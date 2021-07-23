@@ -19,7 +19,7 @@ a {
 
 header {
     &.main-header {
-        background: $main-color;
+        background: url('/assets/images/header-bg.png') top center repeat-x $main-color;
     }
 }
 
