@@ -17,9 +17,13 @@ a {
     text-decoration: none;
 }
 
+input:active {
+    outline: 0;
+}
+
 header {
     &.main-header {
-        background: $main-color;
+        background: url('/assets/images/header-bg.png') top center repeat-x $main-color;
     }
 }
 
@@ -174,10 +178,6 @@ input.bbcuerpo {
     line-height: 1;
 }
 
-input:active {
-    outline: 0;
-}
-
 input.bbboton {
     float: right;
     padding: 0;
@@ -197,4 +197,55 @@ input.bbboton {
         margin: 0 10px;
         font-weight: 700;
     }
+}
+
+#buscador {
+    width: 240px;
+    height: 45px;
+    margin: 0 130px 10px;
+    display: block;
+    background: url('/assets/images/buscador.png') center no-repeat;
+}
+
+#buscador form {
+    height: 32px;
+    clear: both;
+    margin: 0;
+}
+
+.buscador-home {
+    width: 600px;
+}
+
+input.buscador {
+    background: #FFF!important;
+    display: block;
+    padding: 8px;
+    width: 410px;
+    border-right: solid 1px #c6c6c6;
+    border-left: solid 1px #c6c6c6;
+    border-top: solid 1px #cecece;
+    border-bottom: solid 1px #a4a4a4;
+    box-shadow: 0 1px 1px #d3d3d3;
+    -mox-box-shadow: 0 1px 1px #D3D3D3;
+    -webkit-box-shadow: 0 1px 1px #d3d3d3;
+    font-size: 13px;
+    font-family: Helvetica,Arial;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    float: left;
+}
+
+input.buscador:focus {
+    box-shadow: 0 0 5px 0 #b5dff1;
+    -moz-box-shadow: 0 0 5px 0 #B5DFF1;
+    -webkit-box-shadow: 0 0 5px 0 #b5dff1;
+    border: 1px solid #38B2E5;
+}
+
+.buscador-home input.btn-buscar {
+    padding: 8px 15px;
+    margin-left: 10px;
+    float: left;
 }
