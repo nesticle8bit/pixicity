@@ -2,7 +2,11 @@ $background-color: #F0EEEE;
 $main-color: #0B6EA5;
 $accent-color: #004160;
 
-body {
+html, body { height: 100%; }
+
+body { 
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
     background: $background-color;
 }
 
@@ -114,5 +118,20 @@ header {
 .last-posts {
     font-size: .85rem;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+a.registro {
+    background: url('/assets/images/register.png') bottom left no-repeat;
+    width: 143px;
+    height: 45px;
+    display: block;
+    margin: 8px 10px;
+    float: right;
+}
+
+a.identificarse {
+    color: #fff!important;
+    text-shadow: 0 1px 0 #000;
+    margin: 26px 5px 0px 5px;
+    font-size: .9rem;
+}
