@@ -101,30 +101,26 @@ header {
     padding-top: 10px;
 }
 
-// .main-title {
-//     position: relative;
+.main-title {
+    background: url('/assets/images/dotccc.gif') center repeat-x;
+    position: relative;
+    height: 19px;
+    margin-bottom: 5px;
+}
 
-//     & span {
-//         background-color: white;
-//         padding-right: 10px;
-//     }
-
-//     &:after {
-//         content:"";
-//         position: absolute;
-//         bottom: 0;
-//         left: 0;
-//         right: 0;
-//         height: 0.5em;
-//         border-top: 1px solid #000;
-//         z-index: 1;
-//     }
-// }
+.main-title span {
+    font-weight: 700;
+    font-size: 16px!important;
+    background: #fff;
+    padding-right: 10px;
+    line-height: 1.2em;
+    color: #8B8B8B;
+    float: left;
+}
 
 .last-posts {
     font-size: .85rem;
 }
-
 
 a.registro {
     background: url('/assets/images/register.png') bottom left no-repeat;
@@ -175,6 +171,7 @@ input.bbcuerpo {
     border: 0;
     width: 202px;
     height: 29px;
+    border-radius: 18px;
     line-height: 1;
 }
 
@@ -186,6 +183,7 @@ input.bbboton {
     width: 20px;
     height: 28px;
     border: 0;
+    border-radius: 22px;
 }
 
 .footer-copyright {
@@ -249,3 +247,4 @@ input.buscador:focus {
     margin-left: 10px;
     float: left;
 }
+

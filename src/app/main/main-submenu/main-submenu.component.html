@@ -3,32 +3,32 @@
         <div class="col-12">
             <ul class="list-unstyled list-inline mb-0 py-2">
                 <li class="list-inline-item sub-menu--item sub-menu--item--active">
-                    <a href="#">
+                    <a [routerLink]="['/']">
                         <span>Inicio</span>
                     </a>
                 </li>
 
                 <li class="list-inline-item sub-menu--item">
                     <a [routerLink]="['buscar']">
-                        <span>Buscador</span>
+                        <fa-icon [icon]="['fas', 'search']" [fixedWidth]="true"></fa-icon> <span style="margin-left: 2px;">Buscador</span>
                     </a>
                 </li>
 
                 <li class="list-inline-item sub-menu--item">
-                    <a href="#">
-                        <span>Crear Post</span>
+                    <a [routerLink]="['/crear-post']">
+                        <fa-icon [icon]="['fas', 'plus-circle']" [fixedWidth]="true"></fa-icon> <span style="margin-left: 2px;">Crear Post</span>
                     </a>
                 </li>
 
                 <li class="list-inline-item sub-menu--item">
-                    <a href="#">
-                        <span>Historial</span>
+                    <a [routerLink]="['/historial']">
+                        <fa-icon [icon]="['fas', 'history']" [fixedWidth]="true"></fa-icon> <span style="margin-left: 2px;">Historial</span>
                     </a>
                 </li>
 
                 <li class="list-inline-item sub-menu--item">
-                    <a href="#">
-                        <span>Moderación</span>
+                    <a [routerLink]="['/moderacion']">
+                        <fa-icon [icon]="['fas', 'toolbox']" [fixedWidth]="true"></fa-icon> <span style="margin-left: 2px;">Moderación</span>
                     </a>
                 </li>
             </ul>
