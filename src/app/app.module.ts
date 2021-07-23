@@ -26,6 +26,7 @@ import { DisplayComponentService } from './services/shared/displayComponents.ser
 import { MainFooterComponent } from './main/main-footer/main-footer.component';
 import { SearchComponent } from './pages/search/search.component';
 import { PostsViewComponent } from './posts/posts-view/posts-view.component';
+import { LoginComponent } from './pages/login/login.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { PostsViewComponent } from './posts/posts-view/posts-view.component';
     HomeComponent,
     MainFooterComponent,
     SearchComponent,
-    PostsViewComponent
+    PostsViewComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
