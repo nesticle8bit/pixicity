@@ -1,1 +1,57 @@
-<p>login works!</p>
+<div class="container container--home">
+    <div class="row">
+        <div class="col-12 col-sm-8 text-center main-login--head">
+            <h1>Bienvenido a Pixicity!</h1>
+
+            <p>Te damos la bienvenida nuevamente a nuestra gran familia</p>
+
+            <div class="dot--ccc">
+                <span class="w200">Identificarme</span>
+            </div>
+
+            <form [formGroup]="loginForm" (ngSubmit)="login()" class="login_box">
+                <div class="mb-3">
+                    <label>Nombre de Usuario</label>
+                    <input id="nickname" type="text" formControlName="userName" class="form-control mx-auto" />
+                </div>
+
+                <div class="mb-3">
+                    <label>Contraseña</label>
+                    <input id="password" type="password" formControlName="password" class="form-control mx-auto" />
+                </div>
+
+                <div class="dot--ccc">
+                    <input type="submit" class="submit-btn" value="Iniciar Sesión">
+                </div>
+            </form>
+        </div>
+
+        <div class="col-12 col-sm-4">
+            <div class="text-center">
+                <img src="/assets/images/login-bg.gif" alt="">
+
+                <div class="dot--ccc mt-0">
+                    <span class="w200">¿No tienes cuenta?</span>
+                </div>
+
+                <button type="button" mat-flat-button color="primary">
+                    Registrate
+                </button>
+
+                <div class="dot--ccc">
+                    <span class="w200">¿Tienes problemas?</span>
+                </div>
+
+                <div class="olvidar">
+                    <p>
+                        <a href="#">¿Olvidaste la contraseña?</a>
+                    </p>
+                    
+                    <p>
+                        <a href="#">¿No me llegó el email de confirmación?</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

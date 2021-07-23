@@ -27,6 +27,7 @@ import { MainFooterComponent } from './main/main-footer/main-footer.component';
 import { SearchComponent } from './pages/search/search.component';
 import { PostsViewComponent } from './posts/posts-view/posts-view.component';
 import { LoginComponent } from './pages/login/login.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { LoginComponent } from './pages/login/login.component';
     AppRoutingModule,
     FontAwesomeModule,
     BrowserAnimationsModule,
-    MatButtonModule
+    MatButtonModule,
+    ReactiveFormsModule
   ],
   providers: [
     DisplayComponentService
