@@ -1,0 +1,13 @@
+<h6 class="main-title">
+    <span>TOP's Usuarios</span>
+</h6>
+
+<table class="table table-striped last-posts">
+    <tbody>
+        <tr *ngFor="let topUser of topUsers">
+            <td>
+                <fa-icon [icon]="['fas', 'user']"></fa-icon> {{topUser.user}}
+            </td>
+        </tr>
+    </tbody>
+</table>

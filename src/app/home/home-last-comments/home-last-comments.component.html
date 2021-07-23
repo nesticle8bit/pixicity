@@ -1,0 +1,13 @@
+<h6 class="main-title">
+    <span>Comentarios recientes</span>
+</h6>
+
+<table class="table table-striped last-posts">
+    <tbody>
+        <tr *ngFor="let post of lastComments">
+            <td>
+                <small><b><a href="#">{{post.user}}</a></b> &nbsp; <span class="text-muted">{{post.comment}}</span></small>
+            </td>
+        </tr>
+    </tbody>
+</table>

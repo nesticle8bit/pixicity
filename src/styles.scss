@@ -83,3 +83,36 @@ header {
         }
     }
 }
+
+.section--home {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    padding-top: 10px;
+}
+
+// .main-title {
+//     position: relative;
+
+//     & span {
+//         background-color: white;
+//         padding-right: 10px;
+//     }
+
+//     &:after {
+//         content:"";
+//         position: absolute;
+//         bottom: 0;
+//         left: 0;
+//         right: 0;
+//         height: 0.5em;
+//         border-top: 1px solid #000;
+//         z-index: 1;
+//     }
+// }
+
+.last-posts {
+    font-size: .85rem;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
