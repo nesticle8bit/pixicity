@@ -1,0 +1,13 @@
+<h6 class="main-title">
+    <span>Recientes</span>
+</h6>
+
+<table class="table table-striped last-posts">
+    <tbody>
+        <tr *ngFor="let post of lastPosts">
+            <td>
+                <img src="/assets/images/categorias/music.png" /> {{post.title}}
+            </td>
+        </tr>
+    </tbody>
+</table>

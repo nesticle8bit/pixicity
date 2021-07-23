@@ -1,0 +1,13 @@
+<h6 class="main-title">
+    <span>TOP's Posts</span>
+</h6>
+
+<table class="table table-striped last-posts">
+    <tbody>
+        <tr *ngFor="let topPost of topPosts">
+            <td>
+                <img src="/assets/images/categorias/music.png" /> {{topPost.title}}
+            </td>
+        </tr>
+    </tbody>
+</table>
