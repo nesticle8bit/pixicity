@@ -21,6 +21,14 @@ input:active {
     outline: 0;
 }
 
+input, textarea {
+    background: url('/assets/images/inputbg.gif') top left repeat-x #f9f9f9;
+    border: 1px solid #CCC;
+    padding: 4px 2px;
+    color: #333;
+    font-size: 12px;
+}
+
 header {
     &.main-header {
         background: url('/assets/images/header-bg.png') top center repeat-x $main-color;
@@ -99,6 +107,33 @@ header {
     border: 1px solid #ccc;
     border-top: none;
     padding-top: 10px;
+}
+
+.dot {
+    &--ccc {
+        background: url('/assets/images/dotccc.gif') center repeat-x;
+        margin: 20px 0;
+
+        & span {
+            display: block;
+            text-align: center;
+            background-color: #fff;
+            margin: 0 auto;
+            font-size: 18px;
+            padding: 0 20px;
+            color: #999;
+            font-family: Georgia,"Times New Roman",Times,serif;
+            font-style: italic;
+
+            &.w100 {
+                width: 100px;
+            }
+
+            &.w200 {
+                width: 200px;
+            }
+        }
+    }
 }
 
 .main-title {
@@ -248,3 +283,72 @@ input.buscador:focus {
     float: left;
 }
 
+a.ircielo {
+    color: #999!important;
+    border-bottom: 1px dotted #999;
+    float: right;
+    text-decoration: none;
+    margin: 7px 0;
+}
+
+.main-login--head {
+    & h1 {
+        font-weight: 700;
+        font-size: 30px;
+        color: #333;
+        margin: 0 0 15px;
+    }
+
+    & p {
+        font-size: 16px;
+        color: #999;
+        margin: 10px 0 0;
+        padding: 0 0 10px;
+    }
+}
+
+.login_box {
+    font-weight: bold;
+
+    & label {
+        font-size: 13px;
+        color: #444;
+        margin-bottom: 5px;
+    }
+
+    .submit-btn {
+        background: url('/assets/images/btn-green.png') top center no-repeat #FFF;
+        border: 0;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 700;
+        padding: 9px 0 14px;
+        width: 200px;
+        margin: 0 auto;
+    }
+}
+
+.login_box input#nickname, .login_box input#password {
+    width: 330px;
+    border-radius: 4px;
+    padding: 7px;
+    font-size: 14px;
+    font-weight: 700;
+    background: #fff;
+    box-shadow: 0 1px 1px #d3d3d3;
+    -mox-box-shadow: 0 1px 1px #D3D3D3;
+    -webkit-box-shadow: 0 1px 1px #d3d3d3;
+    border-right: solid 1px #c6c6c6;
+    border-left: solid 1px #c6c6c6;
+    border-top: solid 1px #cecece;
+    border-bottom: solid 1px #a4a4a4;
+    text-align: center!important;
+}
+
+.olvidar a {
+    display: block;
+    color: #999;
+    font-weight: 400;
+    font-size: 15px;
+    margin: 0 0 10px;
+}
