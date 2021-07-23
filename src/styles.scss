@@ -1,1 +1,85 @@
-/* You can add global styles to this file, and also import other style files */
+$background-color: #F0EEEE;
+$main-color: #0B6EA5;
+$accent-color: #004160;
+
+body {
+    background: $background-color;
+}
+
+a {
+    color: #105CB6;
+    text-decoration: none;
+}
+
+header {
+    &.main-header {
+        background: $main-color;
+    }
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.main-logo {
+    width: 270px;
+    height: 48px;
+    background: url('assets/images/logo.png') no-repeat;
+    float:left;
+    margin-top: 11px;
+}
+
+.main-logo:hover {
+    background-position: 0 -50px;
+}
+
+.main-menu {
+    background: $accent-color;
+    height: 43px;
+
+    &--item {
+        // background: #003750;
+        color: #fff;
+        padding: 8px 10px 8px 10px;
+        border-radius: 4px 4px 0 0;
+        background: #00354e;
+        font-size: .8rem;
+        font-weight: bold;
+
+        & > a {
+            color: #fff;
+        }
+
+        &--active {
+            background: #fff;
+
+            & > a {
+                color: #00354e;
+            }
+        }
+    }
+}
+
+.sub-menu {
+    background: rgb(233,233,233);
+    background: linear-gradient(0deg, rgba(233,233,233,1) 0%, rgba(255,255,255,1) 60%);
+
+    border: 1px solid #ccc;
+    border-top: none;
+
+    &--item {
+        color: #105CB6;
+        padding: 6px 10px 6px 10px;
+        font-size: .8rem;
+        font-weight: bold;
+
+        &--active {
+            background: #eee;
+            border-radius: 18px;
+
+            & > a {
+                color: #00354e;
+            }
+        }
+    }
+}
