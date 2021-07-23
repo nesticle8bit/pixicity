@@ -6,7 +6,9 @@ html, body { height: 100%; }
 
 body { 
     margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    line-height: 1.5;
+    font-family: "Helvetica Neue",Arial,Helvetica,sans-serif;
+    font-size: 12px;
     background: $background-color;
 }
 
@@ -88,7 +90,7 @@ header {
     }
 }
 
-.section--home {
+.container--home {
     background: #fff;
     border: 1px solid #ccc;
     border-top: none;
@@ -134,4 +136,65 @@ a.identificarse {
     text-shadow: 0 1px 0 #000;
     margin: 26px 5px 0px 5px;
     font-size: .85rem;
+}
+
+.seccion {
+    // width: 1031px;
+    background: url('/assets/images/final.png') left bottom no-repeat;
+    // margin: 0 auto;
+    // height: 53px;
+    padding-bottom: 10px;
+}
+
+.inpie {
+    padding: 10px;
+    background: #fff;
+    height: 50px;
+    border: solid;
+    border-color: rgb(255 255 255 / 0%) #ccc #ccc;
+    border-width: 1px 1px 0;
+}
+
+.busb form {
+    margin: 0;
+    padding: 0 8px;
+    width: 240px;
+    border: 1px solid #CCC;
+    -moz-border-radius: 30px;
+    -webkit-border-radius: 30px;
+    border-radius: 30px;
+}
+
+input.bbcuerpo {
+    background: #fff;
+    padding: 5px;
+    border: 0;
+    width: 202px;
+    height: 29px;
+    line-height: 1;
+}
+
+input:active {
+    outline: 0;
+}
+
+input.bbboton {
+    float: right;
+    padding: 0;
+    margin: 0;
+    background: url('/assets/images/magn.gif') center 8px no-repeat #fff;
+    width: 20px;
+    height: 28px;
+    border: 0;
+}
+
+.footer-copyright {
+    padding: 12px 0;
+    background: #FFF;
+    margin: 10px auto;
+
+    & a {
+        margin: 0 10px;
+        font-weight: 700;
+    }
 }

@@ -21,6 +21,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { HomeTopPostsComponent } from './home/home-top-posts/home-top-posts.component';
 import { HomeTopUsersComponent } from './home/home-top-users/home-top-users.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { HomeComponent } from './pages/home/home.component';
+import { DisplayComponentService } from './services/shared/displayComponents.service';
+import { MainFooterComponent } from './main/main-footer/main-footer.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +39,9 @@ import { RegisterComponent } from './pages/register/register.component';
     HomeAfiliadosComponent,
     HomeTopPostsComponent,
     HomeTopUsersComponent,
-    RegisterComponent
+    RegisterComponent,
+    HomeComponent,
+    MainFooterComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +50,9 @@ import { RegisterComponent } from './pages/register/register.component';
     BrowserAnimationsModule,
     MatButtonModule
   ],
-  providers: [],
+  providers: [
+    DisplayComponentService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
