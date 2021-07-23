@@ -20,6 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { HomeTopPostsComponent } from './home/home-top-posts/home-top-posts.component';
 import { HomeTopUsersComponent } from './home/home-top-users/home-top-users.component';
+import { RegisterComponent } from './pages/register/register.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { HomeTopUsersComponent } from './home/home-top-users/home-top-users.comp
     HomeLastPhotosComponent,
     HomeAfiliadosComponent,
     HomeTopPostsComponent,
-    HomeTopUsersComponent
+    HomeTopUsersComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
