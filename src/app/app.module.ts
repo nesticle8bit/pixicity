@@ -28,6 +28,7 @@ import { SearchComponent } from './pages/search/search.component';
 import { PostsViewComponent } from './posts/posts-view/posts-view.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     FontAwesomeModule,
     BrowserAnimationsModule,
     MatButtonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatTooltipModule
   ],
   providers: [
     DisplayComponentService
