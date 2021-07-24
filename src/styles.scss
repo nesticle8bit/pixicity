@@ -7,7 +7,7 @@ html, body { height: 100%; }
 body { 
     margin: 0;
     line-height: 1.5;
-    font-family: "Helvetica Neue",Arial,Helvetica,sans-serif;
+    font-family: "Lato","Helvetica Neue","Helvetica","Arial","Lucida Grande",sans-serif;
     font-size: 12px;
     background: $background-color;
 }
@@ -351,4 +351,66 @@ a.ircielo {
     font-weight: 400;
     font-size: 15px;
     margin: 0 0 10px;
+}
+
+.top-user {
+    padding: 6px 0px;
+    height: 60px;
+    position: relative;
+
+    & a.avatar-top {
+        overflow: hidden;
+        display: block;
+    }
+
+    & a.avatar-top img {
+        width: 60px;
+        height: 60px;
+        float: left;
+        margin-right: 10px;
+    }
+
+    & .avatar-top h3 {
+        color: #4ea1f0;
+        font-size: 14px;
+        height: 15px;
+        line-height: .9em;
+        margin: 0;
+    }
+
+    & .avatar-top p {
+        color: #545454;
+        margin: 0;
+        font-size: 12px;
+        line-height: 15px;
+        font-weight: 700;
+    }
+}
+
+#sigueme {
+    position: relative;
+    top: -25px;
+    right: -70px;
+
+    & a {
+        font-weight: 700;
+        color: #FFF;
+        text-transform: uppercase;
+        border-radius: 3px;
+        line-height: 2.4em;
+        padding: 0 10px;
+        height: 25px;
+        display: inline-block;
+        font-size: 10px;
+    }
+
+    & a.gris, #ised a.gris {
+        background: #c8c8c8;
+    }
+}
+
+.bg {
+    &-white {
+        background-color: #fff;
+    }
 }
