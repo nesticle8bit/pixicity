@@ -20,7 +20,6 @@ Voy a desarrollar este proyecto en angular y en asp.net core
     - [ ] Crear la página de login y generar la sesión del usuario en el navegador
  
   - Registro de usuarios
-  - 
   - Perfil del usuario
     - [ ] Crear componente para visualizar todos los perfiles de Usuario
     - [ ] Crear sección para listar los posts publicados
