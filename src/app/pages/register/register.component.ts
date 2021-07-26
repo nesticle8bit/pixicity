@@ -34,6 +34,7 @@ export class RegisterComponent implements OnInit {
       genre: ['', Validators.required],
       country: ['', Validators.required],
       city: ['', Validators.required],
+      termsConditions: [false, Validators.requiredTrue]
     });
   }
 

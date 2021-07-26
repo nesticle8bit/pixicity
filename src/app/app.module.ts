@@ -30,6 +30,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgSelectConfig, NgSelectModule } from '@ng-select/ng-select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { NgSelectConfig, NgSelectModule } from '@ng-select/ng-select';
     MatButtonModule,
     ReactiveFormsModule,
     MatTooltipModule,
-    NgSelectModule
+    NgSelectModule,
+    MatCheckboxModule
   ],
   providers: [
     DisplayComponentService
@@ -70,7 +72,7 @@ import { NgSelectConfig, NgSelectModule } from '@ng-select/ng-select';
 export class AppModule {
   constructor(library: FaIconLibrary, private ngSelectConfig: NgSelectConfig) {
     library.addIconPacks(fas, far, fab);
-    
+
     ngSelectConfig.notFoundText = 'No hay elementos';
     ngSelectConfig.appendTo = 'body';
   }
