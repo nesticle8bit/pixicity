@@ -1,3 +1,5 @@
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
 $background-color: #F0EEEE;
 $main-color: #0B6EA5;
 $accent-color: #004160;
@@ -309,6 +311,7 @@ a.ircielo {
 
 .login_box {
     font-weight: bold;
+    width: 65%;
 
     & label {
         font-size: 13px;
@@ -328,8 +331,8 @@ a.ircielo {
     }
 }
 
-.login_box input#nickname, .login_box input#password {
-    width: 330px;
+.login_box .form-control {
+    // width: 330px;
     border-radius: 4px;
     padding: 7px;
     font-size: 14px;
@@ -345,12 +348,31 @@ a.ircielo {
     text-align: center!important;
 }
 
-.olvidar a {
-    display: block;
-    color: #999;
-    font-weight: 400;
-    font-size: 15px;
-    margin: 0 0 10px;
+.olvidar {
+    & a {
+        display: block;
+        color: #999;
+        font-weight: 400;
+        font-size: 15px;
+        margin: 0 0 10px;
+    }
+
+    & li {
+        padding: 5px;
+        font-size: 15px;
+        list-style: disc inside;
+        color: #999;
+    }
+
+    & span {
+        margin: 20px 0;
+        font-size: 20px;
+        font-weight: 300;
+        font-family: 'Helvetica Neue','Helvetica','Arial',sans-serif;
+        text-align: center;
+        color: #555;
+        display: block;
+    }
 }
 
 .top-user {
@@ -414,3 +436,4 @@ a.ircielo {
         background-color: #fff;
     }
 }
+
