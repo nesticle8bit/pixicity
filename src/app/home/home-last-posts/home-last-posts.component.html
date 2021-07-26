@@ -6,7 +6,9 @@
     <tbody>
         <tr *ngFor="let post of lastPosts">
             <td>
-                <img src="/assets/images/categorias/music.png" /> {{post.title}}
+                <a [routerLink]="['/posts/downloads/1/Windows 10']">
+                    <img src="/assets/images/categorias/music.png" /> {{post.title}}
+                </a>
             </td>
         </tr>
     </tbody>

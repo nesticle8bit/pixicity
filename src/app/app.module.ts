@@ -29,6 +29,7 @@ import { PostsViewComponent } from './posts/posts-view/posts-view.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgSelectConfig, NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     BrowserAnimationsModule,
     MatButtonModule,
     ReactiveFormsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NgSelectModule
   ],
   providers: [
     DisplayComponentService
@@ -66,7 +68,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(library: FaIconLibrary) {
+  constructor(library: FaIconLibrary, private ngSelectConfig: NgSelectConfig) {
     library.addIconPacks(fas, far, fab);
+    
+    ngSelectConfig.notFoundText = 'No hay elementos';
+    ngSelectConfig.appendTo = 'body';
   }
 }

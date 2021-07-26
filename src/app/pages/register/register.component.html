@@ -1,1 +1,103 @@
-<p>register works!</p>
+<div class="container container--home">
+    <div class="row">
+        <div class="col-12 col-sm-8 text-center main-login--head">
+            <h1>Bienvenido a Pixicity!</h1>
+
+            <p>
+                Crear tu cuenta en Pixicity! solo te tomará algunos segundos y te permitirá acceder al mejor contenido
+                creado por usuarios como tú.
+            </p>
+
+            <div class="dot--ccc">
+                <span class="w200">Identificarme</span>
+            </div>
+
+            <form [formGroup]="formGroup" class="login_box mx-auto">
+                <div class="mb-3">
+                    <label>Nombre de Usuario</label>
+                    <input type="text" formControlName="userName" autocomplete="off"
+                        class="form-control mx-auto" />
+                </div>
+
+                <div class="mb-3">
+                    <label>Contraseña deseada</label>
+                    <input id="password" type="password" formControlName="password" autocomplete="off"
+                        class="form-control mx-auto" />
+                </div>
+
+                <div class="mb-3">
+                    <label>Correo electrónico</label>
+                    <input type="email" formControlName="email" class="form-control mx-auto" />
+                </div>
+
+                <div class="mb-3">
+                    <label>Fecha de nacimiento</label>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-4">
+                            <label>Día</label>
+                            <ng-select formControlName="day" [items]="days"></ng-select>
+                        </div>
+
+                        <div class="col-12 col-sm-4">
+                            <label>Mes</label>
+                            <ng-select formControlName="month" [items]="months"></ng-select>
+                        </div>
+
+                        <div class="col-12 col-sm-4">
+                            <label>Año</label>
+                            <ng-select formControlName="year" [items]="years"></ng-select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label>Género</label>
+                    <ng-select formControlName="genre" [items]="genres" bindLabel="label" bindValue="value"></ng-select>
+                </div>
+
+                <div class="mb-3">
+                    <label>Pais de Origen</label>
+                    <ng-select formControlName="country" [items]="[]" bindLabel="label" bindValue="value"></ng-select>
+                </div>
+
+                <div class="mb-3">
+                    <label>Estado o Región</label>
+                    <ng-select formControlName="city" [items]="[]" bindLabel="label" bindValue="value"></ng-select>
+                </div>
+
+                <div class="dot--ccc">
+                    <input type="submit" class="submit-btn" value="Iniciar Sesión">
+                </div>
+            </form>
+        </div>
+
+        <div class="col-12 col-sm-4">
+            <div class="text-center">
+                <img src="/assets/images/login-bg.gif" alt="">
+
+                <div class="dot--ccc mt-0">
+                    <span class="w200">¿Ya tienes una cuenta?</span>
+                </div>
+
+                <button type="button" mat-flat-button color="primary" [routerLink]="['login']">
+                    Indentificarme
+                </button>
+
+                <div class="dot--ccc">
+                    <span class="w200">Regístrate para</span>
+                </div>
+
+                <div class="olvidar">
+                    <li>Empezar a interactuar con la comunidad.</li>
+                    <li>Crear y compartir tu contenido favorito.</li>
+                    <li>Votar lo que más te gusta del sitio.</li>
+                    <li>Buscar y seguir amigos.</li>
+                    <li>Promocionar e incrementar el tráfico a tu sitio.</li>
+                    <li>Ser parte de la <b>Inteligencia Colectiva!</b></li>
+                    <span>¡Empieza a participar ahora, es gratis!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,9 +2,22 @@
     <span>TOP's Usuarios</span>
 </h6>
 
+<article class="top-user mb-3">
+    <a class="avatar-top" href="#">
+        <img alt="nesticle8bit" class="img-fluid"
+            src="https://avatars.githubusercontent.com/u/1715022?v=4" />
+        <h3>nesticle8bit</h3>
+        <p>13</p>
+    </a>
+
+    <div id="sigueme">
+        <a class="gris" href="/registro/">Seguir</a>
+    </div>
+</article>
+
 <table class="table table-striped last-posts">
     <tbody>
-        <tr *ngFor="let topUser of topUsers">
+        <tr *ngFor="let topUser of topUsers; let first = first">
             <td>
                 <fa-icon [icon]="['fas', 'user']"></fa-icon> {{topUser.user}}
             </td>
