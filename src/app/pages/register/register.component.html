@@ -12,62 +12,104 @@
                 <span class="w200">Identificarme</span>
             </div>
 
-            <form [formGroup]="formGroup" class="login_box mx-auto">
-                <div class="mb-3">
+            <form [formGroup]="formGroup" (ngSubmit)="registerUser()" class="login_box mx-auto">
+                <div class="mb-3 pos-relative">
                     <label>Nombre de Usuario</label>
-                    <input type="text" formControlName="userName" autocomplete="off"
-                        class="form-control mx-auto" />
+                    <input type="text" formControlName="userName" autocomplete="off" class="form-control mx-auto"
+                        on-focus="onFocus('userName')" on-blur="removePopover()" />
+
+                    <div class="pixicity-popover help info" *ngIf="currentFocus === 'userName'">
+                        <span id="puy"></span>
+
+                        <span>
+                            <em>Ingresa un nombre de usuario único</em>
+                        </span>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label>Contraseña deseada</label>
+                <div class="mb-3 pos-relative">
+                    <label>Contraseña Deseada</label>
                     <input id="password" type="password" formControlName="password" autocomplete="off"
-                        class="form-control mx-auto" />
+                        class="form-control mx-auto" on-focus="onFocus('password')" on-blur="removePopover()" />
+
+                    <div class="pixicity-popover help info" *ngIf="currentFocus === 'password'">
+                        <span id="puy"></span>
+
+                        <span>
+                            <em>Ingresa una contraseña segura</em>
+                        </span>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label>Correo electrónico</label>
-                    <input type="email" formControlName="email" class="form-control mx-auto" />
+                <div class="mb-3 pos-relative">
+                    <label>Correo Electrónico</label>
+                    <input type="email" formControlName="email" class="form-control mx-auto" on-focus="onFocus('email')" on-blur="removePopover()" />
+
+                    <div class="pixicity-popover help info" *ngIf="currentFocus === 'email'">
+                        <span id="puy"></span>
+
+                        <span>
+                            <em>Ingresa tu dirección de email</em>
+                        </span>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label>Fecha de nacimiento</label>
+                <div class="mb-3 pos-relative">
+                    <label>Fecha de Nacimiento</label>
 
                     <div class="row">
                         <div class="col-12 col-sm-4">
                             <label>Día</label>
-                            <ng-select formControlName="day" [items]="days"></ng-select>
+                            <ng-select formControlName="dia" [items]="dias"></ng-select>
                         </div>
 
                         <div class="col-12 col-sm-4">
                             <label>Mes</label>
-                            <ng-select formControlName="month" [items]="months"></ng-select>
+                            <ng-select formControlName="mes" [items]="meses" bindLabel="label" bindValue="value"></ng-select>
                         </div>
 
                         <div class="col-12 col-sm-4">
                             <label>Año</label>
-                            <ng-select formControlName="year" [items]="years"></ng-select>
+                            <ng-select formControlName="año" [items]="years"></ng-select>
                         </div>
                     </div>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 pos-relative">
                     <label>Género</label>
-                    <ng-select formControlName="genre" [items]="genres" bindLabel="label" bindValue="value"></ng-select>
+                    <ng-select formControlName="genero" [items]="generos" bindLabel="label" bindValue="value" (click)="onFocus('genero')"></ng-select>
+
+                    <div class="pixicity-popover help info" *ngIf="currentFocus === 'genero'">
+                        <span id="puy"></span>
+
+                        <span>
+                            <em>Selecciona tu género</em>
+                        </span>
+                    </div>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 pos-relative">
                     <label>Pais de Origen</label>
-                    <ng-select formControlName="country" [items]="[]" bindLabel="label" bindValue="value"></ng-select>
+                    <ng-select formControlName="paisId" [items]="paises" bindLabel="nombre" bindValue="id"
+                        (change)="getEstadosByPais($event)"></ng-select>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 pos-relative">
                     <label>Estado o Región</label>
-                    <ng-select formControlName="city" [items]="[]" bindLabel="label" bindValue="value"></ng-select>
+                    <ng-select formControlName="estadoId" [items]="estados" bindLabel="nombre" bindValue="id"></ng-select>
                 </div>
 
-                <div class="mb-3">
-                    <mat-checkbox formControlName="termsConditions" color="primary">Acepto los Términos y Condiciones de uso</mat-checkbox>
+                <div class="mb-3 pos-relative">
+                    <mat-checkbox formControlName="termsConditions" color="primary" (focusin)="onFocus('terms-conditions')" (focusout)="removePopover()">
+                        Acepto los Términos y Condiciones de uso
+                    </mat-checkbox>
+
+                    <div class="pixicity-popover help info" *ngIf="currentFocus === 'terms-conditions'">
+                        <span id="puy"></span>
+                        <span>
+                            <em>¿Aceptas los Términos y Condiciones?</em>
+                        </span>
+                    </div>
                 </div>
 
                 <div class="dot--ccc">
@@ -84,7 +126,7 @@
                     <span class="w200">¿Ya tienes una cuenta?</span>
                 </div>
 
-                <button type="button" mat-flat-button color="primary" [routerLink]="['login']">
+                <button type="button" mat-flat-button color="primary" [routerLink]="['/login']">
                     Indentificarme
                 </button>
 
@@ -98,7 +140,8 @@
                     <li>Votar lo que más te gusta del sitio.</li>
                     <li>Buscar y seguir amigos.</li>
                     <li>Promocionar e incrementar el tráfico a tu sitio.</li>
-                    <li>Ser parte de la <b>Inteligencia Colectiva!</b></li>
+                    <li>Ser parte de la <b>Ciudad Pixelada!</b></li>
+
                     <span>¡Empieza a participar ahora, es gratis!</span>
                 </div>
             </div>

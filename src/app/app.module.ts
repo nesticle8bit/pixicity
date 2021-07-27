@@ -31,6 +31,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgSelectConfig, NgSelectModule } from '@ng-select/ng-select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { HttpClientModule } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
+import { IHttpSecurityService } from './services/interfaces/httpSecurity.interface';
+import { HttpSecurityService } from './services/implementations/httpSecurity.service';
+import { IHttpParametrosService } from './services/interfaces/httpParametros.interface';
+import { HttpParametrosService } from './services/implementations/httpParametros.service';
 
 @NgModule({
   declarations: [
@@ -62,10 +68,20 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     ReactiveFormsModule,
     MatTooltipModule,
     NgSelectModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    HttpClientModule,
+    ToastrModule.forRoot({
+      timeOut: 6000,
+      positionClass: 'toast-top-right',
+      progressBar: true,
+      progressAnimation: 'increasing',
+      closeButton: true
+    }),
   ],
   providers: [
-    DisplayComponentService
+    DisplayComponentService,
+    { provide: IHttpSecurityService, useClass: HttpSecurityService },
+    { provide: IHttpParametrosService, useClass: HttpParametrosService },
   ],
   bootstrap: [AppComponent]
 })
