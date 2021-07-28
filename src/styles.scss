@@ -494,3 +494,15 @@ a.ircielo {
         position: relative;
     }
 }
+
+.w {
+    &-80 {
+        width: 80%;
+    }
+}
+
+.font {
+    &-w-700 {
+        font-weight: 700;
+    }
+}
