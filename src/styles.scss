@@ -1,4 +1,5 @@
 @import "~@ng-select/ng-select/themes/default.theme.css";
+@import '~ngx-toastr/toastr';
 
 $background-color: #F0EEEE;
 $main-color: #0B6EA5;
@@ -328,6 +329,15 @@ a.ircielo {
         padding: 9px 0 14px;
         width: 200px;
         margin: 0 auto;
+
+        &:hover {
+            background: url('/assets/images/btn-green-hover.png') no-repeat #FFF 24px 0;
+            text-decoration: none;
+        }
+
+        &:active {
+            background: url('/assets/images/btn-green-active.png') no-repeat #FFF 24px 0;
+        }
     }
 }
 
@@ -437,3 +447,50 @@ a.ircielo {
     }
 }
 
+.pixicity-popover.info {
+    background: url('assets/images/y.png') repeat-x silver;
+    border: 1px solid #ccc;
+}
+
+.pixicity-popover em {
+    font-style: normal;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.pixicity-popover.info em {
+    color: #000;
+    text-shadow: 0 1px 0 #eee;
+}
+
+.info span#puy {
+    background: url('assets/images/z.png');
+    display: block;
+    width: 9px;
+    height: 16px;
+    position: absolute;
+    left: -9px;
+    top: 18px;
+}
+
+.help {
+    left: 570px;
+    top: 15px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 10px 15px;
+    width: 185px;
+    -mox-box-shadow: 0 1px 1px #D3D3D3;
+}
+
+.expand, .help {
+    position: absolute;
+    display: block;
+}
+
+.pos {
+    &-relative {
+        position: relative;
+    }
+}
