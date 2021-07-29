@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
   selector: 'app-login',
@@ -8,9 +10,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
+  public error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private securityService: IHttpSecurityService,
+    private router: Router
   ) {
     this.loginForm = this.formBuilder.group({
       userName: ['', Validators.required],
@@ -22,7 +27,22 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
+    if (this.loginForm.invalid) {
+      return;
+    }
+
     const login = Object.assign({}, this.loginForm.value);
-    console.log(login);
+
+    this.error = '';
+
+    this.securityService.loginUser(login).subscribe((value: any) => {
+      if (value === 'error') {
+        this.error = 'Las credenciales son incorrectas, por favor corrige y vuelve a iniciar sesión';
+        return;
+      }
+
+      this.securityService.setUserToLocalStorage(value);
+      this.router.navigate(['']);
+    });
   }
 }

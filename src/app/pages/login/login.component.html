@@ -10,6 +10,12 @@
             </div>
 
             <form [formGroup]="loginForm" (ngSubmit)="login()" class="login_box mx-auto">
+                <div class="alert- alert-danger p-3 font-w-700 mb-3" *ngIf="error">
+                    <span>
+                        {{error}}
+                    </span>
+                </div>
+
                 <div class="mb-3">
                     <label>Nombre de Usuario</label>
                     <input id="nickname" type="text" formControlName="userName" class="form-control mx-auto" />

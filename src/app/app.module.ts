@@ -31,12 +31,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgSelectConfig, NgSelectModule } from '@ng-select/ng-select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { IHttpSecurityService } from './services/interfaces/httpSecurity.interface';
 import { HttpSecurityService } from './services/implementations/httpSecurity.service';
 import { IHttpParametrosService } from './services/interfaces/httpParametros.interface';
 import { HttpParametrosService } from './services/implementations/httpParametros.service';
+import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
+import { SectionUserInfoLoginComponent } from './components/sections/section-user-info-login/section-user-info-login.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,8 @@ import { HttpParametrosService } from './services/implementations/httpParametros
     MainFooterComponent,
     SearchComponent,
     PostsViewComponent,
-    LoginComponent
+    LoginComponent,
+    SectionUserInfoLoginComponent
   ],
   imports: [
     BrowserModule,
@@ -82,6 +85,8 @@ import { HttpParametrosService } from './services/implementations/httpParametros
     DisplayComponentService,
     { provide: IHttpSecurityService, useClass: HttpSecurityService },
     { provide: IHttpParametrosService, useClass: HttpParametrosService },
+
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

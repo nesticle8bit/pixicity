@@ -1,0 +1,65 @@
+<section  *ngIf="currentUser?.usuario">
+    <form class="d-none d-sm-block" style="float:right; margin-top: 17px;">
+        <input type="text" id="ibuscadorq" name="q" placeholder="Buscar..." title="Buscar..."
+            class="mini_ibuscador onblur_effect">
+        <input vspace="2" hspace="10" type="submit" alt="Buscar" value="" title="Buscar" class="mini_bbuscador" />
+    </form>
+    
+    <div class="userInfoLogin">
+        <ul>
+            <li class="monitor" style="position: relative">
+                <a href="#/monitor/" onclick="notifica.last(); return false" title="Monitor" name="Monitor">
+                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                </a>
+                <!-- <div class="notificaciones-list" id="mon_list">
+                    <span class="tail"></span>
+                    <div class="timoni">Notificaciones</div>
+                    <ul></ul>
+                    <a href="#/monitor/" class="ver-mas">Ver más</a>
+                </div> -->
+            </li>
+    
+            <li class="mensajes" style="position:relative">
+                <a href="#/mensajes/" onclick="mensaje.last(); return false" title="Mensajes" name="Mensajes">
+                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                </a>
+                <!-- <div class="notificaciones-list" id="mp_list">
+                    <span class="tail"></span>
+                    <div class="timoni">Mensajes <a
+                            onclick="mensaje.nuevo('','','',''); return false;">Escribir nuevo</a></div>
+                    <ul></ul>
+                    <a href="#/mensajes/" class="ver-mas">Ver más</a>
+                </div> -->
+            </li>
+            <li class="favoritos" style="position:relative">
+                <a href="#/favoritos.php" onclick="favorito.last(); return false" title="Posts favoritos" name="Favoritos">
+                    <fa-icon [icon]="['fas', 'star']"></fa-icon>
+                </a>
+                <!-- <div class="notificaciones-list" id="fav_list">
+                    <span class="tail"></span>
+                    <div class="timoni">Favoritos</div>
+                    <ul></ul>
+                    <a href="#/favoritos.php" class="ver-mas">Ver más</a>
+                </div> -->
+            </li>
+            <li class="usernameMenu">
+                <a class="nick" href="#">
+                    <img class="avamu" src="https://i.imgur.com/oxtdxn3.jpeg" />
+                    <span>{{currentUser?.usuario?.userName}}</span>
+                    <img class="punti" src="/assets/images/ui/arrowd.png" />
+                </a>
+    
+                <!-- <div class="menuver">
+                    <a href="#/cuenta/">Cuenta</a>
+                    <a href="#/borradores.php">Borradores</a>
+                    <a href="#/login-salir.php">Salir</a>
+                </div> -->
+            </li>
+        </ul>
+    </div>
+</section>
+
+<div *ngIf="!currentUser?.usuario">
+    <a class="registro float-end" [routerLink]="['registro']"></a>
+    <a class="identificarse float-end" [routerLink]="['login']">Identificarme</a>
+</div>
