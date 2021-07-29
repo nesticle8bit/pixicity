@@ -8,12 +8,14 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./section-user-info-login.component.scss']
 })
 export class SectionUserInfoLoginComponent implements OnInit {
-  public currentUser: JwtUserModel;
+  public currentUser: JwtUserModel = { usuario: undefined, token: '' };
 
   constructor(
     private securityService: IHttpSecurityService
   ) {
-    this.currentUser = this.securityService.getCurrentUser();
+    this.securityService.getCurrentUserAsObservable().subscribe((value: JwtUserModel) => {
+      this.currentUser = value;
+    });
   }
 
   ngOnInit(): void {

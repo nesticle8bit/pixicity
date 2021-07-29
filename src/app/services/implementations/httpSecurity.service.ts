@@ -57,6 +57,10 @@ export class HttpSecurityService implements IHttpSecurityService {
         return this.currentUserSubject.value;
     }
 
+    getCurrentUserAsObservable(): Observable<JwtUserModel> {
+        return this.currentUserSubject.asObservable();
+    }
+
     setUserToLocalStorage(obj: any): any {
         localStorage.setItem('pixicity', JSON.stringify(obj));
         this.currentUserSubject.next(obj);
