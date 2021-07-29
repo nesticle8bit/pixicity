@@ -39,6 +39,7 @@ import { IHttpParametrosService } from './services/interfaces/httpParametros.int
 import { HttpParametrosService } from './services/implementations/httpParametros.service';
 import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
 import { SectionUserInfoLoginComponent } from './components/sections/section-user-info-login/section-user-info-login.component';
+import { PostsCreateComponent } from './posts/posts-create/posts-create.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { SectionUserInfoLoginComponent } from './components/sections/section-use
     SearchComponent,
     PostsViewComponent,
     LoginComponent,
-    SectionUserInfoLoginComponent
+    SectionUserInfoLoginComponent,
+    PostsCreateComponent
   ],
   imports: [
     BrowserModule,
