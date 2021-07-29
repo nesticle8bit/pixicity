@@ -20,6 +20,10 @@ a {
     text-decoration: none;
 }
 
+li, ol li {
+    list-style: none;
+}
+
 input:active {
     outline: 0;
 }
@@ -476,11 +480,12 @@ a.ircielo {
 .help {
     left: 570px;
     top: 15px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
     border-radius: 5px;
     padding: 10px 15px;
     width: 185px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    box-shadow: 0 1px 1px #D3D3D3;
     -mox-box-shadow: 0 1px 1px #D3D3D3;
 }
 
@@ -505,4 +510,189 @@ a.ircielo {
     &-w-700 {
         font-weight: 700;
     }
+}
+
+.userInfoLogin li .alertas {
+    position: absolute!important;
+    bottom: 15px;
+    right: -12px;
+    z-index: 10;
+    background: none!important;
+    top: -8px!important;
+}
+
+.userInfoLogin li .alertas a {
+    padding: 0 0 0 6px;
+    background-position: left top;
+}
+
+.userInfoLogin li .alertas, .userInfoLogin li .alertas span {
+    display: block;
+    float: left;
+    font-size: 11px;
+    color: white;
+    background: url('/assets/images/ui/bubble.png') no-repeat;
+    padding: 0px 6px 6px 0px;
+    background-position: right top;
+}
+
+.menuTabs li {
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 5px 5px 0px 0px;
+    -webkit-border-radius: 3px 3px 0 0;
+    -moz-border-radius: 3px 3px 0 0;
+    border-radius: 3px 3px 0 0;
+    background: #003750;
+}
+
+.menuTabs li a {
+    color: #fff;
+    display: block;
+    padding: 6px 12px 6px 12px;
+    text-decoration: none;
+    -webkit-border-radius: 3px 3px 0 0;
+    -moz-border-radius: 3px 3px 0 0;
+    border-radius: 3px 3px 0 0;
+}
+
+.menuTabs li a:hover {
+    color: white;
+    background: #025881;
+}
+
+.menuTabs li a img, .userInfoLogin img  {
+    vertical-align:middle;
+}
+
+.userInfoLogin .usernameMenu a {
+    color: #FFF;
+    text-shadow: 0 1px 0 #000;
+    padding-top: 6px;
+}
+
+.usernameMenu {
+    height: 33px;
+}
+
+img.avamu {
+    width: 22px;
+    float: left;
+    margin: 0 5px 0 0;
+    height: 22px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.userInfoLogin .monitor-notificaciones  {
+    position: relative;
+}
+
+.userInfoLogin ul {
+    margin: 0;
+    padding: 0;
+}
+
+.userInfoLogin ul li {
+    float: left;
+}
+
+.userInfoLogin ul li.logout {
+    border-right: none;
+    border-left: 1px solid #dcdcdc;
+    padding: 7px 10px;
+}
+
+.userInfoLogin ul li.logout:hover {
+    background:none;
+} 
+
+.userInfoLogin .logout a {
+    padding: 0;
+}
+
+.userInfoLogin a {
+    color: #fff;
+    text-shadow: 0 1px 0 black;
+    padding: 8px 11px 9px 11px;
+    display: block;
+}
+
+.userInfoLogin li {
+    background: url('/assets/images/ui/bgnavitem.gif') no-repeat top right;
+
+    &:last-child {
+        background: none;
+    }
+}
+
+.userInfoLogin li:hover {
+    background: url('/assets/images/ui/bgnavbarhover.gif') repeat-x top right;
+}
+
+.userInfoLogin {
+    float: right;
+    margin: 16px 10px;
+    border-bottom: 1px solid #062939;
+    border-top: 1px solid #095275;
+    border-left: 1px solid #08415c;
+    border-right: 1px solid #08415c;
+    height: 35px;
+    background: #004b6d url('/assets/images/ui/bgnavbar.gif');
+    border-radius: 4px;
+}
+
+.userInfoLogin ul li div.notificaciones-list ul li:first-child {
+    border-top: 0px solid #EEE!important;
+}
+
+img.punti {
+    float: right;
+    margin: 10px 0 0 6px;
+}
+
+a.nick span {
+    padding-top: 2px;
+    float: left;
+}
+
+.mini_ibuscador {
+    background: url('/assets/images/ui/searchinput.png') top left repeat-x;
+    border: none;
+    float: left;
+    margin: 0;
+    padding: 10px;
+    width: 183px;
+    height: 34px;
+    font-size: 14px;
+    color: #999;
+    -webkit-border-radius:0;
+    -moz-border-radius:0;
+    border-radius:0;
+}
+
+.mini_bbuscador {
+    background: url('/assets/images/ui/searchinput.png') repeat-x;
+    border: none;
+    width: 32px;
+    height: 34px;
+    float: left;
+    cursor: pointer;
+    margin: 0 !important;
+    background-position: -204px 0px;
+}
+
+.mini_bbuscador:hover {
+    background-position: -236px 0px;
+}
+
+.mini_bbuscador:active {
+    background-position: -268px 0px;
+}
+
+.onblur_effect {
+    color:#B1B1B1;
+    font-family: Helvetica;
 }

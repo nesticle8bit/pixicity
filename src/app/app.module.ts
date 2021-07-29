@@ -38,6 +38,7 @@ import { HttpSecurityService } from './services/implementations/httpSecurity.ser
 import { IHttpParametrosService } from './services/interfaces/httpParametros.interface';
 import { HttpParametrosService } from './services/implementations/httpParametros.service';
 import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
+import { SectionUserInfoLoginComponent } from './components/sections/section-user-info-login/section-user-info-login.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
     MainFooterComponent,
     SearchComponent,
     PostsViewComponent,
-    LoginComponent
+    LoginComponent,
+    SectionUserInfoLoginComponent
   ],
   imports: [
     BrowserModule,

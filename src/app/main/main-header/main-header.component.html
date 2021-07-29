@@ -1,7 +1,7 @@
 <header class="main-header">
     <div class="container">
         <div class="row">
-            <div class="col-12 col-sm-6">
+            <div class="col-sm-6">
                 <div class="logo cursor-pointer">
                     <a class="main-logo" [routerLink]="['/']">
                         <img border="0" align="top" title="Titulo" alt="Titulo" src="assets/images/blank.png" />
@@ -9,9 +9,8 @@
                 </div>
             </div>
 
-            <div class="col-12 col-sm-6">
-                <a class="registro float-end" [routerLink]="['registro']"></a>
-                <a class="identificarse float-end" [routerLink]="['login']">Identificarme</a>
+            <div class="col-sm-6">
+                <app-section-user-info-login></app-section-user-info-login>
             </div>
         </div>
     </div>
