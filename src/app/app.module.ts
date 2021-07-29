@@ -40,6 +40,12 @@ import { HttpParametrosService } from './services/implementations/httpParametros
 import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
 import { SectionUserInfoLoginComponent } from './components/sections/section-user-info-login/section-user-info-login.component';
 import { PostsCreateComponent } from './posts/posts-create/posts-create.component';
+import { ModHistoryComponent } from './pages/mod-history/mod-history.component';
+import { UsuariosComponent } from './pages/usuarios/usuarios.component';
+import { MonitorComponent } from './pages/monitor/monitor.component';
+import { MensajesComponent } from './pages/mensajes/mensajes.component';
+import { FavoritosComponent } from './pages/favoritos/favoritos.component';
+import { TopsComponent } from './pages/tops/tops.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +68,13 @@ import { PostsCreateComponent } from './posts/posts-create/posts-create.componen
     PostsViewComponent,
     LoginComponent,
     SectionUserInfoLoginComponent,
-    PostsCreateComponent
+    PostsCreateComponent,
+    ModHistoryComponent,
+    UsuariosComponent,
+    MonitorComponent,
+    MensajesComponent,
+    FavoritosComponent,
+    TopsComponent
   ],
   imports: [
     BrowserModule,
