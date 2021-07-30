@@ -46,6 +46,10 @@ import { MonitorComponent } from './pages/monitor/monitor.component';
 import { MensajesComponent } from './pages/mensajes/mensajes.component';
 import { FavoritosComponent } from './pages/favoritos/favoritos.component';
 import { TopsComponent } from './pages/tops/tops.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DialogAfiliarseComponent } from './components/dialogs/dialog-afiliarse/dialog-afiliarse.component';
+import { IHttpGeneralService } from './services/interfaces/httpGeneral.interface';
+import { HttpGeneralService } from './services/implementations/httpGeneral.service';
 
 @NgModule({
   declarations: [
@@ -74,7 +78,8 @@ import { TopsComponent } from './pages/tops/tops.component';
     MonitorComponent,
     MensajesComponent,
     FavoritosComponent,
-    TopsComponent
+    TopsComponent,
+    DialogAfiliarseComponent
   ],
   imports: [
     BrowserModule,
@@ -94,13 +99,18 @@ import { TopsComponent } from './pages/tops/tops.component';
       progressAnimation: 'increasing',
       closeButton: true
     }),
+    MatDialogModule
   ],
   providers: [
     DisplayComponentService,
     { provide: IHttpSecurityService, useClass: HttpSecurityService },
     { provide: IHttpParametrosService, useClass: HttpParametrosService },
+    { provide: IHttpGeneralService, useClass: HttpGeneralService },
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+  ],
+  entryComponents: [
+    DialogAfiliarseComponent
   ],
   bootstrap: [AppComponent]
 })
