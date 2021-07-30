@@ -2,14 +2,15 @@
     <span>Recientes</span>
 </h6>
 
-<table class="table table-striped last-posts">
-    <tbody>
-        <tr *ngFor="let post of lastPosts">
-            <td>
-                <a [routerLink]="['/posts/downloads/1/Windows 10']">
-                    <img src="/assets/images/categorias/music.png" /> {{post.title}}
-                </a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<article class="lista-posts" *ngFor="let post of lastPosts">
+    <a [routerLink]="['/posts/downloads/1/Windows 10']">
+        <img src="/assets/images/categorias/music.png" /> {{post.title}}
+    </a>
+</article>
+
+<div class="row">
+    <div class="col-12">
+        <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+        </mat-paginator>
+    </div>
+</div>

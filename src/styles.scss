@@ -16,8 +16,10 @@ body {
 }
 
 a {
-    color: #105CB6;
+    color: #006595;
     text-decoration: none;
+    font-weight: 700;
+    cursor: pointer;
 }
 
 li, ol li {
@@ -716,7 +718,6 @@ a.nick span {
 
 #modalBody input, #modalBody textarea {
     width: 100%;
-    margin-bottom: 20px;
     padding: 8px 10px;
     background: #fff;
     border-right: solid 1px #c6c6c6;
@@ -731,4 +732,53 @@ a.nick span {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     border-radius: 4px;
+}
+
+.mentop {
+    right: 0;
+    position: absolute;
+}
+
+.actualtop {
+    padding: 0 12px 0 10px;
+    font-size: 11px;
+    float: right;
+    color: #666;
+    background: url('/assets/images/ui/droparrow.png') right 6px no-repeat #fff;
+}
+
+.actualtop, .secomo a, .tops span {
+    font-weight: 700;
+}
+
+.listop {
+    border: solid #CCC;
+    background: #FFF;
+    border-width: 1px 1px 0;
+    display: none;
+    z-index: 1;
+    position: absolute;
+    top: 13px;
+}
+
+.listop a {
+    border-bottom: 1px solid #CCC;
+    display: block;
+    padding: 5px 6px;
+    font-size: 11px;
+
+    &:hover {
+        color: #FFF;
+        background: #067CB4;
+    }
+}
+
+.lista-posts {
+    border-top: #E0E0E0 1px solid;
+    padding: 7px 0 7px 10px;
+    background: #f5f5f5;
+}
+
+.lista-posts:nth-child(2n+1) {
+    background: #fff;
 }
