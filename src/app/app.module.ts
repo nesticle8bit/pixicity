@@ -50,6 +50,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DialogAfiliarseComponent } from './components/dialogs/dialog-afiliarse/dialog-afiliarse.component';
 import { IHttpGeneralService } from './services/interfaces/httpGeneral.interface';
 import { HttpGeneralService } from './services/implementations/httpGeneral.service';
+import { TopTimesSelectorComponent } from './components/sections/top-times-selector/top-times-selector.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -79,7 +81,8 @@ import { HttpGeneralService } from './services/implementations/httpGeneral.servi
     MensajesComponent,
     FavoritosComponent,
     TopsComponent,
-    DialogAfiliarseComponent
+    DialogAfiliarseComponent,
+    TopTimesSelectorComponent
   ],
   imports: [
     BrowserModule,
@@ -99,7 +102,8 @@ import { HttpGeneralService } from './services/implementations/httpGeneral.servi
       progressAnimation: 'increasing',
       closeButton: true
     }),
-    MatDialogModule
+    MatDialogModule,
+    MatPaginatorModule
   ],
   providers: [
     DisplayComponentService,

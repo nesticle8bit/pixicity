@@ -13,7 +13,7 @@ export class HomeLastPostsComponent implements OnInit {
   ngOnInit(): void {
     for (let index = 0; index < 28; index++) {
       this.lastPosts.push({
-        title: `#${index + 1} Lorem ipsum dolor sit amet, consectetur adipiscing elit.`
+        title: `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`
       });
     }
   }
