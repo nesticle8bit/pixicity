@@ -7,22 +7,22 @@
         </div>
 
         <div id="modalBody" class="mx-auto" *ngIf="!formGroupAfiliacion.value?.codigo">
-            <div class="mb-1">
+            <div class="mb-3">
                 <label>Título</label>
                 <input type="text" formControlName="titulo" [maxLength]="100" cdkFocusInitial />
             </div>
 
-            <div class="mb-1">
+            <div class="mb-3">
                 <label>URL</label>
                 <input type="text" formControlName="url" [maxLength]="350" />
             </div>
 
-            <div class="mb-1">
+            <div class="mb-3">
                 <label>Banner (250x40px)</label>
                 <input type="text" formControlName="banner" [maxLength]="350" />
             </div>
 
-            <div class="mb-1">
+            <div class="mb-3">
                 <label>Descripción</label>
                 <textarea rows="4" formControlName="descripcion" [maxLength]="200"></textarea>
             </div>
