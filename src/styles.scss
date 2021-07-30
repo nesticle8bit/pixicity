@@ -696,3 +696,39 @@ a.nick span {
     color:#B1B1B1;
     font-family: Helvetica;
 }
+
+#modalBody {
+    text-align: center;
+}
+
+#modalBody label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+#modalBody input:focus, textarea:focus#msg_body {
+    box-shadow: 0 0 5px 0 #b5dff1;
+    -moz-box-shadow: 0 0 5px 0 #B5DFF1;
+    -webkit-box-shadow: 0 0 5px 0 #b5dff1;
+    border: 1px solid #38B2E5;
+}
+
+#modalBody input, #modalBody textarea {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 8px 10px;
+    background: #fff;
+    border-right: solid 1px #c6c6c6;
+    border-left: solid 1px #c6c6c6;
+    border-top: solid 1px #cecece;
+    border-bottom: solid 1px #a4a4a4;
+    box-shadow: 0 1px 1px #d3d3d3;
+    -mox-box-shadow: 0 1px 1px #D3D3D3;
+    -webkit-box-shadow: 0 1px 1px #d3d3d3;
+    font-size: 13px;
+    font-family: Helvetica,Arial;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
