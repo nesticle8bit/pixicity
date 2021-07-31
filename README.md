@@ -8,7 +8,7 @@ Voy a desarrollar este proyecto en angular y en asp.net core
 ### To-Do
 
   - Posts 
-    - [ ] Lista de Posts consultando a la base de datos
+    - [x] Lista de Posts consultando a la base de datos
     - [ ] Sección para crear los Posts
     - [ ] Implementar el bbCode tanto para los posts como para los comentarios
     - [ ] Paginación por backend para la lista de posts del index
