@@ -53,6 +53,8 @@ import { HttpGeneralService } from './services/implementations/httpGeneral.servi
 import { TopTimesSelectorComponent } from './components/sections/top-times-selector/top-times-selector.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CategoriesSelectorComponent } from './components/sections/categories-selector/categories-selector.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -105,7 +107,9 @@ import { CategoriesSelectorComponent } from './components/sections/categories-se
       closeButton: true
     }),
     MatDialogModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatChipsModule,
+    MatFormFieldModule
   ],
   providers: [
     DisplayComponentService,
