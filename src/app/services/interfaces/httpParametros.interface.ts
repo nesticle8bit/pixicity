@@ -5,4 +5,5 @@ import { Observable } from "rxjs";
 export abstract class IHttpParametrosService {
     abstract getPaisesDropdown(): Observable<any>;
     abstract getEstadosByPais(idPais: number): Observable<any>;
+    abstract getCategoriasDropdown(): Observable<any>;
 }

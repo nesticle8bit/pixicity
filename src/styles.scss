@@ -564,6 +564,12 @@ a.ircielo {
     background: #025881;
 }
 
+.image {
+    &-middle {
+        vertical-align: middle;
+    }
+}
+
 .menuTabs li a img, .userInfoLogin img  {
     vertical-align:middle;
 }
@@ -781,4 +787,62 @@ a.nick span {
 
 .lista-posts:nth-child(2n+1) {
     background: #fff;
+}
+
+.catbox {
+    margin: 6px 0 6px 6px;
+    width: 180px;
+}
+
+.boxpp, .catbox:hover .liscat, .liscat a {
+    display: block;
+}
+
+.liscat, .simcat {
+    background: #fff;
+}
+
+.simcat {
+    border: 1px solid #ebebeb;
+    color: #494d50;
+    padding: 3px 10px;
+    font-size: 0.8rem;
+}
+
+.simcat span:before {
+    display: inline-block;
+    content: "";
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #696969;
+}
+
+.liscat {
+    display: none;
+    border: solid #ebebeb;
+    border-width: 0 1px 1px;
+    overflow: auto;
+    max-height: 380px;
+    position: absolute;
+    width: 179px;
+    z-index: 1;
+    font-size: .8rem
+}
+
+.liscat a {
+    font-weight: 400;
+    text-align: left;
+    padding: 0 10px;
+    line-height: 1.8em;
+    color: #4d4d4d;
+}
+
+.liscat a.listo, .liscat a:hover {
+    color: #2594ef;
+    text-decoration: none;
 }
