@@ -51,7 +51,7 @@ import { DialogAfiliarseComponent } from './components/dialogs/dialog-afiliarse/
 import { IHttpGeneralService } from './services/interfaces/httpGeneral.interface';
 import { HttpGeneralService } from './services/implementations/httpGeneral.service';
 import { TopTimesSelectorComponent } from './components/sections/top-times-selector/top-times-selector.component';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { CategoriesSelectorComponent } from './components/sections/categories-selector/categories-selector.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -59,6 +59,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DialogPrevisualizarPostComponent } from './components/dialogs/dialog-previsualizar-post/dialog-previsualizar-post.component';
 import { IHttpPostsService } from './services/interfaces/httpPosts.interface';
 import { HttpPostsService } from './services/implementations/httpPosts.service';
+import { getSpanishPaginatorIntl } from './shared/helpers/getSpanishPaginatorIntl';
 
 @NgModule({
   declarations: [
@@ -124,7 +125,8 @@ import { HttpPostsService } from './services/implementations/httpPosts.service';
     { provide: IHttpGeneralService, useClass: HttpGeneralService },
     { provide: IHttpPostsService, useClass: HttpPostsService },
 
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() }
   ],
   entryComponents: [
     DialogAfiliarseComponent,
