@@ -53,6 +53,12 @@ import { HttpGeneralService } from './services/implementations/httpGeneral.servi
 import { TopTimesSelectorComponent } from './components/sections/top-times-selector/top-times-selector.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CategoriesSelectorComponent } from './components/sections/categories-selector/categories-selector.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { DialogPrevisualizarPostComponent } from './components/dialogs/dialog-previsualizar-post/dialog-previsualizar-post.component';
+import { IHttpPostsService } from './services/interfaces/httpPosts.interface';
+import { HttpPostsService } from './services/implementations/httpPosts.service';
 
 @NgModule({
   declarations: [
@@ -84,7 +90,8 @@ import { CategoriesSelectorComponent } from './components/sections/categories-se
     TopsComponent,
     DialogAfiliarseComponent,
     TopTimesSelectorComponent,
-    CategoriesSelectorComponent
+    CategoriesSelectorComponent,
+    DialogPrevisualizarPostComponent
   ],
   imports: [
     BrowserModule,
@@ -105,18 +112,23 @@ import { CategoriesSelectorComponent } from './components/sections/categories-se
       closeButton: true
     }),
     MatDialogModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatChipsModule,
+    MatFormFieldModule,
+    MatSlideToggleModule
   ],
   providers: [
     DisplayComponentService,
     { provide: IHttpSecurityService, useClass: HttpSecurityService },
     { provide: IHttpParametrosService, useClass: HttpParametrosService },
     { provide: IHttpGeneralService, useClass: HttpGeneralService },
+    { provide: IHttpPostsService, useClass: HttpPostsService },
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   entryComponents: [
-    DialogAfiliarseComponent
+    DialogAfiliarseComponent,
+    DialogPrevisualizarPostComponent
   ],
   bootstrap: [AppComponent]
 })

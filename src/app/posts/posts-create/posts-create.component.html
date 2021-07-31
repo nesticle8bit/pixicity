@@ -1,11 +1,114 @@
-<div class="container container--home">
-    <div class="row">
-        <div class="col-12 col-sm-6">
+<div class="container container--home pb-3 form-add-post">
+    <form [formGroup]="formGroup">
+        <div class="row">
+            <div class="col-12 col-sm-8">
+                <section class="mb-3">
+                    <label class="control-label">
+                        <span class="required"></span> Titulo
+                    </label>
 
-        </div>
-        
-        <div class="col-12 col-sm-6">
+                    <input type="text" class="form-control" formControlName="titulo" />
+                </section>
 
+                <section class="mb-3">
+                    <label class="control-label">
+                        <span class="required"></span> Contenido
+                    </label>
+
+                    <textarea class="form-control" formControlName="contenido" rows="20"></textarea>
+                </section>
+
+                <section class="float-end">
+                    <button mat-flat-button class="mat-success" (click)="previsualizar()">Previsualizar</button>
+                </section>
+            </div>
+
+            <aside class="col-12 col-sm-4">
+                <section class="mb-3">
+                    <label class="control-label">
+                        <span class="required"></span> Categoría
+                    </label>
+
+                    <ng-select [items]="categorias" bindLabel="nombre" bindValue="id" formControlName="categoria">
+                        <ng-template ng-label-tmp let-item="item">
+                            <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
+                                [src]="'/assets/images/categorias/' + item.icono" />
+                            {{item.nombre}}
+                        </ng-template>
+
+                        <ng-template ng-option-tmp let-item="item" let-index="index">
+                            <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
+                                [src]="'/assets/images/categorias/' + item.icono" />
+                            {{item.nombre}}
+                        </ng-template>
+                    </ng-select>
+                </section>
+
+                <section id="tagsfox" class="mb-3">
+                    <label class="control-label">
+                        <span class="required"></span> Etiquetas
+                    </label>
+
+                    <ng-select class="ng-select-borders" [items]="[]" [addTag]="true" [multiple]="true"
+                        [selectOnTab]="true" [isOpen]="false" formControlName="etiquetas">
+                    </ng-select>
+
+                    <p>Ingresa <b>al menos 4 etiquetas</b> distintas separadas por comas que describan el contenido de
+                        tu
+                        post.</p>
+                </section>
+
+                <section class="mb-3">
+                    <label class="control-label">
+                        ¿Quiénes pueden comentar?
+                    </label>
+
+                    <select class="form-control" tabindex="5" formControlName="quienPuedeComentar">
+                        <option value="0" selected="selected">Todos pueden comentar</option>
+                        <option value="1">Nadie puede comentar</option>
+                    </select>
+                </section>
+
+                <section class="mb-3">
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <button mat-flat-button class="mat-gray">Guardar en Borradores</button>
+                        </div>
+
+                        <div class="col-12 col-sm-6 text-end">
+                            <button mat-flat-button class="mat-blue">
+                                Publicar
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-3">
+                    <label class="control-label">
+                        Otras Opciones
+                    </label>
+
+                    <main class="p-3 border">
+                        <section class="mb-3">
+                            <mat-slide-toggle color="primary">Post privado</mat-slide-toggle>
+                            <br>
+                            <small class="text-muted">Podrán verlo sólo usuarios registrados</small>
+                        </section>
+
+                        <section class="mb-3">
+                            <mat-slide-toggle color="primary">Visitas recientes</mat-slide-toggle>
+                            <br>
+                            <small class="text-muted">Se veran los últimos visitantes</small>
+                        </section>
+
+                        <section>
+                            <mat-slide-toggle color="primary">Sin smileys</mat-slide-toggle>
+                            <br>
+                            <small class="text-muted">Si tu post no necesita smileys</small>
+                        </section>
+                    </main>
+                </section>
+            </aside>
         </div>
-    </div>
+    </form>
 </div>
