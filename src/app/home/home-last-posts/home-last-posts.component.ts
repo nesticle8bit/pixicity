@@ -18,7 +18,8 @@ export class HomeLastPostsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getPosts();
+    let pageEvent: PageEvent = { pageIndex: 0, pageSize: 32, length: 0 };
+    this.pageChange(pageEvent);
   }
 
   getPosts(): void {
