@@ -52,6 +52,7 @@ import { IHttpGeneralService } from './services/interfaces/httpGeneral.interface
 import { HttpGeneralService } from './services/implementations/httpGeneral.service';
 import { TopTimesSelectorComponent } from './components/sections/top-times-selector/top-times-selector.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { CategoriesSelectorComponent } from './components/sections/categories-selector/categories-selector.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     FavoritosComponent,
     TopsComponent,
     DialogAfiliarseComponent,
-    TopTimesSelectorComponent
+    TopTimesSelectorComponent,
+    CategoriesSelectorComponent
   ],
   imports: [
     BrowserModule,

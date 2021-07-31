@@ -1,0 +1,18 @@
+
+
+<section style="margin-top: -8px" class="float-end">
+    <div class="catbox">
+        <div class="simcat" (mouseenter)="display = true" (mouseleave)="display = false">
+            Todas las categorías<span></span>
+        </div>
+    
+        <div class="liscat" [style.display]="display ? 'block' : 'none'" (mouseenter)="display = true"
+            (mouseleave)="display = false">
+            <a [routerLink]="['']" class="listo">Todas las categorías</a>
+    
+            <a *ngFor="let categoria of categorias" [routerLink]="['/posts/' + categoria.seo]">
+                <!-- <img src="/assets/images/categorias/{{categoria.icono}}" class="image-middle" /> --> {{categoria.nombre}}
+            </a>
+        </div>
+    </div>   
+</section>
