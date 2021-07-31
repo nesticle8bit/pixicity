@@ -55,6 +55,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { CategoriesSelectorComponent } from './components/sections/categories-selector/categories-selector.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { DialogPrevisualizarPostComponent } from './components/dialogs/dialog-previsualizar-post/dialog-previsualizar-post.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +88,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     TopsComponent,
     DialogAfiliarseComponent,
     TopTimesSelectorComponent,
-    CategoriesSelectorComponent
+    CategoriesSelectorComponent,
+    DialogPrevisualizarPostComponent
   ],
   imports: [
     BrowserModule,
@@ -109,7 +112,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatDialogModule,
     MatPaginatorModule,
     MatChipsModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatSlideToggleModule
   ],
   providers: [
     DisplayComponentService,
@@ -120,7 +124,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   entryComponents: [
-    DialogAfiliarseComponent
+    DialogAfiliarseComponent,
+    DialogPrevisualizarPostComponent
   ],
   bootstrap: [AppComponent]
 })
