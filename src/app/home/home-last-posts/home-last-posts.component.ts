@@ -9,6 +9,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
   styleUrls: ['./home-last-posts.component.scss']
 })
 export class HomeLastPostsComponent implements OnInit {
+  public stickyPosts: any = [];
   public lastPosts: any = [];
   public totalCount: number = 0;
 
@@ -18,6 +19,8 @@ export class HomeLastPostsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getStickyPosts();
+    
     let pageEvent: PageEvent = { pageIndex: 0, pageSize: 32, length: 0 };
     this.pageChange(pageEvent);
   }
@@ -26,6 +29,12 @@ export class HomeLastPostsComponent implements OnInit {
     this.postService.getPosts().subscribe((response: any) => {
       this.lastPosts = response.data;
       this.totalCount = response.pagination.totalCount;
+    });
+  }
+
+  getStickyPosts(): void {
+    this.postService.getStickyPosts().subscribe((posts: any) => {
+      this.stickyPosts = posts;
     });
   }
 
