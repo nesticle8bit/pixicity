@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
+import { PaginationService } from 'src/app/services/shared/pagination.service';
 
 @Component({
   selector: 'app-home-last-posts',
@@ -7,14 +10,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeLastPostsComponent implements OnInit {
   public lastPosts: any = [];
+  public totalCount: number = 0;
 
-  constructor() { }
+  constructor(
+    public paginationService: PaginationService,
+    private postService: IHttpPostsService
+  ) { }
 
   ngOnInit(): void {
-    for (let index = 0; index < 28; index++) {
-      this.lastPosts.push({
-        title: `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`
-      });
-    }
+    this.getPosts();
+  }
+
+  getPosts(): void {
+    this.postService.getPosts().subscribe((response: any) => {
+      this.lastPosts = response.data;
+      this.totalCount = response.pagination.totalCount;
+    });
+  }
+
+  pageChange(event: PageEvent): void {
+    this.paginationService.change(event);
+    this.getPosts();
   }
 }

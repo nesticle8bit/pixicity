@@ -57,6 +57,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DialogPrevisualizarPostComponent } from './components/dialogs/dialog-previsualizar-post/dialog-previsualizar-post.component';
+import { IHttpPostsService } from './services/interfaces/httpPosts.interface';
+import { HttpPostsService } from './services/implementations/httpPosts.service';
 
 @NgModule({
   declarations: [
@@ -120,6 +122,7 @@ import { DialogPrevisualizarPostComponent } from './components/dialogs/dialog-pr
     { provide: IHttpSecurityService, useClass: HttpSecurityService },
     { provide: IHttpParametrosService, useClass: HttpParametrosService },
     { provide: IHttpGeneralService, useClass: HttpGeneralService },
+    { provide: IHttpPostsService, useClass: HttpPostsService },
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],

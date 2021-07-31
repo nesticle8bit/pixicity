@@ -5,13 +5,14 @@
 
 <article class="lista-posts" *ngFor="let post of lastPosts">
     <a [routerLink]="['/posts/downloads/1/Windows 10']">
-        <img src="/assets/images/categorias/music.png" /> {{post.title}}
+        <img src="/assets/images/categorias/{{post.icono}}" /> {{post.titulo}}
     </a>
 </article>
 
 <div class="row">
     <div class="col-12">
-        <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+        <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+            [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
         </mat-paginator>
     </div>
 </div>
