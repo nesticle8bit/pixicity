@@ -15,12 +15,19 @@
                         <span class="required"></span> Contenido
                     </label>
 
-                    <textarea class="form-control" formControlName="contenido" rows="20"></textarea>
+                    <div class="NgxEditor__Wrapper">
+                        <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                        <ngx-editor
+                          [editor]="editor"
+                          formControlName="contenido"
+                          [placeholder]="'Ingresa el Contenido'"
+                        ></ngx-editor>
+                      </div>
                 </section>
 
-                <section class="float-end">
+                <!-- <section class="float-end">
                     <button mat-flat-button class="mat-success" (click)="previsualizar()">Previsualizar</button>
-                </section>
+                </section> -->
             </div>
 
             <aside class="col-12 col-sm-4">
@@ -76,7 +83,7 @@
                         </div>
 
                         <div class="col-12 col-sm-6 text-end">
-                            <button mat-flat-button class="mat-blue">
+                            <button mat-flat-button class="mat-success">
                                 Publicar
                             </button>
                         </div>

@@ -1,19 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogPrevisualizarPostComponent } from 'src/app/components/dialogs/dialog-previsualizar-post/dialog-previsualizar-post.component';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
+import { Editor, Toolbar } from 'ngx-editor';
 
 @Component({
   selector: 'app-posts-create',
   templateUrl: './posts-create.component.html',
   styleUrls: ['./posts-create.component.scss']
 })
-export class PostsCreateComponent implements OnInit {
+export class PostsCreateComponent implements OnInit, OnDestroy {
+  public editor: Editor;
   public formGroup: FormGroup;
   public categorias: any[] = [];
   public etiquetas: any = [];
+
+  public toolbar: Toolbar = [
+    ["bold", "italic"],
+    ["underline", "strike"],
+    ["blockquote"],
+    ["ordered_list", "bullet_list"],
+    [{ heading: ["h1", "h2", "h3", "h4", "h5", "h6"] }],
+    ["link", "image"],
+    ["text_color"],
+    ["align_left", "align_center", "align_right", "align_justify"]
+  ];
 
   constructor(
     private parametrosService: IHttpParametrosService,
@@ -28,10 +41,16 @@ export class PostsCreateComponent implements OnInit {
       quienPuedeComentar: [0, Validators.required],
       esPrivado: [false, Validators.required]
     });
+
+    this.editor = new Editor();
   }
 
   ngOnInit(): void {
     this.getCategorias();
+  }
+
+  ngOnDestroy(): void {
+    this.editor.destroy();
   }
 
   getCategorias(): void {
