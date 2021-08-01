@@ -44,4 +44,19 @@ export class HttpPostsService implements IHttpPostsService {
                 }
             })).pipe(catchError(this.helper.errorHandler));
     }
+
+    getPostById(postId: number): Observable<any> {
+        return this.http.get<any>(`${environment.api}/api/posts/getPostById?postId=${postId}`)
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
+    }
 }

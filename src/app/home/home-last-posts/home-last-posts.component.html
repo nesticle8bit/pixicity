@@ -6,7 +6,7 @@
 <article class="lista-posts sticky-post--list" *ngFor="let post of stickyPosts">
     <img src="/assets/images/categorias/sticky.png" class="sticky-post--home" title="Post fijado por el Staff" alt="Sticky" *ngIf="post.sticky" />
 
-    <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.titulo]" title="{{post.titulo}}">
+    <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
         <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
             alt="{{post.categoria.nombre}}" />
         {{post.titulo | truncate:[60]}}
@@ -14,7 +14,7 @@
 </article>
 
 <article class="lista-posts" *ngFor="let post of lastPosts">
-    <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.titulo]" title="{{post.titulo}}">
+    <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
         <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
             alt="{{post.categoria.nombre}}" />
         {{post.titulo | truncate:[60]}}

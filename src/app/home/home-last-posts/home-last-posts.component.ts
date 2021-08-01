@@ -20,7 +20,7 @@ export class HomeLastPostsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getStickyPosts();
-    
+
     let pageEvent: PageEvent = { pageIndex: 0, pageSize: 32, length: 0 };
     this.pageChange(pageEvent);
   }
@@ -28,12 +28,23 @@ export class HomeLastPostsComponent implements OnInit {
   getPosts(): void {
     this.postService.getPosts().subscribe((response: any) => {
       this.lastPosts = response.data;
+
+      this.lastPosts = this.lastPosts.map((post: any) => {
+        post.url = post.titulo.toLowerCase().replace(/\s/g, '-');
+        return post;
+      });
+
       this.totalCount = response.pagination.totalCount;
     });
   }
 
   getStickyPosts(): void {
     this.postService.getStickyPosts().subscribe((posts: any) => {
+      posts = posts.map((post: any) => {
+        post.url = post.titulo.toLowerCase().replace(/\s/g, '-');
+        return post;
+      });
+
       this.stickyPosts = posts;
     });
   }
