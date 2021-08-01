@@ -29,6 +29,7 @@
     "bootstrap": "^5.0.2",
     "ngx-editor": "^10.1.0",
     "ngx-toastr": "^14.0.0",
+    "ngx-ui-loader": "^11.0.0",
     "rxjs": "~6.6.0",
     "sweetalert2": "^11.0.20",
     "tslib": "^2.2.0",
