@@ -64,6 +64,7 @@ import { TruncatePipe } from './shared/pipes/truncate.pipe';
 import { Ads160x600Component } from './components/ads/ads160x600/ads160x600.component';
 import { Ads300x250Component } from './components/ads/ads300x250/ads300x250.component';
 import { NgxEditorModule } from 'ngx-editor';
+import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
 
 @NgModule({
   declarations: [
@@ -156,6 +157,11 @@ import { NgxEditorModule } from 'ngx-editor';
         remove: 'Eliminar',
         insertImage: 'Insertar imagen'
       },
+    }),
+    NgxUiLoaderModule,
+    NgxUiLoaderHttpModule.forRoot({
+      showForeground: true,
+      exclude: []
     })
   ],
   providers: [

@@ -2,11 +2,17 @@
     <span>Comentarios recientes</span>
 
     <div class="float-end">
-        <img class="cursor-pointer" src="/assets/images/icons/arrow-circle-double.png" #tooltip="matTooltip" matTooltip="Actualizar comentarios" [matTooltipPosition]="'above'" />
+        <img class="cursor-pointer" src="/assets/images/icons/arrow-circle-double.png" (click)="getUltimosComentarios()" #tooltip="matTooltip" matTooltip="Actualizar comentarios" [matTooltipPosition]="'above'" />
     </div>
 </h6>
 
-<table class="table table-striped last-posts">
+<section *ngIf="lastComments?.length < 1">
+    <div class="alert alert-warning">
+        <b>😴 Aún no se han realizado comentarios en Pixicity!</b>
+    </div>
+</section>
+
+<table class="table table-striped last-posts" *ngIf="lastComments?.length > 0">
     <tbody>
         <tr *ngFor="let post of lastComments">
             <td>
