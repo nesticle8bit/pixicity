@@ -63,6 +63,7 @@ import { getSpanishPaginatorIntl } from './shared/helpers/getSpanishPaginatorInt
 import { TruncatePipe } from './shared/pipes/truncate.pipe';
 import { Ads160x600Component } from './components/ads/ads160x600/ads160x600.component';
 import { Ads300x250Component } from './components/ads/ads300x250/ads300x250.component';
+import { NgxEditorModule } from 'ngx-editor';
 
 @NgModule({
   declarations: [
@@ -122,7 +123,40 @@ import { Ads300x250Component } from './components/ads/ads300x250/ads300x250.comp
     MatPaginatorModule,
     MatChipsModule,
     MatFormFieldModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    NgxEditorModule.forRoot({
+      locals: {
+        bold: 'Negrita [Ctrl+B]',
+        italic: 'Cursiva [Ctrl+I]',
+        code: 'Code',
+        underline: 'Subrayado [Ctrl+U]',
+        strike: 'Tachado',
+        blockquote: 'Cita',
+        bullet_list: 'Lista de viñetas',
+        ordered_list: 'Lista ordenada',
+        heading: 'Encabezado',
+        h1: 'Encabezado 1',
+        h2: 'Encabezado 2',
+        h3: 'Encabezado 3',
+        h4: 'Encabezado 4',
+        h5: 'Encabezado 5',
+        h6: 'Encabezado 6',
+        align_left: 'Alinear a la izquierda',
+        align_center: 'Centrar',
+        align_right: 'Alinear a la derecha',
+        align_justify: 'Justificar',
+        text_color: 'Color',
+        background_color: 'Color de fondo',
+        url: 'URL',
+        text: 'Texto',
+        openInNewTab: 'Abrir en una nueva pestaña',
+        insert: 'Insertar',
+        altText: 'Texto alternativo',
+        title: 'Título',
+        remove: 'Eliminar',
+        insertImage: 'Insertar imagen'
+      },
+    })
   ],
   providers: [
     DisplayComponentService,
