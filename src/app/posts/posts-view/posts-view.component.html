@@ -83,7 +83,7 @@
 
             <div class="interes">
                 <h3>También te puede interesar...</h3>
-                
+
                 <div class="nada-gris">
                     No hay posts relacionados que te puedan interesar
                 </div>
@@ -113,7 +113,7 @@
 
                     <div class="nekes">
                         <fa-icon [icon]="['fas', 'mars']" class="vctip" tooltip="matTooltip" matTooltip="Hombre"
-                        [matTooltipPosition]="'below'"></fa-icon>
+                            [matTooltipPosition]="'below'"></fa-icon>
                         <img class="vctip pai" src="/assets/images/flags/co.png" />
                     </div>
 
@@ -131,14 +131,23 @@
                         </div>
                     </div>
 
-                    <a class="bgris unfollow_user_post"
-                        onclick="notifica.unfollow('user', 1, notifica.userInPostHandle, $(this).children('span'))"
-                        style="display: none;">Siguiendo</a>
-                    <a class="bverde follow_user_post"
-                        onclick="notifica.follow('user', 1, notifica.userInPostHandle, $(this).children('span'))">Seguir</a>
+                    <a class="bgris unfollow_user_post" style="display: none;">
+                        Siguiendo
+                    </a>
 
+                    <a class="bverde follow_user_post">
+                        Seguir
+                    </a>
                 </div>
             </div>
+
+            <app-ads300x250></app-ads300x250>
+
+            <section class="interes">
+                <div class="titulaw">
+                    <h2>Posts Relacionados</h2>
+                </div>
+            </section>
         </div>
     </div>
 </div>

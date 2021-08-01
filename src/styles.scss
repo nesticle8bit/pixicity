@@ -998,6 +998,11 @@ a.nick span {
     padding-top: 15px;
 }
 
+.esees {
+    overflow: hidden;
+    margin: 0 0 10px;
+}
+
 .letres {
     color: #7e7e7e;
     float: left;
@@ -1345,4 +1350,43 @@ p.cupuntos {
     text-align: center;
     color: #555;
     background: #F7F7F7;
+}
+
+.titulaw {
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.titulaw h2 {
+    color: #9f9f9f;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.clerela {
+    overflow: hidden;
+    padding: 10px 0;
+    float: left;
+    width: 250px;
+    height: 67px;
+    border-bottom: solid 1px #e0e0e0;
+    clear: both;
+}
+
+.interes .clerela {
+    border: 0;
+    clear: none;
+    float: left;
+    width: 48.3%;
+    margin-right: 3.3%;
+    padding: 0;
+    height: 250px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+#relse .clerela {
+    width: 100%;
+    height: 212px;
 }
