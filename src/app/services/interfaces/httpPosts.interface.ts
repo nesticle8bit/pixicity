@@ -7,4 +7,5 @@ export abstract class IHttpPostsService {
     abstract getStickyPosts(): Observable<any>;
     abstract getPostById(postId: number): Observable<any>;
     abstract savePost(post: any): Observable<any>;
+    abstract addComentario(comentario: any): Observable<any>;
 }

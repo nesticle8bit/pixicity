@@ -1,3 +1,4 @@
+import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,10 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home-stats.component.scss']
 })
 export class HomeStatsComponent implements OnInit {
-
-  constructor() { }
+  public estadisticas: any;
+  
+  constructor(
+    private generalService: IHttpGeneralService
+  ) { }
 
   ngOnInit(): void {
+    this.generalService.getEstadisticas().subscribe((values: any) => {
+      this.estadisticas = values;
+    });
   }
 
 }
