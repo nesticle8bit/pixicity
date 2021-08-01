@@ -983,6 +983,11 @@ a.nick span {
     border-top: solid 1px #ebebeb;
     padding: 20px 0 0;
     margin-top: 20px;
+
+    & img {
+        max-width: 100%;
+        height: auto;
+    }
 }
 
 .tagbox {
@@ -1395,3 +1400,4 @@ p.cupuntos {
     min-height: 410px;
     font-size: .9rem;
 }
+

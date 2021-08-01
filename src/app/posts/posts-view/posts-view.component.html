@@ -108,13 +108,13 @@
                     <div class="eolr">
                         <span class="tepe-online vctip" #tooltip="matTooltip" matTooltip="Online"
                             [matTooltipPosition]="'below'"></span>
-                        <a href="#">jjpoveda92</a>
+                        <a href="#">{{usuario.userName}}</a>
                     </div>
 
                     <div class="nekes">
                         <fa-icon [icon]="['fas', 'mars']" class="vctip" tooltip="matTooltip" matTooltip="Hombre"
                             [matTooltipPosition]="'below'"></fa-icon>
-                        <img class="vctip pai" src="/assets/images/flags/co.png" />
+                        <img class="vctip pai" src="/assets/images/flags/{{usuario?.pais.toLowerCase()}}.png" />
                     </div>
 
                     <div class="eliese">
