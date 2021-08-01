@@ -1198,3 +1198,151 @@ p.cupuntos {
 .bulto strong {
     margin-right: 5px;
 }
+
+.eites {
+    width: 120px;
+    height: 120px;
+    float: left;
+    margin-right: 10px;
+}
+
+.eites a.nomis {
+    display: block;
+    clear: both;
+    height: 120px;
+    width: 120px;
+}
+
+.eites a.nomis img {
+    height: 120px;
+    width: 120px;
+}
+
+.eites span {
+    display: block;
+    background: #fff;
+    font-size: 10px;
+    height: 24px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 24px;
+}
+
+.gkes {
+    overflow: hidden;
+    width: 176px;
+    float: right;
+}
+
+.eolr {
+    float: left;
+}
+
+.eolr span {
+    border-radius: 15px;
+    display: block;
+    width: 10px;
+    height: 10px;
+    float: left;
+    margin: 5px 5px 0 0;
+}
+
+.eolr span.tepe-offline {
+    background: #B3BAB6;
+}
+
+.eolr span.tepe-online {
+    background: #01db59;
+}
+
+.eolr a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    float: left;
+    display: block;
+    max-width: 118px;
+    line-height: 16px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #2e96ec;
+}
+
+.nekes {
+    float: right;
+}
+
+.nekes fa-icon {
+    font-size: 1rem;
+    color: #adadad;
+    float: left;
+    margin: -3px 0px;
+}
+
+.nekes img {
+    float: right;
+    margin: 3px 5px;
+}
+
+.eliese {
+    overflow: hidden;
+    height: 65px;
+    margin-bottom: 10px;
+    clear: both;
+    margin-top: 21px;
+}
+
+.bverde {
+    text-align: center;
+    height: 24px;
+    line-height: 24px;
+    display: block;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: #01db59;
+    border-radius: 2px;
+}
+
+.bverde:hover {
+    background: #0bea71;
+    color: #fff;
+}
+
+.tyes {
+    font-size: 12px;
+    color: #494d50;
+    line-height: 18px;
+}
+
+.tyes fa-icon {
+    color: #7e7e7e;
+    font-size: 13px;
+    margin-right: 5px;
+}
+
+.interes {
+    clear: both;
+    width: 95%;
+    margin: 10px auto;
+    overflow: hidden;
+}
+
+.interes h3 {
+    margin: 5px 0 10px;
+    font-size: 16px;
+    color: #7e7e7e;
+    font-weight: 700;
+    border-bottom: 1px solid #ebebeb;
+    border-top: 1px solid #ebebeb;
+    padding: 10px 0;
+    line-height: 18px;
+}
+
+.nada-gris {
+    padding: 6px;
+    text-align: center;
+    color: #555;
+    background: #F7F7F7;
+}
