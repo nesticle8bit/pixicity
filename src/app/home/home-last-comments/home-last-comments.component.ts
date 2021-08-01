@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 
 @Component({
   selector: 'app-home-last-comments',
@@ -8,15 +9,18 @@ import { Component, OnInit } from '@angular/core';
 export class HomeLastCommentsComponent implements OnInit {
   public lastComments: any = [];
 
-  constructor() { }
+  constructor(
+    private postService: IHttpPostsService
+  ) { }
 
   ngOnInit(): void {
-    for (let index = 0; index < 10; index++) {
-      this.lastComments.push({
-        user: `nesticle${index}bit`,
-        comment: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. #${index}`
-      });
-    }
+    this.getUltimosComentarios();
+  }
+
+  getUltimosComentarios(): void {
+    this.postService.getUltimosComentarios().subscribe((comentarios: any) => {
+      this.lastComments = comentarios;
+    });
   }
 
 }

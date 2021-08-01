@@ -75,6 +75,21 @@ export class HttpPostsService implements IHttpPostsService {
             })).pipe(catchError(this.helper.errorHandler));
     }
 
+    getUltimosComentarios(): Observable<any> {
+        return this.http.get<any>(`${environment.api}/api/posts/getComentariosRecientes`)
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
+    }
+
     addComentario(comentario: any): Observable<any> {
         return this.http.post<any>(`${environment.api}/api/posts/addComentario`, comentario)
             .pipe(map((response: any) => {
