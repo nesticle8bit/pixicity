@@ -60,6 +60,8 @@ import { DialogPrevisualizarPostComponent } from './components/dialogs/dialog-pr
 import { IHttpPostsService } from './services/interfaces/httpPosts.interface';
 import { HttpPostsService } from './services/implementations/httpPosts.service';
 import { getSpanishPaginatorIntl } from './shared/helpers/getSpanishPaginatorIntl';
+import { TruncatePipe } from './shared/pipes/truncate.pipe';
+import { Ads160x600Component } from './components/ads/ads160x600/ads160x600.component';
 
 @NgModule({
   declarations: [
@@ -92,7 +94,9 @@ import { getSpanishPaginatorIntl } from './shared/helpers/getSpanishPaginatorInt
     DialogAfiliarseComponent,
     TopTimesSelectorComponent,
     CategoriesSelectorComponent,
-    DialogPrevisualizarPostComponent
+    DialogPrevisualizarPostComponent,
+    TruncatePipe,
+    Ads160x600Component
   ],
   imports: [
     BrowserModule,

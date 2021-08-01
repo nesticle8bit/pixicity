@@ -1,24 +1,92 @@
-<div class="container">
+<div class="container my-3" style="padding: 0">
     <div class="row">
-        <div class="col-12">
-            <h1>Bienvenidos a Pixicity</h1>
+        <div class="col-12 col-sm-12 col-md-8">
+            <main class="boxpc">
+                <h1>{{post?.titulo}}</h1>
+
+                <div class="contenido">
+                    {{post?.contenido}}
+                </div>
+            </main>
+
+            <section class="tagbox">
+                <div class="fortags">
+                    <div class="letres">Tags:</div>
+
+                    <div *ngFor="let etiqueta of post?.tags; let last = last">
+                        <a rel="tag" href="#/buscar/posts/?q=PHPost&amp;type=tags">{{etiqueta}}</a>
+                        <span *ngIf="!last">|</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="nels">
+                <p>
+                    <fa-icon [icon]="['fas', 'award']"></fa-icon> Dar puntos
+                </p>
+            </section>
+
+            <section class="meta">
+                <div class="metacentro">
+                    <div id="puntos-agregados">Puntos agregados!</div>
+
+                    <div class="float-start">
+                        <div class="barpuntos">
+                            <a href="#" onclick="votar_post(1); return false;">1</a>
+                            <a href="#" onclick="votar_post(2); return false;">2</a>
+                            <a href="#" onclick="votar_post(3); return false;">3</a>
+                            <a href="#" onclick="votar_post(4); return false;">4</a>
+                            <a href="#" onclick="votar_post(5); return false;">5</a>
+                        </div>
+                    </div>
+
+                    <div class="float-end">
+                        <p class="cupuntos"><b id="puntos_post">5</b> Puntos</p>
+                    </div>
+                </div>
+                <div class="metabottom">
+                    <div class="botones float-start py-2">
+                        <li>
+                            <a onclick="notifica.sharePost(1);" class="tetese">P!</a>
+                        </li>
+
+                        <li>
+                            <a href="#" onclick="add_favoritos(); return false">
+                                <fa-icon [icon]="['fas', 'star']" class="favoritos"></fa-icon>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <fa-icon [icon]="['fas', 'ban']" class="denunciar"></fa-icon> Denunciar
+                            </a>
+                        </li>
+
+                        <li style="display: none;">
+                            <a class="unfollow_post">
+                                <fa-icon [icon]="['fas', 'eye']" class="dejar-seguir"></fa-icon> Dejar de seguir
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="follow_post">
+                                <fa-icon [icon]="['fas', 'ban']" class="seguir"></fa-icon> Seguir Post
+                            </a>
+                        </li>
+                    </div>
+
+                    <div class="float-end py-2">
+                        <div class="bulto"><strong>7</strong>Visitas</div>
+                        <div class="bulto"><strong id="cfavori">1</strong>Favoritos</div>
+                        <div class="bulto"><strong>0</strong>Medallas</div>
+                        <div class="bulto"><strong id="cseguir">1</strong>Seguidores</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-4">
+
         </div>
     </div>
 </div>
-
-
-
-<!-- 
-<a class="vctip" #tooltip="matTooltip" matTooltip="Post Anterior (más viejo)"
-                        href="#/posts/prev?id=1">
-                        <fa-icon [icon]="['fas', 'angle-left']"></fa-icon>
-                    </a>
-
-                    <a class="vctip" #tooltip="matTooltip" matTooltip="Post Aleatorio" href="#/posts/random">
-                        <fa-icon [icon]="['fas', 'random']"></fa-icon>
-                    </a>
-
-                    <a class="vctip" #tooltip="matTooltip" matTooltip="Post Siguiente (más nuevo)"
-                        href="#/posts/next?id=1">
-                        <fa-icon [icon]="['fas', 'angle-right']"></fa-icon>
-                    </a> -->
