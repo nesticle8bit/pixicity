@@ -1,5 +1,5 @@
 <div class="container container--home pb-3 form-add-post">
-    <form [formGroup]="formGroup">
+    <form [formGroup]="formGroup" (onSubmit)="publicarPost()">
         <div class="row">
             <div class="col-12 col-sm-8">
                 <section class="mb-3">
@@ -36,7 +36,7 @@
                         <span class="required"></span> Categoría
                     </label>
 
-                    <ng-select [items]="categorias" bindLabel="nombre" bindValue="id" formControlName="categoria">
+                    <ng-select [items]="categorias" bindLabel="nombre" bindValue="id" formControlName="categoriaId">
                         <ng-template ng-label-tmp let-item="item">
                             <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
                                 [src]="'/assets/images/categorias/' + item.icono" />
@@ -70,24 +70,7 @@
                         ¿Quiénes pueden comentar?
                     </label>
 
-                    <select class="form-control" tabindex="5" formControlName="quienPuedeComentar">
-                        <option value="0" selected="selected">Todos pueden comentar</option>
-                        <option value="1">Nadie puede comentar</option>
-                    </select>
-                </section>
-
-                <section class="mb-3">
-                    <div class="row">
-                        <div class="col-12 col-sm-6">
-                            <button mat-flat-button class="mat-gray">Guardar en Borradores</button>
-                        </div>
-
-                        <div class="col-12 col-sm-6 text-end">
-                            <button mat-flat-button class="mat-success">
-                                Publicar
-                            </button>
-                        </div>
-                    </div>
+                    <ng-select [items]="quienPuedeComentar" bindLabel="label" bindValue="value" formControlName="quienPuedeComentar"></ng-select>
                 </section>
 
                 <section class="mb-3">
@@ -97,7 +80,7 @@
 
                     <main class="p-3 border">
                         <section class="mb-3">
-                            <mat-slide-toggle color="primary">Post privado</mat-slide-toggle>
+                            <mat-slide-toggle color="primary" formControlName="esPrivado">Post privado</mat-slide-toggle>
                             <br>
                             <small class="text-muted">Podrán verlo sólo usuarios registrados</small>
                         </section>
@@ -109,11 +92,25 @@
                         </section>
 
                         <section>
-                            <mat-slide-toggle color="primary">Sin smileys</mat-slide-toggle>
+                            <mat-slide-toggle color="primary" formControlName="smileys">Sin smileys</mat-slide-toggle>
                             <br>
                             <small class="text-muted">Si tu post no necesita smileys</small>
                         </section>
                     </main>
+                </section>
+
+                <section class="mb-3">
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <button mat-flat-button class="mat-gray">Guardar en Borradores</button>
+                        </div>
+
+                        <div class="col-12 col-sm-6 text-end">
+                            <button type="submit" mat-flat-button class="mat-success" (click)="publicarPost()">
+                                Publicar
+                            </button>
+                        </div>
+                    </div>
                 </section>
             </aside>
         </div>
