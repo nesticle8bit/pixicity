@@ -988,6 +988,10 @@ a.nick span {
         max-width: 100%;
         height: auto;
     }
+
+    & p {
+        font-size: .9rem;
+    }
 }
 
 .tagbox {
@@ -1401,3 +1405,161 @@ p.cupuntos {
     font-size: .9rem;
 }
 
+#post-comentarios {
+    padding: 7px 20px 20px;
+    background: #fff;
+    border-radius: 5px 5px 0 0;
+    width: 98%;
+}
+
+#post-comentarios .titular {
+    height: auto;
+    margin-bottom: 0;
+    background: transparent;
+    position: relative;
+}
+
+#post-comentarios .titular h3 {
+    color: #7e7e7e;
+    background: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 10px 0;
+    margin: 0;
+}
+
+#com_gif {
+    float: right;
+    padding-left: 10px;
+    position: absolute;
+    top: 17px;
+    right: 0;
+}
+
+.avatar-box {
+    margin: 0 12px;
+    position: relative;
+    float: left;
+    margin: 0 10px;
+    width: 52px;
+    height: 53px;
+}
+
+.avatar-box img {
+    background: #fff;
+    border-radius: 5px;
+    border: 0;
+    box-shadow: 0 0;
+    padding: 0;
+}
+
+#respuestas {
+    margin: 0;
+    overflow: hidden;
+    margin-top: 20px;
+    clear: both;
+}
+
+#respuestas .comentario-post {
+    width: auto;
+    margin: 0 0 0 60px;
+    border-top: 0;
+}
+
+.comentario-post:hover {
+    background: #f9f9f9;
+}
+
+.comment-box {
+    float: none;
+    width: auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.clearbeta:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+    font-size: 0;
+}
+
+.comment-info {
+    overflow: hidden;
+    line-height: 14px;
+}
+
+.comment-info a {
+    font-weight: 700;
+    text-decoration: none;
+    color: #52a3ed;
+    font-size: 14px;
+}
+
+.comment-info .floatL span {
+    font-size: 12px;
+    font-weight: normal;
+    color: #adadae;
+}
+
+.floatL {
+    float: left;
+}
+
+.numbersvotes {
+    float: right;
+    padding: 0 0 0 10px;
+}
+
+span.positivo {
+    color: #4ca306!important;
+    font-weight: bold!important;
+    font-size: 13px!important;
+}
+
+.comment-content {
+    overflow: hidden;
+    margin-top: 8px;
+    word-wrap: break-word;
+    font-size: 13px;
+    color: #494d50;
+    line-height: 19px;
+}
+
+#respuestas .comment-box, .nuevares .comment-box {
+    padding-right: 10px;
+}
+
+.answerOptions {
+    position: absolute;
+    top: 0;
+    right: 7px;
+    display: block;
+}
+
+.botonear {
+    background: transparent;
+    border: 0;
+}
+
+.botonear a {
+    color: #818181;
+    border-right: 0;
+    float: left;
+    padding: 3px 6px;
+    font-size: .8rem;
+}
+
+.botonear a:hover .reply {
+    color: #52a3ed;
+}
+
+.botonear a:hover .edit {
+    color: #6ccb33;
+}
+
+.botonear a:hover .times {
+    color: #db4040;
+}
