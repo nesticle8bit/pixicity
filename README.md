@@ -1,7 +1,7 @@
 # pixicity
 Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de las cenizas a Pixicity!
 
-![image](https://user-images.githubusercontent.com/1715022/127719720-322c9bbb-4e78-440e-8423-25fbf99dbb24.png)
+![image](https://user-images.githubusercontent.com/1715022/127756473-ce9ae536-d7ad-42fb-9735-ea84ac09fbf0.png)
 
 Voy a desarrollar este proyecto en angular y en asp.net core
 
