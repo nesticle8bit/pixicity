@@ -62,6 +62,7 @@ import { HttpPostsService } from './services/implementations/httpPosts.service';
 import { getSpanishPaginatorIntl } from './shared/helpers/getSpanishPaginatorIntl';
 import { TruncatePipe } from './shared/pipes/truncate.pipe';
 import { Ads160x600Component } from './components/ads/ads160x600/ads160x600.component';
+import { Ads300x250Component } from './components/ads/ads300x250/ads300x250.component';
 
 @NgModule({
   declarations: [
@@ -96,7 +97,8 @@ import { Ads160x600Component } from './components/ads/ads160x600/ads160x600.comp
     CategoriesSelectorComponent,
     DialogPrevisualizarPostComponent,
     TruncatePipe,
-    Ads160x600Component
+    Ads160x600Component,
+    Ads300x250Component
   ],
   imports: [
     BrowserModule,
