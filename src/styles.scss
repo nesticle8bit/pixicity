@@ -915,6 +915,11 @@ a.nick span {
     color: #fff;
 }
 
+.mat-danger {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
 .tagsinput {
     background: #FFF;
     overflow-y: auto;
@@ -1668,4 +1673,15 @@ span.positivo {
     font-size: 11px;
     line-height: 15px;
     color: #777;
+}
+
+#bgaviso {
+    background: url('/assets/images/ui/bg2cols.gif') repeat-y;
+    overflow: hidden;
+}
+
+.dotted-border {
+    &--left {
+        border-left: 2px dashed rgb(231, 231, 231);
+    }
 }

@@ -9,6 +9,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { SearchComponent } from './pages/search/search.component';
 import { TopsComponent } from './pages/tops/tops.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
+import { PostNotFoundComponent } from './posts/post-not-found/post-not-found.component';
 import { PostsCreateComponent } from './posts/posts-create/posts-create.component';
 import { PostsViewComponent } from './posts/posts-view/posts-view.component';
 
@@ -19,7 +20,10 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
 
   { path: 'posts/:categoria/:id/:nombre-post', component: PostsViewComponent },
-  { path: 'crear-post', component: PostsCreateComponent },
+  { path: 'posts/404/:nombre-post', component: PostNotFoundComponent },
+
+  { path: 'posts/crear', component: PostsCreateComponent },
+  { path: 'posts/actualizar/:id', component: PostsCreateComponent },
   
   { path: 'mod-history', component: ModHistoryComponent },
   { path: 'mensajes', component: MensajesComponent },

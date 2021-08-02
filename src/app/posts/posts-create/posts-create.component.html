@@ -17,12 +17,9 @@
 
                     <div class="NgxEditor__Wrapper">
                         <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
-                        <ngx-editor
-                          [editor]="editor"
-                          formControlName="contenido"
-                          [placeholder]="'Ingresa el Contenido'"
-                        ></ngx-editor>
-                      </div>
+                        <ngx-editor [editor]="editor" formControlName="contenido"
+                            [placeholder]="'Ingresa el Contenido'"></ngx-editor>
+                    </div>
                 </section>
 
                 <!-- <section class="float-end">
@@ -55,14 +52,15 @@
                     <label class="control-label">
                         <span class="required"></span> Etiquetas
                     </label>
-
-                    <ng-select class="ng-select-borders" [items]="[]" [addTag]="true" [multiple]="true"
-                        [selectOnTab]="true" [isOpen]="false" formControlName="etiquetas">
+                
+                    <ng-select class="ng-select-borders" [items]="[]" [addTag]="true" [multiple]="true" [selectOnTab]="true"
+                        [isOpen]="false" formControlName="etiquetas">
                     </ng-select>
-
-                    <p>Ingresa <b>al menos 4 etiquetas</b> distintas separadas por comas que describan el contenido de
-                        tu
-                        post.</p>
+                
+                    <p>
+                        Ingresa por favor <b>al menos 4 etiquetas</b> (ingresando cada una con la tecla <i>Enter</i> ) distintas que
+                        describan el contenido de tu post.
+                    </p>
                 </section>
 
                 <section class="mb-3">
@@ -70,7 +68,8 @@
                         ¿Quiénes pueden comentar?
                     </label>
 
-                    <ng-select [items]="quienPuedeComentar" bindLabel="label" bindValue="value" formControlName="quienPuedeComentar"></ng-select>
+                    <ng-select [items]="quienPuedeComentar" bindLabel="label" bindValue="value"
+                        formControlName="quienPuedeComentar"></ng-select>
                 </section>
 
                 <section class="mb-3">
@@ -80,7 +79,8 @@
 
                     <main class="p-3 border">
                         <section class="mb-3">
-                            <mat-slide-toggle color="primary" formControlName="esPrivado">Post privado</mat-slide-toggle>
+                            <mat-slide-toggle color="primary" formControlName="esPrivado">Post privado
+                            </mat-slide-toggle>
                             <br>
                             <small class="text-muted">Podrán verlo sólo usuarios registrados</small>
                         </section>
@@ -102,12 +102,20 @@
                 <section class="mb-3">
                     <div class="row">
                         <div class="col-12 col-sm-6">
-                            <button mat-flat-button class="mat-gray">Guardar en Borradores</button>
+                            <button mat-flat-button class="mat-gray">
+                                <fa-icon [icon]="['fas', 'save']"></fa-icon> Guardar en Borradores
+                            </button>
                         </div>
 
                         <div class="col-12 col-sm-6 text-end">
                             <button type="submit" mat-flat-button class="mat-success" (click)="publicarPost()">
-                                Publicar
+                                <span *ngIf="!postId">
+                                    <fa-icon [icon]="['far', 'check-circle']"></fa-icon> Publicar
+                                </span>
+
+                                <span *ngIf="postId">
+                                    <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon> Actualizar
+                                </span>
                             </button>
                         </div>
                     </div>

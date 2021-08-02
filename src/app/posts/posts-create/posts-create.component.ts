@@ -7,7 +7,9 @@ import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametr
 import { Editor, Toolbar } from 'ngx-editor';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
   selector: 'app-posts-create',
@@ -27,7 +29,10 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     {
       label: 'Nadie puede comentar',
       value: 1
-    }];
+    }
+  ];
+  public currentUser: JwtUserModel;
+  public postId: number = 0;
 
   public toolbar: Toolbar = [
     ["bold", "italic"],
@@ -45,9 +50,14 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private postService: IHttpPostsService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private securityService: IHttpSecurityService
   ) {
+    this.currentUser = this.securityService.getCurrentUser();
+
     this.formGroup = this.formBuilder.group({
+      id: 0,
       titulo: ['', Validators.required],
       contenido: ['', Validators.required],
       categoriaId: [undefined, Validators.required],
@@ -55,6 +65,26 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       quienPuedeComentar: [0, Validators.required],
       esPrivado: [false, Validators.required],
       smileys: [false, Validators.required]
+    });
+
+    this.activatedRoute.paramMap.subscribe((value: any) => {
+      this.postId = +value.get('id');
+
+      this.postService.getPostById(this.postId).subscribe((response: any) => {
+        console.log(response);
+
+        if (this.currentUser.usuario.userName != response.usuario.userName) {
+          Swal.fire({
+            title: 'Error',
+            text: 'Oye cerebrito!, no puedes actualizar el post de otra persona 😥',
+            icon: 'warning'
+          }).then(() => {
+            this.router.navigate(['']);
+          });
+        }
+
+        this.setPostOnEdit(response.post);
+      });
     });
 
     this.editor = new Editor();
@@ -66,6 +96,23 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.editor.destroy();
+  }
+
+  setPostOnEdit(post: any): void {
+    let etiquetas = post.etiquetas.split(',');
+    etiquetas = etiquetas.map((tag: string) => {
+      return tag.trim();
+    });
+
+    this.formGroup.patchValue({
+      id: this.postId,
+      titulo: post.titulo,
+      contenido: post.contenido,
+      categoriaId: post.categoria.id,
+      etiquetas: etiquetas,
+      smileys: post.smileys,
+      esPrivado: post.esPrivado
+    });
   }
 
   getCategorias(): void {
@@ -97,15 +144,34 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     const post = Object.assign({}, this.formGroup.value);
     post.etiquetas = post.etiquetas.join();
 
-    this.postService.savePost(post).subscribe((response: any) => {
-      if(response) {
+    const categoria = this.categorias.filter((categoria: any) => categoria.id === post.categoriaId)[0];
+
+    if (!this.postId) {
+      this.postService.savePost(post).subscribe((response: any) => {
+        if (response) {
+          Swal.fire({
+            title: 'Creado',
+            text: 'Se ha creado recientemente tu post 👋🏼',
+            icon: 'success',
+            timer: 3000
+          }).then(() => {
+            this.router.navigate(['']);
+          });
+        }
+      });
+
+      return;
+    }
+
+    this.postService.updatePost(post).subscribe((response: any) => {
+      if (response) {
         Swal.fire({
-          title: 'Creado',
-          text: 'Se ha creado recientemente tu post 👋🏼',
+          title: 'Actualizado',
+          text: 'Se ha actualizado recientemente tu post 👋🏼, ahora lo podrás visualizar con los cambios realizados',
           icon: 'success',
           timer: 3000
         }).then(() => {
-          this.router.navigate(['']);
+          this.router.navigate([`/posts/${categoria.nombre.toLowerCase()}/${post.id}/${post.titulo}`]);
         });
       }
     });
