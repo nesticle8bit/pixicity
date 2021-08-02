@@ -93,7 +93,7 @@
             <div class="mx-auto" id="post-comentarios">
                 <div class="titular">
                     <h3>
-                        <span id="ncomments">{{comentarios.length}}</span> comentarios - {{post?.titulo}}
+                        <span id="ncomments">{{comentarios?.length}}</span> comentarios - {{post?.titulo}}
                     </h3>
 
                     <img src="/assets/images/min-carga.gif" id="com_gif" style="display: none;">
@@ -220,7 +220,7 @@
                 </div>
             </div>
 
-            <div class="miComentario mx-auto">
+            <form class="miComentario mx-auto" [formGroup]="formGroup">
                 <div id="procesando">
                     <div id="post"></div>
                 </div>
@@ -235,15 +235,17 @@
                     <div class="error"></div>
 
                     <textarea id="body_comm" class="autogrow onblur_effect" tabindex="1"
-                        placeholder="Escribir un comentario..."></textarea>
+                        placeholder="Escribir un comentario..." formControlName="contenido"></textarea>
 
                     <div class="buttons">
                         <div class="float-end">
-                            <a class="boton azul">Comentar</a>
+                            <a class="boton azul" (click)="enviarComentario()">
+                                Comentar
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
 
         <div class="col-12 col-sm-12 col-md-3">

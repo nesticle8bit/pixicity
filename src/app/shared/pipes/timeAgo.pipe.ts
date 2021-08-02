@@ -10,7 +10,7 @@ export class TimeAgoPipe implements PipeTransform {
             const seconds = Math.floor((+new Date() - +new Date(value)) / 1000);
 
             if (seconds < 29) {
-                return 'Just now';
+                return 'Hace unos segundos';
             }
 
             const intervals: any = {
@@ -30,9 +30,9 @@ export class TimeAgoPipe implements PipeTransform {
 
                 if (counter > 0)
                     if (counter === 1) {
-                        return `${counter} ${i} ago`;
+                        return `Hace ${counter} ${i}`;
                     } else {
-                        return `${counter} ${i}s ago`;;
+                        return `Hace ${counter} ${i}s`;;
                     }
             }
         }
