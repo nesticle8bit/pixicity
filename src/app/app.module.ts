@@ -65,6 +65,7 @@ import { Ads160x600Component } from './components/ads/ads160x600/ads160x600.comp
 import { Ads300x250Component } from './components/ads/ads300x250/ads300x250.component';
 import { NgxEditorModule } from 'ngx-editor';
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
+import { TimeAgoPipe } from './shared/pipes/timeAgo.pipe';
 
 @NgModule({
   declarations: [
@@ -100,7 +101,8 @@ import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
     DialogPrevisualizarPostComponent,
     TruncatePipe,
     Ads160x600Component,
-    Ads300x250Component
+    Ads300x250Component,
+    TimeAgoPipe
   ],
   imports: [
     BrowserModule,

@@ -1466,6 +1466,10 @@ p.cupuntos {
     border-top: 0;
 }
 
+.comentario-post {
+    padding: 10px 0;
+}
+
 .comentario-post:hover {
     background: #f9f9f9;
 }
@@ -1562,4 +1566,106 @@ span.positivo {
 
 .botonear a:hover .times {
     color: #db4040;
+}
+
+#restoup {
+    overflow: hidden;
+    padding: 10px;
+    background: #f9f8e3;
+    margin: 0 0 0 60px;
+}
+
+#restoup .answerInfo {
+    border: 0;
+    box-shadow: 0 0;
+    padding: 0;
+    background: none;
+    width: 48px;
+    height: 48px;
+    float: left;
+    margin-right: 10px;
+}
+
+.Container {
+    font-size: 12px;
+    color: #333;
+    position: relative;
+    overflow: hidden;
+}
+
+#restoup textarea {
+    width: 100%;
+    box-shadow: 0 0;
+    border-radius: 0;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 14px;
+    font-family: "Lato","Helvetica Neue","Helvetica","Arial","Lucida Grande",sans-serif;
+    color: #d9d9d9;
+    background: #fff;
+    min-height: 56px;
+}
+
+#restoup .buttons {
+    margin-top: 10px;
+    display: block;
+    overflow: hidden;
+    padding-bottom: 2px;
+    clear: both;
+}
+
+#restoup .answerInfo img {
+    width: 48px;
+    height: 48px;
+    border-radius: 5px;
+}
+
+.boton {
+    border-radius: 3px;
+    padding: 5px 10px;
+    display: block;
+    border: 0;
+}
+
+.boton.azul {
+    background: #2594ef;
+    color: #fff;
+}
+
+.boton.azul:hover {
+    background: #46acff;
+}
+
+.miComentario {
+    overflow: hidden;
+    background: #FFFCE3;
+    padding: 20px;
+    margin: 0;
+    border-radius: 0 0 5px 5px;
+    width: 98%;
+}
+
+.Container textarea#body_comm {
+    width: 100%;
+    box-shadow: 0 0;
+    border-radius: 0;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 14px;
+    font-family: "Lato","Helvetica Neue","Helvetica","Arial","Lucida Grande",sans-serif;
+    color: #7d7d7d;
+    min-height: 80px;
+    margin-bottom: 10px;
+    border-top: 1px solid transparent;
+}
+
+.creul {
+    float: left;
+    margin: 0 12px 0 10px;
+    width: 48px;
+    font-size: 11px;
+    line-height: 15px;
+    color: #777;
 }
