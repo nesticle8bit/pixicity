@@ -75,6 +75,21 @@ export class HttpPostsService implements IHttpPostsService {
             })).pipe(catchError(this.helper.errorHandler));
     }
 
+    updatePost(post: any): Observable<any> {
+        return this.http.put<any>(`${environment.api}/api/posts/updatePost`, post)
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
+    }
+
     getUltimosComentarios(): Observable<any> {
         return this.http.get<any>(`${environment.api}/api/posts/getComentariosRecientes`)
             .pipe(map((response: any) => {
@@ -107,6 +122,21 @@ export class HttpPostsService implements IHttpPostsService {
 
     getComentariosByPostId(postId: number): Observable<any> {
         return this.http.get<any>(`${environment.api}/api/posts/getComentariosByPostId?postId=${postId}`)
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
+    }
+
+    deletePost(postId: number): Observable<any> {
+        return this.http.delete<any>(`${environment.api}/api/posts/deletePost?postId=${postId}`)
             .pipe(map((response: any) => {
                 if (response.status === 200) {
                     return response.data;

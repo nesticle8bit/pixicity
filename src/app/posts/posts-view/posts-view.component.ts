@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-posts-view',
@@ -11,18 +12,22 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 })
 export class PostsViewComponent implements OnInit {
   public formGroup: FormGroup;
-  public postId: number = 0;
+  public activatedPost = {
+    postId: 0,
+    postNombre: ''
+  };
   public post: any;
   public usuario: any;
   public comentarios: any;
   public show: boolean = false;
-  public loggedUser: any;
+  public currentUser: any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private postService: IHttpPostsService,
     private formBuilder: FormBuilder,
-    private securityService: IHttpSecurityService
+    private securityService: IHttpSecurityService,
+    private router: Router
   ) {
     this.formGroup = this.formBuilder.group({
       contenido: ['', Validators.required]
@@ -31,17 +36,26 @@ export class PostsViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe((values: any) => {
-      this.postId = values.get('id');
+      this.activatedPost = {
+        postId: +values.get('id'),
+        postNombre: values.get('nombre-post')
+      }
 
       this.getPostById();
       this.getComentariosByPostId();
     });
 
-    this.loggedUser = this.securityService.getCurrentUser();
+    this.currentUser = this.securityService.getCurrentUser();
+    console.log(this.currentUser);
   }
 
   getPostById(): void {
-    this.postService.getPostById(this.postId).subscribe((value: any) => {
+    this.postService.getPostById(this.activatedPost.postId).subscribe((value: any) => {
+      if (!value) {
+        this.router.navigate([`/posts/404/${this.activatedPost.postNombre}`]);
+        return;
+      }
+
       if (value.post) {
         value.post.tags = value.post.etiquetas.split(',')
       }
@@ -52,7 +66,7 @@ export class PostsViewComponent implements OnInit {
   }
 
   getComentariosByPostId(): void {
-    this.postService.getComentariosByPostId(this.postId).subscribe((response: any) => {
+    this.postService.getComentariosByPostId(this.activatedPost.postId).subscribe((response: any) => {
       if (response) {
         response = response.map((comentario: any) => {
           comentario.actions = false;
@@ -70,7 +84,7 @@ export class PostsViewComponent implements OnInit {
     }
 
     const comentario = Object.assign({}, this.formGroup.value);
-    comentario.postId = +this.postId;
+    comentario.postId = this.activatedPost.postId;
 
     this.postService.addComentario(comentario).subscribe((response: any) => {
       if (response) {
@@ -80,11 +94,40 @@ export class PostsViewComponent implements OnInit {
 
         this.comentarios.push({
           id: response,
-          userName: this.loggedUser.usuario.userName,
+          userName: this.currentUser.usuario.userName,
           contenido: comentario.contenido,
           fechaComentario: new Date()
         });
       }
     });
+  }
+
+  actualizarPost(): void {
+    this.router.navigate([`posts/actualizar/${this.activatedPost.postId}`]);
+  }
+
+  eliminarPost(): void {
+    Swal.fire({
+      title: 'Borrar Post',
+      text: '¿Seguro que deseas borrar este post?',
+      showCancelButton: true,
+      confirmButtonText: `Borrar`,
+      cancelButtonText: `Cancelar`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.postService.deletePost(this.activatedPost.postId).subscribe((response: boolean) => {
+          if (response) {
+            Swal.fire({
+              title: 'Eliminado',
+              text: 'El post ha sido eliminado correctamente, ahora nadie lo podrá visualizar',
+              icon: 'success',
+              timer: 3000
+            }).then(() => {
+              this.router.navigate(['']);
+            });
+          }
+        });
+      }
+    })
   }
 }

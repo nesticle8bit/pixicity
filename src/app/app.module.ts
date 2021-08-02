@@ -66,6 +66,7 @@ import { Ads300x250Component } from './components/ads/ads300x250/ads300x250.comp
 import { NgxEditorModule } from 'ngx-editor';
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
 import { TimeAgoPipe } from './shared/pipes/timeAgo.pipe';
+import { PostNotFoundComponent } from './posts/post-not-found/post-not-found.component';
 
 @NgModule({
   declarations: [
@@ -102,7 +103,8 @@ import { TimeAgoPipe } from './shared/pipes/timeAgo.pipe';
     TruncatePipe,
     Ads160x600Component,
     Ads300x250Component,
-    TimeAgoPipe
+    TimeAgoPipe,
+    PostNotFoundComponent
   ],
   imports: [
     BrowserModule,

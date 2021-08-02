@@ -299,6 +299,26 @@
                 </div>
             </div>
 
+            <section class="my-1" *ngIf="usuario?.userName === currentUser?.usuario?.userName">
+                <div class="titulaw">
+                    <h2>Herramientas</h2>
+                </div>
+            
+                <div class="row">
+                    <div class="col-12 col-sm-6 d-grid gap-2">
+                        <button mat-flat-button color="primary" (click)="actualizarPost()">
+                            <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon> Editar
+                        </button>
+                    </div>
+            
+                    <div class="col-12 col-sm-6 d-grid gap-2 text-end" (click)="eliminarPost()">
+                        <button mat-flat-button color="danger">
+                            <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon> Eliminar
+                        </button>
+                    </div>
+                </div>
+            </section>
+
             <app-ads300x250></app-ads300x250>
 
             <section class="interes">
