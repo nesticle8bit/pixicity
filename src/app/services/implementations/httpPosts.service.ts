@@ -164,4 +164,34 @@ export class HttpPostsService implements IHttpPostsService {
                 }
             })).pipe(catchError(this.helper.errorHandler));
     }
+
+    getAvailableVotos(type: number): Observable<any> {
+        return this.http.get<any>(`${environment.api}/api/votos/getAvailableVotos?type=${type}`)
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
+    }
+
+    setVotos(voto: any): Observable<any> {
+        return this.http.post<any>(`${environment.api}/api/votos/setVoto`, voto)
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
+    }
 }

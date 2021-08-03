@@ -21,6 +21,8 @@ export class PostsViewComponent implements OnInit {
   public comentarios: any;
   public show: boolean = false;
   public currentUser: any;
+  public availablePuntos: number[] = [];
+  public addedPuntos: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -43,6 +45,7 @@ export class PostsViewComponent implements OnInit {
 
       this.getPostById();
       this.getComentariosByPostId();
+      this.getAvailablePuntos();
     });
 
     this.currentUser = this.securityService.getCurrentUser();
@@ -74,6 +77,20 @@ export class PostsViewComponent implements OnInit {
       }
 
       this.comentarios = response;
+    });
+  }
+
+  getAvailablePuntos(): void {
+    this.postService.getAvailableVotos(1).subscribe((response: any) => {
+      if (response > 0) {
+        for (let index = 1; index < response + 1; index++) {
+          if (this.availablePuntos.length < 10) {
+            this.availablePuntos.push(index);
+          } else {
+            return;
+          }
+        }
+      }
     });
   }
 
@@ -141,6 +158,15 @@ export class PostsViewComponent implements OnInit {
         });
 
         this.post.sticky = !this.post.sticky;
+      }
+    });
+  }
+
+  votarPost(puntos: number): void {
+    this.postService.setVotos({ typeId: this.activatedPost.postId, cantidad: puntos, votosType: 1 }).subscribe((response: any) => {
+      if (response) {
+        this.addedPuntos = true;
+        this.post.puntos += puntos;
       }
     });
   }
