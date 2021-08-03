@@ -608,6 +608,14 @@ img.avamu {
     float: left;
 }
 
+.userInfoLogin ul li:hover {
+    background: url('/assets/images/ui/bgnavbaractive.gif') top right repeat-x;
+}
+
+li.usernameMenu:hover a.nick {
+    background: url('/assets/images/ui/bgnavbaractive.gif');
+}
+
 .userInfoLogin ul li.logout {
     border-right: none;
     border-left: 1px solid #dcdcdc;
@@ -1684,4 +1692,20 @@ span.positivo {
     &--left {
         border-left: 2px dashed rgb(231, 231, 231);
     }
+}
+
+.listop, .menuver, .tamame ul, .tamame ul li {
+    position: relative;
+}
+
+.menuver a {
+    border: 1px solid #07273b;
+    background: url('/assets/images/ui/user-menu-line.png') top repeat-x #002d49;
+    border-top: 0;
+    padding: 7px 10px 6px!important;
+    text-align: right;
+}
+
+.menuver a:hover {
+    background: url('/assets/images/ui/user-menu-line.png') top repeat-x #104c72;
 }

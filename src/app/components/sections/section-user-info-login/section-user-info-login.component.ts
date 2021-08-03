@@ -8,6 +8,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./section-user-info-login.component.scss']
 })
 export class SectionUserInfoLoginComponent implements OnInit {
+  public displayMenu: boolean = false;
   public currentUser: JwtUserModel = { usuario: undefined, token: '' };
 
   constructor(
@@ -21,4 +22,8 @@ export class SectionUserInfoLoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  cerrarSesion(): void {
+    this.securityService.logout();
+    window.location.href = '';
+  }
 }

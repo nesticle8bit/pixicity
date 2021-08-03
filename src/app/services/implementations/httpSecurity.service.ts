@@ -67,7 +67,7 @@ export class HttpSecurityService implements IHttpSecurityService {
     }
 
     logout(): void {
-        localStorage.removeItem('vinylCatalogClub');
+        localStorage.removeItem('pixicity');
 
         this.router.navigateByUrl('');
         this.currentUserSubject.next(new JwtUserModel({}, ''));

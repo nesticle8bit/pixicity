@@ -10,4 +10,5 @@ export abstract class IHttpSecurityService {
     abstract getCurrentUser(): JwtUserModel;
     abstract getCurrentUserAsObservable(): Observable<JwtUserModel>;
     abstract setUserToLocalStorage(obj: any): any;
+    abstract logout(): any;
 }
