@@ -928,6 +928,11 @@ a.nick span {
     color: #fff;
 }
 
+.mat-warning {
+    background-color: #f39c12;
+    color: #fff;
+}
+
 .tagsinput {
     background: #FFF;
     overflow-y: auto;
@@ -1708,4 +1713,62 @@ span.positivo {
 
 .menuver a:hover {
     background: url('/assets/images/ui/user-menu-line.png') top repeat-x #104c72;
+    color: #fff !important;
+}
+
+.notificaciones-list {
+    display: none;
+    background: #FFF;
+    position: absolute;
+    z-index: 300;
+    width: 306px;
+    box-shadow: 5px 5px 10px rgb(0 0 0 / 10%);
+    -mox-box-shadow: 5px 5px 10px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 5px 5px 10px rgb(0 0 0 / 10%);
+    border: solid 1px #dadada;
+    border-radius: 5px;
+    -webkit-border-radius: 3px;
+    top: 42px;
+    font-family: "Lato","Helvetica Neue","Helvetica","Arial","Lucida Grande",sans-serif;
+}
+
+.notificaciones-list:before {
+    position: absolute;
+    content: "";
+    top: -10px;
+    border: 5px solid transparent;
+    border-bottom-color: #fff;
+    z-index: 20;
+}
+
+.timoni {
+    padding: 10px;
+    margin: 0;
+    font-weight: 700;
+    line-height: 1;
+    color: #424242;
+}
+
+.notificaciones-list ul {
+    max-height: 285px;
+    overflow-y: auto;
+}
+
+.errr {
+    text-align: center;
+    padding: 10px 0;
+    border-top: 1px solid #ebebeb;
+    display: block;
+}
+
+a.vemas {
+    display: block;
+    background: #f8f8f8;
+    color: #2594ef;
+    text-align: center;
+    line-height: 18px;
+    font-size: 10px;
+    font-weight: bolder;
+    padding: 0!important;
+    text-shadow: none;
 }

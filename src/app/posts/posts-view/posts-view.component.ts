@@ -46,7 +46,6 @@ export class PostsViewComponent implements OnInit {
     });
 
     this.currentUser = this.securityService.getCurrentUser();
-    console.log(this.currentUser);
   }
 
   getPostById(): void {
@@ -129,5 +128,20 @@ export class PostsViewComponent implements OnInit {
         });
       }
     })
+  }
+
+  quitarSticky(): void {
+    this.postService.changeStickyPost(this.activatedPost.postId).subscribe((response: any) => {
+      if (response) {
+        Swal.fire({
+          title: 'Sticky',
+          text: 'Se ha cambiado el sticky para este post correctamente',
+          icon: 'success',
+          timer: 3000
+        });
+
+        this.post.sticky = !this.post.sticky;
+      }
+    });
   }
 }

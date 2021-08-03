@@ -307,13 +307,21 @@
                 <div class="row">
                     <div class="col-12 col-sm-6 d-grid gap-2">
                         <button mat-flat-button color="primary" (click)="actualizarPost()">
-                            <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon> Editar
+                            <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon> Actualizar
                         </button>
                     </div>
             
                     <div class="col-12 col-sm-6 d-grid gap-2 text-end" (click)="eliminarPost()">
                         <button mat-flat-button color="danger">
                             <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon> Eliminar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-12 d-grid gap-2">
+                        <button mat-flat-button color="warning" (click)="quitarSticky()">
+                            <fa-icon [icon]="['fas', 'thumbtack']"></fa-icon> <span *ngIf="post.sticky"> Quitar</span> <span *ngIf="!post.sticky"> Establecer</span> Sticky
                         </button>
                     </div>
                 </div>
