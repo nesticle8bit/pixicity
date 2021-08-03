@@ -25,6 +25,8 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
     - [ ] Filtrar la lista de posts por categoria en la pagina de inicio
     - [x] Visualizar el post
     - [x] Sistema de votaciones para los posts
+    - [ ] Dialog para Denunciar los posts
+    - [ ] Implementar el Seguir post para ser notificado en el monitor
 
   - Comentarios
     - [x] Comentar los posts
