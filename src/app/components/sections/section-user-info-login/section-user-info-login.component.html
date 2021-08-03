@@ -42,18 +42,19 @@
                     <a href="#/favoritos.php" class="ver-mas">Ver más</a>
                 </div> -->
             </li>
-            <li class="usernameMenu">
+            <li class="usernameMenu" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
                 <a class="nick" href="#">
                     <img class="avamu" src="https://i.imgur.com/oxtdxn3.jpeg" />
                     <span>{{currentUser?.usuario?.userName}}</span>
                     <img class="punti" src="/assets/images/ui/arrowd.png" />
                 </a>
     
-                <!-- <div class="menuver">
-                    <a href="#/cuenta/">Cuenta</a>
-                    <a href="#/borradores.php">Borradores</a>
-                    <a href="#/login-salir.php">Salir</a>
-                </div> -->
+                <div class="menuver" style="top: 18px;" [style.display]="displayMenu ? 'block' : 'none'" (mouseenter)="displayMenu = true"
+                (mouseleave)="displayMenu = false">
+                    <a>Cuenta</a>
+                    <a>Borradores</a>
+                    <a href="javascript:void(0)" (click)="cerrarSesion()">Salir</a>
+                </div>
             </li>
         </ul>
     </div>
