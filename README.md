@@ -19,21 +19,38 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
 
   - Posts 
     - [x] Lista de Posts consultando a la base de datos
-    - [ ] Sección para crear los Posts
-    - [ ] Implementar el bbCode tanto para los posts como para los comentarios
+    - [x] Sección para crear los Posts
+    - [x] Implementar el componente wysiwyg para la creación de los posts
     - [x] Paginación por backend para la lista de posts del index
     - [ ] Filtrar la lista de posts por categoria en la pagina de inicio
-    - [ ] Visualizar el post
+    - [x] Visualizar el post
+    - [x] Sistema de votaciones para los posts
 
   - Comentarios
+    - [x] Comentar los posts
+    - [ ] Implementar las respuestas a los comentarios
+    - [ ] Implementar la votación de 👍🏼 y 👎🏼 en los comentarios de los posts
+
   - Login
-    - [ ] Crear la página de login y generar la sesión del usuario en el navegador
+    - [x] Crear la página de login y generar la sesión del usuario en el navegador
+    - [ ] Implementar y testear la seguridad en los tokens para que no haya suplantación de identidad con jwt
  
   - Registro de usuarios
+    - [x] Implementar el formulario para la creación de los usuarios
+    - [ ] Implementar sistema de envío de correos para validar la cuenta de usuario
+    - [ ] Implementar A2F para las cuentas de usuario
+
   - Perfil del usuario
     - [ ] Crear componente para visualizar todos los perfiles de Usuario
     - [ ] Crear sección para listar los posts publicados
     - [ ] Crear sección para recibir comentarios de diferentes personas
     - [ ] Crear sección para visualizar los usuarios que sigue y seguidores
+    
+  - Fotos
+    - [ ] Implementar sección para subir fotos a la comunidad
+    - [ ] Visualizar las fotos
+    - [ ] Comentar las fotos
+    - [ ] Votar 👍🏼 y 👎🏼 en las fotos
+    - [ ] Crear un slider automático en el Index de la página y visualizar las últimas fotos publicadas en la comunidad
 
 > Seguiré modificando el README cuando vaya teniendo ideas de las tareas que desarrollaré y que ya haya hecho.
