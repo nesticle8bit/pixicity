@@ -8,15 +8,18 @@
     <div class="userInfoLogin">
         <ul>
             <li class="monitor" style="position: relative">
-                <a href="#/monitor/" onclick="notifica.last(); return false" title="Monitor" name="Monitor">
+                <a href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Monitor" [matTooltipPosition]="'above'" (click)="verNotificaciones()">
                     <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                 </a>
-                <!-- <div class="notificaciones-list" id="mon_list">
-                    <span class="tail"></span>
+            
+                <div class="notificaciones-list" id="mon_list" [style.display]="display.monitor ? 'block' : 'none'" (mouseenter)="display.monitor = true"
+                (mouseleave)="display.monitor = false">
                     <div class="timoni">Notificaciones</div>
-                    <ul></ul>
-                    <a href="#/monitor/" class="ver-mas">Ver más</a>
-                </div> -->
+                    <ul>
+                        <div class="errr">No hay notificaciones</div>
+                    </ul>
+                    <a href="https://v6new.lucky-forum.com/monitor/" class="vemas">Más</a>
+                </div>
             </li>
     
             <li class="mensajes" style="position:relative">

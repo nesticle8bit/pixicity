@@ -10,6 +10,9 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 export class SectionUserInfoLoginComponent implements OnInit {
   public displayMenu: boolean = false;
   public currentUser: JwtUserModel = { usuario: undefined, token: '' };
+  public display = {
+    monitor: false
+  };
 
   constructor(
     private securityService: IHttpSecurityService
@@ -20,6 +23,10 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  verNotificaciones(): void {
+    this.display.monitor = !this.display.monitor;
   }
 
   cerrarSesion(): void {

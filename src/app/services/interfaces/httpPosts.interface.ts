@@ -12,4 +12,7 @@ export abstract class IHttpPostsService {
     abstract addComentario(comentario: any): Observable<any>;
     abstract getComentariosByPostId(postId: number): Observable<any>;
     abstract deletePost(postId: number): Observable<any>;
+    abstract changeStickyPost(postId: number): Observable<any>;
+    abstract getAvailableVotos(type: number): Observable<any>;
+    abstract setVotos(voto: any): Observable<any>;
 }

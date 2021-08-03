@@ -28,16 +28,20 @@
 
             <section class="meta">
                 <div class="metacentro">
-                    <div id="puntos-agregados">Puntos agregados!</div>
+                    <div class="float-start" id="puntos-agregados" [style.display]="addedPuntos ? 'block' : 'none'">Puntos agregados!</div>
 
-                    <div class="float-start">
+                    <div class="float-start" [style.display]="!addedPuntos ? 'block' : 'none'">
                         <div class="barpuntos">
-                            <a href="#" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">{{i}}</a>
+                            <a href="javascript:void(0)" *ngFor="let punto of availablePuntos" (click)="votarPost(punto)">
+                                {{punto}}
+                            </a>
                         </div>
                     </div>
 
                     <div class="float-end">
-                        <p class="cupuntos"><b id="puntos_post">5</b> Puntos</p>
+                        <p class="cupuntos">
+                            <b id="puntos_post">{{!post.puntos ? 0 : post.puntos}}</b> Puntos
+                        </p>
                     </div>
                 </div>
 
@@ -307,13 +311,21 @@
                 <div class="row">
                     <div class="col-12 col-sm-6 d-grid gap-2">
                         <button mat-flat-button color="primary" (click)="actualizarPost()">
-                            <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon> Editar
+                            <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon> Actualizar
                         </button>
                     </div>
             
                     <div class="col-12 col-sm-6 d-grid gap-2 text-end" (click)="eliminarPost()">
                         <button mat-flat-button color="danger">
                             <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon> Eliminar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-12 d-grid gap-2">
+                        <button mat-flat-button color="warning" (click)="quitarSticky()">
+                            <fa-icon [icon]="['fas', 'thumbtack']"></fa-icon> <span *ngIf="post.sticky"> Quitar</span> <span *ngIf="!post.sticky"> Establecer</span> Sticky
                         </button>
                     </div>
                 </div>
