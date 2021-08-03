@@ -53,4 +53,12 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
     - [ ] Votar 👍🏼 y 👎🏼 en las fotos
     - [ ] Crear un slider automático en el Index de la página y visualizar las últimas fotos publicadas en la comunidad
 
+  - Medallas
+    - [ ] Implementar medallas para los usuarios
+    - [ ] Visualizar las medallas en los perfiles de los usuarios
+    - [ ] Parametrizar las medallas desde el panel de administración
+
+  - Panel Administrativo
+    > TODO
+
 > Seguiré modificando el README cuando vaya teniendo ideas de las tareas que desarrollaré y que ya haya hecho.
