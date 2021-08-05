@@ -21,7 +21,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { HomeTopPostsComponent } from './home/home-top-posts/home-top-posts.component';
 import { HomeTopUsersComponent } from './home/home-top-users/home-top-users.component';
 import { RegisterComponent } from './pages/register/register.component';
-import { HomeComponent } from './pages/home/home.component';
 import { DisplayComponentService } from './services/shared/displayComponents.service';
 import { MainFooterComponent } from './main/main-footer/main-footer.component';
 import { SearchComponent } from './pages/search/search.component';
@@ -83,7 +82,6 @@ import { PostNotFoundComponent } from './posts/post-not-found/post-not-found.com
     HomeTopPostsComponent,
     HomeTopUsersComponent,
     RegisterComponent,
-    HomeComponent,
     MainFooterComponent,
     SearchComponent,
     PostsViewComponent,

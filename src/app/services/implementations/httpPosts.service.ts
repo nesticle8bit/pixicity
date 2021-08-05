@@ -15,8 +15,8 @@ export class HttpPostsService implements IHttpPostsService {
         private helper: HelperService,
         private paginationService: PaginationService) { }
 
-    getPosts(): Observable<any> {
-        return this.http.get<any>(`${environment.api}/api/posts/getPosts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`)
+    getPosts(categoria: string = ''): Observable<any> {
+        return this.http.get<any>(`${environment.api}/api/posts/getPosts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${categoria}`)
             .pipe(map((response: any) => {
                 if (response.status === 200) {
                     return response.data;

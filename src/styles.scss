@@ -1771,3 +1771,46 @@ a.vemas {
     padding: 0!important;
     text-shadow: none;
 }
+
+.nada-amarillo {
+    padding: 12px;
+    border: 2px dashed #DEDE88;
+    font-weight: 700;
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    background: #FFC;
+    margin: 7px 0;
+}
+
+.post {
+    &-header {
+        a {
+            color: #7e7e7e;
+        }
+
+        &-list {
+            font-weight: 400;
+            color: #7e7e7e;
+
+            & li {
+                max-width: 180px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+
+    &-nav {
+        a {
+            font-size: 13px;
+            margin-left: 4px;
+            padding: 2px 8px;
+            border: none;
+            background: #fff;
+            color: #ababab;
+            border-radius: 3px;
+        }
+    }
+}
