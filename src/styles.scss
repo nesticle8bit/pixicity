@@ -1685,6 +1685,12 @@ span.positivo {
     font-size: 11px;
     line-height: 15px;
     color: #777;
+
+    & img {
+        width: 48px;
+        height: 48px;
+        border-radius: 5px;
+    }
 }
 
 #bgaviso {

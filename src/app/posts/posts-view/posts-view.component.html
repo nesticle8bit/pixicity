@@ -21,7 +21,7 @@
                         </li>
 
                         <li class="list-inline-item">
-                            <a [routerLink]="['/posts/' + post?.categoria?.seo + '/' + activatedPost?.postId + '/' + post?.url]">
+                            <a [routerLink]="['/posts/' + post?.categoria?.seo + '/' + post?.id + '/' + post?.url]">
                                 <fa-icon [icon]="['fas', 'angle-right']"></fa-icon> {{post?.titulo}}
                             </a>
                         </li>
@@ -30,7 +30,7 @@
         
                 <div class="col-12 col-sm-2 text-end">
                     <div class="post-nav">
-                        <a class="float-end" (click)="nextPost(activatedPost.postId)" matTooltip="Post siguiente (más nuevo)">
+                        <a class="float-end" (click)="nextPost(post.id)" matTooltip="Post siguiente (más nuevo)">
                             <fa-icon [icon]="['fas', 'caret-right']"></fa-icon>
                         </a>
 
@@ -38,7 +38,7 @@
                             <fa-icon [icon]="['fas', 'random']"></fa-icon>
                         </a>
 
-                        <a class="float-end" (click)="prevPost(activatedPost.postId)" matTooltip="Post anterior (más viejo)">
+                        <a class="float-end" (click)="prevPost(post.id)" matTooltip="Post anterior (más viejo)">
                             <fa-icon [icon]="['fas', 'caret-left']"></fa-icon>
                         </a>
                     </div>
@@ -137,168 +137,7 @@
                 </div>
             </div>
 
-            <a name="comentarios"></a>
-
-            <section class="nada-amarillo mx-auto" style="width: 98%;" *ngIf="!comentarios || comentarios.length < 1">
-                Este post no tiene comentarios, Sé el primero!
-            </section>
-
-            <div class="mx-auto" id="post-comentarios">
-                <div class="titular">
-                    <h3>
-                        <span id="ncomments">{{comentarios?.length}}</span> comentarios - {{post?.titulo}}
-                    </h3>
-
-                    <img src="/assets/images/min-carga.gif" id="com_gif" style="display: none;">
-                </div>
-
-                <div id="comentarios" style="opacity: 1;" *ngFor="let comentario of comentarios" (mouseover)="comentario.actions=true" (mouseout)="comentario.actions=false">
-                    <div id="respnuevas">
-                        <span id="citar_comm_14" style="display:none">Comentario 1</span>
-                        <div class="comentario-post clearbeta" style="border-top:0;">
-                            <div class="avatar-box" style="z-index: 99;">
-                                <a href="#">
-                                    <img width="48" height="48" title="Avatar de nesticle8bit en V6New"
-                                        src="https://i.imgur.com/2Rs9AVg.jpeg" class="avatar-48 lazy"
-                                        style="position: relative; z-index: 1; display: inline;">
-                                </a>
-                            </div>
-
-                            <div class="comment-box">
-                                <div class="comment-info clearbeta">
-                                    <div class="float-start">
-                                        <div class="floatL">
-                                            <a href="#">{{comentario?.userName}}</a>
-                                            <span> {{comentario?.fechaComentario | timeAgo}}</span>
-                                        </div>
-
-                                        <div class="numbersvotes">
-                                            <div class="overview">
-                                                <span class="positivo" id="votos_total_14"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="float-end answerOptions" *ngIf="comentario.actions">
-                                        <div class="botonear">
-                                            <a>
-                                                <fa-icon [icon]="['fas', 'reply']" class="reply"></fa-icon>
-                                            </a>
-
-                                            <a>
-                                                <fa-icon [icon]="['fas', 'pencil-alt']" class="edit"></fa-icon>
-                                            </a>
-
-                                            <a>
-                                                <fa-icon [icon]="['fas', 'times']" class="times"></fa-icon>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div id="comment-body-14" class="comment-content">
-                                    {{comentario?.contenido}}
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- <div id="respuestas">
-                            <div id="div_cmnt_15" class="especial1">
-                                <span id="citar_comm_15" style="display:none">Comentario 2</span>
-                                <div class="comentario-post clearbeta">
-                                    <div class="avatar-box" style="z-index: 98;">
-                                        <a href="#">
-                                            <img width="32" height="32" title="" src="https://i.imgur.com/2Rs9AVg.jpeg"
-                                                class="avatar-48 lazy"
-                                                style="position: relative; z-index: 1; display: inline;">
-                                        </a>
-                                    </div>
-
-                                    <div class="comment-box" id="pp_15">
-                                        <div class="comment-info clearbeta">
-                                            <div class="floatL">
-                                                <div class="floatL"><a href="#">nesticle8bit</a><span>
-                                                        Hace 7 días</span></div>
-                                                <div class="numbersvotes">
-                                                    <div class="overview">
-                                                        <span class="positivo" id="votos_total_15"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="floatR answerOptions" id="opt_15">
-                                                <div id="ul_cmt_15" class="botonear">
-
-                                                    <a class="qtip" onclick="citar_comment(15, 'nesticle8bit')"
-                                                        title="Citar"><span class="i citare"></span></a>
-
-                                                    <a class="qtip" onclick="comentario.editar(15, 'show')"
-                                                        title=""><span class="toup-edit2"></span></a>
-                                                    <a class="qtip" onclick="borrar_respuesta(15, 19, 8)" title=""><span
-                                                            class="toup-x"></span></a>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="comment-body-15" class="comment-content">
-                                            Comentario 2
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="resp">
-                            <div id="restoup">
-                                <div class="answerInfo">
-                                    <img src="https://i.imgur.com/2Rs9AVg.jpeg">
-                                </div>
-
-                                <div class="Container">
-                                    <div class="error"></div>
-                                    <textarea id="bodys_comm_14" class="onblur_effect autogrow" tabindex="1"
-                                        title="Escribir una respuesta..."
-                                        placeholder="Escribir una respuesta..."></textarea>
-                                    <div class="buttons">
-                                        <div class="float-end">
-                                            <input type="button" onclick="comentario.nuevos('true', '', 14)"
-                                                class="boton azul" value="Responder" tabindex="3" id="btnssComment">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-                    </div>
-
-                    <div id="nuevos"></div>
-                </div>
-            </div>
-
-            <form class="miComentario mx-auto" [formGroup]="formGroup">
-                <div id="procesando">
-                    <div id="post"></div>
-                </div>
-                <div class="creul">
-                    <img src="https://v6new.lucky-forum.com/files/avatar/19_50.jpg?20210802032821" class="avese">
-                    <div id="gif_cargando" style="display: none;margin:10px 3px 0 3px;">
-                        <img src="https://v6new.lucky-forum.com/themes/default/i/min-carga.gif">
-                    </div>
-                </div>
-                <div class="Container">
-                    <div class="clearBoth">&nbsp;</div>
-                    <div class="error"></div>
-
-                    <textarea id="body_comm" class="autogrow onblur_effect" tabindex="1"
-                        placeholder="Escribir un comentario..." formControlName="contenido"></textarea>
-
-                    <div class="buttons">
-                        <div class="float-end">
-                            <a class="boton azul" (click)="enviarComentario()">
-                                Comentar
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </form>
+            <app-post-comments *ngIf="post?.id" [post]="post"></app-post-comments>
         </div>
 
         <div class="col-12 col-sm-12 col-md-3">
