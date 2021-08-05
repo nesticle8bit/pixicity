@@ -66,6 +66,7 @@ import { NgxEditorModule } from 'ngx-editor';
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
 import { TimeAgoPipe } from './shared/pipes/timeAgo.pipe';
 import { PostNotFoundComponent } from './posts/post-not-found/post-not-found.component';
+import { PostCommentsComponent } from './posts/post-comments/post-comments.component';
 
 @NgModule({
   declarations: [
@@ -102,7 +103,8 @@ import { PostNotFoundComponent } from './posts/post-not-found/post-not-found.com
     Ads160x600Component,
     Ads300x250Component,
     TimeAgoPipe,
-    PostNotFoundComponent
+    PostNotFoundComponent,
+    PostCommentsComponent
   ],
   imports: [
     BrowserModule,

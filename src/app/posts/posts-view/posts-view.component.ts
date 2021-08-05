@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
-import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
   selector: 'app-posts-view',
@@ -11,50 +10,33 @@ import Swal from 'sweetalert2';
   styleUrls: ['./posts-view.component.scss']
 })
 export class PostsViewComponent implements OnInit {
-  public formGroup: FormGroup;
-  public activatedPost = {
-    postId: 0,
-    postNombre: ''
-  };
+  public currentUser: any;
   public post: any;
   public usuario: any;
-  public comentarios: any;
   public show: boolean = false;
-  public currentUser: any;
   public availablePuntos: number[] = [];
   public addedPuntos: boolean = false;
 
   constructor(
+    private securityService: IHttpSecurityService,
     private activatedRoute: ActivatedRoute,
     private postService: IHttpPostsService,
-    private formBuilder: FormBuilder,
-    private securityService: IHttpSecurityService,
     private router: Router
-  ) {
-    this.formGroup = this.formBuilder.group({
-      contenido: ['', Validators.required]
-    });
-  }
+  ) { }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe((values: any) => {
-      this.activatedPost = {
-        postId: +values.get('id'),
-        postNombre: values.get('nombre-post')
-      }
-
-      this.getPostById();
-      this.getComentariosByPostId();
+      this.getPostById(+values.get('id'));
       this.getAvailablePuntos();
     });
 
     this.currentUser = this.securityService.getCurrentUser();
   }
 
-  getPostById(): void {
-    this.postService.getPostById(this.activatedPost.postId).subscribe((value: any) => {
+  getPostById(postId: number): void {
+    this.postService.getPostById(postId).subscribe((value: any) => {
       if (!value) {
-        this.router.navigate([`/posts/404/${this.activatedPost.postNombre}`]);
+        this.router.navigate([`/posts/404/${this.post.titulo}`]);
         return;
       }
 
@@ -64,20 +46,9 @@ export class PostsViewComponent implements OnInit {
       }
 
       this.post = value.post;
+      this.post.id = postId;
+
       this.usuario = value.usuario;
-    });
-  }
-
-  getComentariosByPostId(): void {
-    this.postService.getComentariosByPostId(this.activatedPost.postId).subscribe((response: any) => {
-      if (response) {
-        response = response.map((comentario: any) => {
-          comentario.actions = false;
-          return comentario;
-        });
-      }
-
-      this.comentarios = response;
     });
   }
 
@@ -95,32 +66,8 @@ export class PostsViewComponent implements OnInit {
     });
   }
 
-  enviarComentario(): void {
-    if (this.formGroup.invalid) {
-      return;
-    }
-
-    const comentario = Object.assign({}, this.formGroup.value);
-    comentario.postId = this.activatedPost.postId;
-
-    this.postService.addComentario(comentario).subscribe((response: any) => {
-      if (response) {
-        this.formGroup.patchValue({
-          contenido: ''
-        });
-
-        this.comentarios.push({
-          id: response,
-          userName: this.currentUser.usuario.userName,
-          contenido: comentario.contenido,
-          fechaComentario: new Date()
-        });
-      }
-    });
-  }
-
   actualizarPost(): void {
-    this.router.navigate([`posts/actualizar/${this.activatedPost.postId}`]);
+    this.router.navigate([`posts/actualizar/${this.post.id}`]);
   }
 
   eliminarPost(): void {
@@ -132,7 +79,7 @@ export class PostsViewComponent implements OnInit {
       cancelButtonText: `Cancelar`,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.postService.deletePost(this.activatedPost.postId).subscribe((response: boolean) => {
+        this.postService.deletePost(this.post.id).subscribe((response: boolean) => {
           if (response) {
             Swal.fire({
               title: 'Eliminado',
@@ -149,7 +96,7 @@ export class PostsViewComponent implements OnInit {
   }
 
   quitarSticky(): void {
-    this.postService.changeStickyPost(this.activatedPost.postId).subscribe((response: any) => {
+    this.postService.changeStickyPost(this.post.id).subscribe((response: any) => {
       if (response) {
         Swal.fire({
           title: 'Sticky',
@@ -164,7 +111,7 @@ export class PostsViewComponent implements OnInit {
   }
 
   votarPost(puntos: number): void {
-    this.postService.setVotos({ typeId: this.activatedPost.postId, cantidad: puntos, votosType: 1 }).subscribe((response: any) => {
+    this.postService.setVotos({ typeId: this.post.id, cantidad: puntos, votosType: 1 }).subscribe((response: any) => {
       if (response) {
         this.addedPuntos = true;
         this.post.puntos += puntos;
