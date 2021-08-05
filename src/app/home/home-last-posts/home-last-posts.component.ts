@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
@@ -9,6 +9,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
   styleUrls: ['./home-last-posts.component.scss']
 })
 export class HomeLastPostsComponent implements OnInit {
+  @Input() categoria: string = '';
   public stickyPosts: any = [];
   public lastPosts: any = [];
   public totalCount: number = 0;
@@ -26,7 +27,7 @@ export class HomeLastPostsComponent implements OnInit {
   }
 
   getPosts(): void {
-    this.postService.getPosts().subscribe((response: any) => {
+    this.postService.getPosts(this.categoria).subscribe((response: any) => {
       this.lastPosts = response.data;
 
       this.lastPosts = this.lastPosts.map((post: any) => {

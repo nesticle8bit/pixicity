@@ -1,6 +1,50 @@
 <div class="container my-3" style="padding: 0">
     <div class="row">
         <div class="col-12 col-sm-12 col-md-9" style="padding-right: 58px;">
+            <div class="row post-header">
+                <div class="col-12 col-sm-10">
+                    <ul class="list-unstyled list-inline post-header-list">
+                        <li class="list-inline-item mr-2">
+                            <fa-icon [icon]="['far', 'clock']"></fa-icon> {{post?.fechaRegistro | timeAgo}}
+                        </li>
+
+                        <li class="list-inline-item">
+                            <a [routerLink]="['']">
+                                Pixicity
+                            </a>
+                        </li>
+
+                        <li class="list-inline-item">
+                            <a [routerLink]="['']">
+                                <fa-icon [icon]="['fas', 'angle-right']"></fa-icon> {{post?.categoria?.nombre}}
+                            </a>
+                        </li>
+
+                        <li class="list-inline-item">
+                            <a [routerLink]="['/posts/' + post?.categoria?.seo + '/' + activatedPost?.postId + '/' + post?.url]">
+                                <fa-icon [icon]="['fas', 'angle-right']"></fa-icon> {{post?.titulo}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+        
+                <div class="col-12 col-sm-2 text-end">
+                    <div class="post-nav">
+                        <a class="float-end" (click)="nextPost(activatedPost.postId)" matTooltip="Post siguiente (más nuevo)">
+                            <fa-icon [icon]="['fas', 'caret-right']"></fa-icon>
+                        </a>
+
+                        <a class="float-end" (click)="randomPost()" matTooltip="Post aleatorio">
+                            <fa-icon [icon]="['fas', 'random']"></fa-icon>
+                        </a>
+
+                        <a class="float-end" (click)="prevPost(activatedPost.postId)" matTooltip="Post anterior (más viejo)">
+                            <fa-icon [icon]="['fas', 'caret-left']"></fa-icon>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <main class="boxpc">
                 <h1>{{post?.titulo}}</h1>
 
@@ -14,7 +58,7 @@
                     <div class="letres">Tags:</div>
 
                     <div *ngFor="let etiqueta of post?.tags; let last = last">
-                        <a rel="tag" href="#/buscar/posts/?q=PHPost&amp;type=tags">{{etiqueta}}</a>
+                        <a rel="tag" href="/buscar/posts/?q={{etiqueta}}&amp;type=tags">{{etiqueta}}</a>
                         <span *ngIf="!last">|</span>
                     </div>
                 </div>
@@ -30,7 +74,7 @@
                 <div class="metacentro">
                     <div class="float-start" id="puntos-agregados" [style.display]="addedPuntos ? 'block' : 'none'">Puntos agregados!</div>
 
-                    <div class="float-start" [style.display]="!addedPuntos ? 'block' : 'none'">
+                    <div class="float-start" [style.display]="!addedPuntos ? 'block' : 'none'" *ngIf="currentUser?.usuario?.userName != usuario?.userName">
                         <div class="barpuntos">
                             <a href="javascript:void(0)" *ngFor="let punto of availablePuntos" (click)="votarPost(punto)">
                                 {{punto}}
@@ -40,13 +84,13 @@
 
                     <div class="float-end">
                         <p class="cupuntos">
-                            <b id="puntos_post">{{!post.puntos ? 0 : post.puntos}}</b> Puntos
+                            <b id="puntos_post">{{!post?.puntos ? 0 : post?.puntos}}</b> Puntos
                         </p>
                     </div>
                 </div>
 
                 <div class="metabottom">
-                    <div class="botones float-start py-2">
+                    <div class="botones float-start py-2" *ngIf="currentUser?.usuario?.userName != usuario?.userName">
                         <li>
                             <a onclick="notifica.sharePost(1);" class="tetese">P!</a>
                         </li>
@@ -94,6 +138,11 @@
             </div>
 
             <a name="comentarios"></a>
+
+            <section class="nada-amarillo mx-auto" style="width: 98%;" *ngIf="!comentarios || comentarios.length < 1">
+                Este post no tiene comentarios, Sé el primero!
+            </section>
+
             <div class="mx-auto" id="post-comentarios">
                 <div class="titular">
                     <h3>

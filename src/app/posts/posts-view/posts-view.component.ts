@@ -59,6 +59,7 @@ export class PostsViewComponent implements OnInit {
       }
 
       if (value.post) {
+        value.post.url = value.post.titulo.toLowerCase().replace(/\s/g, '-');
         value.post.tags = value.post.etiquetas.split(',')
       }
 
@@ -169,5 +170,17 @@ export class PostsViewComponent implements OnInit {
         this.post.puntos += puntos;
       }
     });
+  }
+
+  nextPost(postId: number): void {
+    console.log(postId);
+  }
+
+  prevPost(postId: number): void {
+    console.log(postId);
+  }
+
+  randomPost(): void {
+
   }
 }
