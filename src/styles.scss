@@ -529,14 +529,23 @@ a.ircielo {
     background-position: left top;
 }
 
-.userInfoLogin li .alertas, .userInfoLogin li .alertas span {
+.userInfoLogin li .alertas a {
+    background: url('/assets/images/ui/bubble.png') top left;
+    padding: 0 5px;
     display: block;
-    float: left;
+    color: #fff;
+    text-shadow: 0 -1px 0 #000;
     font-size: 11px;
-    color: white;
-    background: url('/assets/images/ui/bubble.png') no-repeat;
-    padding: 0px 6px 6px 0px;
-    background-position: right top;
+
+    &:hover {
+        color: #fff;
+    }
+}
+
+.userInfoLogin li .alertas span {
+    background: url('/assets/images/ui/bubble.png') top right;
+    display: block;
+    padding: 0 7px 5px 1px;
 }
 
 .menuTabs li {
