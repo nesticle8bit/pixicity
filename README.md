@@ -27,6 +27,7 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
     - [x] Sistema de votaciones para los posts
     - [ ] Dialog para Denunciar los posts
     - [ ] Implementar el Seguir post para ser notificado en el monitor
+    - [ ] Sidebar del Post como Componente
 
   - Comentarios
     - [x] Comentar los posts
