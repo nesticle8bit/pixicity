@@ -1,1 +1,135 @@
-<p>usuarios works!</p>
+<section class="container container--home">
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-9">
+            <h6 class="main-title">
+                <span>Usuarios</span>
+            </h6>
+
+            <div class="nada-gris" style="margin: 5px 10px 0 0;" *ngIf="usuarios?.length < 1">
+                No se encontraro usuarios con los filtros seleccionados
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-4 my-2" *ngFor="let usuario of usuarios">
+                    <div class="xoti">
+                        <h2>
+                            {{usuario.userName}}
+                        </h2>
+
+                        <div class="estv qtip" title="online">
+                            <span class="user-status s-online"></span>
+                        </div>
+                    </div>
+
+                    <div class="mite">
+                        <div class="current-user-info float-start">
+                            <p style="color: #171717;font-weight: bold;">
+                                <img src="/assets/images/icons/rangos/new.png">
+                                Novato
+                            </p>
+
+                            <p>
+                                <img src="/assets/images/flags/{{usuario.iso2.toLowerCase()}}.png"
+                                    style="margin: 0 10px 0 0;">
+                                {{usuario.pais}}
+                            </p>
+
+                            <p>
+                                <img
+                                    src="/assets/images/icons/{{usuario.genero === 1 ? 'male' : usuario.genero === 2 ? 'female' : 'question'}}.png">
+                                {{usuario.genero === 1 ? 'Hombre' : usuario.genero === 2 ? 'Mujer' : 'Otro'}}
+                            </p>
+                        </div>
+
+                        <a class="float-end" href="#">
+                            <img class="img-fluid img-thumbnail rounded" src="https://i.imgur.com/oxtdxn3.jpeg" />
+                        </a>
+                    </div>
+
+                    <div class="fotus mx-auto">
+                        <div class="row">
+                            <div class="col-4">
+                                <p class="mb-1">
+                                    <span>0</span>
+                                    Puntos
+                                </p>
+                            </div>
+
+                            <div class="col-4">
+                                <p class="espp mb-1">
+                                    <span>0</span>
+                                    Comentarios
+                                </p>
+                            </div>
+
+                            <div class="col-4">
+                                <p class="esppa mb-1">
+                                    <span>1</span>
+                                    Posts
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dotted-border--left col-12 col-sm-6 col-md-3">
+            <h6 class="main-title">
+                <span>Filtrar</span>
+            </h6>
+
+            <section class="mt-3">
+                <h3 class="pixicity-title">
+                    Estado
+                </h3>
+
+                <mat-checkbox color="primary">En línea</mat-checkbox>
+                <br>
+                <mat-checkbox color="primary">Con todo</mat-checkbox>
+            </section>
+
+            <section class="mt-3">
+                <h3 class="pixicity-title">
+                    Género
+                </h3>
+
+                <mat-radio-group class="radio-group">
+                    <mat-radio-button color="primary" class="radio-button" *ngFor="let genero of generos" [value]="genero">
+                        {{genero}} <br>
+                    </mat-radio-button>
+                </mat-radio-group>
+            </section>
+
+            <section class="mt-3">
+                <h3 class="pixicity-title">
+                    País
+                </h3>
+
+                <ng-select [items]="paises" bindLabel="nombre" bindValue="id">
+                    <ng-template ng-option-tmp let-item="item" let-index="index">
+                        <img src="/assets/images/flags/{{item.iso2.toLowerCase()}}.png" class="image-middle"> {{item.nombre}}
+                    </ng-template>
+                </ng-select>
+            </section>
+
+            <section class="mt-3">
+                <h3 class="pixicity-title">
+                    Rango
+                </h3>
+
+                <ng-select [items]="[]" bindLabel="nombre" bindValue="id">
+                    <ng-template ng-option-tmp let-item="item" let-index="index">
+                        <img src="/assets/images/flags/{{item.iso2.toLowerCase()}}.png" class="image-middle"> {{item.nombre}}
+                    </ng-template>
+                </ng-select>
+            </section>
+
+            <section class="d-grid gap-2 my-3">
+                <button mat-flat-button color="primary">
+                    <mat-icon>filter_alt</mat-icon> Filtrar
+                </button>
+            </section>
+        </div>
+    </div>
+</section>

@@ -6,7 +6,9 @@
 
 <div class="row">
     <small class="col-12 col-sm-6">
-        <b>{{estadisticas?.usuariosOnline}}</b> usuario(s) online
+        <a [routerLink]="['usuarios']">
+            <b>{{estadisticas?.usuariosOnline}}</b> usuario(s) online
+        </a>
     </small>
 
     <small class="col-12 col-sm-6">

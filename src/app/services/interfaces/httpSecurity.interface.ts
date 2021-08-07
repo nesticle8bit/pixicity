@@ -5,10 +5,11 @@ import { Observable } from "rxjs";
 
 @Injectable()
 export abstract class IHttpSecurityService {
-    abstract registerUser(user: UserModel): Observable<any>;
-    abstract loginUser(user: any): Observable<any>;
     abstract getCurrentUser(): JwtUserModel;
     abstract getCurrentUserAsObservable(): Observable<JwtUserModel>;
+    abstract getUsuarios(): Observable<any>;
     abstract setUserToLocalStorage(obj: any): any;
+    abstract registerUser(user: UserModel): Observable<any>;
+    abstract loginUser(user: any): Observable<any>;
     abstract logout(): any;
 }
