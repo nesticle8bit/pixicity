@@ -67,6 +67,8 @@ import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
 import { TimeAgoPipe } from './shared/pipes/timeAgo.pipe';
 import { PostNotFoundComponent } from './posts/post-not-found/post-not-found.component';
 import { PostCommentsComponent } from './posts/post-comments/post-comments.component';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -166,7 +168,9 @@ import { PostCommentsComponent } from './posts/post-comments/post-comments.compo
     NgxUiLoaderHttpModule.forRoot({
       showForeground: true,
       exclude: []
-    })
+    }),
+    MatRadioModule,
+    MatIconModule
   ],
   providers: [
     DisplayComponentService,

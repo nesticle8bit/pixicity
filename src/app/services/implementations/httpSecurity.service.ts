@@ -1,5 +1,6 @@
 import { IHttpSecurityService } from "../interfaces/httpSecurity.interface";
 import { JwtUserModel } from "src/app/models/security/jwtUser.model";
+import { PaginationService } from "../shared/pagination.service";
 import { UserModel } from "src/app/models/security/user.model";
 import { environment } from "src/environments/environment";
 import { HelperService } from "../shared/helper.service";
@@ -18,7 +19,9 @@ export class HttpSecurityService implements IHttpSecurityService {
     constructor(
         private http: HttpClient,
         private helper: HelperService,
-        private router: Router) {
+        private router: Router,
+        private paginationService: PaginationService
+    ) {
         this.currentUserSubject = new BehaviorSubject<JwtUserModel>(JSON.parse(localStorage.getItem('pixicity') || '{}'));
         this.currentUser = this.currentUserSubject.asObservable();
     }
@@ -59,6 +62,21 @@ export class HttpSecurityService implements IHttpSecurityService {
 
     getCurrentUserAsObservable(): Observable<JwtUserModel> {
         return this.currentUserSubject.asObservable();
+    }
+
+    getUsuarios(): Observable<any> {
+        return this.http.get<any>(`${environment.api}/api/usuarios/getUsuarios?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`)
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
     }
 
     setUserToLocalStorage(obj: any): any {

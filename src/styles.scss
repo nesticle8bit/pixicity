@@ -1829,3 +1829,102 @@ a.vemas {
         }
     }
 }
+
+.xoti {
+    overflow: hidden;
+    background: #036089 url('/assets/images/ui/ribbon.jpg') no-repeat -30px -15px;
+    border-bottom: 1px solid #062939;
+    border-top: 1px solid #095275;
+    border-left: 1px solid #08415C;
+    border-right: 1px solid #08415C;
+
+    & h2 {
+        font-size: 13px;
+        color: #fff;
+        text-shadow: 0 -1px 0 #000;
+        margin: 0;
+        float: left;
+        padding: 6px 0 6px 10px;
+    }
+}
+
+.estv {
+    float: right;
+    background: url('/assets/images/ui/bgnavitem.gif') no-repeat top left;
+    height: 31px;
+}
+
+.mite {
+    border: solid #ddd;
+    border-width: 0 1px 1px;
+    overflow: hidden;
+    padding: 10px;
+    clear: both;
+}
+
+.fotus {
+    border: solid #ddd;
+    border-width: 0 1px 1px;
+    overflow: hidden;
+    clear: both;
+    background: #F5F5F5;
+
+    & .col-4 {
+        margin: 0;
+        background: url('/assets/images/ui/borde.png') center right no-repeat;
+        text-align: center;
+    }
+
+    & span {
+        color: #000;
+        font-size: 14px;
+        clear: both;
+        display: block;
+        line-height: 1;
+        padding: 5px 0 2px;
+        font-weight: 700;
+    }
+}
+
+p.esppa {
+    background: none;
+}
+
+span.user-status {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    float: right;
+    margin: 9px 9px 9px 12px;
+}
+
+span.user-status.s-online {
+    background: #61DF26;
+}
+
+span.user-status.s-offline {
+    background: #fff;
+    opacity: .5;
+}
+
+.current-user-info {
+    & p {
+        margin: 0;
+        clear: both;
+        overflow: hidden;
+    }
+
+    & img {
+        margin-right: 10px;
+    }
+}
+
+h3.pixicity-title {
+    font-style: italic;
+    font-family: Georgia;
+    color: #F60;
+    margin: 0 0 5px;
+    font-size: 14px;
+    font-weight: 400;
+}
