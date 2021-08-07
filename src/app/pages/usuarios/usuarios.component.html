@@ -50,27 +50,30 @@
                         <div class="row">
                             <div class="col-4">
                                 <p class="mb-1">
-                                    <span>0</span>
+                                    <span>{{usuario.puntos}}</span>
                                     Puntos
                                 </p>
                             </div>
 
                             <div class="col-4">
                                 <p class="espp mb-1">
-                                    <span>0</span>
+                                    <span>{{usuario.comentarios}}</span>
                                     Comentarios
                                 </p>
                             </div>
 
                             <div class="col-4">
                                 <p class="esppa mb-1">
-                                    <span>1</span>
+                                    <span>{{usuario.posts}}</span>
                                     Posts
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)">
+                </mat-paginator>
             </div>
         </div>
 
