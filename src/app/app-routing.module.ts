@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { FavoritosComponent } from './pages/favoritos/favoritos.component';
 import { LoginComponent } from './pages/login/login.component';
 import { MensajesComponent } from './pages/mensajes/mensajes.component';
 import { ModHistoryComponent } from './pages/mod-history/mod-history.component';
@@ -31,6 +32,7 @@ const routes: Routes = [
   { path: 'monitor', component: MonitorComponent },
   { path: 'tops', component: TopsComponent },
   { path: 'usuarios', component: UsuariosComponent },
+  { path: 'favoritos', component: FavoritosComponent },
 
   { path: '*', redirectTo: '' }
 ];

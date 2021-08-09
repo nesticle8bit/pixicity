@@ -47,7 +47,7 @@
                 </div>
             </li>
             <li class="favoritos" style="position:relative">
-                <a href="#/favoritos.php" onclick="favorito.last(); return false" title="Posts favoritos" name="Favoritos">
+                <a [routerLink]="['favoritos']" title="Posts favoritos">
                     <fa-icon [icon]="['fas', 'star']"></fa-icon>
                 </a>
                 <!-- <div class="notificaciones-list" id="fav_list">
