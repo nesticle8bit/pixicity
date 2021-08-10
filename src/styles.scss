@@ -1928,3 +1928,30 @@ h3.pixicity-title {
     font-size: 14px;
     font-weight: 400;
 }
+
+table.table-sm {
+    border: 1px solid #ddd;
+
+    & thead tr th {
+        background: #ebebeb;
+        padding: 10px;
+    }
+
+    & > tbody > tr > td {
+        padding: 7px;
+    }
+
+    & > tbody > tr:nth-of-type(odd) {
+        background: #fff !important;
+    }
+}
+
+.table>:not(:last-child)>:last-child>* {
+    border-bottom: 1px solid #ddd;
+}
+
+.lista-posts {
+    border-top: #E0E0E0 1px solid;
+    padding: 7px 0 7px 10px;
+    background: #fff;
+}
