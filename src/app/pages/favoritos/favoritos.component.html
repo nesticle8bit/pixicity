@@ -4,12 +4,52 @@
             <h6 class="main-title">
                 <span>Mis posts favoritos</span>
             </h6>
+
+            <div class="nada-gris my-3" *ngIf="favoritos.length < 1">
+                No agregaste ningún post a favoritos todavía
+            </div>
+
+            <main class="table-responsive" *ngIf="favoritos.length > 0">
+                <table class="table table-sm table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Creado</th>
+                            <th>Guardado</th>
+                            <th>Puntos</th>
+                            <th>Comentarios</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a href="#">
+                                    <img src="/assets/images/categorias/cake.png" /> Noticias Primera computadora cuántica de uso comercial de Japón
+                                </a>
+                            </td>
+                            <td>Hace 1 año</td>
+                            <td>Hace instantes</td>
+                            <td>5</td>
+                            <td>7</td>
+                            <td class="text-center" width="30px">
+                                <img src="/assets/images/icons/cross.png" alt="Eliminar" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </main>
         </div>
 
         <div class="col-12 col-sm-6 col-md-3">
             <h6 class="main-title">
                 <span>Buscador</span>
             </h6>
+
+            <section class="mb-3">
+                <input type="text" class="form-control" />
+            </section>
 
             <h6 class="main-title">
                 <span>Categorías</span>
