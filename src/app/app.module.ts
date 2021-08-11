@@ -69,6 +69,7 @@ import { PostNotFoundComponent } from './posts/post-not-found/post-not-found.com
 import { PostCommentsComponent } from './posts/post-comments/post-comments.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
+import { BorradoresComponent } from './pages/borradores/borradores.component';
 
 @NgModule({
   declarations: [
@@ -106,7 +107,8 @@ import { MatIconModule } from '@angular/material/icon';
     Ads300x250Component,
     TimeAgoPipe,
     PostNotFoundComponent,
-    PostCommentsComponent
+    PostCommentsComponent,
+    BorradoresComponent
   ],
   imports: [
     BrowserModule,

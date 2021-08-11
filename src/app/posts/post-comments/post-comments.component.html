@@ -43,15 +43,17 @@
 
                         <div class="float-end answerOptions" *ngIf="comentario.actions">
                             <div class="botonear">
-                                <a>
+                                <a #tooltip="matTooltip" matTooltip="Responder">
                                     <fa-icon [icon]="['fas', 'reply']" class="reply"></fa-icon>
                                 </a>
 
-                                <a>
+                                <a #tooltip="matTooltip" matTooltip="Actualizar Comentario"
+                                    *ngIf="currentUser?.usuario?.userName === comentario?.userName">
                                     <fa-icon [icon]="['fas', 'pencil-alt']" class="edit"></fa-icon>
                                 </a>
 
-                                <a>
+                                <a #tooltip="matTooltip" matTooltip="Eliminar Comentario" (click)="eliminarComentario(comentario)"
+                                    *ngIf="currentUser?.usuario?.userName === comentario?.userName">
                                     <fa-icon [icon]="['fas', 'times']" class="times"></fa-icon>
                                 </a>
                             </div>
@@ -146,7 +148,6 @@
         </div>
     </div>
     <div class="Container">
-        <div class="clearBoth">&nbsp;</div>
         <div class="error"></div>
 
         <textarea id="body_comm" class="autogrow onblur_effect" tabindex="1" placeholder="Escribir un comentario..."

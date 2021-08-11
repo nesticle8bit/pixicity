@@ -14,7 +14,7 @@
 </article>
 
 <article class="lista-posts" *ngFor="let post of lastPosts">
-    <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
+    <a [ngClass]="{'post-privado': post.esPrivado}" [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
         <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
             alt="{{post.categoria.nombre}}" />
         {{post.titulo | truncate:[60]}}

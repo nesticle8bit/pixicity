@@ -1,19 +1,20 @@
-<section  *ngIf="currentUser?.usuario">
+<section *ngIf="currentUser?.usuario">
     <form class="d-none d-sm-block" style="float:right; margin-top: 17px;">
         <input type="text" id="ibuscadorq" name="q" placeholder="Buscar..." title="Buscar..."
             class="mini_ibuscador onblur_effect">
         <input vspace="2" hspace="10" type="submit" alt="Buscar" value="" title="Buscar" class="mini_bbuscador" />
     </form>
-    
+
     <div class="userInfoLogin">
         <ul>
             <li class="monitor" style="position: relative">
-                <a href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Monitor" [matTooltipPosition]="'above'" (click)="verNotificaciones()">
+                <a href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Monitor" [matTooltipPosition]="'above'"
+                    (click)="verNotificaciones()">
                     <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                 </a>
-            
-                <div class="notificaciones-list" id="mon_list" [style.display]="display.monitor ? 'block' : 'none'" (mouseenter)="display.monitor = true"
-                (mouseleave)="display.monitor = false">
+
+                <div class="notificaciones-list" id="mon_list" [style.display]="display.monitor ? 'block' : 'none'"
+                    (mouseenter)="display.monitor = true" (mouseleave)="display.monitor = false">
                     <div class="timoni">Notificaciones</div>
                     <ul>
                         <div class="errr">No hay notificaciones</div>
@@ -27,7 +28,7 @@
                     </a>
                 </div>
             </li>
-    
+
             <li class="mensajes" style="position:relative">
                 <a href="#/mensajes/" onclick="mensaje.last(); return false" title="Mensajes" name="Mensajes">
                     <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
@@ -63,12 +64,16 @@
                     <span>{{currentUser?.usuario?.userName}}</span>
                     <img class="punti" src="/assets/images/ui/arrowd.png" />
                 </a>
-    
-                <div class="menuver" style="top: 18px;" [style.display]="displayMenu ? 'block' : 'none'" (mouseenter)="displayMenu = true"
-                (mouseleave)="displayMenu = false">
+
+                <div class="menuver" style="top: 18px;" [style.display]="displayMenu ? 'block' : 'none'"
+                    (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
                     <a>Cuenta</a>
-                    <a>Borradores</a>
-                    <a href="javascript:void(0)" (click)="cerrarSesion()">Salir</a>
+                    <a [routerLink]="['borradores']">
+                        Borradores
+                    </a>
+                    <a href="javascript:void(0)" (click)="cerrarSesion()">
+                        Salir
+                    </a>
                 </div>
             </li>
         </ul>

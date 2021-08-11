@@ -70,6 +70,10 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     this.activatedRoute.paramMap.subscribe((value: any) => {
       this.postId = +value.get('id');
 
+      if(!this.postId) {
+        return;
+      }
+
       this.postService.getPostById(this.postId).subscribe((response: any) => {
         console.log(response);
 
