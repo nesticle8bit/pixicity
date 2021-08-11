@@ -123,7 +123,7 @@
                     <div class="float-end py-2">
                         <div class="bulto"><strong>7</strong>Visitas</div>
                         <div class="bulto"><strong id="cfavori">1</strong>Favoritos</div>
-                        <div class="bulto"><strong>0</strong>Medallas</div>
+                        <!-- <div class="bulto"><strong>0</strong>Medallas</div> -->
                         <div class="bulto"><strong id="cseguir">1</strong>Seguidores</div>
                     </div>
                 </div>
@@ -210,7 +210,7 @@
                     </div>
                 </div>
 
-                <div class="row mt-2">
+                <div class="row mt-2" *ngIf="currentUser?.usuario?.rango === 'Administrador' || currentUser?.usuario?.rango === 'Moderador'">
                     <div class="col-12 d-grid gap-2">
                         <button mat-flat-button color="warning" (click)="quitarSticky()">
                             <fa-icon [icon]="['fas', 'thumbtack']"></fa-icon> <span *ngIf="post.sticky"> Quitar</span> <span *ngIf="!post.sticky"> Establecer</span> Sticky

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { BorradoresComponent } from './pages/borradores/borradores.component';
 import { FavoritosComponent } from './pages/favoritos/favoritos.component';
 import { LoginComponent } from './pages/login/login.component';
 import { MensajesComponent } from './pages/mensajes/mensajes.component';
@@ -23,7 +24,7 @@ const routes: Routes = [
   { path: 'posts/:categoria', component: SectionHomeComponent },
   { path: 'posts/:categoria/:id/:nombre-post', component: PostsViewComponent },
   { path: 'posts/404/:nombre-post', component: PostNotFoundComponent },
-  { path: 'posts/crear', component: PostsCreateComponent },
+  { path: 'crear/post', component: PostsCreateComponent },
   { path: 'posts/actualizar/:id', component: PostsCreateComponent },
   
   { path: 'mod-history', component: ModHistoryComponent },
@@ -33,6 +34,7 @@ const routes: Routes = [
   { path: 'tops', component: TopsComponent },
   { path: 'usuarios', component: UsuariosComponent },
   { path: 'favoritos', component: FavoritosComponent },
+  { path: 'borradores', component: BorradoresComponent },
 
   { path: '*', redirectTo: '' }
 ];

@@ -1,0 +1,42 @@
+<div class="container container--home">
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-9">
+            <h6 class="main-title">
+                <span>Posts</span>
+                <input type="text" id="borradores-search" autocomplete="off">
+            </h6>
+
+            <div class="nada-gris my-3" *ngIf="borradores.length < 1">
+                No agregaste ningún post a favoritos todavía
+            </div>
+
+            <main *ngIf="borradores.length > 0">
+                <ul class="list-unstyled" id="resultados-borradores">
+                    <li *ngFor="let borrador of borradores" class="pt-2">
+                        <a [routerLink]="['/posts/' + borrador.categoria.seo + '/' + borrador.id + '/' + borrador.url]" title="{{borrador.titulo}}">
+                            <img src="/assets/images/categorias/{{borrador.categoria.icono}}" title="{{borrador.categoria.nombre}}"
+                                alt="{{borrador.categoria.nombre}}" />
+                            {{borrador.titulo}}
+                        </a>
+
+                        <p class="m-0 my-1 pt-1">
+                            <small>
+                                Última vez guardado {{borrador.fechaActualiza | timeAgo}}
+                            </small>
+                        </p>
+                    </li>
+                </ul>
+            </main>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+            <h6 class="main-title">
+                <span>Filtrar</span>
+            </h6>
+
+            <h6 class="main-title">
+                <span>Categorías</span>
+            </h6>
+        </div>
+    </div>
+</div>

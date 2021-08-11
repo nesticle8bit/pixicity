@@ -65,4 +65,8 @@ export class PostCommentsComponent implements OnInit {
       this.comentarios = response;
     });
   }
+
+  eliminarComentario(comentario: any): void {
+    console.log(comentario);
+  }
 }
