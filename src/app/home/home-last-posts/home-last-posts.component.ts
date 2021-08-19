@@ -9,7 +9,17 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
   styleUrls: ['./home-last-posts.component.scss']
 })
 export class HomeLastPostsComponent implements OnInit {
-  @Input() categoria: string = '';
+  private _categoria: string = '';
+
+  @Input() set categoria(value: string) {
+    this._categoria = value;
+    this.getPosts(this._categoria);
+  }
+
+  get categoria(): string {
+    return this._categoria;
+  }
+
   public stickyPosts: any = [];
   public lastPosts: any = [];
   public totalCount: number = 0;
@@ -26,8 +36,8 @@ export class HomeLastPostsComponent implements OnInit {
     this.pageChange(pageEvent);
   }
 
-  getPosts(): void {
-    this.postService.getPosts(this.categoria).subscribe((response: any) => {
+  getPosts(categoria: string): void {
+    this.postService.getPosts(categoria).subscribe((response: any) => {
       this.lastPosts = response.data;
 
       this.lastPosts = this.lastPosts.map((post: any) => {
@@ -52,6 +62,6 @@ export class HomeLastPostsComponent implements OnInit {
 
   pageChange(event: PageEvent): void {
     this.paginationService.change(event);
-    this.getPosts();
+    this.getPosts(this.categoria);
   }
 }
