@@ -10,7 +10,7 @@
     </li>
 
     <li class="list-inline-item">
-        <a [routerLink]="['']">
+        <a [routerLink]="['/posts/' + post?.categoria?.seo]">
             <fa-icon [icon]="['fas', 'angle-right']"></fa-icon> {{post?.categoria?.nombre}}
         </a>
     </li>
