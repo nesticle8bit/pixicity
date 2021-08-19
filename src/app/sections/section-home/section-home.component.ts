@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HomeLastPostsComponent } from 'src/app/home/home-last-posts/home-last-posts.component';
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
+import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 
 @Component({
   selector: 'section-home',
@@ -14,15 +15,16 @@ export class SectionHomeComponent implements OnInit {
     mainMenu: true
   };
 
-  // @ViewChild(HomeLastPostsComponent) child!:HomeLastPostsComponent;
-  
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private postsService: IHttpPostsService
   ) { }
 
   ngOnInit(): void {
-    // this.activatedRoute.paramMap.subscribe((params: any) => {
-    // });
+    this.activatedRoute.paramMap.subscribe((params: any) => {
+      this.categoria = params.get('categoria');
+      console.log(this.categoria);
+    });
   }
 
 }
