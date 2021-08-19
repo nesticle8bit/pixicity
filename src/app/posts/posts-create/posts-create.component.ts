@@ -180,4 +180,8 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  guardarBorrador(): void {
+    console.log(this.formGroup.value);
+  }
 }

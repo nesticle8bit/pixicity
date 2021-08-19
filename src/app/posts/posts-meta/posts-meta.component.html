@@ -1,0 +1,58 @@
+<section class="meta">
+    <div class="metacentro">
+        <div class="float-start" id="puntos-agregados" [style.display]="addedPuntos ? 'block' : 'none'">Puntos agregados!</div>
+
+        <div class="float-start" [style.display]="!addedPuntos ? 'block' : 'none'" *ngIf="currentUser?.usuario?.userName != post?.usuario?.userName">
+            <div class="barpuntos">
+                <a href="javascript:void(0)" *ngFor="let punto of availablePuntos" (click)="votarPost(punto)">
+                    {{punto}}
+                </a>
+            </div>
+        </div>
+
+        <div class="float-end">
+            <p class="cupuntos">
+                <b id="puntos_post">{{!post?.puntos ? 0 : post?.puntos}}</b> Puntos
+            </p>
+        </div>
+    </div>
+
+    <div class="metabottom">
+        <div class="botones float-start py-2" *ngIf="currentUser?.usuario?.userName != post?.usuario?.userName">
+            <li>
+                <a onclick="notifica.sharePost(1);" class="tetese">P!</a>
+            </li>
+
+            <li>
+                <a href="#" onclick="add_favoritos(); return false">
+                    <fa-icon [icon]="['fas', 'star']" class="favoritos"></fa-icon>
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <fa-icon [icon]="['fas', 'ban']" class="denunciar"></fa-icon> Denunciar
+                </a>
+            </li>
+
+            <li style="display: none;">
+                <a class="unfollow_post">
+                    <fa-icon [icon]="['fas', 'eye']" class="dejar-seguir"></fa-icon> Dejar de seguir
+                </a>
+            </li>
+
+            <li>
+                <a class="follow_post">
+                    <fa-icon [icon]="['fas', 'ban']" class="seguir"></fa-icon> Seguir Post
+                </a>
+            </li>
+        </div>
+
+        <div class="float-end py-2">
+            <div class="bulto"><strong>7</strong>Visitas</div>
+            <div class="bulto"><strong id="cfavori">1</strong>Favoritos</div>
+            <!-- <div class="bulto"><strong>0</strong>Medallas</div> -->
+            <div class="bulto"><strong id="cseguir">1</strong>Seguidores</div>
+        </div>
+    </div>
+</section>

@@ -3,45 +3,11 @@
         <div class="col-12 col-sm-12 col-md-9" style="padding-right: 58px;">
             <div class="row post-header">
                 <div class="col-12 col-sm-10">
-                    <ul class="list-unstyled list-inline post-header-list">
-                        <li class="list-inline-item mr-2">
-                            <fa-icon [icon]="['far', 'clock']"></fa-icon> {{post?.fechaRegistro | timeAgo}}
-                        </li>
-
-                        <li class="list-inline-item">
-                            <a [routerLink]="['']">
-                                Pixicity
-                            </a>
-                        </li>
-
-                        <li class="list-inline-item">
-                            <a [routerLink]="['']">
-                                <fa-icon [icon]="['fas', 'angle-right']"></fa-icon> {{post?.categoria?.nombre}}
-                            </a>
-                        </li>
-
-                        <li class="list-inline-item">
-                            <a [routerLink]="['/posts/' + post?.categoria?.seo + '/' + post?.id + '/' + post?.url]">
-                                <fa-icon [icon]="['fas', 'angle-right']"></fa-icon> {{post?.titulo}}
-                            </a>
-                        </li>
-                    </ul>
+                    <app-posts-breadcrumb [post]="post"></app-posts-breadcrumb>
                 </div>
         
                 <div class="col-12 col-sm-2 text-end">
-                    <div class="post-nav">
-                        <a class="float-end" (click)="nextPost(post.id)" matTooltip="Post siguiente (más nuevo)">
-                            <fa-icon [icon]="['fas', 'caret-right']"></fa-icon>
-                        </a>
-
-                        <a class="float-end" (click)="randomPost()" matTooltip="Post aleatorio">
-                            <fa-icon [icon]="['fas', 'random']"></fa-icon>
-                        </a>
-
-                        <a class="float-end" (click)="prevPost(post.id)" matTooltip="Post anterior (más viejo)">
-                            <fa-icon [icon]="['fas', 'caret-left']"></fa-icon>
-                        </a>
-                    </div>
+                    <app-posts-nav [post]="post"></app-posts-nav>
                 </div>
             </div>
 
@@ -53,16 +19,7 @@
                 </div>
             </main>
 
-            <section class="tagbox">
-                <div class="fortags">
-                    <div class="letres">Tags:</div>
-
-                    <div *ngFor="let etiqueta of post?.tags; let last = last">
-                        <a rel="tag" href="/buscar/posts/?q={{etiqueta}}&amp;type=tags">{{etiqueta}}</a>
-                        <span *ngIf="!last">|</span>
-                    </div>
-                </div>
-            </section>
+            <app-posts-tags [post]="post"></app-posts-tags>
 
             <section class="nels">
                 <p>
@@ -70,64 +27,7 @@
                 </p>
             </section>
 
-            <section class="meta">
-                <div class="metacentro">
-                    <div class="float-start" id="puntos-agregados" [style.display]="addedPuntos ? 'block' : 'none'">Puntos agregados!</div>
-
-                    <div class="float-start" [style.display]="!addedPuntos ? 'block' : 'none'" *ngIf="currentUser?.usuario?.userName != usuario?.userName">
-                        <div class="barpuntos">
-                            <a href="javascript:void(0)" *ngFor="let punto of availablePuntos" (click)="votarPost(punto)">
-                                {{punto}}
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="float-end">
-                        <p class="cupuntos">
-                            <b id="puntos_post">{{!post?.puntos ? 0 : post?.puntos}}</b> Puntos
-                        </p>
-                    </div>
-                </div>
-
-                <div class="metabottom">
-                    <div class="botones float-start py-2" *ngIf="currentUser?.usuario?.userName != usuario?.userName">
-                        <li>
-                            <a onclick="notifica.sharePost(1);" class="tetese">P!</a>
-                        </li>
-
-                        <li>
-                            <a href="#" onclick="add_favoritos(); return false">
-                                <fa-icon [icon]="['fas', 'star']" class="favoritos"></fa-icon>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <fa-icon [icon]="['fas', 'ban']" class="denunciar"></fa-icon> Denunciar
-                            </a>
-                        </li>
-
-                        <li style="display: none;">
-                            <a class="unfollow_post">
-                                <fa-icon [icon]="['fas', 'eye']" class="dejar-seguir"></fa-icon> Dejar de seguir
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="follow_post">
-                                <fa-icon [icon]="['fas', 'ban']" class="seguir"></fa-icon> Seguir Post
-                            </a>
-                        </li>
-                    </div>
-
-                    <div class="float-end py-2">
-                        <div class="bulto"><strong>7</strong>Visitas</div>
-                        <div class="bulto"><strong id="cfavori">1</strong>Favoritos</div>
-                        <!-- <div class="bulto"><strong>0</strong>Medallas</div> -->
-                        <div class="bulto"><strong id="cseguir">1</strong>Seguidores</div>
-                    </div>
-                </div>
-            </section>
+            <app-posts-meta [post]="post"></app-posts-meta>
 
             <div class="interes">
                 <h3>También te puede interesar...</h3>
@@ -158,13 +58,13 @@
                     <div class="eolr">
                         <span class="tepe-online vctip" #tooltip="matTooltip" matTooltip="Online"
                             [matTooltipPosition]="'below'"></span>
-                        <a href="#">{{usuario?.userName}}</a>
+                        <a href="#">{{post?.usuario?.userName}}</a>
                     </div>
 
                     <div class="nekes">
                         <fa-icon [icon]="['fas', 'mars']" class="vctip" tooltip="matTooltip" matTooltip="Hombre"
                             [matTooltipPosition]="'below'"></fa-icon>
-                        <img class="vctip pai" src="/assets/images/flags/{{usuario?.pais.toLowerCase()}}.png" />
+                        <img class="vctip pai" src="/assets/images/flags/{{post?.usuario?.pais.toLowerCase()}}.png" />
                     </div>
 
                     <div class="eliese">
@@ -191,7 +91,7 @@
                 </div>
             </div>
 
-            <section class="my-1" *ngIf="usuario?.userName === currentUser?.usuario?.userName">
+            <section class="my-1" *ngIf="post?.usuario?.userName === currentUser?.usuario?.userName">
                 <div class="titulaw">
                     <h2>Herramientas</h2>
                 </div>
