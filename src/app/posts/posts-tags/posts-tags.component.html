@@ -1,0 +1,10 @@
+<section class="tagbox">
+    <div class="fortags">
+        <div class="letres">Tags:</div>
+
+        <div *ngFor="let etiqueta of post?.tags; let last = last">
+            <a rel="tag" href="/buscar/posts/?q={{etiqueta}}&amp;type=tags">{{etiqueta}}</a>
+            <span *ngIf="!last">|</span>
+        </div>
+    </div>
+</section>

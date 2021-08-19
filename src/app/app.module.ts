@@ -70,6 +70,10 @@ import { PostCommentsComponent } from './posts/post-comments/post-comments.compo
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { BorradoresComponent } from './pages/borradores/borradores.component';
+import { PostsBreadcrumbComponent } from './posts/posts-breadcrumb/posts-breadcrumb.component';
+import { PostsNavComponent } from './posts/posts-nav/posts-nav.component';
+import { PostsTagsComponent } from './posts/posts-tags/posts-tags.component';
+import { PostsMetaComponent } from './posts/posts-meta/posts-meta.component';
 
 @NgModule({
   declarations: [
@@ -108,7 +112,11 @@ import { BorradoresComponent } from './pages/borradores/borradores.component';
     TimeAgoPipe,
     PostNotFoundComponent,
     PostCommentsComponent,
-    BorradoresComponent
+    BorradoresComponent,
+    PostsBreadcrumbComponent,
+    PostsNavComponent,
+    PostsTagsComponent,
+    PostsMetaComponent
   ],
   imports: [
     BrowserModule,

@@ -12,10 +12,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 export class PostsViewComponent implements OnInit {
   public currentUser: any;
   public post: any;
-  public usuario: any;
   public show: boolean = false;
-  public availablePuntos: number[] = [];
-  public addedPuntos: boolean = false;
 
   constructor(
     private securityService: IHttpSecurityService,
@@ -27,7 +24,6 @@ export class PostsViewComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe((values: any) => {
       this.getPostById(+values.get('id'));
-      this.getAvailablePuntos();
     });
 
     this.currentUser = this.securityService.getCurrentUser();
@@ -46,25 +42,12 @@ export class PostsViewComponent implements OnInit {
       }
 
       this.post = value.post;
+      this.post.usuario = value.usuario;
       this.post.id = postId;
-
-      this.usuario = value.usuario;
     });
   }
 
-  getAvailablePuntos(): void {
-    this.postService.getAvailableVotos(1).subscribe((response: any) => {
-      if (response > 0) {
-        for (let index = 1; index < response + 1; index++) {
-          if (this.availablePuntos.length < 10) {
-            this.availablePuntos.push(index);
-          } else {
-            return;
-          }
-        }
-      }
-    });
-  }
+
 
   actualizarPost(): void {
     this.router.navigate([`posts/actualizar/${this.post.id}`]);
@@ -108,26 +91,5 @@ export class PostsViewComponent implements OnInit {
         this.post.sticky = !this.post.sticky;
       }
     });
-  }
-
-  votarPost(puntos: number): void {
-    this.postService.setVotos({ typeId: this.post.id, cantidad: puntos, votosType: 1 }).subscribe((response: any) => {
-      if (response) {
-        this.addedPuntos = true;
-        this.post.puntos += puntos;
-      }
-    });
-  }
-
-  nextPost(postId: number): void {
-    console.log(postId);
-  }
-
-  prevPost(postId: number): void {
-    console.log(postId);
-  }
-
-  randomPost(): void {
-
   }
 }

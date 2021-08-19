@@ -1,0 +1,23 @@
+<ul class="list-unstyled list-inline post-header-list">
+    <li class="list-inline-item mr-2">
+        <fa-icon [icon]="['far', 'clock']"></fa-icon> {{post?.fechaRegistro | timeAgo}}
+    </li>
+
+    <li class="list-inline-item">
+        <a [routerLink]="['']">
+            Pixicity
+        </a>
+    </li>
+
+    <li class="list-inline-item">
+        <a [routerLink]="['']">
+            <fa-icon [icon]="['fas', 'angle-right']"></fa-icon> {{post?.categoria?.nombre}}
+        </a>
+    </li>
+
+    <li class="list-inline-item">
+        <a [routerLink]="['/posts/' + post?.categoria?.seo + '/' + post?.id + '/' + post?.url]">
+            <fa-icon [icon]="['fas', 'angle-right']"></fa-icon> {{post?.titulo}}
+        </a>
+    </li>
+</ul>
