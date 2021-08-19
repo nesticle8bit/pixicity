@@ -25,11 +25,10 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
     - [ ] Filtrar la lista de posts por categoria en la pagina de inicio
     - [x] Visualizar el post
     - [x] Sistema de votaciones para los posts
-    - [ ] Dialog para Denunciar los posts
     - [ ] Implementar el Seguir post para ser notificado en el monitor
     - [ ] Sidebar del Post como Componente
     - [ ] Seguir post
-    - [ ] Dialog para Denunciar post
+    - [ ] Dialog para Denunciar los posts
     - [ ] Agregar a favoritos
     - [ ] Desarrollar el 'meta' del post (visitantes, favoritos, seguidores)
     - [ ] Meta tags: buscar por tag al dar click a uno de ellos
