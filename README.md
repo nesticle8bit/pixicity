@@ -13,7 +13,7 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
 ![2021-08-01 10 03 40 localhost 0414b0d84b68](https://user-images.githubusercontent.com/1715022/127775700-30f67e69-47df-45b0-9916-707e59e536a8.png)
 
 ### 👀 ver post
-![2021-08-01 10 04 55 localhost 2a2d0529146d](https://user-images.githubusercontent.com/1715022/127775764-a024bd39-10cd-4e75-bfb7-08ebffbc7c37.png)
+![2021-08-18 20 39 41 localhost 92f44c53bb6c](https://user-images.githubusercontent.com/1715022/129994022-b8ae0760-2aea-4f44-ae2c-0e4359172713.png)
 
 ### To-Do
 
