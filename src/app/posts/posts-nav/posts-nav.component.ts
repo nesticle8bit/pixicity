@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 
 @Component({
   selector: 'app-posts-nav',
@@ -8,17 +10,31 @@ import { Component, Input, OnInit } from '@angular/core';
 export class PostsNavComponent implements OnInit {
   @Input() post: any;
   
-  constructor() { }
+  constructor(
+    private postService: IHttpPostsService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
+
   }
 
   nextPost(postId: number): void {
-    console.log(postId);
+    this.postService.nextPost(postId).subscribe((value: any) => {
+      if(value) {
+        debugger
+        this.router.navigate(['/posts/' + value.categoria.seo + '/' + value.id + '/' + value.titulo.toLowerCase().replace(/\s/g, '-')]);
+      }
+    });
   }
 
   prevPost(postId: number): void {
-    console.log(postId);
+    this.postService.previousPost(postId).subscribe((value: any) => {
+      if(value) {
+        debugger
+        this.router.navigate(['/posts/' + value.categoria.seo + '/' + value.id + '/' + value.titulo.toLowerCase().replace(/\s/g, '-')]);
+      }
+    });
   }
 
   randomPost(): void {
