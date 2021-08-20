@@ -9,7 +9,17 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./post-comments.component.scss']
 })
 export class PostCommentsComponent implements OnInit {
-  @Input() post: any;
+  private _post: any;
+
+  @Input() set post(value: any) {
+    this._post = value;
+    this.getComentariosByPostId();
+  }
+
+  get post(): any {
+    return this._post;
+  }
+
   public formGroup: FormGroup;
   public comentarios: any = [];
   public currentUser: any;

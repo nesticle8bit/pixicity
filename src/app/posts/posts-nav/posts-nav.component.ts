@@ -22,7 +22,6 @@ export class PostsNavComponent implements OnInit {
   nextPost(postId: number): void {
     this.postService.nextPost(postId).subscribe((value: any) => {
       if(value) {
-        debugger
         this.router.navigate(['/posts/' + value.categoria.seo + '/' + value.id + '/' + value.titulo.toLowerCase().replace(/\s/g, '-')]);
       }
     });
@@ -31,7 +30,6 @@ export class PostsNavComponent implements OnInit {
   prevPost(postId: number): void {
     this.postService.previousPost(postId).subscribe((value: any) => {
       if(value) {
-        debugger
         this.router.navigate(['/posts/' + value.categoria.seo + '/' + value.id + '/' + value.titulo.toLowerCase().replace(/\s/g, '-')]);
       }
     });
