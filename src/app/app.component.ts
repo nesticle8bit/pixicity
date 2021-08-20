@@ -9,6 +9,7 @@ import { DisplayComponentService } from './services/shared/displayComponents.ser
 })
 export class AppComponent {
   title = 'pixicity';
+  
   public displayComponent: DisplayComponentModel = {
     mainMenu: true
   };
