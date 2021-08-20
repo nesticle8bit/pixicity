@@ -16,10 +16,10 @@ export class HttpPostsService implements IHttpPostsService {
         private paginationService: PaginationService) { }
 
     getPosts(categoria: string = ''): Observable<any> {
-        if(!categoria) {
+        if (!categoria) {
             categoria = '';
         }
-        
+
         return this.http.get<any>(`${environment.api}/api/posts/getPosts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${categoria}`)
             .pipe(map((response: any) => {
                 if (response.status === 200) {
@@ -186,6 +186,36 @@ export class HttpPostsService implements IHttpPostsService {
 
     setVotos(voto: any): Observable<any> {
         return this.http.post<any>(`${environment.api}/api/votos/setVoto`, voto)
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
+    }
+
+    nextPost(postId: number): Observable<any> {
+        return this.http.post<any>(`${environment.api}/api/posts/nextPost`, { id: postId })
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
+    }
+
+    previousPost(postId: number): Observable<any> {
+        return this.http.post<any>(`${environment.api}/api/posts/previousPost`, { id: postId })
             .pipe(map((response: any) => {
                 if (response.status === 200) {
                     return response.data;

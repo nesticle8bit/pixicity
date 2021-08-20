@@ -15,4 +15,6 @@ export abstract class IHttpPostsService {
     abstract changeStickyPost(postId: number): Observable<any>;
     abstract getAvailableVotos(type: number): Observable<any>;
     abstract setVotos(voto: any): Observable<any>;
+    abstract nextPost(postId: number): Observable<any>;
+    abstract previousPost(postId: number): Observable<any>;
 }
