@@ -6,7 +6,15 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./posts-tags.component.scss']
 })
 export class PostsTagsComponent implements OnInit {
-  @Input() post: any;
+  private _post: any;
+
+  @Input() set post(value: any) {
+    this._post = value;
+  }
+
+  get post(): any {
+    return this._post;
+  }
   
   constructor() { }
 

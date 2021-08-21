@@ -36,7 +36,6 @@ export class PostCommentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.securityService.getCurrentUser();
-    this.getComentariosByPostId();
   }
 
   enviarComentario(): void {

@@ -24,7 +24,7 @@
             </li>
 
             <li>
-                <a href="#" onclick="add_favoritos(); return false">
+                <a href="#" (click)="agregarFavorito(post.id)" matTooltip="Agregar favoritos">
                     <fa-icon [icon]="['fas', 'star']" class="favoritos"></fa-icon>
                 </a>
             </li>
