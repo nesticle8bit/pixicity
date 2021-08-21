@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-posts-meta',
@@ -8,7 +8,17 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./posts-meta.component.scss']
 })
 export class PostsMetaComponent implements OnInit {
-  @Input() post: any;
+  private _post: any;
+
+  @Input() set post(value: any) {
+    this._post = value;
+    this.getAvailablePuntos();
+  }
+
+  get post(): any {
+    return this._post;
+  }
+
   public addedPuntos: boolean = false;
   public availablePuntos: number[] = [];
   public currentUser: any;
@@ -20,19 +30,26 @@ export class PostsMetaComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.securityService.getCurrentUser();
-    this.getAvailablePuntos();
   }
 
   getAvailablePuntos(): void {
     this.postService.getAvailableVotos(1).subscribe((response: any) => {
+      console.log('response', response);
+
       if (response > 0) {
-        for (let index = 1; index < response + 1; index++) {
-          if (this.availablePuntos.length < 10) {
-            this.availablePuntos.push(index);
-          } else {
-            return;
-          }
+        for (let index = 1; index < response; index++) {
+          this.availablePuntos.push(index);
+          console.log(this.availablePuntos);
         }
+
+        // for (let index = 1; index < response + 1; index++) {
+        //   debugger
+        //   if (this.availablePuntos.length < 10) {
+        //     this.availablePuntos.push(index);
+        //   } else {
+        //     return;
+        //   }
+        // }
       }
     });
   }
@@ -44,5 +61,9 @@ export class PostsMetaComponent implements OnInit {
         this.post.puntos += puntos;
       }
     });
+  }
+
+  agregarFavorito(postId: number): void {
+    
   }
 }
