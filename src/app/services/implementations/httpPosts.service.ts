@@ -229,6 +229,21 @@ export class HttpPostsService implements IHttpPostsService {
             })).pipe(catchError(this.helper.errorHandler));
     }
 
+    randomPost(postId: number): Observable<any> {
+        return this.http.post<any>(`${environment.api}/api/posts/randomPost`, { id: postId })
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
+    }
+
     addFavoritePost(postId: number): Observable<any> {
         return this.http.post<any>(`${environment.api}/api/posts/previousPost`, { postId })
             .pipe(map((response: any) => {

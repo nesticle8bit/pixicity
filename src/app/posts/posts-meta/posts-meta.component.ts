@@ -12,7 +12,10 @@ export class PostsMetaComponent implements OnInit {
 
   @Input() set post(value: any) {
     this._post = value;
-    this.getAvailablePuntos();
+
+    if(value) {
+      this.getAvailablePuntos();
+    }
   }
 
   get post(): any {
@@ -39,17 +42,7 @@ export class PostsMetaComponent implements OnInit {
       if (response > 0) {
         for (let index = 1; index < response; index++) {
           this.availablePuntos.push(index);
-          console.log(this.availablePuntos);
         }
-
-        // for (let index = 1; index < response + 1; index++) {
-        //   debugger
-        //   if (this.availablePuntos.length < 10) {
-        //     this.availablePuntos.push(index);
-        //   } else {
-        //     return;
-        //   }
-        // }
       }
     });
   }
@@ -64,6 +57,8 @@ export class PostsMetaComponent implements OnInit {
   }
 
   agregarFavorito(postId: number): void {
-    
+    this.postService.addFavoritePost(postId).subscribe((response: any) => {
+      
+    });
   }
 }
