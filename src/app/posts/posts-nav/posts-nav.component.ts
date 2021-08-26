@@ -35,7 +35,11 @@ export class PostsNavComponent implements OnInit {
     });
   }
 
-  randomPost(): void {
-
+  randomPost(postId: number): void {
+    this.postService.randomPost(postId).subscribe((value: any) => {
+      if(value) {
+        this.router.navigate(['/posts/' + value.categoria.seo + '/' + value.id + '/' + value.titulo.toLowerCase().replace(/\s/g, '-')]);
+      }
+    });
   }
 }

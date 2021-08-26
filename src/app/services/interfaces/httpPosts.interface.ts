@@ -17,5 +17,6 @@ export abstract class IHttpPostsService {
     abstract setVotos(voto: any): Observable<any>;
     abstract nextPost(postId: number): Observable<any>;
     abstract previousPost(postId: number): Observable<any>;
+    abstract randomPost(postId: number): Observable<any>;
     abstract addFavoritePost(postId: number): Observable<any>;
 }
