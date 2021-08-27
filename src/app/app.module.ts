@@ -74,6 +74,7 @@ import { PostsBreadcrumbComponent } from './posts/posts-breadcrumb/posts-breadcr
 import { PostsNavComponent } from './posts/posts-nav/posts-nav.component';
 import { PostsTagsComponent } from './posts/posts-tags/posts-tags.component';
 import { PostsMetaComponent } from './posts/posts-meta/posts-meta.component';
+import { DialogDenunciarPostComponent } from './components/dialogs/dialog-denunciar-post/dialog-denunciar-post.component';
 
 @NgModule({
   declarations: [
@@ -116,7 +117,8 @@ import { PostsMetaComponent } from './posts/posts-meta/posts-meta.component';
     PostsBreadcrumbComponent,
     PostsNavComponent,
     PostsTagsComponent,
-    PostsMetaComponent
+    PostsMetaComponent,
+    DialogDenunciarPostComponent
   ],
   imports: [
     BrowserModule,
