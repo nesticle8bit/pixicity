@@ -1,6 +1,8 @@
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogDenunciarPostComponent } from 'src/app/components/dialogs/dialog-denunciar-post/dialog-denunciar-post.component';
 
 @Component({
   selector: 'app-posts-meta',
@@ -13,7 +15,7 @@ export class PostsMetaComponent implements OnInit {
   @Input() set post(value: any) {
     this._post = value;
 
-    if(value) {
+    if (value) {
       this.getAvailablePuntos();
     }
   }
@@ -28,7 +30,8 @@ export class PostsMetaComponent implements OnInit {
 
   constructor(
     private securityService: IHttpSecurityService,
-    private postService: IHttpPostsService
+    private postService: IHttpPostsService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -58,7 +61,15 @@ export class PostsMetaComponent implements OnInit {
 
   agregarFavorito(postId: number): void {
     this.postService.addFavoritePost(postId).subscribe((response: any) => {
-      
+
+    });
+  }
+
+  denunciarPost(): void {
+    this.dialog.open(DialogDenunciarPostComponent, {
+      width: '600px',
+      disableClose: true,
+      data: this.post,
     });
   }
 }
