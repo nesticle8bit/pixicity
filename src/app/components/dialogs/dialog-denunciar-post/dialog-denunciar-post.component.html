@@ -2,28 +2,30 @@
     Denunciar post
 </h2>
 
-<mat-dialog-content>
-    <div class="mb-1">
-        <label class="form-label">Denunciar el post:</label> <br>
-        <p>{{data.titulo}}</p>
-    </div>
-
-    <div class="mb-1">
-        <label class="form-label">Razón de la denuncia:</label> <br>
-        <ng-select formControlName="dia" [items]="razonDenuncia" bindLabel="label" bindValue="id"></ng-select>
-    </div>
-
-    <div class="mb-1">
-        <label class="form-label">Aclaración y comentarios:</label> <br>
-        <textarea rows="8" class="form-control"></textarea>
-    </div>
-
-    <div class="alert alert-warning mt-2 mb-0">
-        <p class="mb-0">Si es <b>Re-post</b> debes indicar el link del post original para ayudar a la comunidad. Muchas gracias!</p>
-    </div>
-</mat-dialog-content>
-
-<mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cancelar</button>
-    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Enviar</button>
-</mat-dialog-actions>
+<form>
+    <mat-dialog-content>
+        <div class="mb-1">
+            <label class="form-label">Denunciar el post:</label> <br>
+            <p>{{data.titulo}}</p>
+        </div>
+    
+        <div class="mb-1">
+            <label class="form-label">Razón de la denuncia:</label> <br>
+            <ng-select formControlName="dia" [items]="razonDenuncia" bindLabel="label" bindValue="id"></ng-select>
+        </div>
+    
+        <div class="mb-1">
+            <label class="form-label">Aclaración y comentarios:</label> <br>
+            <textarea rows="8" class="form-control"></textarea>
+        </div>
+    
+        <div class="alert alert-warning mt-2 mb-0">
+            <p class="mb-0">Si es <b>Re-post</b> debes indicar el link del post original para ayudar a la comunidad. Muchas gracias!</p>
+        </div>
+    </mat-dialog-content>
+    
+    <mat-dialog-actions align="end">
+        <button type="button" mat-button mat-dialog-close>Cancelar</button>
+        <button type="submit" mat-button cdkFocusInitial>Enviar</button>
+    </mat-dialog-actions>
+</form>
