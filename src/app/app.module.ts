@@ -75,6 +75,7 @@ import { PostsNavComponent } from './posts/posts-nav/posts-nav.component';
 import { PostsTagsComponent } from './posts/posts-tags/posts-tags.component';
 import { PostsMetaComponent } from './posts/posts-meta/posts-meta.component';
 import { DialogDenunciarPostComponent } from './components/dialogs/dialog-denunciar-post/dialog-denunciar-post.component';
+import { DashboardAdminComponent } from './components/admin/dashboard-admin/dashboard-admin.component';
 
 @NgModule({
   declarations: [
@@ -118,7 +119,8 @@ import { DialogDenunciarPostComponent } from './components/dialogs/dialog-denunc
     PostsNavComponent,
     PostsTagsComponent,
     PostsMetaComponent,
-    DialogDenunciarPostComponent
+    DialogDenunciarPostComponent,
+    DashboardAdminComponent
   ],
   imports: [
     BrowserModule,
