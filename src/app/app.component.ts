@@ -11,7 +11,9 @@ export class AppComponent {
   title = 'pixicity';
   
   public displayComponent: DisplayComponentModel = {
-    mainMenu: true
+    mainMenu: true,
+    footer: true,
+    searchFooter: true
   };
 
   constructor(

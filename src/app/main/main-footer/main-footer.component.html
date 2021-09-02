@@ -1,10 +1,10 @@
 <footer class="container">
-    <div class="row">
+    <div class="row" *ngIf="display.searchFooter">
         <div class="col-12" style="padding: 0 0px;">
             <div class="seccion">
                 <div class="inpie">
                     <div class="busb float-start">
-                        <form action="/buscar/posts/" name="top_search_box" gid="partner-pub-5535725517227860:7900040286">
+                        <form action="/buscar/posts/" name="top_search_box">
                             <input class="bbcuerpo" type="text" name="q" onkeypress="ibuscador_intro(event)" value=""
                                 placeholder="Buscar...">
                             <input class="bbboton" vspace="2" hspace="10" type="submit" value="">
@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row"  *ngIf="display.footer">
         <div class="col-12">
             <div class="footer-copyright text-center">
                 <a href="#">Chat</a>

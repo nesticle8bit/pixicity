@@ -16,7 +16,7 @@ export class DisplayComponentService {
         this.display.next();
     }
 
-    getDisplay(): Observable<any> {
+    getDisplay(): Observable<DisplayComponentModel> {
         return this.display.asObservable();
     }
 }

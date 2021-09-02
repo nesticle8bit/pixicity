@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HomeLastPostsComponent } from 'src/app/home/home-last-posts/home-last-posts.component';
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
-import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
   selector: 'section-home',
@@ -12,18 +11,21 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 export class SectionHomeComponent implements OnInit {
   public categoria: string = '';
   public displayComponent: DisplayComponentModel = {
-    mainMenu: true
+    mainMenu: true,
+    footer: true,
+    searchFooter: true
   };
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private postsService: IHttpPostsService
+    private displayService: DisplayComponentService
   ) { }
 
   ngOnInit(): void {
+    this.displayService.setDisplay(this.displayComponent);
+
     this.activatedRoute.paramMap.subscribe((params: any) => {
       this.categoria = params.get('categoria');
-      console.log(this.categoria);
     });
   }
 
