@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
   selector: 'app-posts-view',
@@ -18,6 +19,7 @@ export class PostsViewComponent implements OnInit {
     private securityService: IHttpSecurityService,
     private activatedRoute: ActivatedRoute,
     private postService: IHttpPostsService,
+    private displayService: DisplayComponentService,
     private router: Router
   ) { }
 
@@ -25,6 +27,8 @@ export class PostsViewComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe((values: any) => {
       this.getPostById(+values.get('id'));
     });
+
+    this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: false});
 
     this.currentUser = this.securityService.getCurrentUser();
   }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
   selector: 'main-footer',
@@ -6,10 +8,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main-footer.component.scss']
 })
 export class MainFooterComponent implements OnInit {
+  public display!: DisplayComponentModel;
 
-  constructor() { }
+  constructor(
+    private displayService: DisplayComponentService
+  ) { }
 
   ngOnInit(): void {
+    this.displayService.getDisplay().subscribe((value: DisplayComponentModel) => {
+      this.display = value;
+    });
   }
 
 }
