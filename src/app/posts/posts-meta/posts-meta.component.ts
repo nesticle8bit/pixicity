@@ -3,6 +3,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDenunciarPostComponent } from 'src/app/components/dialogs/dialog-denunciar-post/dialog-denunciar-post.component';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-posts-meta',
@@ -10,6 +11,7 @@ import { DialogDenunciarPostComponent } from 'src/app/components/dialogs/dialog-
   styleUrls: ['./posts-meta.component.scss']
 })
 export class PostsMetaComponent implements OnInit {
+  public savedToFavorites: boolean = false;
   private _post: any;
 
   @Input() set post(value: any) {
@@ -43,7 +45,7 @@ export class PostsMetaComponent implements OnInit {
       console.log('response', response);
 
       if (response > 0) {
-        for (let index = 1; index < response; index++) {
+        for (let index = 1; index < response + 1; index++) {
           this.availablePuntos.push(index);
         }
       }
@@ -60,9 +62,10 @@ export class PostsMetaComponent implements OnInit {
   }
 
   agregarFavorito(postId: number): void {
-    this.postService.addFavoritePost(postId).subscribe((response: any) => {
+    this.savedToFavorites = true;
+    // this.postService.addFavoritePost(postId).subscribe((response: any) => {
 
-    });
+    // });
   }
 
   denunciarPost(): void {
