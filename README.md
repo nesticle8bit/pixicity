@@ -22,7 +22,7 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
     - [x] Sección para crear los Posts
     - [x] Implementar el componente wysiwyg para la creación de los posts
     - [x] Paginación por backend para la lista de posts del index
-    - [ ] Filtrar la lista de posts por categoria en la pagina de inicio
+    - [x] Filtrar la lista de posts por categoria en la pagina de inicio
     - [x] Visualizar el post
     - [x] Sistema de votaciones para los posts
     - [ ] Implementar el Seguir post para ser notificado en el monitor
