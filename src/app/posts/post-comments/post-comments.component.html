@@ -17,7 +17,7 @@
         (mouseover)="comentario.actions=true" (mouseout)="comentario.actions=false">
         <div id="respnuevas">
             <span id="citar_comm_14" style="display:none">Comentario 1</span>
-            <div class="comentario-post clearbeta" style="border-top:0;">
+            <div class="comentario-post clearbeta" [ngClass]="{'mi-comentario': comentario?.userName === currentUser?.usuario?.userName, 'op': comentario?.userName === post?.usuario?.userName}">
                 <div class="avatar-box" style="z-index: 99;">
                     <a href="#">
                         <img width="48" height="48" title="Avatar de nesticle8bit"

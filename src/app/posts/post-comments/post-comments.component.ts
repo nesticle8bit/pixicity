@@ -23,7 +23,7 @@ export class PostCommentsComponent implements OnInit {
   public formGroup: FormGroup;
   public comentarios: any = [];
   public currentUser: any;
-  
+
   constructor(
     private formBuilder: FormBuilder,
     private postService: IHttpPostsService,
