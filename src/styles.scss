@@ -1508,10 +1508,35 @@ p.cupuntos {
 
 .comentario-post {
     padding: 10px 0;
+    margin-bottom: 5px;
 }
 
 .comentario-post:hover {
     background: #f9f9f9;
+}
+
+.comentario-post.mi-comentario {
+    background: rgb(239 255 237 / 62%);
+    border: 1px solid rgb(228 253 225 / 62%);
+    border-left: 2px solid rgb(156 234 149 / 88%);
+
+    &:hover {
+        background: rgb(239 255 237 / 100%);
+        border: 1px solid rgb(228 253 225 / 100%);
+        border-left: 2px solid rgb(156 234 149 / 100%);
+    }
+}
+
+.comentario-post.op {
+    background: #fcfdfd;
+    border: 1px solid rgb(232 245 245 / 95%);
+    border-left: 2px solid #7abef9;
+
+    &:hover {
+        background: #aed9ff12;
+        border: 1px solid hsl(208deg 95% 68% / 22%);
+        border-left: 2px solid #5fb3fb;
+    }
 }
 
 .comment-box {
