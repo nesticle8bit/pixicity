@@ -11,7 +11,12 @@ import { animate, style, transition, trigger } from '@angular/animations';
   styleUrls: ['./posts-meta.component.scss']
 })
 export class PostsMetaComponent implements OnInit {
-  public savedToFavorites: boolean = false;
+  public savedToFavorites: any = {
+    message: '',
+    type: false,
+    display: false
+  };
+
   private _post: any;
 
   @Input() set post(value: any) {
@@ -62,10 +67,21 @@ export class PostsMetaComponent implements OnInit {
   }
 
   agregarFavorito(postId: number): void {
-    this.savedToFavorites = true;
-    // this.postService.addFavoritePost(postId).subscribe((response: any) => {
-
-    // });
+    this.postService.addFavoritePost(postId).subscribe((response: any) => {
+      if(response) {
+        this.savedToFavorites = {
+          message: 'Bien! Este post fue agregado a tus favoritos.',
+          type: true,
+          display: true
+        };
+      } else {
+        this.savedToFavorites = {
+          message: 'Este post ya lo tienes en tus favoritos.',
+          type: false,
+          display: true
+        };
+      }
+    });
   }
 
   denunciarPost(): void {
