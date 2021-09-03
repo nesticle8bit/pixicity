@@ -1,9 +1,9 @@
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
   selector: 'app-posts-view',
