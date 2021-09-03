@@ -1,5 +1,5 @@
-<div class="nada-verde mb-3" *ngIf="savedToFavorites">
-    Bien! Este post fue agregado a tus favoritos.
+<div class="mb-3" [ngClass]="{'nada-verde': savedToFavorites.type, 'nada-rojo': !savedToFavorites.type}" *ngIf="savedToFavorites.display">
+    {{savedToFavorites.message}}
 </div>
 
 <section class="nels">

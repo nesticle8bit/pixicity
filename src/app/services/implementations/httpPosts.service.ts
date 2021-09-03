@@ -245,7 +245,7 @@ export class HttpPostsService implements IHttpPostsService {
     }
 
     addFavoritePost(postId: number): Observable<any> {
-        return this.http.post<any>(`${environment.api}/api/posts/previousPost`, { postId })
+        return this.http.post<any>(`${environment.api}/api/posts/addFavoritePost`, { id: postId })
             .pipe(map((response: any) => {
                 if (response.status === 200) {
                     return response.data;
