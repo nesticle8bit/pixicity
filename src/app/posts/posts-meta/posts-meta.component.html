@@ -1,4 +1,4 @@
-<div class="mb-3" [ngClass]="{'nada-verde': savedToFavorites.type, 'nada-rojo': !savedToFavorites.type}" *ngIf="savedToFavorites.display">
+<div class="mb-3" [@enterAnimation] [ngClass]="{'nada-verde': savedToFavorites.type, 'nada-rojo': !savedToFavorites.type}" *ngIf="savedToFavorites.display">
     {{savedToFavorites.message}}
 </div>
 
