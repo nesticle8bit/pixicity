@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 
 @Component({
   selector: 'app-favoritos',
@@ -8,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 export class FavoritosComponent implements OnInit {
   public favoritos: any[] = [];
 
-  constructor() { }
+  constructor(
+    private httpGeneral: IHttpGeneralService
+  ) { }
 
   ngOnInit(): void {
+    this.httpGeneral.getFavoritosByUser().subscribe((response: any) => {
+      this.favoritos = response.favoritos;
+      console.log(this.favoritos);
+    });
   }
 
 }

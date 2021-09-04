@@ -23,18 +23,30 @@
                     </thead>
 
                     <tbody>
-                        <tr>
+                        <tr *ngFor="let favorito of favoritos">
                             <td>
                                 <a href="#">
-                                    <img src="/assets/images/categorias/cake.png" /> Noticias Primera computadora cuántica de uso comercial de Japón
+                                    <img src="/assets/images/categorias/{{favorito.post.categoria.icono}}" title="{{favorito.post.categoria.nombre}}" alt="{{favorito.post.categoria.nombre}}" />
+                                    {{favorito.post.titulo}}
                                 </a>
                             </td>
-                            <td>Hace 1 año</td>
-                            <td>Hace instantes</td>
-                            <td>5</td>
-                            <td>7</td>
+
+                            <td>
+                                {{favorito.post.fechaRegistro | timeAgo}}
+                            </td>
+                            <td>
+                                {{favorito.fechaRegistro | timeAgo}}
+                            </td>
+                            <td>
+                                
+                            </td>
+                            <td>
+                                
+                            </td>
                             <td class="text-center" width="30px">
-                                <img src="/assets/images/icons/cross.png" alt="Eliminar" />
+                                <a href="javascript:void(0)">
+                                    <img src="/assets/images/icons/cross.png" alt="Eliminar" #tooltip="matTooltip" matTooltip="Eliminar" [matTooltipPosition]="'above'" />
+                                </a>
                             </td>
                         </tr>
                     </tbody>

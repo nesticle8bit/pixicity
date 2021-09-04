@@ -6,4 +6,5 @@ import { AfiliacionModel } from "src/app/models/general/afiliacion.model";
 export abstract class IHttpGeneralService {
     abstract getEstadisticas(): Observable<any>;
     abstract saveAfiliacion(afiliacion: AfiliacionModel): Observable<any>;
+    abstract getFavoritosByUser(): Observable<any>;
 }
