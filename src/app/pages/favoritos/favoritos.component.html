@@ -52,6 +52,9 @@
                     </tbody>
                 </table>
             </main>
+
+            <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)" *ngIf="favoritos.length > 0">
+            </mat-paginator>
         </div>
 
         <div class="col-12 col-sm-6 col-md-3">

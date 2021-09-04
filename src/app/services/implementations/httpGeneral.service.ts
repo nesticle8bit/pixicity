@@ -7,12 +7,14 @@ import { catchError, map } from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import Swal from "sweetalert2";
+import { PaginationService } from "../shared/pagination.service";
 
 @Injectable()
 export class HttpGeneralService implements IHttpGeneralService {
     constructor(
         private http: HttpClient,
-        private helper: HelperService) { }
+        private helper: HelperService,
+        private paginationService: PaginationService) { }
 
     getEstadisticas(): Observable<any> {
         return this.http.get<any>(`${environment.api}/api/general/getEstadisticas`)
@@ -45,7 +47,7 @@ export class HttpGeneralService implements IHttpGeneralService {
     }
 
     getFavoritosByUser(): Observable<any> {
-        return this.http.get<any>(`${environment.api}/api/favoritos/getFavoritos`)
+        return this.http.get<any>(`${environment.api}/api/favoritos/getFavoritos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=`)
             .pipe(map((response: any) => {
                 if (response.status === 200) {
                     return response.data;
