@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 @import "~@ng-select/ng-select/themes/default.theme.css";
 @import '~ngx-toastr/toastr';
+@import "animate.css";
 
 $background-color: #F0EEEE;
 $main-color: #0B6EA5;
@@ -1409,6 +1410,8 @@ p.cupuntos {
     color: #DD3131;
     font-weight: 700;
     font-size: 14px;
+
+    transition: all 2s;
 }
 
 .titulaw {

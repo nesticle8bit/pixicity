@@ -26,6 +26,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@ng-select/ng-select": "^7.2.0",
+    "animate.css": "^4.1.1",
     "bootstrap": "^5.0.2",
     "ngx-editor": "^10.1.0",
     "ngx-toastr": "^14.0.0",
