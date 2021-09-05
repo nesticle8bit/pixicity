@@ -76,6 +76,8 @@ import { PostsTagsComponent } from './posts/posts-tags/posts-tags.component';
 import { PostsMetaComponent } from './posts/posts-meta/posts-meta.component';
 import { DialogDenunciarPostComponent } from './components/dialogs/dialog-denunciar-post/dialog-denunciar-post.component';
 import { DashboardAdminComponent } from './components/admin/dashboard-admin/dashboard-admin.component';
+import { IHttpFavoritosService } from './services/interfaces/httpFavoritos.interface';
+import { HttpFavoritosService } from './services/implementations/httpFavoritos.service';
 
 @NgModule({
   declarations: [
@@ -192,6 +194,7 @@ import { DashboardAdminComponent } from './components/admin/dashboard-admin/dash
     { provide: IHttpParametrosService, useClass: HttpParametrosService },
     { provide: IHttpGeneralService, useClass: HttpGeneralService },
     { provide: IHttpPostsService, useClass: HttpPostsService },
+    { provide: IHttpFavoritosService, useClass: HttpFavoritosService },
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() }
