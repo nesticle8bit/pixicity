@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { IHttpFavoritosService } from 'src/app/services/interfaces/httpFavoritos.interface';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 
@@ -14,6 +15,7 @@ export class FavoritosComponent implements OnInit {
 
   constructor(
     public paginationService: PaginationService,
+    public favoritosService: IHttpFavoritosService,
     private httpGeneral: IHttpGeneralService
   ) { }
 
@@ -25,6 +27,14 @@ export class FavoritosComponent implements OnInit {
     this.httpGeneral.getFavoritosByUser().subscribe((response: any) => {
       this.favoritos = response.favoritos;
       this.totalCount = response.pagination.totalCount;
+    });
+  }
+
+  deleteFavorito(favorito: any): void {
+    this.favoritosService.deleteFavorito(favorito.id).subscribe((response: any) => {
+      if(response) {
+        favorito.deleted = response.eliminado;
+      }
     });
   }
 
