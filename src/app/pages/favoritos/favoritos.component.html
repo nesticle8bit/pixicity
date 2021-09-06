@@ -56,18 +56,18 @@
             </mat-paginator>
         </div>
 
-        <div class="col-12 col-sm-6 col-md-3">
+        <form [formGroup]="formGroup" class="col-12 col-sm-6 col-md-3">
             <h6 class="main-title">
                 <span>Buscador</span>
             </h6>
 
             <section class="mb-3">
-                <input type="text" class="form-control" />
+                <input type="text" class="form-control" formControlName="search" />
             </section>
 
             <h6 class="main-title">
                 <span>Categorías</span>
             </h6>
-        </div>
+        </form>
     </div>
 </div>
