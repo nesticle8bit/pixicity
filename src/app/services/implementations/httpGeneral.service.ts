@@ -46,8 +46,8 @@ export class HttpGeneralService implements IHttpGeneralService {
             })).pipe(catchError(this.helper.errorHandler));
     }
 
-    getFavoritosByUser(): Observable<any> {
-        return this.http.get<any>(`${environment.api}/api/favoritos/getFavoritos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=`)
+    getFavoritosByUser(search: string): Observable<any> {
+        return this.http.get<any>(`${environment.api}/api/favoritos/getFavoritos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}`)
             .pipe(map((response: any) => {
                 if (response.status === 200) {
                     return response.data;
