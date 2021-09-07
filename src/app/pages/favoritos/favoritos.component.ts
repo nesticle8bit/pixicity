@@ -31,7 +31,7 @@ export class FavoritosComponent implements OnInit {
   }
 
   getFavoritos(): void {
-    this.httpGeneral.getFavoritosByUser().subscribe((response: any) => {
+    this.httpGeneral.getFavoritosByUser(this.formGroup?.value?.search).subscribe((response: any) => {
       this.favoritos = response.favoritos;
       this.totalCount = response.pagination.totalCount;
     });
