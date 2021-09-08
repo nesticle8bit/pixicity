@@ -72,6 +72,19 @@
             <h6 class="main-title">
                 <span>Categorías</span>
             </h6>
+
+            <table class="table table-sm table-striped table-hover">
+                <tbody>
+                    <tr *ngFor="let categoria of categorias">
+                        <td>
+                            <a [routerLink]="['/posts/' + categoria.categoria.seo]" title="{{categoria.categoria.nombre}}">
+                                <img src="/assets/images/categorias/{{categoria.categoria.icono}}" alt="{{categoria.categoria.nombre}}" />
+                                {{categoria.categoria.nombre}} <span class="badge bg-secondary float-end">{{categoria.count}}</span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </form>
     </div>
 </div>
