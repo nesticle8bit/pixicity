@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class FavoritosComponent implements OnInit {
   public favoritos: any[] = [];
+  public categorias: any[] = [];
   public totalCount: number = 0;
   public formGroup!: FormGroup;
 
@@ -40,6 +41,7 @@ export class FavoritosComponent implements OnInit {
       }
 
       this.favoritos = response.favoritos;
+      this.categorias = response.categorias;
       this.totalCount = response.pagination.totalCount;
     });
   }
