@@ -25,7 +25,7 @@
                     <tbody>
                         <tr *ngFor="let favorito of favoritos" [ngClass]="{'favoritos-deleted': favorito.deleted}">
                             <td>
-                                <a href="#">
+                                <a [routerLink]="['/posts/' + favorito.post.categoria.seo + '/' + favorito.post.id + '/' + favorito.post.url]" title="{{favorito.post.titulo}}">
                                     <img src="/assets/images/categorias/{{favorito.post.categoria.icono}}" title="{{favorito.post.categoria.nombre}}" alt="{{favorito.post.categoria.nombre}}" />
                                     {{favorito.post.titulo}}
                                 </a>
@@ -36,11 +36,15 @@
                             <td>
                                 {{favorito.fechaRegistro | timeAgo}}
                             </td>
+
                             <td>
+                                0
                             </td>
                             
                             <td>
+                                9
                             </td>
+
                             <td class="text-center" width="30px">
                                 <a href="javascript:void(0)" (click)="deleteFavorito(favorito)">
                                     <img src="/assets/images/icons/cross.png" alt="Eliminar" #tooltip="matTooltip" matTooltip="Eliminar" [matTooltipPosition]="'above'" *ngIf="!favorito.deleted" />
