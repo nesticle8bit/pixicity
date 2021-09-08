@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
+import { IHttpFavoritosService } from 'src/app/services/interfaces/httpFavoritos.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
@@ -11,11 +12,14 @@ export class SectionUserInfoLoginComponent implements OnInit {
   public displayMenu: boolean = false;
   public currentUser: JwtUserModel = { usuario: undefined, token: '' };
   public display = {
-    monitor: false
+    monitor: false,
+    favoritos: false
   };
+  public favoritos: any[] = [];
 
   constructor(
-    private securityService: IHttpSecurityService
+    private securityService: IHttpSecurityService,
+    private favoritosService: IHttpFavoritosService
   ) {
     this.securityService.getCurrentUserAsObservable().subscribe((value: JwtUserModel) => {
       this.currentUser = value;
@@ -27,6 +31,21 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
   verNotificaciones(): void {
     this.display.monitor = !this.display.monitor;
+  }
+
+  verFavoritos(): void {
+    this.favoritosService.getLastFavoritos(5).subscribe((response: any) => {
+      if(response) {
+        response = response.map((fav: any) => {
+          fav.post.url = fav.post.titulo.toLowerCase().replace(/\s/g, '-');
+          return fav;
+        });
+      }
+
+      this.favoritos = response;
+    });
+
+    this.display.favoritos = !this.display.favoritos;
   }
 
   cerrarSesion(): void {

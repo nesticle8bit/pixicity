@@ -17,6 +17,21 @@ export class HttpFavoritosService implements IHttpFavoritosService {
         private helper: HelperService,
         private paginationService: PaginationService) { }
 
+    getLastFavoritos(count: number): Observable<any> {
+        return this.http.get<any>(`${environment.api}/api/favoritos/getLastFavoritos?count=${count}`)
+        .pipe(map((response: any) => {
+            if (response.status === 200) {
+                return response.data;
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.errors.join(', ')
+                });
+            }
+        })).pipe(catchError(this.helper.errorHandler));
+    }
+
     deleteFavorito(favoritoId: number): Observable<any> {
         return this.http.delete<any>(`${environment.api}/api/favoritos/deleteFavorito?favoritoId=${favoritoId}`)
             .pipe(map((response: any) => {

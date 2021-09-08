@@ -8,7 +8,7 @@
     <div class="userInfoLogin">
         <ul>
             <li class="monitor" style="position: relative">
-                <a href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Monitor" [matTooltipPosition]="'above'"
+                <a class="menu" href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Monitor" [matTooltipPosition]="'above'"
                     (click)="verNotificaciones()">
                     <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                 </a>
@@ -30,7 +30,7 @@
             </li>
 
             <li class="mensajes" style="position:relative">
-                <a href="#/mensajes/" onclick="mensaje.last(); return false" title="Mensajes" name="Mensajes">
+                <a class="menu" href="#/mensajes/" onclick="mensaje.last(); return false" title="Mensajes" name="Mensajes">
                     <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                 </a>
                 <!-- <div class="notificaciones-list" id="mp_list">
@@ -47,31 +47,49 @@
                     </a>
                 </div>
             </li>
+
             <li class="favoritos" style="position:relative">
-                <a [routerLink]="['favoritos']" title="Posts favoritos">
+                <a class="menu" href="javascript:void(0)" title="Posts favoritos" (click)="verFavoritos()">
                     <fa-icon [icon]="['fas', 'star']"></fa-icon>
                 </a>
-                <!-- <div class="notificaciones-list" id="fav_list">
-                    <span class="tail"></span>
+
+                <div class="notificaciones-list" id="mon_list" [style.display]="display.favoritos ? 'block' : 'none'"
+                    (mouseenter)="display.favoritos = true" (mouseleave)="display.favoritos = false">
                     <div class="timoni">Favoritos</div>
-                    <ul></ul>
-                    <a href="#/favoritos.php" class="ver-mas">Ver más</a>
-                </div> -->
+
+                    <ul>
+                        <div class="errr" *ngIf="favoritos.length < 1">No hay favoritos</div>
+
+                        <li class="list-items" *ngFor="let favorito of favoritos">
+                            <a [routerLink]="['/posts/' + favorito.post.categoria.seo + '/' + favorito.post.id + '/' + favorito.post.url]" title="{{favorito.post.titulo}}">
+                                <img src="/assets/images/categorias/{{favorito.post.categoria.icono}}" title="{{favorito.post.categoria.nombre}}" alt="{{favorito.post.categoria.nombre}}" />
+                                {{favorito.post.titulo | truncate:[44]}}
+                            </a>
+                        </li>
+                    </ul>
+
+                    <a href="javascript:void(0)" [routerLink]="['favoritos']" class="vemas">Más</a>
+                </div>
             </li>
+
             <li class="usernameMenu" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
-                <a class="nick" href="#">
+                <a class="nick menu" href="#">
                     <img class="avamu" src="https://i.imgur.com/oxtdxn3.jpeg" />
                     <span>{{currentUser?.usuario?.userName}}</span>
                     <img class="punti" src="/assets/images/ui/arrowd.png" />
                 </a>
 
-                <div class="menuver" style="top: 18px;" [style.display]="displayMenu ? 'block' : 'none'"
+                <div class="menuver" style="top: 16px;" [style.display]="displayMenu ? 'block' : 'none'"
                     (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
-                    <a>Cuenta</a>
-                    <a [routerLink]="['borradores']">
+                    <a class="menu">
+                        Cuenta
+                    </a>
+
+                    <a class="menu" [routerLink]="['borradores']">
                         Borradores
                     </a>
-                    <a href="javascript:void(0)" (click)="cerrarSesion()">
+
+                    <a class="menu" href="javascript:void(0)" (click)="cerrarSesion()">
                         Salir
                     </a>
                 </div>

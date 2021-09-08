@@ -600,10 +600,10 @@ a.ircielo {
 }
 
 img.avamu {
-    width: 22px;
+    width: 21px;
     float: left;
-    margin: 0 5px 0 0;
-    height: 22px;
+    margin: -1px 6px 0 0;
+    height: 21px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;
@@ -644,7 +644,7 @@ li.usernameMenu:hover a.nick {
     padding: 0;
 }
 
-.userInfoLogin a {
+.userInfoLogin a.menu {
     color: #fff;
     text-shadow: 0 1px 0 black;
     padding: 8px 11px 9px 11px;
@@ -681,11 +681,10 @@ li.usernameMenu:hover a.nick {
 
 img.punti {
     float: right;
-    margin: 10px 0 0 6px;
+    margin: 8px 0 0 6px;
 }
 
 a.nick span {
-    padding-top: 2px;
     float: left;
 }
 
@@ -2042,4 +2041,12 @@ ul#resultados-borradores li {
 .favoritos-deleted {
     opacity: .5;
     color: #525252;
+}
+
+.list-items {
+    float: none !important;
+    border-bottom: 1px solid #f1f1f1;
+    padding: 2px 10px 6px 10px;
+    background: none !important;
+    margin-bottom: 6px;
 }
