@@ -32,6 +32,13 @@ export class FavoritosComponent implements OnInit {
 
   getFavoritos(): void {
     this.httpGeneral.getFavoritosByUser(this.formGroup?.value?.search).subscribe((response: any) => {
+      if(response?.favoritos) {
+        response.favoritos = response.favoritos.map((fav: any) => {
+          fav.post.url = fav.post.titulo.toLowerCase().replace(/\s/g, '-');
+          return fav;
+        });
+      }
+
       this.favoritos = response.favoritos;
       this.totalCount = response.pagination.totalCount;
     });

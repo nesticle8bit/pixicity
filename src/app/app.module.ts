@@ -78,6 +78,7 @@ import { DialogDenunciarPostComponent } from './components/dialogs/dialog-denunc
 import { DashboardAdminComponent } from './components/admin/dashboard-admin/dashboard-admin.component';
 import { IHttpFavoritosService } from './services/interfaces/httpFavoritos.interface';
 import { HttpFavoritosService } from './services/implementations/httpFavoritos.service';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -183,7 +184,9 @@ import { HttpFavoritosService } from './services/implementations/httpFavoritos.s
     NgxUiLoaderModule,
     NgxUiLoaderHttpModule.forRoot({
       showForeground: true,
-      exclude: []
+      exclude: [
+        `${environment.api}/api/favoritos/getFavoritos`
+      ]
     }),
     MatRadioModule,
     MatIconModule
