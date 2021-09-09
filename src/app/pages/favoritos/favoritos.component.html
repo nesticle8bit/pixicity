@@ -66,7 +66,7 @@
             </h6>
 
             <section class="mb-3">
-                <input type="text" class="form-control" formControlName="search" (keyup)="getFavoritos()" />
+                <input type="text" class="form-control" formControlName="search" (keyup)="getFavoritos(0)" />
             </section>
 
             <h6 class="main-title">
@@ -77,7 +77,7 @@
                 <tbody>
                     <tr *ngFor="let categoria of categorias">
                         <td>
-                            <a [routerLink]="['/posts/' + categoria.categoria.seo]" title="{{categoria.categoria.nombre}}">
+                            <a href="javascript:void(0)" (click)="filterByCategory(categoria)" title="{{categoria.categoria.nombre}}">
                                 <img src="/assets/images/categorias/{{categoria.categoria.icono}}" alt="{{categoria.categoria.nombre}}" />
                                 {{categoria.categoria.nombre}} <span class="badge bg-secondary float-end">{{categoria.count}}</span>
                             </a>

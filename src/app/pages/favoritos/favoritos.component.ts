@@ -28,12 +28,12 @@ export class FavoritosComponent implements OnInit {
       search: ['', Validators.required]
     });
 
-    this.getFavoritos();
+    this.getFavoritos(0);
   }
 
-  getFavoritos(): void {
-    this.httpGeneral.getFavoritosByUser(this.formGroup?.value?.search).subscribe((response: any) => {
-      if(response?.favoritos) {
+  getFavoritos(categoriaId: number): void {
+    this.httpGeneral.getFavoritosByUser(this.formGroup?.value?.search, categoriaId).subscribe((response: any) => {
+      if (response?.favoritos) {
         response.favoritos = response.favoritos.map((fav: any) => {
           fav.post.url = fav.post.titulo.toLowerCase().replace(/\s/g, '-');
           return fav;
@@ -41,21 +41,33 @@ export class FavoritosComponent implements OnInit {
       }
 
       this.favoritos = response.favoritos;
-      this.categorias = response.categorias;
+
+      if (this.categorias?.length <= 0) {
+        this.categorias = response.categorias;
+      }
+
       this.totalCount = response.pagination.totalCount;
     });
   }
 
   deleteFavorito(favorito: any): void {
     this.favoritosService.deleteFavorito(favorito.id).subscribe((response: any) => {
-      if(response) {
+      if (response) {
         favorito.deleted = response.eliminado;
       }
     });
   }
 
+  filterByCategory(categoria: any): void {
+    if (!categoria) {
+      return;
+    }
+
+    this.getFavoritos(categoria.categoria.id);
+  }
+
   pageChange(event: PageEvent): void {
     this.paginationService.change(event);
-    this.getFavoritos();
+    this.getFavoritos(0);
   }
 }

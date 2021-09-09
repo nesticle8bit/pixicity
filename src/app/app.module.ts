@@ -79,6 +79,7 @@ import { DashboardAdminComponent } from './components/admin/dashboard-admin/dash
 import { IHttpFavoritosService } from './services/interfaces/httpFavoritos.interface';
 import { HttpFavoritosService } from './services/implementations/httpFavoritos.service';
 import { environment } from 'src/environments/environment';
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -189,7 +190,8 @@ import { environment } from 'src/environments/environment';
       ]
     }),
     MatRadioModule,
-    MatIconModule
+    MatIconModule,
+    MatTableModule
   ],
   providers: [
     DisplayComponentService,
