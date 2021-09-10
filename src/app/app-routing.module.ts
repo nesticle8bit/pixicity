@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardAdminComponent } from './components/admin/dashboard-admin/dashboard-admin.component';
+import { AccountComponent } from './pages/account/account.component';
 import { BorradoresComponent } from './pages/borradores/borradores.component';
 import { FavoritosComponent } from './pages/favoritos/favoritos.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'registro', component: RegisterComponent },
   { path: 'buscar', component: SearchComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'cuenta', component: AccountComponent },
 
   { path: 'posts/:categoria', component: SectionHomeComponent },
   { path: 'posts/:categoria/:id/:nombre-post', component: PostsViewComponent },
