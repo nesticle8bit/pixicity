@@ -1,0 +1,130 @@
+<section class="container container--home">
+    <div class="row">
+        <div class="col-12 col-sm-9 p-3">
+            <div class="ladoi">
+                <div class="mb-3">
+                    <mat-tab-group>
+                        <mat-tab>
+                            <ng-template mat-tab-label>
+                                <mat-icon>account_circle</mat-icon>
+                                Cuenta
+                            </ng-template>
+                            
+                            <section class="mt-3">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <form>
+                                                <div class="mb-3 row">
+                                                    <label class="col-sm-2 col-form-label">
+                                                        E-Mail
+                                                    </label>
+                                                
+                                                    <div class="col-sm-10">
+                                                        <input type="text" readonly class="form-control-plaintext" value="email@example.com" />
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="mb-3 row">
+                                                    <label class="col-sm-2 col-form-label">
+                                                        País
+                                                    </label>
+                                                
+                                                    <div class="col-sm-10">
+                                                        <ng-select [items]="paises" bindLabel="nombre" bindValue="id"
+                                                            (change)="getEstadosByPais($event)"></ng-select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3 row">
+                                                    <label class="col-sm-2 col-form-label">
+                                                        Estado
+                                                    </label>
+                                                
+                                                    <div class="col-sm-10">
+                                                        <ng-select [items]="estados" bindLabel="nombre" bindValue="id"></ng-select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3 row">
+                                                    <label class="col-sm-2 col-form-label">
+                                                        Género
+                                                    </label>
+                                                
+                                                    <div class="col-sm-10">
+                                                        <ng-select [items]="generos" bindLabel="label" bindValue="value"></ng-select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3 row">
+                                                    <label class="col-sm-2 col-form-label">
+                                                        Nacimiento
+                                                    </label>
+                                                
+                                                    <div class="col-sm-10">
+                                                        <div class="row">
+                                                            <div class="col-12 col-sm-4">
+                                                                <label>Día</label>
+                                                                <ng-select [items]="dias"></ng-select>
+                                                            </div>
+                                    
+                                                            <div class="col-12 col-sm-4">
+                                                                <label>Mes</label>
+                                                                <ng-select [items]="meses" bindLabel="label" bindValue="value"></ng-select>
+                                                            </div>
+                                    
+                                                            <div class="col-12 col-sm-4">
+                                                                <label>Año</label>
+                                                                <ng-select [items]="years"></ng-select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </mat-tab>
+
+                        <mat-tab>
+                            <ng-template mat-tab-label>
+                                <mat-icon>account_box</mat-icon>
+                                Perfil
+                            </ng-template>
+                            Content 2
+                        </mat-tab>
+
+                        <mat-tab>
+                            <ng-template mat-tab-label>
+                                <mat-icon>block</mat-icon>
+                                Bloqueados
+                            </ng-template>
+
+                            Content 3
+                        </mat-tab>
+
+                        <mat-tab>
+                            <ng-template mat-tab-label>
+                                <mat-icon>password</mat-icon>
+                                Cambiar contraseña
+                            </ng-template>
+
+                            Content 3
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </div>
+        </div>
+
+        <div class="dotted-border--left col-12 col-sm-3 text-center">
+            <h6>Mi Avatar</h6>
+
+            <img src="https://i.imgur.com/2Rs9AVg.jpeg" height="160px" />
+
+            <a href="#" class="boton azul my-3">
+                Editar
+            </a>
+        </div>
+    </div>
+</section>

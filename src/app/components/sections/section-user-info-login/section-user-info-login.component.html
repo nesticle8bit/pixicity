@@ -81,7 +81,7 @@
 
                 <div class="menuver" style="top: 16px;" [style.display]="displayMenu ? 'block' : 'none'"
                     (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
-                    <a class="menu">
+                    <a [routerLink]="['cuenta']" class="menu">
                         Cuenta
                     </a>
 

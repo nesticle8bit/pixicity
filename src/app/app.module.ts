@@ -80,6 +80,8 @@ import { IHttpFavoritosService } from './services/interfaces/httpFavoritos.inter
 import { HttpFavoritosService } from './services/implementations/httpFavoritos.service';
 import { environment } from 'src/environments/environment';
 import {MatTableModule} from '@angular/material/table';
+import { AccountComponent } from './pages/account/account.component';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -124,7 +126,8 @@ import {MatTableModule} from '@angular/material/table';
     PostsTagsComponent,
     PostsMetaComponent,
     DialogDenunciarPostComponent,
-    DashboardAdminComponent
+    DashboardAdminComponent,
+    AccountComponent
   ],
   imports: [
     BrowserModule,
@@ -191,7 +194,8 @@ import {MatTableModule} from '@angular/material/table';
     }),
     MatRadioModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    MatTabsModule
   ],
   providers: [
     DisplayComponentService,
