@@ -2054,7 +2054,17 @@ ul#resultados-borradores li {
 .form-container {
     border: 1px solid #e0e0e0;
     border-top: none;
-    padding-top: 1rem;
+    padding-top: .6rem;
     border-radius: 0 0 8px 8px;
-    padding: 2rem;
+    //padding: 2rem;
+
+    .container {
+        padding: 2rem;
+    }
+
+    &--footer {
+        background: #e8e8e8;
+        border-top: 1px solid #d8d8d8;
+        padding: .5rem;
+    }
 }
