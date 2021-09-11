@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
@@ -9,6 +10,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 })
 export class AccountComponent implements OnInit {
   public currentUser: any;
+  public changeEmailStatus: boolean = false;
   public paises: any[] = [];
   public estados: any[] = [];
   public generos: any[] = [{
@@ -76,16 +78,49 @@ export class AccountComponent implements OnInit {
     }
   ];
   public years: any[] = [];
+  public formGroupCuenta: FormGroup;
 
   constructor(
     private securityService: IHttpSecurityService,
-    private parametrosService: IHttpParametrosService
-  ) { }
+    private parametrosService: IHttpParametrosService,
+    private formBuilder: FormBuilder
+  ) {
+    this.formGroupCuenta = this.formBuilder.group({
+      email: ['', Validators.email],
+      paisId: [undefined, Validators.required],
+      estadoId: [undefined, Validators.required],
+      genero: [undefined, Validators.required],
+      dia: [undefined, Validators.required],
+      mes: [undefined, Validators.required],
+      año: [undefined, Validators.required]
+    });
+  }
 
   ngOnInit(): void {
-    this.currentUser = this.securityService.getCurrentUser();
+    this.getCurrentUser();
     this.getPaises();
     this.initFechas();
+  }
+
+  getCurrentUser(): void {
+    this.securityService.getLoggedUserByJwt().subscribe((value: any) => {
+      console.log(value);
+      if(value) {
+        const fechaNacimiento = value.fechaNacimiento?.split('/');
+
+        this.formGroupCuenta.patchValue({
+          email: value.email,
+          genero: value.genero,
+          paisId: value.paisId,
+          estadoId: value.estadoId,
+          dia: fechaNacimiento[0],
+          mes: fechaNacimiento[1],
+          año: fechaNacimiento[2]
+        });
+
+        this.getEstadosByPais(value?.paisId);
+      }
+    });
   }
 
   initFechas(): void {
@@ -104,13 +139,17 @@ export class AccountComponent implements OnInit {
     });
   }
 
-  getEstadosByPais(pais: any): void {
-    if (!pais) {
+  getEstadosByPais(paisId: number): void {
+    if (!paisId) {
       return;
     }
 
-    this.parametrosService.getEstadosByPais(pais.id).subscribe((values: any) => {
+    this.parametrosService.getEstadosByPais(paisId).subscribe((values: any) => {
       this.estados = values;
     });
+  }
+
+  changeEmail(): void {
+    this.changeEmailStatus = !this.changeEmailStatus;
   }
 }
