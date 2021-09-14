@@ -189,7 +189,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     NgxUiLoaderHttpModule.forRoot({
       showForeground: true,
       exclude: [
-        `${environment.api}/api/favoritos/getFavoritos`
+        `${environment.api}/api/favoritos/getFavoritos`,
+        `${environment.api}/api/favoritos/getLastFavoritos`
       ]
     }),
     MatRadioModule,
