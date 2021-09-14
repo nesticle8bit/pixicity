@@ -108,7 +108,7 @@
 
                                 <div class="form-container--footer text-center">
                                     <button mat-flat-button color="primary" type="submit">
-                                        Guardar
+                                        <mat-icon>save</mat-icon> Guardar
                                     </button>
                                 </div>
                             </form>
@@ -137,7 +137,55 @@
                                 Cambiar contraseña
                             </ng-template>
 
-                            Content 3
+                            <form class="form-container">
+                                <div class="container mx-auto" style="width: 80%;">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="mb-3 row">
+                                                <div class="col-sm-3 text-end">
+                                                    <label class="col-form-label">
+                                                        Contraseña actual:
+                                                    </label>
+                                                </div>
+
+                                                <div class="col-sm-9">
+                                                    <input type="password" class="form-control" autocomplete="off" />
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 row">
+                                                <div class="col-sm-3 text-end">
+                                                    <label class="col-form-label">
+                                                        Contraseña nueva:
+                                                    </label>
+                                                </div>
+
+                                                <div class="col-sm-9">
+                                                    <input type="password" class="form-control" autocomplete="off" />
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 row">
+                                                <div class="col-sm-3 text-end">
+                                                    <label class="col-form-label">
+                                                        Repetir Contraseña:
+                                                    </label>
+                                                </div>
+
+                                                <div class="col-sm-9">
+                                                    <input type="password" class="form-control" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-container--footer text-center">
+                                    <button mat-flat-button color="primary" type="submit">
+                                        <mat-icon>vpn_key</mat-icon> Cambiar contraseña
+                                    </button>
+                                </div>
+                            </form>
                         </mat-tab>
                     </mat-tab-group>
                 </div>
