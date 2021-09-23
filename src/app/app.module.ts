@@ -82,6 +82,7 @@ import { environment } from 'src/environments/environment';
 import {MatTableModule} from '@angular/material/table';
 import { AccountComponent } from './pages/account/account.component';
 import {MatTabsModule} from '@angular/material/tabs';
+import { PerfilComponent } from './pages/perfil/perfil.component';
 
 @NgModule({
   declarations: [
@@ -127,7 +128,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     PostsMetaComponent,
     DialogDenunciarPostComponent,
     DashboardAdminComponent,
-    AccountComponent
+    AccountComponent,
+    PerfilComponent
   ],
   imports: [
     BrowserModule,

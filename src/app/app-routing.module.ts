@@ -8,6 +8,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { MensajesComponent } from './pages/mensajes/mensajes.component';
 import { ModHistoryComponent } from './pages/mod-history/mod-history.component';
 import { MonitorComponent } from './pages/monitor/monitor.component';
+import { PerfilComponent } from './pages/perfil/perfil.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { SearchComponent } from './pages/search/search.component';
 import { TopsComponent } from './pages/tops/tops.component';
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'buscar', component: SearchComponent },
   { path: 'login', component: LoginComponent },
   { path: 'cuenta', component: AccountComponent },
+  { path: 'perfil/:userName', component: PerfilComponent },
 
   { path: 'posts/:categoria', component: SectionHomeComponent },
   { path: 'posts/:categoria/:id/:nombre-post', component: PostsViewComponent },
