@@ -105,4 +105,19 @@ export class HttpSecurityService implements IHttpSecurityService {
         this.router.navigateByUrl('');
         this.currentUserSubject.next(new JwtUserModel({}, ''));
     }
+
+    changePassword(obj: any): Observable<any> {
+        return this.http.post<any>(`${environment.api}/api/usuarios/changeUserPassword`, obj)
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
+    }
 }

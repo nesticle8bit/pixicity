@@ -137,7 +137,7 @@
                                 Cambiar contraseña
                             </ng-template>
 
-                            <form class="form-container">
+                            <form [formGroup]="formGroupCambiarContrasena" (ngSubmit)="changePassword()" class="form-container">
                                 <div class="container mx-auto" style="width: 80%;">
                                     <div class="row">
                                         <div class="col-12">
@@ -149,7 +149,7 @@
                                                 </div>
 
                                                 <div class="col-sm-9">
-                                                    <input type="password" class="form-control" autocomplete="off" />
+                                                    <input type="password" formControlName="currentPassword" class="form-control" autocomplete="off" />
                                                 </div>
                                             </div>
 
@@ -161,7 +161,7 @@
                                                 </div>
 
                                                 <div class="col-sm-9">
-                                                    <input type="password" class="form-control" autocomplete="off" />
+                                                    <input type="password" formControlName="newPassword" class="form-control" autocomplete="off" />
                                                 </div>
                                             </div>
 
@@ -173,7 +173,10 @@
                                                 </div>
 
                                                 <div class="col-sm-9">
-                                                    <input type="password" class="form-control" autocomplete="off" />
+                                                    <input type="password" formControlName="confirmPassword" class="form-control" autocomplete="off" />
+                                                    <mat-error *ngIf="formGroupCambiarContrasena.hasError('notSame')">
+                                                        La contraseña debe coincidir
+                                                    </mat-error>
                                                 </div>
                                             </div>
                                         </div>
@@ -181,7 +184,7 @@
                                 </div>
 
                                 <div class="form-container--footer text-center">
-                                    <button mat-flat-button color="primary" type="submit">
+                                    <button mat-flat-button color="primary" type="submit" [disabled]="formGroupCambiarContrasena.invalid">
                                         <mat-icon>vpn_key</mat-icon> Cambiar contraseña
                                     </button>
                                 </div>

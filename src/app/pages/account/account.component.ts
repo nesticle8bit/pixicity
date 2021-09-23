@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-account',
@@ -79,6 +80,7 @@ export class AccountComponent implements OnInit {
   ];
   public years: any[] = [];
   public formGroupCuenta: FormGroup;
+  public formGroupCambiarContrasena: FormGroup;
 
   constructor(
     private securityService: IHttpSecurityService,
@@ -94,6 +96,23 @@ export class AccountComponent implements OnInit {
       mes: [undefined, Validators.required],
       año: [undefined, Validators.required]
     });
+
+    this.formGroupCambiarContrasena = this.formBuilder.group({
+      currentPassword: ['', Validators.required],
+      newPassword: ['', Validators.required],
+      confirmPassword: ['']
+    }, { validators: this.checkPasswords });
+  }
+
+  checkPasswords: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
+    let pass = group?.get('newPassword')?.value;
+    let confirmPass = group?.get('confirmPassword')?.value;
+
+    if (!pass || !confirmPass) {
+      return null;
+    }
+
+    return pass === confirmPass ? null : { notSame: true }
   }
 
   ngOnInit(): void {
@@ -105,7 +124,7 @@ export class AccountComponent implements OnInit {
   getCurrentUser(): void {
     this.securityService.getLoggedUserByJwt().subscribe((value: any) => {
       console.log(value);
-      if(value) {
+      if (value) {
         const fechaNacimiento = value.fechaNacimiento?.split('/');
 
         this.formGroupCuenta.patchValue({
@@ -151,5 +170,26 @@ export class AccountComponent implements OnInit {
 
   changeEmail(): void {
     this.changeEmailStatus = !this.changeEmailStatus;
+  }
+
+  changePassword(): void {
+    const passwords = Object.assign({}, this.formGroupCambiarContrasena.value);
+
+    this.securityService.changePassword(passwords).subscribe((response: any) => {
+      if (response) {
+        this.formGroupCambiarContrasena.patchValue({
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: ''
+        });
+
+        Swal.fire({
+          title: 'Actualizado',
+          text: 'La contraseña ha sido actualizada correctamente',
+          icon: 'success',
+          timer: 3000
+        });
+      }
+    });
   }
 }
