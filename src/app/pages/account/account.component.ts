@@ -123,7 +123,6 @@ export class AccountComponent implements OnInit {
 
   getCurrentUser(): void {
     this.securityService.getLoggedUserByJwt().subscribe((value: any) => {
-      console.log(value);
       if (value) {
         const fechaNacimiento = value.fechaNacimiento?.split('/');
 
@@ -170,6 +169,22 @@ export class AccountComponent implements OnInit {
 
   changeEmail(): void {
     this.changeEmailStatus = !this.changeEmailStatus;
+  }
+
+  updateUsuario(): void {
+    const cuenta = Object.assign({}, this.formGroupCuenta.value);
+    cuenta.fechaNacimiento = `${cuenta.dia}/${cuenta.mes}/${cuenta.año}`;
+
+    this.securityService.updateUsuario(cuenta).subscribe((response: any) => {
+      if(response) {
+        Swal.fire({
+          title: 'Actualizado',
+          text: 'La información de la cuenta ha sido actualizado correctamente',
+          icon: 'success',
+          timer: 3000
+        });
+      }
+    });
   }
 
   changePassword(): void {
