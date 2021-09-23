@@ -13,4 +13,5 @@ export abstract class IHttpSecurityService {
     abstract registerUser(user: UserModel): Observable<any>;
     abstract loginUser(user: any): Observable<any>;
     abstract logout(): any;
+    abstract changePassword(obj: any): Observable<any>;
 }
