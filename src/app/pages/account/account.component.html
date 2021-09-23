@@ -10,7 +10,7 @@
                                 Cuenta
                             </ng-template>
 
-                            <form [formGroup]="formGroupCuenta" class="form-container">
+                            <form [formGroup]="formGroupCuenta" (ngSubmit)="updateUsuario()" class="form-container">
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-12">
