@@ -58,7 +58,7 @@
                                         <p>
                                             <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                                             Se unió a <b>Pixicity!</b> <b id="espp"> el {{currentUser?.fechaRegistro |
-                                                date:'fullDate'}}</b>
+                                                date:'dd'}} de {{currentUser?.fechaRegistro | date:'MMMM'}} del {{currentUser?.fechaRegistro | date: 'YYYY'}}</b>
                                         </p>
                                     </div>
                                 </div>

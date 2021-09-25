@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -79,10 +79,12 @@ import { DashboardAdminComponent } from './components/admin/dashboard-admin/dash
 import { IHttpFavoritosService } from './services/interfaces/httpFavoritos.interface';
 import { HttpFavoritosService } from './services/implementations/httpFavoritos.service';
 import { environment } from 'src/environments/environment';
-import {MatTableModule} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { AccountComponent } from './pages/account/account.component';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { PerfilComponent } from './pages/perfil/perfil.component';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
 
 @NgModule({
   declarations: [
@@ -209,7 +211,8 @@ import { PerfilComponent } from './pages/perfil/perfil.component';
     { provide: IHttpFavoritosService, useClass: HttpFavoritosService },
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() }
+    { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
+    { provide: LOCALE_ID, useValue: 'es' }
   ],
   entryComponents: [
     DialogAfiliarseComponent,
@@ -223,5 +226,7 @@ export class AppModule {
 
     ngSelectConfig.notFoundText = 'No hay elementos';
     ngSelectConfig.appendTo = 'body';
+
+    registerLocaleData(localeEs, 'es');
   }
 }
