@@ -1,7 +1,108 @@
-<section class="container container--home">
+<div class="container container--home">
     <div class="row">
-        <div class="col-12">
-            
+        <div class="col-12 col-sm-9">
+            <div class="ladoi">
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-12 col-sm-2">
+                            <div class="perfil-avatar">
+                                <a href="#">
+                                    <img alt="" src="https://i.imgur.com/2Rs9AVg.jpeg" class="img-fluid rounded" />
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-10">
+                            <div class="perfil-info">
+                                <div class="row">
+                                    <div class="col-12 col-sm-8">
+                                        <h1 class="nick">Julio Poveda </h1>
+                                        <div class="pani">@{{currentUser?.userName}} - Colombia</div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-4">
+                                        <div class="text-end">
+                                            <img src="/assets/images/icons/male.png" alt="{{currentUser?.genero}}" title="{{currentUser?.genero}}" class="mx-2" />
+
+                                            <img *ngIf="currentUser?.pais" src="/assets/images/flags/{{currentUser?.pais?.iso2.toLowerCase()}}.png"
+                                                title="{{currentUser?.pais?.nombre}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mt-2">
+                                    <div class="col-12 col-sm-2">
+                                        <p>
+                                            <fa-icon [icon]="['fas', 'male']"></fa-icon>
+                                            Es un <b>Hombre</b>
+                                        </p>
+                                    </div>
+                            
+                                    <div class="col-12 col-sm-2">
+                                        <p>
+                                            <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
+                                            Tiene <b>100</b> años
+                                        </p>
+                                    </div>
+
+                                    <div class="col-12 col-sm-2">
+                                        <p>
+                                            <fa-icon [icon]="['fas', 'map-marker-alt']"></fa-icon>
+                                            Vive en <b>{{currentUser?.pais?.nombre}}</b>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-12 col-sm-4">
+                                        <p>
+                                            <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                                            Se unió a <b>Pixicity!</b> <b id="espp"> el {{currentUser?.fechaRegistro | date:'fullDate'}}</b>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="headtop row">
+
+                    </div>
+
+                    <div class="row">
+                        <div class="estaper col-12">
+                            <div class="row">
+                                <div class="col-12 col-sm-2">
+                                    <p class="ranpe"><b style="color:#171717">Novato<span class="status online"></span></b><span>Rango</span></p>
+                                </div>
+                            
+                                <div class="col-12 col-sm-2">
+                                    <p><b>10</b><span>Puntos</span></p>
+                                </div>
+                            
+                                <div class="col-12 col-sm-2">
+                                    <p><b><a href="#posts" onclick="perfil.load_tab('posts', $('#posts'));">2</a></b><span>Posts</span></p>
+                                </div>
+                            
+                                <div class="col-12 col-sm-2">
+                                    <p><b>2</b><span>Comentarios</span></p>
+                                </div>
+                            
+                                <div class="col-12 col-sm-2">
+                                    <p><b><a href="#seguidores"
+                                                onclick="perfil.load_tab('seguidores', $('#seguidores'));">0</a></b><span>Seguidores</span></p>
+                                </div>
+                                <div class="col-12 col-sm-2">
+                                    <p><b><a href="#siguiendo"
+                                                onclick="perfil.load_tab('siguiendo', $('#siguiendo'));">1</a></b><span>Siguiendo</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dotted-border--left col-12 col-sm-3 text-center">
+            <img class="noim" src="/assets/images/ui/404graph.png">
         </div>
     </div>
-</section>
+</div>
