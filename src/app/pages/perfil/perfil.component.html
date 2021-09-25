@@ -22,14 +22,16 @@
 
                                     <div class="col-12 col-sm-4">
                                         <div class="text-end">
-                                            <img src="/assets/images/icons/male.png" alt="{{currentUser?.genero}}" title="{{currentUser?.genero}}" class="mx-2" />
+                                            <img src="/assets/images/icons/male.png" alt="{{currentUser?.genero}}"
+                                                title="{{currentUser?.genero}}" class="mx-2" />
 
-                                            <img *ngIf="currentUser?.pais" src="/assets/images/flags/{{currentUser?.pais?.iso2.toLowerCase()}}.png"
+                                            <img *ngIf="currentUser?.pais"
+                                                src="/assets/images/flags/{{currentUser?.pais?.iso2.toLowerCase()}}.png"
                                                 title="{{currentUser?.pais?.nombre}}">
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row mt-2">
                                     <div class="col-12 col-sm-2">
                                         <p>
@@ -37,7 +39,7 @@
                                             Es un <b>Hombre</b>
                                         </p>
                                     </div>
-                            
+
                                     <div class="col-12 col-sm-2">
                                         <p>
                                             <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
@@ -55,7 +57,8 @@
                                     <div class="col-12 col-sm-4">
                                         <p>
                                             <fa-icon [icon]="['fas', 'clock']"></fa-icon>
-                                            Se unió a <b>Pixicity!</b> <b id="espp"> el {{currentUser?.fechaRegistro | date:'fullDate'}}</b>
+                                            Se unió a <b>Pixicity!</b> <b id="espp"> el {{currentUser?.fechaRegistro |
+                                                date:'fullDate'}}</b>
                                         </p>
                                     </div>
                                 </div>
@@ -68,31 +71,70 @@
                     </div>
 
                     <div class="row">
-                        <div class="estaper col-12">
+                        <div class="profile__summary col-12">
                             <div class="row">
                                 <div class="col-12 col-sm-2">
-                                    <p class="ranpe"><b style="color:#171717">Novato<span class="status online"></span></b><span>Rango</span></p>
+                                    <p class="ranpe">
+                                        <b style="color:#171717">
+                                            Administrador
+                                            <span class="status online"></span>
+                                        </b>
+                                        <span>Rango</span>
+                                    </p>
                                 </div>
-                            
+
                                 <div class="col-12 col-sm-2">
-                                    <p><b>10</b><span>Puntos</span></p>
+                                    <p>
+                                        <b>
+                                            10
+                                        </b>
+
+                                        <span>Puntos</span>
+                                    </p>
                                 </div>
-                            
+
                                 <div class="col-12 col-sm-2">
-                                    <p><b><a href="#posts" onclick="perfil.load_tab('posts', $('#posts'));">2</a></b><span>Posts</span></p>
+                                    <p>
+                                        <b>
+                                            <a href="#posts">2</a>
+                                        </b>
+
+                                        <span>Posts</span>
+                                    </p>
                                 </div>
-                            
+
                                 <div class="col-12 col-sm-2">
-                                    <p><b>2</b><span>Comentarios</span></p>
+                                    <p>
+                                        <b>
+                                            2
+                                        </b>
+
+                                        <span>Comentarios</span>
+                                    </p>
                                 </div>
-                            
+
                                 <div class="col-12 col-sm-2">
-                                    <p><b><a href="#seguidores"
-                                                onclick="perfil.load_tab('seguidores', $('#seguidores'));">0</a></b><span>Seguidores</span></p>
+                                    <p>
+                                        <b>
+                                            <a href="#seguidores">
+                                                0
+                                            </a>
+                                        </b>
+
+                                        <span>Seguidores</span>
+                                    </p>
                                 </div>
+
                                 <div class="col-12 col-sm-2">
-                                    <p><b><a href="#siguiendo"
-                                                onclick="perfil.load_tab('siguiendo', $('#siguiendo'));">1</a></b><span>Siguiendo</span></p>
+                                    <p>
+                                        <b>
+                                            <a href="#siguiendo">
+                                                1
+                                            </a>
+                                        </b>
+
+                                        <span>Siguiendo</span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
