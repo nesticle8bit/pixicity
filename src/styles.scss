@@ -1958,6 +1958,18 @@ span.user-status.s-offline {
     opacity: .5;
 }
 
+.status {
+    width: 12px;
+    height: 12px;
+    background: url('/assets/images/ui/status.png') no-repeat;
+    float: right;
+    margin: 2.5px 0px 0 0;
+}
+
+.online {
+    background-position: center -2px;
+}
+
 .current-user-info {
     & p {
         margin: 0;
