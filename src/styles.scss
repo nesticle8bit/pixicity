@@ -2078,7 +2078,7 @@ ul#resultados-borradores li {
     line-height: 1;
 }
 
-.estaper {
+.profile__summary {
     background: url('/assets/images/ui/menubg.gif') repeat-x scroll left bottom #fff;
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #f1f1f1;
@@ -2093,20 +2093,21 @@ ul#resultados-borradores li {
             border-right: none;
         }
     }
-}
 
-.estaper p {
-    text-align: center;
-    line-height: 15px;
-    margin-bottom: 0;
-}
+    & p {
+        text-align: center;
+        line-height: 15px;
+        margin-bottom: 0;
+    }
 
-.estaper b {
-    display: block;
-    font-size: 16px;
-}
-
-.estaper span {
-    display: block;
-    color: #999;
+    & b {
+        display: block;
+        font-size: 1.06rem;
+        margin-bottom: .2rem;
+    }
+    
+    & span {
+        display: block;
+        color: #999;
+    }
 }
