@@ -1,3 +1,9 @@
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+![Maintainer](https://img.shields.io/badge/maintainer-NESTicle-blue)
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
+[![GitHub latest commit](https://badgen.net/github/last-commit/NESTicle/pixicity)](https://GitHub.com/NESTicle/pixicity/commit/)
+[![GitHub issues](https://img.shields.io/github/issues/NESTicle/pixicity.svg)](https://GitHub.com/NESTicle/pixicity/issues/)
+
 # pixicity
 Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de las cenizas a Pixicity!
 
