@@ -85,6 +85,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
+import { DashboardSidebarComponent } from './components/admin/dashboard-sidebar/dashboard-sidebar.component';
+import { DashboardConfigurationComponent } from './components/admin/dashboard-configuration/dashboard-configuration.component';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -131,7 +134,10 @@ import localeEs from '@angular/common/locales/es';
     DialogDenunciarPostComponent,
     DashboardAdminComponent,
     AccountComponent,
-    PerfilComponent
+    PerfilComponent,
+    DashboardSidebarComponent,
+    DashboardConfigurationComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

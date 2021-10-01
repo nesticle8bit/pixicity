@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardAdminComponent } from './components/admin/dashboard-admin/dashboard-admin.component';
+import { DashboardConfigurationComponent } from './components/admin/dashboard-configuration/dashboard-configuration.component';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { AccountComponent } from './pages/account/account.component';
 import { BorradoresComponent } from './pages/borradores/borradores.component';
 import { FavoritosComponent } from './pages/favoritos/favoritos.component';
@@ -31,7 +33,7 @@ const routes: Routes = [
   { path: 'posts/404/:nombre-post', component: PostNotFoundComponent },
   { path: 'crear/post', component: PostsCreateComponent },
   { path: 'posts/actualizar/:id', component: PostsCreateComponent },
-  
+
   { path: 'mod-history', component: ModHistoryComponent },
   { path: 'mensajes', component: MensajesComponent },
   { path: 'mod-history', component: ModHistoryComponent },
@@ -40,8 +42,14 @@ const routes: Routes = [
   { path: 'usuarios', component: UsuariosComponent },
   { path: 'favoritos', component: FavoritosComponent },
   { path: 'borradores', component: BorradoresComponent },
-  
-  { path: 'administracion', component: DashboardAdminComponent },
+
+  {
+    path: 'administracion', component: DashboardComponent, children:
+    [
+      { path: 'dashboard', component: DashboardAdminComponent },
+      { path: 'configuracion', component: DashboardConfigurationComponent },
+    ]
+  },
 
   { path: '*', redirectTo: '' }
 ];

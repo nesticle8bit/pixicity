@@ -1,0 +1,43 @@
+.admin-menu {
+    font-size: .8rem;
+    margin-left: .7rem;
+
+    & mat-icon {
+        font-size: 1.3rem;
+        vertical-align: middle;
+    }
+
+    &__wrapper {
+        padding: 15px 0 0px 10px;
+
+        & h6 {
+            font-size: .7rem;
+            font-weight: 400;
+            color: #989898;
+        }
+    }
+
+    li {
+        margin-bottom: .5rem;
+    }
+
+    a {
+        color: #969696;
+    }
+
+    a.active {
+        color: #006595;
+    }
+}
+
+.container--home {
+    padding-top: 0;
+}
+
+a {
+    transition: .2s all ease-in-out;
+}
+
+a:hover {
+    margin-left: .25rem;
+}

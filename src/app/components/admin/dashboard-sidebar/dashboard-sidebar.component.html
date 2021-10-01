@@ -1,0 +1,76 @@
+<aside class="admin-menu__wrapper">
+    <h6>General</h6>
+    <ul class="list-unstyled admin-menu">
+        <li>
+            <a [routerLink]="['dashboard']" [ngClass]="{'active': currentURL === 'administracion/dashboard'}">
+                <mat-icon>home</mat-icon> Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a [routerLink]="['configuracion']" [ngClass]="{'active': currentURL === 'configuracion'}">
+                <mat-icon>settings</mat-icon> Configuración
+            </a>
+        </li>
+
+        <li>
+            <a href="#">
+                <mat-icon>payments</mat-icon> Publicidad
+            </a>
+        </li>
+    </ul>
+
+    <h6>Control de Contenido</h6>
+    <ul class="list-unstyled admin-menu">
+        <li>
+            <a href="#">
+                <mat-icon>fact_check</mat-icon> Posts
+            </a>
+        </li>
+
+        <li>
+            <a href="#">
+                <mat-icon>message</mat-icon> Comentarios
+            </a>
+        </li>
+
+        <li>
+            <a href="#">
+                <mat-icon>feed</mat-icon> Noticias
+            </a>
+        </li>
+    </ul>
+
+    <h6>Control de Pixicity!</h6>
+    <ul class="list-unstyled admin-menu">
+        <li>
+            <a href="#">
+                <mat-icon>emoji_events</mat-icon> Medallas
+            </a>
+        </li>
+
+        <li>
+            <a href="#">
+                <mat-icon>directions</mat-icon> Afiliados
+            </a>
+        </li>
+
+        <li>
+            <a href="#">
+                <mat-icon>analytics</mat-icon> Estadísticas
+            </a>
+        </li>
+
+        <li>
+            <a href="#">
+                <mat-icon>block</mat-icon> Bloqueos
+            </a>
+        </li>
+
+        <li>
+            <a href="#">
+                <mat-icon>warning</mat-icon> Censuras
+            </a>
+        </li>
+    </ul>
+</aside>
