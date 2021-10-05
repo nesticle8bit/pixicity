@@ -85,6 +85,12 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
+import { DashboardSidebarComponent } from './components/admin/dashboard-sidebar/dashboard-sidebar.component';
+import { DashboardConfigurationComponent } from './components/admin/dashboard-configuration/dashboard-configuration.component';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { DashboardPostsComponent } from './components/admin/control-de-contenido/posts/dashboard-posts/dashboard-posts.component';
+import { TablePostsComponent } from './components/admin/control-de-contenido/posts/table-posts/table-posts.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -131,7 +137,12 @@ import localeEs from '@angular/common/locales/es';
     DialogDenunciarPostComponent,
     DashboardAdminComponent,
     AccountComponent,
-    PerfilComponent
+    PerfilComponent,
+    DashboardSidebarComponent,
+    DashboardConfigurationComponent,
+    DashboardComponent,
+    DashboardPostsComponent,
+    TablePostsComponent
   ],
   imports: [
     BrowserModule,
@@ -200,7 +211,8 @@ import localeEs from '@angular/common/locales/es';
     MatRadioModule,
     MatIconModule,
     MatTableModule,
-    MatTabsModule
+    MatTabsModule,
+    MatMenuModule
   ],
   providers: [
     DisplayComponentService,
