@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DashboardPostsComponent } from './components/admin/control-de-contenido/posts/dashboard-posts/dashboard-posts.component';
 import { DashboardAdminComponent } from './components/admin/dashboard-admin/dashboard-admin.component';
 import { DashboardConfigurationComponent } from './components/admin/dashboard-configuration/dashboard-configuration.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
@@ -48,6 +49,8 @@ const routes: Routes = [
     [
       { path: 'dashboard', component: DashboardAdminComponent },
       { path: 'configuracion', component: DashboardConfigurationComponent },
+
+      { path: 'posts', component: DashboardPostsComponent },
     ]
   },
 

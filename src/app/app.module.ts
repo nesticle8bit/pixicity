@@ -88,6 +88,9 @@ import localeEs from '@angular/common/locales/es';
 import { DashboardSidebarComponent } from './components/admin/dashboard-sidebar/dashboard-sidebar.component';
 import { DashboardConfigurationComponent } from './components/admin/dashboard-configuration/dashboard-configuration.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { DashboardPostsComponent } from './components/admin/control-de-contenido/posts/dashboard-posts/dashboard-posts.component';
+import { TablePostsComponent } from './components/admin/control-de-contenido/posts/table-posts/table-posts.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -137,7 +140,9 @@ import { DashboardComponent } from './components/admin/dashboard/dashboard.compo
     PerfilComponent,
     DashboardSidebarComponent,
     DashboardConfigurationComponent,
-    DashboardComponent
+    DashboardComponent,
+    DashboardPostsComponent,
+    TablePostsComponent
   ],
   imports: [
     BrowserModule,
@@ -206,7 +211,8 @@ import { DashboardComponent } from './components/admin/dashboard/dashboard.compo
     MatRadioModule,
     MatIconModule,
     MatTableModule,
-    MatTabsModule
+    MatTabsModule,
+    MatMenuModule
   ],
   providers: [
     DisplayComponentService,

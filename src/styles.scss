@@ -2127,3 +2127,19 @@ ul#resultados-borradores li {
 .border-right {
     border-right: 1px solid #dadada;
 }
+
+.dashboard {
+    &--title {
+        font-size: 1rem;
+        color: #5f5f5f;
+        border-bottom: 1px solid rgb(216 216 216 / 49%);
+        
+        padding-bottom: .5rem;
+        margin-bottom: 1rem;
+    }
+}
+
+.btn-menu {
+    border: 0;
+    background: none;
+}
