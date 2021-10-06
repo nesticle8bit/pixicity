@@ -75,4 +75,34 @@ export class HttpGeneralService implements IHttpGeneralService {
                 }
             })).pipe(catchError(this.helper.errorHandler));
     }
+
+    getConfiguracion(): Observable<any> {
+        return this.http.get<any>(`${environment.api}/api/configuracion/getConfiguracion`)
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
+    }
+
+    updateConfiguracion(configuracion: any): Observable<any> {
+        return this.http.put<any>(`${environment.api}/api/configuracion/updateConfiguracion`, configuracion)
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
+    }
 }

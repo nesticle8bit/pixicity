@@ -26,7 +26,7 @@ import { MainFooterComponent } from './main/main-footer/main-footer.component';
 import { SearchComponent } from './pages/search/search.component';
 import { PostsViewComponent } from './posts/posts-view/posts-view.component';
 import { LoginComponent } from './pages/login/login.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgSelectConfig, NgSelectModule } from '@ng-select/ng-select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -83,10 +83,9 @@ import { MatTableModule } from '@angular/material/table';
 import { AccountComponent } from './pages/account/account.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { PerfilComponent } from './pages/perfil/perfil.component';
-import { registerLocaleData } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { DashboardSidebarComponent } from './components/admin/dashboard-sidebar/dashboard-sidebar.component';
-import { DashboardConfigurationComponent } from './components/admin/dashboard-configuration/dashboard-configuration.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { DashboardPostsComponent } from './components/admin/control-de-contenido/posts/dashboard-posts/dashboard-posts.component';
 import { TablePostsComponent } from './components/admin/control-de-contenido/posts/table-posts/table-posts.component';
@@ -94,6 +93,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { DashboardAfiliadosComponent } from './components/admin/control-de-comunidad/afiliados/dashboard-afiliados/dashboard-afiliados.component';
 import { TableAfiliadosComponent } from './components/admin/control-de-comunidad/afiliados/table-afiliados/table-afiliados.component';
 import { DashboardAdsComponent } from './components/admin/general/publicidad/dashboard-ads/dashboard-ads.component';
+import { DashboardConfigurationComponent } from './components/admin/general/configuration/dashboard-configuration/dashboard-configuration.component';
 
 @NgModule({
   declarations: [
@@ -142,13 +142,13 @@ import { DashboardAdsComponent } from './components/admin/general/publicidad/das
     AccountComponent,
     PerfilComponent,
     DashboardSidebarComponent,
-    DashboardConfigurationComponent,
     DashboardComponent,
     DashboardPostsComponent,
     TablePostsComponent,
     DashboardAfiliadosComponent,
     TableAfiliadosComponent,
-    DashboardAdsComponent
+    DashboardAdsComponent,
+    DashboardConfigurationComponent
   ],
   imports: [
     BrowserModule,
@@ -156,6 +156,7 @@ import { DashboardAdsComponent } from './components/admin/general/publicidad/das
     FontAwesomeModule,
     BrowserAnimationsModule,
     MatButtonModule,
+    FormsModule,
     ReactiveFormsModule,
     MatTooltipModule,
     NgSelectModule,
