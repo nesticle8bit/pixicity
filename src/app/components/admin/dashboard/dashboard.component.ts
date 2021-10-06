@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private displayService: DisplayComponentService
+  ) { }
 
   ngOnInit(): void {
+    this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: false});
   }
 
 }
