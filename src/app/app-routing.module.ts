@@ -5,6 +5,7 @@ import { DashboardPostsComponent } from './components/admin/control-de-contenido
 import { DashboardAdminComponent } from './components/admin/dashboard-admin/dashboard-admin.component';
 import { DashboardConfigurationComponent } from './components/admin/dashboard-configuration/dashboard-configuration.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { DashboardAdsComponent } from './components/admin/general/publicidad/dashboard-ads/dashboard-ads.component';
 import { AccountComponent } from './pages/account/account.component';
 import { BorradoresComponent } from './pages/borradores/borradores.component';
 import { FavoritosComponent } from './pages/favoritos/favoritos.component';
@@ -52,6 +53,7 @@ const routes: Routes = [
       { path: 'configuracion', component: DashboardConfigurationComponent },
       { path: 'posts', component: DashboardPostsComponent },
       { path: 'afiliados', component: DashboardAfiliadosComponent },
+      { path: 'publicidad', component: DashboardAdsComponent },
     ]
   },
 

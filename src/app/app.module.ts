@@ -93,6 +93,7 @@ import { TablePostsComponent } from './components/admin/control-de-contenido/pos
 import { MatMenuModule } from '@angular/material/menu';
 import { DashboardAfiliadosComponent } from './components/admin/control-de-comunidad/afiliados/dashboard-afiliados/dashboard-afiliados.component';
 import { TableAfiliadosComponent } from './components/admin/control-de-comunidad/afiliados/table-afiliados/table-afiliados.component';
+import { DashboardAdsComponent } from './components/admin/general/publicidad/dashboard-ads/dashboard-ads.component';
 
 @NgModule({
   declarations: [
@@ -146,7 +147,8 @@ import { TableAfiliadosComponent } from './components/admin/control-de-comunidad
     DashboardPostsComponent,
     TablePostsComponent,
     DashboardAfiliadosComponent,
-    TableAfiliadosComponent
+    TableAfiliadosComponent,
+    DashboardAdsComponent
   ],
   imports: [
     BrowserModule,
