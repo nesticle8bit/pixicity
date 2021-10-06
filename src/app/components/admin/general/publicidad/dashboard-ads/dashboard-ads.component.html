@@ -1,1 +1,69 @@
-<p>dashboard-ads works!</p>
+<h1 class="dashboard--title">Publicidad</h1>
+
+<form [formGroup]="formGroup" (ngSubmit)="updateAds()" class="container">
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">
+            Script del Header
+        </label>
+
+        <div class="col-sm-10">
+            <textarea class="form-control" formControlName="scriptHeader" rows="6"></textarea>
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">
+            Script del Footer
+        </label>
+
+        <div class="col-sm-10">
+            <textarea class="form-control" formControlName="scriptFooter" rows="6"></textarea>
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">
+            Banner 300x250
+        </label>
+
+        <div class="col-sm-10">
+            <textarea class="form-control" formControlName="banner300x250" rows="6"></textarea>
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">
+            Banner 468x60
+        </label>
+
+        <div class="col-sm-10">
+            <textarea class="form-control" formControlName="banner468x60" rows="6"></textarea>
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">
+            Banner 160x600
+        </label>
+
+        <div class="col-sm-10">
+            <textarea class="form-control" formControlName="banner160x600" rows="6"></textarea>
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">
+            Banner 728x90
+        </label>
+
+        <div class="col-sm-10">
+            <textarea class="form-control" formControlName="banner728x90" rows="6"></textarea>
+        </div>
+    </div>
+
+    <div class="form-container--footer text-center mb-4">
+        <button mat-flat-button color="primary" type="submit">
+            <mat-icon>save</mat-icon> Guardar
+        </button>
+    </div>
+</form>
