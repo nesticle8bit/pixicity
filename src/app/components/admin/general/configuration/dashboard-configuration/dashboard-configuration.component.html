@@ -1,0 +1,64 @@
+<h1 class="dashboard--title">Configuración</h1>
+
+<form [formGroup]="formGroup" (ngSubmit)="updateConfiguracion()" class="container">
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">
+            Nombre del Sitio
+        </label>
+
+        <div class="col-sm-10">
+            <input type="text" class="form-control" formControlName="siteName" />
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">
+            Slogan del Sitio
+        </label>
+
+        <div class="col-sm-10">
+            <input type="text" class="form-control" formControlName="slogan" />
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">
+            Dirección del Sitio
+        </label>
+
+        <div class="col-sm-10">
+            <input type="text" class="form-control" formControlName="url"
+                [ngClass]="{'form-control-plaintext': formGroup.value?.url}" />
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">
+            Modo Mantenimiento <br>
+            <i>Esto hará al Sitio inaccesible a los usuarios. Si quiere, también puede introducir un breve mensaje
+                (<b>600</b> <b> caracteres</b>) para mostrar.</i>
+        </label>
+
+        <div class="col-sm-10">
+            <mat-slide-toggle formControlName="maintenanceMode" color="primary"></mat-slide-toggle>
+            <textarea rows="4" class="form-control mt-2" formControlName="maintenanceMessage"></textarea>
+        </div>
+    </div>
+
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">
+            Usuario Online <span>(minutos)</span> <br>
+            <i>Tiempo que debe trascurrir para considerar que un usuario está en linea.</i>
+        </label>
+
+        <div class="col-sm-10">
+            <input type="number" class="form-control" formControlName="onlineUsersTime" />
+        </div>
+    </div>
+
+    <div class="form-container--footer text-center">
+        <button mat-flat-button color="primary" type="submit">
+            <mat-icon>save</mat-icon> Guardar
+        </button>
+    </div>
+</form>

@@ -8,4 +8,6 @@ export abstract class IHttpGeneralService {
     abstract getAfiliados(): Observable<any>;
     abstract saveAfiliacion(afiliacion: AfiliacionModel): Observable<any>;
     abstract getFavoritosByUser(search: string, categoriaId: number): Observable<any>;
+    abstract getConfiguracion(): Observable<any>;
+    abstract updateConfiguracion(configuracion: any): Observable<any>;
 }

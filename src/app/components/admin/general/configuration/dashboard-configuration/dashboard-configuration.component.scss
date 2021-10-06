@@ -1,0 +1,9 @@
+.col-form-label {
+    font-weight: bold;
+
+    & i {
+        font-weight: normal;
+        margin-top: 2px;
+        color: rgb(160, 160, 160);
+    }
+}
