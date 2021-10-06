@@ -19,6 +19,7 @@ export class HomeAfiliadosComponent implements OnInit {
   afiliarse(): void {
     this.dialog.open(DialogAfiliarseComponent, {
       width: '500px',
+      disableClose: true
     });
   }
 }
