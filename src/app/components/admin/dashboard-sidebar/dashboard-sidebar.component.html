@@ -29,13 +29,13 @@
         </li>
 
         <li>
-            <a href="#">
+            <a [routerLink]="['comentarios']">
                 <mat-icon>message</mat-icon> Comentarios
             </a>
         </li>
 
         <li>
-            <a href="#">
+            <a [routerLink]="['noticias']">
                 <mat-icon>feed</mat-icon> Noticias
             </a>
         </li>
@@ -44,7 +44,7 @@
     <h6>Control de Pixicity!</h6>
     <ul class="list-unstyled admin-menu">
         <li>
-            <a href="#">
+            <a [routerLink]="['medallas']">
                 <mat-icon>emoji_events</mat-icon> Medallas
             </a>
         </li>
@@ -56,20 +56,41 @@
         </li>
 
         <li>
-            <a href="#">
+            <a [routerLink]="['estadisticas']">
                 <mat-icon>analytics</mat-icon> Estadísticas
             </a>
         </li>
 
         <li>
-            <a href="#">
+            <a [routerLink]="['bloqueos']">
                 <mat-icon>block</mat-icon> Bloqueos
             </a>
         </li>
 
         <li>
-            <a href="#">
+            <a [routerLink]="['censuras']">
                 <mat-icon>warning</mat-icon> Censuras
+            </a>
+        </li>
+    </ul>
+
+    <h6>Usuarios</h6>
+    <ul class="list-unstyled admin-menu">
+        <li>
+            <a [routerLink]="['usuarios']">
+                <mat-icon>group</mat-icon> Usuarios
+            </a>
+        </li>
+
+        <li>
+            <a [routerLink]="['afiliados']">
+                <mat-icon>manage_accounts</mat-icon> Sesiones
+            </a>
+        </li>
+
+        <li>
+            <a [routerLink]="['rango-usuarios']">
+                <mat-icon>badge</mat-icon> Rangos de Usuarios
             </a>
         </li>
     </ul>
