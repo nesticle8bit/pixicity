@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardAfiliadosComponent } from './components/admin/control-de-comunidad/afiliados/dashboard-afiliados/dashboard-afiliados.component';
+import { DashboardCommentsComponent } from './components/admin/control-de-contenido/comentarios/dashboard-comments/dashboard-comments.component';
 import { DashboardPostsComponent } from './components/admin/control-de-contenido/posts/dashboard-posts/dashboard-posts.component';
 import { DashboardAdminComponent } from './components/admin/dashboard-admin/dashboard-admin.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
@@ -54,6 +55,7 @@ const routes: Routes = [
       { path: 'posts', component: DashboardPostsComponent },
       { path: 'afiliados', component: DashboardAfiliadosComponent },
       { path: 'publicidad', component: DashboardAdsComponent },
+      { path: 'comentarios', component: DashboardCommentsComponent },
     ]
   },
 

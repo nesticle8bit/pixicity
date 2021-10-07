@@ -94,6 +94,8 @@ import { DashboardAfiliadosComponent } from './components/admin/control-de-comun
 import { TableAfiliadosComponent } from './components/admin/control-de-comunidad/afiliados/table-afiliados/table-afiliados.component';
 import { DashboardAdsComponent } from './components/admin/general/publicidad/dashboard-ads/dashboard-ads.component';
 import { DashboardConfigurationComponent } from './components/admin/general/configuration/dashboard-configuration/dashboard-configuration.component';
+import { DashboardCommentsComponent } from './components/admin/control-de-contenido/comentarios/dashboard-comments/dashboard-comments.component';
+import { TableCommentsComponent } from './components/admin/control-de-contenido/comentarios/table-comments/table-comments.component';
 
 @NgModule({
   declarations: [
@@ -148,7 +150,9 @@ import { DashboardConfigurationComponent } from './components/admin/general/conf
     DashboardAfiliadosComponent,
     TableAfiliadosComponent,
     DashboardAdsComponent,
-    DashboardConfigurationComponent
+    DashboardConfigurationComponent,
+    DashboardCommentsComponent,
+    TableCommentsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,66 @@
+<main class="table-responsive" *ngIf="comments.length > 0">
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Creado</th>
+                <th>Comentario</th>
+                <th>Post</th>
+                <th>Usuario</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let comment of comments" [ngClass]="{'favoritos-deleted': comment.deleted}">
+                <td>
+                    <strong>{{comment.id}}</strong>
+                </td>
+
+                <td>
+                    <span class="cursor--help" matTooltip="{{comment.fechaComentario}}">
+                        {{comment.fechaComentario | timeAgo}}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="cursor--help" matTooltip="{{comment.contenido}}">
+                        {{comment.contenido | truncate:[60]}}
+                    </span>
+                </td>
+
+                <td>
+                    <a [routerLink]="['/posts/' + comment.post.categoria.seo + '/' + comment.post.id + '/' + comment.post.url]"
+                        title="{{comment.post.titulo}}">
+                        <img src="/assets/images/categorias/{{comment.post.categoria.icono}}" title="{{comment.post.categoria.nombre}}"
+                            alt="{{comment.post.categoria.nombre}}" />
+                        {{comment.post.titulo | truncate:[70]}}
+                    </a>
+                </td>
+
+                <td>
+                    <a [routerLink]="['/perfil/' + comment.usuario]" target="_blank">
+                        {{comment.usuario}}
+                    </a>
+                </td>
+
+                <td class="text-center" width="30px">
+                    <button class="btn-menu" [matMenuTriggerFor]="menu">
+                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                            <mat-icon>delete_outline</mat-icon>
+                            <span>Eliminar</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="comments.length > 0">
+</mat-paginator>
