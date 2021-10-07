@@ -16,8 +16,8 @@
                             {{usuario.userName}}
                         </h2>
 
-                        <div class="estv qtip" title="online">
-                            <span class="user-status s-online"></span>
+                        <div class="estv qtip cursor--help" [matTooltipPosition]="'above'" matTooltip="{{!usuario.activo || usuario.activo > 15 ? 'Offline' : 'Online'}}">
+                            <span class="user-status" [ngClass]="{'s-online': usuario.activo && usuario.activo <= 15, 's-offline': !usuario.activo || usuario.activo > 15}"></span>
                         </div>
                     </div>
 

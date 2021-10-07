@@ -7,6 +7,7 @@
                 <th>Token</th>
                 <th>Expira</th>
                 <th>Usuario</th>
+                <th>Eliminado</th>
                 <th></th>
             </tr>
         </thead>
@@ -31,13 +32,32 @@
                 </td>
 
                 <td>
-                    {{sesion.fechaExpiracion | date: 'dd/MM/yyyy HH:mm:ss'}} <small class="text-muted">({{sesion.diffExpira}} {{sesion.diffExpira === 1 ? 'día' : 'días'}})</small>
+                    <span *ngIf="!sesion.eliminado">
+                        {{sesion.fechaExpiracion | date: 'dd/MM/yyyy HH:mm:ss'}} <small
+                            class="text-muted">({{sesion.diffExpira}} {{sesion.diffExpira === 1 ? 'día' :
+                            'días'}})</small>
+                    </span>
+
+                    <span *ngIf="sesion.eliminado">
+                        -
+                    </span>
                 </td>
 
                 <td>
                     {{sesion.usuario}}
                 </td>
 
+                <td>
+                    <span *ngIf="sesion.eliminado" class="badge bg-danger"
+                        matTooltip="Eliminado el ({{sesion.fechaElimina | date:'dd/MM/yyyy HH:mm:ss'}}) por {{sesion.usuarioElimina}}">
+                        Eliminado &nbsp; <fa-icon class="cursor--help ml-3" [icon]="['fas', 'calendar-alt']">
+                        </fa-icon>
+                    </span>
+
+                    <span *ngIf="!sesion.eliminado" class="badge bg-success">
+                        Activo
+                    </span>
+                </td>
 
                 <td class="text-center" width="30px">
                     <button class="btn-menu" [matMenuTriggerFor]="menu">
@@ -45,7 +65,7 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item>
+                        <button type="button" mat-menu-item (click)="deleteSession(sesion.id)">
                             <mat-icon>delete_outline</mat-icon>
                             <span>Eliminar</span>
                         </button>

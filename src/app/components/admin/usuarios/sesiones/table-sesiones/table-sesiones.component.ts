@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-table-sesiones',
@@ -47,6 +48,30 @@ export class TableSesionesComponent implements OnInit {
 
     this.snackBar.open('Texto copiado al portapapeles', '', {
       duration: 3 * 1000
+    });
+  }
+
+  deleteSession(id: number): void {
+    Swal.fire({
+      title: 'Eliminar',
+      text: '¿Está seguro de eliminar esta sesión del usuario?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.securityService.deleteSessionById(id).subscribe((response: any) => {
+          if(response) {
+            Swal.fire({
+              title: 'Eliminado',
+              text: 'La sesión ha sido eliminado correctamente',
+              icon: 'success',
+              timer: 3000
+            });
+          }
+        });
+      }
     });
   }
 
