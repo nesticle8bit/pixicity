@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-table-posts',
@@ -40,4 +41,43 @@ export class TablePostsComponent implements OnInit {
     this.getPosts();
   }
 
+  cambiarSticky(postId: number, index: number): void {
+    this.postsService.changeStickyPost(postId).subscribe((response: any) => {
+      if (response) {
+        Swal.fire({
+          title: 'Sticky',
+          text: 'Se ha cambiado el sticky para este post correctamente',
+          icon: 'success',
+          timer: 3000
+        });
+
+        this.posts[index].sticky = !this.posts[index].sticky;
+      }
+    });
+  }
+
+  eliminarPost(postId: number, index: number): void {
+    Swal.fire({
+      title: 'Borrar Post',
+      text: '¿Seguro que deseas borrar este post?',
+      showCancelButton: true,
+      confirmButtonText: `Borrar`,
+      cancelButtonText: `Cancelar`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.postsService.deletePost(postId).subscribe((response: boolean) => {
+          if (response) {
+            Swal.fire({
+              title: 'Eliminado',
+              text: 'El post ha sido eliminado correctamente, ahora nadie lo podrá visualizar',
+              icon: 'success',
+              timer: 3000
+            });
+
+            this.posts[index].eliminado = !this.posts[index].eliminado;
+          }
+        });
+      }
+    })
+  }
 }
