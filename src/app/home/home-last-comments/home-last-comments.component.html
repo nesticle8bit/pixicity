@@ -19,15 +19,18 @@
             <td>
                 <small>
                     <b>
-                        <a href="#">
-                            {{comment.userName}}
+                        <a class="text-muted" [routerLink]="['/perfil/' + comment.usuario]">
+                            {{comment.usuario}}
                         </a>
                     </b>
 
                     &nbsp;
                     
                     <span class="text-muted">
-                        {{comment.contenido | truncate:[55]}}
+                        <a [routerLink]="['/posts/' + comment.post.categoria.seo + '/' + comment.post.id + '/' + comment.post.url]"
+                        title="{{comment.post.titulo}}">
+                        {{comment.post.titulo | truncate:[55]}}
+                    </a>
                     </span>
                 </small>
             </td>

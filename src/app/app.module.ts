@@ -98,6 +98,7 @@ import { DashboardCommentsComponent } from './components/admin/control-de-conten
 import { TableCommentsComponent } from './components/admin/control-de-contenido/comentarios/table-comments/table-comments.component';
 import { DashboardPaisesComponent } from './components/admin/control-de-contenido/paises/dashboard-paises/dashboard-paises.component';
 import { TablePaisesComponent } from './components/admin/control-de-contenido/paises/table-paises/table-paises.component';
+import { EnVivoComponent } from './pages/en-vivo/en-vivo.component';
 
 @NgModule({
   declarations: [
@@ -156,7 +157,8 @@ import { TablePaisesComponent } from './components/admin/control-de-contenido/pa
     DashboardCommentsComponent,
     TableCommentsComponent,
     DashboardPaisesComponent,
-    TablePaisesComponent
+    TablePaisesComponent,
+    EnVivoComponent
   ],
   imports: [
     BrowserModule,
