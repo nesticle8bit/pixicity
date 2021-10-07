@@ -1,0 +1,61 @@
+<main class="table-responsive" *ngIf="paises.length > 0">
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Creado</th>
+                <th>Nombre</th>
+                <th>ISO 2</th>
+                <th>ISO 3</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let pais of paises" [ngClass]="{'favoritos-deleted': pais.deleted}">
+                <td>
+                    <strong>{{pais.id}}</strong>
+                </td>
+
+                <td>
+                    {{pais.fechaRegistro | timeAgo}}
+                </td>
+
+                <td>
+                    <img src="/assets/images/flags/{{pais.isO2.toLowerCase()}}.png" style="margin: 0 10px 0 0;">
+                    {{pais.nombre}}
+                </td>
+
+                <td>
+                    {{pais.isO2}}
+                </td>
+
+                <td>
+                    {{pais.isO3}}
+                </td>
+
+                <td class="text-center" width="30px">
+                    <button class="btn-menu" [matMenuTriggerFor]="menu">
+                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                            <mat-icon>edit</mat-icon>
+                            <span>Actualizar</span>
+                        </button>
+
+                        <button mat-menu-item>
+                            <mat-icon>delete_outline</mat-icon>
+                            <span>Eliminar</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="paises.length > 0">
+</mat-paginator>

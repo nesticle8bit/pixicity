@@ -96,6 +96,8 @@ import { DashboardAdsComponent } from './components/admin/general/publicidad/das
 import { DashboardConfigurationComponent } from './components/admin/general/configuration/dashboard-configuration/dashboard-configuration.component';
 import { DashboardCommentsComponent } from './components/admin/control-de-contenido/comentarios/dashboard-comments/dashboard-comments.component';
 import { TableCommentsComponent } from './components/admin/control-de-contenido/comentarios/table-comments/table-comments.component';
+import { DashboardPaisesComponent } from './components/admin/control-de-contenido/paises/dashboard-paises/dashboard-paises.component';
+import { TablePaisesComponent } from './components/admin/control-de-contenido/paises/table-paises/table-paises.component';
 
 @NgModule({
   declarations: [
@@ -152,7 +154,9 @@ import { TableCommentsComponent } from './components/admin/control-de-contenido/
     DashboardAdsComponent,
     DashboardConfigurationComponent,
     DashboardCommentsComponent,
-    TableCommentsComponent
+    TableCommentsComponent,
+    DashboardPaisesComponent,
+    TablePaisesComponent
   ],
   imports: [
     BrowserModule,
