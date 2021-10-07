@@ -10,6 +10,7 @@ import { DashboardConfigurationComponent } from './components/admin/general/conf
 import { DashboardAdsComponent } from './components/admin/general/publicidad/dashboard-ads/dashboard-ads.component';
 import { AccountComponent } from './pages/account/account.component';
 import { BorradoresComponent } from './pages/borradores/borradores.component';
+import { EnVivoComponent } from './pages/en-vivo/en-vivo.component';
 import { FavoritosComponent } from './pages/favoritos/favoritos.component';
 import { LoginComponent } from './pages/login/login.component';
 import { MensajesComponent } from './pages/mensajes/mensajes.component';
@@ -31,6 +32,7 @@ const routes: Routes = [
   { path: 'buscar', component: SearchComponent },
   { path: 'login', component: LoginComponent },
   { path: 'cuenta', component: AccountComponent },
+  { path: 'en-vivo', component: EnVivoComponent },
   { path: 'perfil/:userName', component: PerfilComponent },
 
   { path: 'posts/:categoria', component: SectionHomeComponent },

@@ -125,7 +125,7 @@ export class HttpPostsService implements IHttpPostsService {
     }
 
     getUltimosComentarios(): Observable<any> {
-        return this.http.get<any>(`${environment.api}/api/posts/getComentariosRecientes`)
+        return this.http.get<any>(`${environment.api}/api/comentarios/getComentariosRecientes`)
             .pipe(map((response: any) => {
                 if (response.status === 200) {
                     return response.data;
