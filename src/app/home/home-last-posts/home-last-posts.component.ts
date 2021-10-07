@@ -13,7 +13,9 @@ export class HomeLastPostsComponent implements OnInit {
 
   @Input() set categoria(value: string) {
     this._categoria = value;
-    this.getPosts(this._categoria);
+
+    let pageEvent: PageEvent = { pageIndex: 0, pageSize: 32, length: 0 };
+    this.pageChange(pageEvent);
   }
 
   get categoria(): string {
@@ -31,9 +33,6 @@ export class HomeLastPostsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getStickyPosts();
-
-    let pageEvent: PageEvent = { pageIndex: 0, pageSize: 32, length: 0 };
-    this.pageChange(pageEvent);
   }
 
   getPosts(categoria: string): void {
