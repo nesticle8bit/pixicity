@@ -102,6 +102,7 @@ import { EnVivoComponent } from './pages/en-vivo/en-vivo.component';
 import { DashboardSesionesComponent } from './components/admin/usuarios/sesiones/dashboard-sesiones/dashboard-sesiones.component';
 import { TableSesionesComponent } from './components/admin/usuarios/sesiones/table-sesiones/table-sesiones.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
 
 @NgModule({
   declarations: [
@@ -246,6 +247,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     { provide: IHttpFavoritosService, useClass: HttpFavoritosService },
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    
     { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
     { provide: LOCALE_ID, useValue: 'es' }
   ],
