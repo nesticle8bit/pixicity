@@ -10,6 +10,7 @@ export abstract class IHttpSecurityService {
     abstract getUsuarios(): Observable<any>;
     abstract getLoggedUserByJwt(): Observable<any>;
     abstract getUserByUserName(userName: string): Observable<any>;
+    abstract getSesiones(): Observable<any>;
     abstract setUserToLocalStorage(obj: any): any;
     abstract registerUser(user: UserModel): Observable<any>;
     abstract loginUser(user: any): Observable<any>;

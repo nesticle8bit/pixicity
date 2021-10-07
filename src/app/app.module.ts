@@ -99,6 +99,9 @@ import { TableCommentsComponent } from './components/admin/control-de-contenido/
 import { DashboardPaisesComponent } from './components/admin/control-de-contenido/paises/dashboard-paises/dashboard-paises.component';
 import { TablePaisesComponent } from './components/admin/control-de-contenido/paises/table-paises/table-paises.component';
 import { EnVivoComponent } from './pages/en-vivo/en-vivo.component';
+import { DashboardSesionesComponent } from './components/admin/usuarios/sesiones/dashboard-sesiones/dashboard-sesiones.component';
+import { TableSesionesComponent } from './components/admin/usuarios/sesiones/table-sesiones/table-sesiones.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -158,7 +161,9 @@ import { EnVivoComponent } from './pages/en-vivo/en-vivo.component';
     TableCommentsComponent,
     DashboardPaisesComponent,
     TablePaisesComponent,
-    EnVivoComponent
+    EnVivoComponent,
+    DashboardSesionesComponent,
+    TableSesionesComponent
   ],
   imports: [
     BrowserModule,
@@ -229,7 +234,8 @@ import { EnVivoComponent } from './pages/en-vivo/en-vivo.component';
     MatIconModule,
     MatTableModule,
     MatTabsModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSnackBarModule
   ],
   providers: [
     DisplayComponentService,

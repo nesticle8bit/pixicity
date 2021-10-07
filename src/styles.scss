@@ -50,8 +50,14 @@ header {
     }
 }
 
-.cursor-pointer {
-    cursor: pointer;
+.cursor {
+    &--pointer {
+        cursor: pointer;
+    }
+
+    &--help {
+        cursor: help;
+    }
 }
 
 .main-logo {
