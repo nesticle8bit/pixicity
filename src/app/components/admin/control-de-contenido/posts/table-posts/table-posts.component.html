@@ -7,12 +7,13 @@
                 <th>Título</th>
                 <th>Puntos</th>
                 <th>Etiquetas</th>
+                <th>Usuario</th>
                 <th></th>
             </tr>
         </thead>
 
         <tbody>
-            <tr *ngFor="let post of posts" [ngClass]="{'favoritos-deleted': post.deleted}">
+            <tr *ngFor="let post of posts; let i = index" [ngClass]="{'favoritos-deleted': post.eliminado}">
                 <td>
                     <img src="/assets/images/categorias/sticky.png" class="sticky-post--home"
                         title="Post fijado por el Staff" alt="Sticky" *ngIf="post.sticky" />
@@ -39,18 +40,24 @@
                     {{post.etiquetas}}
                 </td>
 
+                <td>
+                    <a [routerLink]="['/perfil/' + post.userName]" target="_blank">
+                        {{post.userName}}
+                    </a>
+                </td>
+
                 <td class="text-center" width="30px">
                     <button class="btn-menu" [matMenuTriggerFor]="menu">
                         <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item>
+                        <button type="button" mat-menu-item (click)="cambiarSticky(post.id, i)">
                             <mat-icon>sticky_note_2</mat-icon>
-                            <span *ngIf="post.sticky">Quitar</span> Sticky
+                            <span *ngIf="post.sticky">Quitar</span> <span *ngIf="!post.sticky">Establecer</span> Sticky
                         </button>
 
-                        <button mat-menu-item>
+                        <button type="button" mat-menu-item (click)="eliminarPost(post.id, i)">
                             <mat-icon>delete_outline</mat-icon>
                             <span>Eliminar</span>
                         </button>
