@@ -1,0 +1,61 @@
+<main class="table-responsive" *ngIf="sesiones.length > 0">
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Creado</th>
+                <th>Token</th>
+                <th>Expira</th>
+                <th>Usuario</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let sesion of sesiones" [ngClass]="{'favoritos-deleted': sesion.eliminado}">
+                <td>
+                    <strong>{{sesion.id}}</strong>
+                </td>
+
+                <td>
+                    {{sesion.fechaRegistro | timeAgo}}
+                </td>
+
+                <td>
+                    <fa-icon [icon]="['fas', 'copy']" matTooltip="Copiar al portapapeles"
+                        (click)="clipboard(sesion.token)" class="mr-3 text-secondary cursor--pointer"></fa-icon> &nbsp;
+
+                    <span class="cursor--help" matTooltip="{{sesion.token}}">
+                        {{sesion.token | truncate:[60]}}
+                    </span>
+                </td>
+
+                <td>
+                    {{sesion.fechaExpiracion | date: 'dd/MM/yyyy HH:mm:ss'}} <small class="text-muted">({{sesion.diffExpira}} {{sesion.diffExpira === 1 ? 'día' : 'días'}})</small>
+                </td>
+
+                <td>
+                    {{sesion.usuario}}
+                </td>
+
+
+                <td class="text-center" width="30px">
+                    <button class="btn-menu" [matMenuTriggerFor]="menu">
+                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                            <mat-icon>delete_outline</mat-icon>
+                            <span>Eliminar</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="sesiones.length > 0">
+</mat-paginator>

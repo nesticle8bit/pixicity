@@ -8,6 +8,7 @@ import { DashboardAdminComponent } from './components/admin/dashboard-admin/dash
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { DashboardConfigurationComponent } from './components/admin/general/configuration/dashboard-configuration/dashboard-configuration.component';
 import { DashboardAdsComponent } from './components/admin/general/publicidad/dashboard-ads/dashboard-ads.component';
+import { DashboardSesionesComponent } from './components/admin/usuarios/sesiones/dashboard-sesiones/dashboard-sesiones.component';
 import { AccountComponent } from './pages/account/account.component';
 import { BorradoresComponent } from './pages/borradores/borradores.component';
 import { EnVivoComponent } from './pages/en-vivo/en-vivo.component';
@@ -49,7 +50,6 @@ const routes: Routes = [
   { path: 'usuarios', component: UsuariosComponent },
   { path: 'favoritos', component: FavoritosComponent },
   { path: 'borradores', component: BorradoresComponent },
-
   {
     path: 'administracion', component: DashboardComponent, children:
     [
@@ -60,9 +60,10 @@ const routes: Routes = [
       { path: 'publicidad', component: DashboardAdsComponent },
       { path: 'comentarios', component: DashboardCommentsComponent },
       { path: 'paises', component: DashboardPaisesComponent },
+      { path: 'sesiones', component: DashboardSesionesComponent },
     ]
   },
-
+  
   { path: '*', redirectTo: '' }
 ];
 
