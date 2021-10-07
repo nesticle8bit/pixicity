@@ -32,7 +32,7 @@ export class TimeAgoPipe implements PipeTransform {
                     if (counter === 1) {
                         return `Hace ${counter} ${i}`;
                     } else {
-                        return `Hace ${counter} ${i}s`;;
+                        return `Hace ${counter} ${i === 'mes' ? 'mese' : i}s`;
                     }
             }
         }
