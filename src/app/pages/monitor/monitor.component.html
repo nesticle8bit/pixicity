@@ -1,1 +1,108 @@
-<p>monitor works!</p>
+<div class="container container--home">
+    
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="container container--home">
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-9">
+            <h6 class="main-title">
+                <span>Últimas notificaciones</span>
+            </h6>
+
+            <div class="nada-gris my-3" *ngIf="notificaciones.length < 1">
+                Aún no se han encontrado notificaciones para tí.
+            </div>
+
+            <main class="table-responsive" *ngIf="notificaciones.length > 0">
+                <table class="table table-sm table-striped table-hover">
+                    <!-- <thead>
+                        <tr>
+                            <th>Creado</th>
+                            <th></th>
+                        </tr>
+                    </thead> -->
+            
+                    <tbody>
+                        <tr *ngFor="let notificacion of notificaciones; let i = index">
+                            <td>
+                                <div class="row">
+                                    <div class="col-12 col-sm-1">
+                                        <img src="https://i.imgur.com/2Rs9AVg.jpeg" alt="Imagen de Perfil" width="40px" class="img-fluid" />
+                                    </div>
+
+                                    <div class="col-12 col-sm-11">
+                                        <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion]">
+                                            @{{notificacion.usuarioQueHaceAccion}}
+                                        </a>
+
+                                        <br>
+
+                                        <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
+
+                                        <span [innerHTML]="notificacion.mensaje"></span> <a [routerLink]="['/posts/' + notificacion.post.categoria.seo + '/' + notificacion.post.id + '/' + notificacion.post.url]"
+                                        title="{{notificacion.post.titulo}}">
+                                        {{notificacion.post.titulo}}
+                                    </a>
+                                    </div>
+                                </div>
+                            </td>
+            
+                            <td class="text-center" width="150px">
+                                <small class="text-muted cursor--help" matTooltip="{{notificacion.fechaRegistro}}">
+                                    <i>
+                                        {{notificacion.fechaRegistro | timeAgo}}
+                                    </i>
+                                </small>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </main>
+            
+            <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+                [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="notificaciones.length > 0">
+            </mat-paginator>
+        </div>
+
+        <form class="col-12 col-sm-6 col-md-3">
+            <h6 class="main-title">
+                <span>Buscador</span>
+            </h6>
+
+            <section class="mb-3">
+                <!-- <input type="text" class="form-control" formControlName="search" (keyup)="getFavoritos(0)" /> -->
+            </section>
+
+            <h6 class="main-title">
+                <span>Categorías</span>
+            </h6>
+
+            <table class="table table-sm table-striped table-hover">
+                <tbody>
+                    <!-- <tr *ngFor="let categoria of categorias">
+                        <td>
+                            <a href="javascript:void(0)" (click)="filterByCategory(categoria)" title="{{categoria.categoria.nombre}}">
+                                <img src="/assets/images/categorias/{{categoria.categoria.icono}}" alt="{{categoria.categoria.nombre}}" />
+                                {{categoria.categoria.nombre}} <span class="badge bg-secondary float-end">{{categoria.count}}</span>
+                            </a>
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
