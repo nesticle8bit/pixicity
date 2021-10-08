@@ -103,6 +103,9 @@ import { DashboardSesionesComponent } from './components/admin/usuarios/sesiones
 import { TableSesionesComponent } from './components/admin/usuarios/sesiones/table-sesiones/table-sesiones.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
+import { IHttpLogsService } from './services/interfaces/httpLogs.interface';
+import { HttpLogsService } from './services/implementations/httpLogs.service';
+import { TipoIconMonitorComponent } from './components/addons/tipo-icon-monitor/tipo-icon-monitor.component';
 
 @NgModule({
   declarations: [
@@ -164,7 +167,8 @@ import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
     TablePaisesComponent,
     EnVivoComponent,
     DashboardSesionesComponent,
-    TableSesionesComponent
+    TableSesionesComponent,
+    TipoIconMonitorComponent
   ],
   imports: [
     BrowserModule,
@@ -245,6 +249,7 @@ import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
     { provide: IHttpGeneralService, useClass: HttpGeneralService },
     { provide: IHttpPostsService, useClass: HttpPostsService },
     { provide: IHttpFavoritosService, useClass: HttpFavoritosService },
+    { provide: IHttpLogsService, useClass: HttpLogsService },
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

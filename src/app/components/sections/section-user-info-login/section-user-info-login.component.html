@@ -16,10 +16,14 @@
                 <div class="notificaciones-list" id="mon_list" [style.display]="display.monitor ? 'block' : 'none'"
                     (mouseenter)="display.monitor = true" (mouseleave)="display.monitor = false">
                     <div class="timoni">Notificaciones</div>
+                    
                     <ul>
                         <div class="errr">No hay notificaciones</div>
                     </ul>
-                    <a href="#" class="vemas">Más</a>
+
+                    <a [routerLink]="['monitor']" class="vemas">
+                        Más
+                    </a>
                 </div>
 
                 <div class="alertas" id="alerta_mon" style="top: -10px;">
