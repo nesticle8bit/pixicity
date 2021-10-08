@@ -26,6 +26,9 @@ export class PostsViewComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe((values: any) => {
       this.getPostById(+values.get('id'));
+      this.post = {
+        titulo: values.get('nombre-post')
+      };
     });
 
     this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: false});
