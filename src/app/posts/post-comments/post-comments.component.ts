@@ -44,7 +44,7 @@ export class PostCommentsComponent implements OnInit {
     }
 
     const comentario = Object.assign({}, this.formGroup.value);
-    comentario.postId = this.post.id;
+    comentario.postId = this.post?.id;
 
     this.postService.addComentario(comentario).subscribe((response: any) => {
       if (response) {
