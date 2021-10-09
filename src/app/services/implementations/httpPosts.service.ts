@@ -140,7 +140,7 @@ export class HttpPostsService implements IHttpPostsService {
     }
 
     addComentario(comentario: any): Observable<any> {
-        return this.http.post<any>(`${environment.api}/api/posts/addComentario`, comentario)
+        return this.http.post<any>(`${environment.api}/api/comentarios/addComentario`, comentario)
             .pipe(map((response: any) => {
                 if (response.status === 200) {
                     return response.data;
@@ -155,7 +155,7 @@ export class HttpPostsService implements IHttpPostsService {
     }
 
     getComentariosByPostId(postId: number): Observable<any> {
-        return this.http.get<any>(`${environment.api}/api/posts/getComentariosByPostId?postId=${postId}`)
+        return this.http.get<any>(`${environment.api}/api/comentarios/getComentariosByPostId?postId=${postId}`)
             .pipe(map((response: any) => {
                 if (response.status === 200) {
                     return response.data;
