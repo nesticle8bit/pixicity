@@ -4,4 +4,5 @@ import { Observable } from "rxjs";
 @Injectable()
 export abstract class IHttpLogsService {
     abstract getNotificaciones(): Observable<any>;
+    abstract getLastNotificaciones(): Observable<any>;
 }

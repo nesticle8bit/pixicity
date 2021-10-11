@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpFavoritosService } from 'src/app/services/interfaces/httpFavoritos.interface';
+import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
@@ -16,10 +17,12 @@ export class SectionUserInfoLoginComponent implements OnInit {
     favoritos: false
   };
   public favoritos: any[] = [];
+  public notificaciones: any[] = [];
 
   constructor(
     private securityService: IHttpSecurityService,
-    private favoritosService: IHttpFavoritosService
+    private favoritosService: IHttpFavoritosService,
+    private httpLogs: IHttpLogsService
   ) {
     this.securityService.getCurrentUserAsObservable().subscribe((value: JwtUserModel) => {
       this.currentUser = value;
@@ -30,6 +33,10 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   verNotificaciones(): void {
+    this.httpLogs.getLastNotificaciones().subscribe((response: any) => {
+      this.notificaciones = response;
+    });
+
     this.display.monitor = !this.display.monitor;
   }
 
