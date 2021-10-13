@@ -18,7 +18,27 @@
                     <div class="timoni">Notificaciones</div>
                     
                     <ul>
-                        <div class="errr">No hay notificaciones</div>
+                        <div class="errr" *ngIf="notificaciones.length < 1">No hay notificaciones</div>
+
+                        <li class="list-items" *ngFor="let notificacion of notificaciones">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <img src="https://i.imgur.com/2Rs9AVg.jpeg" alt="Imagen de Perfil" width="20px" class="img-fluid" />
+                                </div>
+                        
+                                <div class="flex-grow-1 ms-3">
+                                    <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
+                                    <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion]">
+                                        @{{notificacion.usuarioQueHaceAccion}}
+                                    </a> 
+                                    <span [innerHTML]="notificacion.mensaje"></span> <a
+                                        [routerLink]="['/posts/' + notificacion.post.categoria.seo + '/' + notificacion.post.id + '/' + notificacion.post.url]"
+                                        title="{{notificacion.post.titulo}}">
+                                        ->
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
                     </ul>
 
                     <a [routerLink]="['monitor']" class="vemas">
