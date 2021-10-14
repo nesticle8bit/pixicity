@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { DialogUpdatePaisesComponent } from '../dialog-update-paises/dialog-update-paises.component';
 
 @Component({
   selector: 'app-table-paises',
@@ -14,7 +16,8 @@ export class TablePaisesComponent implements OnInit {
 
   constructor(
     public paginationService: PaginationService,
-    private parametrosService: IHttpParametrosService
+    private parametrosService: IHttpParametrosService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -25,6 +28,16 @@ export class TablePaisesComponent implements OnInit {
     this.parametrosService.getPaises().subscribe((response: any) => {
       this.paises = response?.data;
       this.totalCount = response?.pagination?.totalCount;
+    });
+  }
+
+  updatePais(index: number): void {
+    const pais = this.paises[index];
+
+    this.dialog.open(DialogUpdatePaisesComponent, {
+      width: '600px',
+      data: pais,
+      disableClose: true,
     });
   }
 

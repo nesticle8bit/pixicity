@@ -106,6 +106,8 @@ import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
 import { IHttpLogsService } from './services/interfaces/httpLogs.interface';
 import { HttpLogsService } from './services/implementations/httpLogs.service';
 import { TipoIconMonitorComponent } from './components/addons/tipo-icon-monitor/tipo-icon-monitor.component';
+import { DialogUpdatePaisesComponent } from './components/admin/control-de-contenido/paises/dialog-update-paises/dialog-update-paises.component';
+import { UppercaseDirective } from './shared/directives/uppercase.directive';
 
 @NgModule({
   declarations: [
@@ -168,7 +170,9 @@ import { TipoIconMonitorComponent } from './components/addons/tipo-icon-monitor/
     EnVivoComponent,
     DashboardSesionesComponent,
     TableSesionesComponent,
-    TipoIconMonitorComponent
+    TipoIconMonitorComponent,
+    DialogUpdatePaisesComponent,
+    UppercaseDirective
   ],
   imports: [
     BrowserModule,
