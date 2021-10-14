@@ -56,6 +56,25 @@ export class HttpParametrosService implements IHttpParametrosService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  savePais(pais: any): Observable<any> {
+    return this.http
+      .post<any>(`${environment.api}/api/paises/savePais`, pais)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   getEstadosByPais(idPais: number): Observable<any> {
     return this.http
       .get<any>(

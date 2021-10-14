@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>
+    {{data ? 'Actualizar' : 'Crear'}} Pais
+</h2>
+
+<form [formGroup]="formGroup">
+    <mat-dialog-content>
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-3">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" class="form-control" formControlName="nombre" cdkFocusInitial />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">ISO 2</label>
+                    <input type="text" class="form-control" formControlName="iso2" [maxLength]="2" pixicityUppercase />
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">ISO 3</label>
+                    <input type="text" class="form-control" formControlName="iso3" [maxLength]="3" pixicityUppercase />
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button type="button" mat-button mat-dialog-close>
+            Cancelar
+        </button>
+
+        <button type="submit" mat-button [mat-dialog-close]="true" [disabled]="formGroup.invalid">
+            Guardar
+        </button>
+    </mat-dialog-actions>
+</form>

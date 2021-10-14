@@ -12,7 +12,7 @@
         </thead>
 
         <tbody>
-            <tr *ngFor="let pais of paises" [ngClass]="{'favoritos-deleted': pais.deleted}">
+            <tr *ngFor="let pais of paises; let i = index" [ngClass]="{'favoritos-deleted': pais.deleted}">
                 <td>
                     <strong>{{pais.id}}</strong>
                 </td>
@@ -40,7 +40,7 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item>
+                        <button mat-menu-item (click)="updatePais(i)">
                             <mat-icon>edit</mat-icon>
                             <span>Actualizar</span>
                         </button>
