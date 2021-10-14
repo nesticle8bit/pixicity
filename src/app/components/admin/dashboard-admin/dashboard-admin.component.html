@@ -1,1 +1,27 @@
-Dashboard
+<h1 class="dashboard--title">Dashboard</h1>
+
+<div class="card card-waves mb-3 mt-4">
+    <div class="card-body p-5">
+        <div class="row gx-4 align-items-center justify-content-between">
+            <div class="col">
+                <h2 class="text-primary">
+                    Bienvenido {{currentUser?.usuario?.userName}}!
+                </h2>
+
+                <p class="text-gray-700 mt-3">
+                    Este es tu "Centro de Administración de Pixicity!". Aquí puedes modificar la configuración de tu
+                    web, modificar usuarios, modificar posts, y muchas otras cosas.
+                </p>
+
+                <!-- <a href="javascript:void(0);" class="btn btn-primary p-3">
+                    Iniciar
+                </a> -->
+            </div>
+
+            <div class="col d-none d-lg-block mt-xxl-n4" style="margin-top: -4rem">
+                <img src="https://sb-admin-pro-angular.startbootstrap.com/assets/img/illustrations/statistics.svg"
+                    class="img-fluid px-xl-4 mt-n1">
+            </div>
+        </div>
+    </div>
+</div>
