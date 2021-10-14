@@ -34,7 +34,18 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
   verNotificaciones(): void {
     this.httpLogs.getLastNotificaciones().subscribe((response: any) => {
+      if(response) {
+        response = response.map((notificacion: any) => {
+          if(notificacion.mensaje) {
+            notificacion.mensaje = notificacion.mensaje.replace('tu post', `tu <a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post.id}/${notificacion.post.url}">post</a>`);
+          }
+
+          return notificacion;
+        });
+      }
+
       this.notificaciones = response;
+      console.log(response);
     });
 
     this.display.monitor = !this.display.monitor;

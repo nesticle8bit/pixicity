@@ -232,7 +232,8 @@ import { TipoIconMonitorComponent } from './components/addons/tipo-icon-monitor/
       showForeground: true,
       exclude: [
         `${environment.api}/api/favoritos/getFavoritos`,
-        `${environment.api}/api/favoritos/getLastFavoritos`
+        `${environment.api}/api/favoritos/getLastFavoritos`,
+        `${environment.api}/api/monitors/getLastNotificaciones`
       ]
     }),
     MatRadioModule,
