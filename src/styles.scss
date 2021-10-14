@@ -1792,13 +1792,9 @@ span.positivo {
     z-index: 300;
     width: 306px;
     box-shadow: 5px 5px 10px rgb(0 0 0 / 10%);
-    -mox-box-shadow: 5px 5px 10px rgba(0,0,0,0.1);
-    -webkit-box-shadow: 5px 5px 10px rgb(0 0 0 / 10%);
     border: solid 1px #dadada;
-    border-radius: 5px;
-    -webkit-border-radius: 3px;
+    border-radius: 3px 3px 6px 6px;
     top: 42px;
-    font-family: "Lato","Helvetica Neue","Helvetica","Arial","Lucida Grande",sans-serif;
 }
 
 .notificaciones-list:before {
@@ -1837,9 +1833,9 @@ a.vemas {
     text-align: center;
     line-height: 18px;
     font-size: 10px;
-    font-weight: bolder;
-    padding: 0!important;
     text-shadow: none;
+    padding: .2rem;
+    border-radius: 0 0 3px 3px;
 }
 
 .nada-amarillo {
@@ -2065,7 +2061,8 @@ ul#resultados-borradores li {
     border-bottom: 1px solid #f1f1f1;
     padding: 2px 10px 6px 10px;
     background: none !important;
-    margin-bottom: 6px;
+    // margin-bottom: 6px;
+    font-size: .7rem;
 }
 
 .form-container {
