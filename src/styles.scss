@@ -2239,3 +2239,13 @@ span.ma_w_like {
 span.ma_photo {
     background-position: 0 -240px;
 }
+
+.card-angles .card-body, .card-waves .card-body {
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+
+.card-waves .card-body {
+    background-image: url(/assets/images/bg-waves.svg);
+}
