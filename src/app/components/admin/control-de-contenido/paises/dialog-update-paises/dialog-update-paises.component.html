@@ -2,7 +2,7 @@
     {{data ? 'Actualizar' : 'Crear'}} Pais
 </h2>
 
-<form [formGroup]="formGroup">
+<form [formGroup]="formGroup" (ngSubmit)="savePais()">
     <mat-dialog-content>
         <div class="row">
             <div class="col-12">

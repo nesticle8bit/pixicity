@@ -34,10 +34,18 @@ export class TablePaisesComponent implements OnInit {
   updatePais(index: number): void {
     const pais = this.paises[index];
 
-    this.dialog.open(DialogUpdatePaisesComponent, {
+    const dialogRef = this.dialog.open(DialogUpdatePaisesComponent, {
       width: '600px',
       data: pais,
       disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((value: any) => {
+      if (value) {
+        pais.nombre = value.nombre;
+        pais.isO2 = value.iso2;
+        pais.isO3 = value.iso3;
+      }
     });
   }
 
