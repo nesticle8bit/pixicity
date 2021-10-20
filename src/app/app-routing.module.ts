@@ -62,7 +62,7 @@ const routes: Routes = [
       { path: 'comentarios', component: DashboardCommentsComponent },
       { path: 'paises', component: DashboardPaisesComponent },
       { path: 'sesiones', component: DashboardSesionesComponent },
-      { path: 'reportes', component: DashboardReportesComponent },
+      { path: 'denuncias', component: DashboardReportesComponent },
     ]
   },
   
