@@ -58,7 +58,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
     this.formGroup = this.formBuilder.group({
       id: 0,
-      titulo: ['', Validators.required],
+      titulo: ['', [Validators.required, Validators.maxLength(80)]],
       contenido: ['', Validators.required],
       categoriaId: [undefined, Validators.required],
       etiquetas: [[], Validators.required],
