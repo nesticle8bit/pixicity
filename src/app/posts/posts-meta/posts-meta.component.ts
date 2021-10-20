@@ -60,6 +60,8 @@ export class PostsMetaComponent implements OnInit {
   }
 
   getAvailablePuntos(): void {
+    this.availablePuntos = [];
+    
     this.postService.getAvailableVotos(1).subscribe((response: any) => {
       if (response > 0) {
         for (let index = 1; index < response + 1; index++) {
