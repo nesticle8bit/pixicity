@@ -26,6 +26,13 @@ export class TablePaisesComponent implements OnInit {
 
   getPaises(): void {
     this.parametrosService.getPaises().subscribe((response: any) => {
+      if(response.data) {
+        response.data = response.data.map((pais: any) => {
+          pais.isO2 = pais.isO2?.toLowerCase();
+          return pais;
+        });
+      }
+
       this.paises = response?.data;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -43,8 +50,8 @@ export class TablePaisesComponent implements OnInit {
     dialogRef.afterClosed().subscribe((value: any) => {
       if (value) {
         pais.nombre = value.nombre;
-        pais.isO2 = value.iso2;
-        pais.isO3 = value.iso3;
+        pais.isO2 = value.iso2.toLowerCase();
+        pais.isO3 = value.iso3.toLowerCase();
       }
     });
   }

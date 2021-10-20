@@ -108,6 +108,10 @@ import { HttpLogsService } from './services/implementations/httpLogs.service';
 import { TipoIconMonitorComponent } from './components/addons/tipo-icon-monitor/tipo-icon-monitor.component';
 import { DialogUpdatePaisesComponent } from './components/admin/control-de-contenido/paises/dialog-update-paises/dialog-update-paises.component';
 import { UppercaseDirective } from './shared/directives/uppercase.directive';
+import { DashboardReportesComponent } from './components/admin/control-de-comunidad/reportes/dashboard-reportes/dashboard-reportes.component';
+import { TableReportesComponent } from './components/admin/control-de-comunidad/reportes/table-reportes/table-reportes.component';
+import { IHttpDenunciasService } from './services/interfaces/httpDenuncias.interface';
+import { HttpDenunciasService } from './services/implementations/httpDenuncias.service';
 
 @NgModule({
   declarations: [
@@ -172,7 +176,9 @@ import { UppercaseDirective } from './shared/directives/uppercase.directive';
     TableSesionesComponent,
     TipoIconMonitorComponent,
     DialogUpdatePaisesComponent,
-    UppercaseDirective
+    UppercaseDirective,
+    DashboardReportesComponent,
+    TableReportesComponent
   ],
   imports: [
     BrowserModule,
@@ -255,6 +261,7 @@ import { UppercaseDirective } from './shared/directives/uppercase.directive';
     { provide: IHttpPostsService, useClass: HttpPostsService },
     { provide: IHttpFavoritosService, useClass: HttpFavoritosService },
     { provide: IHttpLogsService, useClass: HttpLogsService },
+    { provide: IHttpDenunciasService, useClass: HttpDenunciasService },
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

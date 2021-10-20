@@ -1,37 +1,42 @@
-<main class="table-responsive" *ngIf="paises.length > 0">
+<main class="table-responsive" *ngIf="denuncias.length > 0">
     <table class="table table-sm table-striped table-hover">
         <thead>
             <tr>
-                <th></th>
                 <th>Creado</th>
-                <th>Nombre</th>
-                <th>ISO 2</th>
-                <th>ISO 3</th>
+                <th>Título</th>
+                <th>URL</th>
+                <th>In</th>
+                <th>Out</th>
                 <th></th>
             </tr>
         </thead>
 
         <tbody>
-            <tr *ngFor="let pais of paises; let i = index" [ngClass]="{'favoritos-deleted': pais.deleted}">
+            <tr *ngFor="let afiliado of denuncias">
                 <td>
-                    <strong>{{pais.id}}</strong>
+                    <span class="cursor--help" matTooltip="{{afiliado.fechaRegistro}}">
+                        {{afiliado.fechaRegistro | timeAgo}}
+                    </span>
                 </td>
 
                 <td>
-                    {{pais.fechaRegistro | timeAgo}}
+                    {{afiliado.titulo}}
                 </td>
 
                 <td>
-                    <img src="/assets/images/flags/{{pais?.isO2}}.png" style="margin: 0 10px 0 0;">
-                    {{pais.nombre}}
+                    <strong>
+                        <a href="{{afiliado.url}}" target="_blank" matTooltip="{{afiliado.url}}">
+                            {{afiliado.url}}
+                        </a>
+                    </strong>
                 </td>
 
                 <td>
-                    {{pais.isO2 | uppercase}}
+                    {{afiliado.hitsIn}}
                 </td>
 
                 <td>
-                    {{pais.isO3 | uppercase}}
+                    {{afiliado.hitsOut}}
                 </td>
 
                 <td class="text-center" width="30px">
@@ -40,11 +45,6 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item (click)="updatePais(i)">
-                            <mat-icon>edit</mat-icon>
-                            <span>Actualizar</span>
-                        </button>
-
                         <button mat-menu-item>
                             <mat-icon>delete_outline</mat-icon>
                             <span>Eliminar</span>
@@ -57,5 +57,5 @@
 </main>
 
 <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
-    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="paises.length > 0">
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="denuncias.length > 0">
 </mat-paginator>
