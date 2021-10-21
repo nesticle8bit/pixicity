@@ -2092,37 +2092,48 @@ ul#resultados-borradores li {
     line-height: 1;
 }
 
-.profile__summary {
-    background: url('/assets/images/ui/menubg.gif') repeat-x scroll left bottom #fff;
-    border-bottom: 1px solid #ccc;
-    border-top: 1px solid #f1f1f1;
-    margin-top: 12px;
-    overflow: hidden;
-    padding: 1rem;
+.profile {
+    &__summary {
+        background: url('/assets/images/ui/menubg.gif') repeat-x scroll left bottom #fff;
+        border-bottom: 1px solid #ccc;
+        border-top: 1px solid #f1f1f1;
+        margin-top: 12px;
+        overflow: hidden;
+        padding: 1rem;
 
-    & .col-12 {
-        border-right: 1px solid #dcdcdc;
+        & .col-12 {
+            border-right: 1px solid #dcdcdc;
 
-        &:last-child {
-            border-right: none;
+            &:last-child {
+                border-right: none;
+            }
+        }
+
+        & p {
+            text-align: center;
+            line-height: 15px;
+            margin-bottom: 0;
+        }
+
+        & b {
+            display: block;
+            font-size: 1.06rem;
+            margin-bottom: .2rem;
+        }
+        
+        & span {
+            display: block;
+            color: #999;
         }
     }
 
-    & p {
-        text-align: center;
-        line-height: 15px;
-        margin-bottom: 0;
-    }
+    &__postcomment {
+        background: #f3f3f3;
+        padding: 1rem;
 
-    & b {
-        display: block;
-        font-size: 1.06rem;
-        margin-bottom: .2rem;
-    }
-    
-    & span {
-        display: block;
-        color: #999;
+        & .img-profile {
+            width: 4rem;
+        }
     }
 }
 
