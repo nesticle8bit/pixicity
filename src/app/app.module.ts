@@ -112,6 +112,7 @@ import { DashboardReportesComponent } from './components/admin/control-de-comuni
 import { TableReportesComponent } from './components/admin/control-de-comunidad/reportes/table-reportes/table-reportes.component';
 import { IHttpDenunciasService } from './services/interfaces/httpDenuncias.interface';
 import { HttpDenunciasService } from './services/implementations/httpDenuncias.service';
+import { ProfileCommentsComponent } from './components/profile/profile-comments/profile-comments.component';
 
 @NgModule({
   declarations: [
@@ -178,7 +179,8 @@ import { HttpDenunciasService } from './services/implementations/httpDenuncias.s
     DialogUpdatePaisesComponent,
     UppercaseDirective,
     DashboardReportesComponent,
-    TableReportesComponent
+    TableReportesComponent,
+    ProfileCommentsComponent
   ],
   imports: [
     BrowserModule,
