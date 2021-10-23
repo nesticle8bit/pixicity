@@ -13,46 +13,59 @@
     float: left;
 }
 
-.Story_Pic {
-    float: left;
-    margin-right: 24px;
+.story {
+    &__profile-image {
+        float: left;
+        margin-right: 24px;
+
+        & img {
+            display: block;
+            padding: 2px;
+            width: 48px;
+            height: 48px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 3px #ccc;
+        }
+    }
+
+    &__content {
+        position: relative;
+    }
+
+    &__arrow {
+        display: block;
+        width: 9px;
+        height: 16px;
+        position: absolute;
+        left: -8px;
+        background: url('/assets/images/ui/dialog.png') no-repeat top left;
+        z-index: 1;
+        top: 10px;
+    }
+
+    &__header {
+        min-height: 35px;
+        padding: 10px 20px!important;
+        border: 1px solid #CCC;
+        border-bottom: 0;
+        border-radius: 5px 5px 0 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        overflow: hidden;
+    }
+
+    &__footer {
+        height: 32px;
+        border: 1px solid #CCC;
+        border-top: 1px solid #e9e9e9!important;
+        border-radius: 0 0 5px 5px;
+        box-shadow: 0 2px 3px #eee;
+        word-wrap: break-word;
+        background: #fafafa url('/assets/images/ui/bfs.gif') bottom left repeat-x;
+    }
 }
 
-.Story_Pic img {
-    display: block;
-    padding: 2px;
-    width: 48px;
-    height: 48px;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 3px #ccc;
-}
 
-.Story_Content {
-    position: relative;
-}
-
-.pushot {
-    display: block;
-    width: 9px;
-    height: 16px;
-    position: absolute;
-    left: -8px;
-    background: url('/assets/images/ui/dialog.png') no-repeat top left;
-    z-index: 1;
-    top: 10px;
-}
-
-.Story_Head {
-    min-height: 35px;
-    padding: 10px 20px!important;
-    border: 1px solid #CCC;
-    border-bottom: 0;
-    border-radius: 5px 5px 0 0;
-    position: relative;
-    word-wrap: break-word;
-    background-color: #fff;
-    overflow: hidden;
-}
 
 .quiendi {
     clear: both;
@@ -71,29 +84,6 @@
     margin-bottom: 5px;
 }
 
-.Story_Foot {
-    height: 32px;
-    border: 1px solid #CCC;
-    border-top: 1px solid #e9e9e9!important;
-    border-radius: 0 0 5px 5px;
-    box-shadow: 0 2px 3px #eee;
-    position: relative;
-    word-wrap: break-word;
-    background: #fafafa url('/assets/images/ui/bfs.gif') bottom left repeat-x;
-
-    width: 91.99%;
-    margin-left: 4.5rem;
-}
-
-.lefsho {
-    float: left;
-    margin: 4px 0 0 10px;
-}
-
-.shofo {
-    float: right;
-}
-
 .i.tipot {
     background-position: -1px -137px;
     margin-top: 4px;
@@ -102,30 +92,25 @@
 .i {
     background: url('/assets/images/ui/i.png');
     height: 16px;
-    float: left;
 }
 
-.lefsho a {
-    font-size: 11px;
-    font-weight: 400;
-    color: #999;
-    margin: 3px 0 0 10px;
-    display: block;
-    float: left;
-    text-decoration: none;
-}
+.list-inline-item {
+    & a {
+        font-size: 11px;
+        font-weight: 400;
+        color: #999;
+        // margin: -4px ​0 0 10px;
+        text-decoration: none;
 
-.shofo a {
-    float: left;
-    margin: 0;
-    padding: 5px 5px 0 0;
-    height: 27px;
-    background: url('/assets/images/ui/button-action-s.png') left bottom no-repeat!important;
+        margin: 0;
+        padding: 5px 5px 0 0;
+        height: 27px;
+        background: url('/assets/images/ui/button-action-s.png') left bottom no-repeat!important;
+    }
 }
 
 a.abrir {
     display: block;
-    float: left;
     padding: 7px 10px 0 14px;
     height: 25px;
     font-size: 12px;
@@ -140,7 +125,6 @@ a.abrir {
 }
 
 .acnu {
-    float: left;
     padding: 0 4px;
     height: 20px;
     font-weight: 700;
