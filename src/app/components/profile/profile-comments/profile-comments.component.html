@@ -22,17 +22,17 @@
                             </div>
 
                             <div class="story__footer">
-                                <div class="container-fluid">
-                                    <div class="row pt-1">
-                                        <div class="col-12 col-sm-6">
+                                <div class="container-fluid pr-0">
+                                    <div class="row g-0">
+                                        <div class="col-12 col-sm-6 pt-1">
                                             <span class="i tipot"></span> <a>Hace unos segundos</a>
                                         </div>
 
                                         <div class="col-12 col-sm-6 text-end">
                                             <ul class="list-inline">
                                                 <li class="list-inline-item">
-                                                    <a class="vctip" title="Ver actividad">
-                                                        <span class="i actividades"></span>
+                                                    <a title="Ver actividad">
+                                                        <span class="i actividades">&nbsp;</span>
                                                     </a>
                                                 </li>
 
@@ -41,33 +41,30 @@
                                                 </li>
 
                                                 <li class="list-inline-item">
-                                                    <a class="vctip" title="Comentarios cerrados"><span
-                                                            class="i comenta"></span>
-                                                        <div class="acnu" id="sunc_21"><b id="datine">0</b></div>
+                                                    <a title="Comentarios cerrados">
+                                                        <fa-icon class="pl-2 ml-2" [icon]="['fas', 'comments']"></fa-icon>
+                                                        <span class="counter">0</span>
                                                     </a>
                                                 </li>
 
                                                 <li class="list-inline-item">
-                                                    <a class="vctip" title="Favoritos"
-                                                        onclick="favorito_shout('21'); return false;" id="sunf_21"><span
-                                                            class="i favori"></span>
-                                                        <div class="acnu">0</div>
+                                                    <a title="Favoritos">
+                                                        <fa-icon [icon]="['fas', 'star']"></fa-icon>
+                                                        <span class="counter">0</span>
                                                     </a>
                                                 </li>
 
                                                 <li class="list-inline-item">
-                                                    <a class="vctip" title="Me gusta"
-                                                        onclick="muro.like_this('21', 'pub'); return false;"
-                                                        id="sunl_21"><span class="i likeli"></span>
-                                                        <div class="acnu">0</div>
+                                                    <a title="Me gusta">
+                                                        <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
+                                                        <span class="counter">0</span>
                                                     </a>
                                                 </li>
 
                                                 <li class="list-inline-item">
-                                                    <a class="vctip" title="Compartir"
-                                                        onclick="compartir_shout('21'); return false;"
-                                                        id="suns_21"><span class="i  repost"></span>
-                                                        <div class="acnu">0</div>
+                                                    <a title="Compartir">
+                                                        <fa-icon [icon]="['fas', 'retweet']"></fa-icon>
+                                                        <span class="counter">0</span>
                                                     </a>
                                                 </li>
                                             </ul>
