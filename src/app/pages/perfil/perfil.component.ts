@@ -9,6 +9,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 })
 export class PerfilComponent implements OnInit {
   public currentUser: any = {};
+  public currentSelection = 'shouts';
 
   constructor(
     private activatedRoute: ActivatedRoute,
