@@ -113,6 +113,7 @@ import { TableReportesComponent } from './components/admin/control-de-comunidad/
 import { IHttpDenunciasService } from './services/interfaces/httpDenuncias.interface';
 import { HttpDenunciasService } from './services/implementations/httpDenuncias.service';
 import { ProfileCommentsComponent } from './components/profile/profile-comments/profile-comments.component';
+import { ProfilePostsComponent } from './components/profile/profile-posts/profile-posts.component';
 
 @NgModule({
   declarations: [
@@ -180,7 +181,8 @@ import { ProfileCommentsComponent } from './components/profile/profile-comments/
     UppercaseDirective,
     DashboardReportesComponent,
     TableReportesComponent,
-    ProfileCommentsComponent
+    ProfileCommentsComponent,
+    ProfilePostsComponent
   ],
   imports: [
     BrowserModule,

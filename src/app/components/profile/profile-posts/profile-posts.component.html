@@ -1,0 +1,40 @@
+<h6 class="main-title my-2">
+    <span>Últimos posts creados</span>
+</h6>
+
+<main class="table-responsive">
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Puntos</th>
+                <th>Creado</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let post of posts; let i = index" [ngClass]="{'favoritos-deleted': post.eliminado}">
+                <td>
+                    <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
+                        title="{{post.titulo}}">
+                        <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
+                            alt="{{post.categoria.nombre}}" />
+                        {{post.titulo}}
+                    </a>
+                </td>
+
+                <td>
+                    {{post.puntos}}
+                </td>
+
+                <td>
+                    {{post.fechaRegistro | timeAgo}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
+</mat-paginator>

@@ -5,7 +5,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
-  styleUrls: ['./perfil.component.scss']
+  styleUrls: ['./perfil.component.scss'],
 })
 export class PerfilComponent implements OnInit {
   public currentUser: any = {};
@@ -20,15 +20,11 @@ export class PerfilComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   getUserByUserName(userName: string): void {
     this.securityService.getUserByUserName(userName).subscribe((value: any) => {
-      console.log(value);
       this.currentUser = value;
     });
   }
-
 }
