@@ -22,9 +22,13 @@ export class PostOriginalPosterInfoComponent implements OnInit {
   }
 
   public info: any;
+  public currentUser: any;
+
   constructor(private securityService: IHttpSecurityService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.currentUser = this.securityService.getCurrentUser();
+  }
 
   getUsuarioInfo(userName: string): void {
     if (!userName) {
