@@ -38,11 +38,11 @@
             </div>
         </div>
 
-        <a class="bgris unfollow_user_post" style="display: none;">
+        <a class="bgris unfollow_user_post" style="display: none;" *ngIf="currentUser?.usuario?.userName !== post.usuario?.userName">
             Siguiendo
         </a>
 
-        <a class="bverde follow_user_post">
+        <a class="bverde follow_user_post" *ngIf="currentUser?.usuario?.userName !== post.usuario?.userName">
             Seguir
         </a>
     </div>
