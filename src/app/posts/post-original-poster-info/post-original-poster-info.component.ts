@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
   selector: 'app-post-original-poster-info',
@@ -11,8 +12,8 @@ export class PostOriginalPosterInfoComponent implements OnInit {
   @Input() set post(value: any) {
     this._post = value;
 
-    if(value) {
-      console.log(value);
+    if (value) {
+      this.getUsuarioInfo(value.usuario?.userName);
     }
   }
 
@@ -20,9 +21,20 @@ export class PostOriginalPosterInfoComponent implements OnInit {
     return this._post;
   }
 
-  constructor() {}
+  public info: any;
+  constructor(private securityService: IHttpSecurityService) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
 
+  getUsuarioInfo(userName: string): void {
+    if (!userName) {
+      return;
+    }
+
+    this.securityService.getUsuarioInfo(userName).subscribe((response: any) => {
+      if (response) {
+        this.info = response;
+      }
+    });
   }
 }
