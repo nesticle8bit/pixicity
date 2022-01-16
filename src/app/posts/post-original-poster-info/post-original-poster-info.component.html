@@ -1,0 +1,49 @@
+<div class="esees">
+    <div class="eites">
+        <a class="nomis" href="#">
+            <img alt="Ver perfil de jjpoveda92" src="https://i.imgur.com/2Rs9AVg.jpeg"
+                style="width: 120px; height: 120px" />
+        </a>
+        <span>
+            <img src="/assets/images/icons/rosette.png" #tooltip="matTooltip" matTooltip="Administrador"
+                [matTooltipPosition]="'below'">
+            Administrador
+        </span>
+    </div>
+
+    <div class="gkes">
+        <div class="eolr">
+            <span class="tepe-online vctip" #tooltip="matTooltip" matTooltip="Online"
+                [matTooltipPosition]="'below'"></span>
+            <a href="#">{{post?.usuario?.userName}}</a>
+        </div>
+
+        <div class="nekes">
+            <fa-icon [icon]="['fas', 'mars']" class="vctip" tooltip="matTooltip" matTooltip="Hombre"
+                [matTooltipPosition]="'below'"></fa-icon>
+            <img class="vctip pai" src="/assets/images/flags/{{post?.usuario?.pais.toLowerCase()}}.png" />
+        </div>
+
+        <div class="eliese">
+            <div class="tyes">
+                <fa-icon [icon]="['far', 'user-circle']"></fa-icon> <b>3</b> Seguidores
+            </div>
+
+            <div class="tyes">
+                <fa-icon [icon]="['fas', 'chart-line']"></fa-icon> <b>5</b> Puntos
+            </div>
+
+            <div class="tyes">
+                <fa-icon [icon]="['far', 'copy']"></fa-icon> <b>1</b> Posts
+            </div>
+        </div>
+
+        <a class="bgris unfollow_user_post" style="display: none;">
+            Siguiendo
+        </a>
+
+        <a class="bverde follow_user_post">
+            Seguir
+        </a>
+    </div>
+</div>
