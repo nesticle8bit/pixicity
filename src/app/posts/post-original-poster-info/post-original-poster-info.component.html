@@ -26,15 +26,15 @@
 
         <div class="eliese">
             <div class="tyes">
-                <fa-icon [icon]="['far', 'user-circle']"></fa-icon> <b>3</b> Seguidores
+                <fa-icon [icon]="['far', 'user-circle']"></fa-icon> <b>{{info?.seguidores}}</b> Seguidores
             </div>
 
             <div class="tyes">
-                <fa-icon [icon]="['fas', 'chart-line']"></fa-icon> <b>5</b> Puntos
+                <fa-icon [icon]="['fas', 'chart-line']"></fa-icon> <b>{{info?.puntos ? info?.puntos : 0}}</b> Puntos
             </div>
 
             <div class="tyes">
-                <fa-icon [icon]="['far', 'copy']"></fa-icon> <b>1</b> Posts
+                <fa-icon [icon]="['far', 'copy']"></fa-icon> <b>{{info?.posts}}</b> Posts
             </div>
         </div>
 
