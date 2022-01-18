@@ -115,6 +115,7 @@ import { HttpDenunciasService } from './services/implementations/httpDenuncias.s
 import { ProfileCommentsComponent } from './components/profile/profile-comments/profile-comments.component';
 import { ProfilePostsComponent } from './components/profile/profile-posts/profile-posts.component';
 import { PostOriginalPosterInfoComponent } from './posts/post-original-poster-info/post-original-poster-info.component';
+import { FollowButtonComponent } from './components/addons/follow-button/follow-button.component';
 
 @NgModule({
   declarations: [
@@ -184,7 +185,8 @@ import { PostOriginalPosterInfoComponent } from './posts/post-original-poster-in
     TableReportesComponent,
     ProfileCommentsComponent,
     ProfilePostsComponent,
-    PostOriginalPosterInfoComponent
+    PostOriginalPosterInfoComponent,
+    FollowButtonComponent
   ],
   imports: [
     BrowserModule,

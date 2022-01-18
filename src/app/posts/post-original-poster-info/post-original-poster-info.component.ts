@@ -41,4 +41,18 @@ export class PostOriginalPosterInfoComponent implements OnInit {
       }
     });
   }
+
+  changeSeguidores(value: boolean): void {
+    if(this.info) {
+      if(!this.info.seguidores) {
+        this.info.seguidores = 0;
+      }
+
+      if(value) {
+        this.info.seguidores += 1;
+      } else {
+        this.info.seguidores -= 1;
+      }
+    }
+  }
 }

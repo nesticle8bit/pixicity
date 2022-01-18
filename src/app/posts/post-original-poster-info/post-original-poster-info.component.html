@@ -38,12 +38,6 @@
             </div>
         </div>
 
-        <a class="bgris unfollow_user_post" style="display: none;" *ngIf="currentUser?.usuario?.userName !== post.usuario?.userName">
-            Siguiendo
-        </a>
-
-        <a class="bverde follow_user_post" *ngIf="currentUser?.usuario?.userName !== post.usuario?.userName">
-            Seguir
-        </a>
+        <app-follow-button [userName]="post?.usuario?.userName" (followingChange)="changeSeguidores($event)"></app-follow-button>
     </div>
 </div>
