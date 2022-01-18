@@ -19,4 +19,6 @@ export abstract class IHttpSecurityService {
     abstract changePassword(obj: any): Observable<any>;
     abstract updateUsuario(usuario: any): Observable<any>;
     abstract getUsuarioInfo(userName: string): Observable<any>;
+    abstract seguirUsuario(usuario: any): Observable<any>;
+    abstract isFollowingTheUser(userName: any): Observable<any>;
 }

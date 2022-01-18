@@ -1366,11 +1366,29 @@ p.cupuntos {
     text-transform: uppercase;
     background: #01db59;
     border-radius: 2px;
+
+    &:hover {
+        background: #0bea71;
+        color: #fff;
+    }
 }
 
-.bverde:hover {
-    background: #0bea71;
+.bgris {
+    text-align: center;
+    height: 24px;
+    line-height: 24px;
+    display: block;
     color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: #aaa;
+    border-radius: 2px;
+
+    &:hover{
+        background:#c8c8c8;
+        color:#fff
+    }
 }
 
 .tyes {
