@@ -3,7 +3,13 @@
     <app-top-times-selector></app-top-times-selector>
 </h6>
 
-<table class="table table-striped last-posts">
+<section *ngIf="topPosts.length < 1">
+    <div class="alert alert-warning">
+        <b>😳 Aún no se han encontrado top de posts en Pixicity!</b>
+    </div>
+</section>
+
+<table class="table table-striped last-posts" *ngIf="topPosts.length > 0">
     <tbody>
         <tr *ngFor="let post of topPosts">
             <td>
