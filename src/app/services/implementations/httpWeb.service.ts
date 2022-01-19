@@ -10,6 +10,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { TopUserModel } from 'src/app/models/web/topUser.model';
+import { TopPostModel } from 'src/app/models/web/topPost.model';
 
 @Injectable()
 export class HttpWebService implements IHttpWebService {
@@ -23,6 +24,25 @@ export class HttpWebService implements IHttpWebService {
   getTopUsers(): Observable<TopUserModel[]> {
     return this.http
       .get<any>(`${environment.api}/api/tops/getTopUsers`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getTopPosts(): Observable<TopPostModel[]> {
+    return this.http
+      .get<any>(`${environment.api}/api/tops/getTopPosts`)
       .pipe(
         map((response: any) => {
           if (response.status === 200) {

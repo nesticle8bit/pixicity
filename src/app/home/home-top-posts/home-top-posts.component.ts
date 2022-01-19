@@ -1,20 +1,24 @@
+import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { Component, OnInit } from '@angular/core';
+import { TopPostModel } from 'src/app/models/web/topPost.model';
 
 @Component({
   selector: 'app-home-top-posts',
   templateUrl: './home-top-posts.component.html',
-  styleUrls: ['./home-top-posts.component.scss']
+  styleUrls: ['./home-top-posts.component.scss'],
 })
 export class HomeTopPostsComponent implements OnInit {
-  public topPosts: any = [];
+  public topPosts: TopPostModel[] = [];
 
-  constructor() { }
+  constructor(private httpWeb: IHttpWebService) {}
 
   ngOnInit(): void {
-    for (let index = 0; index < 6; index++) {
-      this.topPosts.push({
-        title: `#${index + 1} Lorem ipsum dolor sit amet, consectetur adipiscing elit.`
-      });
-    }
+    this.getTopPosts();
+  }
+
+  getTopPosts(): void {
+    this.httpWeb.getTopPosts().subscribe((value: TopPostModel[]) => {
+      this.topPosts = value;
+    });
   }
 }

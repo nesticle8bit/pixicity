@@ -5,9 +5,15 @@
 
 <table class="table table-striped last-posts">
     <tbody>
-        <tr *ngFor="let topPost of topPosts">
+        <tr *ngFor="let post of topPosts">
             <td>
-                <img src="/assets/images/categorias/music.png" /> {{topPost.title}}
+                <small>
+                    <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
+                        <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
+                            alt="{{post.categoria.nombre}}" />
+                        {{post.titulo | truncate:[65]}}
+                    </a>
+                </small>
             </td>
         </tr>
     </tbody>
