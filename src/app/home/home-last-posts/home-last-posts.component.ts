@@ -1,3 +1,4 @@
+import { ViewportScroller } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
@@ -6,7 +7,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 @Component({
   selector: 'app-home-last-posts',
   templateUrl: './home-last-posts.component.html',
-  styleUrls: ['./home-last-posts.component.scss']
+  styleUrls: ['./home-last-posts.component.scss'],
 })
 export class HomeLastPostsComponent implements OnInit {
   private _categoria: string = '';
@@ -28,8 +29,9 @@ export class HomeLastPostsComponent implements OnInit {
 
   constructor(
     public paginationService: PaginationService,
-    private postService: IHttpPostsService
-  ) { }
+    private postService: IHttpPostsService,
+    private viewPort: ViewportScroller
+  ) {}
 
   ngOnInit(): void {
     this.getStickyPosts();
@@ -62,5 +64,7 @@ export class HomeLastPostsComponent implements OnInit {
   pageChange(event: PageEvent): void {
     this.paginationService.change(event);
     this.getPosts(this.categoria);
+
+    this.viewPort.scrollToPosition([0, 0]);
   }
 }
