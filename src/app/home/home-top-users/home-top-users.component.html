@@ -3,24 +3,44 @@
     <app-top-times-selector></app-top-times-selector>
 </h6>
 
-<article class="top-user mb-3">
-    <a class="avatar-top" href="#">
-        <img alt="nesticle8bit" class="img-fluid"
-            src="https://avatars.githubusercontent.com/u/1715022?v=4" />
-        <h3>nesticle8bit</h3>
-        <p>13</p>
+<section *ngIf="topUsers.length < 1">
+    <div class="alert alert-warning">
+        <b>😳 Aún no se han encontrado top de usuarios en Pixicity!</b>
+    </div>
+</section>
+
+<article class="top-user mb-3" *ngIf="topUsers.length > 0">
+    <a class="avatar-top" [routerLink]="['/perfil/' + topUsers[0]?.userName]">
+        <img alt="nesticle8bit" class="img-fluid" src="https://avatars.githubusercontent.com/u/1715022?v=4" />
+        <h3>
+            {{topUsers[0]?.userName}}
+        </h3>
+        <p>{{topUsers[0]?.puntos}}</p>
     </a>
 
     <div id="sigueme">
-        <a class="gris" href="/registro/">Seguir</a>
+        <app-follow-button [userName]="topUsers[0]?.userName"></app-follow-button>
     </div>
 </article>
 
-<table class="table table-striped last-posts">
+<table class="table table-striped last-posts" *ngIf="topUsers.length > 0">
     <tbody>
-        <tr *ngFor="let topUser of topUsers; let first = first">
-            <td>
-                <fa-icon [icon]="['fas', 'user']"></fa-icon> {{topUser.user}}
+        <tr *ngFor="let topUser of topUsers; let first = first; let i = index">
+            <td class="top-list" *ngIf="!first">
+                <div class="row">
+                    <div class="col-2">
+                        <b>0{{i + 1}}.</b>
+                    </div>
+
+                    <div class="col-10">
+                        <h3>
+                            <a [routerLink]="['/perfil/' + topUser.userName]">
+                                {{topUser.userName}}
+                            </a>
+                        </h3>
+                        <p>{{topUser.puntos}} Puntos</p>
+                    </div>
+                </div>
             </td>
         </tr>
     </tbody>

@@ -456,6 +456,18 @@ a.ircielo {
 
     & a.gris, #ised a.gris {
         background: #c8c8c8;
+
+        &:hover {
+            background: #bebebe;
+        }
+    }
+    
+    a.verde, #ised a.verde{
+        background:#0cd769;
+
+        &:hover{
+            background:#00ab4e;
+        }
     }
 }
 
