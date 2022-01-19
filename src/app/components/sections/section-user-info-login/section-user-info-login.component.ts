@@ -18,6 +18,10 @@ export class SectionUserInfoLoginComponent implements OnInit {
   };
   public favoritos: any[] = [];
   public notificaciones: any[] = [];
+  public currentStats = {
+    notifications: 0,
+    messages: 0,
+  };
 
   constructor(
     private securityService: IHttpSecurityService,
@@ -30,6 +34,14 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getStats();
+  }
+
+  getStats(): void {
+    this.httpLogs.getStats().subscribe((value: any) => {
+      this.currentStats.notifications = value.notifications;
+      this.currentStats.messages = value.messages;
+    });
   }
 
   verNotificaciones(): void {
