@@ -50,9 +50,9 @@
                     </a>
                 </div>
 
-                <div class="alertas" id="alerta_mon" style="top: -10px;">
-                    <a title="4 notificaciones">
-                        <span>104</span>
+                <div class="alertas" id="alerta_mon" style="top: -10px;" *ngIf="currentStats.notifications > 0">
+                    <a title="{{currentStats.notifications}} notificaciones">
+                        <span>{{currentStats.notifications}}</span>
                     </a>
                 </div>
             </li>
@@ -69,9 +69,9 @@
                     <a href="#/mensajes/" class="ver-mas">Ver más</a>
                 </div> -->
 
-                <div class="alertas" id="alerta_mon" style="top: -10px;">
-                    <a title="4 notificaciones">
-                        <span>2</span>
+                <div class="alertas" id="alerta_mon" style="top: -10px;" *ngIf="currentStats.messages > 0">
+                    <a title="{{currentStats.messages}} mensajes">
+                        <span>{{currentStats.messages}}</span>
                     </a>
                 </div>
             </li>
