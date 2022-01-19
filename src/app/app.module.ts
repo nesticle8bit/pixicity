@@ -116,6 +116,8 @@ import { ProfileCommentsComponent } from './components/profile/profile-comments/
 import { ProfilePostsComponent } from './components/profile/profile-posts/profile-posts.component';
 import { PostOriginalPosterInfoComponent } from './posts/post-original-poster-info/post-original-poster-info.component';
 import { FollowButtonComponent } from './components/addons/follow-button/follow-button.component';
+import { IHttpWebService } from './services/interfaces/httpWeb.interface';
+import { HttpWebService } from './services/implementations/httpWeb.service';
 
 @NgModule({
   declarations: [
@@ -270,10 +272,11 @@ import { FollowButtonComponent } from './components/addons/follow-button/follow-
     { provide: IHttpFavoritosService, useClass: HttpFavoritosService },
     { provide: IHttpLogsService, useClass: HttpLogsService },
     { provide: IHttpDenunciasService, useClass: HttpDenunciasService },
+    { provide: IHttpWebService, useClass: HttpWebService },
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    
+
     { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
     { provide: LOCALE_ID, useValue: 'es' }
   ],

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { TopUserModel } from 'src/app/models/web/topUser.model';
+import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 
 @Component({
   selector: 'app-home-top-users',
@@ -6,16 +8,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home-top-users.component.scss']
 })
 export class HomeTopUsersComponent implements OnInit {
-  public topUsers: any = [];
+  public topUsers: TopUserModel[] = [];
 
-  constructor() { }
+  constructor(
+    private httpWeb: IHttpWebService
+  ) { }
 
   ngOnInit(): void {
-    for (let index = 0; index < 6; index++) {
-      this.topUsers.push({
-        user: `nesticle${index}bit`
-      });
-    }
+    this.getTopUsers();
+  }
+
+  getTopUsers(): void {
+    this.httpWeb.getTopUsers().subscribe((value: TopUserModel[]) => {
+      this.topUsers = value;
+    })
   }
 
 }

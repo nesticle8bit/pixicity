@@ -1,0 +1,26 @@
+.top-list {
+    & b {
+        color: #b5b5b5;
+        font-size: 30px;
+        float: left;
+        margin-right: 8px;
+        line-height: 30px;
+        font-weight: 400;
+    }
+
+    & h3 {
+        color: #545454;
+        font-size: 12px;
+        margin: 0;
+        font-weight: 700;
+        line-height: 1em;
+    }
+
+    & p {
+        color: #545454;
+        margin: 0;
+        font-size: 12px;
+        line-height: 15px;
+        font-weight: 700;
+    }
+}
