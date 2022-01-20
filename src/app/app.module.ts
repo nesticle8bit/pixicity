@@ -3,7 +3,10 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import {
+  FontAwesomeModule,
+  FaIconLibrary,
+} from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -50,7 +53,10 @@ import { DialogAfiliarseComponent } from './components/dialogs/dialog-afiliarse/
 import { IHttpGeneralService } from './services/interfaces/httpGeneral.interface';
 import { HttpGeneralService } from './services/implementations/httpGeneral.service';
 import { TopTimesSelectorComponent } from './components/sections/top-times-selector/top-times-selector.component';
-import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import {
+  MatPaginatorIntl,
+  MatPaginatorModule,
+} from '@angular/material/paginator';
 import { CategoriesSelectorComponent } from './components/sections/categories-selector/categories-selector.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -101,7 +107,7 @@ import { TablePaisesComponent } from './components/admin/control-de-contenido/pa
 import { EnVivoComponent } from './pages/en-vivo/en-vivo.component';
 import { DashboardSesionesComponent } from './components/admin/usuarios/sesiones/dashboard-sesiones/dashboard-sesiones.component';
 import { TableSesionesComponent } from './components/admin/usuarios/sesiones/table-sesiones/table-sesiones.component';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
 import { IHttpLogsService } from './services/interfaces/httpLogs.interface';
 import { HttpLogsService } from './services/implementations/httpLogs.service';
@@ -118,6 +124,9 @@ import { PostOriginalPosterInfoComponent } from './posts/post-original-poster-in
 import { FollowButtonComponent } from './components/addons/follow-button/follow-button.component';
 import { IHttpWebService } from './services/interfaces/httpWeb.interface';
 import { HttpWebService } from './services/implementations/httpWeb.service';
+import { PostRelatedPostsComponent } from './posts/post-related-posts/post-related-posts.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -188,7 +197,8 @@ import { HttpWebService } from './services/implementations/httpWeb.service';
     ProfileCommentsComponent,
     ProfilePostsComponent,
     PostOriginalPosterInfoComponent,
-    FollowButtonComponent
+    FollowButtonComponent,
+    PostRelatedPostsComponent,
   ],
   imports: [
     BrowserModule,
@@ -207,7 +217,7 @@ import { HttpWebService } from './services/implementations/httpWeb.service';
       positionClass: 'toast-top-right',
       progressBar: true,
       progressAnimation: 'increasing',
-      closeButton: true
+      closeButton: true,
     }),
     MatDialogModule,
     MatPaginatorModule,
@@ -244,7 +254,7 @@ import { HttpWebService } from './services/implementations/httpWeb.service';
         altText: 'Texto alternativo',
         title: 'Título',
         remove: 'Eliminar',
-        insertImage: 'Insertar imagen'
+        insertImage: 'Insertar imagen',
       },
     }),
     NgxUiLoaderModule,
@@ -253,15 +263,17 @@ import { HttpWebService } from './services/implementations/httpWeb.service';
       exclude: [
         `${environment.api}/api/favoritos/getFavoritos`,
         `${environment.api}/api/favoritos/getLastFavoritos`,
-        `${environment.api}/api/monitors/getLastNotificaciones`
-      ]
+        `${environment.api}/api/monitors/getLastNotificaciones`,
+      ],
     }),
     MatRadioModule,
     MatIconModule,
     MatTableModule,
     MatTabsModule,
     MatMenuModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatCardModule,
+    MatDividerModule,
   ],
   providers: [
     DisplayComponentService,
@@ -278,13 +290,10 @@ import { HttpWebService } from './services/implementations/httpWeb.service';
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
 
     { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
-    { provide: LOCALE_ID, useValue: 'es' }
+    { provide: LOCALE_ID, useValue: 'es' },
   ],
-  entryComponents: [
-    DialogAfiliarseComponent,
-    DialogPrevisualizarPostComponent
-  ],
-  bootstrap: [AppComponent]
+  entryComponents: [DialogAfiliarseComponent, DialogPrevisualizarPostComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule {
   constructor(library: FaIconLibrary, private ngSelectConfig: NgSelectConfig) {
