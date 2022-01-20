@@ -23,4 +23,5 @@ export abstract class IHttpPostsService {
     abstract randomPost(postId: number): Observable<any>;
     abstract addFavoritePost(postId: number): Observable<any>;
     abstract reportPost(report: any): Observable<any>;
+    abstract getRelatedPosts(postId: number): Observable<any>;
 }
