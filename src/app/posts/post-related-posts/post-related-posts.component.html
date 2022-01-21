@@ -4,15 +4,19 @@
     </div>
 </section>
 
+<main class="alert alert-warning" *ngIf="relatedPosts?.length < 1">
+    🎯 No se han encontrado posts relacionados
+</main>
+
 <main *ngIf="post && relatedPosts.length > 0">
     <article *ngFor="let post of relatedPosts" class="mb-3 cursor--pointer"
         [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
         <mat-card>
             <mat-card-subtitle>{{post.titulo}}</mat-card-subtitle>
             <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
-                    alt="{{post.categoria.nombre}}" />
-                {{post.categoria.nombre}}
-                <br class="mb-3">
+                alt="{{post.categoria.nombre}}" />
+            {{post.categoria.nombre}}
+            <br class="mb-3">
             <mat-divider inset></mat-divider>
             <br>
             <small>
@@ -20,7 +24,7 @@
             </small>
 
             <mat-card-content>
-                
+
             </mat-card-content>
         </mat-card>
     </article>
