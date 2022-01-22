@@ -22,4 +22,5 @@ export abstract class IHttpSecurityService {
     abstract seguirUsuario(usuario: any): Observable<any>;
     abstract isFollowingTheUser(userName: any): Observable<any>;
     abstract getFollowingUsersByUserId(id: number): Observable<any>;
+    abstract getFollowersByUserId(userId: number): Observable<any>;
 }

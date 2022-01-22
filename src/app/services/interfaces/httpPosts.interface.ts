@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 export abstract class IHttpPostsService {
     abstract getPosts(categoria: string): Observable<any>;
     abstract getPostsAdmin(search: any): Observable<any>;
+    abstract getPostsByUserId(userId: number): Observable<any>;
     abstract getPostsByLoggedUser(search: any): Observable<any>;
     abstract getStickyPosts(): Observable<any>;
     abstract getPostById(postId: number): Observable<any>;

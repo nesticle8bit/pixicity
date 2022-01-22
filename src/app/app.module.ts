@@ -129,6 +129,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { ProfileShoutsComponent } from './components/profile/profile-shouts/profile-shouts.component';
 import { ProfileFollowingComponent } from './components/profile/profile-following/profile-following.component';
+import { ProfileFollowersComponent } from './components/profile/profile-followers/profile-followers.component';
 
 @NgModule({
   declarations: [
@@ -203,6 +204,7 @@ import { ProfileFollowingComponent } from './components/profile/profile-followin
     PostRelatedPostsComponent,
     ProfileShoutsComponent,
     ProfileFollowingComponent,
+    ProfileFollowersComponent,
   ],
   imports: [
     BrowserModule,

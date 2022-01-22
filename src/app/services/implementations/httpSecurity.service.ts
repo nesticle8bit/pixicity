@@ -240,4 +240,19 @@ export class HttpSecurityService implements IHttpSecurityService {
                 }
             })).pipe(catchError(this.helper.errorHandler));
     }
+
+    getFollowersByUserId(userId: number): Observable<any> {
+        return this.http.get<any>(`${environment.api}/api/usuarios/getFollowersByUserId?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${userId}`)
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
+    }
 }

@@ -120,7 +120,7 @@
                                 <div class="col-12 col-sm-2">
                                     <p>
                                         <b>
-                                            <a href="#seguidores">
+                                            <a href="javascript:void(0)" (click)="currentSelection = 'followers'">
                                                 {{currentUser.seguidoresCount ? currentUser.seguidoresCount : 0}}
                                             </a>
                                         </b>
@@ -145,8 +145,9 @@
                     </div>
 
                     <app-profile-shouts *ngIf="currentSelection === 'shouts'"></app-profile-shouts>
-                    <app-profile-posts *ngIf="currentSelection === 'posts'"></app-profile-posts>
+                    <app-profile-posts [user]="currentUser" *ngIf="currentSelection === 'posts'"></app-profile-posts>
                     <app-profile-comments [user]="currentUser" *ngIf="currentSelection === 'comments'"></app-profile-comments>
+                    <app-profile-followers [user]="currentUser" *ngIf="currentSelection === 'followers'"></app-profile-followers>
                     <app-profile-following [user]="currentUser" *ngIf="currentSelection === 'following'"></app-profile-following>
                 </div>
             </div>

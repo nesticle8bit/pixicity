@@ -1,16 +1,16 @@
-<main class="alert alert-warning mt-3" *ngIf="followingUsers.length < 1">
+<main class="alert alert-warning mt-3" *ngIf="followers.length < 1">
     <strong>
-        👾 El usuario {{user.userName}} no ha comenzado a seguir usuarios en la comunidad
+        🐱‍💻 El usuario {{user.userName}} no tiene seguidores, pero pronto los tendrá.
     </strong>
 </main>
 
-<main class="mt-3" *ngIf="followingUsers.length > 0">
+<main class="mt-3" *ngIf="followers.length > 0">
     <h6 class="main-title my-2">
-        <span>Últimos comentarios creados</span>
+        <span>Últimos seguidores del usuario {{user.userName}}</span>
     </h6>
 
-    <main class="container-fluid" *ngIf="followingUsers.length > 0">
-        <section class="row user-list" *ngFor="let user of followingUsers">
+    <main class="container-fluid" *ngIf="followers.length > 0">
+        <section class="row user-list" *ngFor="let user of followers">
             <div class="col-12 col-sm-12 col-md-9">
                 <div class="d-flex">
                     <div class="flex-shrink-0">
@@ -41,6 +41,6 @@
 
     <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
         [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)"
-        *ngIf="followingUsers.length > 0">
+        *ngIf="followers.length > 0">
     </mat-paginator>
 </main>
