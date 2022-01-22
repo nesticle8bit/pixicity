@@ -108,7 +108,9 @@
                                 <div class="col-12 col-sm-2">
                                     <p>
                                         <b>
-                                            {{currentUser.comentariosCount ? currentUser.comentariosCount : 0}}
+                                            <a href="javascript:void(0)" (click)="currentSelection = 'comments'">
+                                                {{currentUser.comentariosCount ? currentUser.comentariosCount : 0}}
+                                            </a>
                                         </b>
 
                                         <span>Comentarios</span>
@@ -142,8 +144,9 @@
                         </div>
                     </div>
 
-                    <app-profile-comments *ngIf="currentSelection === 'shouts'"></app-profile-comments>
+                    <app-profile-shouts *ngIf="currentSelection === 'shouts'"></app-profile-shouts>
                     <app-profile-posts *ngIf="currentSelection === 'posts'"></app-profile-posts>
+                    <app-profile-comments *ngIf="currentSelection === 'comments'"></app-profile-comments>
                 </div>
             </div>
         </div>

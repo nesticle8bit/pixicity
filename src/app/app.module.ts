@@ -127,6 +127,7 @@ import { HttpWebService } from './services/implementations/httpWeb.service';
 import { PostRelatedPostsComponent } from './posts/post-related-posts/post-related-posts.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
+import { ProfileShoutsComponent } from './components/profile/profile-shouts/profile-shouts.component';
 
 @NgModule({
   declarations: [
@@ -199,6 +200,7 @@ import { MatDividerModule } from '@angular/material/divider';
     PostOriginalPosterInfoComponent,
     FollowButtonComponent,
     PostRelatedPostsComponent,
+    ProfileShoutsComponent,
   ],
   imports: [
     BrowserModule,
