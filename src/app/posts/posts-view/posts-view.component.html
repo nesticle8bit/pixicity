@@ -23,13 +23,13 @@
             
             <app-posts-meta [post]="post"></app-posts-meta>
 
-            <div class="interes">
+            <!-- <div class="interes">
                 <h3>También te puede interesar...</h3>
 
                 <div class="nada-gris">
                     No hay posts relacionados que te puedan interesar
                 </div>
-            </div>
+            </div> -->
 
             <app-post-comments *ngIf="post?.id" [post]="post"></app-post-comments>
         </div>

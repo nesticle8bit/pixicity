@@ -86,7 +86,7 @@
                                 <div class="col-12 col-sm-2">
                                     <p>
                                         <b>
-                                            10
+                                            {{currentUser.puntos ? currentUser.puntos : 0}}
                                         </b>
 
                                         <span>Puntos</span>
@@ -96,7 +96,9 @@
                                 <div class="col-12 col-sm-2">
                                     <p>
                                         <b>
-                                            <a href="javascript:void(0)" (click)="currentSelection = 'posts'">2</a>
+                                            <a href="javascript:void(0)" (click)="currentSelection = 'posts'">
+                                                {{currentUser.postsCount ? currentUser.postsCount : 0}}
+                                            </a>
                                         </b>
 
                                         <span>Posts</span>
@@ -106,7 +108,9 @@
                                 <div class="col-12 col-sm-2">
                                     <p>
                                         <b>
-                                            2
+                                            <a href="javascript:void(0)" (click)="currentSelection = 'comments'">
+                                                {{currentUser.comentariosCount ? currentUser.comentariosCount : 0}}
+                                            </a>
                                         </b>
 
                                         <span>Comentarios</span>
@@ -117,7 +121,7 @@
                                     <p>
                                         <b>
                                             <a href="#seguidores">
-                                                0
+                                                {{currentUser.seguidoresCount ? currentUser.seguidoresCount : 0}}
                                             </a>
                                         </b>
 
@@ -129,7 +133,7 @@
                                     <p>
                                         <b>
                                             <a href="#siguiendo">
-                                                1
+                                                {{currentUser.siguiendoCount ? currentUser.siguiendoCount : 0}}
                                             </a>
                                         </b>
 
@@ -140,8 +144,9 @@
                         </div>
                     </div>
 
-                    <app-profile-comments *ngIf="currentSelection === 'shouts'"></app-profile-comments>
+                    <app-profile-shouts *ngIf="currentSelection === 'shouts'"></app-profile-shouts>
                     <app-profile-posts *ngIf="currentSelection === 'posts'"></app-profile-posts>
+                    <app-profile-comments *ngIf="currentSelection === 'comments'"></app-profile-comments>
                 </div>
             </div>
         </div>
