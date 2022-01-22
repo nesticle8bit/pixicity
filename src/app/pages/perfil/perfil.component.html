@@ -146,7 +146,7 @@
 
                     <app-profile-shouts *ngIf="currentSelection === 'shouts'"></app-profile-shouts>
                     <app-profile-posts *ngIf="currentSelection === 'posts'"></app-profile-posts>
-                    <app-profile-comments *ngIf="currentSelection === 'comments'"></app-profile-comments>
+                    <app-profile-comments [user]="currentUser" *ngIf="currentSelection === 'comments'"></app-profile-comments>
                 </div>
             </div>
         </div>
