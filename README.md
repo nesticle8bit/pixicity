@@ -18,7 +18,7 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
 ![2021-08-01 10 03 40 localhost 0414b0d84b68](https://user-images.githubusercontent.com/1715022/127775700-30f67e69-47df-45b0-9916-707e59e536a8.png)
 
 ### 👀 ver post
-![2021-09-08 21 38 11 localhost 1515be033f44](https://user-images.githubusercontent.com/1715022/132613185-db91c2d1-a391-4a8f-b074-490fb5655289.png)
+![image](https://user-images.githubusercontent.com/1715022/150617233-ec0258d9-e0b2-4cfa-9f8a-6d9a509b904a.png)
 
 ### 🧮 Dashboard
 ![image](https://user-images.githubusercontent.com/1715022/137824467-cd826f59-0917-44c5-b12d-e6fac368c7f7.png)
