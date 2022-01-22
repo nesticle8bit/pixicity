@@ -37,7 +37,6 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
     - [x] Sistema de votaciones para los posts
     - [ ] Implementar el Seguir post para ser notificado en el monitor
     - [x] Sidebar del Post como Componente
-    - [ ] Seguir post
     - [x] Dialog para Denunciar los posts
     - [x] Agregar a favoritos
     - [ ] Desarrollar el 'meta' del post (visitantes, favoritos, seguidores)
@@ -58,10 +57,11 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
     - [ ] Implementar A2F para las cuentas de usuario
 
   - Perfil del usuario
-    - [ ] Crear componente para visualizar todos los perfiles de Usuario
-    - [ ] Crear sección para listar los posts publicados
+    - [x] Crear componente para visualizar todos los perfiles de usuario
+    - [x] Crear sección para listar los posts publicados por el usuario
     - [ ] Crear sección para recibir comentarios de diferentes personas
-    - [ ] Crear sección para visualizar los usuarios que sigue y seguidores
+    - [x] Crear sección para visualizar los usuarios que sigue y seguidores
+    - [x] Crear sección para visualizar los comentarios realizados por el usuario
     
   - Fotos
     - [ ] Implementar sección para subir fotos a la comunidad
