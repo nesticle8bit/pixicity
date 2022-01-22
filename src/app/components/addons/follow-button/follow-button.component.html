@@ -1,9 +1,9 @@
 <main *ngIf="currentUser?.usuario?.userName !== userName">
-    <a class="bgris unfollow_user_post" *ngIf="isFollowing" (click)="followUser(false)">
-        Siguiendo
+    <a class=" bgris unfollow_user_post" *ngIf="isFollowing" (click)="followUser(false)">
+        <fa-icon *ngIf="icon" [icon]="['fas', 'eye']"></fa-icon> Siguiendo
     </a>
 
     <a class="bverde follow_user_post" *ngIf="!isFollowing" (click)="followUser(!isFollowing)">
-        Seguir
+        <fa-icon *ngIf="icon" [icon]="['fas', 'eye']"></fa-icon> Seguir
     </a>
 </main>

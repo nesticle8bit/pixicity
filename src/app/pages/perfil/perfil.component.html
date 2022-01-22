@@ -132,7 +132,7 @@
                                 <div class="col-12 col-sm-2">
                                     <p>
                                         <b>
-                                            <a href="#siguiendo">
+                                            <a href="javascript:void(0)" (click)="currentSelection = 'following'">
                                                 {{currentUser.siguiendoCount ? currentUser.siguiendoCount : 0}}
                                             </a>
                                         </b>
@@ -147,6 +147,7 @@
                     <app-profile-shouts *ngIf="currentSelection === 'shouts'"></app-profile-shouts>
                     <app-profile-posts *ngIf="currentSelection === 'posts'"></app-profile-posts>
                     <app-profile-comments [user]="currentUser" *ngIf="currentSelection === 'comments'"></app-profile-comments>
+                    <app-profile-following [user]="currentUser" *ngIf="currentSelection === 'following'"></app-profile-following>
                 </div>
             </div>
         </div>
