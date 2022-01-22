@@ -7,6 +7,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./follow-button.component.scss'],
 })
 export class FollowButtonComponent implements OnInit {
+  @Input() icon: boolean = false;
+
   private _userName: any;
 
   @Input() set userName(value: any) {

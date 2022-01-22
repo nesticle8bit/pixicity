@@ -1,0 +1,46 @@
+<main class="alert alert-warning mt-3" *ngIf="followingUsers.length < 1">
+    <strong>
+        👻 El usuario {{user.userName}} no ha realizado ningún comentario en la comunidad.
+    </strong>
+</main>
+
+<main class="mt-3" *ngIf="followingUsers.length > 0">
+    <h6 class="main-title my-2">
+        <span>Últimos comentarios creados</span>
+    </h6>
+
+    <main class="container-fluid" *ngIf="followingUsers.length > 0">
+        <section class="row user-list" *ngFor="let user of followingUsers">
+            <div class="col-12 col-sm-12 col-md-9">
+                <div class="d-flex">
+                    <div class="flex-shrink-0">
+                        <img src="https://i.imgur.com/2Rs9AVg.jpeg" style="height: 40px;"
+                            class="img-profile img-fluid rounded mb-1" />
+                    </div>
+
+                    <div class="flex-grow-1 ms-3">
+                        <strong>
+                            <a [routerLink]="['/perfil/' + user.userName]">
+                                {{user.userName}}
+                            </a>
+                            <br>
+                            <small class="text-muted">
+                                <img src="/assets/images/flags/{{user.pais?.iso2}}.png" style="margin: -3px 10px 0 0;">
+                                <strong>Puntos</strong>: {{user.puntos}}
+                            </small>
+                        </strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-3">
+                <app-follow-button [userName]="user.userName" [icon]="true"></app-follow-button>
+            </div>
+        </section>
+    </main>
+
+    <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+        [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)"
+        *ngIf="followingUsers.length > 0">
+    </mat-paginator>
+</main>
