@@ -1,0 +1,49 @@
+<main class="alert alert-warning mt-3" *ngIf="comments.length < 1">
+    <strong>
+        👻 El usuario {{user.userName}} no ha realizado ningún comentario en la comunidad.
+    </strong>
+</main>
+
+<main class="mt-3" *ngIf="comments.length > 0">
+    <main class="table-responsive" *ngIf="comments.length > 0">
+        <table class="table table-sm table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Creado</th>
+                    <th>Post</th>
+                    <th>Comentario</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let comment of comments">
+                    <td>
+                        <span class="cursor--help" matTooltip="{{comment.fechaComentario}}">
+                            {{comment.fechaComentario | timeAgo}}
+                        </span>
+                    </td>
+
+                    <td>
+                        <a [routerLink]="['/posts/' + comment.post.categoria.seo + '/' + comment.post.id + '/' + comment.post.url]"
+                            title="{{comment.post.titulo}}">
+                            <img src="/assets/images/categorias/{{comment.post.categoria.icono}}"
+                                title="{{comment.post.categoria.nombre}}" alt="{{comment.post.categoria.nombre}}" />
+                            {{comment.post.titulo | truncate:[70]}}
+                        </a>
+                    </td>
+
+                    <td>
+                        <span class="cursor--help" matTooltip="{{comment.contenido}}">
+                            {{comment.contenido | truncate:[60]}}
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+        [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)"
+        *ngIf="comments.length > 0">
+    </mat-paginator>
+</main>

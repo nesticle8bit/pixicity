@@ -11,6 +11,7 @@ export abstract class IHttpPostsService {
     abstract savePost(post: any): Observable<any>;
     abstract updatePost(post: any): Observable<any>;
     abstract getComentarios(): Observable<any>;
+    abstract getComentariosByUserId(userId: number): Observable<any>;
     abstract getUltimosComentarios(): Observable<any>;
     abstract addComentario(comentario: any): Observable<any>;
     abstract getComentariosByPostId(postId: number): Observable<any>;
