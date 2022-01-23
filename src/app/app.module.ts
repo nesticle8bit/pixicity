@@ -130,6 +130,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { ProfileShoutsComponent } from './components/profile/profile-shouts/profile-shouts.component';
 import { ProfileFollowingComponent } from './components/profile/profile-following/profile-following.component';
 import { ProfileFollowersComponent } from './components/profile/profile-followers/profile-followers.component';
+import { PageProtocoloComponent } from './pages/page-protocolo/page-protocolo.component';
 
 @NgModule({
   declarations: [
@@ -205,6 +206,7 @@ import { ProfileFollowersComponent } from './components/profile/profile-follower
     ProfileShoutsComponent,
     ProfileFollowingComponent,
     ProfileFollowersComponent,
+    PageProtocoloComponent,
   ],
   imports: [
     BrowserModule,
