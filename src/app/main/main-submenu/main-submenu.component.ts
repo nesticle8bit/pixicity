@@ -1,3 +1,5 @@
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,7 +8,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main-submenu.component.scss'],
 })
 export class MainSubmenuComponent implements OnInit {
-  constructor() {}
+  public display!: DisplayComponentModel;
 
-  ngOnInit(): void {}
+  constructor(private displayService: DisplayComponentService) {}
+
+  ngOnInit(): void {
+    this.displayService
+      .getDisplay()
+      .subscribe((value: DisplayComponentModel) => {
+        this.display = value;
+      });
+  }
 }
