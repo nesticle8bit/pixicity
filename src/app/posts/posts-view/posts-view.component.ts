@@ -31,7 +31,7 @@ export class PostsViewComponent implements OnInit {
       };
     });
 
-    this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: false});
+    this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: false, submenu: false});
 
     this.currentUser = this.securityService.getCurrentUser();
   }

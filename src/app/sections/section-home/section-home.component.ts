@@ -13,7 +13,8 @@ export class SectionHomeComponent implements OnInit {
   public displayComponent: DisplayComponentModel = {
     mainMenu: true,
     footer: true,
-    searchFooter: true
+    searchFooter: true,
+    submenu: true
   };
 
   constructor(
