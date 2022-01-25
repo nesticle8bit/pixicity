@@ -4,7 +4,7 @@
     Este post no tiene comentarios, Sé el primero!
 </section>
 
-<div class="mx-auto" id="post-comentarios">
+<div class="mx-auto mt-2" id="post-comentarios">
     <div class="titular">
         <h3>
             <span>{{comentarios?.length}}</span> comentarios - {{post?.titulo}}
@@ -30,7 +30,8 @@
                         <div class="float-start">
                             <div class="floatL">
                                 <a href="#">{{comentario?.userName}}</a>
-                                <b class="badge bg-primary mx-1" *ngIf="comentario?.userName === post?.usuario?.userName">OP</b>
+                                <b class="badge bg-primary mx-1 cursor--help" matTooltip="Original Poster"
+                                [matTooltipPosition]="'right'" *ngIf="comentario?.userName === post?.usuario?.userName">OP</b>
                                 <span> {{comentario?.fechaComentario | timeAgo}}</span>
                             </div>
 
