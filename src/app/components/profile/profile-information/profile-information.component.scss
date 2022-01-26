@@ -1,0 +1,39 @@
+ul {
+    list-style: disc inside;
+}
+
+li {
+    font-size: 12px;
+    padding: 10px;
+    border-bottom: 1px dotted #CCC;
+
+    &.sep {
+        background: #F7F7F7;
+    }
+
+    & h4 {
+        color: #F60;
+        margin: 0;
+        font-style: italic;
+        font-family: Georgia;
+        font-size: 1.2em;
+        line-height: 1.25;
+    }
+
+    & label {
+        vertical-align: top;
+        color: #777;
+        display: inline-block;
+        font-weight: 700;
+        width: 170px;
+        padding: 2px;
+    }
+
+    & strong {
+        display: inline-block;
+        width: 400px;
+        color: #222;
+    }
+}
+
+

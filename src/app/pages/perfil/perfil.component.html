@@ -1,4 +1,4 @@
-<app-main-profile-menu></app-main-profile-menu>
+<app-main-profile-menu (selectedChanged)="selectedChanged($event)"></app-main-profile-menu>
 
 <div class="container container--home">
     <div class="row">
@@ -9,7 +9,8 @@
                         <div class="col-12 col-sm-2">
                             <div class="perfil-avatar">
                                 <a href="#">
-                                    <img alt="" src="https://i.imgur.com/2Rs9AVg.jpeg" style="height: 100px;" class="img-fluid rounded" />
+                                    <img alt="" src="https://i.imgur.com/2Rs9AVg.jpeg" style="height: 100px;"
+                                        class="img-fluid rounded" />
                                 </a>
                             </div>
                         </div>
@@ -60,7 +61,8 @@
                                         <p>
                                             <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                                             Se unió a <b>Pixicity!</b> <b id="espp"> el {{currentUser?.fechaRegistro |
-                                                date:'dd'}} de {{currentUser?.fechaRegistro | date:'MMMM'}} del {{currentUser?.fechaRegistro | date: 'YYYY'}}</b>
+                                                date:'dd'}} de {{currentUser?.fechaRegistro | date:'MMMM'}} del
+                                                {{currentUser?.fechaRegistro | date: 'YYYY'}}</b>
                                         </p>
                                     </div>
                                 </div>
@@ -151,6 +153,7 @@
                     <app-profile-comments [user]="currentUser" *ngIf="currentSelection === 'comments'"></app-profile-comments>
                     <app-profile-followers [user]="currentUser" *ngIf="currentSelection === 'followers'"></app-profile-followers>
                     <app-profile-following [user]="currentUser" *ngIf="currentSelection === 'following'"></app-profile-following>
+                    <app-profile-information [user]="currentUser" *ngIf="currentSelection === 'information'"></app-profile-information>
                 </div>
             </div>
         </div>

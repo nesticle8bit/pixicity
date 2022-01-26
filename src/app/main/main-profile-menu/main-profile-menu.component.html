@@ -2,43 +2,43 @@
     <div class="row">
         <div class="col-12">
             <ul class="list-unstyled list-inline mb-0 py-2">
-                <li class="list-inline-item sub-menu--item">
-                    <a [routerLink]="['buscar']">
+                <li (click)="select('actividad')" class="list-inline-item sub-menu--item">
+                    <a [ngClass]="{'selected': selected === 'actividad'}" href="javascript:void(0)">
                         <fa-icon [icon]="['fas', 'satellite-dish']" [fixedWidth]="true"></fa-icon>
                         <span style="margin-left: 2px;">Actividad</span>
                     </a>
                 </li>
 
-                <li class="list-inline-item sub-menu--item">
-                    <a [routerLink]="['/crear/post']">
+                <li (click)="select('information')" class="list-inline-item sub-menu--item">
+                    <a href="javascript:void(0)" [ngClass]="{'selected': selected === 'information'}">
                         <fa-icon [icon]="['fas', 'info-circle']" [fixedWidth]="true"></fa-icon>
                         <span style="margin-left: 2px;">Información</span>
                     </a>
                 </li>
 
-                <li class="list-inline-item sub-menu--item">
-                    <a [routerLink]="['/mod-history']">
+                <li (click)="select('shouts')" class="list-inline-item sub-menu--item">
+                    <a href="javascript:void(0)" [ngClass]="{'selected': selected === 'shouts'}">
                         <fa-icon [icon]="['fas', 'address-card']" [fixedWidth]="true"></fa-icon>
                         <span style="margin-left: 2px;">Mi</span>
                     </a>
                 </li>
 
-                <li class="list-inline-item sub-menu--item">
-                    <a [routerLink]="['/moderacion']">
+                <li (click)="select('posts')" class="list-inline-item sub-menu--item">
+                    <a href="javascript:void(0)" [ngClass]="{'selected': selected === 'posts'}">
                         <fa-icon [icon]="['fas', 'file-alt']" [fixedWidth]="true"></fa-icon>
                         <span style="margin-left: 2px;">Posts</span>
                     </a>
                 </li>
 
-                <li class="list-inline-item sub-menu--item">
-                    <a [routerLink]="['/moderacion']">
+                <li (click)="select('followers')" class="list-inline-item sub-menu--item">
+                    <a href="javascript:void(0)" [ngClass]="{'selected': selected === 'followers'}">
                         <fa-icon [icon]="['fas', 'users']" [fixedWidth]="true"></fa-icon>
                         <span style="margin-left: 2px;">Seguidores</span>
                     </a>
                 </li>
 
-                <li class="list-inline-item sub-menu--item">
-                    <a [routerLink]="['/moderacion']">
+                <li (click)="select('medals')" class="list-inline-item sub-menu--item">
+                    <a href="javascript:void(0)" [ngClass]="{'selected': selected === 'medals'}">
                         <fa-icon [icon]="['fas', 'medal']" [fixedWidth]="true"></fa-icon>
                         <span style="margin-left: 2px;">Medallas</span>
                     </a>

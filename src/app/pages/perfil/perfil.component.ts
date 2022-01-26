@@ -31,4 +31,8 @@ export class PerfilComponent implements OnInit {
       this.currentUser = value;
     });
   }
+
+  selectedChanged(value: string): void {
+    this.currentSelection = value;
+  }
 }

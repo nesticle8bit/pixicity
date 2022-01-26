@@ -132,6 +132,7 @@ import { ProfileFollowingComponent } from './components/profile/profile-followin
 import { ProfileFollowersComponent } from './components/profile/profile-followers/profile-followers.component';
 import { PageProtocoloComponent } from './pages/page-protocolo/page-protocolo.component';
 import { MainProfileMenuComponent } from './main/main-profile-menu/main-profile-menu.component';
+import { ProfileInformationComponent } from './components/profile/profile-information/profile-information.component';
 
 @NgModule({
   declarations: [
@@ -209,6 +210,7 @@ import { MainProfileMenuComponent } from './main/main-profile-menu/main-profile-
     ProfileFollowersComponent,
     PageProtocoloComponent,
     MainProfileMenuComponent,
+    ProfileInformationComponent,
   ],
   imports: [
     BrowserModule,
