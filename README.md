@@ -8,17 +8,20 @@ Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de la
 
 Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .net en el siguiente [enlace](https://github.com/NESTicle/pixicity-backend)
 
-### 📄 index
+### 📄 Index
 ![image](https://user-images.githubusercontent.com/1715022/127756473-ce9ae536-d7ad-42fb-9735-ea84ac09fbf0.png)
 
-### ➕ crear post
+### ➕ Crear post
 ![2021-08-01 10 02 47 localhost 1c16e2930f4a](https://user-images.githubusercontent.com/1715022/127775666-6b7a13a5-2a1e-442f-b1b0-4de0b46fe630.png)
 
-### 🔍️ buscador
+### 🙂 Perfil del Usuario
+![image](https://user-images.githubusercontent.com/1715022/151095147-2c04269d-e82a-417c-bed0-7fe15a919ea6.png)
+
+### 🔍️ Buscador
 ![2021-08-01 10 03 40 localhost 0414b0d84b68](https://user-images.githubusercontent.com/1715022/127775700-30f67e69-47df-45b0-9916-707e59e536a8.png)
 
-### 👀 ver post
-![image](https://user-images.githubusercontent.com/1715022/150617233-ec0258d9-e0b2-4cfa-9f8a-6d9a509b904a.png)
+### 👀 Ver post
+![image](https://user-images.githubusercontent.com/1715022/151095244-3ef898ec-2b4e-4ea8-abe5-ff9fd27aa9dd.png)
 
 ### 🧮 Dashboard
 ![image](https://user-images.githubusercontent.com/1715022/137824467-cd826f59-0917-44c5-b12d-e6fac368c7f7.png)
