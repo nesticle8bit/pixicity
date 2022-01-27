@@ -133,6 +133,7 @@ import { ProfileFollowersComponent } from './components/profile/profile-follower
 import { PageProtocoloComponent } from './pages/page-protocolo/page-protocolo.component';
 import { MainProfileMenuComponent } from './main/main-profile-menu/main-profile-menu.component';
 import { ProfileInformationComponent } from './components/profile/profile-information/profile-information.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -286,6 +287,7 @@ import { ProfileInformationComponent } from './components/profile/profile-inform
     MatSnackBarModule,
     MatCardModule,
     MatDividerModule,
+    MatExpansionModule,
   ],
   providers: [
     DisplayComponentService,
