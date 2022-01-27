@@ -1,0 +1,22 @@
+.accordion-bg .mat-expansion-panel-header-title,
+.accordion-bg .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.accordion-bg .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accordion-bg .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+// .accordion-panel {
+//   background-color: #ccc;
+// }
+
+.field {
+  border-bottom: 1px dotted #CCC;
+  padding: 15px 0;
+}

@@ -119,7 +119,434 @@
                                 <mat-icon>account_box</mat-icon>
                                 Perfil
                             </ng-template>
-                            Content 2
+
+                            <form [formGroup]="formGroupPerfil" (ngSubmit)="savePerfilInfo()" class="mt-3">
+                                <mat-accordion class="accordion-bg">
+                                    <mat-expansion-panel [expanded]="currentStep === 0" (opened)="currentStep = 0">
+                                        <mat-expansion-panel-header class="accordion-panel">
+                                            <mat-panel-title>
+                                                Más sobre mi
+                                            </mat-panel-title>
+    
+                                            <mat-panel-description>
+                                                &nbsp;
+                                                <mat-icon>account_circle</mat-icon>
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+    
+                                        <section class="container">
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Nombre completo
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <input type="text" formControlName="completeName" class="form-control" />
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Mensaje personal
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" formControlName="personalMessage" rows="3"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Sitio web
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <input type="url" class="form-control" formControlName="website" />
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Redes sociales
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <section class="mb-3">
+                                                        <label>
+                                                            <strong class="text-primary">
+                                                                <fa-icon [icon]="['fab', 'facebook']"></fa-icon> facebook.com/
+                                                            </strong>
+                                                        </label>
+                                                        <input type="text" class="form-control" formControlName="facebook" />
+                                                    </section>
+
+                                                    <section class="mb-3">
+                                                        <label>
+                                                            <strong class="text-info">
+                                                                <fa-icon [icon]="['fab', 'twitter']"></fa-icon> twitter.com/
+                                                            </strong>
+                                                        </label>
+                                                        <input type="text" class="form-control" formControlName="twitter" />
+                                                    </section>
+
+                                                    <section class="mb-3">
+                                                        <label>
+                                                            <strong class="text-danger">
+                                                                <fa-icon [icon]="['fab', 'youtube']"></fa-icon> youtube.com/
+                                                            </strong>
+                                                        </label>
+                                                        <input type="text" class="form-control" formControlName="youtube" />
+                                                    </section>
+
+                                                    <section>
+                                                        <label>
+                                                            <strong>
+                                                                <fa-icon [icon]="['fab', 'tiktok']"></fa-icon> tiktok.com/
+                                                            </strong>
+                                                        </label>
+                                                        <input type="text" class="form-control" formControlName="tiktok" />
+                                                    </section>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Me gustaría
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <p class="mb-1">
+                                                        <mat-checkbox formControlName="like1" color="primary">
+                                                            Hacer amigos
+                                                        </mat-checkbox>
+                                                    </p>
+
+                                                    <p class="mb-1">
+                                                        <mat-checkbox formControlName="like2" color="primary">
+                                                            Conocer gente con mis intereses
+                                                        </mat-checkbox>
+                                                    </p>
+
+                                                    <p class="mb-1">
+                                                        <mat-checkbox formControlName="like3" color="primary">
+                                                            Conocer gente para negocios
+                                                        </mat-checkbox>
+                                                    </p>
+
+                                                    <p class="mb-1">
+                                                        <mat-checkbox formControlName="like4" color="primary">
+                                                            Encontrar pareja
+                                                        </mat-checkbox>
+                                                    </p>
+
+                                                    <p class="mb-1">
+                                                        <mat-checkbox formControlName="like_all" color="primary">
+                                                            De todo
+                                                        </mat-checkbox>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Estado civil
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <ng-select formControlName="estadoCivil" [items]="estadosCiviles" appendTo="body"></ng-select>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Hijos
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <ng-select formControlName="hijos" [items]="hijos" appendTo="body"></ng-select>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Vivo con
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <ng-select formControlName="vivoCon" [items]="vivoCon" appendTo="body"></ng-select>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <div class="form-container--footer text-center">
+                                            <button class="me-2" mat-flat-button color="primary" type="submit">
+                                                <mat-icon>save</mat-icon> Guardar
+                                            </button>
+
+                                            <button mat-flat-button type="button" (click)="currentStep = currentStep + 1">
+                                                Siguiente <mat-icon>navigate_next</mat-icon>
+                                            </button>
+                                        </div>
+                                    </mat-expansion-panel>
+
+                                    <mat-expansion-panel class="mb-2" [expanded]="currentStep === 1" (opened)="currentStep = 1">
+                                        <mat-expansion-panel-header class="accordion-panel">
+                                            <mat-panel-title>
+                                                Como soy
+                                            </mat-panel-title>
+    
+                                            <mat-panel-description>
+                                                &nbsp;
+                                                <mat-icon>face</mat-icon>
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+
+                                        <section class="container">
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Mi altura (cm)
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <input type="text" formControlName="altura" class="form-control" />
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Mi peso (kg)
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <input type="text" formControlName="peso" class="form-control" />
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Color de cabello
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <ng-select formControlName="colorCabello" [items]="colorCabello" appendTo="body"></ng-select>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Color de ojos
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <ng-select formControlName="colorOjos" [items]="colorOjos" appendTo="body"></ng-select>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Complexión
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <ng-select formControlName="complexion" [items]="complexiones" appendTo="body"></ng-select>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Mi dieta es
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <ng-select formControlName="dieta" [items]="dietas" appendTo="body"></ng-select>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Tengo
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <p class="mb-1">
+                                                        <mat-checkbox formControlName="tatuajes" color="primary">
+                                                            Tatuajes
+                                                        </mat-checkbox>
+                                                    </p>
+
+                                                    <p class="mb-1">
+                                                        <mat-checkbox formControlName="piercings" color="primary">
+                                                            Piercings
+                                                        </mat-checkbox>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Fumo
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <ng-select formControlName="fumo" [items]="fumoAlcohol" appendTo="body"></ng-select>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Tomo alcohol
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <ng-select formControlName="alcohol" [items]="fumoAlcohol" appendTo="body"></ng-select>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <div class="form-container--footer text-center">
+                                            <button class="me-2" mat-flat-button color="primary" type="submit">
+                                                <mat-icon>save</mat-icon> Guardar
+                                            </button>
+
+                                            <button mat-flat-button type="button" (click)="currentStep = currentStep + 1">
+                                                Siguiente <mat-icon>navigate_next</mat-icon>
+                                            </button>
+                                        </div>
+                                    </mat-expansion-panel>
+
+                                    <mat-expansion-panel class="mb-2" [expanded]="currentStep === 2" (opened)="currentStep = 2">
+                                        <mat-expansion-panel-header class="accordion-panel">
+                                            <mat-panel-title>
+                                                Formación y trabajo
+                                            </mat-panel-title>
+    
+                                            <mat-panel-description>
+                                                &nbsp;
+                                                <mat-icon>work</mat-icon>
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+
+                                        <section class="container">
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Estudios
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <ng-select formControlName="estudios" [items]="estudios" appendTo="body"></ng-select>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Profesión
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" formControlName="profesion" />
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Empresa
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" formControlName="empresa" />
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Sector
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <ng-select formControlName="sector" [items]="sector" appendTo="body"></ng-select>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Intereses Profesionales
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" formControlName="interesesProfesionales" rows="3"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Habilidades Profesionales
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" formControlName="habilidadesProfesionales" rows="3"></textarea>
+                                                </div>
+                                            </div>
+
+                                        </section>
+
+                                        <div class="form-container--footer text-center">
+                                            <button class="me-2" mat-flat-button color="primary" type="submit">
+                                                <mat-icon>save</mat-icon> Guardar
+                                            </button>
+
+                                            <button mat-flat-button type="button" (click)="currentStep = currentStep + 1">
+                                                Siguiente <mat-icon>navigate_next</mat-icon>
+                                            </button>
+                                        </div>
+                                    </mat-expansion-panel>
+                                </mat-accordion>
+                            </form>
                         </mat-tab>
 
                         <mat-tab>
@@ -137,7 +564,8 @@
                                 Cambiar contraseña
                             </ng-template>
 
-                            <form [formGroup]="formGroupCambiarContrasena" (ngSubmit)="changePassword()" class="form-container">
+                            <form [formGroup]="formGroupCambiarContrasena" (ngSubmit)="changePassword()"
+                                class="form-container">
                                 <div class="container mx-auto" style="width: 80%;">
                                     <div class="row">
                                         <div class="col-12">
@@ -149,7 +577,8 @@
                                                 </div>
 
                                                 <div class="col-sm-9">
-                                                    <input type="password" formControlName="currentPassword" class="form-control" autocomplete="off" />
+                                                    <input type="password" formControlName="currentPassword"
+                                                        class="form-control" autocomplete="off" />
                                                 </div>
                                             </div>
 
@@ -161,7 +590,8 @@
                                                 </div>
 
                                                 <div class="col-sm-9">
-                                                    <input type="password" formControlName="newPassword" class="form-control" autocomplete="off" />
+                                                    <input type="password" formControlName="newPassword"
+                                                        class="form-control" autocomplete="off" />
                                                 </div>
                                             </div>
 
@@ -173,7 +603,8 @@
                                                 </div>
 
                                                 <div class="col-sm-9">
-                                                    <input type="password" formControlName="confirmPassword" class="form-control" autocomplete="off" />
+                                                    <input type="password" formControlName="confirmPassword"
+                                                        class="form-control" autocomplete="off" />
                                                     <mat-error *ngIf="formGroupCambiarContrasena.hasError('notSame')">
                                                         La contraseña debe coincidir
                                                     </mat-error>
@@ -184,7 +615,8 @@
                                 </div>
 
                                 <div class="form-container--footer text-center">
-                                    <button mat-flat-button color="primary" type="submit" [disabled]="formGroupCambiarContrasena.invalid">
+                                    <button mat-flat-button color="primary" type="submit"
+                                        [disabled]="formGroupCambiarContrasena.invalid">
                                         <mat-icon>vpn_key</mat-icon> Cambiar contraseña
                                     </button>
                                 </div>
