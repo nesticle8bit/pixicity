@@ -325,6 +325,57 @@ export class AccountComponent implements OnInit {
       },
       { validators: this.checkPasswords }
     );
+
+    this.getCurrentPerfilInfo();
+  }
+
+  getCurrentPerfilInfo(): void {
+    this.securityService.getCurrentPerfilInfo().subscribe((response: any) => {
+      if(response) {
+        this.formGroupPerfil.patchValue({
+          completeName: response.completeName,
+          personalMessage: response.personalMessage,
+          website: response.website,
+          facebook: response.facebook,
+          twitter: response.twitter,
+          tiktok: response.tiktok,
+          youtube: response.youtube,
+          like1: response.like1,
+          like2: response.like2,
+          like3: response.like3,
+          like4: response.like4,
+          like_all: response.like_All,
+          estadoCivil: response.estadoCivil,
+          hijos: response.hijos,
+          vivoCon: response.vivoCon,
+          altura: response.altura,
+          peso: response.peso,
+          colorCabello: response.colorCabello,
+          colorOjos: response.colorOjos,
+          complexion: response.complexion,
+          dieta: response.dieta,
+          tatuajes: response.tatuajes,
+          piercings: response.piercings,
+          fumo: response.fumo,
+          alcohol: response.alcohol,
+          estudios: response.estudios,
+          profesion: response.profesion,
+          empresa: response.empresa,
+          sector: response.sector,
+          interesesProfesionales: response.interesesProfesionales,
+          habilidadesProfesionales: response.habilidadesProfesionales,
+          misIntereses: response.misIntereses,
+          hobbies: response.hobbies,
+          seriesTV: response.seriesTV,
+          musicaFavorita: response.musicaFavorita,
+          deportesFavoritos: response.deportesFavoritos,
+          librosFavoritos: response.librosFavoritos,
+          peliculasFavoritas: response.peliculasFavoritas,
+          comidaFavorita: response.comidaFavorita,
+          misHeroesSon: response.misHeroesSon,
+        });
+      }
+    });
   }
 
   checkPasswords: ValidatorFn = (
@@ -437,7 +488,6 @@ export class AccountComponent implements OnInit {
 
   savePerfilInfo(): void {
     const perfil = Object.assign({}, this.formGroupPerfil.value);
-    console.log(perfil);
 
     this.securityService.savePerfilInfo(perfil).subscribe((response: any) => {
       if (response) {
