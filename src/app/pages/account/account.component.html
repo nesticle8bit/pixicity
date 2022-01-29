@@ -122,7 +122,7 @@
 
                             <form [formGroup]="formGroupPerfil" (ngSubmit)="savePerfilInfo()" class="mt-3">
                                 <mat-accordion class="accordion-bg">
-                                    <mat-expansion-panel [expanded]="currentStep === 0" (opened)="currentStep = 0">
+                                    <mat-expansion-panel class="mb-2" [expanded]="currentStep === 0" (opened)="currentStep = 0">
                                         <mat-expansion-panel-header class="accordion-panel">
                                             <mat-panel-title>
                                                 Más sobre mi
@@ -542,6 +542,136 @@
 
                                             <button mat-flat-button type="button" (click)="currentStep = currentStep + 1">
                                                 Siguiente <mat-icon>navigate_next</mat-icon>
+                                            </button>
+                                        </div>
+                                    </mat-expansion-panel>
+
+                                    <mat-expansion-panel class="mb-2" [expanded]="currentStep === 2" (opened)="currentStep = 2">
+                                        <mat-expansion-panel-header class="accordion-panel">
+                                            <mat-panel-title>
+                                                Intereses y preferencias
+                                            </mat-panel-title>
+    
+                                            <mat-panel-description>
+                                                &nbsp;
+                                                <mat-icon>games</mat-icon>
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+
+                                        <section class="container">
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Mis intereses
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" formControlName="misIntereses" rows="3"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Hobbies
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" formControlName="hobbies" rows="3"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Series de TV favoritas
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" formControlName="seriesTV" rows="3"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Música favorita
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" formControlName="musica" rows="3"></textarea>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Deportes y equipos favoritos
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" formControlName="deportes" rows="3"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Libros favoritos
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" formControlName="libros" rows="3"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Películas favoritas
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" formControlName="peliculas" rows="3"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Comida favorita
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" formControlName="comida" rows="3"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Mis héroes son
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" formControlName="heroes" rows="3"></textarea>
+                                                </div>
+                                            </div>
+
+                                        </section>
+
+                                        <div class="form-container--footer text-center">
+                                            <button class="me-2" mat-flat-button color="primary" type="submit">
+                                                <mat-icon>save</mat-icon> Guardar
                                             </button>
                                         </div>
                                     </mat-expansion-panel>
