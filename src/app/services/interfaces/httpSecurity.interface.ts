@@ -24,4 +24,5 @@ export abstract class IHttpSecurityService {
     abstract getFollowingUsersByUserId(id: number): Observable<any>;
     abstract getFollowersByUserId(userId: number): Observable<any>;
     abstract savePerfilInfo(perfil: any): Observable<any>;
+    abstract getCurrentPerfilInfo():Observable<any>;
 }
