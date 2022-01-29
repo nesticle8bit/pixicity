@@ -305,6 +305,16 @@ export class AccountComponent implements OnInit {
       sector: [''],
       interesesProfesionales: [''],
       habilidadesProfesionales: [''],
+
+      misIntereses: [''],
+      hobbies: [''],
+      seriesTV: [''],
+      musica: [''],
+      deportes: [''],
+      libros: [''],
+      peliculas: [''],
+      comida: [''],
+      heroes: [''],
     });
 
     this.formGroupCambiarContrasena = this.formBuilder.group(
