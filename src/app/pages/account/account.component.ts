@@ -309,12 +309,12 @@ export class AccountComponent implements OnInit {
       misIntereses: [''],
       hobbies: [''],
       seriesTV: [''],
-      musica: [''],
-      deportes: [''],
-      libros: [''],
-      peliculas: [''],
-      comida: [''],
-      heroes: [''],
+      musicaFavorita: [''],
+      deportesFavoritos: [''],
+      librosFavoritos: [''],
+      peliculasFavoritas: [''],
+      comidaFavorita: [''],
+      misHeroesSon: [''],
     });
 
     this.formGroupCambiarContrasena = this.formBuilder.group(
