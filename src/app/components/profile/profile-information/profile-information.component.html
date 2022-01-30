@@ -11,27 +11,59 @@
 
     <article *ngIf="userInformation">
         <ul>
-            <li><label>País</label><strong>Colombia</strong></li>
             <li>
-                <label>Sitio Web</label><strong>
-                    <a rel="nofollow" href="http://juliopoveda.com">
-                        http://juliopoveda.com
+                <label>País</label>
+                <strong>Colombia</strong>
+            </li>
+
+            <li *ngIf="perfil.website">
+                <label>Sitio Web</label>
+                <strong>
+                    <a rel="nofollow" href="{{perfil.website}}">
+                        {{perfil.website}}
                     </a>
                 </strong>
             </li>
-            <li><label>Es usuario desde</label><strong>23 de julio de 2021</strong></li>
+
+            <li *ngIf="perfil.fechaRegistro">
+                <label>Es usuario desde</label>
+                <strong>{{perfil?.fechaRegistro |
+                    date:'dd'}} de {{perfil?.fechaRegistro | date:'MMMM'}} del
+                    {{perfil?.fechaRegistro | date: 'YYYY'}}</strong>
+            </li>
+
             <li><label>Última vez activo</label><strong>Hace unos segundos</strong></li>
-            <li><label>Estudios</label><strong>Universitario completo</strong></li>
+            
+            <li *ngIf="perfil.estudios">
+                <label>Estudios</label>
+                <strong>{{perfil.estudios}}</strong>
+            </li>
+
             <li class="sep">
                 <h4>Idiomas</h4>
             </li>
-            <li><label>Español</label><strong>Nativo</strong></li>
-            <li><label>Inglés</label><strong>Intermedio</strong></li>
+            <li>
+                <label>Español</label>
+                <strong>Nativo</strong>
+            </li>
+            <li>
+                <label>Inglés</label>
+                <strong>Intermedio</strong>
+            </li>
+            
             <li class="sep">
                 <h4>Datos profesionales</h4>
             </li>
-            <li><label>Profesión</label><strong>Ing. de sistemas</strong></li>
-            <li><label>Empresa</label><strong>CDC</strong></li>
+
+            <li *ngIf="perfil.profesion">
+                <label>Profesión</label>
+                <strong>{{perfil.profesion}}</strong>
+            </li>
+
+            <li *ngIf="perfil.empresa">
+                <label>Empresa</label>
+                <strong>{{perfil.empresa}}</strong>
+            </li>
 
             <li class="sep">
                 <h4>Vida personal</h4>
