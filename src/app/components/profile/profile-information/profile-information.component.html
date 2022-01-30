@@ -16,16 +16,16 @@
                 <strong>Colombia</strong>
             </li>
 
-            <li *ngIf="perfil.website">
+            <li *ngIf="perfil?.website">
                 <label>Sitio Web</label>
                 <strong>
-                    <a rel="nofollow" href="{{perfil.website}}">
-                        {{perfil.website}}
+                    <a rel="nofollow" href="{{perfil?.website}}">
+                        {{perfil?.website}}
                     </a>
                 </strong>
             </li>
 
-            <li *ngIf="perfil.fechaRegistro">
+            <li *ngIf="perfil?.fechaRegistro">
                 <label>Es usuario desde</label>
                 <strong>{{perfil?.fechaRegistro |
                     date:'dd'}} de {{perfil?.fechaRegistro | date:'MMMM'}} del
@@ -34,9 +34,9 @@
 
             <li><label>Última vez activo</label><strong>Hace unos segundos</strong></li>
             
-            <li *ngIf="perfil.estudios">
+            <li *ngIf="perfil?.estudios">
                 <label>Estudios</label>
-                <strong>{{perfil.estudios}}</strong>
+                <strong>{{perfil?.estudios}}</strong>
             </li>
 
             <li class="sep">
@@ -51,51 +51,170 @@
                 <strong>Intermedio</strong>
             </li>
             
-            <li class="sep">
+            <li class="sep" *ngIf="perfil?.profesion || perfil?.empresa">
                 <h4>Datos profesionales</h4>
             </li>
 
-            <li *ngIf="perfil.profesion">
+            <li *ngIf="perfil?.profesion">
                 <label>Profesión</label>
-                <strong>{{perfil.profesion}}</strong>
+                <strong>{{perfil?.profesion}}</strong>
             </li>
 
-            <li *ngIf="perfil.empresa">
+            <li *ngIf="perfil?.empresa">
                 <label>Empresa</label>
-                <strong>{{perfil.empresa}}</strong>
+                <strong>{{perfil?.empresa}}</strong>
+            </li>
+
+            <li *ngIf="perfil?.interesesProfesionales">
+                <label>Intereses profesionales</label>
+                <strong>{{perfil?.interesesProfesionales}}</strong>
+            </li>
+
+            <li *ngIf="perfil?.habilidadesProfesionales">
+                <label>Habilidades profesionales</label>
+                <strong>{{perfil?.habilidadesProfesionales}}</strong>
             </li>
 
             <li class="sep">
                 <h4>Vida personal</h4>
             </li>
 
-            <li><label>Estado civil</label><strong>Con novio/a</strong></li>
-            <li><label>Hijos</label><strong>Algún día</strong></li>
-            <li><label>Vive con</label><strong>Con mi pareja</strong></li>
+            <li>
+                <label>Le gustaría</label>
+                <strong>
+                    <span *ngIf="perfil?.like1">Hacer amigos, </span>
+                    <span *ngIf="perfil?.like2">Conocer gente con mis intereses, </span>
+                    <span *ngIf="perfil?.like3">Conocer gente para negocios, </span>
+                    <span *ngIf="perfil?.like4">Encontrar pareja, </span>
+                    <span *ngIf="perfil?.like_All">De todo.</span>
+                </strong>
+            </li>
+
+            <li *ngIf="perfil?.estadoCivil">
+                <label>Estado civil</label>
+                <strong>{{perfil?.estadoCivil}}</strong>
+            </li>
+
+            <li *ngIf="perfil?.hijos">
+                <label>Hijos</label>
+                <strong>{{perfil?.hijos}}</strong>
+            </li>
+
+            <li *ngIf="perfil?.vivoCon">
+                <label>Vive con</label>
+                <strong>{{perfil?.vivoCon}}</strong>
+            </li>
+
             <li class="sep">
                 <h4>¿Cómo es?</h4>
             </li>
-            <li><label>Mide</label><strong>666 centimetros</strong></li>
-            <li><label>Pesa</label><strong>666 kilos</strong></li>
-            <li><label>Su pelo es</label><strong>Negro</strong></li>
-            <li><label>Sus ojos son</label><strong>Negros</strong></li>
-            <li><label>Su físico es</label><strong>Delgado/a</strong></li>
-            <li><label></label><strong>Tiene Tatuajes</strong></li>
-            <li><label></label><strong>No tiene Piercings</strong></li>
+
+            <li *ngIf="perfil?.altura">
+                <label>Mide</label>
+                <strong>{{perfil?.altura}} centimetros</strong>
+            </li>
+
+            <li *ngIf="perfil?.peso">
+                <label>Pesa</label>
+                <strong>{{perfil?.peso}} kilos</strong>
+            </li>
+
+            <li *ngIf="perfil?.colorCabello">
+                <label>Su pelo es</label>
+                <strong>{{perfil?.colorCabello}}</strong>
+            </li>
+
+            <li *ngIf="perfil?.colorOjos">
+                <label>Sus ojos son</label>
+                <strong>{{perfil?.colorOjos}}</strong>
+            </li>
+
+            <li *ngIf="perfil?.complexion">
+                <label>Su físico es</label>
+                <strong>{{perfil?.complexion}}</strong>
+            </li>
+            
+            <li>
+                <label></label>
+                <strong>{{perfil?.tatuajes ? 'Tiene' : 'No tiene'}} Tatuajes</strong>
+            </li>
+
+            <li>
+                <label></label>
+                <strong>{{perfil?.piercings ? 'Tiene' : 'No tiene'}} Piercings</strong>
+            </li>
 
             <li class="sep">
                 <h4>Habitos personales</h4>
             </li>
-            <li><label>Mantiene una dieta</label><strong>Orgánica</strong></li>
-            <li><label>Fuma</label><strong>No</strong></li>
-            <li><label>Toma alcohol</label><strong>Casualmente</strong></li>
+
+            <li>
+                <label>Mantiene una dieta</label>
+                <strong>{{perfil?.dieta}}</strong>
+            </li>
+
+            <li>
+                <label>Fuma</label>
+                <strong>{{perfil?.fumo}}</strong>
+            </li>
+            <li>
+                <label>Toma alcohol</label>
+                <strong>{{perfil?.alcohol}}</strong>
+            </li>
+
             <li class="sep">
                 <h4>Sus propias palabras</h4>
             </li>
 
-            <li><label>Música favorita</label><strong>Metal</strong></li>
+            <li>
+                <label>Intereses</label>
+                <strong>{{perfil?.intereses}}</strong>
+            </li>
+            
+            <li>
+                <label>Hobbies</label>
+                <strong>{{perfil?.hobbies}}</strong>
+            </li>
 
-            <li><label>Sus heroes son</label><strong>Batman</strong></li>
+            <li>
+                <label>Series de TV favoritas</label>
+                <strong>{{perfil?.seriesTV}}</strong>
+            </li>
+
+            <li>
+                <label>Música favorita</label>
+                <strong>{{perfil?.musicaFavorita}}</strong>
+            </li>
+
+            <li>
+                <label>Deportes y Equipos</label>
+                <strong>{{perfil?.musicaFavorita}}</strong>
+            </li>
+
+            <li>
+                <label>Libros favoritos</label>
+                <strong>{{perfil?.librosFavoritos}}</strong>
+            </li>
+
+            <li>
+                <label>Películas favoritas</label>
+                <strong>{{perfil?.peliculasFavoritas}}</strong>
+            </li>
+
+            <li>
+                <label>Comida favorita</label>
+                <strong>{{perfil?.comidaFavorita}}</strong>
+            </li>
+
+            <li>
+                <label>Comida favorita</label>
+                <strong>{{perfil?.comidaFavorita}}</strong>
+            </li>
+
+            <li>
+                <label>Sus heroes son</label>
+                <strong></strong>
+            </li>
         </ul>
     </article>
 </main>
