@@ -32,7 +32,10 @@
                     {{perfil?.fechaRegistro | date: 'YYYY'}}</strong>
             </li>
 
-            <li><label>Última vez activo</label><strong>Hace unos segundos</strong></li>
+            <!-- <li>
+                <label>Última vez activo</label>
+                <strong>Hace unos segundos</strong>
+            </li> -->
             
             <li *ngIf="perfil?.estudios">
                 <label>Estudios</label>
@@ -42,16 +45,18 @@
             <li class="sep">
                 <h4>Idiomas</h4>
             </li>
+
             <li>
                 <label>Español</label>
                 <strong>Nativo</strong>
             </li>
+
             <li>
                 <label>Inglés</label>
                 <strong>Intermedio</strong>
             </li>
             
-            <li class="sep" *ngIf="perfil?.profesion || perfil?.empresa">
+            <li class="sep">
                 <h4>Datos profesionales</h4>
             </li>
 
@@ -79,7 +84,7 @@
                 <h4>Vida personal</h4>
             </li>
 
-            <li>
+            <li *ngIf="perfil?.like1 || perfil?.like2 || perfil?.like3 || perfil?.like4 || perfil?.like_All">
                 <label>Le gustaría</label>
                 <strong>
                     <span *ngIf="perfil?.like1">Hacer amigos, </span>
@@ -148,16 +153,17 @@
                 <h4>Habitos personales</h4>
             </li>
 
-            <li>
+            <li *ngIf="perfil?.dieta">
                 <label>Mantiene una dieta</label>
                 <strong>{{perfil?.dieta}}</strong>
             </li>
 
-            <li>
+            <li *ngIf="perfil?.fumo">
                 <label>Fuma</label>
                 <strong>{{perfil?.fumo}}</strong>
             </li>
-            <li>
+
+            <li *ngIf="perfil?.alcohol">
                 <label>Toma alcohol</label>
                 <strong>{{perfil?.alcohol}}</strong>
             </li>
@@ -166,54 +172,49 @@
                 <h4>Sus propias palabras</h4>
             </li>
 
-            <li>
+            <li *ngIf="perfil?.intereses">
                 <label>Intereses</label>
                 <strong>{{perfil?.intereses}}</strong>
             </li>
             
-            <li>
+            <li *ngIf="perfil?.hobbies">
                 <label>Hobbies</label>
                 <strong>{{perfil?.hobbies}}</strong>
             </li>
 
-            <li>
+            <li *ngIf="perfil?.seriesTV">
                 <label>Series de TV favoritas</label>
                 <strong>{{perfil?.seriesTV}}</strong>
             </li>
 
-            <li>
+            <li *ngIf="perfil?.musicaFavorita">
                 <label>Música favorita</label>
                 <strong>{{perfil?.musicaFavorita}}</strong>
             </li>
 
-            <li>
+            <li *ngIf="perfil?.deportesFavoritos">
                 <label>Deportes y Equipos</label>
-                <strong>{{perfil?.musicaFavorita}}</strong>
+                <strong>{{perfil?.deportesFavoritos}}</strong>
             </li>
 
-            <li>
+            <li *ngIf="perfil?.librosFavoritos">
                 <label>Libros favoritos</label>
                 <strong>{{perfil?.librosFavoritos}}</strong>
             </li>
 
-            <li>
+            <li *ngIf="perfil?.peliculasFavoritas">
                 <label>Películas favoritas</label>
                 <strong>{{perfil?.peliculasFavoritas}}</strong>
             </li>
 
-            <li>
+            <li *ngIf="perfil?.comidaFavorita">
                 <label>Comida favorita</label>
                 <strong>{{perfil?.comidaFavorita}}</strong>
             </li>
 
-            <li>
-                <label>Comida favorita</label>
-                <strong>{{perfil?.comidaFavorita}}</strong>
-            </li>
-
-            <li>
+            <li *ngIf="perfil?.misHeroesSon">
                 <label>Sus heroes son</label>
-                <strong></strong>
+                <strong>{{perfil?.misHeroesSon}}</strong>
             </li>
         </ul>
     </article>
