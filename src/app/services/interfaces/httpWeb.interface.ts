@@ -7,4 +7,5 @@ import { TopPostModel } from 'src/app/models/web/topPost.model';
 export abstract class IHttpWebService {
   abstract getTopUsers(): Observable<TopUserModel[]>;
   abstract getTopPosts(): Observable<TopPostModel[]>;
+  abstract getAdsByType(type: string): Observable<string>;
 }
