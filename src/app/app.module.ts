@@ -66,8 +66,6 @@ import { IHttpPostsService } from './services/interfaces/httpPosts.interface';
 import { HttpPostsService } from './services/implementations/httpPosts.service';
 import { getSpanishPaginatorIntl } from './shared/helpers/getSpanishPaginatorIntl';
 import { TruncatePipe } from './shared/pipes/truncate.pipe';
-import { Ads160x600Component } from './components/ads/ads160x600/ads160x600.component';
-import { Ads300x250Component } from './components/ads/ads300x250/ads300x250.component';
 import { NgxEditorModule } from 'ngx-editor';
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
 import { TimeAgoPipe } from './shared/pipes/timeAgo.pipe';
@@ -134,6 +132,8 @@ import { PageProtocoloComponent } from './pages/page-protocolo/page-protocolo.co
 import { MainProfileMenuComponent } from './main/main-profile-menu/main-profile-menu.component';
 import { ProfileInformationComponent } from './components/profile/profile-information/profile-information.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { AdsByTypeComponent } from './components/ads/ads-by-type/ads-by-type.component';
+import { PerfilSocialMediaButtonsComponent } from './pages/perfil/perfil-social-media-buttons/perfil-social-media-buttons.component';
 
 @NgModule({
   declarations: [
@@ -167,8 +167,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
     CategoriesSelectorComponent,
     DialogPrevisualizarPostComponent,
     TruncatePipe,
-    Ads160x600Component,
-    Ads300x250Component,
     TimeAgoPipe,
     PostNotFoundComponent,
     PostCommentsComponent,
@@ -212,6 +210,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     PageProtocoloComponent,
     MainProfileMenuComponent,
     ProfileInformationComponent,
+    AdsByTypeComponent,
+    PerfilSocialMediaButtonsComponent,
   ],
   imports: [
     BrowserModule,

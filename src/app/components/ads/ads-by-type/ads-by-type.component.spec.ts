@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Ads300x250Component } from './ads300x250.component';
+import { AdsByTypeComponent } from './ads-by-type.component';
 
-describe('Ads300x250Component', () => {
-  let component: Ads300x250Component;
-  let fixture: ComponentFixture<Ads300x250Component>;
+describe('AdsByTypeComponent', () => {
+  let component: AdsByTypeComponent;
+  let fixture: ComponentFixture<AdsByTypeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ Ads300x250Component ]
+      declarations: [ AdsByTypeComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(Ads300x250Component);
+    fixture = TestBed.createComponent(AdsByTypeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
