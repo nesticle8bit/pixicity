@@ -133,6 +133,7 @@ import { MainProfileMenuComponent } from './main/main-profile-menu/main-profile-
 import { ProfileInformationComponent } from './components/profile/profile-information/profile-information.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AdsByTypeComponent } from './components/ads/ads-by-type/ads-by-type.component';
+import { PerfilSocialMediaButtonsComponent } from './pages/perfil/perfil-social-media-buttons/perfil-social-media-buttons.component';
 
 @NgModule({
   declarations: [
@@ -210,6 +211,7 @@ import { AdsByTypeComponent } from './components/ads/ads-by-type/ads-by-type.com
     MainProfileMenuComponent,
     ProfileInformationComponent,
     AdsByTypeComponent,
+    PerfilSocialMediaButtonsComponent,
   ],
   imports: [
     BrowserModule,
