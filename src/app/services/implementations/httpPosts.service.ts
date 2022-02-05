@@ -363,4 +363,29 @@ export class HttpPostsService implements IHttpPostsService {
                 }
             })).pipe(catchError(this.helper.errorHandler));
     }
+
+    searchPosts(value: any): Observable<any[]> {
+        let searchValues = '';
+
+        if(value.search) {
+            searchValues += `&search=${value.search}`;
+        }
+
+        if(value.searchType) {
+            searchValues += `&searchType=${value.searchType}`;
+        }
+
+        return this.http.get<any>(`${environment.api}/api/posts/searchPosts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${searchValues}`)
+            .pipe(map((response: any) => {
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errors.join(', ')
+                    });
+                }
+            })).pipe(catchError(this.helper.errorHandler));
+    }
 }

@@ -25,7 +25,7 @@
                                 </div>
 
                                 <div class="col-12 col-sm-12 col-md-2">
-                                    <button type="submit" mat-flat-button color="primary" class="btn-buscar verde">
+                                    <button type="button" (click)="search()" mat-flat-button color="primary" class="btn-buscar verde">
                                         <mat-icon>search</mat-icon> Buscar
                                     </button>
                                 </div>
@@ -34,12 +34,33 @@
 
                         <section>
                             <h6 class="main-title my-2">
-                                <span>Posts</span>
+                                <span style="padding-right: 0;">Posts</span>
 
-                                <small style="background: #fff; margin-top: -2px; color: #b4b4b4; padding-right: 7px;">
+                                <small style="background: #fff; color: #b4b4b4; padding: 0 4px; font-size: .65rem; position: relative; top: -2px;">
                                     (0)
                                 </small>
                             </h6>
+
+                            <article class="list-posts" *ngFor="let post of posts">
+                                <section>
+                                    <a class="post-title" [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
+                                        <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
+                                            alt="{{post.categoria.nombre}}" />
+                                        {{post.titulo}}
+                                    </a>
+
+                                    <p class="info">
+                                        {{post.fechaRegistro | timeAgo}} - En <a target="_blank" [routerLink]="['/posts/' + post.categoria.seo]">{{post.categoria.nombre}}</a> - Por <a target="_blank" [routerLink]="['/perfil/' + post.usuario.userName]">{{post.usuario.userName}}</a> - 1 Favoritos - {{post.comentarios}} {{post.comentarios === 1 ? 'Comentario' : 'Comentarios'}}
+                                    </p>
+                                </section>
+
+                                <section class="float-end">
+
+                                </section>
+                            </article>
+
+                            <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)">
+                            </mat-paginator>
                         </section>
                     </div>
                 </div>

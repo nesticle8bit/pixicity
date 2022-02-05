@@ -26,4 +26,5 @@ export abstract class IHttpPostsService {
     abstract addFavoritePost(postId: number): Observable<any>;
     abstract reportPost(report: any): Observable<any>;
     abstract getRelatedPosts(postId: number): Observable<any>;
+    abstract searchPosts(value: any): Observable<any[]>;
 }
