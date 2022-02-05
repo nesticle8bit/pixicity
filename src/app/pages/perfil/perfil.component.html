@@ -29,7 +29,7 @@
                                                 title="{{currentUser?.genero}}" class="mx-2" />
 
                                             <img *ngIf="currentUser?.pais"
-                                                src="/assets/images/flags/{{currentUser?.pais?.iso2.toLowerCase()}}.png"
+                                                src="/assets/images/flags/{{currentUser?.pais?.isO2?.toLowerCase()}}.png"
                                                 title="{{currentUser?.pais?.nombre}}">
                                         </div>
                                     </div>
@@ -163,7 +163,7 @@
             <app-perfil-user-medals [usuarioId]="currentUser.id"></app-perfil-user-medals>
             <app-perfil-user-followers [usuarioId]="currentUser.id"></app-perfil-user-followers>
 
-            <ads-by-type [type]="'300x250'"></ads-by-type>
+            <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
         </div>
     </div>
 </div>
