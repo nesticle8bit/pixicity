@@ -4,6 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 
 @Component({
@@ -20,12 +21,20 @@ export class SearchComponent implements OnInit {
 
   constructor(
     private parametrosService: IHttpParametrosService,
+    private displayService: DisplayComponentService,
     public paginationService: PaginationService,
     private postService: IHttpPostsService,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private router: Router
   ) {
+    this.displayService.setDisplay({
+      mainMenu: true,
+      footer: true,
+      searchFooter: true,
+      submenu: true,
+    });
+
     this.searchFormGroup = this.formBuilder.group({
       search: [''],
       searchType: ['titulo'],
