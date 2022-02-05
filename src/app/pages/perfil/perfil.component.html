@@ -160,8 +160,10 @@
 
         <div class="dotted-border--left col-12 col-sm-3 text-center">
             <app-perfil-social-media-buttons [usuarioId]="currentUser.id"></app-perfil-social-media-buttons>
+            <app-perfil-user-medals [usuarioId]="currentUser.id"></app-perfil-user-medals>
+            <app-perfil-user-followers [usuarioId]="currentUser.id"></app-perfil-user-followers>
 
-            <img class="noim" src="/assets/images/404graph.png">
+            <ads-by-type [type]="'300x250'"></ads-by-type>
         </div>
     </div>
 </div>
