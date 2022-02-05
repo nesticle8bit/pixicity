@@ -16,15 +16,15 @@
 
         <div class="row" *ngIf="isSearch">
             <div class="row">
-                <div class="col-12 col-sm-9">
+                <div class="col-12 col-sm-12 col-md-9">
                     <div class="ladoi">
                         <section class="text-center">
                             <div class="row">
-                                <div class="col-12 col-sm-12 col-md-10">
+                                <div class="col-12 col-sm-12 col-md-10 my-2">
                                     <input class="form-control" type="text" formControlName="search" />
                                 </div>
 
-                                <div class="col-12 col-sm-12 col-md-2">
+                                <div class="col-12 col-sm-12 col-md-2 my-2">
                                     <button type="button" (click)="search()" mat-flat-button color="primary" class="col-12">
                                         <mat-icon>search</mat-icon> Buscar
                                     </button>
@@ -42,8 +42,8 @@
                             </h6>
 
                             <ng-container *ngIf="posts.length > 0">
-                                <article class="list-posts" *ngFor="let post of posts">
-                                    <section>
+                                <article class="list-posts row" *ngFor="let post of posts">
+                                    <section class="col-12 col-sm-12 col-md-11">
                                         <a class="post-title" [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
                                             <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
                                                 alt="{{post.categoria.nombre}}" />
@@ -55,11 +55,15 @@
                                         </p>
                                     </section>
     
-                                    <section class="float-end">
-    
+                                    <section class="col-12 col-sm-12 col-md-1 text-end">
+                                        <span class="post-points d-block">
+                                            {{post.puntos}}
+                                        </span>
+
+                                        <p class="info mt-0">
+                                            Puntos
+                                        </p>
                                     </section>
-    
-                                    <div class="clearfix"></div>
                                 </article>
                             </ng-container>
 
@@ -74,7 +78,31 @@
                     </div>
                 </div>
 
-                <div class="dotted-border--left col-12 col-sm-3 text-center">
+                <div class="col-12 col-sm-12 col-md-3 dotted-border--left">
+                    <h6 class="main-title my-2">
+                        <span>Filtros</span>
+                    </h6>
+
+                    <section class="mb-3">
+                        <label class="control-label">
+                            <span class="required"></span> Categoría
+                        </label>
+    
+                        <ng-select [items]="categorias" bindLabel="nombre" bindValue="id" formControlName="categoriaId">
+                            <ng-template ng-label-tmp let-item="item">
+                                <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
+                                    [src]="'/assets/images/categorias/' + item.icono" />
+                                {{item.nombre}}
+                            </ng-template>
+    
+                            <ng-template ng-option-tmp let-item="item" let-index="index">
+                                <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
+                                    [src]="'/assets/images/categorias/' + item.icono" />
+                                {{item.nombre}}
+                            </ng-template>
+                        </ng-select>
+                    </section>
+
                     <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
                 </div>
             </div>
