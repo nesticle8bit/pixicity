@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
+import { PaginationService } from 'src/app/services/shared/pagination.service';
 
 @Component({
   selector: 'app-search',
@@ -10,22 +13,30 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class SearchComponent implements OnInit {
   public isSearch: boolean = false;
   public searchFormGroup: FormGroup;
+  public posts: any[] = [];
+  public totalCount: number = 0;
 
   constructor(
+    public paginationService: PaginationService,
+    private postService: IHttpPostsService,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private router: Router
   ) {
     this.searchFormGroup = this.formBuilder.group({
       search: [''],
+      searchType: ['titulo']
     });
 
     this.activatedRoute.paramMap.subscribe((route: any) => {
       if(route?.params?.query) {
         this.isSearch = true;
         this.searchFormGroup.patchValue({
-          search: route?.params?.query
+          search: route?.params?.query,
+          searchType: ['titulo']
         });
+
+        this.searchPosts();
       }
     });
   }
@@ -40,5 +51,19 @@ export class SearchComponent implements OnInit {
     }
 
     this.router.navigate([`/buscar/posts/${query}`]);
+  }
+
+  searchPosts(): void {
+    const search = Object.assign({}, this.searchFormGroup.value);
+
+    this.postService.searchPosts(search).subscribe((response: any) => {
+      this.posts = response.data;
+      this.totalCount = response.pagination.totalCount;
+    });
+  }
+
+  pageChange(event: PageEvent): void {
+    this.paginationService.change(event);
+    this.searchPosts();
   }
 }
