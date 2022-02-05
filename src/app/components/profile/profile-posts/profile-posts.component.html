@@ -3,9 +3,7 @@
 </h6>
 
 <main class="alert alert-warning" *ngIf="posts.length < 1">
-    <strong>
-        🐱‍💻 El usuario {{user.userName}} no ha publicado ningun post hasta el momento.
-    </strong>
+    🐱‍💻 <strong>El usuario {{user.userName}} no ha publicado ningun post hasta el momento.</strong>
 </main>
 
 <main class="table-responsive" *ngIf="posts.length > 0">

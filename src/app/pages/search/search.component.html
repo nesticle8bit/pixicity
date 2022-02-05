@@ -1,13 +1,53 @@
-<div class="container container--home">
-    <div class="row">
-        <div class="col-12 p-3">
-            <div class="buscador-home mx-auto p-5">
-                <span id="buscador" class="mb-4"></span>
-                <form class="pb-5" name="buscador" action="/buscar/posts/" method="GET">
-                    <input class="buscador" name="q" type="text" value="">
-                    <input type="submit" title="Buscar" value="Buscar" class="btn-buscar verde">
-                </form>
+<form [formGroup]="searchFormGroup" (ngSubmit)="search()">
+    <div class="container container--home">
+        <div class="row" *ngIf="!isSearch">
+            <div class="col-12 p-3">
+                <div class="buscador-home mx-auto p-5">
+                    <span id="buscador" class="mb-4"></span>
+
+                    <input class="buscador me-3" type="text" formControlName="search" />
+
+                    <button type="submit" mat-flat-button color="primary" class="btn-buscar verde">
+                        <mat-icon>search</mat-icon> Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="isSearch">
+            <div class="row">
+                <div class="col-12 col-sm-9">
+                    <div class="ladoi">
+                        <section class="text-center">
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-10">
+                                    <input class="form-control" type="text" formControlName="search" />
+                                </div>
+
+                                <div class="col-12 col-sm-12 col-md-2">
+                                    <button type="submit" mat-flat-button color="primary" class="btn-buscar verde">
+                                        <mat-icon>search</mat-icon> Buscar
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section>
+                            <h6 class="main-title my-2">
+                                <span>Posts</span>
+
+                                <small style="background: #fff; margin-top: -2px; color: #b4b4b4; padding-right: 7px;">
+                                    (0)
+                                </small>
+                            </h6>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="dotted-border--left col-12 col-sm-3 text-center">
+                    <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</form>

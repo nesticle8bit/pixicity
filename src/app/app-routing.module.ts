@@ -32,7 +32,10 @@ import { SectionHomeComponent } from './sections/section-home/section-home.compo
 const routes: Routes = [
   { path: '', component: SectionHomeComponent },
   { path: 'registro', component: RegisterComponent },
+  
   { path: 'buscar', component: SearchComponent },
+  { path: 'buscar/:tipo/:query', component: SearchComponent },
+  
   { path: 'login', component: LoginComponent },
   { path: 'cuenta', component: AccountComponent },
   { path: 'en-vivo', component: EnVivoComponent },

@@ -4,9 +4,7 @@
     </h6>
 
     <main class="alert alert-warning mt-3" *ngIf="!userInformation">
-        <strong>
-            👾 El usuario {{user.userName}} aún no ha llenado la información de esta sección.
-        </strong>
+        👾 <strong>El usuario {{user.userName}} aún no ha llenado la información de esta sección.</strong>
     </main>
 
     <article *ngIf="userInformation">
