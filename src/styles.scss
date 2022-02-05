@@ -2346,11 +2346,16 @@ span.ma_photo {
 }
 
 .list-posts {
-    padding: 5px;
+    padding: 10px 4px;
     border-bottom: 1px dotted #ccc;
 
     & .post-title {
         font-size: .8rem;
+    }
+
+    & .post-points {
+        font-size: 1.1rem;
+        font-weight: 600;
     }
 
     & .info {

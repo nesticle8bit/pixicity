@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 
@@ -15,8 +16,10 @@ export class SearchComponent implements OnInit {
   public searchFormGroup: FormGroup;
   public posts: any[] = [];
   public totalCount: number = 0;
+  public categorias: any[] = [];
 
   constructor(
+    private parametrosService: IHttpParametrosService,
     public paginationService: PaginationService,
     private postService: IHttpPostsService,
     private activatedRoute: ActivatedRoute,
@@ -25,7 +28,8 @@ export class SearchComponent implements OnInit {
   ) {
     this.searchFormGroup = this.formBuilder.group({
       search: [''],
-      searchType: ['titulo']
+      searchType: ['titulo'],
+      categoriaId: undefined
     });
 
     this.activatedRoute.paramMap.subscribe((route: any) => {
@@ -41,7 +45,15 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getCategorias();
+  }
+
+  getCategorias(): void {
+    this.parametrosService.getCategoriasDropdown().subscribe((value: any) => {
+      this.categorias = value;
+    });
+  }
 
   search(): void {
     const query = this.searchFormGroup.value.search;

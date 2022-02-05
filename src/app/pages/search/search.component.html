@@ -16,16 +16,16 @@
 
         <div class="row" *ngIf="isSearch">
             <div class="row">
-                <div class="col-12 col-sm-9">
+                <div class="col-12 col-sm-12 col-md-9">
                     <div class="ladoi">
                         <section class="text-center">
                             <div class="row">
-                                <div class="col-12 col-sm-12 col-md-10">
+                                <div class="col-12 col-sm-12 col-md-10 my-2">
                                     <input class="form-control" type="text" formControlName="search" />
                                 </div>
 
-                                <div class="col-12 col-sm-12 col-md-2">
-                                    <button type="button" (click)="search()" mat-flat-button color="primary" class="btn-buscar verde">
+                                <div class="col-12 col-sm-12 col-md-2 my-2">
+                                    <button type="button" (click)="search()" mat-flat-button color="primary" class="col-12">
                                         <mat-icon>search</mat-icon> Buscar
                                     </button>
                                 </div>
@@ -37,27 +37,40 @@
                                 <span style="padding-right: 0;">Posts</span>
 
                                 <small style="background: #fff; color: #b4b4b4; padding: 0 4px; font-size: .65rem; position: relative; top: -2px;">
-                                    (0)
+                                    ({{totalCount}})
                                 </small>
                             </h6>
 
-                            <article class="list-posts" *ngFor="let post of posts">
-                                <section>
-                                    <a class="post-title" [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
-                                        <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
-                                            alt="{{post.categoria.nombre}}" />
-                                        {{post.titulo}}
-                                    </a>
+                            <ng-container *ngIf="posts.length > 0">
+                                <article class="list-posts row" *ngFor="let post of posts">
+                                    <section class="col-12 col-sm-12 col-md-11">
+                                        <a class="post-title" [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
+                                            <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
+                                                alt="{{post.categoria.nombre}}" />
+                                            {{post.titulo}}
+                                        </a>
+    
+                                        <p class="info mt-1">
+                                            {{post.fechaRegistro | timeAgo}} - En <a target="_blank" [routerLink]="['/posts/' + post.categoria.seo]">{{post.categoria.nombre}}</a> - Por <a target="_blank" [routerLink]="['/perfil/' + post.usuario.userName]">{{post.usuario.userName}}</a> - 1 Favoritos - {{post.comentarios}} {{post.comentarios === 1 ? 'Comentario' : 'Comentarios'}}
+                                        </p>
+                                    </section>
+    
+                                    <section class="col-12 col-sm-12 col-md-1 text-end">
+                                        <span class="post-points d-block">
+                                            {{post.puntos}}
+                                        </span>
 
-                                    <p class="info">
-                                        {{post.fechaRegistro | timeAgo}} - En <a target="_blank" [routerLink]="['/posts/' + post.categoria.seo]">{{post.categoria.nombre}}</a> - Por <a target="_blank" [routerLink]="['/perfil/' + post.usuario.userName]">{{post.usuario.userName}}</a> - 1 Favoritos - {{post.comentarios}} {{post.comentarios === 1 ? 'Comentario' : 'Comentarios'}}
-                                    </p>
-                                </section>
+                                        <p class="info mt-0">
+                                            Puntos
+                                        </p>
+                                    </section>
+                                </article>
+                            </ng-container>
 
-                                <section class="float-end">
-
-                                </section>
-                            </article>
+                            <div class="alert alert-warning" *ngIf="posts.length < 1">
+                                <h3>👀 Oops... Nada por aquí</h3>
+                                <h6>No hay resultados para "{{searchFormGroup?.value?.search}}" intenta usando alguno de los filtros</h6>
+                            </div>
 
                             <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)">
                             </mat-paginator>
@@ -65,7 +78,31 @@
                     </div>
                 </div>
 
-                <div class="dotted-border--left col-12 col-sm-3 text-center">
+                <div class="col-12 col-sm-12 col-md-3 dotted-border--left">
+                    <h6 class="main-title my-2">
+                        <span>Filtros</span>
+                    </h6>
+
+                    <section class="mb-3">
+                        <label class="control-label">
+                            <span class="required"></span> Categoría
+                        </label>
+    
+                        <ng-select [items]="categorias" bindLabel="nombre" bindValue="id" formControlName="categoriaId">
+                            <ng-template ng-label-tmp let-item="item">
+                                <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
+                                    [src]="'/assets/images/categorias/' + item.icono" />
+                                {{item.nombre}}
+                            </ng-template>
+    
+                            <ng-template ng-option-tmp let-item="item" let-index="index">
+                                <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
+                                    [src]="'/assets/images/categorias/' + item.icono" />
+                                {{item.nombre}}
+                            </ng-template>
+                        </ng-select>
+                    </section>
+
                     <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
                 </div>
             </div>
