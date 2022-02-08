@@ -68,6 +68,7 @@ export class SearchComponent implements OnInit {
   }
 
   search(): void {
+    debugger
     const query = this.searchFormGroup.value.search;
     let categoria = this.searchFormGroup.value.categoria;
 
