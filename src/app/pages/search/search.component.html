@@ -25,7 +25,8 @@
                                 </div>
 
                                 <div class="col-12 col-sm-12 col-md-2 my-2">
-                                    <button type="button" (click)="search()" mat-flat-button color="primary" class="col-12">
+                                    <button type="button" (click)="search()" mat-flat-button color="primary" class="col-12"
+                                    [disabled]="!searchFormGroup.value.search">
                                         <mat-icon>search</mat-icon> Buscar
                                     </button>
                                 </div>
@@ -101,6 +102,28 @@
                                 {{item.nombre}}
                             </ng-template>
                         </ng-select>
+                    </section>
+
+                    <section class="mb-3">
+                        <label class="control-label">
+                            <span class="required"></span> Tipo
+                        </label>
+
+                        <br>
+                    
+                        <mat-radio-group class="mt-1" color="primary" formControlName="searchType">
+                            <mat-radio-button class="d-block my-3" value="titulo">
+                                Título
+                            </mat-radio-button>
+
+                            <mat-radio-button class="d-block my-3" value="contenido">
+                                Contenido
+                            </mat-radio-button>
+
+                            <mat-radio-button class="d-block my-3" value="tags">
+                                Tags
+                            </mat-radio-button>
+                        </mat-radio-group>
                     </section>
 
                     <section class="mb-3">
