@@ -40,6 +40,7 @@ export class SearchComponent implements OnInit {
       search: [''],
       searchType: ['titulo'],
       categoria: undefined,
+      autor: ''
     });
 
     this.activatedRoute.paramMap.subscribe((route: any) => {

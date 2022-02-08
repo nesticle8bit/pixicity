@@ -379,6 +379,10 @@ export class HttpPostsService implements IHttpPostsService {
             searchValues += `&categoriaId=${value.categoriaId}`;
         }
 
+        if(value.autor) {
+            searchValues += `&autor=${value.autor}`;
+        }
+
         return this.http.get<any>(`${environment.api}/api/posts/searchPosts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${searchValues}`)
             .pipe(map((response: any) => {
                 if (response.status === 200) {
