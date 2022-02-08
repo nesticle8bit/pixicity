@@ -88,16 +88,16 @@
                             <span class="required"></span> Categoría
                         </label>
     
-                        <ng-select [items]="categorias" bindLabel="nombre" bindValue="id" formControlName="categoriaId">
+                        <ng-select [items]="categorias" bindLabel="nombre" bindValue="seo" formControlName="categoria">
                             <ng-template ng-label-tmp let-item="item">
                                 <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
-                                    [src]="'/assets/images/categorias/' + item.icono" />
+                                    [src]="'/assets/images/categorias/' + item?.icono" />
                                 {{item.nombre}}
                             </ng-template>
     
                             <ng-template ng-option-tmp let-item="item" let-index="index">
                                 <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
-                                    [src]="'/assets/images/categorias/' + item.icono" />
+                                    [src]="'/assets/images/categorias/' + item?.icono" />
                                 {{item.nombre}}
                             </ng-template>
                         </ng-select>

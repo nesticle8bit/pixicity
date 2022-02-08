@@ -35,6 +35,7 @@ const routes: Routes = [
   
   { path: 'buscar', component: SearchComponent },
   { path: 'buscar/:tipo/:query', component: SearchComponent },
+  { path: 'buscar/:tipo/:query/:categoria', component: SearchComponent },
   
   { path: 'login', component: LoginComponent },
   { path: 'cuenta', component: AccountComponent },
