@@ -2368,3 +2368,50 @@ span.ma_photo {
         }
     }
 }
+
+.tops-container {
+    border: #f0d35b solid 1px;
+
+    & .card-header {
+        padding: 7px 10px;
+        border-top: 1px solid #FFF;
+        border-bottom: 1px solid #f0d35b;
+        background: #f9ecb7;
+        overflow: hidden;
+        border-radius: 3px 3px 0 0;
+
+        & h2 {
+            text-shadow: 0 1px 0 rgb(255 255 255 / 70%);
+            color: #b59130;
+            float: left;
+            padding-right: 10px;
+            margin: 0;
+            font-weight: 700;
+            font-size: 15px;
+        }
+    }
+}
+
+.i {
+    background: url('/assets/images/icons/i.png');
+    width: 16px;
+    height: 16px;
+    display: block;
+    float: left;
+}
+
+.i.moneda {
+    background-position: -85px -34px;
+}
+
+.i.estrella-plus {
+    background-position: -136px -34px;
+}
+
+.i.comentarios {
+    background-position: -17px -51px;
+}
+
+.i.personas {
+    background-position: -102px -86px;
+}
