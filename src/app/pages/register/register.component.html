@@ -1,5 +1,13 @@
 <div class="container container--home">
-    <div class="row">
+    <div class="row" *ngIf="configuracion?.disableUserRegistrationMessage">
+        <div class="col-12">
+            <div class="alert alert-warning">
+                <h4>{{configuracion?.disableUserRegistrationMessage}}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="!configuracion || !configuracion?.disableUserRegistration">
         <div class="col-12 col-sm-8 text-center main-login--head">
             <h1>Bienvenido a Pixicity!</h1>
 
