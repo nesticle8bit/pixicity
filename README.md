@@ -82,6 +82,7 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
     - [ ] Parametrizar las medallas desde el panel de administración
 
   - Panel Administrativo
+    - [ ] Desactivar el registro de usuarios desde el admin
     > TODO
 
 > Seguiré modificando el README cuando vaya teniendo ideas de las tareas que desarrollaré y que ya haya hecho.
