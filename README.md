@@ -9,7 +9,7 @@ Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de la
 Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .net en el siguiente [enlace](https://github.com/NESTicle/pixicity-backend)
 
 ### 📄 Index
-![image](https://user-images.githubusercontent.com/1715022/127756473-ce9ae536-d7ad-42fb-9735-ea84ac09fbf0.png)
+![image](https://user-images.githubusercontent.com/1715022/153257213-1981863a-c00a-4ed7-9c70-a198691f502f.png)
 
 ### ➕ Crear post
 ![2021-08-01 10 02 47 localhost 1c16e2930f4a](https://user-images.githubusercontent.com/1715022/127775666-6b7a13a5-2a1e-442f-b1b0-4de0b46fe630.png)
