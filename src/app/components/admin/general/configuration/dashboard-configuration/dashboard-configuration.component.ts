@@ -21,7 +21,9 @@ export class DashboardConfigurationComponent implements OnInit {
       url: [''],
       maintenanceMode: [false],
       maintenanceMessage: [''],
-      onlineUsersTime: ['']
+      onlineUsersTime: [''],
+      disableUserRegistration: [false],
+      disableUserRegistrationMessage: [''],
     });
   }
 
