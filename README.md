@@ -20,6 +20,9 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
 ### 🔍️ Buscador
 ![Buscador](https://user-images.githubusercontent.com/1715022/152900078-a5f5daf6-914c-45a0-96f6-ba04d653c13d.png)
 
+### 🏅 Top posts
+![image](https://user-images.githubusercontent.com/1715022/153098093-db1d3959-c795-48e4-9602-4b8672c25fa4.png)
+
 ### 👀 Ver post
 ![image](https://user-images.githubusercontent.com/1715022/151095244-3ef898ec-2b4e-4ea8-abe5-ff9fd27aa9dd.png)
 
