@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserModel } from 'src/app/models/security/user.model';
+import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,6 +14,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
+  public configuracion: any;
   public formGroup: FormGroup;
 
   public dias: any[] = [];
@@ -87,7 +90,8 @@ export class RegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private securityService: IHttpSecurityService,
     private parametrosService: IHttpParametrosService,
-    private router: Router
+    private generalService: IHttpGeneralService,
+    private router: Router,
   ) {
     this.formGroup = this.formBuilder.group({
       userName: ['', Validators.required],
@@ -113,6 +117,13 @@ export class RegisterComponent implements OnInit {
     }
 
     this.getPaises();
+    this.getConfiguracion();
+  }
+
+  getConfiguracion(): void {
+    this.generalService.getConfiguracion().subscribe((value: any) => {
+      this.configuracion = value;
+    });
   }
 
   getPaises(): void {
