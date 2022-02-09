@@ -1,4 +1,4 @@
-<section class="container container--home">
+<form class="container container--home" [formGroup]="formGroup">
     <div class="row">
         <div class="row">
             <div class="col-12 col-sm-12 col-md-9">
@@ -11,7 +11,27 @@
                             </div>
 
                             <div class="card-body">
+                                <ng-container *ngIf="topPosts?.postsConMasPuntos?.length > 0">
+                                    <article class="list-posts--zebra"
+                                        *ngFor="let post of topPosts?.postsConMasPuntos; let i = index">
+                                        <strong class="float-start">
+                                            {{i+1}}
+                                        </strong>
 
+                                        <div class="ms-2">
+                                            <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
+                                                title="{{post.titulo}}">
+                                                <img src="/assets/images/categorias/{{post.categoria.icono}}"
+                                                    title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" />
+                                                {{post.titulo}}
+                                            </a>
+                                        </div>
+                                    </article>
+                                </ng-container>
+
+                                <div class="alert alert-warning m-2" *ngIf="topPosts?.postsConMasPuntos?.length < 1">
+                                    😶‍🌫️ <strong>No hay nada por aquí</strong>
+                                </div>
                             </div>
                         </div>
 
@@ -22,7 +42,27 @@
                             </div>
 
                             <div class="card-body">
+                                <ng-container *ngIf="topPosts?.postsConMasComentarios?.length > 0">
+                                    <article class="list-posts--zebra"
+                                        *ngFor="let post of topPosts?.postsConMasComentarios; let i = index">
+                                        <strong class="float-start">
+                                            {{i+1}}
+                                        </strong>
 
+                                        <div class="ms-2">
+                                            <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
+                                                title="{{post.titulo}}">
+                                                <img src="/assets/images/categorias/{{post.categoria.icono}}"
+                                                    title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" />
+                                                {{post.titulo}}
+                                            </a>
+                                        </div>
+                                    </article>
+                                </ng-container>
+
+                                <div class="alert alert-warning m-2" *ngIf="topPosts?.postsConMasComentarios?.length < 1">
+                                    😶‍🌫️ <strong>No hay nada por aquí</strong>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -35,7 +75,27 @@
                             </div>
 
                             <div class="card-body">
+                                <ng-container *ngIf="topPosts?.postsConMasFavoritos?.length > 0">
+                                    <article class="list-posts--zebra"
+                                        *ngFor="let post of topPosts?.postsConMasFavoritos; let i = index">
+                                        <strong class="float-start">
+                                            {{i+1}}
+                                        </strong>
 
+                                        <div class="ms-2">
+                                            <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
+                                                title="{{post.titulo}}">
+                                                <img src="/assets/images/categorias/{{post.categoria.icono}}"
+                                                    title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" />
+                                                {{post.titulo}}
+                                            </a>
+                                        </div>
+                                    </article>
+                                </ng-container>
+
+                                <div class="alert alert-warning m-2" *ngIf="topPosts?.postsConMasFavoritos?.length < 1">
+                                    😶‍🌫️ <strong>No hay nada por aquí</strong>
+                                </div>
                             </div>
                         </div>
 
@@ -46,7 +106,27 @@
                             </div>
 
                             <div class="card-body">
+                                <ng-container *ngIf="topPosts?.postsConMasSeguidores?.length > 0">
+                                    <article class="list-posts--zebra"
+                                        *ngFor="let post of topPosts?.postsConMasSeguidores; let i = index">
+                                        <strong class="float-start">
+                                            {{i+1}}
+                                        </strong>
 
+                                        <div class="ms-2">
+                                            <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
+                                                title="{{post.titulo}}">
+                                                <img src="/assets/images/categorias/{{post.categoria.icono}}"
+                                                    title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" />
+                                                {{post.titulo}}
+                                            </a>
+                                        </div>
+                                    </article>
+                                </ng-container>
+
+                                <div class="alert alert-warning m-2" *ngIf="topPosts?.postsConMasSeguidores?.length < 1">
+                                    😶‍🌫️ <strong>No hay nada por aquí</strong>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -85,7 +165,7 @@
 
                     <br>
 
-                    <mat-radio-group class="mt-1" color="primary" formControlName="searchType">
+                    <mat-radio-group class="mt-1" color="primary" formControlName="date">
                         <mat-radio-button class="d-block my-3" value="ayer">
                             Ayer
                         </mat-radio-button>
@@ -112,4 +192,4 @@
             </div>
         </div>
     </div>
-</section>
+</form>

@@ -2369,8 +2369,31 @@ span.ma_photo {
     }
 }
 
+.list-posts--zebra {
+    padding: 7px 10px;
+    background: #f5f5f5;
+    border-top: #e0e0e0 1px solid;
+    font-size: .76rem;
+
+    &:nth-child(2n+1) {
+        border-top: #FFF 1px solid;
+        background: #FFF;
+    }
+
+    & strong {
+        width: 21px;
+        color: #8b8b8b;
+        font-weight: 700;
+        margin-right: 6px;
+    }
+}
+
 .tops-container {
     border: #f0d35b solid 1px;
+
+    & .card-body {
+        padding: 0;
+    }
 
     & .card-header {
         padding: 7px 10px;
