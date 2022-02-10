@@ -47,6 +47,11 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
     - [x] Agregar a favoritos
     - [ ] Desarrollar el 'meta' del post (visitantes, favoritos, seguidores)
     - [ ] Meta tags: buscar por tag al dar click a uno de ellos
+    
+  - Buscador
+    - [x] Buscar por una palabra
+    - [x] Buscar por categorías
+    - [ ] Buscar por tags
 
   - Comentarios
     - [x] Comentar los posts
@@ -61,6 +66,7 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
     - [x] Implementar el formulario para la creación de los usuarios
     - [ ] Implementar sistema de envío de correos para validar la cuenta de usuario
     - [ ] Implementar A2F para las cuentas de usuario
+    - [ ] Mejorar la vista del mensaje cuando se deshabilita el registro de usuarios
 
   - Perfil del usuario
     - [x] Crear componente para visualizar todos los perfiles de usuario
@@ -82,7 +88,7 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
     - [ ] Parametrizar las medallas desde el panel de administración
 
   - Panel Administrativo
-    - [ ] Desactivar el registro de usuarios desde el admin
+    - [x] Desactivar el registro de usuarios desde el admin
     > TODO
 
 > Seguiré modificando el README cuando vaya teniendo ideas de las tareas que desarrollaré y que ya haya hecho.
