@@ -33,6 +33,9 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
 
 ### To-Do
 
+  - Home
+    - [ ] Agregar el número de puntos que tiene el usuario en el top de usuarios
+
   - Posts 
     - [x] Lista de Posts consultando a la base de datos
     - [x] Sección para crear los Posts
