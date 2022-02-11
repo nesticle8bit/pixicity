@@ -2386,6 +2386,12 @@ span.ma_photo {
         font-weight: 700;
         margin-right: 6px;
     }
+
+    & .value {
+        font-weight: bold;
+        text-shadow: 0 1px 0 #fff;
+        color: #69900f;
+    }
 }
 
 .tops-container {

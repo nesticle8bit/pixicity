@@ -9,18 +9,22 @@
     </div>
 </section>
 
-<table class="table table-striped last-posts" *ngIf="topPosts.length > 0">
-    <tbody>
-        <tr *ngFor="let post of topPosts">
-            <td>
-                <small>
-                    <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
-                        <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
-                            alt="{{post.categoria.nombre}}" />
-                        {{post.titulo | truncate:[65]}}
-                    </a>
-                </small>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<ng-container *ngIf="topPosts.length > 0">
+    <article class="list-posts--zebra" *ngFor="let post of topPosts; let i = index">
+        <strong class="float-start">{{i + 1}}</strong>
+
+        <small>
+            <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
+                <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
+                    alt="{{post.categoria.nombre}}" />
+                {{post.titulo | truncate:[65]}}
+            </a>
+        </small>
+
+        <span class="float-end value">
+            {{post.puntos}}
+        </span>
+    </article>
+</ng-container>
+
+<br>
