@@ -10,12 +10,17 @@
 </section>
 
 <article class="top-user mb-3" *ngIf="topUsers.length > 0">
-    <a class="avatar-top" [routerLink]="['/perfil/' + topUsers[0]?.userName]">
+    <a class="avatar-top">
         <img alt="nesticle8bit" class="img-fluid" src="https://avatars.githubusercontent.com/u/1715022?v=4" />
-        <h3>
+        <h3 class="float-start" [routerLink]="['/perfil/' + topUsers[0]?.userName]">
             {{topUsers[0]?.userName}}
         </h3>
-        <p>{{topUsers[0]?.puntos}} Puntos</p>
+
+        <span class="float-end puntos">
+            {{topUsers[0]?.puntos}}
+        </span>
+
+        <div class="clearfix"></div>
     </a>
 
     <div id="sigueme">
@@ -23,25 +28,28 @@
     </div>
 </article>
 
-<table class="table table-striped last-posts" *ngIf="topUsers.length > 0">
-    <tbody>
-        <tr *ngFor="let topUser of topUsers; let first = first; let i = index">
-            <td class="top-list" *ngIf="!first">
-                <div class="row">
-                    <div class="col-2">
-                        <b>0{{i + 1}}.</b>
-                    </div>
+<ng-container class="last-posts" *ngIf="topUsers.length > 0">
+    <article class="list-posts--zebra" *ngFor="let topUser of topUsers; let first = first; let i = index">
+        <ng-container *ngIf="!first">
+            <strong class="float-start">{{i + 1}}</strong>
 
-                    <div class="col-10">
-                        <h3>
-                            <a [routerLink]="['/perfil/' + topUser.userName]">
-                                {{topUser.userName}}
-                            </a>
-                        </h3>
-                        <p>{{topUser.puntos}} Puntos</p>
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
+            <small>
+                <a [routerLink]="['/perfil/' + topUser.userName]">
+                    {{topUser.userName}}
+                </a>
+            </small>
+
+            <span class="float-end value">
+                {{topUser.puntos}}
+            </span>
+        </ng-container>
+    </article>
+
+    <div class="view-more-list">
+        <a [routerLink]="['/tops']">
+            Ver más
+        </a>
+    </div>
+
+    <br>
+</ng-container>

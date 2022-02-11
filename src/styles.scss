@@ -46,7 +46,7 @@ input:focus {
 
 header {
     &.main-header {
-        background: url('/assets/images/header-bg-2.jpg') top center repeat-x $main-color;
+        background: url('/assets/images/header-bg-1.jpg') top center repeat-x $main-color;
     }
 }
 
@@ -405,7 +405,7 @@ a.ircielo {
 
 .top-user {
     padding: 6px 0px;
-    height: 60px;
+    height: 48px;
     position: relative;
 
     & a.avatar-top {
@@ -423,8 +423,8 @@ a.ircielo {
     & .avatar-top h3 {
         color: #4ea1f0;
         font-size: 14px;
-        height: 15px;
-        line-height: .9em;
+        // height: 15px;
+        // line-height: .9em;
         margin: 0;
     }
 
@@ -2392,6 +2392,16 @@ span.ma_photo {
         text-shadow: 0 1px 0 #fff;
         color: #69900f;
     }
+}
+
+.view-more-list {
+    background: #eff9fd;
+    text-align: center;
+    -moz-border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+    border-top: 1px solid #cfe9f4;
+    padding: 3px;
 }
 
 .tops-container {
