@@ -1,4 +1,6 @@
-<div class="mb-3" [@enterAnimation] [ngClass]="{'nada-verde': savedToFavorites.type, 'nada-rojo': !savedToFavorites.type}" *ngIf="savedToFavorites.display">
+<div class="mb-3" [@enterAnimation]
+    [ngClass]="{'nada-verde': savedToFavorites.type, 'nada-rojo': !savedToFavorites.type}"
+    *ngIf="savedToFavorites.display">
     {{savedToFavorites.message}}
 </div>
 
@@ -10,9 +12,11 @@
 
 <section class="meta">
     <div class="metacentro">
-        <div class="float-start" id="puntos-agregados" [style.display]="addedPuntos ? 'block' : 'none'">Puntos agregados!</div>
+        <div class="float-start" id="puntos-agregados" [style.display]="addedPuntos ? 'block' : 'none'">Puntos
+            agregados!</div>
 
-        <div class="float-start" [style.display]="!addedPuntos ? 'block' : 'none'" *ngIf="currentUser?.usuario?.userName != post?.usuario?.userName">
+        <div class="float-start" [style.display]="!addedPuntos ? 'block' : 'none'"
+            *ngIf="currentUser?.usuario?.userName != post?.usuario?.userName">
             <div class="barpuntos">
                 <a href="javascript:void(0)" *ngFor="let punto of availablePuntos" (click)="votarPost(punto)">
                     {{punto}}
@@ -59,10 +63,22 @@
         </div>
 
         <div class="float-end py-2">
-            <div class="bulto"><strong>7</strong>Visitas</div>
-            <div class="bulto"><strong id="cfavori">1</strong>Favoritos</div>
-            <!-- <div class="bulto"><strong>0</strong>Medallas</div> -->
-            <div class="bulto"><strong id="cseguir">1</strong>Seguidores</div>
+            <div class="bulto">
+                <strong>7</strong>
+                Visitas
+            </div>
+
+            <div class="bulto">
+                <strong id="cfavori">
+                    {{post.favoritos}}
+                </strong>
+                Favoritos
+            </div>
+
+            <div class="bulto">
+                <strong id="cseguir">1</strong>
+                Seguidores
+            </div>
         </div>
     </div>
 </section>

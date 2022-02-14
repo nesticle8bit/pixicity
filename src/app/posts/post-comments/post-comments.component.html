@@ -1,10 +1,14 @@
 <a name="comentarios"></a>
 
-<section class="nada-amarillo mx-auto" style="width: 98%;" *ngIf="!comentarios || comentarios.length < 1">
+<section class="nada-amarillo mx-auto" style="width: 98%;" *ngIf="(!comentarios || comentarios.length < 1) && post?.sinComentarios === false">
     Este post no tiene comentarios, Sé el primero!
 </section>
 
-<div class="mx-auto mt-2" id="post-comentarios">
+<section class="nada-amarillo mx-auto" style="width: 98%;" *ngIf="post?.sinComentarios === true">
+    El post se encuentra cerrado y no se permiten comentarios.
+</section>
+
+<div class="mx-auto mt-2" id="post-comentarios" *ngIf="post?.sinComentarios === false">
     <div class="titular">
         <h3>
             <span>{{comentarios?.length}}</span> comentarios - {{post?.titulo}}
@@ -138,7 +142,7 @@
     </div>
 </div>
 
-<form class="miComentario mx-auto" [formGroup]="formGroup">
+<form class="miComentario mx-auto" [formGroup]="formGroup" *ngIf="post?.sinComentarios === false">
     <div id="procesando">
         <div id="post"></div>
     </div>
