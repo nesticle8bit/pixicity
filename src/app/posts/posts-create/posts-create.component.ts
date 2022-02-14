@@ -62,9 +62,9 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       contenido: ['', Validators.required],
       categoriaId: [undefined, Validators.required],
       etiquetas: [[], Validators.required],
-      quienPuedeComentar: [0, Validators.required],
-      esPrivado: [false, Validators.required],
-      smileys: [false, Validators.required]
+      esPrivado: false,
+      sinComentarios: false,
+      smileys: false
     });
 
     this.activatedRoute.paramMap.subscribe((value: any) => {
@@ -75,8 +75,6 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       }
 
       this.postService.getPostById(this.postId).subscribe((response: any) => {
-        console.log(response);
-
         if (this.currentUser.usuario.userName != response.usuario.userName) {
           Swal.fire({
             title: 'Error',
@@ -115,7 +113,8 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       categoriaId: post.categoria.id,
       etiquetas: etiquetas,
       smileys: post.smileys,
-      esPrivado: post.esPrivado
+      esPrivado: post.esPrivado,
+      sinComentarios: post.sinComentarios
     });
   }
 
