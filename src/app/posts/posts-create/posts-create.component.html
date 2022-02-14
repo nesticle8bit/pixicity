@@ -81,21 +81,27 @@
                         <section class="mb-3">
                             <mat-slide-toggle color="primary" formControlName="esPrivado">Post privado
                             </mat-slide-toggle>
-                            <br>
-                            <small class="text-muted">Podrán verlo sólo usuarios registrados</small>
+                            <br class="my-2">
+                            <small class="text-muted">Podrán verlo sólo usuarios registrados en Pixicity!</small>
                         </section>
 
                         <section class="mb-3">
+                            <mat-slide-toggle color="primary" formControlName="sinComentarios">Cerrar comentarios</mat-slide-toggle>
+                            <br>
+                            <small class="text-muted">Si tu post es polémico sería mejor que cierres los comentarios</small>
+                        </section>
+
+                        <!-- <section class="mb-3">
                             <mat-slide-toggle color="primary">Visitas recientes</mat-slide-toggle>
                             <br>
                             <small class="text-muted">Se veran los últimos visitantes</small>
-                        </section>
+                        </section> -->
 
-                        <section>
+                        <!-- <section>
                             <mat-slide-toggle color="primary" formControlName="smileys">Sin smileys</mat-slide-toggle>
                             <br>
                             <small class="text-muted">Si tu post no necesita smileys</small>
-                        </section>
+                        </section> -->
                     </main>
                 </section>
 
@@ -108,7 +114,7 @@
                         </div>
 
                         <div class="col-12 col-sm-6 text-end">
-                            <button type="submit" mat-flat-button class="mat-success" (click)="publicarPost()">
+                            <button type="submit" mat-flat-button class="mat-success" (click)="publicarPost()" [disabled]="formGroup.invalid">
                                 <span *ngIf="!postId">
                                     <fa-icon [icon]="['far', 'check-circle']"></fa-icon> Publicar
                                 </span>

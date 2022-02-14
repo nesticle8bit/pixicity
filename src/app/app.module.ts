@@ -136,6 +136,7 @@ import { AdsByTypeComponent } from './components/ads/ads-by-type/ads-by-type.com
 import { PerfilSocialMediaButtonsComponent } from './pages/perfil/perfil-social-media-buttons/perfil-social-media-buttons.component';
 import { PerfilUserMedalsComponent } from './pages/perfil/perfil-user-medals/perfil-user-medals.component';
 import { PerfilUserFollowersComponent } from './pages/perfil/perfil-user-followers/perfil-user-followers.component';
+import { TagsCloudComponent } from './components/addons/tags-cloud/tags-cloud.component';
 
 @NgModule({
   declarations: [
@@ -216,6 +217,7 @@ import { PerfilUserFollowersComponent } from './pages/perfil/perfil-user-followe
     PerfilSocialMediaButtonsComponent,
     PerfilUserMedalsComponent,
     PerfilUserFollowersComponent,
+    TagsCloudComponent,
   ],
   imports: [
     BrowserModule,
