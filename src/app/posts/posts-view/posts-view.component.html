@@ -5,7 +5,7 @@
                 <div class="col-12 col-sm-10">
                     <app-posts-breadcrumb [post]="post"></app-posts-breadcrumb>
                 </div>
-        
+
                 <div class="col-12 col-sm-2 text-end">
                     <app-posts-nav [post]="post"></app-posts-nav>
                 </div>
@@ -20,7 +20,6 @@
             </main>
 
             <app-posts-tags [post]="post"></app-posts-tags>
-            
             <app-posts-meta [post]="post"></app-posts-meta>
 
             <!-- <div class="interes">
@@ -41,14 +40,14 @@
                 <div class="titulaw">
                     <h2>Herramientas</h2>
                 </div>
-            
+
                 <div class="row">
                     <div class="col-12 col-sm-6 d-grid gap-2">
                         <button mat-flat-button color="primary" (click)="actualizarPost()">
                             <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon> Actualizar
                         </button>
                     </div>
-            
+
                     <div class="col-12 col-sm-6 d-grid gap-2 text-end" (click)="eliminarPost()">
                         <button mat-flat-button color="danger">
                             <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon> Eliminar
@@ -56,10 +55,12 @@
                     </div>
                 </div>
 
-                <div class="row mt-2" *ngIf="currentUser?.usuario?.rango === 'Administrador' || currentUser?.usuario?.rango === 'Moderador'">
+                <div class="row mt-2"
+                    *ngIf="currentUser?.usuario?.rango === 'Administrador' || currentUser?.usuario?.rango === 'Moderador'">
                     <div class="col-12 d-grid gap-2">
                         <button mat-flat-button color="warning" (click)="quitarSticky()">
-                            <fa-icon [icon]="['fas', 'thumbtack']"></fa-icon> <span *ngIf="post.sticky"> Quitar</span> <span *ngIf="!post.sticky"> Establecer</span> Sticky
+                            <fa-icon [icon]="['fas', 'thumbtack']"></fa-icon> <span *ngIf="post.sticky"> Quitar</span>
+                            <span *ngIf="!post.sticky"> Establecer</span> Sticky
                         </button>
                     </div>
                 </div>
