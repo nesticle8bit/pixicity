@@ -28,4 +28,5 @@ export abstract class IHttpPostsService {
     abstract getRelatedPosts(postId: number): Observable<any>;
     abstract searchPosts(value: any): Observable<any[]>;
     abstract getTopPosts(type: string): Observable<any>;
+    abstract seguirPost(postId: number): Observable<any>;
 }

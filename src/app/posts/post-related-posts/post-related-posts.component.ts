@@ -12,7 +12,7 @@ export class PostRelatedPostsComponent implements OnInit {
   @Input() set post(value: any) {
     this._post = value;
 
-    if (value) {
+    if (value && value.id) {
       this.getRelatedPosts(value.id);
     }
   }
