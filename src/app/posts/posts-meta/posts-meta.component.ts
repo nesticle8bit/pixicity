@@ -109,4 +109,18 @@ export class PostsMetaComponent implements OnInit {
       data: this.post,
     });
   }
+
+  seguirPost(): void {
+    const postId = this.post.id;
+
+    if(!postId) {
+      return;
+    }
+
+    this.postService.seguirPost(postId).subscribe((value: any) => {
+      if(value) {
+        this.post.seguirPost = !this.post.seguirPost;
+      }
+    });
+  }
 }

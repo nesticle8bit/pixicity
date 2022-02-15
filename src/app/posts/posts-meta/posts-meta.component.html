@@ -49,14 +49,14 @@
                 </a>
             </li>
 
-            <li style="display: none;">
-                <a class="unfollow_post">
+            <li *ngIf="post?.seguirPost">
+                <a href="javascript:void(0)" class="unfollow_post" (click)="seguirPost()">
                     <fa-icon [icon]="['fas', 'eye']" class="dejar-seguir"></fa-icon> Dejar de seguir
                 </a>
             </li>
 
-            <li>
-                <a class="follow_post">
+            <li *ngIf="!post?.seguirPost">
+                <a href="javascript:void(0)" class="follow_post" (click)="seguirPost()">
                     <fa-icon [icon]="['fas', 'ban']" class="seguir"></fa-icon> Seguir Post
                 </a>
             </li>
