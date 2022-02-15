@@ -24,11 +24,11 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   public quienPuedeComentar: any = [
     {
       label: 'Todos pueden comentar',
-      value: 0
+      value: false
     },
     {
       label: 'Nadie puede comentar',
-      value: 1
+      value: true
     }
   ];
   public currentUser: JwtUserModel;
