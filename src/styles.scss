@@ -1072,6 +1072,9 @@ a.nick span {
 .esees {
     overflow: hidden;
     margin: 0 0 10px;
+    background: #fff;
+    padding: 0.6rem;
+    border-radius: 3px;
 }
 
 .letres {
@@ -1275,8 +1278,8 @@ p.cupuntos {
 }
 
 .eites {
-    width: 120px;
-    height: 120px;
+    width: 97px;
+    height: 97px;
     float: left;
     margin-right: 10px;
 }
@@ -1284,8 +1287,6 @@ p.cupuntos {
 .eites a.nomis {
     display: block;
     clear: both;
-    height: 120px;
-    width: 120px;
 }
 
 .eites a.nomis img {
