@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
@@ -14,6 +15,7 @@ export class TopsComponent implements OnInit {
   public topPosts: any;
 
   constructor(
+    private httpParametrosService: IHttpParametrosService,
     private displayService: DisplayComponentService,
     private postService: IHttpPostsService,
     private formBuilder: FormBuilder
@@ -27,18 +29,28 @@ export class TopsComponent implements OnInit {
 
     this.formGroup = this.formBuilder.group({
       date: 'all',
-      categoria: ''
+      categoria: '',
     });
   }
 
   ngOnInit(): void {
     this.getTopPosts();
+    this.getCategorias();
   }
 
   getTopPosts(): void {
-    this.postService.getTopPosts(this.formGroup.value.date).subscribe((response: any) => {
-      console.log(response);
-      this.topPosts = response;
-    });
+    this.postService
+      .getTopPosts(this.formGroup.value.date)
+      .subscribe((response: any) => {
+        this.topPosts = response;
+      });
+  }
+
+  getCategorias(): void {
+    this.httpParametrosService
+      .getCategoriasDropdown()
+      .subscribe((values: any) => {
+        this.categorias = values;
+      });
   }
 }
