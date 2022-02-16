@@ -23,7 +23,7 @@
                                                 title="{{post.titulo}}">
                                                 <img src="/assets/images/categorias/{{post.categoria.icono}}"
                                                     title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" />
-                                                {{post.titulo}}
+                                                {{post.titulo | truncate:[65]}}
                                             </a>
                                         </div>
                                     </article>
@@ -54,13 +54,14 @@
                                                 title="{{post.titulo}}">
                                                 <img src="/assets/images/categorias/{{post.categoria.icono}}"
                                                     title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" />
-                                                {{post.titulo}}
+                                                {{post.titulo | truncate:[65]}}
                                             </a>
                                         </div>
                                     </article>
                                 </ng-container>
 
-                                <div class="alert alert-warning m-2" *ngIf="topPosts?.postsConMasComentarios?.length < 1">
+                                <div class="alert alert-warning m-2"
+                                    *ngIf="topPosts?.postsConMasComentarios?.length < 1">
                                     😶‍🌫️ <strong>No hay nada por aquí</strong>
                                 </div>
                             </div>
@@ -87,7 +88,7 @@
                                                 title="{{post.titulo}}">
                                                 <img src="/assets/images/categorias/{{post.categoria.icono}}"
                                                     title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" />
-                                                {{post.titulo}}
+                                                {{post.titulo | truncate:[65]}}
                                             </a>
                                         </div>
                                     </article>
@@ -118,13 +119,14 @@
                                                 title="{{post.titulo}}">
                                                 <img src="/assets/images/categorias/{{post.categoria.icono}}"
                                                     title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" />
-                                                {{post.titulo}}
+                                                {{post.titulo | truncate:[65]}}
                                             </a>
                                         </div>
                                     </article>
                                 </ng-container>
 
-                                <div class="alert alert-warning m-2" *ngIf="topPosts?.postsConMasSeguidores?.length < 1">
+                                <div class="alert alert-warning m-2"
+                                    *ngIf="topPosts?.postsConMasSeguidores?.length < 1">
                                     😶‍🌫️ <strong>No hay nada por aquí</strong>
                                 </div>
                             </div>
