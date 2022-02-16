@@ -4,6 +4,15 @@
 	text-shadow: 0 1px 0 #FFF;
 	text-align: center;
 	font-size: 12px;
+
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+
+	& > div {
+		padding: 0.125rem 0.25rem;
+	}
 }
 
 .tag-size1 {
