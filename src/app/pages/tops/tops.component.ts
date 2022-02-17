@@ -38,9 +38,9 @@ export class TopsComponent implements OnInit {
     this.getCategorias();
   }
 
-  getTopPosts(): void {
+  getTopPosts(date: string = ''): void {
     this.postService
-      .getTopPosts(this.formGroup.value.date)
+      .getTopPosts(date)
       .subscribe((response: any) => {
         this.topPosts = response;
       });
