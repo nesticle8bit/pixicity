@@ -168,23 +168,23 @@
                     <br>
 
                     <mat-radio-group class="mt-1" color="primary" formControlName="date">
-                        <mat-radio-button class="d-block my-3" value="ayer">
+                        <mat-radio-button class="d-block my-3" value="ayer" (click)="getTopPosts('ayer')">
                             Ayer
                         </mat-radio-button>
 
-                        <mat-radio-button class="d-block my-3" value="hoy">
+                        <mat-radio-button class="d-block my-3" value="hoy" (click)="getTopPosts('hoy')">
                             Hoy
                         </mat-radio-button>
 
-                        <mat-radio-button class="d-block my-3" value="ultimos7dias">
+                        <mat-radio-button class="d-block my-3" value="ultimos7dias" (click)="getTopPosts('ultimos7dias')">
                             Últimos 7 días
                         </mat-radio-button>
 
-                        <mat-radio-button class="d-block my-3" value="mes">
+                        <mat-radio-button class="d-block my-3" value="mes" (click)="getTopPosts('mes')">
                             Del mes
                         </mat-radio-button>
 
-                        <mat-radio-button class="d-block my-3" value="all">
+                        <mat-radio-button class="d-block my-3" value="all" (click)="getTopPosts('all')">
                             Todos los tiempos
                         </mat-radio-button>
                     </mat-radio-group>
