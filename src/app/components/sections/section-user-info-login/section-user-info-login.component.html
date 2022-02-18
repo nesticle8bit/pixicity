@@ -107,7 +107,7 @@
                     <img class="punti" src="/assets/images/ui/arrowd.png" />
                 </a>
 
-                <div class="menuver" style="top: 16px;" [style.display]="displayMenu ? 'block' : 'none'"
+                <div class="menuver" style="top: 16px; z-index: 1;" [style.display]="displayMenu ? 'block' : 'none'"
                     (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
                     <a [routerLink]="['cuenta']" class="menu">
                         Cuenta
