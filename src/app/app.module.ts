@@ -283,7 +283,8 @@ import { TagsCloudComponent } from './components/addons/tags-cloud/tags-cloud.co
         `${environment.api}/api/favoritos/getFavoritos`,
         `${environment.api}/api/favoritos/getLastFavoritos`,
         `${environment.api}/api/monitors/getLastNotificaciones`,
-        `${environment.api}/api/comentarios/getComentariosRecientes`
+        `${environment.api}/api/comentarios/getComentariosRecientes`,
+        `${environment.api}/api/tops/getTopPosts`
       ],
     }),
     MatRadioModule,

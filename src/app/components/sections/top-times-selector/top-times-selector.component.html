@@ -1,18 +1,33 @@
 <div class="mentop">
-    <div class="actualtop cursor--pointer" id="ucambi" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
-        Todos
+    <div class="actualtop cursor--pointer" id="ucambi" (mouseenter)="displayMenu = true"
+        (mouseleave)="displayMenu = false">
+        <span *ngIf="selection === 'ayer'">Ayer</span>
+        <span *ngIf="selection === 'hoy'">Hoy</span>
+        <span *ngIf="selection === 'ultimos7dias'">Semana</span>
+        <span *ngIf="selection === 'mes'">Mes</span>
+        <span *ngIf="selection === 'all'">Todos</span>
     </div>
 
-    <div class="listop" id="mutops" [style.display]="displayMenu ? 'block' : 'none'" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
-        <a onclick="pestana('mutops','uayer','ttayer','ucambi','utops'), filtrar_top_usuarios('2');"
-            class="ttayer">Ayer</a>
-        <a onclick="pestana('mutops','uhoy','tthoy','ucambi','utops'), filtrar_top_usuarios('1');"
-            class="tthoy">Hoy</a>
-        <a onclick="pestana('mutops','usemana','ttsemana','ucambi','utops'), filtrar_top_usuarios('3');;"
-            class="ttsemana">Semana</a>
-        <a onclick="pestana('mutops','umes','ttmes','ucambi','utops'), filtrar_top_usuarios('4');;"
-            class="ttmes">Mes</a>
-        <a onclick="pestana('mutops','utodos','tttodos','ucambi','utops'), filtrar_top_usuarios('5');;"
-            class="tttodos listo">Todos</a>
+    <div class="listop" id="mutops" [style.display]="displayMenu ? 'block' : 'none'" (mouseenter)="displayMenu = true"
+        (mouseleave)="displayMenu = false">
+        <a href="javascript:void(0)" (click)="changeTop('ayer')" class="ttayer">
+            Ayer
+        </a>
+
+        <a href="javascript:void(0)" (click)="changeTop('hoy')" class="tthoy">
+            Hoy
+        </a>
+
+        <a href="javascript:void(0)" (click)="changeTop('ultimos7dias')" class="ttsemana">
+            Semana
+        </a>
+
+        <a href="javascript:void(0)" (click)="changeTop('mes')" class="ttmes">
+            Mes
+        </a>
+
+        <a href="javascript:void(0)" (click)="changeTop('all')" class="tttodos listo">
+            Todos
+        </a>
     </div>
 </div>
