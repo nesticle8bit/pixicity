@@ -1,13 +1,17 @@
 <div class="container container--home">
-    <div class="row" *ngIf="configuracion?.disableUserRegistrationMessage">
-        <div class="col-12">
-            <div class="alert alert-warning">
-                <h4>{{configuracion?.disableUserRegistrationMessage}}</h4>
+    <div class="row" *ngIf="configuracion?.disableUserRegistration === true">
+        <div class="col-12 col-sm-12 col-md-9">
+            <div class="alert alert-warning p-5">
+                <h5>{{configuracion?.disableUserRegistrationMessage}}</h5>
             </div>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-3 dotted-border--left">
+            <img class="noim" src="/assets/images/404graph.png">
         </div>
     </div>
 
-    <div class="row" *ngIf="!configuracion || !configuracion?.disableUserRegistration">
+    <div class="row" *ngIf="configuracion?.disableUserRegistration === false">
         <div class="col-12 col-sm-8 text-center main-login--head">
             <h1>Bienvenido a Pixicity!</h1>
 

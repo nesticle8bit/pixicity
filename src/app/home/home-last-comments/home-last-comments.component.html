@@ -2,8 +2,9 @@
     <span>Comentarios recientes</span>
 
     <div class="float-end">
-        <img class="cursor--pointer" src="/assets/images/icons/arrow-circle-double.png" (click)="getUltimosComentarios()"
-            #tooltip="matTooltip" matTooltip="Actualizar comentarios" [matTooltipPosition]="'above'" />
+        <img class="cursor--pointer" src="/assets/images/icons/arrow-circle-double.png"
+            (click)="getUltimosComentarios()" #tooltip="matTooltip" matTooltip="Actualizar comentarios"
+            [matTooltipPosition]="'above'" />
     </div>
 </h6>
 
@@ -13,7 +14,7 @@
     </div>
 </section>
 
-<table class="table table-striped last-posts" *ngIf="lastComments?.length > 0">
+<table class="table table-striped last-posts" *ngIf="lastComments?.length > 0" [ngClass]="{'opacity-50': refreshComments}">
     <tbody>
         <tr *ngFor="let comment of lastComments">
             <td>
@@ -25,12 +26,12 @@
                     </b>
 
                     &nbsp;
-                    
+
                     <span class="text-muted">
                         <a [routerLink]="['/posts/' + comment.post.categoria.seo + '/' + comment.post.id + '/' + comment.post.url]"
-                        title="{{comment.post.titulo}}">
-                        {{comment.post.titulo | truncate:[55]}}
-                    </a>
+                            title="{{comment.post.titulo}}">
+                            {{comment.post.titulo | truncate:[55]}}
+                        </a>
                     </span>
                 </small>
             </td>
