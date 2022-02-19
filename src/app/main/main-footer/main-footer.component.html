@@ -4,10 +4,10 @@
             <div class="seccion">
                 <div class="inpie">
                     <div class="busb float-start">
-                        <form action="/buscar/posts/" name="top_search_box">
-                            <input class="bbcuerpo" type="text" name="q" onkeypress="ibuscador_intro(event)" value=""
+                        <form [formGroup]="formGroup" (ngSubmit)="search()" action="/buscar/posts/" name="top_search_box">
+                            <input class="bbcuerpo" type="text" name="q" value="" formControlName="search"
                                 placeholder="Buscar...">
-                            <input class="bbboton" vspace="2" hspace="10" type="submit" value="">
+                            <input class="bbboton" vspace="2" hspace="10" type="submit" value="" />
                         </form>
                     </div>
                     
