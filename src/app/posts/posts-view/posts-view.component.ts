@@ -54,7 +54,6 @@ export class PostsViewComponent implements OnInit {
       }
 
       this.post = value.post;
-      this.post.usuario = value.usuario;
       this.post.id = postId;
     });
   }
