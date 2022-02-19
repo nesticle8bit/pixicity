@@ -14,17 +14,6 @@ export class HomeLastCommentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUltimosComentarios();
-    console.log(` __________________________
-    / No lo hagas, no abras la \
-    \ consola, es peligroso 🥺 /
-     --------------------------
-             \
-              \
-               ___
-              (o o)
-             (  V  )
-            /--m-m-
-    `);
   }
 
   getUltimosComentarios(): void {
