@@ -1,20 +1,24 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpFavoritosService } from 'src/app/services/interfaces/httpFavoritos.interface';
 import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
+import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
   selector: 'app-section-user-info-login',
   templateUrl: './section-user-info-login.component.html',
-  styleUrls: ['./section-user-info-login.component.scss']
+  styleUrls: ['./section-user-info-login.component.scss'],
 })
 export class SectionUserInfoLoginComponent implements OnInit {
+  public formGroup: FormGroup;
   public displayMenu: boolean = false;
   public currentUser: JwtUserModel = { usuario: undefined, token: '' };
   public display = {
     monitor: false,
-    favoritos: false
+    favoritos: false,
   };
   public favoritos: any[] = [];
   public notificaciones: any[] = [];
@@ -26,10 +30,18 @@ export class SectionUserInfoLoginComponent implements OnInit {
   constructor(
     private securityService: IHttpSecurityService,
     private favoritosService: IHttpFavoritosService,
-    private httpLogs: IHttpLogsService
+    private httpLogs: IHttpLogsService,
+    private formBuilder: FormBuilder,
+    private router: Router
   ) {
-    this.securityService.getCurrentUserAsObservable().subscribe((value: JwtUserModel) => {
-      this.currentUser = value;
+    this.securityService
+      .getCurrentUserAsObservable()
+      .subscribe((value: JwtUserModel) => {
+        this.currentUser = value;
+      });
+
+    this.formGroup = this.formBuilder.group({
+      search: '',
     });
   }
 
@@ -46,10 +58,13 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
   verNotificaciones(): void {
     this.httpLogs.getLastNotificaciones().subscribe((response: any) => {
-      if(response) {
+      if (response) {
         response = response.map((notificacion: any) => {
-          if(notificacion.mensaje) {
-            notificacion.mensaje = notificacion.mensaje.replace('tu post', `tu <a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post.id}/${notificacion.post.url}">post</a>`);
+          if (notificacion.mensaje) {
+            notificacion.mensaje = notificacion.mensaje.replace(
+              'tu post',
+              `tu <a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post.id}/${notificacion.post.url}">post</a>`
+            );
           }
 
           return notificacion;
@@ -65,7 +80,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
   verFavoritos(): void {
     this.favoritosService.getLastFavoritos(5).subscribe((response: any) => {
-      if(response) {
+      if (response) {
         response = response.map((fav: any) => {
           fav.post.url = fav.post.titulo.toLowerCase().replace(/\s/g, '-');
           return fav;
@@ -81,5 +96,15 @@ export class SectionUserInfoLoginComponent implements OnInit {
   cerrarSesion(): void {
     this.securityService.logout();
     window.location.href = '';
+  }
+
+  buscar(): void {
+    const obj = Object.assign({}, this.formGroup.value);
+
+    if (!obj?.search) {
+      return;
+    }
+
+    this.router.navigate([`/buscar/posts/${obj.search}`]);
   }
 }

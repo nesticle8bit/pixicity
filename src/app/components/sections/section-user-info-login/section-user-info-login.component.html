@@ -1,6 +1,6 @@
 <section *ngIf="currentUser?.usuario">
-    <form class="d-none d-sm-block" style="float:right; margin-top: 17px;">
-        <input type="text" id="ibuscadorq" name="q" placeholder="Buscar..." title="Buscar..."
+    <form [formGroup]="formGroup" (ngSubmit)="buscar()" class="d-none d-sm-block" style="float:right; margin-top: 17px;">
+        <input type="text" id="ibuscadorq" name="q" placeholder="Buscar..." title="Buscar..." formControlName="search"
             class="mini_ibuscador onblur_effect">
         <input vspace="2" hspace="10" type="submit" alt="Buscar" value="" title="Buscar" class="mini_bbuscador" />
     </form>

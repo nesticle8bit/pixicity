@@ -1,7 +1,9 @@
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 import { ViewportScroller } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
-import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'main-footer',
@@ -10,11 +12,18 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
 })
 export class MainFooterComponent implements OnInit {
   public display!: DisplayComponentModel;
+  public formGroup: FormGroup;
 
   constructor(
     private displayService: DisplayComponentService,
-    private viewPort: ViewportScroller
-  ) {}
+    private viewPort: ViewportScroller,
+    private formBuilder: FormBuilder,
+    private router: Router
+  ) {
+    this.formGroup = this.formBuilder.group({
+      search: ''
+    });
+  }
 
   ngOnInit(): void {
     this.displayService
@@ -26,5 +35,15 @@ export class MainFooterComponent implements OnInit {
 
   goToHeaven(): void {
     this.viewPort.scrollToPosition([0, 0]);
+  }
+
+  search(): void {
+    const obj = Object.assign({}, this.formGroup.value);
+
+    if (!obj?.search) {
+      return;
+    }
+
+    this.router.navigate([`/buscar/posts/${obj.search}`]);
   }
 }
