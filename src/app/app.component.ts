@@ -23,5 +23,7 @@ export class AppComponent {
       .subscribe(
         (value: DisplayComponentModel) => (this.displayComponent = value)
       );
+
+      console.log(` _______________________\r\n< Bienvenido a Pixicity >\r\n -----------------------\r\n         \\\r\n          \\\r\n           ___\r\n          (o o)\r\n         (  V  )\r\n        \/--m-m-\r\n`);
   }
 }
