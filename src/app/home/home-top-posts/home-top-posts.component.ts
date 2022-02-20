@@ -8,6 +8,8 @@ import { TopPostModel } from 'src/app/models/web/topPost.model';
   styleUrls: ['./home-top-posts.component.scss'],
 })
 export class HomeTopPostsComponent implements OnInit {
+  public date: string = '';
+  public loading: boolean = false;
   public topPosts: TopPostModel[] = [];
 
   constructor(private httpWeb: IHttpWebService) {}
@@ -17,8 +19,20 @@ export class HomeTopPostsComponent implements OnInit {
   }
 
   getTopPosts(): void {
-    this.httpWeb.getTopPosts().subscribe((value: TopPostModel[]) => {
+    this.loading = true;
+
+    this.httpWeb.getTopPosts(this.date).subscribe((value: TopPostModel[]) => {
       this.topPosts = value;
+      this.loading = false;
     });
+  }
+
+  dateChanges(date: string): void {
+    if(!date) {
+      return;
+    }
+
+    this.date = date;
+    this.getTopPosts();
   }
 }

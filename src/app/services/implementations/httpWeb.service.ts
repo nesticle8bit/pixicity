@@ -40,9 +40,9 @@ export class HttpWebService implements IHttpWebService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getTopPosts(): Observable<TopPostModel[]> {
+  getTopPosts(date: string): Observable<TopPostModel[]> {
     return this.http
-      .get<any>(`${environment.api}/api/tops/getTopPosts`)
+      .get<any>(`${environment.api}/api/tops/getTopPosts?date=${date}`)
       .pipe(
         map((response: any) => {
           if (response.status === 200) {

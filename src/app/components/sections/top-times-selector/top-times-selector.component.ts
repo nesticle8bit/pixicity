@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-top-times-selector',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./top-times-selector.component.scss']
 })
 export class TopTimesSelectorComponent implements OnInit {
+  public selection: string = 'all';
+  @Output() selectedDate = new EventEmitter<any>();
+  
   public displayMenu: boolean = false;
   
   constructor() { }
@@ -13,4 +16,10 @@ export class TopTimesSelectorComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  changeTop(date: string): void {
+    this.selection = date;
+    this.selectedDate.emit(date);
+
+    this.displayMenu = false;
+  }
 }
