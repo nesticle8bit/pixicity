@@ -25,13 +25,39 @@ export class TableUsuariosComponent implements OnInit {
   }
 
   getSesiones(): void {
-    this.securityService.getUsuarios().subscribe((response: any) => {
+    this.securityService.getUsuariosAdmin().subscribe((response: any) => {
       this.usuarios = response.usuarios;
       this.totalCount = response.pagination.totalCount;
     });
   }
 
-  deleteSession(id: number): void {
+  banUser(user: any): void {
+    Swal.fire({
+      title: 'Banear Usuario',
+      text: `¿Está seguro de banear el usuario ${user.userName}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Banear',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.securityService
+          .deleteSessionById(user.id)
+          .subscribe((response: any) => {
+            if (response) {
+              Swal.fire({
+                title: 'Baneado',
+                text: 'El usuario ha sido baneado correctamente',
+                icon: 'success',
+                timer: 3000,
+              });
+            }
+          });
+      }
+    });
+  }
+
+  deleteUser(id: number): void {
     Swal.fire({
       title: 'Eliminar',
       text: '¿Está seguro de eliminar esta sesión del usuario?',
