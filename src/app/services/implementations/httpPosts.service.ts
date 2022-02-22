@@ -510,9 +510,15 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getTopPosts(date: string): Observable<any> {
+  getTopPosts(date: string, categoriaId?: number): Observable<any> {
+    let search = '';
+
+    if(categoriaId) {
+      search += `&categoria=${categoriaId}`;
+    }
+
     return this.http
-      .get<any>(`${environment.api}/api/posts/getTopPosts?date=${date}`)
+      .get<any>(`${environment.api}/api/posts/getTopPosts?date=${date}${search}`)
       .pipe(
         map((response: any) => {
           if (response.status === 200) {

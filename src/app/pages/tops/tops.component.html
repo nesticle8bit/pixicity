@@ -145,7 +145,7 @@
                         <span class="required"></span> Categoría
                     </label>
 
-                    <ng-select [items]="categorias" bindLabel="nombre" bindValue="seo" formControlName="categoria">
+                    <ng-select [items]="categorias" bindLabel="nombre" bindValue="id" formControlName="categoria" (change)="getTopPosts(date)">
                         <ng-template ng-label-tmp let-item="item">
                             <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
                                 [src]="'/assets/images/categorias/' + item?.icono" />

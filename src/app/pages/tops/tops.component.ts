@@ -13,6 +13,7 @@ export class TopsComponent implements OnInit {
   public formGroup: FormGroup;
   public categorias: any[] = [];
   public topPosts: any;
+  public date: string = 'all';
 
   constructor(
     private httpParametrosService: IHttpParametrosService,
@@ -29,7 +30,7 @@ export class TopsComponent implements OnInit {
 
     this.formGroup = this.formBuilder.group({
       date: 'all',
-      categoria: '',
+      categoria: undefined,
     });
   }
 
@@ -39,8 +40,11 @@ export class TopsComponent implements OnInit {
   }
 
   getTopPosts(date: string = ''): void {
+    const categoriaId = this.formGroup.value.categoria;
+    this.date = date;
+
     this.postService
-      .getTopPosts(date)
+      .getTopPosts(date, categoriaId)
       .subscribe((response: any) => {
         this.topPosts = response;
       });
