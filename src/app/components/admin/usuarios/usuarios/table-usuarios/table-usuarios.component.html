@@ -1,19 +1,21 @@
-<main class="table-responsive" *ngIf="sesiones.length > 0">
+<main class="table-responsive" *ngIf="usuarios.length > 0">
     <table class="table table-sm table-striped table-hover">
         <thead>
             <tr>
                 <th></th>
                 <th>Creado</th>
-                <th>Token</th>
-                <th>Expira</th>
-                <th>Usuario</th>
+                <th>UserName</th>
+                <th>Género</th>
+                <th>País</th>
+                <th>Posts</th>
+                <th>Comentarios</th>
                 <th>Eliminado</th>
                 <th></th>
             </tr>
         </thead>
 
         <tbody>
-            <tr *ngFor="let sesion of sesiones" [ngClass]="{'opacity-50': sesion.eliminado}">
+            <tr *ngFor="let sesion of usuarios" [ngClass]="{'opacity-50': sesion.eliminado}">
                 <td>
                     <strong>{{sesion.id}}</strong>
                 </td>
@@ -23,28 +25,24 @@
                 </td>
 
                 <td>
-                    <fa-icon [icon]="['fas', 'copy']" matTooltip="Copiar al portapapeles"
-                        (click)="clipboard(sesion.token)" class="mr-3 text-secondary cursor--pointer"></fa-icon> &nbsp;
-
-                    <span class="cursor--help" matTooltip="{{sesion.token}}">
-                        {{sesion.token | truncate:[60]}}
-                    </span>
+                    {{sesion.userName}}
                 </td>
 
                 <td>
-                    <span *ngIf="!sesion.eliminado">
-                        {{sesion.fechaExpiracion | date: 'dd/MM/yyyy HH:mm:ss'}} <small
-                            class="text-muted">({{sesion.diffExpira}} {{sesion.diffExpira === 1 ? 'día' :
-                            'días'}})</small>
-                    </span>
-
-                    <span *ngIf="sesion.eliminado">
-                        -
-                    </span>
+                    {{sesion.genero}}
                 </td>
 
                 <td>
-                    {{sesion.usuario}}
+                    <addon-country-flag [iso2]="sesion.iso2"></addon-country-flag>
+                    {{sesion.pais}}
+                </td>
+
+                <td>
+                    {{sesion.posts}}
+                </td>
+
+                <td>
+                    {{sesion.comentarios}}
                 </td>
 
                 <td>
@@ -77,5 +75,5 @@
 </main>
 
 <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
-    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="sesiones.length > 0">
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="usuarios.length > 0">
 </mat-paginator>
