@@ -137,6 +137,9 @@ import { PerfilSocialMediaButtonsComponent } from './pages/perfil/perfil-social-
 import { PerfilUserMedalsComponent } from './pages/perfil/perfil-user-medals/perfil-user-medals.component';
 import { PerfilUserFollowersComponent } from './pages/perfil/perfil-user-followers/perfil-user-followers.component';
 import { TagsCloudComponent } from './components/addons/tags-cloud/tags-cloud.component';
+import { DashboardUsuariosComponent } from './components/admin/usuarios/usuarios/dashboard-usuarios/dashboard-usuarios.component';
+import { TableUsuariosComponent } from './components/admin/usuarios/usuarios/table-usuarios/table-usuarios.component';
+import { CountryFlagComponent } from './components/addons/country-flag/country-flag.component';
 
 @NgModule({
   declarations: [
@@ -218,6 +221,9 @@ import { TagsCloudComponent } from './components/addons/tags-cloud/tags-cloud.co
     PerfilUserMedalsComponent,
     PerfilUserFollowersComponent,
     TagsCloudComponent,
+    DashboardUsuariosComponent,
+    TableUsuariosComponent,
+    CountryFlagComponent,
   ],
   imports: [
     BrowserModule,
