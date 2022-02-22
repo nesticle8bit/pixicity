@@ -10,6 +10,7 @@ import { DashboardComponent } from './components/admin/dashboard/dashboard.compo
 import { DashboardConfigurationComponent } from './components/admin/general/configuration/dashboard-configuration/dashboard-configuration.component';
 import { DashboardAdsComponent } from './components/admin/general/publicidad/dashboard-ads/dashboard-ads.component';
 import { DashboardSesionesComponent } from './components/admin/usuarios/sesiones/dashboard-sesiones/dashboard-sesiones.component';
+import { DashboardUsuariosComponent } from './components/admin/usuarios/usuarios/dashboard-usuarios/dashboard-usuarios.component';
 import { AccountComponent } from './pages/account/account.component';
 import { BorradoresComponent } from './pages/borradores/borradores.component';
 import { EnVivoComponent } from './pages/en-vivo/en-vivo.component';
@@ -71,6 +72,7 @@ const routes: Routes = [
       { path: 'paises', component: DashboardPaisesComponent },
       { path: 'sesiones', component: DashboardSesionesComponent },
       { path: 'denuncias', component: DashboardReportesComponent },
+      { path: 'usuarios', component: DashboardUsuariosComponent },
     ]
   },
   
