@@ -2,7 +2,20 @@
     <span>Afiliados</span>
 </h6>
 
-<div class="text-end">
+<ng-container *ngIf="afiliados.length > 0">
+    <article class="list-posts--zebra" *ngFor="let afiliado of afiliados; let i = index">
+        <strong class="float-start">
+            {{i + 1}}
+        </strong>
+
+        <a href="javascript:void(0)" (click)="hit(afiliado)">
+            <img class="me-1" src="{{afiliado.banner}}" alt="Favicon" style="width: 16px; height: 16px;" />
+            {{afiliado.titulo}}
+        </a>
+    </article>
+</ng-container>
+
+<div class="text-end mt-3">
     <button mat-flat-button color="success" (click)="afiliarse()">
         Afiliate a Pixicity!
     </button>

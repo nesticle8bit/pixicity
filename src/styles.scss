@@ -2437,12 +2437,13 @@ span.ma_photo {
     }
 }
 
-.i {
+.i, .icon {
     background: url('/assets/images/icons/i.png');
     width: 16px;
     height: 16px;
     display: block;
     float: left;
+    margin-top: 1px;
 }
 
 .i.moneda {
@@ -2460,6 +2461,126 @@ span.ma_photo {
 .i.personas {
     background-position: -102px -86px;
 }
+
+.activity-element.video i.shout.icon {background-position: -18px -136px;margin-top:4px;}
+.activity-element.image i.shout.icon {background-position: -34px -138px;margin-top:4px;}
+.activity-element.shout i.shout.icon {background-position: -1px -137px;margin-top:4px;}
+.activity-element.link i.shout.icon {background-position: -52px -137px;margin-top:4px;}
+.shout-footer .date-icon i {
+	margin-top: 2px;
+}
+
+i.icon {
+    background-position: 32px 0px;
+}
+i.icon.animaciones { background-position: 0 0; }
+i.icon.apuntes-y-monografias { background-position: -17px 0; }
+i.icon.arte, i.icon.arte-literatura { background-position: -34px 0px; }
+i.icon.autos-motos { background-position: -51px 0px; }
+i.icon.celulares { background-position: -68px 0  }
+i.icon.ciencia-educacion { background-position: -87px 0  }
+i.icon.comics { background-position: -103px 0  }
+i.icon.ebooks-tutoriales {	background-position:-153px 0 }
+i.icon.comunidades-n { background-position: -34px -51px; }
+i.icon.comentarios-n { background-position: 0 -51px}
+i.icon.recomendar-p { background-position: 0 -68px}
+
+i.icon.comentarios-n-g { background-position:-119px -51px }
+i.icon.deportes { background-position: -119px 0; }
+i.icon.downloads { background-position: -136px 0px; }
+i.icon.ecologia { background-position: -170px 0; }
+i.icon.economia-negocios { background-position: -187px 0px; }
+i.icon.femme { background-position: -204px 0; }
+i.icon.male { background-position: -204px -51px; }
+i.icon.sticky { background-position: -221px -51px; }
+i.icon.hazlo-tu-mismo { background-position: -221px 0; }
+i.icon.humor { background-position: -239px 0 ; }
+i.icon.imagenes { background-position: -255px 0; }
+i.icon.info { background-position: 0 -17px; }
+i.icon.juegos { background-position:  -17px -17px; }
+i.icon.juegos-online { background-position: -34px -17px; }
+i.icon.links { background-position: -51px -17px; }
+i.icon.linux { background-position: -68px -17px; }
+i.icon.mac { background-position: -86px -17px; }
+i.icon.manga-anime { background-position: -102px -17px; }
+i.icon.mascotas { background-position: -119px -17px; }
+i.icon.musica { background-position: -136px -17px; }
+i.icon.noticias { background-position: -153px -17px; }
+i.icon.offtopic { background-position: -170px -17px; }
+i.icon.paranormal { background-position: -187px -17px; }
+i.icon.patrocinados { background-position: -204px -17px; }
+i.icon.recetas-y-cocina { background-position: -221px -17px; }
+i.icon.reviews { background-position: -239px -17px;  }
+i.icon.salud-bienestar { background-position: -255px -17px; }
+i.icon.solidaridad { background-position: 0 -34px; }
+i.icon.pixicity { background-position: -17px -34px; }
+i.icon.turismo { background-position: -34px -34px; }
+i.icon.tv-peliculas-series { background-position: -51px -34; }
+i.icon.videos { background-position: -68px -34px; }
+
+i.icon.points { background-position: -85px -34px; }
+i.icon.followers { background-position: -102px -34px; }
+i.icon.visits { background-position: -119px -34px; }
+i.icon.favs { background-position: -136px -34px; }
+
+i.icon.thumb-up { background-position: -153px -34px; }
+i.icon.thumb-up:hover, i.icon.thumb-up.hover { background-position: -153px -51px; }
+.comment-text i.icon.thumb-up { background-position: -153px -51px; display: inline-block; float: none; vertical-align: -4px; margin: -4px 0 0 4px; }
+i.icon.thumb-down { background-position: -170px -34px; }
+.comment-text i.icon.thumb-down { background-position: -170px -51px; display: inline-block; float: none; vertical-align: -4px; margin: -4px 0 0 4px; }
+i.icon.thumb-down:hover, i.icon.thumb-down.hover { background-position: -170px -51px; }
+
+i.icon.quote { background-position: -187px -34px; }
+
+i.icon.notifications { background-position: -204px -34px; }
+i.icon.messages { background-position: -221px -34px; }
+i.icon.favorites { background-position: -237px -34px}
+
+i.icon.sprite-balloon-left { background-position: 0 -51px; }
+i.icon.sprite-balloon-left-blue { background-position:  -101px -50px }
+i.icon.sprite-balloon-left-green { background-position: -119px -50px; }
+i.icon.sprite-balloons { background-position: 0 -22px; }
+i.icon.sprite-block { background-position: -34px -51px; }
+i.icon.sprite-document-text-image  { background-position: -51px -51px; }
+i.icon.sprite-point { background-position: 0 -103px; }
+i.icon.sprite-star { background-position: -68px -51px; }
+i.icon.sprite-follow { background-position: -85px -51px; }
+i.icon.sprite-recomendar-p { background-position: 0 -68px }
+i.icon.private-message { background-position: 0 -85px}
+i.icon.message-send { background-position: -17px -84px}
+i.icon.message-delete { background-position: -34px -85px}
+i.icon.message-new { background-position: -51px -85px}
+i.icon.folder { background-position: -68px -85px}
+
+// i.icon.loading-icon { background: url(/web/20111102210602im_/http://o2.t26.net/img/ajax-loader.gif) 1px 2px no-repeat!important;}
+
+i.icon.libro { background-position: -68px -68px}
+i.icon.cake { background-position: -51px -68px}
+i.icon.report {	background-position: -17px -68px;margin: 0; }
+i.icon.report:hover { background-position: 0 -102px;margin: 0; }
+i.icon.party { background-position:0px -119px;margin: 0; }
+
+i.icon.shout-status { background-position: -123px -106px; }
+i.icon.shout-image { background-position: -22px -107px; }
+i.icon.shout-link { background-position: -90px -106px; }
+i.icon.shout-video { background-position: -56px -106px; }
+
+i.icon.interes-general { background-position: -153px -68px; }
+i.icon.internet-tecnologia { background-position: -169px -68px; }
+i.icon.internet-technology { background-position: -169px -68px; }
+i.icon.regiones { background-position: -186px -68px; }
+i.icon.diversion-esparcimiento { background-position: -86px -85px; }
+i.icon.musica-bandas { background-position: -153px -85px; }
+i.icon.grupos-organizaciones { background-position: -102px -85px; }
+i.icon.entretenimiento-medios, i.icon.tv-peliculas-series { background-position: -170px -85px; }
+
+i.icon.gender { background-position: -67px -136px; }
+i.icon.age { background-position: -84px -136px; }
+i.icon.lives { background-position: -101px -136px; }
+i.icon.joined { background-position:-118px -136px; }
+i.icon.work { background-position: -135px -136px }
+i.icon.web { background-position: -153px -136px }
+i.icon.plus { background-position: -53px -220px }
 
 .opacity-50 {
     opacity: .5;
