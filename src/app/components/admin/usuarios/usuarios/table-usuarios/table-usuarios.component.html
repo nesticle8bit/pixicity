@@ -9,6 +9,8 @@
                 <th>País</th>
                 <th>Posts</th>
                 <th>Comentarios</th>
+                <th>Última Conexión</th>
+                <th>Última IP</th>
                 <th>Baneado</th>
                 <th>Eliminado</th>
                 <th></th>
@@ -46,6 +48,14 @@
 
                 <td>
                     {{usuario.cantidadComentarios}}
+                </td>
+
+                <td>
+                    {{usuario.ultimaConexion | date:'medium'}}
+                </td>
+
+                <td>
+                    {{usuario.ultimaIP}}
                 </td>
 
                 <td>
