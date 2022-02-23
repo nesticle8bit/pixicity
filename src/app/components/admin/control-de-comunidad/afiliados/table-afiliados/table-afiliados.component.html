@@ -3,10 +3,12 @@
         <thead>
             <tr>
                 <th>Creado</th>
+                <th>Código</th>
                 <th>Título</th>
                 <th>URL</th>
                 <th>In</th>
                 <th>Out</th>
+                <th>Estado</th>
                 <th></th>
             </tr>
         </thead>
@@ -16,6 +18,12 @@
                 <td>
                     <span class="cursor--help" matTooltip="{{afiliado.fechaRegistro}}">
                         {{afiliado.fechaRegistro | timeAgo}}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="badge bg-primary">
+                        {{afiliado.codigo}}
                     </span>
                 </td>
 
@@ -39,12 +47,30 @@
                     {{afiliado.hitsOut}}
                 </td>
 
+                <td>
+                    <span class="badge" [ngClass]="{'bg-success': afiliado.activo, 'bg-warning': !afiliado.activo}">
+                        {{afiliado.activo ? 'Activo' : 'Pendiente'}}
+                    </span>
+                </td>
+
                 <td class="text-center" width="30px">
                     <button class="btn-menu" [matMenuTriggerFor]="menu">
                         <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
                     </button>
 
                     <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="activarDesactivarAfiliado(afiliado)">
+                            <span *ngIf="afiliado.activo">
+                                <mat-icon>toggle_off</mat-icon>
+                                Desactivar
+                            </span>
+
+                            <span *ngIf="!afiliado.activo">
+                                <mat-icon>toggle_on</mat-icon>
+                                Activar
+                            </span>
+                        </button>
+
                         <button mat-menu-item>
                             <mat-icon>delete_outline</mat-icon>
                             <span>Eliminar</span>

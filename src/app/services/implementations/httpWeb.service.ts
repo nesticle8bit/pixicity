@@ -77,4 +77,61 @@ export class HttpWebService implements IHttpWebService {
       )
       .pipe(catchError(this.helper.errorHandler));
   }
+
+  getAfiliados(): Observable<any> {
+    return this.http
+      .get<any>(`${environment.api}/api/web/getAfiliados`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  changeAfiliadoActive(obj: any): Observable<any> {
+    return this.http
+      .post<any>(`${environment.api}/api/web/changeAfiliadoActive`, obj)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  hitAfiliado(codigo: string): Observable<any> {
+    return this.http
+      .get<any>(`${environment.api}/api/web/hitAfiliado?codigo=${codigo}`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
 }

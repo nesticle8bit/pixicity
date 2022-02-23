@@ -8,4 +8,7 @@ export abstract class IHttpWebService {
   abstract getTopUsers(): Observable<TopUserModel[]>;
   abstract getTopPosts(date: string): Observable<TopPostModel[]>;
   abstract getAdsByType(type: string): Observable<string>;
+  abstract getAfiliados(): Observable<any>;
+  abstract changeAfiliadoActive(obj: any): Observable<any>;
+  abstract hitAfiliado(codigo: string): Observable<any>;
 }
