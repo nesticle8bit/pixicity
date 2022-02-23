@@ -31,26 +31,28 @@ export class TableUsuariosComponent implements OnInit {
     });
   }
 
-  banUser(user: any): void {
+  banUser(user: any, index: number): void {
     Swal.fire({
-      title: 'Banear Usuario',
-      text: `¿Está seguro de banear el usuario ${user.userName}?`,
+      title: `${(user.baneado ? 'Desbanear' : 'Banear')} Usuario`,
+      text: `¿Está seguro de ${(user.baneado ? 'desbanear' : 'banear')} el usuario ${user.userName}?`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Banear',
+      confirmButtonText: `${(user.baneado ? 'Desbanear' : 'Banear')}`,
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.securityService
           .banUser(user.id)
           .subscribe((response: any) => {
-            if (response) {
+            if (response === true || response === false) {
               Swal.fire({
-                title: 'Baneado',
-                text: 'El usuario ha sido baneado correctamente',
+                title: response === true ? 'Baneado' : 'Desbaneado',
+                text: `El usuario ha sido ${(response === true ? 'baneado' : 'desbaneado')} correctamente`,
                 icon: 'success',
                 timer: 3000,
               });
+
+              this.usuarios[index].baneado = !this.usuarios[index].baneado;
             }
           });
       }

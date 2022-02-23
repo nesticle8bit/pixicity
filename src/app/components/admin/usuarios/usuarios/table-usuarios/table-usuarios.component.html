@@ -16,7 +16,7 @@
         </thead>
 
         <tbody>
-            <tr *ngFor="let usuario of usuarios" [ngClass]="{'opacity-50': usuario.eliminado}">
+            <tr *ngFor="let usuario of usuarios; let i = index" [ngClass]="{'opacity-50': usuario.eliminado}">
                 <td>
                     <strong>{{usuario.id}}</strong>
                 </td>
@@ -78,9 +78,10 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <button type="button" mat-menu-item (click)="banUser(usuario)">
+                        <button type="button" mat-menu-item (click)="banUser(usuario, i)">
                             <mat-icon>do_disturb_alt</mat-icon>
-                            <span>Banear</span>
+                            <span *ngIf="!usuario.baneado">Banear</span>
+                            <span *ngIf="usuario.baneado">Desbanear</span>
                         </button>
 
                         <button type="button" mat-menu-item (click)="deleteUser(usuario.id)">
