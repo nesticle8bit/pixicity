@@ -3,56 +3,81 @@
         <thead>
             <tr>
                 <th></th>
-                <th>Creado</th>
+                <th>Registrado desde</th>
                 <th>UserName</th>
                 <th>Género</th>
                 <th>País</th>
                 <th>Posts</th>
                 <th>Comentarios</th>
+                <th>Última Conexión</th>
+                <th>Última IP</th>
+                <th>Baneado</th>
                 <th>Eliminado</th>
                 <th></th>
             </tr>
         </thead>
 
         <tbody>
-            <tr *ngFor="let sesion of usuarios" [ngClass]="{'opacity-50': sesion.eliminado}">
+            <tr *ngFor="let usuario of usuarios; let i = index" [ngClass]="{'opacity-50': usuario.eliminado}">
                 <td>
-                    <strong>{{sesion.id}}</strong>
+                    <strong>{{usuario.id}}</strong>
                 </td>
 
                 <td>
-                    {{sesion.fechaRegistro | timeAgo}}
+                    {{usuario.fechaRegistro | timeAgo}}
                 </td>
 
                 <td>
-                    {{sesion.userName}}
+                    <a href="/perfil/{{usuario.userName}}" target="_blank">
+                        {{usuario.userName}}
+                    </a>
                 </td>
 
                 <td>
-                    {{sesion.genero}}
+                    {{usuario.genero}}
                 </td>
 
                 <td>
-                    <addon-country-flag [iso2]="sesion.iso2"></addon-country-flag>
-                    {{sesion.pais}}
+                    <addon-country-flag [iso2]="usuario.estado.pais.isO2"></addon-country-flag>
+                    {{usuario.estado.pais.nombre}}
                 </td>
 
                 <td>
-                    {{sesion.posts}}
+                    {{usuario.cantidadPosts}}
                 </td>
 
                 <td>
-                    {{sesion.comentarios}}
+                    {{usuario.cantidadComentarios}}
                 </td>
 
                 <td>
-                    <span *ngIf="sesion.eliminado" class="badge bg-danger"
-                        matTooltip="Eliminado el ({{sesion.fechaElimina | date:'dd/MM/yyyy HH:mm:ss'}}) por {{sesion.usuarioElimina}}">
+                    {{usuario.ultimaConexion | date:'medium'}}
+                </td>
+
+                <td>
+                    {{usuario.ultimaIP}}
+                </td>
+
+                <td>
+                    <span class="badge" [ngClass]="{'bg-danger': usuario.baneado, 'bg-info': !usuario.baneado}">
+                        <span *ngIf="usuario.baneado">
+                            <fa-icon [icon]="['fas', 'ban']"></fa-icon> Baneado
+                        </span>
+
+                        <span *ngIf="!usuario.baneado">
+                            <fa-icon [icon]="['fas', 'check-circle']"></fa-icon> Activo
+                        </span>
+                    </span>
+                </td>
+
+                <td>
+                    <span *ngIf="usuario.eliminado" class="badge bg-danger"
+                        matTooltip="Eliminado el ({{usuario.fechaElimina | date:'dd/MM/yyyy HH:mm:ss'}}) por {{usuario.usuarioElimina}}">
                         Eliminado &nbsp; <fa-icon class="cursor--help ml-3" [icon]="['fas', 'calendar-alt']">
                         </fa-icon>
                     </span>
 
-                    <span *ngIf="!sesion.eliminado" class="badge bg-success">
+                    <span *ngIf="!usuario.eliminado" class="badge bg-success">
                         Activo
                     </span>
                 </td>
@@ -63,7 +88,13 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <button type="button" mat-menu-item (click)="deleteSession(sesion.id)">
+                        <button type="button" mat-menu-item (click)="banUser(usuario, i)">
+                            <mat-icon>do_disturb_alt</mat-icon>
+                            <span *ngIf="!usuario.baneado">Banear</span>
+                            <span *ngIf="usuario.baneado">Desbanear</span>
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="deleteUser(usuario.id)">
                             <mat-icon>delete_outline</mat-icon>
                             <span>Eliminar</span>
                         </button>
