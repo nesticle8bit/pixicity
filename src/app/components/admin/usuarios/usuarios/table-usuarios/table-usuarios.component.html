@@ -3,12 +3,13 @@
         <thead>
             <tr>
                 <th></th>
-                <th>Creado</th>
+                <th>Registrado desde</th>
                 <th>UserName</th>
                 <th>Género</th>
                 <th>País</th>
                 <th>Posts</th>
                 <th>Comentarios</th>
+                <th>Baneado</th>
                 <th>Eliminado</th>
                 <th></th>
             </tr>
@@ -25,7 +26,9 @@
                 </td>
 
                 <td>
-                    {{usuario.userName}}
+                    <a href="/perfil/{{usuario.userName}}" target="_blank">
+                        {{usuario.userName}}
+                    </a>
                 </td>
 
                 <td>
@@ -38,11 +41,23 @@
                 </td>
 
                 <td>
-                    {{usuario.posts}}
+                    {{usuario.cantidadPosts}}
                 </td>
 
                 <td>
-                    {{usuario.comentarios}}
+                    {{usuario.cantidadComentarios}}
+                </td>
+
+                <td>
+                    <span class="badge" [ngClass]="{'bg-danger': usuario.baneado, 'bg-info': !usuario.baneado}">
+                        <span *ngIf="usuario.baneado">
+                            <fa-icon [icon]="['fas', 'ban']"></fa-icon> Baneado
+                        </span>
+
+                        <span *ngIf="!usuario.baneado">
+                            <fa-icon [icon]="['fas', 'check-circle']"></fa-icon> Activo
+                        </span>
+                    </span>
                 </td>
 
                 <td>

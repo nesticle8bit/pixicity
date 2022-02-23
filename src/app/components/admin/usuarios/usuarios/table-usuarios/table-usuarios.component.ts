@@ -42,7 +42,7 @@ export class TableUsuariosComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.securityService
-          .deleteSessionById(user.id)
+          .banUser(user.id)
           .subscribe((response: any) => {
             if (response) {
               Swal.fire({

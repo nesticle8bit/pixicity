@@ -27,4 +27,5 @@ export abstract class IHttpSecurityService {
   abstract savePerfilInfo(perfil: any): Observable<any>;
   abstract getCurrentPerfilInfo(): Observable<any>;
   abstract getSocialMediaByUsuarioId(usuarioId: number): Observable<any>;
+  abstract banUser(userId: number): Observable<any>;
 }
