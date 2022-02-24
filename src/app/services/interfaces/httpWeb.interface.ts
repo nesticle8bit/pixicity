@@ -11,4 +11,5 @@ export abstract class IHttpWebService {
   abstract getAfiliados(): Observable<any>;
   abstract changeAfiliadoActive(obj: any): Observable<any>;
   abstract hitAfiliado(codigo: string): Observable<any>;
+  abstract getHistorialModeracion(): Observable<any>;
 }

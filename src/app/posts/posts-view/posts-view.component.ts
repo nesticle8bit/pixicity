@@ -21,7 +21,10 @@ export class PostsViewComponent implements OnInit {
     private postService: IHttpPostsService,
     private displayService: DisplayComponentService,
     private router: Router
-  ) {}
+  ) {
+    this.currentUser = this.securityService.getCurrentUser();
+    console.log(this.currentUser);
+  }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe((values: any) => {
@@ -37,8 +40,6 @@ export class PostsViewComponent implements OnInit {
       searchFooter: false,
       submenu: false,
     });
-
-    this.currentUser = this.securityService.getCurrentUser();
   }
 
   getPostById(postId: number): void {

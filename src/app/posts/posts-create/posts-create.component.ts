@@ -75,13 +75,15 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       }
 
       this.postService.getPostById(this.postId).subscribe((response: any) => {
-        if (this.currentUser.usuario.userName != response.usuario.userName) {
+
+        if (this.currentUser.usuario.rango !== 'Administrador' && this.currentUser.usuario.rango !== 'Moderador' &&
+          this.currentUser.usuario.userName != response.post.usuario.userName) {
+          this.router.navigate(['']);
+
           Swal.fire({
-            title: 'Error',
+            title: 'Actualizar Post',
             text: 'Oye cerebrito!, no puedes actualizar el post de otra persona 😥',
             icon: 'warning'
-          }).then(() => {
-            this.router.navigate(['']);
           });
         }
 
