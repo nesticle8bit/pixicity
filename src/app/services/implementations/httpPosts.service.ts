@@ -573,9 +573,9 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getBorradores(): Observable<any> {
+  getBorradores(search: string, categoriaId: number): Observable<any> {
     return this.http
-      .get<any>(`${environment.api}/api/posts/getBorradores?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=`)
+      .get<any>(`${environment.api}/api/posts/getBorradores?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}&categoriaId=${categoriaId}`)
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
