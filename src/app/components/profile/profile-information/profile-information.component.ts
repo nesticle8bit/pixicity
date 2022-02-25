@@ -37,7 +37,6 @@ export class ProfileInformationComponent implements OnInit {
     this.securityService.getCurrentPerfilInfo().subscribe((response: any) => {
       if(response) {
         this.perfil = response;
-        console.log(response);
       }
     });
   }
