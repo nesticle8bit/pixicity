@@ -10,7 +10,7 @@
                 No agregaste ningún post a favoritos todavía
             </div>
 
-            <main class="table-responsive" *ngIf="borradores.length > 0">
+            <main class="table-responsive mt-3" *ngIf="borradores.length > 0">
                 <table class="table table-sm table-striped table-hover">
                     <thead>
                         <tr>
@@ -26,7 +26,7 @@
                     <tbody>
                         <tr *ngFor="let borrador of borradores">
                             <td>
-                                <a [routerLink]="['/posts/' + borrador.categoria.seo + '/' + borrador.id + '/' + borrador.url]" title="{{borrador.titulo}}">
+                                <a [routerLink]="['/posts/actualizar/' + borrador.id]" title="{{borrador.titulo}}">
                                     <img src="/assets/images/categorias/{{borrador.categoria.icono}}" title="{{borrador.categoria.nombre}}" alt="{{borrador.categoria.nombre}}" />
                                     {{borrador.titulo}}
                                 </a>
