@@ -14,7 +14,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 @Component({
   selector: 'app-posts-create',
   templateUrl: './posts-create.component.html',
-  styleUrls: ['./posts-create.component.scss']
+  styleUrls: ['./posts-create.component.scss'],
 })
 export class PostsCreateComponent implements OnInit, OnDestroy {
   public editor: Editor;
@@ -24,25 +24,27 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   public quienPuedeComentar: any = [
     {
       label: 'Todos pueden comentar',
-      value: false
+      value: false,
     },
     {
       label: 'Nadie puede comentar',
-      value: true
-    }
+      value: true,
+    },
   ];
   public currentUser: JwtUserModel;
   public postId: number = 0;
+  public esBorrador: boolean = false;
+  public today = new Date();
 
   public toolbar: Toolbar = [
-    ["bold", "italic"],
-    ["underline", "strike"],
-    ["blockquote"],
-    ["ordered_list", "bullet_list"],
-    [{ heading: ["h1", "h2", "h3", "h4", "h5", "h6"] }],
-    ["link", "image"],
-    ["text_color"],
-    ["align_left", "align_center", "align_right", "align_justify"]
+    ['bold', 'italic'],
+    ['underline', 'strike'],
+    ['blockquote'],
+    ['ordered_list', 'bullet_list'],
+    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+    ['link', 'image'],
+    ['text_color'],
+    ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
 
   constructor(
@@ -64,26 +66,29 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       etiquetas: [[], Validators.required],
       esPrivado: false,
       sinComentarios: false,
-      smileys: false
+      smileys: false,
+      esBorrador: false
     });
 
     this.activatedRoute.paramMap.subscribe((value: any) => {
       this.postId = +value.get('id');
 
-      if(!this.postId) {
+      if (!this.postId) {
         return;
       }
 
       this.postService.getPostById(this.postId).subscribe((response: any) => {
-
-        if (this.currentUser.usuario.rango !== 'Administrador' && this.currentUser.usuario.rango !== 'Moderador' &&
-          this.currentUser.usuario.userName != response.post.usuario.userName) {
+        if (
+          this.currentUser.usuario.rango !== 'Administrador' &&
+          this.currentUser.usuario.rango !== 'Moderador' &&
+          this.currentUser.usuario.userName != response.post.usuario.userName
+        ) {
           this.router.navigate(['']);
 
           Swal.fire({
             title: 'Actualizar Post',
             text: 'Oye cerebrito!, no puedes actualizar el post de otra persona 😥',
-            icon: 'warning'
+            icon: 'warning',
           });
         }
 
@@ -116,7 +121,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       etiquetas: etiquetas,
       smileys: post.smileys,
       esPrivado: post.esPrivado,
-      sinComentarios: post.sinComentarios
+      sinComentarios: post.sinComentarios,
     });
   }
 
@@ -141,15 +146,18 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     this.dialog.open(DialogPrevisualizarPostComponent, {
       width: '850px',
       data: this.formGroup.value?.contenido,
-      disableClose: true
+      disableClose: true,
     });
   }
 
   publicarPost(): void {
     const post = Object.assign({}, this.formGroup.value);
     post.etiquetas = post.etiquetas.join();
+    post.esBorrador = false;
 
-    const categoria = this.categorias.filter((categoria: any) => categoria.id === post.categoriaId)[0];
+    const categoria = this.categorias.filter(
+      (categoria: any) => categoria.id === post.categoriaId
+    )[0];
 
     if (!this.postId) {
       this.postService.savePost(post).subscribe((response: any) => {
@@ -158,7 +166,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
             title: 'Creado',
             text: 'Se ha creado recientemente tu post 👋🏼',
             icon: 'success',
-            timer: 3000
+            timer: 3000,
           }).then(() => {
             this.router.navigate(['']);
           });
@@ -174,15 +182,50 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
           title: 'Actualizado',
           text: 'Se ha actualizado recientemente tu post 👋🏼, ahora lo podrás visualizar con los cambios realizados',
           icon: 'success',
-          timer: 3000
+          timer: 3000,
         }).then(() => {
-          this.router.navigate([`/posts/${categoria.nombre.toLowerCase()}/${post.id}/${post.titulo}`]);
+          this.router.navigate([
+            `/posts/${categoria.nombre.toLowerCase()}/${post.id}/${
+              post.titulo
+            }`,
+          ]);
         });
       }
     });
   }
 
   guardarBorrador(): void {
-    console.log(this.formGroup.value);
+    if (this.formGroup.invalid) {
+      return;
+    }
+
+    const post = Object.assign({}, this.formGroup.value);
+    post.etiquetas = post.etiquetas.join();
+    post.esBorrador = this.esBorrador = true;
+
+    if (!this.postId) {
+      this.postService.savePost(post).subscribe((response: any) => {
+        if (response) {
+          this.postId = response;
+          this.today = new Date();
+
+          this.formGroup.patchValue({
+            id: response
+          });
+        }
+      });
+
+      return;
+    }
+
+    this.postService.updatePost(post).subscribe((response: any) => {
+      if (response) {
+        this.today = new Date();
+
+        this.formGroup.patchValue({
+          id: response
+        });
+      }
+    });
   }
 }
