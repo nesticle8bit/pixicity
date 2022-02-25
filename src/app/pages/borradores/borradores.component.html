@@ -1,16 +1,17 @@
-<div class="container container--home">
+<div [formGroup]="formGroup" class="container container--home">
     <div class="row">
         <div class="col-12 col-sm-6 col-md-9">
             <h6 class="main-title">
-                <span>Posts</span>
-                <input type="text" id="borradores-search" autocomplete="off">
+                <span>Borradores</span>
+                <input type="text" id="borradores-search" autocomplete="off" formControlName="search"
+                    (keyup)="getBorradores(0)" />
             </h6>
 
             <div class="nada-gris my-3" *ngIf="borradores.length < 1">
                 No agregaste ningún post a favoritos todavía
             </div>
 
-            <main class="table-responsive" *ngIf="borradores.length > 0">
+            <main class="table-responsive mt-3" *ngIf="borradores.length > 0">
                 <table class="table table-sm table-striped table-hover">
                     <thead>
                         <tr>
@@ -26,8 +27,9 @@
                     <tbody>
                         <tr *ngFor="let borrador of borradores">
                             <td>
-                                <a [routerLink]="['/posts/' + borrador.categoria.seo + '/' + borrador.id + '/' + borrador.url]" title="{{borrador.titulo}}">
-                                    <img src="/assets/images/categorias/{{borrador.categoria.icono}}" title="{{borrador.categoria.nombre}}" alt="{{borrador.categoria.nombre}}" />
+                                <a [routerLink]="['/posts/actualizar/' + borrador.id]" title="{{borrador.titulo}}">
+                                    <img src="/assets/images/categorias/{{borrador.categoria.icono}}"
+                                        title="{{borrador.categoria.nombre}}" alt="{{borrador.categoria.nombre}}" />
                                     {{borrador.titulo}}
                                 </a>
                             </td>
@@ -41,15 +43,19 @@
                             <td>
                                 0
                             </td>
-                            
+
                             <td>
                                 9
                             </td>
 
                             <td class="text-center" width="30px">
                                 <a href="javascript:void(0)" (click)="deleteBorrador(borrador)">
-                                    <img src="/assets/images/icons/cross.png" alt="Eliminar" #tooltip="matTooltip" matTooltip="Eliminar" [matTooltipPosition]="'above'" *ngIf="!borrador.deleted" />
-                                    <img src="/assets/images/icons/reload.png" alt="Recuperar" #tooltip="matTooltip" matTooltip="Recuperar" [matTooltipPosition]="'above'" *ngIf="borrador.deleted" />
+                                    <img src="/assets/images/icons/cross.png" alt="Eliminar" #tooltip="matTooltip"
+                                        matTooltip="Eliminar" [matTooltipPosition]="'above'"
+                                        *ngIf="!borrador.deleted" />
+                                    <img src="/assets/images/icons/reload.png" alt="Recuperar" #tooltip="matTooltip"
+                                        matTooltip="Recuperar" [matTooltipPosition]="'above'"
+                                        *ngIf="borrador.deleted" />
                                 </a>
                             </td>
                         </tr>
@@ -63,12 +69,32 @@
 
         <div class="col-12 col-sm-6 col-md-3">
             <h6 class="main-title">
-                <span>Filtrar</span>
-            </h6>
-
-            <h6 class="main-title">
                 <span>Categorías</span>
             </h6>
+
+            <table class="table table-sm table-striped table-hover">
+                <tbody>
+                    <tr *ngFor="let categoria of categorias">
+                        <td>
+                            <a href="javascript:void(0)" (click)="filterByCategory(categoria)"
+                                title="{{categoria.categoria.nombre}}">
+                                <img src="/assets/images/categorias/{{categoria.categoria.icono}}"
+                                    alt="{{categoria.categoria.nombre}}" />
+                                {{categoria.categoria.nombre}} <span
+                                    class="badge bg-secondary float-end">{{categoria.count}}</span>
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <a href="javascript:void(0)" (click)="getBorradores(0)">
+                                Todos
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

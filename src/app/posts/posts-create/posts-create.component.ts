@@ -122,6 +122,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       smileys: post.smileys,
       esPrivado: post.esPrivado,
       sinComentarios: post.sinComentarios,
+      esBorrador: post.esBorrador
     });
   }
 

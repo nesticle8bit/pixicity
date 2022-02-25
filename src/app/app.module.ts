@@ -290,7 +290,8 @@ import { CountryFlagComponent } from './components/addons/country-flag/country-f
         `${environment.api}/api/favoritos/getLastFavoritos`,
         `${environment.api}/api/monitors/getLastNotificaciones`,
         `${environment.api}/api/comentarios/getComentariosRecientes`,
-        `${environment.api}/api/tops/getTopPosts`
+        `${environment.api}/api/tops/getTopPosts`,
+        `${environment.api}/api/posts/getBorradores`
       ],
     }),
     MatRadioModule,

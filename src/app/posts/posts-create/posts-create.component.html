@@ -109,11 +109,11 @@
 
                         <div class="col-12 col-sm-6 text-end">
                             <button type="submit" mat-flat-button class="mat-success" (click)="publicarPost()" [disabled]="formGroup.invalid">
-                                <span *ngIf="!postId">
+                                <span *ngIf="!postId || formGroup.value.esBorrador">
                                     <fa-icon [icon]="['far', 'check-circle']"></fa-icon> Publicar
                                 </span>
 
-                                <span *ngIf="postId">
+                                <span *ngIf="postId && !formGroup.value.esBorrador">
                                     <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon> Actualizar
                                 </span>
                             </button>
