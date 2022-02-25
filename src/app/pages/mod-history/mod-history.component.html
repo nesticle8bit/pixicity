@@ -18,18 +18,28 @@
                 <tr *ngFor="let post of posts">
                     <td>
                         {{post.titulo}}
-                        <small>{{post.autor}}</small>
+                        <br>
+                        <small>
+                            Por: 
+                            <strong>
+                                <a href="/perfil/{{post.autor}}" target="_blank">
+                                    {{post.autor}}
+                                </a>
+                            </strong>
+                        </small>
                     </td>
 
-                    <td>
-                        {{post.accion}}
+                    <td class="my-auto">
+                        <strong [ngClass]="{'text-danger': post.accion === 'Eliminado', 'text-success': post.accion === 'Actualizado'}">
+                            {{post.accion}}
+                        </strong>
                     </td>
                     
-                    <td>
+                    <td class="my-auto">
                         {{post.moderador}}
                     </td>
 
-                    <td>
+                    <td class="my-auto">
                         {{post.causa}}
                     </td>
                 </tr>

@@ -11,7 +11,9 @@ export class ModHistoryComponent implements OnInit {
   
   constructor(private webService: IHttpWebService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getHistorialModeracion();
+  }
 
   getHistorialModeracion(): void {
     this.webService.getHistorialModeracion().subscribe((response: any) => {
