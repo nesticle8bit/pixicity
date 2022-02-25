@@ -102,7 +102,7 @@
                 <section class="mb-3">
                     <div class="row">
                         <div class="col-12 col-sm-6">
-                            <button mat-flat-button class="mat-gray" (click)="guardarBorrador()">
+                            <button mat-flat-button class="mat-gray" (click)="guardarBorrador()" [disabled]="formGroup.invalid">
                                 <fa-icon [icon]="['fas', 'save']"></fa-icon> Guardar en Borradores
                             </button>
                         </div>
@@ -117,6 +117,14 @@
                                     <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon> Actualizar
                                 </span>
                             </button>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2" *ngIf="esBorrador">
+                        <div class="col-12">
+                            <strong class="text-success">
+                                Borrador guardado exitosamente a las {{today | date:'hh:mm:ss a'}}
+                            </strong>
                         </div>
                     </div>
                 </section>
