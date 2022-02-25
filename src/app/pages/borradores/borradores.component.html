@@ -10,23 +10,55 @@
                 No agregaste ningún post a favoritos todavía
             </div>
 
-            <main *ngIf="borradores.length > 0">
-                <ul class="list-unstyled" id="resultados-borradores">
-                    <li *ngFor="let borrador of borradores" class="pt-2">
-                        <a [routerLink]="['/posts/' + borrador.categoria.seo + '/' + borrador.id + '/' + borrador.url]" title="{{borrador.titulo}}">
-                            <img src="/assets/images/categorias/{{borrador.categoria.icono}}" title="{{borrador.categoria.nombre}}"
-                                alt="{{borrador.categoria.nombre}}" />
-                            {{borrador.titulo}}
-                        </a>
+            <main class="table-responsive" *ngIf="borradores.length > 0">
+                <table class="table table-sm table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Creado</th>
+                            <th>Guardado</th>
+                            <th>Puntos</th>
+                            <th>Comentarios</th>
+                            <th></th>
+                        </tr>
+                    </thead>
 
-                        <p class="m-0 my-1 pt-1">
-                            <small>
-                                Última vez guardado {{borrador.fechaActualiza | timeAgo}}
-                            </small>
-                        </p>
-                    </li>
-                </ul>
+                    <tbody>
+                        <tr *ngFor="let borrador of borradores">
+                            <td>
+                                <a [routerLink]="['/posts/' + borrador.categoria.seo + '/' + borrador.id + '/' + borrador.url]" title="{{borrador.titulo}}">
+                                    <img src="/assets/images/categorias/{{borrador.categoria.icono}}" title="{{borrador.categoria.nombre}}" alt="{{borrador.categoria.nombre}}" />
+                                    {{borrador.titulo}}
+                                </a>
+                            </td>
+                            <td>
+                                {{borrador.fechaRegistro | timeAgo}}
+                            </td>
+                            <td>
+                                {{borrador.fechaRegistro | timeAgo}}
+                            </td>
+
+                            <td>
+                                0
+                            </td>
+                            
+                            <td>
+                                9
+                            </td>
+
+                            <td class="text-center" width="30px">
+                                <a href="javascript:void(0)" (click)="deleteBorrador(borrador)">
+                                    <img src="/assets/images/icons/cross.png" alt="Eliminar" #tooltip="matTooltip" matTooltip="Eliminar" [matTooltipPosition]="'above'" *ngIf="!borrador.deleted" />
+                                    <img src="/assets/images/icons/reload.png" alt="Recuperar" #tooltip="matTooltip" matTooltip="Recuperar" [matTooltipPosition]="'above'" *ngIf="borrador.deleted" />
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </main>
+
+            <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)">
+            </mat-paginator>
         </div>
 
         <div class="col-12 col-sm-6 col-md-3">
