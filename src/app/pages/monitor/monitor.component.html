@@ -34,9 +34,9 @@
                                         <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
 
                                         <span [innerHTML]="notificacion.mensaje"></span> <a
-                                            [routerLink]="['/posts/' + notificacion.post.categoria.seo + '/' + notificacion.post.id + '/' + notificacion.post.url]"
-                                            title="{{notificacion.post.titulo}}">
-                                            {{notificacion.post.titulo}}
+                                            [routerLink]="['/posts/' + notificacion.post?.categoria?.seo + '/' + notificacion.post?.id + '/' + notificacion.post?.url]"
+                                            title="{{notificacion?.post?.titulo}}">
+                                            {{notificacion.post?.titulo}}
                                         </a>
                                     </div>
                                 </div>

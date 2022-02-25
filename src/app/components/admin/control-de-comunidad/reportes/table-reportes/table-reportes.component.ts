@@ -26,8 +26,6 @@ export class TableReportesComponent implements OnInit {
     this.denunciaService.getDenuncias().subscribe((response: any) => {
       this.denuncias = response.data;
       this.totalCount = response.pagination.totalCount;
-
-      console.log(this.denuncias);
     });
   }
 

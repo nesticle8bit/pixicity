@@ -23,7 +23,6 @@ export class PostsViewComponent implements OnInit {
     private router: Router
   ) {
     this.currentUser = this.securityService.getCurrentUser();
-    console.log(this.currentUser);
   }
 
   ngOnInit(): void {

@@ -63,7 +63,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
           if (notificacion.mensaje) {
             notificacion.mensaje = notificacion.mensaje.replace(
               'tu post',
-              `tu <a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post.id}/${notificacion.post.url}">post</a>`
+              `tu <a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}">post</a>`
             );
           }
 
@@ -72,7 +72,6 @@ export class SectionUserInfoLoginComponent implements OnInit {
       }
 
       this.notificaciones = response;
-      console.log(response);
     });
 
     this.display.monitor = !this.display.monitor;
