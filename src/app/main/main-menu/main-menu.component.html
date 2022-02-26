@@ -27,7 +27,7 @@
                         </a>
                     </li>
 
-                    <li class="list-inline-item main-menu--item">
+                    <li class="list-inline-item main-menu--item" *ngIf="currentUser.usuario.rango === 'Administrador'">
                         <a [routerLink]="['/administracion/dashboard']">
                             <span>Administración</span>
                         </a>
