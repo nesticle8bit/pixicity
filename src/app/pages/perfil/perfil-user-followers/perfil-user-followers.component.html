@@ -1,11 +1,19 @@
 <main class="mb-4">
     <h6 class="main-title my-2">
         <span>Seguidores</span>
-    
-        <strong class="float-end" style="background: #fff; margin-top: -2px; color: #8B8B8B; padding-left: 7px;">0</strong>
+
+        <strong class="float-end"
+            style="background: #fff; margin-top: -2px; color: #8B8B8B; padding-left: 7px;">0</strong>
     </h6>
-    
-    <div class="alert alert-warning">
+
+    <div class="alert alert-warning" *ngIf="followers.length < 1">
         😔 <strong>No tiene seguidores</strong>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-2" *ngFor="let item of followers">
+            <img src="https://i.imgur.com/2Rs9AVg.jpeg" class="img-fluid rounded" matTooltip="{{item.userName}}"
+            [matTooltipPosition]="'left'" />
+        </div>
     </div>
 </main>
