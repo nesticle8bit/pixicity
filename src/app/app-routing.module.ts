@@ -11,6 +11,7 @@ import { DashboardConfigurationComponent } from './components/admin/general/conf
 import { DashboardAdsComponent } from './components/admin/general/publicidad/dashboard-ads/dashboard-ads.component';
 import { DashboardSesionesComponent } from './components/admin/usuarios/sesiones/dashboard-sesiones/dashboard-sesiones.component';
 import { DashboardUsuariosComponent } from './components/admin/usuarios/usuarios/dashboard-usuarios/dashboard-usuarios.component';
+import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
 import { AccountComponent } from './pages/account/account.component';
 import { BorradoresComponent } from './pages/borradores/borradores.component';
 import { EnVivoComponent } from './pages/en-vivo/en-vivo.component';
@@ -57,6 +58,8 @@ const routes: Routes = [
   { path: 'usuarios', component: UsuariosComponent },
   { path: 'favoritos', component: FavoritosComponent },
   { path: 'borradores', component: BorradoresComponent },
+
+  { path: 'mi', component: MiHomeComponent },
 
   { path: 'protocolo', component: PageProtocoloComponent },
 
