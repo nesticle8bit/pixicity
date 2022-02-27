@@ -1,6 +1,7 @@
 <a name="comentarios"></a>
 
-<section class="nada-amarillo mx-auto" style="width: 98%;" *ngIf="(!comentarios || comentarios.length < 1) && post?.sinComentarios === false">
+<section class="nada-amarillo mx-auto" style="width: 98%;"
+    *ngIf="(!comentarios || comentarios.length < 1) && post?.sinComentarios === false">
     Este post no tiene comentarios, soyez le premier!
 </section>
 
@@ -20,7 +21,8 @@
     <div id="comentarios" style="opacity: 1;" *ngFor="let comentario of comentarios"
         (mouseover)="comentario.actions=true" (mouseout)="comentario.actions=false">
         <div id="respnuevas">
-            <div class="comentario-post clearbeta" [ngClass]="{'mi-comentario': comentario?.userName === currentUser?.usuario?.userName, 'op': comentario?.userName === post?.usuario?.userName}">
+            <div class="comentario-post clearbeta"
+                [ngClass]="{'mi-comentario': comentario?.userName === currentUser?.usuario?.userName, 'op': comentario?.userName === post?.usuario?.userName}">
                 <div class="avatar-box" style="z-index: 99;">
                     <a href="#">
                         <img width="48" height="48" title="Avatar de nesticle8bit"
@@ -35,7 +37,8 @@
                             <div class="floatL">
                                 <a href="#">{{comentario?.userName}}</a>
                                 <b class="badge bg-primary mx-1 cursor--help" matTooltip="Original Poster"
-                                [matTooltipPosition]="'right'" *ngIf="comentario?.userName === post?.usuario?.userName">OP</b>
+                                    [matTooltipPosition]="'right'"
+                                    *ngIf="comentario?.userName === post?.usuario?.userName">OP</b>
                                 <span> {{comentario?.fechaComentario | timeAgo}}</span>
                             </div>
 
@@ -142,16 +145,18 @@
     </div>
 </div>
 
-<form class="miComentario mx-auto" [formGroup]="formGroup" *ngIf="post?.sinComentarios === false">
+<form class="miComentario mx-auto" [formGroup]="formGroup" *ngIf="post?.sinComentarios === false && currentUser?.usuario">
     <div id="procesando">
         <div id="post"></div>
     </div>
+
     <div class="creul">
         <img src="https://i.imgur.com/2Rs9AVg.jpeg" class="avese">
         <div id="gif_cargando" style="display: none;margin:10px 3px 0 3px;">
             <img src="/assets/images/min-carga.gif">
         </div>
     </div>
+
     <div class="Container">
         <div class="error"></div>
 

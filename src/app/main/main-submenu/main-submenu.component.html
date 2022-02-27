@@ -15,7 +15,7 @@
                     </a>
                 </li>
 
-                <li class="list-inline-item sub-menu--item">
+                <li class="list-inline-item sub-menu--item" *ngIf="currentUser?.usuario">
                     <a [routerLink]="['/crear/post']">
                         <i class="icon plus"></i>
                         <span style="margin-left: 2px;">Crear Post</span>
@@ -29,7 +29,7 @@
                     </a>
                 </li>
 
-                <li class="list-inline-item sub-menu--item">
+                <li class="list-inline-item sub-menu--item" *ngIf="currentUser?.usuario?.rango === 'Moderador'">
                     <a [routerLink]="['/moderacion']">
                         <fa-icon [icon]="['fas', 'toolbox']" [fixedWidth]="true"></fa-icon>
                         <span style="margin-left: 2px;">Moderación</span>

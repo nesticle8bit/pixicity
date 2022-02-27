@@ -140,6 +140,7 @@ import { TagsCloudComponent } from './components/addons/tags-cloud/tags-cloud.co
 import { DashboardUsuariosComponent } from './components/admin/usuarios/usuarios/dashboard-usuarios/dashboard-usuarios.component';
 import { TableUsuariosComponent } from './components/admin/usuarios/usuarios/table-usuarios/table-usuarios.component';
 import { CountryFlagComponent } from './components/addons/country-flag/country-flag.component';
+import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
 
 @NgModule({
   declarations: [
@@ -224,6 +225,7 @@ import { CountryFlagComponent } from './components/addons/country-flag/country-f
     DashboardUsuariosComponent,
     TableUsuariosComponent,
     CountryFlagComponent,
+    MiHomeComponent,
   ],
   imports: [
     BrowserModule,
