@@ -113,7 +113,7 @@
                         Cuenta
                     </a>
 
-                    <a class="menu" [routerLink]="['borradores']">
+                    <a class="menu" [routerLink]="['/borradores']">
                         Borradores
                     </a>
 
@@ -127,6 +127,6 @@
 </section>
 
 <div *ngIf="!currentUser?.usuario">
-    <a class="registro float-end" [routerLink]="['registro']"></a>
-    <a class="identificarse float-end" [routerLink]="['login']">Identificarme</a>
+    <a class="registro float-end" [routerLink]="['/registro']"></a>
+    <a class="identificarse float-end" [routerLink]="['/login']">Identificarme</a>
 </div>
