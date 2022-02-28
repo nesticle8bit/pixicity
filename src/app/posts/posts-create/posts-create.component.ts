@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
   selector: 'app-posts-create',
@@ -49,6 +50,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
   constructor(
     private parametrosService: IHttpParametrosService,
+    private displayService: DisplayComponentService,
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private postService: IHttpPostsService,
@@ -57,6 +59,13 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     private securityService: IHttpSecurityService
   ) {
     this.currentUser = this.securityService.getCurrentUser();
+
+    this.displayService.setDisplay({
+      mainMenu: true,
+      footer: true,
+      searchFooter: true,
+      submenu: true,
+    });
 
     this.formGroup = this.formBuilder.group({
       id: 0,
