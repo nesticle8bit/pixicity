@@ -61,10 +61,8 @@ export class SectionUserInfoLoginComponent implements OnInit {
       if (response) {
         response = response.map((notificacion: any) => {
           if (notificacion.mensaje) {
-            notificacion.mensaje = notificacion.mensaje.replace(
-              'tu post',
-              `tu <a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}">post</a>`
-            );
+            notificacion.mensaje = notificacion.mensaje.replace('tu post', `tu ${this.setURL(notificacion, 'post')}`);
+            notificacion.mensaje = notificacion.mensaje.replace('post que sigues', `${this.setURL(notificacion, 'post que sigues')}`);
           }
 
           return notificacion;
@@ -75,6 +73,10 @@ export class SectionUserInfoLoginComponent implements OnInit {
     });
 
     this.display.monitor = !this.display.monitor;
+  }
+
+  setURL(notificacion: any, text: string): string {
+   return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}">${text}</a>`;
   }
 
   verFavoritos(): void {
