@@ -27,6 +27,7 @@ import { SearchComponent } from './pages/search/search.component';
 import { TopsComponent } from './pages/tops/tops.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { PostNotFoundComponent } from './posts/post-not-found/post-not-found.component';
+import { PostPrivadoComponent } from './posts/post-privado/post-privado.component';
 import { PostsCreateComponent } from './posts/posts-create/posts-create.component';
 import { PostsViewComponent } from './posts/posts-view/posts-view.component';
 import { SectionHomeComponent } from './sections/section-home/section-home.component';
@@ -47,6 +48,7 @@ const routes: Routes = [
   { path: 'posts/:categoria', component: SectionHomeComponent },
   { path: 'posts/:categoria/:id/:nombre-post', component: PostsViewComponent },
   { path: 'posts/404/:nombre-post', component: PostNotFoundComponent },
+  { path: 'posts/privado/:nombre-post', component: PostPrivadoComponent },
   { path: 'crear/post', component: PostsCreateComponent },
   { path: 'posts/actualizar/:id', component: PostsCreateComponent },
 

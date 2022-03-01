@@ -141,6 +141,7 @@ import { DashboardUsuariosComponent } from './components/admin/usuarios/usuarios
 import { TableUsuariosComponent } from './components/admin/usuarios/usuarios/table-usuarios/table-usuarios.component';
 import { CountryFlagComponent } from './components/addons/country-flag/country-flag.component';
 import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
+import { PostPrivadoComponent } from './posts/post-privado/post-privado.component';
 
 @NgModule({
   declarations: [
@@ -226,6 +227,7 @@ import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
     TableUsuariosComponent,
     CountryFlagComponent,
     MiHomeComponent,
+    PostPrivadoComponent,
   ],
   imports: [
     BrowserModule,
