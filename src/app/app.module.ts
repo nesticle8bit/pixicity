@@ -142,6 +142,7 @@ import { TableUsuariosComponent } from './components/admin/usuarios/usuarios/tab
 import { CountryFlagComponent } from './components/addons/country-flag/country-flag.component';
 import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
 import { PostPrivadoComponent } from './posts/post-privado/post-privado.component';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 
 @NgModule({
   declarations: [
@@ -307,6 +308,7 @@ import { PostPrivadoComponent } from './posts/post-privado/post-privado.componen
     MatCardModule,
     MatDividerModule,
     MatExpansionModule,
+    PickerModule,
   ],
   providers: [
     DisplayComponentService,

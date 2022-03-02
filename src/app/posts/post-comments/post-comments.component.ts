@@ -6,7 +6,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 @Component({
   selector: 'app-post-comments',
   templateUrl: './post-comments.component.html',
-  styleUrls: ['./post-comments.component.scss']
+  styleUrls: ['./post-comments.component.scss'],
 })
 export class PostCommentsComponent implements OnInit {
   private _post: any;
@@ -23,6 +23,7 @@ export class PostCommentsComponent implements OnInit {
   public formGroup: FormGroup;
   public comentarios: any = [];
   public currentUser: any;
+  public displayEmojis: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -30,7 +31,7 @@ export class PostCommentsComponent implements OnInit {
     private securityService: IHttpSecurityService
   ) {
     this.formGroup = this.formBuilder.group({
-      contenido: ['', Validators.required]
+      contenido: ['', Validators.required],
     });
   }
 
@@ -49,33 +50,45 @@ export class PostCommentsComponent implements OnInit {
     this.postService.addComentario(comentario).subscribe((response: any) => {
       if (response) {
         this.formGroup.patchValue({
-          contenido: ''
+          contenido: '',
         });
 
         this.comentarios.push({
           id: response,
           userName: this.currentUser.usuario.userName,
           contenido: comentario.contenido,
-          fechaComentario: new Date()
+          fechaComentario: new Date(),
         });
       }
     });
   }
 
   getComentariosByPostId(): void {
-    this.postService.getComentariosByPostId(this.post.id).subscribe((response: any) => {
-      if (response) {
-        response = response.map((comentario: any) => {
-          comentario.actions = false;
-          return comentario;
-        });
-      }
+    this.postService
+      .getComentariosByPostId(this.post.id)
+      .subscribe((response: any) => {
+        if (response) {
+          response = response.map((comentario: any) => {
+            comentario.actions = false;
+            return comentario;
+          });
+        }
 
-      this.comentarios = response;
-    });
+        this.comentarios = response;
+      });
   }
 
   eliminarComentario(comentario: any): void {
     console.log(comentario);
+  }
+
+  addEmoji(event: any): void {
+    const comentario = this.formGroup.value.contenido;
+
+    this.formGroup.patchValue({
+      contenido: `${comentario}${event.emoji.native}`,
+    });
+
+    this.displayEmojis = false;
   }
 }
