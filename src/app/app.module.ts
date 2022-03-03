@@ -142,7 +142,9 @@ import { TableUsuariosComponent } from './components/admin/usuarios/usuarios/tab
 import { CountryFlagComponent } from './components/addons/country-flag/country-flag.component';
 import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
 import { PostPrivadoComponent } from './posts/post-privado/post-privado.component';
-
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { BottomSheetsEmojisComponent } from './components/bottom-sheets/bottom-sheets-emojis/bottom-sheets-emojis.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -228,6 +230,7 @@ import { PostPrivadoComponent } from './posts/post-privado/post-privado.componen
     CountryFlagComponent,
     MiHomeComponent,
     PostPrivadoComponent,
+    BottomSheetsEmojisComponent,
   ],
   imports: [
     BrowserModule,
@@ -295,7 +298,7 @@ import { PostPrivadoComponent } from './posts/post-privado/post-privado.componen
         `${environment.api}/api/monitors/getLastNotificaciones`,
         `${environment.api}/api/comentarios/getComentariosRecientes`,
         `${environment.api}/api/tops/getTopPosts`,
-        `${environment.api}/api/posts/getBorradores`
+        `${environment.api}/api/posts/getBorradores`,
       ],
     }),
     MatRadioModule,
@@ -307,6 +310,8 @@ import { PostPrivadoComponent } from './posts/post-privado/post-privado.componen
     MatCardModule,
     MatDividerModule,
     MatExpansionModule,
+    PickerModule,
+    MatBottomSheetModule,
   ],
   providers: [
     DisplayComponentService,
