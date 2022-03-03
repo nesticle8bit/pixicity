@@ -44,12 +44,12 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
     - [x] Filtrar la lista de posts por categoria en la pagina de inicio
     - [x] Visualizar el post
     - [x] Sistema de votaciones para los posts
-    - [ ] Implementar el Seguir post para ser notificado en el monitor
+    - [x] Implementar el Seguir post para ser notificado en el monitor
     - [x] Sidebar del Post como Componente
     - [x] Dialog para Denunciar los posts
     - [x] Agregar a favoritos
-    - [ ] Desarrollar el 'meta' del post (visitantes, favoritos, seguidores)
-    - [ ] Meta tags: buscar por tag al dar click a uno de ellos
+    - [x] Desarrollar el 'meta' del post (visitantes, favoritos, seguidores)
+    - [x] Meta tags: buscar por tag al dar click a uno de ellos
     
   - Buscador
     - [x] Buscar por una palabra
