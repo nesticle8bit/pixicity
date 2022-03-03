@@ -23,9 +23,9 @@
                         <li class="list-items" *ngFor="let notificacion of notificaciones">
                             <div class="d-flex">
                                 <div class="flex-shrink-0">
-                                    <img src="https://i.imgur.com/2Rs9AVg.jpeg" alt="Imagen de Perfil" 
-                                    matTooltip="{{notificacion.usuarioQueHaceAccion}}" [matTooltipPosition]="'before'"
-                                    width="20px" class="img-fluid" />
+                                    <app-user-avatar matTooltip="{{notificacion.usuarioQueHaceAccion}}" [matTooltipPosition]="'before'"
+                                        [avatar]="notificacion.usuarioQueHaceAccion.avatar" [userName]="notificacion.usuarioQueHaceAccion.userName"
+                                        [height]="20"></app-user-avatar>
                                 </div>
                         
                                 <div class="flex-grow-1 ms-2">
@@ -58,7 +58,7 @@
             </li>
 
             <li class="mensajes" style="position:relative">
-                <a class="menu" href="#/mensajes/" onclick="mensaje.last(); return false" title="Mensajes" name="Mensajes">
+                <a class="menu" href="#/mensajes/" onclick="mensaje.last();" title="Mensajes" name="Mensajes">
                     <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                 </a>
                 <!-- <div class="notificaciones-list" id="mp_list">
@@ -102,7 +102,10 @@
 
             <li class="usernameMenu" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
                 <a class="nick menu" href="javascript:void(0)" [routerLink]="['/perfil/' + currentUser?.usuario?.userName]">
-                    <img class="avamu" src="https://i.imgur.com/2Rs9AVg.jpeg" />
+                    <app-user-avatar [class]="'avamu'"
+                        [avatar]="currentUser?.usuario?.avatar" [userName]="currentUser?.usuario?.userName"
+                        [height]="20"></app-user-avatar>
+
                     <span>{{currentUser?.usuario?.userName}}</span>
                     <img class="punti" src="/assets/images/ui/arrowd.png" />
                 </a>

@@ -265,6 +265,8 @@ export class AccountComponent implements OnInit {
     private dialog: MatDialog
   ) {
     this.formGroupCuenta = this.formBuilder.group({
+      avatar: '',
+      userName: '',
       email: ['', Validators.email],
       paisId: [undefined, Validators.required],
       estadoId: [undefined, Validators.required],
@@ -406,6 +408,8 @@ export class AccountComponent implements OnInit {
         const fechaNacimiento = value.fechaNacimiento?.split('/');
 
         this.formGroupCuenta.patchValue({
+          avatar: value.avatar,
+          userName: value.userName,
           email: value.email,
           genero: value.genero,
           paisId: value.paisId,
@@ -506,7 +510,7 @@ export class AccountComponent implements OnInit {
 
   changeAvatar(): void {
     this.dialog.open(DialogChangeAvatarComponent, {
-      width: '680px',
+      width: '350px',
       disableClose: true
     });
   }

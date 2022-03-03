@@ -24,10 +24,8 @@
             <div class="comentario-post clearbeta"
                 [ngClass]="{'mi-comentario': comentario?.userName === currentUser?.usuario?.userName, 'op': comentario?.userName === post?.usuario?.userName}">
                 <div class="avatar-box" style="z-index: 99;">
-                    <a href="#">
-                        <img width="48" height="48" title="Avatar de nesticle8bit"
-                            src="https://i.imgur.com/2Rs9AVg.jpeg" class="avatar-48 lazy"
-                            style="position: relative; z-index: 1; display: inline;">
+                    <a [routerLink]="['/perfil/' + comentario?.userName]">
+                        <app-user-avatar [class]="'avatar-48 lazy'" [avatar]="comentario?.avatar" [userName]="comentario?.userName" [width]="48" matTooltip="Avatar de {{comentario?.userName}}" [matTooltipPosition]="'left'"></app-user-avatar>
                     </a>
                 </div>
 
@@ -152,7 +150,8 @@
     </div>
 
     <div class="creul">
-        <img src="https://i.imgur.com/2Rs9AVg.jpeg" class="avese">
+        <app-user-avatar [class]="'avese'" [avatar]="currentUser?.usuario?.avatar" [userName]="currentUser?.usuario?.userName" [width]="48" matTooltip="Avatar de {{currentUser?.usuario?.userName}}" [matTooltipPosition]="'left'"></app-user-avatar>
+
         <div id="gif_cargando" style="display: none;margin:10px 3px 0 3px;">
             <img src="/assets/images/min-carga.gif">
         </div>
