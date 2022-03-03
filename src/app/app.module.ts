@@ -146,6 +146,7 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { BottomSheetsEmojisComponent } from './components/bottom-sheets/bottom-sheets-emojis/bottom-sheets-emojis.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { DialogChangeAvatarComponent } from './components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
 
 @NgModule({
   declarations: [
@@ -233,6 +234,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     MiHomeComponent,
     PostPrivadoComponent,
     BottomSheetsEmojisComponent,
+    DialogChangeAvatarComponent,
   ],
   imports: [
     BrowserModule,

@@ -7,6 +7,8 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogChangeAvatarComponent } from 'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import Swal from 'sweetalert2';
@@ -259,7 +261,8 @@ export class AccountComponent implements OnInit {
   constructor(
     private securityService: IHttpSecurityService,
     private parametrosService: IHttpParametrosService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog
   ) {
     this.formGroupCuenta = this.formBuilder.group({
       email: ['', Validators.email],
@@ -498,6 +501,13 @@ export class AccountComponent implements OnInit {
           timer: 3000,
         });
       }
+    });
+  }
+
+  changeAvatar(): void {
+    this.dialog.open(DialogChangeAvatarComponent, {
+      width: '680px',
+      disableClose: true
     });
   }
 }
