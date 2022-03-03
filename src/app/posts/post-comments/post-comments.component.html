@@ -145,7 +145,8 @@
     </div>
 </div>
 
-<form class="miComentario mx-auto" [formGroup]="formGroup" *ngIf="post?.sinComentarios === false && currentUser?.usuario">
+<form class="miComentario mx-auto" [formGroup]="formGroup"
+    *ngIf="post?.sinComentarios === false && currentUser?.usuario">
     <div id="procesando">
         <div id="post"></div>
     </div>
@@ -160,9 +161,29 @@
     <div class="Container">
         <div class="error"></div>
 
-        <span class="cursor--pointer" (click)="emojiBottomSheet()">
-            😃
-        </span>
+        <section class="comments-menu">
+            <ul class="list-inline mb-0">
+                <li class="list-inline-item" (click)="emojiBottomSheet()">
+                    <fa-icon [icon]="['far', 'laugh-beam']"></fa-icon>
+                </li>
+
+                <li class="list-inline-item">
+                    <fa-icon [icon]="['fas', 'bold']"></fa-icon>
+                </li>
+
+                <li class="list-inline-item">
+                    <fa-icon [icon]="['fas', 'italic']"></fa-icon>
+                </li>
+
+                <li class="list-inline-item">
+                    <fa-icon [icon]="['fas', 'underline']"></fa-icon>
+                </li>
+
+                <li class="list-inline-item">
+                    <fa-icon [icon]="['fas', 'image']"></fa-icon>
+                </li>
+            </ul>
+        </section>
 
         <textarea id="body_comm" class="autogrow onblur_effect" tabindex="1" placeholder="Escribir un comentario..."
             formControlName="contenido"></textarea>

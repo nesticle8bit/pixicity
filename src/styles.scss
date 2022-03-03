@@ -2598,3 +2598,22 @@ i.icon.tipov {
 .opacity-50 {
     opacity: .5;
 }
+
+.comments-menu {
+    background-color: #f5f5f5;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid #ddd;
+    border-bottom: 0;
+
+    & .list-inline-item {
+        margin-right: 0;
+        border-right: 1px solid #ccc;
+        padding-right: 8px;
+        padding: 5px 10px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #e6e6e6;
+        }
+    }
+}
