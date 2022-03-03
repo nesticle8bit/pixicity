@@ -46,7 +46,8 @@ input:focus {
 
 header {
     &.main-header {
-        background: url('/assets/images/header-bg-1.jpg') top center repeat-x $main-color;
+        background: url('/assets/images/header-bg-3.png') top center repeat-x $main-color;
+        height: 65px;
     }
 }
 
