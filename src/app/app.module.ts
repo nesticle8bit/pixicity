@@ -145,6 +145,8 @@ import { PostPrivadoComponent } from './posts/post-privado/post-privado.componen
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { BottomSheetsEmojisComponent } from './components/bottom-sheets/bottom-sheets-emojis/bottom-sheets-emojis.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -312,6 +314,7 @@ import { BottomSheetsEmojisComponent } from './components/bottom-sheets/bottom-s
     MatExpansionModule,
     PickerModule,
     MatBottomSheetModule,
+    ImageCropperModule
   ],
   providers: [
     DisplayComponentService,
