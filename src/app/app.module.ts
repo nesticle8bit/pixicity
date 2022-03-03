@@ -143,7 +143,8 @@ import { CountryFlagComponent } from './components/addons/country-flag/country-f
 import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
 import { PostPrivadoComponent } from './posts/post-privado/post-privado.component';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
-
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { BottomSheetsEmojisComponent } from './components/bottom-sheets/bottom-sheets-emojis/bottom-sheets-emojis.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -229,6 +230,7 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
     CountryFlagComponent,
     MiHomeComponent,
     PostPrivadoComponent,
+    BottomSheetsEmojisComponent,
   ],
   imports: [
     BrowserModule,
@@ -296,7 +298,7 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
         `${environment.api}/api/monitors/getLastNotificaciones`,
         `${environment.api}/api/comentarios/getComentariosRecientes`,
         `${environment.api}/api/tops/getTopPosts`,
-        `${environment.api}/api/posts/getBorradores`
+        `${environment.api}/api/posts/getBorradores`,
       ],
     }),
     MatRadioModule,
@@ -309,6 +311,7 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
     MatDividerModule,
     MatExpansionModule,
     PickerModule,
+    MatBottomSheetModule,
   ],
   providers: [
     DisplayComponentService,

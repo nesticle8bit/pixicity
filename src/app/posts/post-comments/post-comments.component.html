@@ -160,11 +160,9 @@
     <div class="Container">
         <div class="error"></div>
 
-        <span (click)="displayEmojis = !displayEmojis">
+        <span class="cursor--pointer" (click)="emojiBottomSheet()">
             😃
         </span>
-
-        <emoji-mart class="emoji-mart" *ngIf="displayEmojis" (emojiSelect)="addEmoji($event)" title="Choose your emoji"></emoji-mart>
 
         <textarea id="body_comm" class="autogrow onblur_effect" tabindex="1" placeholder="Escribir un comentario..."
             formControlName="contenido"></textarea>

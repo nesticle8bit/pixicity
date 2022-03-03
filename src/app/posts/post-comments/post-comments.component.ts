@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { BottomSheetsEmojisComponent } from 'src/app/components/bottom-sheets/bottom-sheets-emojis/bottom-sheets-emojis.component';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
@@ -27,6 +29,7 @@ export class PostCommentsComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private bottomSheet: MatBottomSheet,
     private postService: IHttpPostsService,
     private securityService: IHttpSecurityService
   ) {
@@ -88,7 +91,18 @@ export class PostCommentsComponent implements OnInit {
     this.formGroup.patchValue({
       contenido: `${comentario}${event.emoji.native}`,
     });
+  }
 
-    this.displayEmojis = false;
+  emojiBottomSheet(): void {
+    // displayEmojis = !displayEmojis
+    const ref = this.bottomSheet.open(BottomSheetsEmojisComponent, {
+      closeOnNavigation: true
+    });
+
+    ref.afterDismissed().subscribe((value: any) => {
+      if (value) {
+        this.addEmoji(value);
+      }
+    });
   }
 }
