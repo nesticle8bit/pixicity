@@ -760,11 +760,13 @@
         <div class="dotted-border--left col-12 col-sm-3 text-center">
             <h6>Mi Avatar</h6>
 
-            <img src="https://i.imgur.com/2Rs9AVg.jpeg" height="160px" />
+            <img class="img-fluid rounded" src="https://i.imgur.com/2Rs9AVg.jpeg" height="160px" />
 
-            <a href="#" class="boton azul block my-3">
+            <br>
+
+            <button class="mt-3 col-9" (click)="changeAvatar()" mat-flat-button color="primary">
                 Editar
-            </a>
+            </button>
         </div>
     </div>
 </section>
