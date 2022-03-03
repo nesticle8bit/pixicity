@@ -2617,3 +2617,7 @@ i.icon.tipov {
         }
     }
 }
+
+.table>:not(:first-child) {
+    border-top: none;
+}
