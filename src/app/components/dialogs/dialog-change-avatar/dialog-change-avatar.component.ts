@@ -2,6 +2,7 @@ import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog-change-avatar',
@@ -12,7 +13,10 @@ export class DialogChangeAvatarComponent implements OnInit {
   imageChangedEvent: any = '';
   croppedImage: any = '';
 
-  constructor(private securityService: IHttpSecurityService) {}
+  constructor(
+    private securityService: IHttpSecurityService,
+    public dialogRef: MatDialogRef<DialogChangeAvatarComponent>
+  ) {}
 
   ngOnInit(): void {}
 
@@ -43,7 +47,14 @@ export class DialogChangeAvatarComponent implements OnInit {
     });
 
     this.securityService.changeAvatar(imageFile).subscribe((response: any) => {
-      console.log(response);
+      if (response) {
+        debugger
+        let currentUser = this.securityService.getCurrentUser();
+        currentUser.usuario.avatar = 'avatar.jpeg';
+        this.securityService.setUserToLocalStorage(currentUser);
+
+        this.dialogRef.close(response);
+      }
     });
   }
 
