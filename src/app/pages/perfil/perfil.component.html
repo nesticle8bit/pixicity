@@ -27,12 +27,8 @@
 
                                     <div class="col-12 col-sm-4">
                                         <div class="text-end">
-                                            <img src="/assets/images/icons/male.png" alt="{{currentUser?.genero}}"
-                                                title="{{currentUser?.genero}}" class="mx-2" />
-
-                                            <img *ngIf="currentUser?.pais"
-                                                src="/assets/images/flags/{{currentUser?.pais?.isO2?.toLowerCase()}}.png"
-                                                title="{{currentUser?.pais?.nombre}}">
+                                            <app-genre-icon class="mx-2" [genre]="currentUser?.genero"></app-genre-icon>
+                                            <addon-country-flag [iso2]="currentUser?.pais?.isO2" [title]="currentUser?.pais?.nombre"></addon-country-flag>
                                         </div>
                                     </div>
                                 </div>

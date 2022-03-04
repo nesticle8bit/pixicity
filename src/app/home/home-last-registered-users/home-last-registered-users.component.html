@@ -9,15 +9,7 @@
         </strong>
 
         <a [routerLink]="['/perfil/' + usuario.userName]" title="{{usuario.userName}}">
-            <fa-icon [icon]="['fas', 'mars']" class="vctip" tooltip="matTooltip" matTooltip="Hombre"
-                [matTooltipPosition]="'below'" *ngIf="usuario.genero == 'Masculino'" class="text-primary"></fa-icon>
-
-                <fa-icon [icon]="['fas', 'venus']" class="vctip" tooltip="matTooltip" matTooltip="Mujer"
-                [matTooltipPosition]="'below'" *ngIf="usuario.genero == 'Femenino'" class="text-prunus"></fa-icon>
-
-                <fa-icon [icon]="['fas', 'neuter']" class="vctip" tooltip="matTooltip" matTooltip="Otros" class="text-muted"
-                [matTooltipPosition]="'below'" *ngIf="usuario.genero != 'Femenino' && usuario.genero != 'Masculino'"></fa-icon>
-
+            <app-genre-icon [genre]="usuario?.genero"></app-genre-icon>
             <span class="ms-2">{{usuario.userName}}</span>
         </a>
     </article>
