@@ -265,6 +265,8 @@ export class AccountComponent implements OnInit {
     private dialog: MatDialog
   ) {
     this.formGroupCuenta = this.formBuilder.group({
+      avatar: '',
+      userName: '',
       email: ['', Validators.email],
       paisId: [undefined, Validators.required],
       estadoId: [undefined, Validators.required],
@@ -334,7 +336,7 @@ export class AccountComponent implements OnInit {
 
   getCurrentPerfilInfo(): void {
     this.securityService.getCurrentPerfilInfo().subscribe((response: any) => {
-      if(response) {
+      if (response) {
         this.formGroupPerfil.patchValue({
           completeName: response.completeName,
           personalMessage: response.personalMessage,
@@ -406,6 +408,8 @@ export class AccountComponent implements OnInit {
         const fechaNacimiento = value.fechaNacimiento?.split('/');
 
         this.formGroupCuenta.patchValue({
+          avatar: value.avatar,
+          userName: value.userName,
           email: value.email,
           genero: value.genero,
           paisId: value.paisId,
@@ -505,9 +509,18 @@ export class AccountComponent implements OnInit {
   }
 
   changeAvatar(): void {
-    this.dialog.open(DialogChangeAvatarComponent, {
-      width: '680px',
-      disableClose: true
+    const dialogRef = this.dialog.open(DialogChangeAvatarComponent, {
+      width: '350px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((value: any) => {
+      debugger
+      if (value) {
+        this.formGroupCuenta.patchValue({
+          avatar: value,
+        });
+      }
     });
   }
 }

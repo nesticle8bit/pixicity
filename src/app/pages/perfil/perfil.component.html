@@ -8,9 +8,8 @@
                     <div class="row">
                         <div class="col-12 col-sm-2">
                             <div class="perfil-avatar">
-                                <a href="#">
-                                    <img alt="" src="https://i.imgur.com/2Rs9AVg.jpeg" style="height: 100px;"
-                                        class="img-fluid rounded" />
+                                <a [routerLink]="['/perfil/' + currentUser.userName]">
+                                    <app-user-avatar [avatar]="currentUser.avatar" [userName]="currentUser.userName" [height]="120"></app-user-avatar>
                                 </a>
                             </div>
                         </div>
@@ -19,7 +18,10 @@
                             <div class="perfil-info">
                                 <div class="row">
                                     <div class="col-12 col-sm-8">
-                                        <h1 class="nick">Julio Poveda </h1>
+                                        <h1 class="nick">
+                                            {{currentUser?.userName}}
+                                        </h1>
+                                        
                                         <div class="pani">@{{currentUser?.userName}} - Colombia</div>
                                     </div>
 

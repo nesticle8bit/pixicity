@@ -20,8 +20,9 @@
                             <td>
                                 <div class="row">
                                     <div class="col-12 col-sm-1">
-                                        <img src="https://i.imgur.com/2Rs9AVg.jpeg" alt="Imagen de Perfil" width="40px"
-                                            class="img-fluid" />
+                                        <app-user-avatar [avatar]="notificacion.usuarioQueHaceAccion.avatar"
+                                            [userName]="notificacion.usuarioQueHaceAccion.userName" [height]="40">
+                                        </app-user-avatar>
                                     </div>
 
                                     <div class="col-12 col-sm-11">

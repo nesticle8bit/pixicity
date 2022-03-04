@@ -1,9 +1,9 @@
 <div class="esees">
     <div class="eites">
-        <a class="nomis" href="#">
-            <img alt="Ver perfil de jjpoveda92" src="https://i.imgur.com/2Rs9AVg.jpeg"
-                style="width: 97px; height: 97px" />
+        <a class="nomis" [routerLink]="['/perfil/' + post?.usuario?.userName]" #tooltip="matTooltip" matTooltip="Ver perfil de {{post?.usuario?.userName}}">
+            <app-user-avatar [avatar]="post?.usuario?.avatar" [userName]="post?.usuario?.userName" [height]="97"></app-user-avatar>
         </a>
+
         <span>
             <img src="/assets/images/icons/rosette.png" #tooltip="matTooltip" matTooltip="Administrador"
                 [matTooltipPosition]="'below'">

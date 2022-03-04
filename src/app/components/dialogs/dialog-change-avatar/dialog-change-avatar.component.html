@@ -1,14 +1,23 @@
-<input type="file" (change)="fileChangeEvent($event)" />
+<h2 mat-dialog-title>Subir y cortar avatar</h2>
 
-<image-cropper
-    [imageChangedEvent]="imageChangedEvent"
-    [maintainAspectRatio]="true"
-    [aspectRatio]="1 / 1"
-    format="png"
-    (imageCropped)="imageCropped($event)"
-    (imageLoaded)="imageLoaded($event)"
-    (cropperReady)="cropperReady()"
-    (loadImageFailed)="loadImageFailed()"
-></image-cropper>
+<mat-dialog-content>
+    <div class="mb-3">
+        <input class="form-control form-control-sm" id="formFileSm" type="file" (change)="fileChangeEvent($event)">
+    </div>
 
-<img [src]="croppedImage" />
+    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+        [containWithinAspectRatio]="true" [aspectRatio]="1 / 1" [imageQuality]="93" format="jpeg"
+        [resizeToWidth]="200" [resizeToHeight]="200"
+        (imageCropped)="imageCropped($event)" (loadImageFailed)="loadImageFailed()">
+    </image-cropper>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>
+        Cancelar
+    </button>
+
+    <button type="submit" mat-button color="primary" (click)="saveAvatar()" [disabled]="!croppedImage">
+        Guardar
+    </button>
+</mat-dialog-actions>

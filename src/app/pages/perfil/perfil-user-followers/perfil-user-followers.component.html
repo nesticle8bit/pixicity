@@ -12,8 +12,8 @@
 
     <div class="row">
         <div class="col-12 col-sm-12 col-md-2" *ngFor="let item of followers">
-            <img src="https://i.imgur.com/2Rs9AVg.jpeg" class="img-fluid rounded" matTooltip="{{item.userName}}"
-            [matTooltipPosition]="'left'" />
+            <app-user-avatar [avatar]="item.avatar" [userName]="item.userName" matTooltip="{{item.userName}}"
+            [matTooltipPosition]="'left'"></app-user-avatar>
         </div>
     </div>
 </main>

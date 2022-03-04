@@ -147,6 +147,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { BottomSheetsEmojisComponent } from './components/bottom-sheets/bottom-sheets-emojis/bottom-sheets-emojis.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { DialogChangeAvatarComponent } from './components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
+import { UserAvatarComponent } from './components/addons/user-avatar/user-avatar.component';
 
 @NgModule({
   declarations: [
@@ -235,6 +236,7 @@ import { DialogChangeAvatarComponent } from './components/dialogs/dialog-change-
     PostPrivadoComponent,
     BottomSheetsEmojisComponent,
     DialogChangeAvatarComponent,
+    UserAvatarComponent,
   ],
   imports: [
     BrowserModule,
