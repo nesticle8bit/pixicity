@@ -15,7 +15,7 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
 ![2021-08-01 10 02 47 localhost 1c16e2930f4a](https://user-images.githubusercontent.com/1715022/127775666-6b7a13a5-2a1e-442f-b1b0-4de0b46fe630.png)
 
 ### 🙂 Perfil del Usuario
-![image](https://user-images.githubusercontent.com/1715022/152624812-ca59e10e-35b8-41bb-bb5d-bc3f8590a6c2.png)
+![image](https://user-images.githubusercontent.com/1715022/156680206-bbf501b7-7ca7-452e-bdc6-978d1e6301b6.png)
 
 ### 🔍️ Buscador
 ![Buscador](https://user-images.githubusercontent.com/1715022/152900078-a5f5daf6-914c-45a0-96f6-ba04d653c13d.png)
