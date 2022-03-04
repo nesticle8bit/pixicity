@@ -78,7 +78,7 @@
                                 <div class="col-12 col-sm-2">
                                     <p class="ranpe">
                                         <b style="color:#171717">
-                                            Administrador
+                                            {{currentUser?.rango}}
                                             <span class="status online"></span>
                                         </b>
                                         <span>Rango</span>
@@ -88,7 +88,7 @@
                                 <div class="col-12 col-sm-2">
                                     <p>
                                         <b>
-                                            {{currentUser.puntos ? currentUser.puntos : 0}}
+                                            {{currentUser?.puntos ? currentUser?.puntos : 0}}
                                         </b>
 
                                         <span>Puntos</span>
