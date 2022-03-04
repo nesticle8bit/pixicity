@@ -30,4 +30,5 @@ export abstract class IHttpSecurityService {
   abstract getSocialMediaByUsuarioId(usuarioId: number): Observable<any>;
   abstract banUser(userId: number): Observable<any>;
   abstract changeAvatar(file: Blob): Observable<any>;
+  abstract getLastRegisteredUsers(): Observable<any>;
 }

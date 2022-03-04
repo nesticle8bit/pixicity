@@ -2442,8 +2442,11 @@ span.ma_photo {
     background: url('/assets/images/icons/i.png');
     width: 16px;
     height: 16px;
+
     display: block;
     float: left;
+
+    // display: inline-block;
     margin-top: 1px;
 }
 
@@ -2621,4 +2624,10 @@ i.icon.tipov {
 
 .table>:not(:first-child) {
     border-top: none;
+}
+
+.text {
+    &-prunus {
+        color: #e84393;
+    }
 }

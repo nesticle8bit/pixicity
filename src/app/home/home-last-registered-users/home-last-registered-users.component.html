@@ -1,0 +1,16 @@
+<h6 class="main-title">
+    <span>Últimos Registrados</span>
+</h6>
+
+<ng-container *ngIf="users.length > 0">
+    <article class="list-posts--zebra" *ngFor="let usuario of users; let i = index">
+        <strong class="float-start">
+            {{i + 1}}
+        </strong>
+
+        <a [routerLink]="['/perfil/' + usuario.userName]" title="{{usuario.userName}}">
+            <app-genre-icon [genre]="usuario?.genero"></app-genre-icon>
+            <span class="ms-2">{{usuario.userName}}</span>
+        </a>
+    </article>
+</ng-container>

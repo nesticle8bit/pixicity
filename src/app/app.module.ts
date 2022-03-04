@@ -148,6 +148,8 @@ import { BottomSheetsEmojisComponent } from './components/bottom-sheets/bottom-s
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { DialogChangeAvatarComponent } from './components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
 import { UserAvatarComponent } from './components/addons/user-avatar/user-avatar.component';
+import { HomeLastRegisteredUsersComponent } from './home/home-last-registered-users/home-last-registered-users.component';
+import { GenreIconComponent } from './components/addons/genre-icon/genre-icon.component';
 
 @NgModule({
   declarations: [
@@ -237,6 +239,8 @@ import { UserAvatarComponent } from './components/addons/user-avatar/user-avatar
     BottomSheetsEmojisComponent,
     DialogChangeAvatarComponent,
     UserAvatarComponent,
+    HomeLastRegisteredUsersComponent,
+    GenreIconComponent,
   ],
   imports: [
     BrowserModule,

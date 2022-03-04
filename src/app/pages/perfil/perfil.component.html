@@ -27,12 +27,8 @@
 
                                     <div class="col-12 col-sm-4">
                                         <div class="text-end">
-                                            <img src="/assets/images/icons/male.png" alt="{{currentUser?.genero}}"
-                                                title="{{currentUser?.genero}}" class="mx-2" />
-
-                                            <img *ngIf="currentUser?.pais"
-                                                src="/assets/images/flags/{{currentUser?.pais?.isO2?.toLowerCase()}}.png"
-                                                title="{{currentUser?.pais?.nombre}}">
+                                            <app-genre-icon class="mx-2" [genre]="currentUser?.genero"></app-genre-icon>
+                                            <addon-country-flag [iso2]="currentUser?.pais?.isO2" [title]="currentUser?.pais?.nombre"></addon-country-flag>
                                         </div>
                                     </div>
                                 </div>
@@ -82,7 +78,7 @@
                                 <div class="col-12 col-sm-2">
                                     <p class="ranpe">
                                         <b style="color:#171717">
-                                            Administrador
+                                            {{currentUser?.rango}}
                                             <span class="status online"></span>
                                         </b>
                                         <span>Rango</span>
@@ -92,7 +88,7 @@
                                 <div class="col-12 col-sm-2">
                                     <p>
                                         <b>
-                                            {{currentUser.puntos ? currentUser.puntos : 0}}
+                                            {{currentUser?.puntos ? currentUser?.puntos : 0}}
                                         </b>
 
                                         <span>Puntos</span>
