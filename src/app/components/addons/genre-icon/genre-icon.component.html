@@ -6,3 +6,7 @@
 
 <img class="{{class}}" src="/assets/images/icons/question.png" alt="{{genre}}" matTooltip="{{genre}}"
     *ngIf="!isFA && genre === 'Otros'" />
+
+<fa-icon [icon]="['fas', 'male']" *ngIf="isFA && genre === 'Masculino'"></fa-icon>
+<fa-icon [icon]="['fas', 'female']" *ngIf="isFA && genre === 'Femenino'"></fa-icon>
+<fa-icon [icon]="['fas', 'neuter']" *ngIf="isFA && genre === 'Otros'"></fa-icon>

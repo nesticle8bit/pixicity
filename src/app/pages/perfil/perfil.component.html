@@ -36,8 +36,11 @@
                                 <div class="row mt-2">
                                     <div class="col-12 col-sm-2">
                                         <p>
-                                            <fa-icon [icon]="['fas', 'male']"></fa-icon>
-                                            Es un <b>Hombre</b>
+                                            <app-genre-icon class="me-1" [genre]="currentUser.genero" [isFA]="true"></app-genre-icon>
+
+                                            <span *ngIf="currentUser.genero === 'Otros'">Es un Otro</span>
+                                            <span *ngIf="currentUser.genero === 'Masculino'">Es un Hombre</span>
+                                            <span *ngIf="currentUser.genero === 'Femenino'">Es una Mujer</span>
                                         </p>
                                     </div>
 
