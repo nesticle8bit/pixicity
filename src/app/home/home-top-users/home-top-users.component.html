@@ -11,7 +11,10 @@
 
 <article class="top-user mb-3" *ngIf="topUsers.length > 0">
     <a class="avatar-top">
-        <img alt="nesticle8bit" class="img-fluid" src="https://avatars.githubusercontent.com/u/1715022?v=4" />
+        <app-user-avatar [avatar]="topUsers[0]?.avatar" [userName]="topUsers[0]?.userName"
+        [height]="50" [width]="50" matTooltip="Avatar de {{topUsers[0]?.userName}}" [matTooltipPosition]="'left'">
+        </app-user-avatar>
+
         <h3 class="float-start" [routerLink]="['/perfil/' + topUsers[0]?.userName]">
             {{topUsers[0]?.userName}}
         </h3>
