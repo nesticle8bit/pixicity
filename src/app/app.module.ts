@@ -150,6 +150,8 @@ import { DialogChangeAvatarComponent } from './components/dialogs/dialog-change-
 import { UserAvatarComponent } from './components/addons/user-avatar/user-avatar.component';
 import { HomeLastRegisteredUsersComponent } from './home/home-last-registered-users/home-last-registered-users.component';
 import { GenreIconComponent } from './components/addons/genre-icon/genre-icon.component';
+import { DashboardRangosComponent } from './components/admin/usuarios/rangos/dashboard-rangos/dashboard-rangos.component';
+import { TableRangosComponent } from './components/admin/usuarios/rangos/table-rangos/table-rangos.component';
 
 @NgModule({
   declarations: [
@@ -241,6 +243,8 @@ import { GenreIconComponent } from './components/addons/genre-icon/genre-icon.co
     UserAvatarComponent,
     HomeLastRegisteredUsersComponent,
     GenreIconComponent,
+    DashboardRangosComponent,
+    TableRangosComponent,
   ],
   imports: [
     BrowserModule,

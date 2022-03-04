@@ -1,0 +1,55 @@
+<main class="table-responsive" *ngIf="rangos.length > 0">
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Creado</th>
+                <th>Ícono</th>
+                <th>Rango</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let rango of rangos">
+                <td>
+                    <strong>{{rango.id}}</strong>
+                </td>
+
+                <td>
+                    {{rango.fechaRegistro | timeAgo}}
+                </td>
+
+                <td>
+                    {{rango.icono}}
+                </td>
+
+                <td>
+                    {{rango.nombre}}
+                </td>
+
+                <td class="text-center" width="30px">
+                    <button class="btn-menu" [matMenuTriggerFor]="menu">
+                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button type="button" mat-menu-item (click)="updateRango(rango.id)">
+                            <mat-icon>edit</mat-icon>
+                            <span>Actualizar</span>
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="deleteRango(rango.id)">
+                            <mat-icon>delete_outline</mat-icon>
+                            <span>Eliminar</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="rangos.length > 0">
+</mat-paginator>
