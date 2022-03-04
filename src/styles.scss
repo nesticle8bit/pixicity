@@ -2622,3 +2622,9 @@ i.icon.tipov {
 .table>:not(:first-child) {
     border-top: none;
 }
+
+.text {
+    &-prunus {
+        color: #e84393;
+    }
+}
