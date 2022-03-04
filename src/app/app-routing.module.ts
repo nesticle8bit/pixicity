@@ -9,6 +9,7 @@ import { DashboardAdminComponent } from './components/admin/dashboard-admin/dash
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { DashboardConfigurationComponent } from './components/admin/general/configuration/dashboard-configuration/dashboard-configuration.component';
 import { DashboardAdsComponent } from './components/admin/general/publicidad/dashboard-ads/dashboard-ads.component';
+import { DashboardRangosComponent } from './components/admin/usuarios/rangos/dashboard-rangos/dashboard-rangos.component';
 import { DashboardSesionesComponent } from './components/admin/usuarios/sesiones/dashboard-sesiones/dashboard-sesiones.component';
 import { DashboardUsuariosComponent } from './components/admin/usuarios/usuarios/dashboard-usuarios/dashboard-usuarios.component';
 import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
@@ -78,6 +79,7 @@ const routes: Routes = [
       { path: 'sesiones', component: DashboardSesionesComponent },
       { path: 'denuncias', component: DashboardReportesComponent },
       { path: 'usuarios', component: DashboardUsuariosComponent },
+      { path: 'rango-usuarios', component: DashboardRangosComponent },
     ]
   },
   
