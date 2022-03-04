@@ -1,4 +1,4 @@
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/NESTicle/pixicity/graphs/commit-activity)
 ![Maintainer](https://img.shields.io/badge/maintainer-NESTicle-blue)
 [![GitHub issues](https://img.shields.io/github/issues/NESTicle/pixicity.svg)](https://GitHub.com/NESTicle/pixicity/issues/)
 
