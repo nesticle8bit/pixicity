@@ -152,6 +152,7 @@ import { HomeLastRegisteredUsersComponent } from './home/home-last-registered-us
 import { GenreIconComponent } from './components/addons/genre-icon/genre-icon.component';
 import { DashboardRangosComponent } from './components/admin/usuarios/rangos/dashboard-rangos/dashboard-rangos.component';
 import { TableRangosComponent } from './components/admin/usuarios/rangos/table-rangos/table-rangos.component';
+import { ProfileActivityComponent } from './components/profile/profile-activity/profile-activity.component';
 
 @NgModule({
   declarations: [
@@ -245,6 +246,7 @@ import { TableRangosComponent } from './components/admin/usuarios/rangos/table-r
     GenreIconComponent,
     DashboardRangosComponent,
     TableRangosComponent,
+    ProfileActivityComponent,
   ],
   imports: [
     BrowserModule,
