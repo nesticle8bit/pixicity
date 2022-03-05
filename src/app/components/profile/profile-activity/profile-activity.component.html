@@ -1,0 +1,16 @@
+<article class="mt-1">
+    <ul>
+        <li class="sep">
+            <h4>Hoy</h4>
+        </li>
+    
+        <li *ngFor="let actividad of actividad?.hoy">
+            <span [innerHTML]="actividad.texto"></span>
+
+            <aside class="float-end">
+                <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
+            </aside>
+            <div class="clearfix"></div>
+        </li>
+    </ul>
+</article>

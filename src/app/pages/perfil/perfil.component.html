@@ -154,6 +154,7 @@
                         </div>
                     </div>
 
+                    <app-profile-activity [user]="currentUser" *ngIf="currentSelection === 'activity'"></app-profile-activity>
                     <app-profile-shouts *ngIf="currentSelection === 'shouts'"></app-profile-shouts>
                     <app-profile-posts [user]="currentUser" *ngIf="currentSelection === 'posts'"></app-profile-posts>
                     <app-profile-comments [user]="currentUser" *ngIf="currentSelection === 'comments'"></app-profile-comments>
