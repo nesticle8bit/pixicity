@@ -153,6 +153,7 @@ import { GenreIconComponent } from './components/addons/genre-icon/genre-icon.co
 import { DashboardRangosComponent } from './components/admin/usuarios/rangos/dashboard-rangos/dashboard-rangos.component';
 import { TableRangosComponent } from './components/admin/usuarios/rangos/table-rangos/table-rangos.component';
 import { ProfileActivityComponent } from './components/profile/profile-activity/profile-activity.component';
+import { TipoActividadIconComponent } from './components/addons/tipo-actividad-icon/tipo-actividad-icon.component';
 
 @NgModule({
   declarations: [
@@ -247,6 +248,7 @@ import { ProfileActivityComponent } from './components/profile/profile-activity/
     DashboardRangosComponent,
     TableRangosComponent,
     ProfileActivityComponent,
+    TipoActividadIconComponent,
   ],
   imports: [
     BrowserModule,

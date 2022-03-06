@@ -1,10 +1,69 @@
+<h6 class="main-title my-2">
+    <span>Última actividad de {{user.userName}}</span>
+
+    <strong class="float-end" style="background: #fff; margin-top: -2px; color: #8B8B8B; padding-left: 7px;">0</strong>
+</h6>
+
 <article class="mt-1">
-    <ul>
+    <ul *ngIf="actividad?.hoy?.length > 0">
         <li class="sep">
             <h4>Hoy</h4>
         </li>
-    
+
         <li *ngFor="let actividad of actividad?.hoy">
+            <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
+            </addons-tipo-actividad-icon>
+            <span [innerHTML]="actividad.texto"></span>
+
+            <aside class="float-end">
+                <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
+            </aside>
+            <div class="clearfix"></div>
+        </li>
+    </ul>
+
+    <ul *ngIf="actividad?.ayer?.length > 0">
+        <li class="sep">
+            <h4>Ayer</h4>
+        </li>
+
+        <li *ngFor="let actividad of actividad?.ayer">
+            <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
+            </addons-tipo-actividad-icon>
+            <span [innerHTML]="actividad.texto"></span>
+
+            <aside class="float-end">
+                <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
+            </aside>
+            <div class="clearfix"></div>
+        </li>
+    </ul>
+
+    <ul *ngIf="actividad?.semana?.length > 0">
+        <li class="sep">
+            <h4>Semanas Anteriores</h4>
+        </li>
+
+        <li *ngFor="let actividad of actividad?.semana">
+            <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
+            </addons-tipo-actividad-icon>
+            <span [innerHTML]="actividad.texto"></span>
+
+            <aside class="float-end">
+                <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
+            </aside>
+            <div class="clearfix"></div>
+        </li>
+    </ul>
+
+    <ul *ngIf="actividad?.mes?.length > 0">
+        <li class="sep">
+            <h4>Actividad más antigua</h4>
+        </li>
+
+        <li *ngFor="let actividad of actividad?.mes">
+            <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
+            </addons-tipo-actividad-icon>
             <span [innerHTML]="actividad.texto"></span>
 
             <aside class="float-end">

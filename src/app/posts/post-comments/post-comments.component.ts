@@ -59,6 +59,7 @@ export class PostCommentsComponent implements OnInit {
         this.comentarios.push({
           id: response,
           userName: this.currentUser.usuario.userName,
+          avatar: this.currentUser.usuario.avatar,
           contenido: comentario.contenido,
           fechaComentario: new Date(),
         });
