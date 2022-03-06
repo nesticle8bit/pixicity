@@ -510,9 +510,9 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getActividadUsuario(usuarioId: number): Observable<any> {
+  getActividadUsuario(usuarioId: number, tipoActividad: any): Observable<any> {
     return this.http
-      .get<any>(`${environment.api}/api/usuarios/getActividadUsuario?usuarioId=${usuarioId}`)
+      .get<any>(`${environment.api}/api/usuarios/getActividadUsuario?usuarioId=${usuarioId}&tipoActividad=${tipoActividad}`)
       .pipe(
         map((response: any) => {
           if (response.status === 200) {

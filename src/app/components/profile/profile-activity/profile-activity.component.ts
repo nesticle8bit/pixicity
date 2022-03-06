@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
@@ -21,14 +22,69 @@ export class ProfileActivityComponent implements OnInit {
     return this._user;
   }
 
+  public formGroup: FormGroup;
   public actividad: any;
-  constructor(private securityService: IHttpSecurityService) {}
+  public tipoActividades: any = [
+    {
+      key: 'Post Nuevo',
+      value: 1,
+    },
+    {
+      key: 'Post Favorito',
+      value: 2,
+    },
+    {
+      key: 'Post Votado',
+      value: 3,
+    },
+    {
+      key: 'Post Recomendado',
+      value: 4,
+    },
+    {
+      key: 'Comentario Nuevo',
+      value: 5,
+    },
+    {
+      key: 'Comentario Votado',
+      value: 6,
+    },
+    {
+      key: 'Siguiendo un Post',
+      value: 7,
+    },
+    {
+      key: 'Siguiendo un Usuario',
+      value: 8,
+    },
+    {
+      key: 'Foto Nueva',
+      value: 9,
+    },
+    {
+      key: 'Publicaciones en Muro',
+      value: 10,
+    },
+    {
+      key: 'Le Gusta un Shout',
+      value: 11,
+    },
+  ];
+
+  constructor(
+    private securityService: IHttpSecurityService,
+    private formBuilder: FormBuilder
+  ) {
+    this.formGroup = this.formBuilder.group({
+      tipoActividad: ''
+    });
+  }
 
   ngOnInit(): void {}
 
   getActividadUsuario(): void {
     this.securityService
-      .getActividadUsuario(this.user.id)
+      .getActividadUsuario(this.user.id, this.formGroup.value.tipoActividad)
       .subscribe((response: any) => {
         console.log(response);
         this.actividad = response;
