@@ -32,5 +32,5 @@ export abstract class IHttpSecurityService {
   abstract changeAvatar(file: Blob): Observable<any>;
   abstract getLastRegisteredUsers(): Observable<any>;
   abstract getRangosUsuarios(): Observable<any>;
-  abstract getActividadUsuario(usuarioId: number): Observable<any>;
+  abstract getActividadUsuario(usuarioId: number, tipoActividad: any): Observable<any>;
 }

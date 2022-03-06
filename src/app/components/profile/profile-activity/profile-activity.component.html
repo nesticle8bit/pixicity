@@ -1,7 +1,12 @@
-<h6 class="main-title my-2">
+<h6 [formGroup]="formGroup" class="main-title my-2">
     <span>Última actividad de {{user.userName}}</span>
 
-    <strong class="float-end" style="background: #fff; margin-top: -2px; color: #8B8B8B; padding-left: 7px;">0</strong>
+    <strong class="float-end">
+        <select class="form-select form-select-xs" formControlName="tipoActividad" (change)="getActividadUsuario()">
+            <option value="" selected>Todas</option>
+            <option *ngFor="let tipo of tipoActividades" value="{{tipo.value}}">{{tipo.key}}</option>
+          </select>
+    </strong>
 </h6>
 
 <article class="mt-1">
