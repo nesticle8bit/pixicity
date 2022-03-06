@@ -2474,52 +2474,9 @@ span.ma_photo {
 	margin-top: 2px;
 }
 
-i.icon {
-    background-position: 32px 0px;
-}
-i.icon.animaciones { background-position: 0 0; }
-i.icon.apuntes-y-monografias { background-position: -17px 0; }
-i.icon.arte, i.icon.arte-literatura { background-position: -34px 0px; }
-i.icon.autos-motos { background-position: -51px 0px; }
-i.icon.celulares { background-position: -68px 0  }
-i.icon.ciencia-educacion { background-position: -87px 0  }
-i.icon.comics { background-position: -103px 0  }
-i.icon.ebooks-tutoriales {	background-position:-153px 0 }
 i.icon.comunidades-n { background-position: -34px -51px; }
 i.icon.comentarios-n { background-position: 0 -51px}
-
 i.icon.comentarios-n-g { background-position:-119px -51px }
-i.icon.deportes { background-position: -119px 0; }
-i.icon.downloads { background-position: -136px 0px; }
-i.icon.ecologia { background-position: -170px 0; }
-i.icon.economia-negocios { background-position: -187px 0px; }
-i.icon.femme { background-position: -204px 0; }
-i.icon.male { background-position: -204px -51px; }
-i.icon.sticky { background-position: -221px -51px; }
-i.icon.hazlo-tu-mismo { background-position: -221px 0; }
-i.icon.humor { background-position: -239px 0 ; }
-i.icon.imagenes { background-position: -255px 0; }
-i.icon.info { background-position: 0 -17px; }
-i.icon.juegos { background-position:  -17px -17px; }
-i.icon.juegos-online { background-position: -34px -17px; }
-i.icon.links { background-position: -51px -17px; }
-i.icon.linux { background-position: -68px -17px; }
-i.icon.mac { background-position: -86px -17px; }
-i.icon.manga-anime { background-position: -102px -17px; }
-i.icon.mascotas { background-position: -119px -17px; }
-i.icon.musica { background-position: -136px -17px; }
-i.icon.noticias { background-position: -153px -17px; }
-i.icon.offtopic { background-position: -170px -17px; }
-i.icon.paranormal { background-position: -187px -17px; }
-i.icon.patrocinados { background-position: -204px -17px; }
-i.icon.recetas-y-cocina { background-position: -221px -17px; }
-i.icon.reviews { background-position: -239px -17px;  }
-i.icon.salud-bienestar { background-position: -255px -17px; }
-i.icon.solidaridad { background-position: 0 -34px; }
-i.icon.pixicity { background-position: -17px -34px; }
-i.icon.turismo { background-position: -34px -34px; }
-i.icon.tv-peliculas-series { background-position: -51px -34; }
-i.icon.videos { background-position: -68px -34px; }
 
 i.icon.followers { background-position: -102px -34px; }
 i.icon.visits { background-position: -119px -34px; }
@@ -2548,6 +2505,7 @@ i.icon.sprite-point { background-position: 0 -103px; }
 i.icon.sprite-star { background-position: -68px -51px; }
 i.icon.sprite-follow { background-position: -85px -51px; }
 i.icon.sprite-recomendar-p { background-position: 0 -68px }
+
 i.icon.private-message { background-position: 0 -85px}
 i.icon.message-send { background-position: -17px -84px}
 i.icon.message-delete { background-position: -34px -85px}
@@ -2567,7 +2525,6 @@ i.icon.shout-video { background-position: -56px -106px; }
 
 i.icon.interes-general { background-position: -153px -68px; }
 i.icon.internet-tecnologia { background-position: -169px -68px; }
-i.icon.internet-technology { background-position: -169px -68px; }
 i.icon.regiones { background-position: -186px -68px; }
 i.icon.diversion-esparcimiento { background-position: -86px -85px; }
 i.icon.musica-bandas { background-position: -153px -85px; }
@@ -2581,19 +2538,6 @@ i.icon.joined { background-position:-118px -136px; }
 i.icon.work { background-position: -135px -136px }
 i.icon.web { background-position: -153px -136px }
 i.icon.plus { background-position: -53px -220px }
-
-i.icon.tipot {
-    background-position: -1px -137px;
-}
-i.icon.tipoi {
-    background-position:-34px -138px;margin-top:4px;
-}
-i.icon.tipol {
-    background-position:-52px -137px;margin-top:4px;
-}
-i.icon.tipov {
-    background-position:-18px -136px;margin-top:4px;
-}
 
 .opacity-50 {
     opacity: .5;
