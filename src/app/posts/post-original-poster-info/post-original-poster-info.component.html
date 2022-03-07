@@ -5,9 +5,9 @@
         </a>
 
         <span>
-            <img src="/assets/images/icons/rangos/rosette.png" #tooltip="matTooltip" matTooltip="{{post?.usuario?.rango}}"
+            <img src="/assets/images/icons/rangos/{{post?.usuario?.rango?.icono}}" #tooltip="matTooltip" matTooltip="{{post?.usuario?.rango?.nombre}}"
                 [matTooltipPosition]="'below'">
-            {{post?.usuario?.rango}}
+            {{post?.usuario?.rango?.nombre}}
         </span>
     </div>
 
