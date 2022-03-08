@@ -23,15 +23,15 @@
                         <li class="list-items" *ngFor="let notificacion of notificaciones">
                             <div class="d-flex">
                                 <div class="flex-shrink-0">
-                                    <app-user-avatar matTooltip="{{notificacion.usuarioQueHaceAccion}}" [matTooltipPosition]="'before'"
-                                        [avatar]="notificacion.usuarioQueHaceAccion.avatar" [userName]="notificacion.usuarioQueHaceAccion.userName"
+                                    <app-user-avatar matTooltip="{{notificacion.usuarioQueHaceAccion?.userName}}" [matTooltipPosition]="'before'"
+                                        [avatar]="notificacion.usuarioQueHaceAccion.avatar" [userName]="notificacion.usuarioQueHaceAccion?.userName"
                                         [height]="20"></app-user-avatar>
                                 </div>
                         
                                 <div class="flex-grow-1 ms-2">
                                     <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
-                                    <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion]">
-                                        {{notificacion.usuarioQueHaceAccion}}
+                                    <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion?.userName]">
+                                        {{notificacion.usuarioQueHaceAccion?.userName}}
                                     </a>
                                     <span [innerHTML]="notificacion.mensaje"></span>
 
@@ -45,7 +45,7 @@
                         </li>
                     </ul>
 
-                    <a [routerLink]="['monitor']" class="vemas">
+                    <a [routerLink]="['/monitor']" class="vemas">
                         Más
                     </a>
                 </div>
@@ -58,16 +58,47 @@
             </li>
 
             <li class="mensajes" style="position:relative">
-                <a class="menu" href="#/mensajes/" onclick="mensaje.last();" title="Mensajes" name="Mensajes">
+                <a class="menu" href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Mensajes" [matTooltipPosition]="'above'"
+                (click)="verMensajes()">
                     <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                 </a>
-                <!-- <div class="notificaciones-list" id="mp_list">
-                    <span class="tail"></span>
-                    <div class="timoni">Mensajes <a
-                            onclick="mensaje.nuevo('','','',''); return false;">Escribir nuevo</a></div>
-                    <ul></ul>
-                    <a href="#/mensajes/" class="ver-mas">Ver más</a>
-                </div> -->
+
+                <div class="notificaciones-list" id="mon_list" [style.display]="display.mensajes ? 'block' : 'none'"
+                    (mouseenter)="display.mensajes = true" (mouseleave)="display.mensajes = false">
+                    <div class="timoni">Mensajes directos</div>
+                    
+                    <ul>
+                        <div class="errr" *ngIf="mensajes.length < 1">No hay mensajes</div>
+
+                        <li class="list-items" *ngFor="let mensaje of mensajes">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <app-user-avatar matTooltip="{{mensaje.usuarioQueHaceAccion}}" [matTooltipPosition]="'before'"
+                                        [avatar]="mensaje.usuarioQueHaceAccion.avatar" [userName]="mensaje.usuarioQueHaceAccion.userName"
+                                        [height]="20"></app-user-avatar>
+                                </div>
+                        
+                                <div class="flex-grow-1 ms-2">
+                                    <!-- <app-tipo-icon-monitor [tipo]="mensaje.tipoString"></app-tipo-icon-monitor>
+                                    <a [routerLink]="['/perfil/' + mensaje.usuarioQueHaceAccion]">
+                                        {{mensaje.usuarioQueHaceAccion}}
+                                    </a>
+                                    <span [innerHTML]="mensaje.mensaje"></span> -->
+
+                                    <br>
+                                
+                                    <small class="text-muted cursor--help" matTooltip="{{mensaje.fechaRegistro | date:'medium'}}">
+                                        {{mensaje.fechaRegistro | timeAgo}}
+                                    </small>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <a [routerLink]="['/mensajes']" class="vemas">
+                        Más
+                    </a>
+                </div>
 
                 <div class="alertas" id="alerta_mon" style="top: -10px;" *ngIf="currentStats.messages > 0">
                     <a title="{{currentStats.messages}} mensajes">
@@ -96,7 +127,7 @@
                         </li>
                     </ul>
 
-                    <a href="javascript:void(0)" [routerLink]="['favoritos']" class="vemas">Más</a>
+                    <a href="javascript:void(0)" [routerLink]="['/favoritos']" class="vemas">Más</a>
                 </div>
             </li>
 

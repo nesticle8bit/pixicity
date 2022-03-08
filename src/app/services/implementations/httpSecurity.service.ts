@@ -528,4 +528,23 @@ export class HttpSecurityService implements IHttpSecurityService {
       )
       .pipe(catchError(this.helper.errorHandler));
   }
+
+  addUpdateRango(rango: any): Observable<number> {
+    return this.http
+      .post<any>(`${environment.api}/api/rangos/addUpdateRango`, rango)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
 }

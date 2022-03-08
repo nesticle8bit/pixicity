@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 
 @Component({
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.scss']
+  styleUrls: ['./usuarios.component.scss'],
 })
 export class UsuariosComponent implements OnInit {
   public usuarios: any = [];
@@ -15,16 +17,35 @@ export class UsuariosComponent implements OnInit {
   public paises: any[] = [];
   public totalCount: number = 0;
 
+  public formGroup: FormGroup;
+
   constructor(
-    private securityService: IHttpSecurityService,
     private parametrosService: IHttpParametrosService,
-    public paginationService: PaginationService
-  ) { }
+    private displayService: DisplayComponentService,
+    private securityService: IHttpSecurityService,
+    public paginationService: PaginationService,
+    private formBuilder: FormBuilder
+  ) {
+    this.formGroup = this.formBuilder.group({
+      enLinea: false,
+      conTodo: false,
+      genero: '',
+      pais: '',
+      rango: ''
+    });
+
+    this.displayService.setDisplay({
+      mainMenu: true,
+      footer: true,
+      searchFooter: true,
+      submenu: true,
+    });
+  }
 
   ngOnInit(): void {
     let pageEvent: PageEvent = { pageIndex: 0, pageSize: 12, length: 0 };
     this.pageChange(pageEvent);
-    
+
     this.getPaises();
   }
 

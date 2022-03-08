@@ -1,0 +1,81 @@
+<h2 mat-dialog-title>
+    Agregar rango
+</h2>
+
+<form [formGroup]="formGroup" (ngSubmit)="saveRango()">
+    <mat-dialog-content>
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Rango</label>
+                    <input type="text" class="form-control" formControlName="nombre" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Ícono</label>
+
+                    <ng-select [items]="iconos" formControlName="icono">
+                        <ng-template ng-option-tmp let-item="item" let-index="index">
+                            <img src="/assets/images/icons/rangos/{{item}}" class="image-middle me-1">
+                            {{item}}
+                        </ng-template>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Puntos</label>
+                    <input type="number" class="form-control" formControlName="puntos" />
+                    <small class="text-muted">Puntos que necesita para llegar a este Rango</small>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Color</label>
+                    <input type="text" class="form-control" formControlName="color" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <hr>
+                <div class="mb-3">
+                    <label class="form-label">Tipo</label>
+
+                    <mat-radio-group class="mt-1" color="primary" formControlName="tipo">
+                        <mat-radio-button class="mx-3" value="1">
+                            Administrador
+                        </mat-radio-button>
+
+                        <mat-radio-button class="mx-3" value="2">
+                            Moderador
+                        </mat-radio-button>
+
+                        <mat-radio-button class="mx-3" value="3">
+                            Usuario
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button type="button" mat-button mat-dialog-close>
+            Cancelar
+        </button>
+
+        <button type="submit" mat-button color="primary" [disabled]="formGroup.invalid">
+            Guardar
+        </button>
+    </mat-dialog-actions>
+</form>

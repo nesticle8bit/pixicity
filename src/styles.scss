@@ -243,7 +243,7 @@ input.bbboton {
     border-radius: 22px;
 }
 
-.footer-copyright {
+.footer {
     padding: 12px 0;
     background: #FFF;
     margin: 10px auto;
@@ -251,6 +251,14 @@ input.bbboton {
     & a {
         margin: 0 10px;
         font-weight: 700;
+    }
+}
+
+.copyright {
+    color: #979797;
+
+    & a {
+        color: #979797;
     }
 }
 
@@ -1358,22 +1366,6 @@ p.cupuntos {
     color: #2e96ec;
 }
 
-.nekes {
-    float: right;
-}
-
-.nekes fa-icon {
-    font-size: 1rem;
-    color: #adadad;
-    float: left;
-    margin: -3px 0px;
-}
-
-.nekes img {
-    float: right;
-    margin: 3px 5px;
-}
-
 .eliese {
     overflow: hidden;
     height: 65px;
@@ -2399,7 +2391,7 @@ span.ma_photo {
         width: 21px;
         color: #8b8b8b;
         font-weight: 700;
-        margin-right: 6px;
+        margin-right: 2px;
     }
 
     & .value {

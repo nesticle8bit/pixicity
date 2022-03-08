@@ -154,6 +154,7 @@ import { DashboardRangosComponent } from './components/admin/usuarios/rangos/das
 import { TableRangosComponent } from './components/admin/usuarios/rangos/table-rangos/table-rangos.component';
 import { ProfileActivityComponent } from './components/profile/profile-activity/profile-activity.component';
 import { TipoActividadIconComponent } from './components/addons/tipo-actividad-icon/tipo-actividad-icon.component';
+import { DialogAddUpdateRangoComponent } from './components/dialogs/dialog-add-update-rango/dialog-add-update-rango.component';
 
 @NgModule({
   declarations: [
@@ -249,6 +250,7 @@ import { TipoActividadIconComponent } from './components/addons/tipo-actividad-i
     TableRangosComponent,
     ProfileActivityComponent,
     TipoActividadIconComponent,
+    DialogAddUpdateRangoComponent,
   ],
   imports: [
     BrowserModule,
