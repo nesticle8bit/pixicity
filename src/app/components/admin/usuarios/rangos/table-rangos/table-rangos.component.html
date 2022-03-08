@@ -1,11 +1,20 @@
+<div class="text-end mb-2 mt-0">
+    <button type="button" mat-flat-button color="primary" (click)="addRango()">
+        Agregar rango
+    </button>
+</div>
+
 <main class="table-responsive" *ngIf="rangos.length > 0">
     <table class="table table-sm table-striped table-hover">
         <thead>
             <tr>
                 <th></th>
                 <th>Creado</th>
-                <th>Ícono</th>
                 <th>Rango</th>
+                <th>Puntos</th>
+                <th>Tipo</th>
+                <th>Usuarios</th>
+                <th>Actualizado</th>
                 <th></th>
             </tr>
         </thead>
@@ -21,11 +30,37 @@
                 </td>
 
                 <td>
-                    {{rango.icono}}
+                    <img class="me-1 cursor--help" src="/assets/images/icons/rangos/{{rango.icono}}" alt="{{rango.icono}}" matTooltip="{{rango.icono}}"
+                    [matTooltipPosition]="'left'">
+                    <strong [ngStyle]="{'color': rango.color}">
+                        {{rango.nombre}}
+                    </strong>
                 </td>
 
                 <td>
-                    {{rango.nombre}}
+                    <span>
+                        {{rango.puntos}}
+                    </span>
+                </td>
+
+                <td>
+                    <span>
+                        {{rango.tipoString}}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="cursor--help"
+                        matTooltip="{{rango.usuariosCount}} es la cantidad de usuarios que poseen el rango de {{rango.nombre}}"
+                        [matTooltipPosition]="'above'">
+                        {{rango.usuariosCount}}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="cursor--help" matTooltip="Fecha de última actualización: {{rango.fechaActualiza | date:'medium'}}" [matTooltipPosition]="'above'">
+                        {{rango.usuarioActualiza ? rango.usuarioActualiza : '-'}}
+                    </span>
                 </td>
 
                 <td class="text-center" width="30px">
@@ -34,7 +69,7 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <button type="button" mat-menu-item (click)="updateRango(rango.id)">
+                        <button type="button" mat-menu-item (click)="updateRango(rango)">
                             <mat-icon>edit</mat-icon>
                             <span>Actualizar</span>
                         </button>

@@ -19,14 +19,19 @@
         </div>
     </div>
 
-    <div class="row"  *ngIf="display?.footer">
+    <div class="row" *ngIf="display?.footer">
         <div class="col-12">
-            <div class="footer-copyright text-center">
+            <div class="footer text-center">
                 <a href="#">Chat</a>
                 <a [routerLink]="['/protocolo']">Protocolo</a>
                 <a href="#">Términos y condiciones</a>
                 <a href="#">Privacidad de datos</a>
             </div>
         </div>
+    </div>
+
+    <div class="text-center copyright">
+        <small>Desarrolado con ❤️ por <a [routerLink]="['/perfil/nesticle8bit']">nesticle8bit</a></small>
+        <br><br>
     </div>
 </footer>

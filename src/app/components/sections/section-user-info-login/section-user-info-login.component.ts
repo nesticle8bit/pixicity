@@ -18,10 +18,12 @@ export class SectionUserInfoLoginComponent implements OnInit {
   public currentUser: JwtUserModel = { usuario: undefined, token: '' };
   public display = {
     monitor: false,
+    mensajes: false,
     favoritos: false,
   };
   public favoritos: any[] = [];
   public notificaciones: any[] = [];
+  public mensajes: any[] = [];
   public currentStats = {
     notifications: 0,
     messages: 0,
@@ -73,6 +75,10 @@ export class SectionUserInfoLoginComponent implements OnInit {
     });
 
     this.display.monitor = !this.display.monitor;
+  }
+
+  verMensajes(): void {
+    this.display.mensajes = !this.display.mensajes;
   }
 
   setURL(notificacion: any, text: string): string {

@@ -20,18 +20,14 @@
             </a>
         </div>
 
-        <div class="nekes">
-            <fa-icon [icon]="['fas', 'mars']" class="vctip" tooltip="matTooltip" matTooltip="Hombre"
-                [matTooltipPosition]="'below'" *ngIf="post?.usuario?.generoString == 'Masculino'"></fa-icon>
-
-                <fa-icon [icon]="['fas', 'venus']" class="vctip" tooltip="matTooltip" matTooltip="Mujer"
-                [matTooltipPosition]="'below'" *ngIf="post?.usuario?.generoString == 'Femenino'"></fa-icon>
-
-            <img class="vctip pai" src="/assets/images/flags/{{post?.usuario?.estado?.pais?.isO2?.toLowerCase()}}.png"
-            tooltip="matTooltip" matTooltip="{{post?.usuario?.estado?.pais.nombre}}" />
+        <div class="float-end">
+            <addon-country-flag [iso2]="post?.usuario?.estado?.pais?.isO2" [title]="post?.usuario?.estado?.pais.nombre"></addon-country-flag>
+            <app-genre-icon [genre]="post?.usuario?.generoString"></app-genre-icon>
         </div>
 
-        <div class="eliese">
+        <div class="clearfix"></div>
+
+        <div class="eliese mt-2">
             <div class="tyes">
                 <fa-icon [icon]="['far', 'user-circle']"></fa-icon>
                 <b>{{info?.seguidores ? info?.seguidores : 0}}</b> Seguidores

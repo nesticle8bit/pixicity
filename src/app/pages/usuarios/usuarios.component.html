@@ -16,16 +16,18 @@
                             {{usuario.userName}}
                         </h2>
 
-                        <div class="estv qtip cursor--help" [matTooltipPosition]="'above'" matTooltip="{{!usuario.activo || usuario.activo > 15 ? 'Offline' : 'Online'}}">
-                            <span class="user-status" [ngClass]="{'s-online': usuario.activo && usuario.activo <= 15, 's-offline': !usuario.activo || usuario.activo > 15}"></span>
+                        <div class="estv qtip cursor--help" [matTooltipPosition]="'above'"
+                            matTooltip="{{!usuario.activo || usuario.activo > 15 ? 'Offline' : 'Online'}}">
+                            <span class="user-status"
+                                [ngClass]="{'s-online': usuario.activo && usuario.activo <= 15, 's-offline': !usuario.activo || usuario.activo > 15}"></span>
                         </div>
                     </div>
 
                     <div class="mite">
                         <div class="current-user-info float-start">
                             <p style="color: #171717;font-weight: bold;">
-                                <img src="/assets/images/icons/rangos/new.png">
-                                Novato
+                                <img src="/assets/images/icons/rangos/{{usuario.rango.icono}}">
+                                {{usuario.rango?.nombre}}
                             </p>
 
                             <p>
@@ -42,7 +44,9 @@
                         </div>
 
                         <a class="float-end" href="#">
-                            <app-user-avatar [class]="'img-fluid img-thumbnail'" [avatar]="usuario.avatar" [userName]="usuario.userName" [width]="80" matTooltip="{{usuario.userName}}" [matTooltipPosition]="'left'"></app-user-avatar>
+                            <app-user-avatar [class]="'img-fluid img-thumbnail'" [avatar]="usuario.avatar"
+                                [userName]="usuario.userName" [width]="80" matTooltip="{{usuario.userName}}"
+                                [matTooltipPosition]="'left'"></app-user-avatar>
                         </a>
                     </div>
 
@@ -72,7 +76,8 @@
                     </div>
                 </div>
 
-                <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)">
+                <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+                    (page)="pageChange($event)">
                 </mat-paginator>
             </div>
         </div>
@@ -98,7 +103,8 @@
                 </h3>
 
                 <mat-radio-group class="radio-group">
-                    <mat-radio-button color="primary" class="radio-button" *ngFor="let genero of generos" [value]="genero">
+                    <mat-radio-button color="primary" class="radio-button" *ngFor="let genero of generos"
+                        [value]="genero">
                         {{genero}} <br>
                     </mat-radio-button>
                 </mat-radio-group>
@@ -111,7 +117,8 @@
 
                 <ng-select [items]="paises" bindLabel="nombre" bindValue="id">
                     <ng-template ng-option-tmp let-item="item" let-index="index">
-                        <img src="/assets/images/flags/{{item.iso2.toLowerCase()}}.png" class="image-middle"> {{item.nombre}}
+                        <img src="/assets/images/flags/{{item.iso2.toLowerCase()}}.png" class="image-middle">
+                        {{item.nombre}}
                     </ng-template>
                 </ng-select>
             </section>
@@ -123,7 +130,8 @@
 
                 <ng-select [items]="[]" bindLabel="nombre" bindValue="id">
                     <ng-template ng-option-tmp let-item="item" let-index="index">
-                        <img src="/assets/images/flags/{{item.iso2.toLowerCase()}}.png" class="image-middle"> {{item.nombre}}
+                        <img src="/assets/images/flags/{{item.iso2.toLowerCase()}}.png" class="image-middle">
+                        {{item.nombre}}
                     </ng-template>
                 </ng-select>
             </section>

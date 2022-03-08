@@ -26,8 +26,8 @@
                                     </div>
 
                                     <div class="col-12 col-sm-11">
-                                        <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion]">
-                                            @{{notificacion.usuarioQueHaceAccion}}
+                                        <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion?.userName]">
+                                            @{{notificacion.usuarioQueHaceAccion?.userName}}
                                         </a>
 
                                         <br>
