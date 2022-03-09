@@ -24,20 +24,23 @@ export class ProfileInformationComponent implements OnInit {
   public perfil: any;
   public userInformation: any = {};
 
-  constructor(
-    private securityService: IHttpSecurityService
-  ) {
-  }
+  constructor(private securityService: IHttpSecurityService) {}
 
   ngOnInit(): void {
     this.getCurrentPerfilInfo();
   }
 
   getCurrentPerfilInfo(): void {
-    this.securityService.getCurrentPerfilInfo().subscribe((response: any) => {
-      if(response) {
-        this.perfil = response;
-      }
-    });
+    if (!this.user.id) {
+      return;
+    }
+
+    this.securityService
+      .getPerfilInfoByUserId(this.user.id)
+      .subscribe((response: any) => {
+        if (response) {
+          this.perfil = response;
+        }
+      });
   }
 }

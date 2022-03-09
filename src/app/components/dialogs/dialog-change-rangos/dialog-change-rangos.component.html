@@ -1,0 +1,38 @@
+<h2 mat-dialog-title>
+    Actualizar rango al usuario
+</h2>
+
+<form [formGroup]="formGroup" (ngSubmit)="changeRango()">
+    <mat-dialog-content>
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Rango</label>
+
+                    <ng-select [items]="rangos" formControlName="id" bindLabel="nombre" bindValue="id">
+                        <ng-template ng-label-tmp let-item="item">
+                            <img src="/assets/images/icons/rangos/{{item.icono}}" class="image-middle me-1"
+                                *ngIf="item.icono">
+                            <span [ngStyle]="{'color': item.color}">{{item.nombre ? item.nombre : item | json}}</span>
+                        </ng-template>
+
+                        <ng-template ng-option-tmp let-item="item" let-index="index">
+                            <img src="/assets/images/icons/rangos/{{item.icono}}" class="image-middle me-1">
+                            <span [ngStyle]="{'color': item.color}">{{item.nombre}}</span>
+                        </ng-template>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button type="button" mat-button mat-dialog-close>
+            Cancelar
+        </button>
+
+        <button type="submit" mat-button color="primary" [disabled]="formGroup.invalid">
+            Actualizar
+        </button>
+    </mat-dialog-actions>
+</form>

@@ -1410,6 +1410,47 @@ p.cupuntos {
     }
 }
 
+.button-uppercase {
+    text-align: center;
+    height: 24px;
+    line-height: 24px;
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 2px;
+}
+
+.bazul {
+    color: #fff;
+    background: #2594ef;
+
+    &:hover {
+        color: #fff;
+        background:#1e7dca;
+    }
+
+    &:active {
+        color: #fff;
+        background:#196caf;
+    }
+}
+
+.brojo {
+    color: #fff;
+    background: #e74c3c;
+
+    &:hover {
+        color: #fff;
+        background:#d64636;
+    }
+
+    &:active {
+        color: #fff;
+        background:#bb3b2d;
+    }
+}
+
 .tyes {
     font-size: 12px;
     color: #494d50;

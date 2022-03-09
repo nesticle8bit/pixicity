@@ -410,6 +410,25 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getPerfilInfoByUserId(userId: number): Observable<any> {
+    return this.http
+      .get<any>(`${environment.api}/api/usuarios/getPerfilInfoByUserId?usuarioId=${userId}`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   getSocialMediaByUsuarioId(usuarioId: number): Observable<any> {
     return this.http
       .get<any>(
@@ -510,6 +529,25 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getRangosDropdown(): Observable<any> {
+    return this.http
+      .get<any>(`${environment.api}/api/rangos/getRangosDropdown`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   getActividadUsuario(usuarioId: number, tipoActividad: any): Observable<any> {
     return this.http
       .get<any>(`${environment.api}/api/usuarios/getActividadUsuario?usuarioId=${usuarioId}&tipoActividad=${tipoActividad}`)
@@ -532,6 +570,25 @@ export class HttpSecurityService implements IHttpSecurityService {
   addUpdateRango(rango: any): Observable<number> {
     return this.http
       .post<any>(`${environment.api}/api/rangos/addUpdateRango`, rango)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  changeRango(rangoUsuario: any): Observable<boolean> {
+    return this.http
+      .post<any>(`${environment.api}/api/rangos/changeRangoUsuario`, rangoUsuario)
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
