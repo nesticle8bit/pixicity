@@ -9,7 +9,8 @@
                         <div class="col-12 col-sm-2">
                             <div class="perfil-avatar">
                                 <a [routerLink]="['/perfil/' + currentUser.userName]">
-                                    <app-user-avatar [avatar]="currentUser.avatar" [userName]="currentUser.userName" [height]="120"></app-user-avatar>
+                                    <app-user-avatar [avatar]="currentUser.avatar" [userName]="currentUser.userName"
+                                        [height]="120"></app-user-avatar>
                                 </a>
                             </div>
                         </div>
@@ -22,13 +23,15 @@
                                             {{currentUser?.completeName}}
                                         </h1>
 
-                                        <div class="pani" [routerLink]="['/perfil/' + currentUser?.userName]">@{{currentUser?.userName}}</div>
+                                        <div class="pani" [routerLink]="['/perfil/' + currentUser?.userName]">
+                                            @{{currentUser?.userName}}</div>
                                     </div>
 
                                     <div class="col-12 col-sm-4">
                                         <div class="text-end">
                                             <app-genre-icon class="mx-2" [genre]="currentUser?.genero"></app-genre-icon>
-                                            <addon-country-flag [iso2]="currentUser?.pais?.isO2" [title]="currentUser?.pais?.nombre"></addon-country-flag>
+                                            <addon-country-flag [iso2]="currentUser?.pais?.isO2"
+                                                [title]="currentUser?.pais?.nombre"></addon-country-flag>
                                         </div>
                                     </div>
                                 </div>
@@ -36,7 +39,8 @@
                                 <div class="row mt-2">
                                     <div class="col-12 col-sm-2">
                                         <p>
-                                            <app-genre-icon class="me-1" [genre]="currentUser.genero" [isFA]="true"></app-genre-icon>
+                                            <app-genre-icon class="me-1" [genre]="currentUser.genero" [isFA]="true">
+                                            </app-genre-icon>
 
                                             <span *ngIf="currentUser.genero === 'Otros'">Es un Otro</span>
                                             <span *ngIf="currentUser.genero === 'Masculino'">Es un Hombre</span>
@@ -51,7 +55,7 @@
                                         </p>
                                     </div>
 
-                                    <div class="col-12 col-sm-2">
+                                    <div class="col-12 col-sm-3">
                                         <p>
                                             <fa-icon [icon]="['fas', 'map-marker-alt']"></fa-icon>
                                             Vive en <b>{{currentUser?.pais?.nombre}}</b>
@@ -70,17 +74,20 @@
 
                                 <div class="row mt-2">
                                     <div class="col-12 col-sm-2">
-                                        <app-follow-button [userName]="currentUser.userName" [icon]="true"></app-follow-button>
+                                        <app-follow-button [userName]="currentUser.userName" [icon]="true">
+                                        </app-follow-button>
                                     </div>
 
                                     <div class="col-12 col-sm-3" *ngIf="currentUser?.rango">
                                         <app-change-rango
-                                            [data]="{ id: currentUser?.rango?.id, usuarioId: currentUser?.id, icono: currentUser.rango?.icono, color: currentUser.rango?.color }">
+                                            [data]="{ id: currentUser?.rango?.id, usuarioId: currentUser?.id, icono: currentUser.rango?.icono, color: currentUser.rango?.color, nombre: currentUser.rango?.nombre }">
                                         </app-change-rango>
                                     </div>
 
                                     <div class="col-12 col-sm-3" *ngIf="currentUser?.id">
-                                        <app-banear-usuario [data]="{ usuarioId: currentUser?.id}"></app-banear-usuario>
+                                        <app-banear-usuario
+                                            [data]="{ usuarioId: currentUser?.id, nombre: currentUser.rango?.nombre}">
+                                        </app-banear-usuario>
                                     </div>
                                 </div>
                             </div>
@@ -96,8 +103,9 @@
                                 <div class="col-12 col-sm-2">
                                     <p class="ranpe">
                                         <b style="color:#171717">
-                                            
-                                            <span [ngStyle]="{'color': currentUser?.rango?.color}">{{currentUser?.rango?.nombre}}</span>
+
+                                            <span
+                                                [ngStyle]="{'color': currentUser?.rango?.color}">{{currentUser?.rango?.nombre}}</span>
                                             <span class="status online"></span>
                                         </b>
                                         <span>Rango</span>
@@ -165,13 +173,18 @@
                         </div>
                     </div>
 
-                    <app-profile-activity [user]="currentUser" *ngIf="currentSelection === 'activity'"></app-profile-activity>
+                    <app-profile-activity [user]="currentUser" *ngIf="currentSelection === 'activity'">
+                    </app-profile-activity>
                     <app-profile-shouts *ngIf="currentSelection === 'shouts'"></app-profile-shouts>
                     <app-profile-posts [user]="currentUser" *ngIf="currentSelection === 'posts'"></app-profile-posts>
-                    <app-profile-comments [user]="currentUser" *ngIf="currentSelection === 'comments'"></app-profile-comments>
-                    <app-profile-followers [user]="currentUser" *ngIf="currentSelection === 'followers'"></app-profile-followers>
-                    <app-profile-following [user]="currentUser" *ngIf="currentSelection === 'following'"></app-profile-following>
-                    <app-profile-information [user]="currentUser" *ngIf="currentSelection === 'information'"></app-profile-information>
+                    <app-profile-comments [user]="currentUser" *ngIf="currentSelection === 'comments'">
+                    </app-profile-comments>
+                    <app-profile-followers [user]="currentUser" *ngIf="currentSelection === 'followers'">
+                    </app-profile-followers>
+                    <app-profile-following [user]="currentUser" *ngIf="currentSelection === 'following'">
+                    </app-profile-following>
+                    <app-profile-information [user]="currentUser" *ngIf="currentSelection === 'information'">
+                    </app-profile-information>
                 </div>
             </div>
         </div>

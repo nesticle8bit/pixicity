@@ -6,11 +6,16 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
   public error: string = '';
+  public baneo: any = {
+    title: 'La cuenta se encuentra deshabilitada',
+    causa: '',
+    hasta: new Date(),
+  };
 
   constructor(
     private formBuilder: FormBuilder,
@@ -19,7 +24,7 @@ export class LoginComponent implements OnInit {
   ) {
     this.loginForm = this.formBuilder.group({
       userName: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
@@ -36,12 +41,37 @@ export class LoginComponent implements OnInit {
 
     this.securityService.loginUser(login).subscribe((value: any) => {
       if (value === 'error') {
-        this.error = 'Las credenciales son incorrectas, por favor corrige y vuelve a iniciar sesión';
+        this.error =
+          'Las credenciales son incorrectas, por favor corrige y vuelve a iniciar sesión';
+        return;
+      }
+
+      if (value?.error === 'baneado') {
+        this.error = 'baneado';
+        this.baneo = {
+          title: 'La cuenta se encuentra deshabilitada',
+          causa: value.razonBaneo,
+          hasta: value.tiempoBaneado,
+        };
+
+        return;
+      }
+
+      if (value?.error === 'baneado_permanente') {
+        this.error = 'baneado';
+
+        this.baneo = {
+          title: 'La cuenta se encuentra deshabilitada permanentemente',
+          causa: value.razonBaneo,
+          hasta: null,
+        };
+
         return;
       }
 
       this.securityService.setUserToLocalStorage(value);
-      this.router.navigate(['']);
+      // this.router.navigate(['']);
+      window.location.href = '';
     });
   }
 }

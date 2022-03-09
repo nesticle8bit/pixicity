@@ -49,9 +49,7 @@ export class TablePaisesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((value: any) => {
       if (value) {
-        pais.nombre = value.nombre;
-        pais.isO2 = value.iso2.toLowerCase();
-        pais.isO3 = value.iso3.toLowerCase();
+        this.getPaises();
       }
     });
   }

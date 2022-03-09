@@ -450,9 +450,9 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  banUser(userId: number): Observable<any> {
+  banUser(usuario: any): Observable<any> {
     return this.http
-      .post<any>(`${environment.api}/api/usuarios/banUser`, { id: userId })
+      .post<any>(`${environment.api}/api/usuarios/banUser`, usuario)
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
