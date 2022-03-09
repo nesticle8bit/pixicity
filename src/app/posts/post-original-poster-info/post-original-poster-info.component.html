@@ -1,27 +1,29 @@
 <div class="esees">
     <div class="eites">
-        <a class="nomis" [routerLink]="['/perfil/' + post?.usuario?.userName]" #tooltip="matTooltip" matTooltip="Ver perfil de {{post?.usuario?.userName}}">
-            <app-user-avatar [avatar]="post?.usuario?.avatar" [userName]="post?.usuario?.userName" [height]="97"></app-user-avatar>
+        <a class="nomis" [routerLink]="['/perfil/' + post?.usuario?.userName]"
+            matTooltip="Ver perfil de {{post?.usuario?.userName}}">
+            <app-user-avatar [avatar]="post?.usuario?.avatar" [userName]="post?.usuario?.userName" [height]="97">
+            </app-user-avatar>
         </a>
 
-        <span>
-            <img src="/assets/images/icons/rangos/{{post?.usuario?.rango?.icono}}" #tooltip="matTooltip" matTooltip="{{post?.usuario?.rango?.nombre}}"
-                [matTooltipPosition]="'below'">
-            {{post?.usuario?.rango?.nombre}}
+        <span [ngStyle]="{'color': post?.usuario?.rango?.color}">
+            <img src="/assets/images/icons/rangos/{{post?.usuario?.rango?.icono}}"
+                matTooltip="{{post?.usuario?.rango?.nombre}}" [matTooltipPosition]="'below'">
+            <strong class="ms-1">{{post?.usuario?.rango?.nombre}}</strong>
         </span>
     </div>
 
     <div class="gkes">
         <div class="eolr">
-            <span class="tepe-online vctip" #tooltip="matTooltip" matTooltip="Online"
-                [matTooltipPosition]="'below'"></span>
+            <span class="tepe-online vctip" matTooltip="Online" [matTooltipPosition]="'below'"></span>
             <a [routerLink]="['/perfil/' + post?.usuario?.userName]">
                 {{post?.usuario?.userName}}
             </a>
         </div>
 
         <div class="float-end">
-            <addon-country-flag [iso2]="post?.usuario?.estado?.pais?.isO2" [title]="post?.usuario?.estado?.pais.nombre"></addon-country-flag>
+            <addon-country-flag [iso2]="post?.usuario?.estado?.pais?.isO2" [title]="post?.usuario?.estado?.pais.nombre">
+            </addon-country-flag>
             <app-genre-icon [genre]="post?.usuario?.generoString"></app-genre-icon>
         </div>
 
