@@ -1,0 +1,57 @@
+<h2 mat-dialog-title>
+    Banear Usuario
+</h2>
+
+<form [formGroup]="formGroup" (ngSubmit)="banearUsuario()">
+    <mat-dialog-content>
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <div class="mb-1">
+                    <mat-form-field class="col-6">
+                        <mat-label>Tiempo de Baneo</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="tiempoBaneado">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Descripción del Baneo</label>
+                    <textarea class="form-control" formControlName="razonBaneo"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Banear</label>
+
+                    <mat-radio-group class="mt-1" color="primary" formControlName="baneadoPermanente">
+                        <mat-radio-button class="mx-3" value="false">
+                            Banear temporalmente
+                        </mat-radio-button>
+
+                        <mat-radio-button class="mx-3" value="true">
+                            Banear permanentemente
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button type="button" mat-button mat-dialog-close>
+            Cancelar
+        </button>
+
+        <button type="submit" mat-button color="warn" [disabled]="formGroup.invalid">
+            Banear
+        </button>
+    </mat-dialog-actions>
+</form>

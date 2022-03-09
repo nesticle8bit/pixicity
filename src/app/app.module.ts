@@ -158,6 +158,10 @@ import { DialogAddUpdateRangoComponent } from './components/dialogs/dialog-add-u
 import { ChangeRangoComponent } from './components/admin/usuarios/rangos/change-rango/change-rango.component';
 import { DialogChangeRangosComponent } from './components/dialogs/dialog-change-rangos/dialog-change-rangos.component';
 import { BanearUsuarioComponent } from './components/admin/usuarios/usuarios/banear-usuario/banear-usuario.component';
+import { DialogBanUserComponent } from './components/dialogs/dialog-ban-user/dialog-ban-user.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import {MatInputModule} from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -257,6 +261,7 @@ import { BanearUsuarioComponent } from './components/admin/usuarios/usuarios/ban
     ChangeRangoComponent,
     DialogChangeRangosComponent,
     BanearUsuarioComponent,
+    DialogBanUserComponent,
   ],
   imports: [
     BrowserModule,
@@ -338,7 +343,10 @@ import { BanearUsuarioComponent } from './components/admin/usuarios/usuarios/ban
     MatExpansionModule,
     PickerModule,
     MatBottomSheetModule,
-    ImageCropperModule
+    ImageCropperModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule
   ],
   providers: [
     DisplayComponentService,

@@ -88,10 +88,9 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <button type="button" mat-menu-item (click)="banUser(usuario, i)">
+                        <button type="button" mat-menu-item (click)="banUser(usuario)" *ngIf="!usuario.baneado">
                             <mat-icon>do_disturb_alt</mat-icon>
-                            <span *ngIf="!usuario.baneado">Banear</span>
-                            <span *ngIf="usuario.baneado">Desbanear</span>
+                            Banear
                         </button>
 
                         <button type="button" mat-menu-item (click)="deleteUser(usuario.id)">

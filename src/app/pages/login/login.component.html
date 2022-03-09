@@ -10,10 +10,22 @@
             </div>
 
             <form [formGroup]="loginForm" (ngSubmit)="login()" class="login_box mx-auto">
-                <div class="alert- alert-danger p-3 font-w-700 mb-3" *ngIf="error">
-                    <span>
+                <div class="alert alert-danger p-3 mb-3" *ngIf="error">
+                    <span class="font-w-700" *ngIf="error != 'baneado'">
                         {{error}}
                     </span>
+
+                    <div style="font-size: 1.2rem;">
+                        {{baneo.title}}
+                    </div>
+
+                    <div *ngIf="baneo.causa" class="my-3" style="font-size: 1rem;">
+                        Causa: {{baneo.causa}}
+                    </div>
+
+                    <div *ngIf="baneo.hasta" style="font-size: .8rem;">
+                        <strong>Hasta:</strong> {{baneo.hasta | date:'medium'}}
+                    </div>
                 </div>
 
                 <div class="mb-3">

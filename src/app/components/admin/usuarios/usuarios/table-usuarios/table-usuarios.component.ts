@@ -4,6 +4,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogBanUserComponent } from 'src/app/components/dialogs/dialog-ban-user/dialog-ban-user.component';
 
 @Component({
   selector: 'app-table-usuarios',
@@ -17,44 +19,31 @@ export class TableUsuariosComponent implements OnInit {
   constructor(
     public paginationService: PaginationService,
     private securityService: IHttpSecurityService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.getSesiones();
+    this.getUsuarios();
   }
 
-  getSesiones(): void {
+  getUsuarios(): void {
     this.securityService.getUsuariosAdmin().subscribe((response: any) => {
       this.usuarios = response.usuarios;
       this.totalCount = response.pagination.totalCount;
     });
   }
 
-  banUser(user: any, index: number): void {
-    Swal.fire({
-      title: `${(user.baneado ? 'Desbanear' : 'Banear')} Usuario`,
-      text: `¿Está seguro de ${(user.baneado ? 'desbanear' : 'banear')} el usuario ${user.userName}?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: `${(user.baneado ? 'Desbanear' : 'Banear')}`,
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.securityService
-          .banUser(user.id)
-          .subscribe((response: any) => {
-            if (response === true || response === false) {
-              Swal.fire({
-                title: response === true ? 'Baneado' : 'Desbaneado',
-                text: `El usuario ha sido ${(response === true ? 'baneado' : 'desbaneado')} correctamente`,
-                icon: 'success',
-                timer: 3000,
-              });
+  banUser(user: any): void {
+    const dialogRef = this.dialog.open(DialogBanUserComponent, {
+      width: '860px',
+      data: user.id,
+      disableClose: true,
+    });
 
-              this.usuarios[index].baneado = !this.usuarios[index].baneado;
-            }
-          });
+    dialogRef.afterClosed().subscribe((value: any) => {
+      if (value) {
+        this.getUsuarios();
       }
     });
   }
@@ -87,6 +76,6 @@ export class TableUsuariosComponent implements OnInit {
 
   pageChange(event: PageEvent): void {
     this.paginationService.change(event);
-    this.getSesiones();
+    this.getUsuarios();
   }
 }
