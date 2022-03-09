@@ -22,7 +22,7 @@
                                             {{currentUser?.completeName}}
                                         </h1>
 
-                                        <div class="pani">@{{currentUser?.userName}} - Colombia</div>
+                                        <div class="pani" [routerLink]="['/perfil/' + currentUser?.userName]">@{{currentUser?.userName}}</div>
                                     </div>
 
                                     <div class="col-12 col-sm-4">
@@ -72,6 +72,16 @@
                                     <div class="col-12 col-sm-2">
                                         <app-follow-button [userName]="currentUser.userName" [icon]="true"></app-follow-button>
                                     </div>
+
+                                    <div class="col-12 col-sm-3" *ngIf="currentUser?.rango">
+                                        <app-change-rango
+                                            [data]="{ id: currentUser?.rango?.id, usuarioId: currentUser?.id, icono: currentUser.rango?.icono, color: currentUser.rango?.color }">
+                                        </app-change-rango>
+                                    </div>
+
+                                    <div class="col-12 col-sm-3" *ngIf="currentUser?.id">
+                                        <app-banear-usuario [data]="{ usuarioId: currentUser?.id}"></app-banear-usuario>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +96,8 @@
                                 <div class="col-12 col-sm-2">
                                     <p class="ranpe">
                                         <b style="color:#171717">
-                                            {{currentUser?.rango}}
+                                            
+                                            <span [ngStyle]="{'color': currentUser?.rango?.color}">{{currentUser?.rango?.nombre}}</span>
                                             <span class="status online"></span>
                                         </b>
                                         <span>Rango</span>

@@ -155,6 +155,9 @@ import { TableRangosComponent } from './components/admin/usuarios/rangos/table-r
 import { ProfileActivityComponent } from './components/profile/profile-activity/profile-activity.component';
 import { TipoActividadIconComponent } from './components/addons/tipo-actividad-icon/tipo-actividad-icon.component';
 import { DialogAddUpdateRangoComponent } from './components/dialogs/dialog-add-update-rango/dialog-add-update-rango.component';
+import { ChangeRangoComponent } from './components/admin/usuarios/rangos/change-rango/change-rango.component';
+import { DialogChangeRangosComponent } from './components/dialogs/dialog-change-rangos/dialog-change-rangos.component';
+import { BanearUsuarioComponent } from './components/admin/usuarios/usuarios/banear-usuario/banear-usuario.component';
 
 @NgModule({
   declarations: [
@@ -251,6 +254,9 @@ import { DialogAddUpdateRangoComponent } from './components/dialogs/dialog-add-u
     ProfileActivityComponent,
     TipoActividadIconComponent,
     DialogAddUpdateRangoComponent,
+    ChangeRangoComponent,
+    DialogChangeRangosComponent,
+    BanearUsuarioComponent,
   ],
   imports: [
     BrowserModule,
