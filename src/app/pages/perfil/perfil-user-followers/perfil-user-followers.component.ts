@@ -9,6 +9,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 export class PerfilUserFollowersComponent implements OnInit {
   private _usuarioId: any;
   public followers: any[] = [];
+  public totalCount: number = 0;
 
   @Input() set usuarioId(value: any) {
     this._usuarioId = value;
@@ -34,7 +35,8 @@ export class PerfilUserFollowersComponent implements OnInit {
     this.securityService
       .getLastFollowersByUserId(this._usuarioId)
       .subscribe((response: any) => {
-        this.followers = response;
+        this.followers = response.followers;
+        this.totalCount = response.totalCount;
       });
   }
 }

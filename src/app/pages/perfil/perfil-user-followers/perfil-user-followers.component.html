@@ -3,7 +3,9 @@
         <span>Seguidores</span>
 
         <strong class="float-end"
-            style="background: #fff; margin-top: -2px; color: #8B8B8B; padding-left: 7px;">0</strong>
+            style="background: #fff; margin-top: -2px; color: #8B8B8B; padding-left: 7px;">
+            {{totalCount}}
+        </strong>
     </h6>
 
     <div class="alert alert-warning" *ngIf="followers.length < 1">
@@ -12,7 +14,7 @@
 
     <div class="row">
         <div class="col-12 col-sm-12 col-md-2" *ngFor="let item of followers">
-            <app-user-avatar [routerLink]="['/perfil/' + item.userName]" [avatar]="item.avatar" [userName]="item.userName" matTooltip="{{item.userName}}"
+            <app-user-avatar class="cursor--pointer" [routerLink]="['/perfil/' + item.userName]" [avatar]="item.avatar" [userName]="item.userName" matTooltip="{{item.userName}}"
             [matTooltipPosition]="'above'"></app-user-avatar>
         </div>
     </div>

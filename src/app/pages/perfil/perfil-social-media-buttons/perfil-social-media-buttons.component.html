@@ -3,26 +3,37 @@
 </h6>
 
 <div class="row mb-4">
+    <div class="col-12">
+        <div class="alert alert-warning"
+            *ngIf="!socialMedia?.facebook && !socialMedia?.twitter && !socialMedia?.youtube && !socialMedia?.tiktok">
+            🗃️ <strong>La información de sus redes sociales se encuentra vacía</strong>
+        </div>
+    </div>
+
     <div class="col-12 col-sm-12 col-md-3" *ngIf="socialMedia?.facebook">
-        <a href="https://facebook.com/{{socialMedia?.facebook}}" target="_blank" rel="noopener noreferrer" matTooltip="Facebook: {{socialMedia?.facebook}}">
+        <a href="https://facebook.com/{{socialMedia?.facebook}}" target="_blank" rel="noopener noreferrer"
+            matTooltip="Facebook: {{socialMedia?.facebook}}">
             <fa-icon class="facebook" [icon]="['fab', 'facebook']"></fa-icon>
         </a>
     </div>
 
     <div class="col-12 col-sm-12 col-md-3" *ngIf="socialMedia?.twitter">
-        <a href="https://twitter.com/{{socialMedia?.twitter}}" target="_blank" rel="noopener noreferrer" matTooltip="Twitter: {{socialMedia?.twitter}}">
+        <a href="https://twitter.com/{{socialMedia?.twitter}}" target="_blank" rel="noopener noreferrer"
+            matTooltip="Twitter: {{socialMedia?.twitter}}">
             <fa-icon class="twitter" [icon]="['fab', 'twitter']"></fa-icon>
         </a>
     </div>
 
     <div class="col-12 col-sm-12 col-md-3" *ngIf="socialMedia?.youtube">
-        <a href="https://youtube.com/{{socialMedia?.youtube}}" target="_blank" rel="noopener noreferrer" matTooltip="Youtube: {{socialMedia?.youtube}}">
+        <a href="https://youtube.com/{{socialMedia?.youtube}}" target="_blank" rel="noopener noreferrer"
+            matTooltip="Youtube: {{socialMedia?.youtube}}">
             <fa-icon class="youtube" [icon]="['fab', 'youtube']"></fa-icon>
         </a>
     </div>
 
     <div class="col-12 col-sm-12 col-md-3" *ngIf="socialMedia?.tiktok">
-        <a href="https://tiktok.com/{{socialMedia?.tiktok}}" target="_blank" rel="noopener noreferrer" matTooltip="Tiktok: {{socialMedia?.tiktok}}">
+        <a href="https://tiktok.com/{{socialMedia?.tiktok}}" target="_blank" rel="noopener noreferrer"
+            matTooltip="Tiktok: {{socialMedia?.tiktok}}">
             <fa-icon class="tiktok" [icon]="['fab', 'tiktok']"></fa-icon>
         </a>
     </div>
