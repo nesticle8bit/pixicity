@@ -10,6 +10,12 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
 ### 📄 Index
 ![image](https://user-images.githubusercontent.com/1715022/157444461-4484ebe4-2eee-48b3-87ba-bb67dca58c5a.png)
 
+### 🔐 Login
+![image](https://user-images.githubusercontent.com/1715022/157564937-2744e258-f216-47b8-b33c-6038947eae9b.png)
+
+### 🏚️ Registro
+![image](https://user-images.githubusercontent.com/1715022/157565018-d6a53cc1-cbb8-4d8f-ba24-8feed282f77b.png)
+
 ### ➕ Crear post
 ![image](https://user-images.githubusercontent.com/1715022/157444548-5a256888-93f0-47e2-b6a4-626bce6d341a.png)
 
