@@ -2612,3 +2612,15 @@ i.icon.plus { background-position: -53px -220px }
         color: #e84393;
     }
 }
+
+.bg-login {
+    background: url('/assets/images/register-bg.gif') repeat;
+    padding: 2rem;
+    padding-top: 1.4rem;
+    padding-bottom: 1.4rem;
+    border-radius: 10px;
+}
+
+.bg-white {
+    background: #fff;
+}

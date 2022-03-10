@@ -6,6 +6,7 @@ import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.int
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -87,10 +88,11 @@ export class RegisterComponent implements OnInit {
   public currentFocus: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private securityService: IHttpSecurityService,
     private parametrosService: IHttpParametrosService,
+    private displayService: DisplayComponentService,
+    private securityService: IHttpSecurityService,
     private generalService: IHttpGeneralService,
+    private formBuilder: FormBuilder,
     private router: Router,
   ) {
     this.formGroup = this.formBuilder.group({
@@ -108,6 +110,13 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.displayService.setDisplay({
+      mainMenu: false,
+      footer: true,
+      searchFooter: false,
+      submenu: false,
+    });
+
     for (let index = 0; index < 31; index++) {
       this.dias.push(index + 1);
     }
