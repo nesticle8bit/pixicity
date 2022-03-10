@@ -1,4 +1,4 @@
-<div class="container container--home">
+<div class="container container--home bg-login mt-3">
     <div class="row" *ngIf="configuracion?.disableUserRegistration === true">
         <div class="col-12 col-sm-12 col-md-9">
             <div class="alert alert-warning p-5">
@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="row" *ngIf="configuracion?.disableUserRegistration === false">
+    <div class="row p-4 bg-white" *ngIf="configuracion?.disableUserRegistration === false">
         <div class="col-12 col-sm-8 text-center main-login--head">
             <h1>Bienvenido a Pixicity!</h1>
 
@@ -55,7 +55,8 @@
 
                 <div class="mb-3 pos-relative">
                     <label>Correo Electrónico</label>
-                    <input type="email" formControlName="email" class="form-control mx-auto" on-focus="onFocus('email')" on-blur="removePopover()" />
+                    <input type="email" formControlName="email" class="form-control mx-auto" on-focus="onFocus('email')"
+                        on-blur="removePopover()" />
 
                     <div class="pixicity-popover help info" *ngIf="currentFocus === 'email'">
                         <span id="puy"></span>
@@ -77,7 +78,8 @@
 
                         <div class="col-12 col-sm-4">
                             <label>Mes</label>
-                            <ng-select formControlName="mes" [items]="meses" bindLabel="label" bindValue="value"></ng-select>
+                            <ng-select formControlName="mes" [items]="meses" bindLabel="label" bindValue="value">
+                            </ng-select>
                         </div>
 
                         <div class="col-12 col-sm-4">
@@ -89,7 +91,8 @@
 
                 <div class="mb-3 pos-relative">
                     <label>Género</label>
-                    <ng-select formControlName="genero" [items]="generos" bindLabel="label" bindValue="value" (click)="onFocus('genero')"></ng-select>
+                    <ng-select formControlName="genero" [items]="generos" bindLabel="label" bindValue="value"
+                        (click)="onFocus('genero')"></ng-select>
 
                     <div class="pixicity-popover help info" *ngIf="currentFocus === 'genero'">
                         <span id="puy"></span>
@@ -108,11 +111,13 @@
 
                 <div class="mb-3 pos-relative">
                     <label>Estado o Región</label>
-                    <ng-select formControlName="estadoId" [items]="estados" bindLabel="nombre" bindValue="id"></ng-select>
+                    <ng-select formControlName="estadoId" [items]="estados" bindLabel="nombre" bindValue="id">
+                    </ng-select>
                 </div>
 
                 <div class="mb-3 pos-relative">
-                    <mat-checkbox formControlName="termsConditions" color="primary" (focusin)="onFocus('terms-conditions')" (focusout)="removePopover()">
+                    <mat-checkbox formControlName="termsConditions" color="primary"
+                        (focusin)="onFocus('terms-conditions')" (focusout)="removePopover()">
                         Acepto los Términos y Condiciones de uso
                     </mat-checkbox>
 

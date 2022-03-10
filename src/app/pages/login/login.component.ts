@@ -2,6 +2,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
   selector: 'app-login',
@@ -18,8 +19,9 @@ export class LoginComponent implements OnInit {
   };
 
   constructor(
-    private formBuilder: FormBuilder,
+    private displayService: DisplayComponentService,
     private securityService: IHttpSecurityService,
+    private formBuilder: FormBuilder,
     private router: Router
   ) {
     this.loginForm = this.formBuilder.group({
@@ -28,7 +30,14 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.displayService.setDisplay({
+      mainMenu: false,
+      footer: true,
+      searchFooter: false,
+      submenu: false,
+    });
+  }
 
   login(): void {
     if (this.loginForm.invalid) {
