@@ -1,0 +1,63 @@
+th {
+    margin: 0;
+    color: #576b86;
+    padding: 8px !important;
+    text-align: left;
+    text-transform: uppercase;
+    background: #d6dee8 !important;
+    border-bottom: 1px solid #576b86 !important;
+}
+
+tr {
+    background: #EEE;
+}
+
+td {
+    margin: 0;
+    padding: 5px;
+    color: #FFF!important;
+    border-bottom: 1px solid #CCC;
+    border-top: 1px solid #FFF;
+}
+
+td a {
+    margin: 0;
+    font-weight: bold;
+    color: #777!important;
+    width: 90px;
+    overflow: hidden;
+}
+
+tr.post td.accion {
+	color: #004a95!important;
+}
+
+tr.comentario td.accion  {
+	color: #f7941d!important;
+}
+
+tr.comunidad td.accion  {
+	color: #007236!important;
+}
+
+
+tr.tema  td.accion {
+	color: #7cc576!important;
+	
+}
+
+tr.usuario td.accion {
+	color: #ed145b!important;
+}
+
+tr.shout td.accion  {
+	color: #77AABC!important;
+}
+
+tr.album td.accion  {
+	color: #AABC77!important;
+}
+
+tr.track td.accion  {
+	color: #AABC77!important;
+}
