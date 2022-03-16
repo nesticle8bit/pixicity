@@ -6,6 +6,7 @@ import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogUpdateAfiliadosComponent } from '../dialog-update-afiliados/dialog-update-afiliados.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-table-afiliados',
@@ -20,6 +21,7 @@ export class TableAfiliadosComponent implements OnInit {
     public paginationService: PaginationService,
     private generalService: IHttpGeneralService,
     private webService: IHttpWebService,
+    private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {}
 
@@ -77,6 +79,24 @@ export class TableAfiliadosComponent implements OnInit {
         afiliado.titulo = value.titulo;
         afiliado.url = value.url;
       }
+    });
+  }
+
+  clipboard(codigo: string): void {
+    let selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = `https://pixicity.net/?ref=${codigo}`;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+
+    this.snackBar.open('Texto copiado al portapapeles', '', {
+      duration: 3 * 1000,
     });
   }
 }

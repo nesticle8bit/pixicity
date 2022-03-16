@@ -6,8 +6,8 @@
                 <th>Código</th>
                 <th>Título</th>
                 <th>URL</th>
-                <th>In</th>
-                <th>Out</th>
+                <th>In <fa-icon class="text-success ms-1" icon="long-arrow-alt-down"></fa-icon></th>
+                <th>Out <fa-icon class="text-primary ms-1" icon="long-arrow-alt-up"></fa-icon></th>
                 <th>Estado</th>
                 <th></th>
             </tr>
@@ -22,6 +22,9 @@
                 </td>
 
                 <td>
+                    <fa-icon [icon]="['fas', 'copy']" matTooltip="Copiar al portapapeles"
+                        (click)="clipboard(afiliado.codigo)" class="mr-3 text-secondary cursor--pointer"></fa-icon> &nbsp;
+
                     <span class="badge bg-primary">
                         {{afiliado.codigo}}
                     </span>
