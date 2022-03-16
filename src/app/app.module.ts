@@ -162,6 +162,7 @@ import { DialogBanUserComponent } from './components/dialogs/dialog-ban-user/dia
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatInputModule} from '@angular/material/input';
+import { DialogUpdateAfiliadosComponent } from './components/admin/control-de-comunidad/afiliados/dialog-update-afiliados/dialog-update-afiliados.component';
 
 @NgModule({
   declarations: [
@@ -262,6 +263,7 @@ import {MatInputModule} from '@angular/material/input';
     DialogChangeRangosComponent,
     BanearUsuarioComponent,
     DialogBanUserComponent,
+    DialogUpdateAfiliadosComponent,
   ],
   imports: [
     BrowserModule,
