@@ -8,7 +8,7 @@
             {{i + 1}}
         </strong>
 
-        <a href="javascript:void(0)" (click)="hit(afiliado)" title="{{afiliado.descripcion}}">
+        <a href="javascript:void(0)" (click)="hit(afiliado)" matTooltip="{{afiliado.descripcion}}" [matTooltipPosition]="'above'">
             <img class="me-1" src="{{afiliado.banner}}" alt="Favicon" style="width: 16px; height: 16px;" />
             {{afiliado.titulo}}
         </a>
