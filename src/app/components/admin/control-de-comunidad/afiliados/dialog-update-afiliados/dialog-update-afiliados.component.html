@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>
+    Actualizar Afiliación
+</h2>
+
+<form [formGroup]="formGroupAfiliacion" (ngSubmit)="updateAfiliacion()">
+    <mat-dialog-content>
+        <div class="mb-3">
+            <label>Código</label> <br>
+            <span class="badge bg-primary">{{formGroupAfiliacion.value?.codigo}}</span>
+        </div>
+
+        <div class="mb-3">
+            <label>Título <strong class="text-danger">*</strong></label>
+            <input type="text" class="form-control" formControlName="titulo" [maxLength]="100" cdkFocusInitial />
+        </div>
+
+        <div class="mb-3">
+            <label>URL <strong class="text-danger">*</strong></label>
+            <input type="text" class="form-control" formControlName="url" [maxLength]="350" />
+        </div>
+
+        <div class="mb-3">
+            <label>Favicon (16x16px) <strong class="text-danger">*</strong></label>
+            <input type="text" class="form-control" formControlName="banner" [maxLength]="350" />
+        </div>
+
+        <div class="mb-3">
+            <label>Descripción</label>
+            <textarea rows="4" class="form-control" formControlName="descripcion" [maxLength]="200"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <mat-slide-toggle formControlName="activo" color="primary">Activo</mat-slide-toggle>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>
+            Cancelar
+        </button>
+
+        <button type="submit" mat-button color="primary" [disabled]="formGroupAfiliacion.invalid">
+            Actualizar
+        </button>
+    </mat-dialog-actions>
+</form>

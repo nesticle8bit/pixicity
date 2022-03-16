@@ -2,7 +2,6 @@ import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.int
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dialog-afiliarse',
@@ -36,10 +35,9 @@ export class DialogAfiliarseComponent implements OnInit {
 
     const afiliacion = Object.assign({}, this.formGroupAfiliacion.value);
     this.httpGeneralService.saveAfiliacion(afiliacion).subscribe((response: any) => {
-      debugger
       if (response) {
         this.formGroupAfiliacion.patchValue({
-          codigo: `<a href="https://pixicity/?ref=${response}" target="_blank" title="Pixicity"><img src="http://pixity/logo.png"></a>`
+          codigo: `<a href="https://pixicity.net/?ref=${response}" target="_blank" title="Pixicity"><img src="https://pixicity.net/assets/images/logo_ref.png"></a>`
         });
       }
     });

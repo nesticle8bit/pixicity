@@ -120,4 +120,23 @@ export class HttpGeneralService implements IHttpGeneralService {
                 }
             })).pipe(catchError(this.helper.errorHandler));
     }
+
+    updateAfiliacion(afiliacion: any): Observable<any> {
+        return this.http
+          .put<any>(`${environment.api}/api/afiliados/updateAfiliacion`, afiliacion)
+          .pipe(
+            map((response: any) => {
+              if (response.status === 200) {
+                return response.data;
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: response.errors.join(', '),
+                });
+              }
+            })
+          )
+          .pipe(catchError(this.helper.errorHandler));
+      }
 }

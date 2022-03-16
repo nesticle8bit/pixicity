@@ -11,4 +11,5 @@ export abstract class IHttpGeneralService {
     abstract getConfiguracion(): Observable<any>;
     abstract updateConfiguracion(configuracion: any): Observable<any>;
     abstract updateAds(configuration: any): Observable<any>;
+    abstract updateAfiliacion(afiliacion: any): Observable<any>;
 }
