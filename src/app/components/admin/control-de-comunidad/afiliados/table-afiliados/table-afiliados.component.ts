@@ -4,6 +4,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import Swal from 'sweetalert2';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogUpdateAfiliadosComponent } from '../dialog-update-afiliados/dialog-update-afiliados.component';
 
 @Component({
   selector: 'app-table-afiliados',
@@ -17,7 +19,8 @@ export class TableAfiliadosComponent implements OnInit {
   constructor(
     public paginationService: PaginationService,
     private generalService: IHttpGeneralService,
-    private webService: IHttpWebService
+    private webService: IHttpWebService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -57,5 +60,23 @@ export class TableAfiliadosComponent implements OnInit {
           afiliado.activo = !afiliado.activo;
         }
       });
+  }
+
+  updateAfiliado(afiliado: any): void {
+    const dialogRef = this.dialog.open(DialogUpdateAfiliadosComponent, {
+      width: '980px',
+      data: afiliado,
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((value: any) => {
+      if (value) {
+        afiliado.activo = value.activo;
+        afiliado.banner = value.banner;
+        afiliado.descripcion = value.descripcion;
+        afiliado.titulo = value.titulo;
+        afiliado.url = value.url;
+      }
+    });
   }
 }

@@ -59,7 +59,7 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item (click)="activarDesactivarAfiliado(afiliado)">
+                        <button type="button" mat-menu-item (click)="activarDesactivarAfiliado(afiliado)">
                             <span *ngIf="afiliado.activo">
                                 <mat-icon>toggle_off</mat-icon>
                                 Desactivar
@@ -71,8 +71,13 @@
                             </span>
                         </button>
 
-                        <button mat-menu-item>
-                            <mat-icon>delete_outline</mat-icon>
+                        <button type="button" mat-menu-item (click)="updateAfiliado(afiliado)">
+                            <mat-icon>edit</mat-icon>
+                            <span>Actualizar</span>
+                        </button>
+
+                        <button type="button" class="text-danger" mat-menu-item>
+                            <mat-icon class="text-danger">delete_outline</mat-icon>
                             <span>Eliminar</span>
                         </button>
                     </mat-menu>
