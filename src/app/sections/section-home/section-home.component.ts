@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
+import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
@@ -19,7 +20,8 @@ export class SectionHomeComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private displayService: DisplayComponentService
+    private displayService: DisplayComponentService,
+    private generalService: IHttpGeneralService
   ) { }
 
   ngOnInit(): void {
@@ -27,6 +29,16 @@ export class SectionHomeComponent implements OnInit {
 
     this.activatedRoute.paramMap.subscribe((params: any) => {
       this.categoria = params.get('categoria');
+    });
+
+    this.activatedRoute.queryParams.subscribe((params: any) => {
+      if(params?.ref) {
+        this.generalService.setHitInByRefCode(params.ref).subscribe((response: any) => {
+          if(response) {
+            console.log('💖 Que bueno tener un referido como tú, bienvenido a nuestra comunidad');
+          }
+        })
+      }
     });
   }
 
