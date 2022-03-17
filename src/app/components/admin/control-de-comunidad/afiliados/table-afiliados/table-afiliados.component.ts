@@ -99,4 +99,32 @@ export class TableAfiliadosComponent implements OnInit {
       duration: 3 * 1000,
     });
   }
+
+  deleteAfiliado(afiliado: any, index: number): void {
+    Swal.fire({
+      title: 'Eliminar',
+      text: '¿Está seguro de eliminar esta afiliación?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.generalService
+          .deleteAfiliado(afiliado.id)
+          .subscribe((response: any) => {
+            if (response) {
+              Swal.fire({
+                title: 'Eliminado',
+                text: 'La afiliación ha sido eliminada correctamente',
+                icon: 'success',
+                timer: 3000,
+              });
+
+              this.afiliados.splice(index, 1);
+            }
+          });
+      }
+    });
+  }
 }

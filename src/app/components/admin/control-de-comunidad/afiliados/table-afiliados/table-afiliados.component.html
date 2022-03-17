@@ -14,7 +14,7 @@
         </thead>
 
         <tbody>
-            <tr *ngFor="let afiliado of afiliados">
+            <tr *ngFor="let afiliado of afiliados; let i = index">
                 <td>
                     <span class="cursor--help" matTooltip="{{afiliado.fechaRegistro}}">
                         {{afiliado.fechaRegistro | timeAgo}}
@@ -37,7 +37,7 @@
                 <td>
                     <strong>
                         <a href="{{afiliado.url}}" target="_blank" matTooltip="{{afiliado.url}}">
-                            {{afiliado.url}}
+                            <fa-icon icon="external-link-alt"></fa-icon> {{afiliado.url}}
                         </a>
                     </strong>
                 </td>
@@ -79,7 +79,7 @@
                             <span>Actualizar</span>
                         </button>
 
-                        <button type="button" class="text-danger" mat-menu-item>
+                        <button type="button" class="text-danger" mat-menu-item (click)="deleteAfiliado(afiliado, i)">
                             <mat-icon class="text-danger">delete_outline</mat-icon>
                             <span>Eliminar</span>
                         </button>

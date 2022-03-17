@@ -13,4 +13,5 @@ export abstract class IHttpGeneralService {
     abstract updateAds(configuration: any): Observable<any>;
     abstract updateAfiliacion(afiliacion: any): Observable<any>;
     abstract setHitInByRefCode(refCode: string): Observable<any>;
+    abstract deleteAfiliado(id: number): Observable<any>;
 }
