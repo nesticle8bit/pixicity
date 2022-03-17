@@ -6,6 +6,7 @@
                 <th>Creado</th>
                 <th>Comentario</th>
                 <th>Post</th>
+                <th>IP</th>
                 <th>Usuario</th>
                 <th></th>
             </tr>
@@ -35,6 +36,12 @@
                         <img src="/assets/images/categorias/{{comment.post.categoria.icono}}" title="{{comment.post.categoria.nombre}}"
                             alt="{{comment.post.categoria.nombre}}" />
                         {{comment.post.titulo | truncate:[70]}}
+                    </a>
+                </td>
+
+                <td>
+                    <a href="https://dnschecker.org/ip-whois-lookup.php?query={{comment.ip}}" target="_blank">
+                        {{comment.ip}}
                     </a>
                 </td>
 
