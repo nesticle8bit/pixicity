@@ -11,6 +11,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./post-comments.component.scss'],
 })
 export class PostCommentsComponent implements OnInit {
+  public commented: boolean = false;
   private _post: any;
 
   @Input() set post(value: any) {
@@ -63,6 +64,8 @@ export class PostCommentsComponent implements OnInit {
           contenido: comentario.contenido,
           fechaComentario: new Date(),
         });
+
+        this.commented = true;
       }
     });
   }
