@@ -2,7 +2,7 @@ import { IHttpGeneralService } from '../interfaces/httpGeneral.interface';
 import { AfiliacionModel } from 'src/app/models/general/afiliacion.model';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -178,6 +178,30 @@ export class HttpGeneralService implements IHttpGeneralService {
     return this.http
       .post<any>(`${environment.api}/api/afiliados/setHitIn`, {
         codigo: refCode,
+      })
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  deleteAfiliado(id: number): Observable<any> {
+    return this.http
+      .delete<any>(`${environment.api}/api/afiliados/deleteAfiliado`, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+        body: { id },
       })
       .pipe(
         map((response: any) => {
