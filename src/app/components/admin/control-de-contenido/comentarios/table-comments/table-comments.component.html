@@ -6,6 +6,7 @@
                 <th>Creado</th>
                 <th>Comentario</th>
                 <th>Post</th>
+                <th>IP</th>
                 <th>Usuario</th>
                 <th></th>
             </tr>
@@ -39,6 +40,12 @@
                 </td>
 
                 <td>
+                    <a href="https://dnschecker.org/ip-whois-lookup.php?query={{comment.ip}}" target="_blank">
+                        {{comment.ip}}
+                    </a>
+                </td>
+
+                <td>
                     <a [routerLink]="['/perfil/' + comment.usuario]" target="_blank">
                         {{comment.usuario}}
                     </a>
@@ -50,7 +57,7 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item>
+                        <button type="button" mat-menu-item (click)="deleteComentario(comment)">
                             <mat-icon>delete_outline</mat-icon>
                             <span>Eliminar</span>
                         </button>

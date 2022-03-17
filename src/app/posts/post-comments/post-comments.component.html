@@ -144,7 +144,7 @@
 </div>
 
 <form class="miComentario mx-auto" [formGroup]="formGroup"
-    *ngIf="post?.sinComentarios === false && currentUser?.usuario">
+    *ngIf="post?.sinComentarios === false && currentUser?.usuario && !commented">
     <div id="procesando">
         <div id="post"></div>
     </div>
