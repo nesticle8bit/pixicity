@@ -36,11 +36,13 @@ export class TableCommentsComponent implements OnInit {
 
   deleteComentario(comentario: any): void {
     Swal.fire({
-      title: 'Eliminar',
-      text: '¿Está seguro de eliminar este comentario?',
+      title: comentario.eliminado ? 'Recuperar' : 'Eliminar',
+      text: `¿Está seguro de ${
+        comentario.eliminado ? 'recuperar' : 'eliminar'
+      } este comentario?`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Eliminar',
+      confirmButtonText: comentario.eliminado ? 'Recuperar' : 'Eliminar',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
@@ -49,8 +51,10 @@ export class TableCommentsComponent implements OnInit {
           .subscribe((response: any) => {
             if (response) {
               Swal.fire({
-                title: 'Eliminado',
-                text: 'La afiliación ha sido eliminada correctamente',
+                title: comentario.eliminado ? 'Recuperado' : 'Eliminado',
+                text: `El comentario ha sido ${
+                  comentario.eliminado ? 'recuperado' : 'eliminado'
+                } correctamente`,
                 icon: 'success',
                 timer: 3000,
               });

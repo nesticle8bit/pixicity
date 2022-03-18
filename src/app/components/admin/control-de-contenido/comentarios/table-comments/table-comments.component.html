@@ -13,7 +13,7 @@
         </thead>
 
         <tbody>
-            <tr *ngFor="let comment of comments" [ngClass]="{'favoritos-deleted': comment.deleted}">
+            <tr *ngFor="let comment of comments" [ngClass]="{'opacity-50': comment.eliminado}">
                 <td>
                     <strong>{{comment.id}}</strong>
                 </td>
@@ -57,9 +57,14 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <button type="button" mat-menu-item (click)="deleteComentario(comment)">
+                        <button type="button" mat-menu-item (click)="deleteComentario(comment)" *ngIf="!comment.eliminado">
                             <mat-icon>delete_outline</mat-icon>
                             <span>Eliminar</span>
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="deleteComentario(comment)" *ngIf="comment.eliminado">
+                            <mat-icon>undo</mat-icon>
+                            <span>Recuperar</span>
                         </button>
                     </mat-menu>
                 </td>
