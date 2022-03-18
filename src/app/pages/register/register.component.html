@@ -92,7 +92,7 @@
                 <div class="mb-3 pos-relative">
                     <label>Género</label>
                     <ng-select formControlName="genero" [items]="generos" bindLabel="label" bindValue="value"
-                        (click)="onFocus('genero')"></ng-select>
+                        (click)="onFocus('genero')" on-blur="removePopover()"></ng-select>
 
                     <div class="pixicity-popover help info" *ngIf="currentFocus === 'genero'">
                         <span id="puy"></span>
@@ -106,13 +106,30 @@
                 <div class="mb-3 pos-relative">
                     <label>Pais de Origen</label>
                     <ng-select formControlName="paisId" [items]="paises" bindLabel="nombre" bindValue="id"
-                        (change)="getEstadosByPais($event)"></ng-select>
+                        (change)="getEstadosByPais($event)" (click)="onFocus('pais')" on-blur="removePopover()"></ng-select>
+
+                    <div class="pixicity-popover help info" *ngIf="currentFocus === 'pais'">
+                        <span id="puy"></span>
+
+                        <span>
+                            <em>Selecciona tu país de origen</em>
+                        </span>
+                    </div>
                 </div>
 
                 <div class="mb-3 pos-relative">
                     <label>Estado o Región</label>
-                    <ng-select formControlName="estadoId" [items]="estados" bindLabel="nombre" bindValue="id">
+                    <ng-select formControlName="estadoId" [items]="estados" bindLabel="nombre" bindValue="id" (click)="onFocus('estado')"
+                        on-blur="removePopover()">
                     </ng-select>
+                
+                    <div class="pixicity-popover help info" *ngIf="currentFocus === 'estado'">
+                        <span id="puy"></span>
+                
+                        <span>
+                            <em>Selecciona tu estado o región</em>
+                        </span>
+                    </div>
                 </div>
 
                 <div class="mb-3 pos-relative">
@@ -130,7 +147,7 @@
                 </div>
 
                 <div class="dot--ccc">
-                    <input type="submit" class="submit-btn" value="Iniciar Sesión">
+                    <input type="submit" class="submit-btn" value="Registrarse" [disabled]="formGroup.invalid">
                 </div>
             </form>
         </div>
