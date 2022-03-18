@@ -12,7 +12,7 @@
         </thead>
 
         <tbody>
-            <tr *ngFor="let denuncia of denuncias">
+            <tr *ngFor="let denuncia of denuncias" [ngClass]="{'opacity-50': denuncia.eliminado}">
                 <td>
                     <span class="cursor--help" matTooltip="{{denuncia.fechaRegistro}}">
                         {{denuncia.fechaRegistro | timeAgo}}
@@ -46,7 +46,7 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item>
+                        <button type="button" mat-menu-item (click)="deleteReporte(denuncia)">
                             <mat-icon>delete_outline</mat-icon>
                             <span>Eliminar</span>
                         </button>
