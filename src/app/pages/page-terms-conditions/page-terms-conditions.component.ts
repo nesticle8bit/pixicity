@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
-  selector: 'app-page-protocolo',
-  templateUrl: './page-protocolo.component.html',
-  styleUrls: ['./page-protocolo.component.scss'],
+  selector: 'app-page-terms-conditions',
+  templateUrl: './page-terms-conditions.component.html',
+  styleUrls: ['./page-terms-conditions.component.scss'],
 })
-export class PageProtocoloComponent implements OnInit {
+export class PageTermsConditionsComponent implements OnInit {
   constructor(private displayService: DisplayComponentService) {
     this.displayService.setDisplay({
       mainMenu: true,
