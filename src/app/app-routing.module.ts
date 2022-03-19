@@ -22,6 +22,7 @@ import { MensajesComponent } from './pages/mensajes/mensajes.component';
 import { ModHistoryComponent } from './pages/mod-history/mod-history.component';
 import { MonitorComponent } from './pages/monitor/monitor.component';
 import { PageProtocoloComponent } from './pages/page-protocolo/page-protocolo.component';
+import { PageTermsConditionsComponent } from './pages/page-terms-conditions/page-terms-conditions.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { SearchComponent } from './pages/search/search.component';
@@ -65,6 +66,7 @@ const routes: Routes = [
   { path: 'mi', component: MiHomeComponent },
 
   { path: 'protocolo', component: PageProtocoloComponent },
+  { path: 'terminos-condiciones', component: PageTermsConditionsComponent },
 
   {
     path: 'administracion', component: DashboardComponent, children:
