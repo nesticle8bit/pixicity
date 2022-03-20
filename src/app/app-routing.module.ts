@@ -21,6 +21,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { MensajesComponent } from './pages/mensajes/mensajes.component';
 import { ModHistoryComponent } from './pages/mod-history/mod-history.component';
 import { MonitorComponent } from './pages/monitor/monitor.component';
+import { PageContactoComponent } from './pages/page-contacto/page-contacto.component';
 import { PageProtocoloComponent } from './pages/page-protocolo/page-protocolo.component';
 import { PageTermsConditionsComponent } from './pages/page-terms-conditions/page-terms-conditions.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
@@ -67,6 +68,7 @@ const routes: Routes = [
 
   { path: 'protocolo', component: PageProtocoloComponent },
   { path: 'terminos-condiciones', component: PageTermsConditionsComponent },
+  { path: 'contacto', component: PageContactoComponent },
 
   {
     path: 'administracion', component: DashboardComponent, children:
