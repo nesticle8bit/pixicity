@@ -75,10 +75,14 @@ export class SectionUserInfoLoginComponent implements OnInit {
     });
 
     this.display.monitor = !this.display.monitor;
+    this.display.mensajes = false;
+    this.display.favoritos = false;
   }
 
   verMensajes(): void {
     this.display.mensajes = !this.display.mensajes;
+    this.display.favoritos = false;
+    this.display.monitor = false;
   }
 
   setURL(notificacion: any, text: string): string {
@@ -98,6 +102,8 @@ export class SectionUserInfoLoginComponent implements OnInit {
     });
 
     this.display.favoritos = !this.display.favoritos;
+    this.display.mensajes = false;
+    this.display.monitor = false;
   }
 
   cerrarSesion(): void {
