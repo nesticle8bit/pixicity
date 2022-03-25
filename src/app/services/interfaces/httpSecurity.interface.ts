@@ -37,4 +37,5 @@ export abstract class IHttpSecurityService {
   abstract getActividadUsuario(usuarioId: number, tipoActividad: any): Observable<any>;
   abstract addUpdateRango(rango: any): Observable<number>;
   abstract changeRango(rangoUsuario: any): Observable<boolean>;
+  abstract sessionOnlineUser(): Observable<any>;
 }

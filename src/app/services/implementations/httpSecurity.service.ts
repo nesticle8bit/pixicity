@@ -412,7 +412,9 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   getPerfilInfoByUserId(userId: number): Observable<any> {
     return this.http
-      .get<any>(`${environment.api}/api/usuarios/getPerfilInfoByUserId?usuarioId=${userId}`)
+      .get<any>(
+        `${environment.api}/api/usuarios/getPerfilInfoByUserId?usuarioId=${userId}`
+      )
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
@@ -550,7 +552,9 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   getActividadUsuario(usuarioId: number, tipoActividad: any): Observable<any> {
     return this.http
-      .get<any>(`${environment.api}/api/usuarios/getActividadUsuario?usuarioId=${usuarioId}&tipoActividad=${tipoActividad}`)
+      .get<any>(
+        `${environment.api}/api/usuarios/getActividadUsuario?usuarioId=${usuarioId}&tipoActividad=${tipoActividad}`
+      )
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
@@ -588,7 +592,29 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   changeRango(rangoUsuario: any): Observable<boolean> {
     return this.http
-      .post<any>(`${environment.api}/api/rangos/changeRangoUsuario`, rangoUsuario)
+      .post<any>(
+        `${environment.api}/api/rangos/changeRangoUsuario`,
+        rangoUsuario
+      )
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  sessionOnlineUser(): Observable<any> {
+    return this.http
+      .get<any>(`${environment.api}/api/usuarios/sessionOnlineUser`)
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
