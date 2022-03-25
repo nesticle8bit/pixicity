@@ -336,6 +336,7 @@ import { PageContactoComponent } from './pages/page-contacto/page-contacto.compo
         `${environment.api}/api/comentarios/getComentariosRecientes`,
         `${environment.api}/api/tops/getTopPosts`,
         `${environment.api}/api/posts/getBorradores`,
+        `${environment.api}/api/monitors/setNotificacionesAsReaded`
       ],
     }),
     MatRadioModule,
