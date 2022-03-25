@@ -5,5 +5,6 @@ import { Observable } from "rxjs";
 export abstract class IHttpLogsService {
     abstract getNotificaciones(): Observable<any>;
     abstract getLastNotificaciones(): Observable<any>;
+    abstract setNotificacionesAsReaded(): Observable<any>;
     abstract getStats(): Observable<any>;
 }
