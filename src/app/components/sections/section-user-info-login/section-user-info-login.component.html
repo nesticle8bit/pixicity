@@ -20,7 +20,7 @@
                     <ul>
                         <div class="errr" *ngIf="notificaciones.length < 1">No hay notificaciones</div>
 
-                        <li class="list-items" *ngFor="let notificacion of notificaciones">
+                        <li class="list-items" *ngFor="let notificacion of notificaciones" [ngClass]="{'sin-leer': !notificacion.leido}">
                             <div class="d-flex">
                                 <div class="flex-shrink-0">
                                     <app-user-avatar matTooltip="{{notificacion.usuarioQueHaceAccion?.userName}}" [matTooltipPosition]="'before'"

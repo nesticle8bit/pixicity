@@ -77,6 +77,8 @@ export class SectionUserInfoLoginComponent implements OnInit {
     this.display.monitor = !this.display.monitor;
     this.display.mensajes = false;
     this.display.favoritos = false;
+
+    this.setNotificacionesAsReaded();
   }
 
   verMensajes(): void {
@@ -119,5 +121,11 @@ export class SectionUserInfoLoginComponent implements OnInit {
     }
 
     this.router.navigate([`/buscar/posts/${obj.search}`]);
+  }
+
+  setNotificacionesAsReaded(): void {
+    this.httpLogs.setNotificacionesAsReaded().subscribe((response: any) => {
+      console.log('🔔 Se ha cambiado el estado de las últimas notificaciones a leído');
+    });
   }
 }

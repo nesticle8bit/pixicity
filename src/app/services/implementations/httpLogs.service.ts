@@ -56,6 +56,26 @@ export class HttpLogsService implements IHttpLogsService {
     ).pipe(catchError(this.helper.errorHandler));
   }
 
+  setNotificacionesAsReaded(): Observable<any> {
+    return this.http
+    .get<any>(
+      `${environment.api}/api/monitors/setNotificacionesAsReaded`
+    )
+    .pipe(
+      map((response: any) => {
+        if (response.status === 200) {
+          return response.data;
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: response.errors.join(', '),
+          });
+        }
+      })
+    ).pipe(catchError(this.helper.errorHandler));
+  }
+
   getStats(): Observable<any> {
     return this.http
     .get<any>(
