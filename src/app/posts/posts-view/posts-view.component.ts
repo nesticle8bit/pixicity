@@ -74,6 +74,7 @@ export class PostsViewComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: `Borrar`,
       cancelButtonText: `Cancelar`,
+      icon: 'question'
     }).then((result) => {
       if (result.isConfirmed) {
         this.postService

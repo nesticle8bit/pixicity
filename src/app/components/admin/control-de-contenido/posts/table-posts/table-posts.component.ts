@@ -63,6 +63,7 @@ export class TablePostsComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: `Borrar`,
       cancelButtonText: `Cancelar`,
+      icon: 'question'
     }).then((result) => {
       if (result.isConfirmed) {
         this.postsService.deletePost(postId).subscribe((response: boolean) => {
@@ -78,6 +79,6 @@ export class TablePostsComponent implements OnInit {
           }
         });
       }
-    })
+    });
   }
 }

@@ -18,8 +18,6 @@
                             <th>Título</th>
                             <th>Creado</th>
                             <th>Guardado</th>
-                            <th>Puntos</th>
-                            <th>Comentarios</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -37,25 +35,18 @@
                                 {{borrador.fechaRegistro | timeAgo}}
                             </td>
                             <td>
-                                {{borrador.fechaRegistro | timeAgo}}
-                            </td>
-
-                            <td>
-                                0
-                            </td>
-
-                            <td>
-                                9
+                                {{borrador.fechaActualiza | timeAgo}}
                             </td>
 
                             <td class="text-center" width="30px">
                                 <a href="javascript:void(0)" (click)="deleteBorrador(borrador)">
                                     <img src="/assets/images/icons/cross.png" alt="Eliminar" #tooltip="matTooltip"
                                         matTooltip="Eliminar" [matTooltipPosition]="'above'"
-                                        *ngIf="!borrador.deleted" />
+                                        *ngIf="!borrador.eliminado" />
+
                                     <img src="/assets/images/icons/reload.png" alt="Recuperar" #tooltip="matTooltip"
                                         matTooltip="Recuperar" [matTooltipPosition]="'above'"
-                                        *ngIf="borrador.deleted" />
+                                        *ngIf="borrador.eliminado" />
                                 </a>
                             </td>
                         </tr>
