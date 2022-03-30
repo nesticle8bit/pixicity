@@ -13,6 +13,10 @@
                 <app-genre-icon [genre]="usuario?.genero"></app-genre-icon>
                 <span class="ms-2">{{usuario.userName}}</span>
             </a>
+
+            <span class="float-end value">
+                {{usuario.registro | timeAgo}}
+            </span>
         </article>
     </ng-container>
 </section>
