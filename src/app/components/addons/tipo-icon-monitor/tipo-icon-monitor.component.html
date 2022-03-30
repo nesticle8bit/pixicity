@@ -1,8 +1,9 @@
 <span class="monac_icons" [ngClass]="{
-        'ma_w_comment': tipo === 'Comentario' || tipo === 'ComentarioSiguePost', 
+        'ma_comment_post': tipo === 'Comentario', 
         'ma_voto_positivo': tipo === 'Like', 
         'ma_voto_negativo': tipo === 'Dislike', 
         'ma_star': tipo === 'Favoritos', 
         'ma_points': tipo === 'Puntos', 
-        'ma_follow': tipo === 'Seguir'}">
+        'ma_follow': tipo === 'Seguir',
+        'ma_blue_ball': tipo === 'ComentarioSiguePost'}">
 </span>
