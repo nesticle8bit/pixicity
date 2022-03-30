@@ -3,6 +3,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
   selector: 'app-monitor',
@@ -15,6 +16,7 @@ export class MonitorComponent implements OnInit {
   public totalCount: number = 0;
 
   constructor(
+    private displayService: DisplayComponentService,
     public paginationService: PaginationService,
     private logsService: IHttpLogsService,
     private formBuilder: FormBuilder
@@ -27,6 +29,13 @@ export class MonitorComponent implements OnInit {
       postNuevo: true,
       recomendaciones: true,
       comentariosPostQueSigue: true,
+    });
+
+    this.displayService.setDisplay({
+      mainMenu: true,
+      footer: true,
+      searchFooter: true,
+      submenu: true,
     });
   }
 

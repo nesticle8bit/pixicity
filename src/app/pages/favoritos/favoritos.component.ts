@@ -4,6 +4,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
   selector: 'app-favoritos',
@@ -17,11 +18,19 @@ export class FavoritosComponent implements OnInit {
   public formGroup!: FormGroup;
 
   constructor(
-    public paginationService: PaginationService,
+    private displayService: DisplayComponentService,
     public favoritosService: IHttpFavoritosService,
+    public paginationService: PaginationService,
     private httpGeneral: IHttpGeneralService,
     private formBuilder: FormBuilder
-  ) { }
+  ) {
+    this.displayService.setDisplay({
+      mainMenu: true,
+      footer: true,
+      searchFooter: true,
+      submenu: true,
+    });
+  }
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({

@@ -30,10 +30,12 @@
                         
                                 <div class="flex-grow-1 ms-2">
                                     <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
-                                    <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion?.userName]">
-                                        {{notificacion.usuarioQueHaceAccion?.userName}}
-                                    </a>
-                                    <span [innerHTML]="notificacion.mensaje"></span>
+                                    <span class="inner-text">
+                                        <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion?.userName]">
+                                            {{notificacion.usuarioQueHaceAccion?.userName}}
+                                        </a>
+                                        <span [innerHTML]="notificacion.mensaje"></span>
+                                    </span>
 
                                     <br>
                                 
