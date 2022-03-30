@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import Swal from 'sweetalert2';
 
@@ -17,12 +18,20 @@ export class BorradoresComponent implements OnInit {
   public formGroup: FormGroup;
 
   constructor(
+    private displayService: DisplayComponentService,
     public paginationService: PaginationService,
     private postService: IHttpPostsService,
     private formBuilder: FormBuilder
   ) {
     this.formGroup = this.formBuilder.group({
       search: '',
+    });
+
+    this.displayService.setDisplay({
+      mainMenu: true,
+      footer: true,
+      searchFooter: true,
+      submenu: true,
     });
   }
 

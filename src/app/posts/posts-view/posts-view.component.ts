@@ -37,7 +37,7 @@ export class PostsViewComponent implements OnInit {
       mainMenu: true,
       footer: true,
       searchFooter: false,
-      submenu: false,
+      submenu: true,
     });
   }
 
