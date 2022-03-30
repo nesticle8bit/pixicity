@@ -16,10 +16,10 @@ export class HttpLogsService implements IHttpLogsService {
     private paginationService: PaginationService
   ) {}
 
-  getNotificaciones(): Observable<any> {
+  getNotificaciones(search: string): Observable<any> {
     return this.http
       .get<any>(
-        `${environment.api}/api/monitors/getNotificaciones?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`
+        `${environment.api}/api/monitors/getNotificaciones?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${search}`
       )
       .pipe(
         map((response: any) => {
