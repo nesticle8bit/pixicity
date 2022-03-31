@@ -16,8 +16,7 @@
                             <tbody>
                                 <tr class="post comentario-votar">
                                     <td class="usuario">
-                                        <a href="#"
-                                            target="_blank">nesticle8bit</a>
+                                        <a href="#" target="_blank">nesticle8bit</a>
                                     </td>
 
                                     <td class="accion">
@@ -36,37 +35,67 @@
 
             <div class="col-12 col-sm-12 col-md-3 dotted-border--left">
                 <h6 class="main-title my-2">
-                    <span>Filtros</span>
+                    <span>Estadísticas</span>
+
+                    <strong class="float-end" style="background: #fff; margin-top: -2px; padding-left: 7px;">
+                        <img src="/assets/images/icons/icon_pause.png" *ngIf="play" class="cursor--pointer"
+                            (click)="play = !play" />
+                        <img src="/assets/images/icons/icon_play.png" *ngIf="!play" class="cursor--pointer"
+                            (click)="play = !play" />
+                    </strong>
                 </h6>
 
                 <section class="mb-3">
-                    <label class="control-label">
-                        <span class="required"></span> Tipo
-                    </label>
+                    <ul class="list-unstyled">
+                        <li>
+                            <strong class="text-muted float-start">
+                                Tiempo
+                            </strong>
 
-                    <br>
+                            <span class="number float-end">
+                                {{time}}
+                            </span>
 
-                    <mat-radio-group class="mt-1" color="primary" formControlName="searchType">
-                        <mat-radio-button class="d-block my-3" value="titulo">
-                            Título
-                        </mat-radio-button>
+                            <div class="clearfix"></div>
+                        </li>
 
-                        <mat-radio-button class="d-block my-3" value="contenido">
-                            Contenido
-                        </mat-radio-button>
+                        <li>
+                            <strong class="text-muted float-start">
+                                Velocidad actual
+                            </strong>
 
-                        <mat-radio-button class="d-block my-3" value="tags">
-                            Tags
-                        </mat-radio-button>
-                    </mat-radio-group>
+                            <span class="number float-end" [matTooltip]="'Medido en acciones por segundo'"
+                                [matTooltipPosition]="'right'">
+                                11,35 a/s
+                            </span>
+
+                            <div class="clearfix"></div>
+                        </li>
+
+                        <li>
+                            <strong class="text-muted float-start">
+                                Acciones totales
+                            </strong>
+
+                            <span class="number float-end" [matTooltip]="'Medido en acciones por segundo'">
+                                {{acciones.length}}
+                            </span>
+
+                            <div class="clearfix"></div>
+                        </li>
+                    </ul>
                 </section>
 
-                <section class="mb-3">
-                    <label class="control-label">
-                        <span class="required"></span> Autor
-                    </label>
+                <h6 class="main-title my-2">
+                    <span>Filtrar Actividad</span>
+                </h6>
 
-                    <input type="text" class="form-control" formControlName="autor" />
+                <section class="mb-3">
+                    <ul class="list-unstyled vivo-filter">
+                        <li>
+                            
+                        </li>
+                    </ul>
                 </section>
 
                 <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
