@@ -61,3 +61,20 @@ tr.album td.accion  {
 tr.track td.accion  {
 	color: #AABC77!important;
 }
+
+strong.text-muted {
+    color: #8D8D8D !important;
+}
+
+.list-unstyled {
+    & li {
+        padding: 3px 6px;
+        border-bottom: 1px #EEE dotted;
+    }
+
+    & li span.number {
+        color: #141414;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+}
