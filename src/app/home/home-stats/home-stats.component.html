@@ -38,6 +38,6 @@
 
 <div class="alert alert-info p-1 mt-1 text-center" *ngIf="estadisticas?.recordUsers?.usersOnline">
     <small>
-        🎉 Record conectados: <b>{{estadisticas?.recordUsers?.usersOnline}}</b> el {{estadisticas?.recordUsers?.date | date:'medium'}} - <a [routerLink]="['/en-vivo']">En vivo</a>
+        🎉 Record conectados: <b>{{estadisticas?.recordUsers?.usersOnline}}</b> el {{estadisticas?.recordUsers?.date | date:'mediumDate'}} a las {{estadisticas?.recordUsers?.date | date:'h:mm a'}} <!--  -  <a [routerLink]="['/en-vivo']">En vivo</a> -->
     </small>
 </div>
