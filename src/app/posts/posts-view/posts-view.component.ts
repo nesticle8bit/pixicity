@@ -1,9 +1,11 @@
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
+import { SEOModel } from 'src/app/models/shared/seo.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
+import { SEOService } from 'src/app/services/shared/seo.service';
 
 @Component({
   selector: 'app-posts-view',
@@ -11,6 +13,13 @@ import Swal from 'sweetalert2';
   styleUrls: ['./posts-view.component.scss'],
 })
 export class PostsViewComponent implements OnInit {
+  public seo: SEOModel = {
+    title: '',
+    description: '',
+    type: '',
+    imageURL: '',
+    tags: [],
+  };
   public currentUser: any;
   public post: any;
   public show: boolean = false;
@@ -20,6 +29,7 @@ export class PostsViewComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private postService: IHttpPostsService,
     private displayService: DisplayComponentService,
+    private seoService: SEOService,
     private router: Router
   ) {
     this.currentUser = this.securityService.getCurrentUser();
@@ -38,7 +48,7 @@ export class PostsViewComponent implements OnInit {
       footer: true,
       searchFooter: false,
       submenu: true,
-      background: ''
+      background: '',
     });
   }
 
@@ -49,7 +59,7 @@ export class PostsViewComponent implements OnInit {
         return;
       }
 
-      if(value.post.esPrivado && !value.post.id) {
+      if (value.post.esPrivado && !value.post.id) {
         this.router.navigate([`/posts/privado/${this.post.titulo}`]);
         return;
       }
@@ -61,6 +71,14 @@ export class PostsViewComponent implements OnInit {
 
       this.post = value.post;
       this.post.id = postId;
+
+      this.seoService.setSEO({
+        title: value.post.titulo,
+        description: value.post.titulo,
+        tags: value.post.tags,
+        type: value.post.categoria.nombre,
+        imageURL: '',
+      });
     });
   }
 
@@ -75,7 +93,7 @@ export class PostsViewComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: `Borrar`,
       cancelButtonText: `Cancelar`,
-      icon: 'question'
+      icon: 'question',
     }).then((result) => {
       if (result.isConfirmed) {
         this.postService
