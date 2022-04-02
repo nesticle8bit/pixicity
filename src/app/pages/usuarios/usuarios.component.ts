@@ -39,6 +39,7 @@ export class UsuariosComponent implements OnInit {
       footer: true,
       searchFooter: true,
       submenu: true,
+      background: ''
     });
   }
 

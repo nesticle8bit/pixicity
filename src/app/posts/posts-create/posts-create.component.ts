@@ -65,6 +65,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       footer: true,
       searchFooter: true,
       submenu: true,
+      background: ''
     });
 
     this.formGroup = this.formBuilder.group({

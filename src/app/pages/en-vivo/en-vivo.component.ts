@@ -18,6 +18,7 @@ export class EnVivoComponent implements OnInit {
       footer: true,
       searchFooter: false,
       submenu: true,
+      background: ''
     });
   }
 

@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
       footer: true,
       searchFooter: false,
       submenu: false,
+      background: ''
     });
   }
 

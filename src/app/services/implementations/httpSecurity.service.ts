@@ -630,4 +630,23 @@ export class HttpSecurityService implements IHttpSecurityService {
       )
       .pipe(catchError(this.helper.errorHandler));
   }
+
+  changeBackgroundProfile(obj: any): Observable<any> {
+    return this.http
+      .post<any>(`${environment.api}/api/usuarios/changeBackgroundProfile`, obj)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
 }

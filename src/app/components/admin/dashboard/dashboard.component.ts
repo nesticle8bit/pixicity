@@ -15,6 +15,7 @@ export class DashboardComponent implements OnInit {
       footer: true,
       searchFooter: false,
       submenu: true,
+      background: ''
     });
   }
 }
