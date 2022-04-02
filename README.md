@@ -59,7 +59,7 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
   - Buscador
     - [x] Buscar por una palabra
     - [x] Buscar por categorías
-    - [ ] Buscar por tags
+    - [x] Buscar por tags
 
   - Comentarios
     - [x] Comentar los posts
@@ -68,13 +68,13 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
 
   - Login
     - [x] Crear la página de login y generar la sesión del usuario en el navegador
-    - [ ] Implementar y testear la seguridad en los tokens para que no haya suplantación de identidad con jwt
+    - [x] Implementar y testear la seguridad en los tokens para que no haya suplantación de identidad con jwt
  
   - Registro de usuarios
     - [x] Implementar el formulario para la creación de los usuarios
     - [ ] Implementar sistema de envío de correos para validar la cuenta de usuario
     - [ ] Implementar A2F para las cuentas de usuario
-    - [ ] Mejorar la vista del mensaje cuando se deshabilita el registro de usuarios
+    - [x] Mejorar la vista del mensaje cuando se deshabilita el registro de usuarios
 
   - Perfil del usuario
     - [x] Crear componente para visualizar todos los perfiles de usuario
