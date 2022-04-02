@@ -3,23 +3,51 @@
         <div class="col-12 col-sm-8 text-center main-login--head">
             <h1>Formulario de Contacto, Prensa</h1>
 
-            <p>
-                IMPORTANTE: Este formulario no es de soporte, si tiene algun problema como usuario del funcionamiento
-                del site, este no es el lugar para solucionarlo, en este formulario atenderemos: propuestas ofrecidas al
-                site, tanto de publicidad, como otros acuerdos.
-            </p>
-
             <div class="dot--ccc">
                 <span class="w200">Contacto</span>
             </div>
 
+            <form [formGroup]="formGroup" (ngSubmit)="contacto()" class="login_box mx-auto">
+                <div class="mb-3">
+                    <label>Nombre <span class="text-danger">*</span></label>
+                    <input type="text" formControlName="nombre" class="form-control mx-auto" />
+                </div>
 
+                <div class="mb-3">
+                    <label>Correo electrónico <span class="text-danger">*</span></label>
+                    <input type="email" formControlName="email" class="form-control mx-auto" />
+                </div>
+
+                <div class="mb-3">
+                    <label>Medio</label>
+                    <input type="text" formControlName="medio" class="form-control mx-auto" />
+                </div>
+
+                <div class="mb-3">
+                    <label>Comentarios <span class="text-danger">*</span></label>
+                    <textarea formControlName="comentarios" class="form-control mx-auto" rows="6"></textarea>
+                </div>
+
+                <div class="dot--ccc">
+                    <input type="submit" class="submit-btn" value="Enviar" [disabled]="formGroup.invalid">
+                </div>
+            </form>
         </div>
 
         <div class="col-12 col-sm-4">
             <div class="text-center">
                 <img src="/assets/images/login-bg.gif" alt="">
             </div>
+
+            <div class="dot--ccc">
+                <span class="w200">⚠️ Importante</span>
+            </div>
+
+            <h4>
+                Este formulario no es de soporte, si tiene algun problema como usuario del funcionamiento
+                del site, este no es el lugar para solucionarlo, en este formulario atenderemos: propuestas ofrecidas al
+                site, tanto de publicidad, como otros acuerdos.
+            </h4>
         </div>
     </div>
 </div>

@@ -218,4 +218,23 @@ export class HttpGeneralService implements IHttpGeneralService {
       )
       .pipe(catchError(this.helper.errorHandler));
   }
+
+  saveContacto(contacto: any): Observable<any> {
+    return this.http
+      .post<any>(`${environment.api}/api/general/contacto`, contacto)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
 }
