@@ -29,6 +29,7 @@ export class FavoritosComponent implements OnInit {
       footer: true,
       searchFooter: true,
       submenu: true,
+      background: ''
     });
   }
 

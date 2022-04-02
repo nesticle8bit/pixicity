@@ -17,6 +17,7 @@ export class SectionHomeComponent implements OnInit {
     footer: true,
     searchFooter: true,
     submenu: true,
+    background: ''
   };
 
   constructor(

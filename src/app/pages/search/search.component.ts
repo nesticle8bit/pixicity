@@ -34,6 +34,7 @@ export class SearchComponent implements OnInit {
       footer: true,
       searchFooter: true,
       submenu: true,
+      background: ''
     });
 
     this.searchFormGroup = this.formBuilder.group({

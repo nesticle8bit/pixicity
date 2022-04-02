@@ -26,6 +26,7 @@ export class TopsComponent implements OnInit {
       footer: true,
       searchFooter: true,
       submenu: true,
+      background: ''
     });
 
     this.formGroup = this.formBuilder.group({

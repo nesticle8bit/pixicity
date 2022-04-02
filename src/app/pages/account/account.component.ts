@@ -257,6 +257,7 @@ export class AccountComponent implements OnInit {
   public formGroupCuenta: FormGroup;
   public formGroupPerfil: FormGroup;
   public formGroupCambiarContrasena: FormGroup;
+  public formGroupPersonalizacion: FormGroup;
 
   constructor(
     private securityService: IHttpSecurityService,
@@ -330,6 +331,10 @@ export class AccountComponent implements OnInit {
       },
       { validators: this.checkPasswords }
     );
+
+    this.formGroupPersonalizacion = this.formBuilder.group({
+      profileBackground: ''
+    });
 
     this.getCurrentPerfilInfo();
   }
@@ -521,6 +526,19 @@ export class AccountComponent implements OnInit {
           avatar: value,
         });
       }
+    });
+  }
+
+  saveFormGroupPersonalizacion(): void {
+    const personalization = Object.assign({}, this.formGroupPersonalizacion.value);
+
+    this.securityService.changeBackgroundProfile(personalization).subscribe((value: string) => {
+      Swal.fire({
+        title: 'Actualizado',
+        text: 'El background de tu perfil ha sido actualizado correctamente',
+        icon: 'success',
+        timer: 3000
+      })
     });
   }
 }

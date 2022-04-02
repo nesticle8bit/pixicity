@@ -1,6 +1,6 @@
 import { DisplayComponentService } from './services/shared/displayComponents.service';
 import { DisplayComponentModel } from './models/shared/displayComponent.model';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
@@ -16,6 +16,7 @@ export class AppComponent {
     footer: true,
     searchFooter: true,
     submenu: true,
+    background: ''
   };
 
   constructor(

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
@@ -9,6 +10,7 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
   styleUrls: ['./perfil.component.scss'],
 })
 export class PerfilComponent implements OnInit {
+  public display: DisplayComponentModel = { mainMenu: true, footer: true, searchFooter: true, submenu: false, background: ''};
   public currentUser: any = {};
   public currentSelection = 'shouts';
 
@@ -23,12 +25,15 @@ export class PerfilComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: true, submenu: false});
+    this.displayService.setDisplay(this.display);
   }
 
   getUserByUserName(userName: string): void {
     this.securityService.getUserByUserName(userName).subscribe((value: any) => {
       this.currentUser = value;
+
+      this.display.background = this.currentUser.profileBackground;
+      this.displayService.setDisplay(this.display);
     });
   }
 

@@ -31,6 +31,7 @@ export class PageContactoComponent implements OnInit {
       footer: true,
       searchFooter: false,
       submenu: true,
+      background: ''
     });
   }
 

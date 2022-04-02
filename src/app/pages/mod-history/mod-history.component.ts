@@ -19,6 +19,7 @@ export class ModHistoryComponent implements OnInit {
       footer: true,
       searchFooter: true,
       submenu: true,
+      background: ''
     });
   }
 

@@ -13,6 +13,7 @@ export class PageProtocoloComponent implements OnInit {
       footer: true,
       searchFooter: true,
       submenu: true,
+      background: ''
     });
   }
 

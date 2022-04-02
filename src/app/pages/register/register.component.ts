@@ -115,6 +115,7 @@ export class RegisterComponent implements OnInit {
       footer: true,
       searchFooter: false,
       submenu: false,
+      background: ''
     });
 
     for (let index = 0; index < 31; index++) {

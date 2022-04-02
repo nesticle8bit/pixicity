@@ -681,6 +681,55 @@
 
                         <mat-tab>
                             <ng-template mat-tab-label>
+                                <mat-icon>format_paint</mat-icon>
+                                Personalización
+                            </ng-template>
+
+                            <form [formGroup]="formGroupPersonalizacion" class="mb-3" (ngSubmit)="saveFormGroupPersonalizacion()">
+                                <mat-accordion class="accordion-bg">
+                                    <mat-expansion-panel class="mb-2" [expanded]="currentStep === 0" (opened)="currentStep = 0">
+                                        <mat-expansion-panel-header class="accordion-panel">
+                                            <mat-panel-title>
+                                                Perfil
+                                            </mat-panel-title>
+    
+                                            <mat-panel-description>
+                                                &nbsp;
+                                                <mat-icon>account_circle</mat-icon>
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+    
+                                        <section class="container">
+                                            <div class="mb-3 mt-2 row field">
+                                                <div class="col-sm-2 text-end">
+                                                    <label class="col-form-label">
+                                                        Fondo de perfil
+                                                    </label>
+                                                </div>
+                                        
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" placeholder="URL de la imagen" formControlName="profileBackground" />
+                                                    <div class="form-text">Sólo se aceptarán imágenes que tengan el formato (.jpg, .jpeg o .png) </div>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <div class="form-container--footer text-center">
+                                            <button class="me-2" mat-flat-button color="primary" type="submit">
+                                                <mat-icon>save</mat-icon> Guardar
+                                            </button>
+
+                                            <!-- <button mat-flat-button type="button" (click)="currentStep = currentStep + 1">
+                                                Siguiente <mat-icon>navigate_next</mat-icon>
+                                            </button> -->
+                                        </div>
+                                    </mat-expansion-panel>
+                                </mat-accordion>
+                            </form>
+                        </mat-tab>
+
+                        <mat-tab>
+                            <ng-template mat-tab-label>
                                 <mat-icon>block</mat-icon>
                                 Bloqueados
                             </ng-template>

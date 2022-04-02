@@ -18,6 +18,7 @@ export class DisplayComponentService {
       footer: false,
       searchFooter: false,
       submenu: false,
+      background: ''
     });
   }
 

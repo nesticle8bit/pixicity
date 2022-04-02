@@ -36,6 +36,7 @@ export class MonitorComponent implements OnInit {
       footer: true,
       searchFooter: true,
       submenu: true,
+      background: ''
     });
   }
 
