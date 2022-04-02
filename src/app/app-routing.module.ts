@@ -15,6 +15,7 @@ import { DashboardUsuariosComponent } from './components/admin/usuarios/usuarios
 import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
 import { AccountComponent } from './pages/account/account.component';
 import { BorradoresComponent } from './pages/borradores/borradores.component';
+import { DMCAComponent } from './pages/dmca/dmca.component';
 import { EnVivoComponent } from './pages/en-vivo/en-vivo.component';
 import { FavoritosComponent } from './pages/favoritos/favoritos.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -38,11 +39,11 @@ import { SectionHomeComponent } from './sections/section-home/section-home.compo
 const routes: Routes = [
   { path: '', component: SectionHomeComponent },
   { path: 'registro', component: RegisterComponent },
-  
+
   { path: 'buscar', component: SearchComponent },
   { path: 'buscar/:tipo/:query', component: SearchComponent },
   { path: 'buscar/:tipo/:query/:categoria', component: SearchComponent },
-  
+
   { path: 'login', component: LoginComponent },
   { path: 'cuenta', component: AccountComponent },
   { path: 'en-vivo', component: EnVivoComponent },
@@ -69,10 +70,12 @@ const routes: Routes = [
   { path: 'protocolo', component: PageProtocoloComponent },
   { path: 'terminos-condiciones', component: PageTermsConditionsComponent },
   { path: 'contacto', component: PageContactoComponent },
+  { path: 'dmca', component: DMCAComponent },
 
   {
-    path: 'administracion', component: DashboardComponent, children:
-    [
+    path: 'administracion',
+    component: DashboardComponent,
+    children: [
       { path: 'dashboard', component: DashboardAdminComponent },
       { path: 'configuracion', component: DashboardConfigurationComponent },
       { path: 'posts', component: DashboardPostsComponent },
@@ -84,14 +87,14 @@ const routes: Routes = [
       { path: 'denuncias', component: DashboardReportesComponent },
       { path: 'usuarios', component: DashboardUsuariosComponent },
       { path: 'rango-usuarios', component: DashboardRangosComponent },
-    ]
+    ],
   },
-  
-  { path: '*', redirectTo: '' }
+
+  { path: '*', redirectTo: '' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

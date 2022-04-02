@@ -165,6 +165,7 @@ import {MatInputModule} from '@angular/material/input';
 import { DialogUpdateAfiliadosComponent } from './components/admin/control-de-comunidad/afiliados/dialog-update-afiliados/dialog-update-afiliados.component';
 import { PageTermsConditionsComponent } from './pages/page-terms-conditions/page-terms-conditions.component';
 import { PageContactoComponent } from './pages/page-contacto/page-contacto.component';
+import { DMCAComponent } from './pages/dmca/dmca.component';
 
 @NgModule({
   declarations: [
@@ -268,6 +269,7 @@ import { PageContactoComponent } from './pages/page-contacto/page-contacto.compo
     DialogUpdateAfiliadosComponent,
     PageTermsConditionsComponent,
     PageContactoComponent,
+    DMCAComponent,
   ],
   imports: [
     BrowserModule,
