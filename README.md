@@ -10,6 +10,9 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
 ### 📄 Index
 ![image](https://user-images.githubusercontent.com/1715022/161352397-60379b2d-943a-48aa-84af-18d78553f1ae.png)
 
+<details>
+  <summary>🖼️ Screenshots</summary>
+  
 ### 🔐 Login
 ![image](https://user-images.githubusercontent.com/1715022/157564937-2744e258-f216-47b8-b33c-6038947eae9b.png)
 
@@ -33,6 +36,7 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
 
 ### 🧮 Dashboard
 ![image](https://user-images.githubusercontent.com/1715022/156478249-58ae2333-7e0a-4608-8867-b7ac0ddc2300.png)
+</details>
 
 ----
 
