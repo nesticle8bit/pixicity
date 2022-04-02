@@ -2,6 +2,9 @@ import { DisplayComponentService } from './services/shared/displayComponents.ser
 import { DisplayComponentModel } from './models/shared/displayComponent.model';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { SEOService } from './services/shared/seo.service';
+import { SEOModel } from './models/shared/seo.model';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -9,19 +12,20 @@ import { NavigationEnd, Router } from '@angular/router';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'pixicity';
-
   public displayComponent: DisplayComponentModel = {
     mainMenu: true,
     footer: true,
     searchFooter: true,
     submenu: true,
-    background: ''
+    background: '',
   };
 
   constructor(
     private displayComponentService: DisplayComponentService,
-    private router: Router
+    private seoService: SEOService,
+    private router: Router,
+    private title: Title,
+    private meta: Meta
   ) {
     this.displayComponentService
       .getDisplay()
@@ -29,11 +33,63 @@ export class AppComponent {
         (value: DisplayComponentModel) => (this.displayComponent = value)
       );
 
-      this.router.events.subscribe((evt) => {
-        if (!(evt instanceof NavigationEnd)) {
-            return;
-        }
-        window.scrollTo(0, 0)
+    this.seoService.getSEO().subscribe((value: SEOModel) => {
+      if (value.title) {
+        this.title.setTitle(`${value.title} - ${this.title.getTitle()}`);
+
+        this.meta.addTag({
+          name: 'og:title',
+          content: value.title,
+        });
+
+        this.meta.addTag({
+          name: 'twitter:title',
+          content: value.title,
+        });
+
+        this.meta.addTag({
+          name: 'og:site_name',
+          content: value.title,
+        });
+      }
+
+      if (value.tags) {
+        this.meta.addTag({
+          name: 'description',
+          content: value.tags.join()?.toLowerCase(),
+        });
+      }
+
+      if (value.imageURL) {
+        this.meta.addTag({
+          name: 'og:image',
+          content: value.imageURL,
+        });
+
+        this.meta.addTag({
+          name: 'twitter:image',
+          content: value.imageURL,
+        });
+
+        this.meta.addTag({
+          name: 'twitter:card',
+          content: value.imageURL,
+        });
+      }
+
+      if (value.type) {
+        this.meta.addTag({
+          name: 'og:type',
+          content: value.type,
+        });
+      }
+    });
+
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+      window.scrollTo(0, 0);
     });
 
     this.welcome();

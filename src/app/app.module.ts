@@ -161,11 +161,12 @@ import { BanearUsuarioComponent } from './components/admin/usuarios/usuarios/ban
 import { DialogBanUserComponent } from './components/dialogs/dialog-ban-user/dialog-ban-user.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 import { DialogUpdateAfiliadosComponent } from './components/admin/control-de-comunidad/afiliados/dialog-update-afiliados/dialog-update-afiliados.component';
 import { PageTermsConditionsComponent } from './pages/page-terms-conditions/page-terms-conditions.component';
 import { PageContactoComponent } from './pages/page-contacto/page-contacto.component';
 import { DMCAComponent } from './pages/dmca/dmca.component';
+import { SEOService } from './services/shared/seo.service';
 
 @NgModule({
   declarations: [
@@ -338,7 +339,7 @@ import { DMCAComponent } from './pages/dmca/dmca.component';
         `${environment.api}/api/comentarios/getComentariosRecientes`,
         `${environment.api}/api/tops/getTopPosts`,
         `${environment.api}/api/posts/getBorradores`,
-        `${environment.api}/api/monitors/setNotificacionesAsReaded`
+        `${environment.api}/api/monitors/setNotificacionesAsReaded`,
       ],
     }),
     MatRadioModule,
@@ -355,10 +356,12 @@ import { DMCAComponent } from './pages/dmca/dmca.component';
     ImageCropperModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatInputModule
+    MatInputModule,
   ],
   providers: [
     DisplayComponentService,
+    SEOService,
+    Title,
     { provide: IHttpSecurityService, useClass: HttpSecurityService },
     { provide: IHttpParametrosService, useClass: HttpParametrosService },
     { provide: IHttpGeneralService, useClass: HttpGeneralService },
