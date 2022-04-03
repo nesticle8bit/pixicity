@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { SEOService } from 'src/app/services/shared/seo.service';
 
 @Component({
   selector: 'section-home',
@@ -24,9 +26,21 @@ export class SectionHomeComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private displayService: DisplayComponentService,
     private securityService: IHttpSecurityService,
-    private generalService: IHttpGeneralService
+    private generalService: IHttpGeneralService,
+    private seoService: SEOService,
+    private title: Title
   ) {
     this.sessionOnlineUser();
+
+    this.seoService.setSEO({
+      title: 'Pixicity - Ciudad Pixelada | Comunidad para Compartir Información',
+      description: '',
+      tags: [],
+      type: 'Red social',
+      imageURL: '',
+    });
+
+    this.title.setTitle('Pixicity - Ciudad Pixelada | Comunidad para Compartir Información');
   }
 
   ngOnInit(): void {
