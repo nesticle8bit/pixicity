@@ -18,6 +18,7 @@ export class HomeLastCommentsComponent implements OnInit {
 
   getUltimosComentarios(): void {
     this.refreshComments = true;
+
     this.postService.getUltimosComentarios().subscribe((comentarios: any) => {
       this.lastComments = comentarios;
       this.refreshComments = false;
