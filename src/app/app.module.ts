@@ -167,7 +167,11 @@ import { PageTermsConditionsComponent } from './pages/page-terms-conditions/page
 import { PageContactoComponent } from './pages/page-contacto/page-contacto.component';
 import { DMCAComponent } from './pages/dmca/dmca.component';
 import { SEOService } from './services/shared/seo.service';
-import { RecaptchaFormsModule, RecaptchaModule } from 'ng-recaptcha';
+import {
+  RecaptchaFormsModule,
+  RecaptchaModule,
+  RECAPTCHA_LANGUAGE,
+} from 'ng-recaptcha';
 import { ReCaptchaComponent } from './components/addons/re-captcha/re-captcha.component';
 
 @NgModule({
@@ -361,7 +365,7 @@ import { ReCaptchaComponent } from './components/addons/re-captcha/re-captcha.co
     MatNativeDateModule,
     MatInputModule,
     RecaptchaModule,
-    RecaptchaFormsModule
+    RecaptchaFormsModule,
   ],
   providers: [
     DisplayComponentService,
@@ -381,6 +385,8 @@ import { ReCaptchaComponent } from './components/addons/re-captcha/re-captcha.co
 
     { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
     { provide: LOCALE_ID, useValue: 'es' },
+
+    { provide: RECAPTCHA_LANGUAGE, useValue: 'es' },
   ],
   entryComponents: [DialogAfiliarseComponent, DialogPrevisualizarPostComponent],
   bootstrap: [AppComponent],
