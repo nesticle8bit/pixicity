@@ -38,6 +38,8 @@
                     <input id="password" type="password" formControlName="password" class="form-control mx-auto" />
                 </div>
 
+                <app-re-captcha (response)="captchaResponse($event)"></app-re-captcha>
+
                 <div class="dot--ccc">
                     <input type="submit" class="submit-btn" value="Iniciar Sesión">
                 </div>
