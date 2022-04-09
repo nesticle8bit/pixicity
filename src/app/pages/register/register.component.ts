@@ -105,6 +105,7 @@ export class RegisterComponent implements OnInit {
       genero: [undefined, Validators.required],
       paisId: [undefined, Validators.required],
       estadoId: [undefined, Validators.required],
+      captcha: ['', Validators.required],
       termsConditions: [false, Validators.requiredTrue]
     });
   }
