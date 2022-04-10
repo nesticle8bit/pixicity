@@ -146,6 +146,8 @@
                     </div>
                 </div>
 
+                <app-re-captcha (response)="captchaResponse($event)"></app-re-captcha>
+
                 <div class="dot--ccc">
                     <input type="submit" class="submit-btn" value="Registrarse" [disabled]="formGroup.invalid">
                 </div>
