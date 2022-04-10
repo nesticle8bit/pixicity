@@ -180,4 +180,10 @@ export class RegisterComponent implements OnInit {
   removePopover(): void {
     this.currentFocus = '';
   }
+
+  captchaResponse(value: string): void {
+    this.formGroup.patchValue({
+      captcha: value,
+    });
+  }
 }
