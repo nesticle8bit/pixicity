@@ -19,16 +19,33 @@ export class TagsCloudComponent implements OnInit {
     this.postService.getCloudTags().subscribe((value: any) => {
       this.cloudTags = value;
 
-      if(this.cloudTags?.length > 0) {
-        let max = 0;
-        let min = 0;
+      if (this.cloudTags?.length > 0) {
+        let array = this.cloudTags.map((value: any) => { return value.count });
+        let max = Math.max(...array);
 
         this.cloudTags = this.cloudTags.map((tags: any) => {
-          if(tags.count > max) {
-            max = tags.count;
+          let count = tags.count;
+          let percent = (count / max) * 100;
+
+          if (percent < 20)
+          {
+              tags.class = 5;
+          }
+          else if (percent < 40)
+          {
+            tags.class = 4;
+          }
+          else if (percent < 60)
+          {
+            tags.class = 3;
+          }
+          else if (percent < 80)
+          {
+            tags.class = 2;
+          }
+          else
+          {
             tags.class = 1;
-          } else {
-            tags.class = Math.floor(Math.random() * (5 - 1 + 1) + 1); // TODO
           }
 
           return tags;
