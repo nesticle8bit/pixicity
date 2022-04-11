@@ -65,6 +65,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
           if (notificacion.mensaje) {
             notificacion.mensaje = notificacion.mensaje.replace('tu post', `tu ${this.setURL(notificacion, 'post')}`);
             notificacion.mensaje = notificacion.mensaje.replace('post que sigues', `${this.setURL(notificacion, 'post que sigues')}`);
+            notificacion.mensaje = notificacion.mensaje.replace('un post', `un ${this.setURL(notificacion, 'post')}`);
           }
 
           return notificacion;

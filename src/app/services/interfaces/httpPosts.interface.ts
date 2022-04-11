@@ -32,4 +32,5 @@ export abstract class IHttpPostsService {
     abstract getCloudTags(): Observable<any>;
     abstract getBorradores(search: string, categoriaId: number): Observable<any>;
     abstract deleteComentario(comentarioId: number): Observable<any>;
+    abstract recomendarPost(postId: number): Observable<any>;
 }
