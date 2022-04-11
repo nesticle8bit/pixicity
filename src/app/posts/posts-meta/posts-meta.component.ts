@@ -4,6 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDenunciarPostComponent } from 'src/app/components/dialogs/dialog-denunciar-post/dialog-denunciar-post.component';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { DialogRecomendarPostComponent } from 'src/app/components/dialogs/dialog-recomendar-post/dialog-recomendar-post.component';
 
 @Component({
   selector: 'app-posts-meta',
@@ -77,6 +78,14 @@ export class PostsMetaComponent implements OnInit {
         this.addedPuntos = true;
         this.post.puntos += puntos;
       }
+    });
+  }
+
+  recomendarPost(postId: number): void {
+    this.dialog.open(DialogRecomendarPostComponent, {
+      width: '500px',
+      disableClose: true,
+      data: postId
     });
   }
 

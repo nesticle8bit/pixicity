@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>
+    Recomendar Post
+</h2>
+
+<mat-dialog-content class="mat-typography">
+    ¿Quieres recomendar este post a tus seguidores?
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button type="button" mat-button mat-dialog-close>
+        Cancelar
+    </button>
+
+    <button type="button" (click)="recomendarPost()" mat-button color="primary">
+        Recomendar
+    </button>
+</mat-dialog-actions>

@@ -34,7 +34,7 @@
     <div class="metabottom">
         <div class="botones float-start py-2" *ngIf="currentUser?.usuario?.userName != post?.usuario?.userName">
             <li>
-                <a onclick="notifica.sharePost(1);" class="tetese">P!</a>
+                <a (click)="recomendarPost(post.id)" matTooltip="Recomendar post" class="tetese">P!</a>
             </li>
 
             <li>

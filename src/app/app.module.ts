@@ -173,6 +173,7 @@ import {
   RECAPTCHA_LANGUAGE,
 } from 'ng-recaptcha';
 import { ReCaptchaComponent } from './components/addons/re-captcha/re-captcha.component';
+import { DialogRecomendarPostComponent } from './components/dialogs/dialog-recomendar-post/dialog-recomendar-post.component';
 
 @NgModule({
   declarations: [
@@ -278,6 +279,7 @@ import { ReCaptchaComponent } from './components/addons/re-captcha/re-captcha.co
     PageContactoComponent,
     DMCAComponent,
     ReCaptchaComponent,
+    DialogRecomendarPostComponent,
   ],
   imports: [
     BrowserModule,
