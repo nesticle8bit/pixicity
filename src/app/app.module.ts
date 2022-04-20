@@ -174,6 +174,8 @@ import {
 } from 'ng-recaptcha';
 import { ReCaptchaComponent } from './components/addons/re-captcha/re-captcha.component';
 import { DialogRecomendarPostComponent } from './components/dialogs/dialog-recomendar-post/dialog-recomendar-post.component';
+import { DialogVerReporteComponent } from './components/admin/control-de-comunidad/reportes/dialog-ver-reporte/dialog-ver-reporte.component';
+import { PostUrlLinkComponent } from './components/addons/post-url-link/post-url-link.component';
 
 @NgModule({
   declarations: [
@@ -280,6 +282,8 @@ import { DialogRecomendarPostComponent } from './components/dialogs/dialog-recom
     DMCAComponent,
     ReCaptchaComponent,
     DialogRecomendarPostComponent,
+    DialogVerReporteComponent,
+    PostUrlLinkComponent,
   ],
   imports: [
     BrowserModule,
