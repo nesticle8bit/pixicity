@@ -19,6 +19,15 @@
         </div>
 
         <div class="col-12 col-sm-12 col-md-4">
+            <label>Post</label> <br>
+            <app-post-url-link 
+                [post]="{ id: data.post.id, url: data.post.url, titulo: data.post.titulo}"
+                [categoria]="{ icono: data.post.categoria.icono, nombre: data.post.categoria.nombre, seo: data.post.categoria.seo}"></app-post-url-link>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-4">
             <div class="mb-3">
                 <label>Usuario que denuncia</label>
                 <a class="cursor--pointer d-block pt-1" href="/perfil/{{data?.usuarioDenuncia}}" target="_blank">
@@ -26,18 +35,23 @@
                 </a>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-12 col-sm-12 col-md-4">
-            <label>Post</label>
-            <app-post-url-link 
-                [post]="{ id: data.post.id, url: data.post.url, titulo: data.post.titulo}"
-                [categoria]="{ icono: data.post.categoria.icono, nombre: data.post.categoria.nombre, seo: data.post.categoria.seo}"></app-post-url-link>
+        <div class="col-12 col-sm-12 col-md-8">
+            <div class="mb-3">
+                <label>Razón</label>
+                <input type="text" readonly class="form-control-plaintext" value="{{data?.razon}}">
+            </div>
         </div>
     </div>
 
-    {{data | json}}
+    <div class="row">
+        <div class="col-12">
+            <div class="mb-3">
+                <label>Comentarios</label>
+                <textarea class="form-control" readonly>{{data?.comentarios}}</textarea>
+            </div>
+        </div>
+    </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
