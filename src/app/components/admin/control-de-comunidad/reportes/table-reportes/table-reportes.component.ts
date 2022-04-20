@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpDenunciasService } from 'src/app/services/interfaces/httpDenuncias.interface';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import Swal from 'sweetalert2';
+import { DialogVerReporteComponent } from '../dialog-ver-reporte/dialog-ver-reporte.component';
 
 @Component({
   selector: 'app-table-reportes',
@@ -16,7 +18,8 @@ export class TableReportesComponent implements OnInit {
 
   constructor(
     public paginationService: PaginationService,
-    private denunciaService: IHttpDenunciasService
+    private denunciaService: IHttpDenunciasService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -60,6 +63,14 @@ export class TableReportesComponent implements OnInit {
             }
           });
       }
+    });
+  }
+
+  verReporte(denuncia: any): void {
+    this.dialog.open(DialogVerReporteComponent, {
+      width: '980px',
+      disableClose: true,
+      data: denuncia,
     });
   }
 }
