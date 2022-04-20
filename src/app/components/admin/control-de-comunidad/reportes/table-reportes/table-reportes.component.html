@@ -46,6 +46,11 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
+                        <button type="button" mat-menu-item (click)="verReporte(denuncia)">
+                            <mat-icon>visibility</mat-icon>
+                            <span>Ver</span>
+                        </button>
+
                         <button type="button" mat-menu-item (click)="deleteReporte(denuncia)">
                             <mat-icon>delete_outline</mat-icon>
                             <span>Eliminar</span>
