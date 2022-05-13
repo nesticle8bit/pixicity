@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-12 col-sm-6 col-md-4 my-2" *ngFor="let usuario of usuarios">
                     <div class="xoti">
-                        <h2>
+                        <h2 [routerLink]="['/perfil/' + usuario.userName]">
                             {{usuario.userName}}
                         </h2>
 
@@ -44,7 +44,7 @@
                         </div>
 
                         <a class="float-end" href="#">
-                            <app-user-avatar [class]="'img-fluid img-thumbnail'" [avatar]="usuario.avatar"
+                            <app-user-avatar [routerLink]="['/perfil/' + usuario.userName]" [class]="'img-fluid img-thumbnail'" [avatar]="usuario.avatar"
                                 [userName]="usuario.userName" [width]="80" matTooltip="{{usuario.userName}}"
                                 [matTooltipPosition]="'left'"></app-user-avatar>
                         </a>
