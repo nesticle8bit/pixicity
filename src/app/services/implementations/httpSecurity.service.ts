@@ -74,10 +74,24 @@ export class HttpSecurityService implements IHttpSecurityService {
     return this.currentUserSubject.asObservable();
   }
 
-  getUsuarios(): Observable<any> {
+  getUsuarios(search: any): Observable<any> {
+    let searchParams = ``;
+
+    if (search?.genero) {
+      searchParams += `&genero=${search.genero}`;
+    }
+
+    if (search?.pais) {
+      searchParams += `&pais=${search.pais}`;
+    }
+
+    if (search?.rango) {
+      searchParams += `&rango=${search.rango}`;
+    }
+
     return this.http
       .get<any>(
-        `${environment.api}/api/usuarios/getUsuarios?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`
+        `${environment.api}/api/usuarios/getUsuarios?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${searchParams}`
       )
       .pipe(
         map((response: any) => {
