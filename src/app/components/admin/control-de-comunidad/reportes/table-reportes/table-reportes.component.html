@@ -22,8 +22,8 @@
                 <td>
                     <a [routerLink]="['/posts/' + denuncia.post.categoria.seo + '/' + denuncia.post.id + '/' + denuncia.post.url]"
                         title="{{denuncia.post.titulo}}">
-                        <img src="/assets/images/categorias/{{denuncia.post.categoria.icono}}" title="{{denuncia.post.categoria.nombre}}"
-                            alt="{{denuncia.post.categoria.nombre}}" />
+                        <img src="/assets/images/categorias/{{denuncia.post.categoria.icono}}"
+                            title="{{denuncia.post.categoria.nombre}}" alt="{{denuncia.post.categoria.nombre}}" />
                         {{denuncia.post.titulo | truncate:[70]}}
                     </a>
                 </td>
