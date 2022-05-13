@@ -13,9 +13,17 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 })
 export class UsuariosComponent implements OnInit {
   public usuarios: any = [];
-  public generos: string[] = ['Hombre', 'Mujer', 'Otro', 'Todos'];
+  public generos: any[] = [
+    { label: 'Hombre', value: 1 },
+    { label: 'Mujer', value: 2 },
+    { label: 'Otro', value: 3 },
+    { label: 'Todos', value: undefined },
+  ];
+
   public paises: any[] = [];
+  public rangos: any[] = [];
   public totalCount: number = 0;
+  public enLineaValues: any[] = ['En línea', 'Con todo'];
 
   public formGroup: FormGroup;
 
@@ -27,11 +35,10 @@ export class UsuariosComponent implements OnInit {
     private formBuilder: FormBuilder
   ) {
     this.formGroup = this.formBuilder.group({
-      enLinea: false,
-      conTodo: false,
+      enLinea: '',
       genero: '',
       pais: '',
-      rango: ''
+      rango: '',
     });
 
     this.displayService.setDisplay({
@@ -39,7 +46,7 @@ export class UsuariosComponent implements OnInit {
       footer: true,
       searchFooter: true,
       submenu: true,
-      background: ''
+      background: '',
     });
   }
 
@@ -48,10 +55,13 @@ export class UsuariosComponent implements OnInit {
     this.pageChange(pageEvent);
 
     this.getPaises();
+    this.getRangos();
   }
 
   getUsuarios(): void {
-    this.securityService.getUsuarios().subscribe((response: any) => {
+    const search = Object.assign({}, this.formGroup.value);
+
+    this.securityService.getUsuarios(search).subscribe((response: any) => {
       this.usuarios = response.usuarios;
       this.totalCount = response.pagination.totalCount;
     });
@@ -60,6 +70,12 @@ export class UsuariosComponent implements OnInit {
   getPaises(): void {
     this.parametrosService.getPaisesDropdown().subscribe((values: any) => {
       this.paises = values;
+    });
+  }
+
+  getRangos(): void {
+    this.securityService.getRangosDropdown().subscribe((values: any) => {
+      this.rangos = values;
     });
   }
 

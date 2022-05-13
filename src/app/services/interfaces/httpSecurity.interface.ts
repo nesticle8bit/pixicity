@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 export abstract class IHttpSecurityService {
   abstract getCurrentUser(): JwtUserModel;
   abstract getCurrentUserAsObservable(): Observable<JwtUserModel>;
-  abstract getUsuarios(): Observable<any>;
+  abstract getUsuarios(search: any): Observable<any>;
   abstract getUsuariosAdmin(): Observable<any>;
   abstract getLoggedUserByJwt(): Observable<any>;
   abstract getUserByUserName(userName: string): Observable<any>;
