@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'section-home',
@@ -56,9 +56,7 @@ export class SectionHomeComponent implements OnInit {
           .setHitInByRefCode(params.ref)
           .subscribe((response: any) => {
             if (response) {
-              console.log(
-                '💖 Que bueno tener un referido como tú, bienvenido a nuestra comunidad'
-              );
+              console.log('💖 Que bueno tener un referido como tú, bienvenido a nuestra comunidad');
             }
           });
       }
