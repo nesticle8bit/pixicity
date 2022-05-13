@@ -18,8 +18,7 @@
         <img src="/assets/images/min-carga.gif" id="com_gif" style="display: none;">
     </div>
 
-    <div id="comentarios" style="opacity: 1;" *ngFor="let comentario of comentarios"
-        (mouseover)="comentario.actions=true" (mouseout)="comentario.actions=false">
+    <div id="comentarios" style="opacity: 1;" *ngFor="let comentario of comentarios">
         <div id="respnuevas">
             <div class="comentario-post clearbeta"
                 [ngClass]="{'mi-comentario': comentario?.userName === currentUser?.usuario?.userName, 'op': comentario?.userName === post?.usuario?.userName}">
@@ -47,7 +46,7 @@
                             </div>
                         </div>
 
-                        <!-- <div class="float-end answerOptions" *ngIf="comentario.actions">
+                        <div class="float-end answerOptions">
                             <div class="botonear">
                                 <a #tooltip="matTooltip" matTooltip="Responder">
                                     <fa-icon [icon]="['fas', 'reply']" class="reply"></fa-icon>
@@ -63,7 +62,7 @@
                                     <fa-icon [icon]="['fas', 'times']" class="times"></fa-icon>
                                 </a>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
 
                     <div id="comment-body-14" class="comment-content">
@@ -72,71 +71,70 @@
                 </div>
             </div>
 
-            <!-- <div id="respuestas">
-                            <div id="div_cmnt_15" class="especial1">
-                                <span id="citar_comm_15" style="display:none">Comentario 2</span>
-                                <div class="comentario-post clearbeta">
-                                    <div class="avatar-box" style="z-index: 98;">
-                                        <a href="#">
-                                            <img width="32" height="32" title="" src="https://i.imgur.com/2Rs9AVg.jpeg"
-                                                class="avatar-48 lazy"
-                                                style="position: relative; z-index: 1; display: inline;">
-                                        </a>
+            <div id="respuestas">
+                <div id="div_cmnt_15" class="especial1">
+                    <span id="citar_comm_15" style="display:none">Comentario 2</span>
+                    <div class="comentario-post clearbeta">
+                        <div class="avatar-box" style="z-index: 98;">
+                            <a href="#">
+                                <img width="32" height="32" title="" src="https://i.imgur.com/2Rs9AVg.jpeg" class="avatar-48 lazy"
+                                    style="position: relative; z-index: 1; display: inline;">
+                            </a>
+                        </div>
+            
+                        <div class="comment-box" id="pp_15">
+                            <div class="comment-info clearbeta">
+                                <div class="floatL">
+                                    <div class="floatL"><a href="#">nesticle8bit</a><span>
+                                            Hace 7 días</span></div>
+                                    <div class="numbersvotes">
+                                        <div class="overview">
+                                            <span class="positivo" id="votos_total_15"></span>
+                                        </div>
                                     </div>
+                                </div>
 
-                                    <div class="comment-box" id="pp_15">
-                                        <div class="comment-info clearbeta">
-                                            <div class="floatL">
-                                                <div class="floatL"><a href="#">nesticle8bit</a><span>
-                                                        Hace 7 días</span></div>
-                                                <div class="numbersvotes">
-                                                    <div class="overview">
-                                                        <span class="positivo" id="votos_total_15"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="floatR answerOptions" id="opt_15">
-                                                <div id="ul_cmt_15" class="botonear">
-
-                                                    <a class="qtip" onclick="citar_comment(15, 'nesticle8bit')"
-                                                        title="Citar"><span class="i citare"></span></a>
-
-                                                    <a class="qtip" onclick="comentario.editar(15, 'show')"
-                                                        title=""><span class="toup-edit2"></span></a>
-                                                    <a class="qtip" onclick="borrar_respuesta(15, 19, 8)" title=""><span
-                                                            class="toup-x"></span></a>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="comment-body-15" class="comment-content">
-                                            Comentario 2
-                                        </div>
+                                <div class="floatR answerOptions" id="opt_15">
+                                    <div id="ul_cmt_15" class="botonear">
+    
+                                        <a class="qtip" onclick="citar_comment(15, 'nesticle8bit')" title="Citar"><span
+                                                class="i citare"></span></a>
+            
+                                        <a class="qtip" onclick="comentario.editar(15, 'show')" title=""><span
+                                                class="toup-edit2"></span></a>
+                                        <a class="qtip" onclick="borrar_respuesta(15, 19, 8)" title=""><span
+                                                class="toup-x"></span></a>
+            
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
-
-            <!-- <div class="resp">
-                            <div id="restoup">
-                                <div class="answerInfo">
-                                    <img src="https://i.imgur.com/2Rs9AVg.jpeg">
-                                </div>
-
-                                <div class="Container">
-                                    <div class="error"></div>
-                                    <textarea id="bodys_comm_14" class="onblur_effect autogrow" tabindex="1"
-                                        title="Escribir una respuesta..."
-                                        placeholder="Escribir una respuesta..."></textarea>
-                                    <div class="buttons">
-                                        <div class="float-end">
-                                            <input type="button" onclick="comentario.nuevos('true', '', 14)"
-                                                class="boton azul" value="Responder" tabindex="3" id="btnssComment">
-                                        </div>
-                                    </div>
-                                </div>
+                            <div id="comment-body-15" class="comment-content">
+                                Comentario 2
                             </div>
-                        </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resp">
+                <div id="restoup">
+                    <div class="answerInfo">
+                        <img src="https://i.imgur.com/2Rs9AVg.jpeg">
+                    </div>
+            
+                    <div class="Container">
+                        <div class="error"></div>
+                        <textarea id="bodys_comm_14" class="onblur_effect autogrow" tabindex="1" title="Escribir una respuesta..."
+                            placeholder="Escribir una respuesta..."></textarea>
+                        <div class="buttons">
+                            <div class="float-end">
+                                <input type="button" onclick="comentario.nuevos('true', '', 14)" class="boton azul"
+                                    value="Responder" tabindex="3" id="btnssComment">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="nuevos"></div>

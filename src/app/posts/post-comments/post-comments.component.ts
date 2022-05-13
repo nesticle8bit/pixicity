@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { BottomSheetsEmojisComponent } from 'src/app/components/bottom-sheets/bottom-sheets-emojis/bottom-sheets-emojis.component';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { BottomSheetsEmojisComponent } from 'src/app/components/bottom-sheets/bottom-sheets-emojis/bottom-sheets-emojis.component';
-import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
-import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-post-comments',
@@ -74,13 +74,6 @@ export class PostCommentsComponent implements OnInit {
     this.postService
       .getComentariosByPostId(this.post.id)
       .subscribe((response: any) => {
-        if (response) {
-          response = response.map((comentario: any) => {
-            comentario.actions = false;
-            return comentario;
-          });
-        }
-
         this.comentarios = response;
       });
   }
