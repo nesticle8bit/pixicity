@@ -1605,7 +1605,7 @@ p.cupuntos {
 #respuestas {
     margin: 0;
     overflow: hidden;
-    margin-top: 20px;
+    margin-top: 15px;
     clear: both;
 }
 
@@ -1618,6 +1618,12 @@ p.cupuntos {
 .comentario-post {
     padding: 10px 0;
     margin-bottom: 5px;
+
+    &:hover {
+        .answerOptions {
+            display: block !important;
+        }
+    }
 }
 
 .comentario-post:hover {
@@ -1669,6 +1675,13 @@ p.cupuntos {
     line-height: 14px;
 }
 
+.answerOptions {
+    position: absolute;
+    top: 0;
+    right: 7px;
+    display: none;
+}
+
 .comment-info a {
     font-weight: 700;
     text-decoration: none;
@@ -1708,13 +1721,6 @@ span.positivo {
 
 #respuestas .comment-box, .nuevares .comment-box {
     padding-right: 10px;
-}
-
-.answerOptions {
-    position: absolute;
-    top: 0;
-    right: 7px;
-    display: block;
 }
 
 .botonear {
