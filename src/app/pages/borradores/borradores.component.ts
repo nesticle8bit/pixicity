@@ -62,7 +62,6 @@ export class BorradoresComponent implements OnInit {
   }
 
   deleteBorrador(borrador: any): void {
-    console.log(borrador);
     Swal.fire({
       title: !borrador.eliminado ? 'Eliminar Borrador' : 'Recuperar Borrador',
       text: `¿Seguro que deseas ${

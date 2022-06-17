@@ -79,7 +79,6 @@ export class PostCommentsComponent implements OnInit {
   }
 
   eliminarComentario(comentario: any): void {
-    console.log(comentario);
   }
 
   addEmoji(event: any): void {

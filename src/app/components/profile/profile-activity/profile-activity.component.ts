@@ -86,7 +86,6 @@ export class ProfileActivityComponent implements OnInit {
     this.securityService
       .getActividadUsuario(this.user.id, this.formGroup.value.tipoActividad)
       .subscribe((response: any) => {
-        console.log(response);
         this.actividad = response;
       });
   }

@@ -30,7 +30,6 @@ export class DialogChangeRangosComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data) {
-      console.log(this.data);
       this.formGroup.patchValue({
         id: this.data.id,
         usuarioId: this.data.usuarioId,

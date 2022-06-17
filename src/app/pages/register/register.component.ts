@@ -155,8 +155,6 @@ export class RegisterComponent implements OnInit {
 
   registerUser(): void {
     const user: UserModel = Object.assign({}, this.formGroup.value);
-    console.log(user);
-
     user.fechaNacimiento = `${user.dia}/${user.mes}/${user.año}`;
 
     this.securityService.registerUser(user).subscribe((response: any) => {
