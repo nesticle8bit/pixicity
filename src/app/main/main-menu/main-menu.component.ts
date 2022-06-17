@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
@@ -16,7 +16,12 @@ export class MainMenuComponent implements OnInit {
     private router: Router
   ) {
     this.currentUser = this.securityService.getCurrentUser();
-    this.active = this.router.url;
+
+    this.router.events.subscribe((val: any) => {
+      if(val?.url) {
+        this.active = val?.url;
+      }
+    });
   }
 
   ngOnInit(): void {}
