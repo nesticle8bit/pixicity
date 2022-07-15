@@ -1748,14 +1748,14 @@ span.positivo {
     color: #db4040;
 }
 
-#restoup {
+#respuestas_comentario {
     overflow: hidden;
     padding: 10px;
     background: #f9f8e3;
     margin: 0 0 0 60px;
 }
 
-#restoup .answerInfo {
+#respuestas_comentario .answerInfo {
     border: 0;
     box-shadow: 0 0;
     padding: 0;
@@ -1773,7 +1773,7 @@ span.positivo {
     overflow: hidden;
 }
 
-#restoup textarea {
+#respuestas_comentario textarea {
     width: 100%;
     box-shadow: 0 0;
     border-radius: 0;
@@ -1787,7 +1787,7 @@ span.positivo {
     min-height: 56px;
 }
 
-#restoup .buttons {
+#respuestas_comentario .buttons {
     margin-top: 10px;
     display: block;
     overflow: hidden;
@@ -1795,7 +1795,7 @@ span.positivo {
     clear: both;
 }
 
-#restoup .answerInfo img {
+#respuestas_comentario .answerInfo img {
     width: 48px;
     height: 48px;
     border-radius: 5px;

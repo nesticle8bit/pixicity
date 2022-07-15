@@ -78,6 +78,32 @@ export class PostCommentsComponent implements OnInit {
       });
   }
 
+  respuesta(respuesta: any): void {
+    if (!respuesta?.respuesta) {
+      return;
+    }
+
+    let comentario = Object.assign({}, respuesta);
+    comentario.postId = this.post?.id;
+    comentario.comentarioId = comentario.id;
+    comentario.contenido = respuesta.respuesta;
+    comentario.id = 0;
+
+    this.postService.addComentario(comentario).subscribe((response: any) => {
+      if (response) {
+        respuesta.respuestas.push({
+          id: response,
+          userName: this.currentUser.usuario.userName,
+          avatar: this.currentUser.usuario.avatar,
+          contenido: comentario.contenido,
+          fechaComentario: new Date(),
+        });
+
+        this.commented = true;
+      }
+    });
+  }
+
   eliminarComentario(comentario: any): void {
   }
 

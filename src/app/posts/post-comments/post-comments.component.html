@@ -21,10 +21,13 @@
     <div id="comentarios" style="opacity: 1;" *ngFor="let comentario of comentarios">
         <div id="respnuevas">
             <div class="comentario-post clearbeta"
-                [ngClass]="{'mi-comentario': comentario?.userName === currentUser?.usuario?.userName, 'op': comentario?.userName === post?.usuario?.userName}">
+                [ngClass]="{'mi-comentario': comentario?.usuario === currentUser?.usuario?.userName, 'op': comentario?.usuario === post?.usuario?.userName}">
                 <div class="avatar-box" style="z-index: 99;">
                     <a [routerLink]="['/perfil/' + comentario?.userName]">
-                        <app-user-avatar [class]="'avatar-48 lazy'" [avatar]="comentario?.avatar" [userName]="comentario?.userName" [width]="48" matTooltip="Avatar de {{comentario?.userName}}" [matTooltipPosition]="'left'"></app-user-avatar>
+                        <app-user-avatar [class]="'avatar-48 lazy'" [avatar]="comentario?.avatar"
+                            [userName]="comentario?.usuario" [width]="48"
+                            matTooltip="Avatar de {{comentario?.usuario}}" [matTooltipPosition]="'left'">
+                        </app-user-avatar>
                     </a>
                 </div>
 
@@ -32,10 +35,13 @@
                     <div class="comment-info clearbeta">
                         <div class="float-start">
                             <div class="floatL">
-                                <a href="#">{{comentario?.userName}}</a>
+                                <a [routerLink]="['/perfil/' + comentario?.usuario]">
+                                    {{comentario?.usuario}}
+                                </a>
+
                                 <b class="badge bg-primary mx-1 cursor--help" matTooltip="Original Poster"
                                     [matTooltipPosition]="'right'"
-                                    *ngIf="comentario?.userName === post?.usuario?.userName">OP</b>
+                                    *ngIf="comentario?.usuario === post?.usuario?.userName">OP</b>
                                 <span> {{comentario?.fechaComentario | timeAgo}}</span>
                             </div>
 
@@ -48,17 +54,18 @@
 
                         <div class="float-end answerOptions">
                             <div class="botonear">
-                                <a #tooltip="matTooltip" matTooltip="Responder">
+                                <a #tooltip="matTooltip" matTooltip="Responder" (click)="comentario.responder = true">
                                     <fa-icon [icon]="['fas', 'reply']" class="reply"></fa-icon>
                                 </a>
 
                                 <a #tooltip="matTooltip" matTooltip="Actualizar Comentario"
-                                    *ngIf="currentUser?.usuario?.userName === comentario?.userName">
+                                    *ngIf="currentUser?.usuario?.userName === comentario?.usuario">
                                     <fa-icon [icon]="['fas', 'pencil-alt']" class="edit"></fa-icon>
                                 </a>
 
-                                <a #tooltip="matTooltip" matTooltip="Eliminar Comentario" (click)="eliminarComentario(comentario)"
-                                    *ngIf="currentUser?.usuario?.userName === comentario?.userName">
+                                <a #tooltip="matTooltip" matTooltip="Eliminar Comentario"
+                                    (click)="eliminarComentario(comentario)"
+                                    *ngIf="currentUser?.usuario?.userName === comentario?.usuario">
                                     <fa-icon [icon]="['fas', 'times']" class="times"></fa-icon>
                                 </a>
                             </div>
@@ -72,64 +79,61 @@
             </div>
 
             <div id="respuestas">
-                <div id="div_cmnt_15" class="especial1">
-                    <span id="citar_comm_15" style="display:none">Comentario 2</span>
+                <section *ngFor="let respuesta of comentario?.respuestas; let i = index">
+                    <span id="citar_comentario_{{respuesta.id}}" style="display:none">{{respuesta?.contenido}}</span>
                     <div class="comentario-post clearbeta">
                         <div class="avatar-box" style="z-index: 98;">
-                            <a href="#">
-                                <img width="32" height="32" title="" src="https://i.imgur.com/2Rs9AVg.jpeg" class="avatar-48 lazy"
-                                    style="position: relative; z-index: 1; display: inline;">
-                            </a>
+                            <app-user-avatar [class]="'avatar-48 lazy'" [avatar]="comentario?.avatar"
+                                [userName]="respuesta?.usuario" [width]="32"
+                                matTooltip="Avatar de {{respuesta?.usuario}}" [matTooltipPosition]="'left'">
+                            </app-user-avatar>
                         </div>
-            
-                        <div class="comment-box" id="pp_15">
+
+                        <div class="comment-box" id="pp_{{respuesta?.id}}">
                             <div class="comment-info clearbeta">
                                 <div class="floatL">
-                                    <div class="floatL"><a href="#">nesticle8bit</a><span>
-                                            Hace 7 días</span></div>
+                                    <div class="floatL">
+                                        <a [routerLink]="['/perfil/' + respuesta?.usuario]">
+                                            {{respuesta?.usuario}}
+                                        </a>
+                                        
+                                        <b class="badge bg-primary mx-1 cursor--help" matTooltip="Original Poster"
+                                            [matTooltipPosition]="'right'"
+                                            *ngIf="respuesta?.usuario === post?.usuario?.userName">OP</b>
+                                        <span> {{respuesta?.fechaComentario | timeAgo}}</span>
+                                    </div>
+
                                     <div class="numbersvotes">
                                         <div class="overview">
                                             <span class="positivo" id="votos_total_15"></span>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="floatR answerOptions" id="opt_15">
-                                    <div id="ul_cmt_15" class="botonear">
-    
-                                        <a class="qtip" onclick="citar_comment(15, 'nesticle8bit')" title="Citar"><span
-                                                class="i citare"></span></a>
-            
-                                        <a class="qtip" onclick="comentario.editar(15, 'show')" title=""><span
-                                                class="toup-edit2"></span></a>
-                                        <a class="qtip" onclick="borrar_respuesta(15, 19, 8)" title=""><span
-                                                class="toup-x"></span></a>
-            
-                                    </div>
-                                </div>
                             </div>
-                            <div id="comment-body-15" class="comment-content">
-                                Comentario 2
+
+                            <div id="comment-body-{{respuesta?.id}}" class="comment-content">
+                                {{respuesta?.contenido}}
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
 
-            <div class="resp">
-                <div id="restoup">
+            <div class="respuestas_{{comentario?.id}}" *ngIf="comentario?.responder">
+                <div id="respuestas_comentario">
                     <div class="answerInfo">
-                        <img src="https://i.imgur.com/2Rs9AVg.jpeg">
+                        <app-user-avatar [class]="'avatar-48 lazy'" [avatar]="comentario?.avatar"
+                            [userName]="currentUser?.usuario?.userName"
+                            matTooltip="Avatar de {{currentUser?.usuario?.userName}}" [matTooltipPosition]="'left'">
+                        </app-user-avatar>
                     </div>
-            
+
                     <div class="Container">
-                        <div class="error"></div>
-                        <textarea id="bodys_comm_14" class="onblur_effect autogrow" tabindex="1" title="Escribir una respuesta..."
-                            placeholder="Escribir una respuesta..."></textarea>
+                        <textarea class="onblur_effect" [(ngModel)]="comentario.respuesta" title="Escribir una respuesta..." placeholder="Escribir una respuesta..."></textarea>
+
                         <div class="buttons">
                             <div class="float-end">
-                                <input type="button" onclick="comentario.nuevos('true', '', 14)" class="boton azul"
-                                    value="Responder" tabindex="3" id="btnssComment">
+                                <input type="button" class="boton azul" value="Responder" (click)="respuesta(comentario)" />
                             </div>
                         </div>
                     </div>
@@ -148,7 +152,9 @@
     </div>
 
     <div class="creul">
-        <app-user-avatar [class]="'avese'" [avatar]="currentUser?.usuario?.avatar" [userName]="currentUser?.usuario?.userName" [width]="48" matTooltip="Avatar de {{currentUser?.usuario?.userName}}" [matTooltipPosition]="'left'"></app-user-avatar>
+        <app-user-avatar [class]="'avese'" [avatar]="currentUser?.usuario?.avatar"
+            [userName]="currentUser?.usuario?.userName" [width]="48"
+            matTooltip="Avatar de {{currentUser?.usuario?.userName}}" [matTooltipPosition]="'left'"></app-user-avatar>
 
         <div id="gif_cargando" style="display: none;margin:10px 3px 0 3px;">
             <img src="/assets/images/min-carga.gif">
@@ -182,7 +188,7 @@
             </ul>
         </section> -->
 
-        <textarea id="body_comm" class="autogrow onblur_effect" tabindex="1" placeholder="Escribir un comentario..."
+        <textarea id="body_comm" class="onblur_effect" placeholder="Escribir un comentario..."
             formControlName="contenido"></textarea>
 
         <div class="buttons">
