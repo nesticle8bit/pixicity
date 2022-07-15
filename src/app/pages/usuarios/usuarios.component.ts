@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
-import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
-import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-usuarios',
@@ -34,6 +34,8 @@ export class UsuariosComponent implements OnInit {
     public paginationService: PaginationService,
     private formBuilder: FormBuilder
   ) {
+    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+
     this.formGroup = this.formBuilder.group({
       enLinea: '',
       genero: '',

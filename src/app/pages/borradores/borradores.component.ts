@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
+import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
-import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
-import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -23,6 +23,8 @@ export class BorradoresComponent implements OnInit {
     private postService: IHttpPostsService,
     private formBuilder: FormBuilder
   ) {
+    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+
     this.formGroup = this.formBuilder.group({
       search: '',
     });

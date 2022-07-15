@@ -16,7 +16,9 @@ export class TablePostsComponent implements OnInit {
   constructor(
     public paginationService: PaginationService,
     private postsService: IHttpPostsService
-  ) { }
+  ) {
+    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+  }
 
   ngOnInit(): void {
     this.getPosts();

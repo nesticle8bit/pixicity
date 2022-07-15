@@ -18,7 +18,9 @@ export class TablePaisesComponent implements OnInit {
     public paginationService: PaginationService,
     private parametrosService: IHttpParametrosService,
     private dialog: MatDialog
-  ) {}
+  ) {
+    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+  }
 
   ngOnInit(): void {
     this.getPaises();

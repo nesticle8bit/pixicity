@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { IHttpDenunciasService } from 'src/app/services/interfaces/httpDenuncias.interface';
-import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
-import { PaginationService } from 'src/app/services/shared/pagination.service';
-import Swal from 'sweetalert2';
 import { DialogVerReporteComponent } from '../dialog-ver-reporte/dialog-ver-reporte.component';
+import { IHttpDenunciasService } from 'src/app/services/interfaces/httpDenuncias.interface';
+import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-table-reportes',
@@ -20,7 +19,9 @@ export class TableReportesComponent implements OnInit {
     public paginationService: PaginationService,
     private denunciaService: IHttpDenunciasService,
     private dialog: MatDialog
-  ) {}
+  ) {
+    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+  }
 
   ngOnInit(): void {
     this.getDenuncias();

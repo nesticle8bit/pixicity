@@ -1,11 +1,11 @@
+import { DialogBanUserComponent } from 'src/app/components/dialogs/dialog-ban-user/dialog-ban-user.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import { MatDialog } from '@angular/material/dialog';
-import { DialogBanUserComponent } from 'src/app/components/dialogs/dialog-ban-user/dialog-ban-user.component';
 
 @Component({
   selector: 'app-table-usuarios',
@@ -21,7 +21,9 @@ export class TableUsuariosComponent implements OnInit {
     private securityService: IHttpSecurityService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
-  ) {}
+  ) {
+    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+  }
 
   ngOnInit(): void {
     this.getUsuarios();

@@ -31,7 +31,9 @@ export class HomeLastPostsComponent implements OnInit {
     public paginationService: PaginationService,
     private postService: IHttpPostsService,
     private viewPort: ViewportScroller
-  ) {}
+  ) {
+    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+  }
 
   ngOnInit(): void {
     this.getStickyPosts();

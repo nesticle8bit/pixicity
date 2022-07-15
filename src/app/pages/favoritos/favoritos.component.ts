@@ -1,10 +1,10 @@
 import { IHttpFavoritosService } from 'src/app/services/interfaces/httpFavoritos.interface';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
   selector: 'app-favoritos',
@@ -24,6 +24,8 @@ export class FavoritosComponent implements OnInit {
     private httpGeneral: IHttpGeneralService,
     private formBuilder: FormBuilder
   ) {
+    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,

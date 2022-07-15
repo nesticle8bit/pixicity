@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
-import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { PageEvent } from '@angular/material/paginator';
+import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -20,7 +18,9 @@ export class TableSesionesComponent implements OnInit {
     public paginationService: PaginationService,
     private securityService: IHttpSecurityService,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+  }
 
   ngOnInit(): void {
     this.getSesiones();

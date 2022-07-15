@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
+import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
-import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
-import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
-import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
-import { PaginationService } from 'src/app/services/shared/pagination.service';
 
 @Component({
   selector: 'app-search',
@@ -29,6 +29,8 @@ export class SearchComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router
   ) {
+    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,

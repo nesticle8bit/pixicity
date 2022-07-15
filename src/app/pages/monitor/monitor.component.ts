@@ -21,6 +21,8 @@ export class MonitorComponent implements OnInit {
     private logsService: IHttpLogsService,
     private formBuilder: FormBuilder
   ) {
+    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+    
     this.formGroup = this.formBuilder.group({
       favorito: true,
       comentarios: true,

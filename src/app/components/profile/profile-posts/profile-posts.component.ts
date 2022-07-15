@@ -29,7 +29,9 @@ export class ProfilePostsComponent implements OnInit {
   constructor(
     public paginationService: PaginationService,
     private postService: IHttpPostsService
-  ) {}
+  ) {
+    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+  }
 
   ngOnInit(): void {}
 

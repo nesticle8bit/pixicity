@@ -29,7 +29,9 @@ export class ProfileFollowersComponent implements OnInit {
   constructor(
     public paginationService: PaginationService,
     private securityService: IHttpSecurityService
-  ) {}
+  ) {
+    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+  }
 
   ngOnInit(): void {}
 
