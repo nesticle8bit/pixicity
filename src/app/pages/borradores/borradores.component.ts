@@ -76,7 +76,7 @@ export class BorradoresComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.postService
-          .deletePost(borrador.id)
+          .deletePost(borrador.id, '')
           .subscribe((response: boolean) => {
             Swal.fire({
               title: !borrador.eliminado ? 'Eliminado' : 'Recuperado',

@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-table-posts',
   templateUrl: './table-posts.component.html',
-  styleUrls: ['./table-posts.component.scss']
+  styleUrls: ['./table-posts.component.scss'],
 })
 export class TablePostsComponent implements OnInit {
   public posts: any[] = [];
@@ -50,7 +50,7 @@ export class TablePostsComponent implements OnInit {
           title: 'Sticky',
           text: 'Se ha cambiado el sticky para este post correctamente',
           icon: 'success',
-          timer: 3000
+          timer: 3000,
         });
 
         this.posts[index].sticky = !this.posts[index].sticky;
@@ -65,19 +65,36 @@ export class TablePostsComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: `Borrar`,
       cancelButtonText: `Cancelar`,
-      icon: 'question'
+      icon: 'question',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.postsService.deletePost(postId).subscribe((response: boolean) => {
-          if (response) {
-            Swal.fire({
-              title: 'Eliminado',
-              text: 'El post ha sido eliminado correctamente, ahora nadie lo podrá visualizar',
-              icon: 'success',
-              timer: 3000
-            });
+        Swal.fire({
+          title:
+            'Ingrese por favor la razón por la cual va a eliminar este post',
+          input: 'text',
+          inputAttributes: {
+            autocapitalize: 'on',
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Eliminar',
+          cancelButtonText: `Cancelar`,
+          showLoaderOnConfirm: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.postsService
+              .deletePost(postId, result.value)
+              .subscribe((response: boolean) => {
+                if (response) {
+                  Swal.fire({
+                    title: 'Eliminado',
+                    text: 'El post ha sido eliminado correctamente, ahora nadie lo podrá visualizar',
+                    icon: 'success',
+                    timer: 3000,
+                  });
 
-            this.posts[index].eliminado = !this.posts[index].eliminado;
+                  this.posts[index].eliminado = !this.posts[index].eliminado;
+                }
+              });
           }
         });
       }

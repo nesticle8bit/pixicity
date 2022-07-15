@@ -97,7 +97,7 @@ export class PostsViewComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.postService
-          .deletePost(this.post.id)
+          .deletePost(this.post.id, '')
           .subscribe((response: boolean) => {
             if (response) {
               Swal.fire({

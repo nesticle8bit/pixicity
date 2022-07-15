@@ -281,9 +281,9 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  deletePost(postId: number): Observable<any> {
+  deletePost(postId: number, razon: string): Observable<any> {
     return this.http
-      .delete<any>(`${environment.api}/api/posts/deletePost?postId=${postId}`)
+      .delete<any>(`${environment.api}/api/posts/deletePost?postId=${postId}&razon=${razon}`)
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
