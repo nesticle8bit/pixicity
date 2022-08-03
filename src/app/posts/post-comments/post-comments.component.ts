@@ -127,4 +127,12 @@ export class PostCommentsComponent implements OnInit {
       }
     });
   }
+
+  updateComentario(comentario: any): void {
+    this.postService.updateComentario(comentario).subscribe((response: any) => {
+      if (response) {
+        comentario.update = false;
+      }
+    });
+  }
 }

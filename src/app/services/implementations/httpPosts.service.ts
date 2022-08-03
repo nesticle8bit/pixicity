@@ -260,6 +260,28 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  updateComentario(comentario: any): Observable<any> {
+    return this.http
+      .post<any>(
+        `${environment.api}/api/comentarios/updateComentario`,
+        comentario
+      )
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   getComentariosByPostId(postId: number): Observable<any> {
     return this.http
       .get<any>(
@@ -283,7 +305,9 @@ export class HttpPostsService implements IHttpPostsService {
 
   deletePost(postId: number, razon: string): Observable<any> {
     return this.http
-      .delete<any>(`${environment.api}/api/posts/deletePost?postId=${postId}&razon=${razon}`)
+      .delete<any>(
+        `${environment.api}/api/posts/deletePost?postId=${postId}&razon=${razon}`
+      )
       .pipe(
         map((response: any) => {
           if (response.status === 200) {

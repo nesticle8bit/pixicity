@@ -15,6 +15,7 @@ export abstract class IHttpPostsService {
     abstract getComentariosByUserId(userId: number): Observable<any>;
     abstract getUltimosComentarios(): Observable<any>;
     abstract addComentario(comentario: any): Observable<any>;
+    abstract updateComentario(comentario: any): Observable<any>;
     abstract getComentariosByPostId(postId: number): Observable<any>;
     abstract deletePost(postId: number, razon: string): Observable<any>;
     abstract changeStickyPost(postId: number): Observable<any>;

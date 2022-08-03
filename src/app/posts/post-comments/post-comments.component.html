@@ -58,7 +58,7 @@
                                     <fa-icon [icon]="['fas', 'reply']" class="reply"></fa-icon>
                                 </a>
 
-                                <a #tooltip="matTooltip" matTooltip="Actualizar Comentario"
+                                <a #tooltip="matTooltip" matTooltip="Actualizar Comentario" (click)="comentario.update = true"
                                     *ngIf="currentUser?.usuario?.userName === comentario?.usuario">
                                     <fa-icon [icon]="['fas', 'pencil-alt']" class="edit"></fa-icon>
                                 </a>
@@ -72,8 +72,18 @@
                         </div>
                     </div>
 
-                    <div id="comment-body-14" class="comment-content">
-                        {{comentario?.contenido}}
+                    <div id="comment-body-{{comentario.id}}" class="comment-content">
+                        <span *ngIf="!comentario.update">{{comentario?.contenido}}</span>
+                        
+                        <div class="Container" *ngIf="comentario.update" style="width: 98%">
+                            <textarea id="body_comm" class="onblur_effect" [(ngModel)]="comentario.contenido" title="Escribir un comentario..." placeholder="Escribir un comentario..."></textarea>
+
+                            <div class="buttons">
+                                <div class="float-end">
+                                    <input type="button" class="boton azul" value="Actualizar" (click)="updateComentario(comentario)" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
