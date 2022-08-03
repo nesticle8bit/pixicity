@@ -80,7 +80,7 @@
 
                             <div class="buttons">
                                 <div class="float-end">
-                                    <input type="button" class="boton azul" value="Actualizar" (click)="updateComentario(comentario)" />
+                                    <input type="button" class="boton azul" value="Actualizar" (click)="updateComentario(comentario)" [disabled]="!comentario.contenido" />
                                 </div>
                             </div>
                         </div>

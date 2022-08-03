@@ -90,7 +90,7 @@ export class PostCommentsComponent implements OnInit {
       contenido: respuesta.respuesta,
       usuario: undefined,
       avatar: undefined,
-      fechaComentario: new Date()
+      fechaComentario: new Date(),
     };
 
     this.postService.addComentario(comentario).subscribe((response: any) => {
@@ -104,8 +104,7 @@ export class PostCommentsComponent implements OnInit {
     });
   }
 
-  eliminarComentario(comentario: any): void {
-  }
+  eliminarComentario(comentario: any): void {}
 
   addEmoji(event: any): void {
     const comentario = this.formGroup.value.contenido;
@@ -118,7 +117,7 @@ export class PostCommentsComponent implements OnInit {
   emojiBottomSheet(): void {
     // displayEmojis = !displayEmojis
     const ref = this.bottomSheet.open(BottomSheetsEmojisComponent, {
-      closeOnNavigation: true
+      closeOnNavigation: true,
     });
 
     ref.afterDismissed().subscribe((value: any) => {
@@ -129,6 +128,14 @@ export class PostCommentsComponent implements OnInit {
   }
 
   updateComentario(comentario: any): void {
+    if (!comentario) {
+      return;
+    }
+
+    if (!comentario.contenido) {
+      return;
+    }
+
     this.postService.updateComentario(comentario).subscribe((response: any) => {
       if (response) {
         comentario.update = false;
