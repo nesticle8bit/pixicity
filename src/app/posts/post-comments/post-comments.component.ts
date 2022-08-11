@@ -136,7 +136,12 @@ export class PostCommentsComponent implements OnInit {
       return;
     }
 
-    this.postService.updateComentario(comentario).subscribe((response: any) => {
+    const updateComentario = {
+      id: comentario.id,
+      contenido: comentario.contenido
+    };
+
+    this.postService.updateComentario(updateComentario).subscribe((response: any) => {
       if (response) {
         comentario.update = false;
       }
