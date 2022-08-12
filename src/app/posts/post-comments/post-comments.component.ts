@@ -4,6 +4,8 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogDisplayHistoryCommentsComponent } from 'src/app/components/dialogs/dialog-display-history-comments/dialog-display-history-comments.component';
 
 @Component({
   selector: 'app-post-comments',
@@ -29,10 +31,11 @@ export class PostCommentsComponent implements OnInit {
   public displayEmojis: boolean = false;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private bottomSheet: MatBottomSheet,
+    private securityService: IHttpSecurityService,
     private postService: IHttpPostsService,
-    private securityService: IHttpSecurityService
+    private bottomSheet: MatBottomSheet,
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog
   ) {
     this.formGroup = this.formBuilder.group({
       contenido: ['', Validators.required],
@@ -138,13 +141,26 @@ export class PostCommentsComponent implements OnInit {
 
     const updateComentario = {
       id: comentario.id,
-      contenido: comentario.contenido
+      contenido: comentario.contenido,
     };
 
-    this.postService.updateComentario(updateComentario).subscribe((response: any) => {
-      if (response) {
-        comentario.update = false;
-      }
+    this.postService
+      .updateComentario(updateComentario)
+      .subscribe((response: any) => {
+        if (response) {
+          comentario.update = false;
+        }
+      });
+  }
+
+  displayHistory(comentario: any): void {
+    if (comentario.historial?.length < 1) {
+      return;
+    }
+
+    this.dialog.open(DialogDisplayHistoryCommentsComponent, {
+      width: '700px',
+      data: comentario.historial
     });
   }
 }

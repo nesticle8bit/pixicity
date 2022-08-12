@@ -42,7 +42,7 @@
                                 <b class="badge bg-primary mx-1 cursor--help" matTooltip="Original Poster"
                                     [matTooltipPosition]="'right'"
                                     *ngIf="comentario?.usuario === post?.usuario?.userName">OP</b>
-                                <span> {{comentario?.fechaComentario | timeAgo}}</span>
+                                <span (click)="displayHistory(comentario)" [ngClass]="{'cursor--pointer': comentario.historial?.length > 0}"> {{comentario?.fechaComentario | timeAgo}}</span>
                             </div>
 
                             <div class="numbersvotes">
@@ -80,6 +80,7 @@
 
                             <div class="buttons">
                                 <div class="float-end">
+                                    <input type="button" class="boton link me-2" value="Cancelar" (click)="comentario.update = false" />
                                     <input type="button" class="boton azul" value="Actualizar" (click)="updateComentario(comentario)" [disabled]="!comentario.contenido" />
                                 </div>
                             </div>

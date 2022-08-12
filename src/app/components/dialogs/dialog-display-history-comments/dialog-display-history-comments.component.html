@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>
+    Histórico de cambios
+</h2>
+
+<mat-dialog-content>
+    <div class="row">
+        <div class="col-12 col-sm-12">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Comentario</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let comentario of data">
+                            <td>{{comentario.fecha | date:'short'}}</td>
+                            <td>{{comentario.contenido}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button type="button" mat-button mat-dialog-close>
+        Cerrar
+    </button>
+</mat-dialog-actions>

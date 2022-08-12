@@ -1821,6 +1821,15 @@ span.positivo {
     background: #46acff;
 }
 
+.boton.link {
+    background: none;
+    color: #686868;
+
+    &:hover {
+        color: #8a8a8a;
+    }
+}
+
 .miComentario {
     overflow: hidden;
     background: #FFFCE3;
