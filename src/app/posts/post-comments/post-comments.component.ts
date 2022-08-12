@@ -130,6 +130,7 @@ export class PostCommentsComponent implements OnInit {
     });
   }
 
+  public lastComment: string = '';
   updateComentario(comentario: any): void {
     if (!comentario) {
       return;
@@ -149,6 +150,17 @@ export class PostCommentsComponent implements OnInit {
       .subscribe((response: any) => {
         if (response) {
           comentario.update = false;
+
+          if (!comentario.historial) {
+            comentario.historial = [];
+          }
+
+          comentario.historial.unshift({
+            fecha: new Date(),
+            contenido: this.lastComment,
+          });
+
+          this.lastComment = '';
         }
       });
   }
@@ -160,7 +172,7 @@ export class PostCommentsComponent implements OnInit {
 
     this.dialog.open(DialogDisplayHistoryCommentsComponent, {
       width: '700px',
-      data: comentario.historial
+      data: comentario.historial,
     });
   }
 }

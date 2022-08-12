@@ -58,7 +58,7 @@
                                     <fa-icon [icon]="['fas', 'reply']" class="reply"></fa-icon>
                                 </a>
 
-                                <a #tooltip="matTooltip" matTooltip="Actualizar Comentario" (click)="comentario.update = true"
+                                <a #tooltip="matTooltip" matTooltip="Actualizar Comentario" (click)="comentario.update = true; lastComment = comentario.contenido"
                                     *ngIf="currentUser?.usuario?.userName === comentario?.usuario">
                                     <fa-icon [icon]="['fas', 'pencil-alt']" class="edit"></fa-icon>
                                 </a>
@@ -80,7 +80,7 @@
 
                             <div class="buttons">
                                 <div class="float-end">
-                                    <input type="button" class="boton link me-2" value="Cancelar" (click)="comentario.update = false" />
+                                    <input type="button" class="boton link me-2" value="Cancelar" (click)="comentario.update = false; lastComment = ''" />
                                     <input type="button" class="boton azul" value="Actualizar" (click)="updateComentario(comentario)" [disabled]="!comentario.contenido" />
                                 </div>
                             </div>

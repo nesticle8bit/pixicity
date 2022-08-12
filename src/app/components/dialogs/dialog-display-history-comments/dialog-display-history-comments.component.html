@@ -17,7 +17,7 @@
                     <tbody>
                         <tr *ngFor="let comentario of data">
                             <td>{{comentario.fecha | date:'short'}}</td>
-                            <td>{{comentario.contenido}}</td>
+                            <td class="text-justify">{{comentario.contenido}}</td>
                         </tr>
                     </tbody>
                 </table>
