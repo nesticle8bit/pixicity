@@ -6,6 +6,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDisplayHistoryCommentsComponent } from 'src/app/components/dialogs/dialog-display-history-comments/dialog-display-history-comments.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-post-comments',
@@ -107,7 +108,33 @@ export class PostCommentsComponent implements OnInit {
     });
   }
 
-  eliminarComentario(comentario: any): void {}
+  eliminarComentario(comentarioId: any, i: number): void {
+    Swal.fire({
+      title: 'Eliminar',
+      text: '¿Estás seguro de eliminar este comentario? Recuerda que no se podrá recuperar',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.postService
+          .deleteComentario(comentarioId)
+          .subscribe((response: any) => {
+            if (response) {
+              Swal.fire({
+                title: 'Eliminado',
+                text: `El comentario ha sido eliminado correctamente`,
+                icon: 'success',
+                timer: 3000,
+              });
+
+              this.comentarios.splice(i, 1);
+            }
+          });
+      }
+    });
+  }
 
   addEmoji(event: any): void {
     const comentario = this.formGroup.value.contenido;

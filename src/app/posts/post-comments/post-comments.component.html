@@ -18,15 +18,15 @@
         <img src="/assets/images/min-carga.gif" id="com_gif" style="display: none;">
     </div>
 
-    <div id="comentarios" style="opacity: 1;" *ngFor="let comentario of comentarios">
+    <div id="comentarios" style="opacity: 1;" *ngFor="let comentario of comentarios; let i = index">
         <div id="respnuevas">
             <div class="comentario-post clearbeta"
                 [ngClass]="{'mi-comentario': comentario?.usuario === currentUser?.usuario?.userName, 'op': comentario?.usuario === post?.usuario?.userName}">
                 <div class="avatar-box" style="z-index: 99;">
                     <a [routerLink]="['/perfil/' + comentario?.userName]">
                         <app-user-avatar [class]="'avatar-48 lazy'" [avatar]="comentario?.avatar"
-                            [userName]="comentario?.usuario" [width]="48"
-                            matTooltip="Avatar de {{comentario?.usuario}}" [matTooltipPosition]="'left'">
+                            [userName]="comentario?.usuario" [width]="48" matTooltip="Avatar de {{comentario?.usuario}}"
+                            [matTooltipPosition]="'left'">
                         </app-user-avatar>
                     </a>
                 </div>
@@ -42,7 +42,9 @@
                                 <b class="badge bg-primary mx-1 cursor--help" matTooltip="Original Poster"
                                     [matTooltipPosition]="'right'"
                                     *ngIf="comentario?.usuario === post?.usuario?.userName">OP</b>
-                                <span (click)="displayHistory(comentario)" [ngClass]="{'cursor--pointer': comentario.historial?.length > 0}"> {{comentario?.fechaComentario | timeAgo}}</span>
+                                <span (click)="displayHistory(comentario)"
+                                    [ngClass]="{'cursor--pointer': comentario.historial?.length > 0}">
+                                    {{comentario?.fechaComentario | timeAgo}}</span>
                             </div>
 
                             <div class="numbersvotes">
@@ -58,13 +60,14 @@
                                     <fa-icon [icon]="['fas', 'reply']" class="reply"></fa-icon>
                                 </a>
 
-                                <a #tooltip="matTooltip" matTooltip="Actualizar Comentario" (click)="comentario.update = true; lastComment = comentario.contenido"
+                                <a #tooltip="matTooltip" matTooltip="Actualizar Comentario"
+                                    (click)="comentario.update = true; lastComment = comentario.contenido"
                                     *ngIf="currentUser?.usuario?.userName === comentario?.usuario">
                                     <fa-icon [icon]="['fas', 'pencil-alt']" class="edit"></fa-icon>
                                 </a>
 
                                 <a #tooltip="matTooltip" matTooltip="Eliminar Comentario"
-                                    (click)="eliminarComentario(comentario)"
+                                    (click)="eliminarComentario(comentario.id, i)"
                                     *ngIf="currentUser?.usuario?.userName === comentario?.usuario">
                                     <fa-icon [icon]="['fas', 'times']" class="times"></fa-icon>
                                 </a>
@@ -74,14 +77,17 @@
 
                     <div id="comment-body-{{comentario.id}}" class="comment-content">
                         <span *ngIf="!comentario.update">{{comentario?.contenido}}</span>
-                        
+
                         <div class="Container" *ngIf="comentario.update" style="width: 98%">
-                            <textarea id="body_comm" class="onblur_effect" [(ngModel)]="comentario.contenido" title="Escribir un comentario..." placeholder="Escribir un comentario..."></textarea>
+                            <textarea id="body_comm" class="onblur_effect" [(ngModel)]="comentario.contenido"
+                                title="Escribir un comentario..." placeholder="Escribir un comentario..."></textarea>
 
                             <div class="buttons">
                                 <div class="float-end">
-                                    <input type="button" class="boton link me-2" value="Cancelar" (click)="comentario.update = false; lastComment = ''" />
-                                    <input type="button" class="boton azul" value="Actualizar" (click)="updateComentario(comentario)" [disabled]="!comentario.contenido" />
+                                    <input type="button" class="boton link me-2" value="Cancelar"
+                                        (click)="comentario.update = false; lastComment = ''" />
+                                    <input type="button" class="boton azul" value="Actualizar"
+                                        (click)="updateComentario(comentario)" [disabled]="!comentario.contenido" />
                                 </div>
                             </div>
                         </div>
@@ -99,11 +105,13 @@
                     </div>
 
                     <div class="Container">
-                        <textarea class="onblur_effect" [(ngModel)]="comentario.respuesta" title="Escribir una respuesta..." placeholder="Escribir una respuesta..."></textarea>
+                        <textarea class="onblur_effect" [(ngModel)]="comentario.respuesta"
+                            title="Escribir una respuesta..." placeholder="Escribir una respuesta..."></textarea>
 
                         <div class="buttons">
                             <div class="float-end">
-                                <input type="button" class="boton azul" value="Responder" (click)="respuesta(comentario)" />
+                                <input type="button" class="boton azul" value="Responder"
+                                    (click)="respuesta(comentario)" />
                             </div>
                         </div>
                     </div>
@@ -128,7 +136,7 @@
                                         <a [routerLink]="['/perfil/' + respuesta?.usuario]">
                                             {{respuesta?.usuario}}
                                         </a>
-                                        
+
                                         <b class="badge bg-primary mx-1 cursor--help" matTooltip="Original Poster"
                                             [matTooltipPosition]="'right'"
                                             *ngIf="respuesta?.usuario === post?.usuario?.userName">OP</b>
