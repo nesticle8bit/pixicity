@@ -89,6 +89,27 @@
                 </div>
             </div>
 
+            <div class="respuestas_{{comentario?.id}}" *ngIf="comentario?.responder">
+                <div id="respuestas_comentario">
+                    <div class="answerInfo">
+                        <app-user-avatar [class]="'avatar-48 lazy'" [avatar]="comentario?.avatar"
+                            [userName]="currentUser?.usuario?.userName"
+                            matTooltip="Avatar de {{currentUser?.usuario?.userName}}" [matTooltipPosition]="'left'">
+                        </app-user-avatar>
+                    </div>
+
+                    <div class="Container">
+                        <textarea class="onblur_effect" [(ngModel)]="comentario.respuesta" title="Escribir una respuesta..." placeholder="Escribir una respuesta..."></textarea>
+
+                        <div class="buttons">
+                            <div class="float-end">
+                                <input type="button" class="boton azul" value="Responder" (click)="respuesta(comentario)" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div id="respuestas">
                 <section *ngFor="let respuesta of comentario?.respuestas; let i = index">
                     <span id="citar_comentario_{{respuesta.id}}" style="display:none">{{respuesta?.contenido}}</span>
@@ -128,27 +149,6 @@
                         </div>
                     </div>
                 </section>
-            </div>
-
-            <div class="respuestas_{{comentario?.id}}" *ngIf="comentario?.responder">
-                <div id="respuestas_comentario">
-                    <div class="answerInfo">
-                        <app-user-avatar [class]="'avatar-48 lazy'" [avatar]="comentario?.avatar"
-                            [userName]="currentUser?.usuario?.userName"
-                            matTooltip="Avatar de {{currentUser?.usuario?.userName}}" [matTooltipPosition]="'left'">
-                        </app-user-avatar>
-                    </div>
-
-                    <div class="Container">
-                        <textarea class="onblur_effect" [(ngModel)]="comentario.respuesta" title="Escribir una respuesta..." placeholder="Escribir una respuesta..."></textarea>
-
-                        <div class="buttons">
-                            <div class="float-end">
-                                <input type="button" class="boton azul" value="Responder" (click)="respuesta(comentario)" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
