@@ -1,4 +1,4 @@
 <a [routerLink]="['/posts/' + categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
     <img src="/assets/images/categorias/{{categoria.icono}}" title="{{categoria.nombre}}" alt="{{categoria.nombre}}" />
-    {{post.titulo | truncate:[70]}}
+    {{post.titulo | truncate:[post.truncate]}}
 </a>

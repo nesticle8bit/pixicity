@@ -10,6 +10,7 @@ export class PostUrlLinkComponent implements OnInit {
     id: 0,
     url: '',
     titulo: '',
+    truncate: 70
   };
 
   @Input() categoria = {

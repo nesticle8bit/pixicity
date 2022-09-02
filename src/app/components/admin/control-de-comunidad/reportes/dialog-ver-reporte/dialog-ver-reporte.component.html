@@ -21,7 +21,7 @@
 
         <div class="col-12 col-sm-12 col-md-4">
             <label>Post</label> <br>
-            <app-post-url-link [post]="{ id: data.post.id, url: data.post.url, titulo: data.post.titulo}"
+            <app-post-url-link [post]="{ id: data.post.id, url: data.post.url, titulo: data.post.titulo, truncate: 70}"
                 [categoria]="{ icono: data.post.categoria.icono, nombre: data.post.categoria.nombre, seo: data.post.categoria.seo}">
             </app-post-url-link>
         </div>

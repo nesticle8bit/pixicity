@@ -193,7 +193,6 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
           title: 'Actualizado',
           text: 'Se ha actualizado recientemente tu post 👋🏼, ahora lo podrás visualizar con los cambios realizados',
           icon: 'success',
-          timer: 3000,
         }).then(() => {
           this.router.navigate([
             `/posts/${categoria.nombre.toLowerCase()}/${post.id}/${

@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-post-related-posts',

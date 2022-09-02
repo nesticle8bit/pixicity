@@ -8,24 +8,18 @@
     🎯 <strong>No se han encontrado posts relacionados</strong>
 </main>
 
-<main *ngIf="post && relatedPosts.length > 0">
-    <article *ngFor="let post of relatedPosts" class="mb-3 cursor--pointer"
-        [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
-        <mat-card>
-            <mat-card-subtitle>{{post.titulo}}</mat-card-subtitle>
-            <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
-                alt="{{post.categoria.nombre}}" />
-            {{post.categoria.nombre}}
-            <br class="mb-3">
-            <mat-divider inset></mat-divider>
-            <br>
-            <small>
-                {{post.fechaRegistro | date:'short'}}
-            </small>
+<main class="esees" *ngIf="post && relatedPosts.length > 0">
+    <article class="list-posts--zebra" *ngFor="let post of relatedPosts; let i = index">
+        <strong class="float-start">{{i + 1}}</strong>
 
-            <mat-card-content>
+        <small>
+            <app-post-url-link [post]="{ id: post.id, url: post.url, titulo: post.titulo, truncate: 35}"
+                [categoria]="{ icono: post.categoria.icono, nombre: post.categoria.nombre, seo: post.categoria.seo}">
+            </app-post-url-link>
+        </small>
 
-            </mat-card-content>
-        </mat-card>
+        <span class="float-end value">
+            {{post.puntos}}
+        </span>
     </article>
 </main>
