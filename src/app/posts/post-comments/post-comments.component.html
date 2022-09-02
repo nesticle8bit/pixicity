@@ -110,8 +110,11 @@
 
                         <div class="buttons">
                             <div class="float-end">
-                                <input type="button" class="boton azul" value="Responder"
-                                    (click)="respuesta(comentario)" />
+                                <button type="button" class="me-2 boton gris" (click)="comentario.responder = false;">
+                                    Cancelar
+                                </button>
+                        
+                                <input type="button" class="boton azul" value="Responder" (click)="respuesta(comentario)" />
                             </div>
                         </div>
                     </div>

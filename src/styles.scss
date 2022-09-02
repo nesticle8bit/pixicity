@@ -2640,3 +2640,9 @@ i.icon.plus { background-position: -53px -220px }
 .bg-white {
     background: #fff;
 }
+
+.align {
+    &-middle {
+        vertical-align: middle;
+    }
+}
