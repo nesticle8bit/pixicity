@@ -177,6 +177,8 @@ import { DialogRecomendarPostComponent } from './components/dialogs/dialog-recom
 import { DialogVerReporteComponent } from './components/admin/control-de-comunidad/reportes/dialog-ver-reporte/dialog-ver-reporte.component';
 import { PostUrlLinkComponent } from './components/addons/post-url-link/post-url-link.component';
 import { DialogDisplayHistoryCommentsComponent } from './components/dialogs/dialog-display-history-comments/dialog-display-history-comments.component';
+import { PrivacidadDatosComponent } from './pages/privacidad-datos/privacidad-datos.component';
+import { ApiDocumentationComponent } from './pages/api-documentation/api-documentation.component';
 
 @NgModule({
   declarations: [
@@ -286,6 +288,8 @@ import { DialogDisplayHistoryCommentsComponent } from './components/dialogs/dial
     DialogVerReporteComponent,
     PostUrlLinkComponent,
     DialogDisplayHistoryCommentsComponent,
+    PrivacidadDatosComponent,
+    ApiDocumentationComponent,
   ],
   imports: [
     BrowserModule,

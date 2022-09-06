@@ -14,6 +14,7 @@ import { DashboardSesionesComponent } from './components/admin/usuarios/sesiones
 import { DashboardUsuariosComponent } from './components/admin/usuarios/usuarios/dashboard-usuarios/dashboard-usuarios.component';
 import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
 import { AccountComponent } from './pages/account/account.component';
+import { ApiDocumentationComponent } from './pages/api-documentation/api-documentation.component';
 import { BorradoresComponent } from './pages/borradores/borradores.component';
 import { DMCAComponent } from './pages/dmca/dmca.component';
 import { EnVivoComponent } from './pages/en-vivo/en-vivo.component';
@@ -26,6 +27,7 @@ import { PageContactoComponent } from './pages/page-contacto/page-contacto.compo
 import { PageProtocoloComponent } from './pages/page-protocolo/page-protocolo.component';
 import { PageTermsConditionsComponent } from './pages/page-terms-conditions/page-terms-conditions.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
+import { PrivacidadDatosComponent } from './pages/privacidad-datos/privacidad-datos.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { SearchComponent } from './pages/search/search.component';
 import { TopsComponent } from './pages/tops/tops.component';
@@ -71,6 +73,8 @@ const routes: Routes = [
   { path: 'terminos-condiciones', component: PageTermsConditionsComponent },
   { path: 'contacto', component: PageContactoComponent },
   { path: 'dmca', component: DMCAComponent },
+  { path: 'privacidad-datos', component: PrivacidadDatosComponent },
+  { path: 'api', component: ApiDocumentationComponent },
 
   {
     path: 'administracion',
