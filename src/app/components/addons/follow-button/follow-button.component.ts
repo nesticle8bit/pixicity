@@ -1,5 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 
 @Component({
   selector: 'app-follow-button',
@@ -27,11 +34,11 @@ export class FollowButtonComponent implements OnInit {
 
   public isFollowing: boolean = false;
   public currentUser: any;
-  constructor(private securityService: IHttpSecurityService) {}
-
-  ngOnInit(): void {
+  constructor(private securityService: IHttpSecurityService) {
     this.currentUser = this.securityService.getCurrentUser();
   }
+
+  ngOnInit(): void {}
 
   isFollowingTheUser(userName: string): void {
     this.securityService

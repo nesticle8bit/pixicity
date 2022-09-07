@@ -1,8 +1,8 @@
+import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
-import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
   selector: 'app-perfil',
@@ -12,6 +12,7 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
 export class PerfilComponent implements OnInit {
   public display: DisplayComponentModel = { mainMenu: true, footer: true, searchFooter: true, submenu: false, background: ''};
   public currentUser: any = {};
+  public loggedUser: any = {};
   public currentSelection = 'shouts';
 
   constructor(
@@ -22,6 +23,8 @@ export class PerfilComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe((values: any) => {
       this.getUserByUserName(values.get('userName'));
     });
+
+    this.loggedUser = this.securityService.getCurrentUser();
   }
 
   ngOnInit(): void {

@@ -24,7 +24,8 @@
                                         </h1>
 
                                         <div class="pani" [routerLink]="['/perfil/' + currentUser?.userName]">
-                                            @{{currentUser?.userName}}</div>
+                                            @{{currentUser?.userName}}
+                                        </div>
                                     </div>
 
                                     <div class="col-12 col-sm-4">
@@ -32,6 +33,14 @@
                                             <app-genre-icon class="mx-2" [genre]="currentUser?.genero"></app-genre-icon>
                                             <addon-country-flag [iso2]="currentUser?.pais?.isO2"
                                                 [title]="currentUser?.pais?.nombre"></addon-country-flag>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2" *ngIf="currentUser.mensajePersonal">
+                                    <div class="col-12">
+                                        <div class="alert alert-secondary">
+                                            {{currentUser.mensajePersonal}}
                                         </div>
                                     </div>
                                 </div>
@@ -73,9 +82,8 @@
                                 </div>
 
                                 <div class="row mt-2">
-                                    <div class="col-12 col-sm-2">
-                                        <app-follow-button [userName]="currentUser.userName" [icon]="true">
-                                        </app-follow-button>
+                                    <div class="col-12 col-sm-2" *ngIf="loggedUser?.usuario?.userName !== currentUser.userName">
+                                        <app-follow-button [userName]="currentUser.userName" [icon]="true"></app-follow-button>
                                     </div>
 
                                     <div class="col-12 col-sm-3" *ngIf="currentUser?.rango">
