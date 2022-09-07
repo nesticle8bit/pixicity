@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Validators } from 'ngx-editor';
 
 @Component({
   selector: 'app-profile-shouts',
@@ -6,8 +8,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./profile-shouts.component.scss']
 })
 export class ProfileShoutsComponent implements OnInit {
+  public formGroup: FormGroup;
 
-  constructor() { }
+  constructor(private formBuilder: FormBuilder) {
+    this.formGroup = this.formBuilder.group({
+      mensaje: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
   }

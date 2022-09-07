@@ -179,6 +179,7 @@ import { PostUrlLinkComponent } from './components/addons/post-url-link/post-url
 import { DialogDisplayHistoryCommentsComponent } from './components/dialogs/dialog-display-history-comments/dialog-display-history-comments.component';
 import { PrivacidadDatosComponent } from './pages/privacidad-datos/privacidad-datos.component';
 import { ApiDocumentationComponent } from './pages/api-documentation/api-documentation.component';
+import { ProfileShoutsWallComponent } from './components/profile/profile-shouts-wall/profile-shouts-wall.component';
 
 @NgModule({
   declarations: [
@@ -290,6 +291,7 @@ import { ApiDocumentationComponent } from './pages/api-documentation/api-documen
     DialogDisplayHistoryCommentsComponent,
     PrivacidadDatosComponent,
     ApiDocumentationComponent,
+    ProfileShoutsWallComponent,
   ],
   imports: [
     BrowserModule,

@@ -33,6 +33,9 @@
                                             <app-genre-icon class="mx-2" [genre]="currentUser?.genero"></app-genre-icon>
                                             <addon-country-flag [iso2]="currentUser?.pais?.isO2"
                                                 [title]="currentUser?.pais?.nombre"></addon-country-flag>
+                                            <!-- <i class="icon date"></i> -->
+                                            
+                                            <img class="mx-2" src="/assets/images/icons/date.png" matTooltip="Se unió a Pixicity! el {{currentUser?.fechaRegistro | date:'dd'}} de {{currentUser?.fechaRegistro | date:'MMMM'}} del {{currentUser?.fechaRegistro | date: 'YYYY'}}"  />
                                         </div>
                                     </div>
                                 </div>
@@ -71,14 +74,14 @@
                                         </p>
                                     </div>
 
-                                    <div class="col-12 col-sm-4">
+                                    <!-- <div class="col-12 col-sm-4">
                                         <p>
                                             <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                                             Se unió a <b>Pixicity!</b> <b id="espp"> el {{currentUser?.fechaRegistro |
                                                 date:'dd'}} de {{currentUser?.fechaRegistro | date:'MMMM'}} del
                                                 {{currentUser?.fechaRegistro | date: 'YYYY'}}</b>
                                         </p>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="row mt-2">

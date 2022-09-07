@@ -927,7 +927,7 @@ a.nick span {
 .btn-pixicity {
     text-decoration: none!important;
     display: inline-block;
-    padding: 5px 10px;
+    padding: 3px 10px;
     border: 1px solid;
     border-radius: 4px;
     font-family: Helvetica Neue,Helvetica,Arial;
@@ -937,9 +937,10 @@ a.nick span {
     font-weight: 700;
 }
 
-.btn-pixicity.btn-gris{
+.btn-pixicity.btn-gris {
     color:#111;
     border-color:#ccc #c6c6c6 #aaa;
+    padding-top: 8px;
     background:-moz-linear-gradient(top,#fcfcfc 0,#eee 100%);
     background:-webkit-gradient(linear,0% 0,0% 100%,from(#fcfcfc),to(#eee));
     text-shadow:0 1px 0 #EEE;
