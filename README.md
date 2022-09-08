@@ -67,7 +67,7 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
 
   - Comentarios
     - [x] Comentar los posts
-    - [ ] Implementar las respuestas a los comentarios
+    - [x] Implementar las respuestas a los comentarios
     - [ ] Implementar la votación de 👍🏼 y 👎🏼 en los comentarios de los posts
 
   - Login
