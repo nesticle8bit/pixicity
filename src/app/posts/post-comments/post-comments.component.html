@@ -76,7 +76,9 @@
                     </div>
 
                     <div id="comment-body-{{comentario.id}}" class="comment-content">
-                        <span *ngIf="!comentario.update">{{comentario?.contenido}}</span>
+                        <span *ngIf="!comentario.update">
+                            {{comentario?.contenido}}
+                        </span>
 
                         <div class="Container" *ngIf="comentario.update" style="width: 98%">
                             <textarea id="body_comm" class="onblur_effect" [(ngModel)]="comentario.contenido"
@@ -86,6 +88,7 @@
                                 <div class="float-end">
                                     <input type="button" class="boton link me-2" value="Cancelar"
                                         (click)="comentario.update = false; lastComment = ''" />
+
                                     <input type="button" class="boton azul" value="Actualizar"
                                         (click)="updateComentario(comentario)" [disabled]="!comentario.contenido" />
                                 </div>
@@ -113,37 +116,38 @@
                                 <button type="button" class="me-2 boton gris" (click)="comentario.responder = false;">
                                     Cancelar
                                 </button>
-                        
-                                <input type="button" class="boton azul" value="Responder" (click)="respuesta(comentario)" />
+
+                                <input type="button" class="boton azul" value="Responder"
+                                    (click)="respuesta(comentario)" />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="respuestas">
-                <section *ngFor="let respuesta of comentario?.respuestas; let i = index">
-                    <span id="citar_comentario_{{respuesta.id}}" style="display:none">{{respuesta?.contenido}}</span>
-                    <div class="comentario-post clearbeta">
-                        <div class="avatar-box" style="z-index: 98;">
+            <section id="respuestas">
+                <section *ngFor="let respuesta of comentario?.respuestas; let respuestaIndex = index">
+                    <article class="comentario-post clearbeta">
+                        <aside class="avatar-box" style="z-index: 98;">
                             <app-user-avatar [class]="'avatar-48 lazy'" [avatar]="comentario?.avatar"
                                 [userName]="respuesta?.usuario" [width]="32"
                                 matTooltip="Avatar de {{respuesta?.usuario}}" [matTooltipPosition]="'left'">
                             </app-user-avatar>
-                        </div>
+                        </aside>
 
                         <div class="comment-box" id="pp_{{respuesta?.id}}">
                             <div class="comment-info clearbeta">
-                                <div class="floatL">
+                                <div class="float-start">
                                     <div class="floatL">
                                         <a [routerLink]="['/perfil/' + respuesta?.usuario]">
                                             {{respuesta?.usuario}}
                                         </a>
-
-                                        <b class="badge bg-primary mx-1 cursor--help" matTooltip="Original Poster"
-                                            [matTooltipPosition]="'right'"
+                                    
+                                        <b class="badge bg-primary mx-1 cursor--help" matTooltip="Original Poster" [matTooltipPosition]="'right'"
                                             *ngIf="respuesta?.usuario === post?.usuario?.userName">OP</b>
-                                        <span> {{respuesta?.fechaComentario | timeAgo}}</span>
+                                            
+                                        <span (click)="displayHistory(respuesta)" [ngClass]="{'cursor--pointer': respuesta.historial?.length > 0}">
+                                            {{respuesta?.fechaComentario | timeAgo}}</span>
                                     </div>
 
                                     <div class="numbersvotes">
@@ -152,15 +156,54 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="float-end answerOptions">
+                                    <div class="botonear">
+                                        <!-- <a #tooltip="matTooltip" matTooltip="Responder" (click)="comentario.responder = true">
+                                            <fa-icon [icon]="['fas', 'reply']" class="reply"></fa-icon>
+                                        </a> -->
+
+                                        <a #tooltip="matTooltip" matTooltip="Actualizar Comentario"
+                                            (click)="respuesta.update = true; lastComment = respuesta.contenido"
+                                            *ngIf="currentUser?.usuario?.userName === respuesta?.usuario">
+                                            <fa-icon [icon]="['fas', 'pencil-alt']" class="edit"></fa-icon>
+                                        </a>
+
+                                        <a #tooltip="matTooltip" matTooltip="Eliminar Comentario"
+                                            (click)="eliminarRespuesta(respuesta.id, i, respuestaIndex)"
+                                            *ngIf="currentUser?.usuario?.userName === respuesta?.usuario">
+                                            <fa-icon [icon]="['fas', 'times']" class="times"></fa-icon>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
 
                             <div id="comment-body-{{respuesta?.id}}" class="comment-content">
-                                {{respuesta?.contenido}}
+                                <span *ngIf="!respuesta.update">
+                                    {{respuesta?.contenido}}
+                                </span>
+
+                                <div class="Container" *ngIf="respuesta.update" style="width: 98%">
+                                    <textarea id="body_comm" class="onblur_effect" [(ngModel)]="respuesta.contenido"
+                                        title="Escribir un comentario..."
+                                        placeholder="Escribir un comentario..."></textarea>
+
+                                    <div class="buttons">
+                                        <div class="float-end">
+                                            <input type="button" class="boton link me-2" value="Cancelar"
+                                                (click)="respuesta.update = false; lastComment = ''" />
+
+                                            <input type="button" class="boton azul" value="Actualizar"
+                                                (click)="updateComentario(respuesta)"
+                                                [disabled]="!respuesta.contenido" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </article>
                 </section>
-            </div>
+            </section>
         </div>
 
         <div id="nuevos"></div>

@@ -54,6 +54,7 @@ export class PostCommentsComponent implements OnInit {
 
     const comentario = Object.assign({}, this.formGroup.value);
     comentario.postId = this.post?.id;
+    comentario.respuestas = [];
 
     this.postService.addComentario(comentario).subscribe((response: any) => {
       if (response) {
@@ -130,6 +131,38 @@ export class PostCommentsComponent implements OnInit {
               });
 
               this.comentarios.splice(i, 1);
+            }
+          });
+      }
+    });
+  }
+
+  eliminarRespuesta(respuestaId: any, comentario: number, i: number): void {
+    Swal.fire({
+      title: 'Eliminar',
+      text: '¿Estás seguro de eliminar esta respuesta? Recuerda que no se podrá recuperar',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.postService
+          .deleteComentario(respuestaId)
+          .subscribe((response: any) => {
+            if (response) {
+              Swal.fire({
+                title: 'Eliminado',
+                text: `La respuesta ha sido eliminado correctamente`,
+                icon: 'success',
+                timer: 3000,
+              });
+
+              const comment = this.comentarios[comentario];
+
+              if (comment && comment?.respuestas) {
+                this.comentarios[comentario].respuestas.splice(i, 1);
+              }
             }
           });
       }
