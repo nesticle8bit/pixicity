@@ -1,7 +1,7 @@
 import { DialogChangeRangosComponent } from 'src/app/components/dialogs/dialog-change-rangos/dialog-change-rangos.component';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
   selector: 'app-change-rango',

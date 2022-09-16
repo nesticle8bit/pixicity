@@ -89,16 +89,16 @@
                                         <app-follow-button [userName]="currentUser.userName" [icon]="true"></app-follow-button>
                                     </div>
 
-                                    <div class="col-12 col-sm-3" *ngIf="currentUser?.rango">
-                                        <app-change-rango
-                                            [data]="{ id: currentUser?.rango?.id, usuarioId: currentUser?.id, icono: currentUser.rango?.icono, color: currentUser.rango?.color, nombre: currentUser.rango?.nombre }">
-                                        </app-change-rango>
-                                    </div>
-
                                     <div class="col-12 col-sm-3" *ngIf="currentUser?.id">
                                         <app-banear-usuario
                                             [data]="{ usuarioId: currentUser?.id, nombre: currentUser.rango?.nombre}">
                                         </app-banear-usuario>
+                                    </div>
+
+                                    <div class="col-12 col-sm-3" *ngIf="currentUser?.rango">
+                                        <app-change-rango
+                                            [data]="{ id: currentUser?.rango?.id, usuarioId: currentUser?.id, icono: currentUser.rango?.icono, color: currentUser.rango?.color, nombre: currentUser.rango?.nombre }">
+                                        </app-change-rango>
                                     </div>
                                 </div>
                             </div>
