@@ -29,6 +29,7 @@
     "@ng-select/ng-select": "^9.0.2",
     "animate.css": "^4.1.1",
     "bootstrap": "^5.2.1",
+    "jwt-decode": "^3.1.2",
     "ng-recaptcha": "^10.0.0",
     "ngx-editor": "^15.0.0",
     "ngx-image-cropper": "^6.2.2",

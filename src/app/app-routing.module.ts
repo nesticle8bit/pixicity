@@ -37,6 +37,9 @@ import { PostPrivadoComponent } from './posts/post-privado/post-privado.componen
 import { PostsCreateComponent } from './posts/posts-create/posts-create.component';
 import { PostsViewComponent } from './posts/posts-view/posts-view.component';
 import { SectionHomeComponent } from './sections/section-home/section-home.component';
+import { AdministradorAuthorization } from './shared/guards/adminAuthorization.guard';
+import { AuthGuard } from './shared/guards/auth.guard';
+import { ModeradorAuthorization } from './shared/guards/moderadorAuthorization.guard';
 
 const routes: Routes = [
   { path: '', component: SectionHomeComponent },
@@ -47,51 +50,84 @@ const routes: Routes = [
   { path: 'buscar/:tipo/:query/:categoria', component: SearchComponent },
 
   { path: 'login', component: LoginComponent },
-  { path: 'cuenta', component: AccountComponent },
+  { path: 'cuenta', component: AccountComponent, canActivate: [AuthGuard] },
   { path: 'en-vivo', component: EnVivoComponent },
   { path: 'perfil/:userName', component: PerfilComponent },
 
   { path: 'posts/:categoria', component: SectionHomeComponent },
   { path: 'posts/:categoria/:id/:nombre-post', component: PostsViewComponent },
   { path: 'posts/404/:nombre-post', component: PostNotFoundComponent },
-  { path: 'posts/privado/:nombre-post', component: PostPrivadoComponent },
-  { path: 'crear/post', component: PostsCreateComponent },
-  { path: 'posts/actualizar/:id', component: PostsCreateComponent },
+  {
+    path: 'posts/privado/:nombre-post',
+    component: PostPrivadoComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'crear/post',
+    component: PostsCreateComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'posts/actualizar/:id',
+    component: PostsCreateComponent,
+    canActivate: [AuthGuard],
+  },
 
-  { path: 'mod-history', component: ModHistoryComponent },
-  { path: 'mensajes', component: MensajesComponent },
-  { path: 'mod-history', component: ModHistoryComponent },
-  { path: 'monitor', component: MonitorComponent },
+  {
+    path: 'mod-history',
+    component: ModHistoryComponent,
+    canActivate: [AuthGuard],
+  },
+  { path: 'mensajes', component: MensajesComponent, canActivate: [AuthGuard] },
+  {
+    path: 'mod-history',
+    component: ModHistoryComponent,
+    canActivate: [AuthGuard],
+  },
+  { path: 'monitor', component: MonitorComponent, canActivate: [AuthGuard] },
   { path: 'tops', component: TopsComponent },
-  { path: 'usuarios', component: UsuariosComponent },
-  { path: 'favoritos', component: FavoritosComponent },
-  { path: 'borradores', component: BorradoresComponent },
+  { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
+  {
+    path: 'favoritos',
+    component: FavoritosComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'borradores',
+    component: BorradoresComponent,
+    canActivate: [AuthGuard],
+  },
 
-  { path: 'mi', component: MiHomeComponent },
+  { path: 'mi', component: MiHomeComponent, canActivate: [AuthGuard] },
 
   { path: 'protocolo', component: PageProtocoloComponent },
   { path: 'terminos-condiciones', component: PageTermsConditionsComponent },
   { path: 'contacto', component: PageContactoComponent },
   { path: 'dmca', component: DMCAComponent },
   { path: 'privacidad-datos', component: PrivacidadDatosComponent },
-  { path: 'api', component: ApiDocumentationComponent },
+  {
+    path: 'api',
+    component: ApiDocumentationComponent,
+    canActivate: [AuthGuard],
+  },
 
   {
     path: 'administracion',
     component: DashboardComponent,
     children: [
-      { path: 'dashboard', component: DashboardAdminComponent },
-      { path: 'configuracion', component: DashboardConfigurationComponent },
-      { path: 'posts', component: DashboardPostsComponent },
-      { path: 'afiliados', component: DashboardAfiliadosComponent },
-      { path: 'publicidad', component: DashboardAdsComponent },
-      { path: 'comentarios', component: DashboardCommentsComponent },
-      { path: 'paises', component: DashboardPaisesComponent },
-      { path: 'sesiones', component: DashboardSesionesComponent },
-      { path: 'denuncias', component: DashboardReportesComponent },
-      { path: 'usuarios', component: DashboardUsuariosComponent },
-      { path: 'rango-usuarios', component: DashboardRangosComponent },
+      { path: 'dashboard', component: DashboardAdminComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
+      { path: 'configuracion', component: DashboardConfigurationComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
+      { path: 'posts', component: DashboardPostsComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
+      { path: 'afiliados', component: DashboardAfiliadosComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
+      { path: 'publicidad', component: DashboardAdsComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
+      { path: 'comentarios', component: DashboardCommentsComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
+      { path: 'paises', component: DashboardPaisesComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
+      { path: 'sesiones', component: DashboardSesionesComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
+      { path: 'denuncias', component: DashboardReportesComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
+      { path: 'usuarios', component: DashboardUsuariosComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
+      { path: 'rango-usuarios', component: DashboardRangosComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
     ],
+    canActivate: [AuthGuard, AdministradorAuthorization],
   },
 
   { path: '*', redirectTo: '' },
