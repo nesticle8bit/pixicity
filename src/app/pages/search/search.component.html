@@ -70,7 +70,7 @@
 
                             <div class="alert alert-warning" *ngIf="posts.length < 1">
                                 <h3>👀 Oops... Nada por aquí</h3>
-                                <h6>No hay resultados para "{{searchFormGroup?.value?.search}}" intenta usando alguno de los filtros</h6>
+                                <h6>No hay resultados para "{{searchFormGroup.value?.search}}" intenta usando alguno de los filtros</h6>
                             </div>
 
                             <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)">

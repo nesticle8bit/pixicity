@@ -11,23 +11,23 @@
 
 <article class="top-user mb-3" *ngIf="topUsers.length > 0">
     <a class="avatar-top">
-        <app-user-avatar [avatar]="topUsers[0]?.avatar" [userName]="topUsers[0]?.userName"
-        [height]="55" [width]="55" matTooltip="Avatar de {{topUsers[0]?.userName}}" [matTooltipPosition]="'left'">
+        <app-user-avatar [avatar]="topUsers[0].avatar" [userName]="topUsers[0].userName" [height]="55" [width]="55"
+            matTooltip="Avatar de {{topUsers[0].userName}}" [matTooltipPosition]="'left'">
         </app-user-avatar>
 
-        <h3 class="float-start" [routerLink]="['/perfil/' + topUsers[0]?.userName]">
-            {{topUsers[0]?.userName}}
+        <h3 class="float-start" [routerLink]="['/perfil/' + topUsers[0].userName]">
+            {{topUsers[0].userName}}
         </h3>
 
         <span class="float-end puntos">
-            {{topUsers[0]?.puntos}}
+            {{topUsers[0].puntos}}
         </span>
 
         <div class="clearfix"></div>
     </a>
 
     <div id="sigueme">
-        <app-follow-button [userName]="topUsers[0]?.userName"></app-follow-button>
+        <app-follow-button [userName]="topUsers[0].userName"></app-follow-button>
     </div>
 </article>
 

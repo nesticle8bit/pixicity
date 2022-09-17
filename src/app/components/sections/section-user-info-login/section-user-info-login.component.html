@@ -134,12 +134,12 @@
             </li>
 
             <li class="usernameMenu" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
-                <a class="nick menu" href="javascript:void(0)" [routerLink]="['/perfil/' + currentUser?.usuario?.userName]">
+                <a class="nick menu" href="javascript:void(0)" [routerLink]="['/perfil/' + currentUser.usuario?.userName]">
                     <app-user-avatar [class]="'avamu'"
-                        [avatar]="currentUser?.usuario?.avatar" [userName]="currentUser?.usuario?.userName"
+                        [avatar]="currentUser.usuario?.avatar" [userName]="currentUser.usuario?.userName"
                         [height]="20"></app-user-avatar>
 
-                    <span>{{currentUser?.usuario?.userName}}</span>
+                    <span>{{currentUser.usuario?.userName}}</span>
                     <img class="punti" src="/assets/images/ui/arrowd.png" />
                 </a>
 
