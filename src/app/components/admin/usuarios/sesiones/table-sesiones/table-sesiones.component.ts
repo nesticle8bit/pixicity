@@ -69,6 +69,8 @@ export class TableSesionesComponent implements OnInit {
               icon: 'success',
               timer: 3000
             });
+
+            this.getSesiones();
           }
         });
       }

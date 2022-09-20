@@ -180,6 +180,7 @@ import { DialogDisplayHistoryCommentsComponent } from './components/dialogs/dial
 import { PrivacidadDatosComponent } from './pages/privacidad-datos/privacidad-datos.component';
 import { ApiDocumentationComponent } from './pages/api-documentation/api-documentation.component';
 import { ProfileShoutsWallComponent } from './components/profile/profile-shouts-wall/profile-shouts-wall.component';
+import { WhoIsIpComponent } from './components/addons/who-is-ip/who-is-ip.component';
 
 @NgModule({
   declarations: [
@@ -292,6 +293,7 @@ import { ProfileShoutsWallComponent } from './components/profile/profile-shouts-
     PrivacidadDatosComponent,
     ApiDocumentationComponent,
     ProfileShoutsWallComponent,
+    WhoIsIpComponent,
   ],
   imports: [
     BrowserModule,

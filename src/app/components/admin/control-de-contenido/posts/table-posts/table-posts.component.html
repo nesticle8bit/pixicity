@@ -7,6 +7,7 @@
                 <th>Título</th>
                 <th>Puntos</th>
                 <th>Etiquetas</th>
+                <th>IP</th>
                 <th>Usuario</th>
                 <th></th>
             </tr>
@@ -38,6 +39,10 @@
 
                 <td>
                     {{post.etiquetas}}
+                </td>
+
+                <td>
+                    <app-who-is-ip [IP]="post.ip"></app-who-is-ip>
                 </td>
 
                 <td>

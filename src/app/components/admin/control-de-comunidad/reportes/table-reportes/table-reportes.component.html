@@ -62,6 +62,10 @@
     </table>
 </main>
 
+<div class="alert alert-warning" *ngIf="denuncias.length < 1">
+    🗃️ Lo sentimos, no se han encontrado datos.
+</div>
+
 <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
     [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="denuncias.length > 0">
 </mat-paginator>
