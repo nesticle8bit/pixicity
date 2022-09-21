@@ -1,37 +1,38 @@
-<form [formGroup]="formGroup">
+<form [formGroup]="formGroup" (ngSubmit)="createShout()">
     <div class="row">
         <div class="profile__postcomment col-12">
             <div class="row">
                 <div class="col-12 col-sm-1">
                     <img src="https://i.imgur.com/2Rs9AVg.jpeg" class="img-profile img-fluid img-thumbnail" />
                 </div>
-    
+
                 <div class="col-12 col-sm-11">
-                    <textarea class="form-control" rows="3" formControlName="mensaje" placeholder="Comparte algo..."></textarea>
-    
+                    <textarea class="form-control" rows="3" formControlName="comentario"
+                        placeholder="Comparte algo..."></textarea>
+
                     <div class="row my-3">
                         <div class="col-12 col-sm-6">
                             <span class="btn-pixicity btn-gris">
                                 <span class="shout image"></span>
                             </span>
-    
+
                             &nbsp;
-    
+
                             <span class="btn-pixicity btn-gris">
                                 <span class="shout video"></span>
                             </span>
-    
+
                             &nbsp;
-    
+
                             <span class="btn-pixicity btn-gris">
                                 <span class="shout link"></span>
                             </span>
                         </div>
-    
+
                         <div class="col-12 col-sm-6 text-end">
                             <!-- <fa-icon class="text-muted" [icon]="['fas', 'lock']"></fa-icon> &nbsp; -->
-    
-                            <button type="submit" class="boton azul" [disabled]="formGroup.invalid">
+
+                            <button type="submit" class="boton azul" [disabled]="!formGroup.value.comentario">
                                 <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon> Compartir
                             </button>
                         </div>
@@ -42,4 +43,4 @@
     </div>
 </form>
 
-<!-- <app-profile-shouts-wall></app-profile-shouts-wall> -->
+<app-profile-shouts-wall [user]="user"></app-profile-shouts-wall>

@@ -181,6 +181,8 @@ import { PrivacidadDatosComponent } from './pages/privacidad-datos/privacidad-da
 import { ApiDocumentationComponent } from './pages/api-documentation/api-documentation.component';
 import { ProfileShoutsWallComponent } from './components/profile/profile-shouts-wall/profile-shouts-wall.component';
 import { WhoIsIpComponent } from './components/addons/who-is-ip/who-is-ip.component';
+import { IHttpPerfilService } from './services/interfaces/httpPerfil.interface';
+import { HttpPerfilService } from './services/implementations/httpPerfil.service';
 
 @NgModule({
   declarations: [
@@ -395,6 +397,7 @@ import { WhoIsIpComponent } from './components/addons/who-is-ip/who-is-ip.compon
     { provide: IHttpLogsService, useClass: HttpLogsService },
     { provide: IHttpDenunciasService, useClass: HttpDenunciasService },
     { provide: IHttpWebService, useClass: HttpWebService },
+    { provide: IHttpPerfilService, useClass: HttpPerfilService },
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

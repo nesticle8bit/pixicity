@@ -1,7 +1,7 @@
-<div class="row wall__container">
+<div class="row wall__container" *ngIf="shoutsList.length > 0">
     <div class="col-12">
         <article class="wall__story">
-            <div class="story" id="pub_21">
+            <div class="story" *ngFor="let shout of shoutsList; let i = index">
                 <div class="row">
                     <div class="col-12 col-sm-1">
                         <div class="boxreshout">
@@ -16,16 +16,21 @@
                             <span class="story__arrow"></span>
                             <div class="story__header">
                                 <div class="quiendi">
-                                    @<a href="#" class="a_blue">nesticle8bit</a>
-                                    dijo </div>
-                                <div class="shoutbody">Bienvenido a la comunidad de Pixicity! </div>
+                                    @<a href="#" class="a_blue">nesticle8bit</a> dijo
+                                </div>
+
+                                <div class="shoutbody">
+                                    {{shout.comentario}}
+                                </div>
                             </div>
 
                             <div class="story__footer">
                                 <div class="container-fluid pr-0">
                                     <div class="row g-0">
                                         <div class="col-12 col-sm-6 pt-1">
-                                            <i class="icon tipot"></i> <a class="ms-2">Hace unos segundos</a>
+                                            <i class="icon tipot"></i> <a class="ms-2">
+                                                {{shout.fechaRegistro | timeAgo}}
+                                            </a>
                                         </div>
 
                                         <div class="col-12 col-sm-6 text-end">
