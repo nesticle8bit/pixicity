@@ -5,8 +5,12 @@
                 <div class="row">
                     <div class="col-12 col-sm-1">
                         <div class="boxreshout">
-                            <a href="/perfil/nesticle8bit" class="story__profile-image">
+                            <!-- <a href="/perfil/nesticle8bit" class="story__profile-image">
                                 <img alt="nesticle8bit" src="https://i.imgur.com/2Rs9AVg.jpeg" />
+                            </a> -->
+
+                            <a [routerLink]="['/perfil/' + shout.avatar.userName]" class="story__profile-image">
+                                <app-user-avatar [class]="''" [avatar]="shout?.avatar?.avatar" [userName]="shout?.avatar?.userName"></app-user-avatar>
                             </a>
                         </div>
                     </div>
@@ -16,7 +20,7 @@
                             <span class="story__arrow"></span>
                             <div class="story__header">
                                 <div class="quiendi">
-                                    @<a href="#" class="a_blue">nesticle8bit</a> dijo
+                                    @<a [routerLink]="['/perfil/' + shout.avatar.userName]" class="a_blue">{{shout.avatar.userName}}</a> dijo
                                 </div>
 
                                 <div class="shoutbody">

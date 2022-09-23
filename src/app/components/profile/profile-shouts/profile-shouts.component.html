@@ -3,7 +3,8 @@
         <div class="profile__postcomment col-12">
             <div class="row">
                 <div class="col-12 col-sm-1">
-                    <img src="https://i.imgur.com/2Rs9AVg.jpeg" class="img-profile img-fluid img-thumbnail" />
+                    <app-user-avatar [class]="'mb-1 img-thumbnail'" [avatar]="currentUser?.usuario?.avatar" [userName]="currentUser?.usuario?.userName">
+                    </app-user-avatar>
                 </div>
 
                 <div class="col-12 col-sm-11">

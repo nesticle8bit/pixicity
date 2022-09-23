@@ -8,58 +8,6 @@
     }
 }
 
-.story {
-    &__profile-image {
-        float: left;
-        margin-right: 24px;
-
-        & img {
-            display: block;
-            padding: 2px;
-            width: 48px;
-            height: 48px;
-            border: 1px solid #ccc;
-            box-shadow: 0 2px 3px #ccc;
-        }
-    }
-
-    &__content {
-        position: relative;
-    }
-
-    &__arrow {
-        display: block;
-        width: 9px;
-        height: 16px;
-        position: absolute;
-        left: -8px;
-        background: url('/assets/images/ui/dialog.png') no-repeat top left;
-        z-index: 1;
-        top: 10px;
-    }
-
-    &__header {
-        min-height: 35px;
-        padding: 10px 20px!important;
-        border: 1px solid #CCC;
-        border-bottom: 0;
-        border-radius: 5px 5px 0 0;
-        word-wrap: break-word;
-        background-color: #fff;
-        overflow: hidden;
-    }
-
-    &__footer {
-        height: 29px;
-        border: 1px solid #CCC;
-        border-top: 1px solid #e9e9e9!important;
-        border-radius: 0 0 5px 5px;
-        box-shadow: 0 2px 3px #eee;
-        word-wrap: break-word;
-        background: #fafafa url('/assets/images/ui/bfs.gif') bottom left repeat-x;
-    }
-}
-
 .list-inline-item {
     background: url('/assets/images/ui/button-action-s.png') left bottom no-repeat !important;
     padding-left: 1rem;
