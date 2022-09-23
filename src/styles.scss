@@ -2528,10 +2528,11 @@ span.ma_photo {
     background-position: -102px -86px;
 }
 
-.activity-element.video i.shout.icon {background-position: -18px -136px;margin-top:4px;}
-.activity-element.image i.shout.icon {background-position: -34px -138px;margin-top:4px;}
-.activity-element.shout i.shout.icon {background-position: -1px -137px;margin-top:4px;}
-.activity-element.link i.shout.icon {background-position: -52px -137px;margin-top:4px;}
+i.icon.texto-shout  { background-position: 1px -139px; margin-top:3px; }
+i.icon.foto-shout   { background-position: -34px -138px; margin-top:3px; }
+i.icon.video-shout  { background-position: -52px -137px; margin-top:3px; }
+i.icon.enlace-shout { background-position: -52px -137px; margin-top:3px; }
+
 .shout-footer .date-icon i {
 	margin-top: 2px;
 }
@@ -2706,4 +2707,61 @@ i.icon.plus { background-position: -53px -220px }
         word-wrap: break-word;
         background: #fafafa url('/assets/images/ui/bfs.gif') bottom left repeat-x;
     }
+
+    &__timeAgo {
+        font-size: 11px;
+        font-weight: 400;
+        color: #999;
+        margin: 1px 0 0 10px;
+        display: block;
+        float: left;
+    }
+}
+
+.wall {
+    &__container {
+        margin: 18px 18px 0;
+    }
+
+    &__story {
+        padding: 0 0 18px;
+    }
+}
+
+.list__inline-item {
+    background: url('/assets/images/ui/button-action-s.png') left bottom no-repeat !important;
+    padding-left: 1rem;
+    padding-top: .2rem;
+    padding-bottom: 0.4rem;
+
+    & svg {
+        vertical-align: middle;
+    }
+    
+    & a {
+        font-size: 11px;
+        font-weight: 400;
+        color: #999;
+        text-decoration: none;
+    }
+
+    & .counter {
+        padding: 0 6px;
+        font-weight: 700;
+        font-size: 12px;
+        color: #666;
+        border-radius: 0 3px 3px 0;
+    }
+
+    &:last-child {
+        padding-right: 8px;
+    }
+}
+
+.pr-0 {
+    padding-right: 0;
+}
+
+.abrir {
+    padding-right: 5px;
 }

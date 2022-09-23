@@ -7,18 +7,18 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./post-original-poster-info.component.scss'],
 })
 export class PostOriginalPosterInfoComponent implements OnInit {
-  private _post: any;
+  private _userName: any;
 
-  @Input() set post(value: any) {
-    this._post = value;
+  @Input() set userName(value: any) {
+    this._userName = value;
 
     if (value) {
-      this.getUsuarioInfo(value.usuario?.userName);
+      this.getUsuarioInfo(value);
     }
   }
 
-  get post(): any {
-    return this._post;
+  get userName(): any {
+    return this._userName;
   }
 
   public info: any;
@@ -43,12 +43,12 @@ export class PostOriginalPosterInfoComponent implements OnInit {
   }
 
   changeSeguidores(value: boolean): void {
-    if(this.info) {
-      if(!this.info.seguidores) {
+    if (this.info) {
+      if (!this.info.seguidores) {
         this.info.seguidores = 0;
       }
 
-      if(value) {
+      if (value) {
         this.info.seguidores += 1;
       } else {
         this.info.seguidores -= 1;

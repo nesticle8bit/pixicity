@@ -30,6 +30,7 @@ import { PerfilComponent } from './pages/perfil/perfil.component';
 import { PrivacidadDatosComponent } from './pages/privacidad-datos/privacidad-datos.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { SearchComponent } from './pages/search/search.component';
+import { ShoutsViewComponent } from './pages/shouts/shouts-view/shouts-view.component';
 import { TopsComponent } from './pages/tops/tops.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { PostNotFoundComponent } from './posts/post-not-found/post-not-found.component';
@@ -39,7 +40,6 @@ import { PostsViewComponent } from './posts/posts-view/posts-view.component';
 import { SectionHomeComponent } from './sections/section-home/section-home.component';
 import { AdministradorAuthorization } from './shared/guards/adminAuthorization.guard';
 import { AuthGuard } from './shared/guards/auth.guard';
-import { ModeradorAuthorization } from './shared/guards/moderadorAuthorization.guard';
 
 const routes: Routes = [
   { path: '', component: SectionHomeComponent },
@@ -53,6 +53,7 @@ const routes: Routes = [
   { path: 'cuenta', component: AccountComponent, canActivate: [AuthGuard] },
   { path: 'en-vivo', component: EnVivoComponent },
   { path: 'perfil/:userName', component: PerfilComponent },
+  { path: 'shouts/:userName/:id', component: ShoutsViewComponent },
 
   { path: 'posts/:categoria', component: SectionHomeComponent },
   { path: 'posts/:categoria/:id/:nombre-post', component: PostsViewComponent },

@@ -34,7 +34,7 @@
         </div>
 
         <div class="col-12 col-sm-12 col-md-3">
-            <app-post-original-poster-info [post]="post"></app-post-original-poster-info>
+            <app-post-original-poster-info [userName]="post.usuario?.userName"></app-post-original-poster-info>
 
             <section class="my-1" *ngIf="post?.usuario?.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador' || currentUser?.usuario?.rango === 'Moderador'">
                 <div class="titulaw">

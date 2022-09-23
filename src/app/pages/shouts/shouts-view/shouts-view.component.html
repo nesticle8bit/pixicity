@@ -1,26 +1,20 @@
-<div class="row wall__container" *ngIf="shoutsList.length > 0">
-    <div class="col-12">
-        <article class="wall__story">
-            <div class="story" *ngFor="let shout of shoutsList; let i = index">
+<!-- <app-main-profile-menu></app-main-profile-menu> -->
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-9">
+            <div class="container container--home">
                 <div class="row">
-                    <div class="col-12 col-sm-1">
-                        <div class="boxreshout">
-                            <!-- <a href="/perfil/nesticle8bit" class="story__profile-image">
-                                <img alt="nesticle8bit" src="https://i.imgur.com/2Rs9AVg.jpeg" />
-                            </a> -->
-
-                            <a [routerLink]="['/perfil/' + shout.avatar.userName]" class="story__profile-image">
-                                <app-user-avatar [class]="''" [avatar]="shout?.avatar?.avatar" [userName]="shout?.avatar?.userName"></app-user-avatar>
-                            </a>
+                    <div class="col-12 p-3 pt-1">
+                        <div class="titulaw">
+                            <h2>{{shout.fechaRegistro | date:'long'}}</h2>
                         </div>
-                    </div>
 
-                    <div class="col-12 col-sm-11">
                         <div class="story__content">
-                            <span class="story__arrow"></span>
                             <div class="story__header">
                                 <div class="quiendi">
-                                    @<a [routerLink]="['/perfil/' + shout.avatar.userName]" class="a_blue">{{shout.avatar.userName}}</a> dijo
+                                    @<a [routerLink]="['/perfil/' + shout.avatar.userName]"
+                                        class="a_blue">{{shout.avatar.userName}}</a> dijo
                                 </div>
 
                                 <div class="shoutbody">
@@ -32,7 +26,7 @@
                                 <div class="container-fluid pr-0">
                                     <div class="row g-0">
                                         <div class="col-12 col-sm-6 pt-1">
-                                            <i class="text-muted icon {{shout.tipo?.toLowerCase()}}-shout"></i> <span class="story__timeAgo">{{shout.fechaRegistro | date:'long'}}</span>
+                                            <i class="text-muted icon {{shout.tipo?.toLowerCase()}}-shout"></i>
                                         </div>
 
                                         <div class="col-12 col-sm-6 text-end">
@@ -44,10 +38,6 @@
                                                     </a>
                                                 </li> -->
 
-                                                <li class="list__inline-item">
-                                                    <a class="abrir" [routerLink]="['/shouts/' + shout.avatar.userName + '/' + shout.id]">Abrir</a>
-                                                </li>
-
                                                 <!-- <li class="list__inline-item">
                                                     <a title="Comentarios">
                                                         <fa-icon class="pl-2 ml-2" [icon]="['fas', 'comments']">
@@ -55,21 +45,21 @@
                                                         <span class="counter">0</span>
                                                     </a>
                                                 </li>
-
+            
                                                 <li class="list__inline-item">
                                                     <a title="Favoritos">
                                                         <fa-icon [icon]="['fas', 'star']"></fa-icon>
                                                         <span class="counter">0</span>
                                                     </a>
                                                 </li>
-
+            
                                                 <li class="list__inline-item">
                                                     <a title="Me gusta">
                                                         <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
                                                         <span class="counter">0</span>
                                                     </a>
                                                 </li>
-
+            
                                                 <li class="list__inline-item">
                                                     <a title="Compartir">
                                                         <fa-icon [icon]="['fas', 'retweet']"></fa-icon>
@@ -82,9 +72,51 @@
                                 </div>
                             </div>
                         </div>
+
+                        <h6 class="main-title mt-4 mb-2">
+                            <span>Comentarios</span>
+                        </h6>
+
+                        <div class="alert alert-warning">
+                            ⚠️ <strong>En construcción...</strong>
+                        </div>
                     </div>
                 </div>
             </div>
-        </article>
+        </div>
+
+        <div class="dotted-border--left col-12 col-sm-3 mt-3">
+            <app-post-original-poster-info [userName]="'nesticle8bit'"></app-post-original-poster-info>
+
+            <section class="my-1"
+                *ngIf="shout.avatar.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador' || currentUser?.usuario?.rango === 'Moderador'">
+                <div class="titulaw">
+                    <h2>Herramientas</h2>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-sm-12 d-grid gap-2 text-end" (click)="eliminarShout()">
+                        <button mat-flat-button color="danger">
+                            <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon> Eliminar Shout
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="my-3"
+                *ngIf="shout.avatar.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador' || currentUser?.usuario?.rango === 'Moderador'">
+                <div class="titulaw">
+                    <h2>Compartido por</h2>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-warning">
+                            😶‍🌫️ Nadie ha compartido este shout
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
 </div>

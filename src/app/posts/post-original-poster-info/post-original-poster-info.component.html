@@ -1,30 +1,29 @@
 <div class="esees">
     <div class="eites">
-        <a class="nomis" [routerLink]="['/perfil/' + post?.usuario?.userName]"
-            matTooltip="Ver perfil de {{post?.usuario?.userName}}">
-            <app-user-avatar [avatar]="post?.usuario?.avatar" [userName]="post?.usuario?.userName" [height]="97">
+        <a class="nomis" [routerLink]="['/perfil/' + userName]" matTooltip="Ver perfil de {{userName}}">
+            <app-user-avatar [avatar]="info.avatar" [userName]="userName" [height]="97">
             </app-user-avatar>
         </a>
 
-        <span [ngStyle]="{'color': post?.usuario?.rango?.color}">
-            <img src="/assets/images/icons/rangos/{{post?.usuario?.rango?.icono}}"
-                matTooltip="{{post?.usuario?.rango?.nombre}}" [matTooltipPosition]="'below'">
-            <strong class="ms-1">{{post?.usuario?.rango?.nombre}}</strong>
+        <span [ngStyle]="{'color': info.rango?.color}">
+            <img src="/assets/images/icons/rangos/{{info.rango?.icono}}" matTooltip="{{info.rango?.nombre}}"
+                [matTooltipPosition]="'below'">
+            <strong class="ms-1">{{info.rango?.nombre}}</strong>
         </span>
     </div>
 
     <div class="gkes">
         <div class="eolr">
             <span class="tepe-online vctip" matTooltip="Online" [matTooltipPosition]="'below'"></span>
-            <a [routerLink]="['/perfil/' + post?.usuario?.userName]">
-                {{post?.usuario?.userName}}
+            <a [routerLink]="['/perfil/' + userName]">
+                {{userName}}
             </a>
         </div>
 
         <div class="float-end">
-            <addon-country-flag [iso2]="post?.usuario?.estado?.pais?.isO2" [title]="post?.usuario?.estado?.pais.nombre">
+            <addon-country-flag [iso2]="info.estado?.pais?.isO2" [title]="info.estado?.pais.nombre">
             </addon-country-flag>
-            <app-genre-icon [genre]="post?.usuario?.generoString"></app-genre-icon>
+            <app-genre-icon [genre]="info.genero"></app-genre-icon>
         </div>
 
         <div class="clearfix"></div>
@@ -46,7 +45,7 @@
             </div>
         </div>
 
-        <app-follow-button [userName]="post?.usuario?.userName" (followingChange)="changeSeguidores($event)">
+        <app-follow-button [userName]="userName" (followingChange)="changeSeguidores($event)">
         </app-follow-button>
     </div>
 </div>

@@ -183,6 +183,7 @@ import { ProfileShoutsWallComponent } from './components/profile/profile-shouts-
 import { WhoIsIpComponent } from './components/addons/who-is-ip/who-is-ip.component';
 import { IHttpPerfilService } from './services/interfaces/httpPerfil.interface';
 import { HttpPerfilService } from './services/implementations/httpPerfil.service';
+import { ShoutsViewComponent } from './pages/shouts/shouts-view/shouts-view.component';
 
 @NgModule({
   declarations: [
@@ -296,6 +297,7 @@ import { HttpPerfilService } from './services/implementations/httpPerfil.service
     ApiDocumentationComponent,
     ProfileShoutsWallComponent,
     WhoIsIpComponent,
+    ShoutsViewComponent,
   ],
   imports: [
     BrowserModule,
