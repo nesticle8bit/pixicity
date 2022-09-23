@@ -10,11 +10,20 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 })
 export class ProfileShoutsWallComponent implements OnInit {
   private _user: any;
+  private _load: any;
 
   @Input() set user(value: any) {
     this._user = value;
 
     if (value && value.id) {
+      this.getShouts();
+    }
+  }
+
+  @Input() set load(value: any) {
+    this._load = value;
+
+    if (value) {
       this.getShouts();
     }
   }

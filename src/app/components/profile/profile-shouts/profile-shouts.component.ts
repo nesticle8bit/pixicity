@@ -10,8 +10,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./profile-shouts.component.scss'],
 })
 export class ProfileShoutsComponent implements OnInit {
-  @Output() getShouts = new EventEmitter<boolean>();
-
+  public reloadShouts: boolean = false;
   private _user: any;
 
   @Input() set user(value: any) {
@@ -30,7 +29,7 @@ export class ProfileShoutsComponent implements OnInit {
 
   public formGroup: FormGroup;
   public currentUser: any;
-  
+
   constructor(
     private formBuilder: FormBuilder,
     private perfilService: IHttpPerfilService,
@@ -48,7 +47,12 @@ export class ProfileShoutsComponent implements OnInit {
   ngOnInit(): void {}
 
   createShout(): void {
+    this.reloadShouts = false;
     const shout = Object.assign({}, this.formGroup.value);
+
+    if (!shout || !shout.comentario) {
+      return;
+    }
 
     this.perfilService.createShout(shout).subscribe((response: any) => {
       if (response) {
@@ -56,7 +60,7 @@ export class ProfileShoutsComponent implements OnInit {
           comentario: '',
         });
 
-        this.getShouts.emit(true);
+        this.reloadShouts = true;
       }
     });
   }
