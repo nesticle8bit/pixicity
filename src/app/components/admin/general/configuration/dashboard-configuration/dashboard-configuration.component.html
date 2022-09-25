@@ -68,6 +68,27 @@
         </div>
     </div>
 
+    <hr>
+
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">
+            Darle la bienvenida al usuario<br>
+            <i>Crear un mensaje en el perfil del usuario recien registrado.</i>
+
+            <br><br>
+            <mat-slide-toggle formControlName="welcomeActivated" color="primary"></mat-slide-toggle>
+        </label>
+
+        <div class="col-sm-10">
+            <label>Seleccione el usuario que dará la bienvenida</label>
+            <ng-select [items]="administradores" bindLabel="userName" bindValue="id" formControlName="welcomeUserId"></ng-select>
+
+            <br>
+            <label>Mensaje</label>
+            <textarea class="form-control" formControlName="welcomeMessage" rows="3"></textarea>
+        </div>
+    </div>
+
     <div class="form-container--footer text-center">
         <button mat-flat-button color="primary" type="submit">
             <mat-icon>save</mat-icon> Guardar
