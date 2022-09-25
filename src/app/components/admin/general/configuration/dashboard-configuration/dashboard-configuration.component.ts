@@ -49,8 +49,10 @@ export class DashboardConfigurationComponent implements OnInit {
           maintenanceMessage: configuracion.maintenanceMessage,
           onlineUsersTime: configuracion.onlineUsersTime,
           disableUserRegistration: configuracion.disableUserRegistration,
-          disableUserRegistrationMessage:
-            configuracion.disableUserRegistrationMessage,
+          disableUserRegistrationMessage: configuracion.disableUserRegistrationMessage,
+          welcomeUserId: configuracion.welcomeUserId,
+          welcomeActivated: configuracion.welcomeActivated,
+          welcomeMessage: configuracion.welcomeMessage
         });
 
         this.formGroup.controls['url'].disable();
