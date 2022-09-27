@@ -101,6 +101,7 @@ Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .n
 
   - Panel Administrativo
     - [x] Desactivar el registro de usuarios desde el admin
+    - [ ] Administrar IP
     > TODO
 
 > Seguiré modificando el README cuando vaya teniendo ideas de las tareas que desarrollaré y que ya haya hecho.
