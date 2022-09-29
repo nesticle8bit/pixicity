@@ -196,6 +196,11 @@
                     </app-profile-following>
                     <app-profile-information [user]="currentUser" *ngIf="currentSelection === 'information'">
                     </app-profile-information>
+                    <section *ngIf="currentSelection === 'medals'">
+                        <div class="alert alert-warning mt-4">
+                            ⚠️ <strong>En construcción...</strong>
+                        </div>
+                    </section>
                 </div>
             </div>
         </div>

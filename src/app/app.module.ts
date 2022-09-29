@@ -184,6 +184,8 @@ import { WhoIsIpComponent } from './components/addons/who-is-ip/who-is-ip.compon
 import { IHttpPerfilService } from './services/interfaces/httpPerfil.interface';
 import { HttpPerfilService } from './services/implementations/httpPerfil.service';
 import { ShoutsViewComponent } from './pages/shouts/shouts-view/shouts-view.component';
+import { DashboardShoutsComponent } from './components/admin/control-de-contenido/shouts/dashboard-shouts/dashboard-shouts.component';
+import { TableShoutsComponent } from './components/admin/control-de-contenido/shouts/table-shouts/table-shouts.component';
 
 @NgModule({
   declarations: [
@@ -298,6 +300,8 @@ import { ShoutsViewComponent } from './pages/shouts/shouts-view/shouts-view.comp
     ProfileShoutsWallComponent,
     WhoIsIpComponent,
     ShoutsViewComponent,
+    DashboardShoutsComponent,
+    TableShoutsComponent,
   ],
   imports: [
     BrowserModule,

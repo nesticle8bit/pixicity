@@ -5,6 +5,7 @@ import { DashboardReportesComponent } from './components/admin/control-de-comuni
 import { DashboardCommentsComponent } from './components/admin/control-de-contenido/comentarios/dashboard-comments/dashboard-comments.component';
 import { DashboardPaisesComponent } from './components/admin/control-de-contenido/paises/dashboard-paises/dashboard-paises.component';
 import { DashboardPostsComponent } from './components/admin/control-de-contenido/posts/dashboard-posts/dashboard-posts.component';
+import { DashboardShoutsComponent } from './components/admin/control-de-contenido/shouts/dashboard-shouts/dashboard-shouts.component';
 import { DashboardAdminComponent } from './components/admin/dashboard-admin/dashboard-admin.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { DashboardConfigurationComponent } from './components/admin/general/configuration/dashboard-configuration/dashboard-configuration.component';
@@ -127,6 +128,7 @@ const routes: Routes = [
       { path: 'denuncias', component: DashboardReportesComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
       { path: 'usuarios', component: DashboardUsuariosComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
       { path: 'rango-usuarios', component: DashboardRangosComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
+      { path: 'shouts', component: DashboardShoutsComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
     ],
     canActivate: [AuthGuard, AdministradorAuthorization],
   },

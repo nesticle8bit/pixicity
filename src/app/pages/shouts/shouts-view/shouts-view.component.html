@@ -101,7 +101,7 @@
         </div>
 
         <div class="dotted-border--left col-12 col-sm-3 mt-3">
-            <app-post-original-poster-info [userName]="'nesticle8bit'"></app-post-original-poster-info>
+            <app-post-original-poster-info [userName]="shout.avatar?.userName"></app-post-original-poster-info>
 
             <section class="my-1"
                 *ngIf="shout.avatar.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador' || currentUser?.usuario?.rango === 'Moderador'">

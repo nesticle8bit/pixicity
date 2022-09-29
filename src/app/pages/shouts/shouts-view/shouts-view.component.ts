@@ -49,6 +49,7 @@ export class ShoutsViewComponent implements OnInit {
 
     this.perfilService.getShoutById(shoutId).subscribe((value: any) => {
       this.shout = value;
+      console.log(value);
     });
   }
 
