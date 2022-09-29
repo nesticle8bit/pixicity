@@ -2696,6 +2696,10 @@ i.icon.plus { background-position: -53px -220px }
         word-wrap: break-word;
         background-color: #fff;
         overflow: hidden;
+
+        &--userName {
+            margin-bottom: .4rem;
+        }
     }
 
     &__footer {

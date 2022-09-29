@@ -19,7 +19,7 @@
                         <div class="story__content">
                             <span class="story__arrow"></span>
                             <div class="story__header">
-                                <div class="quiendi">
+                                <div class="story__header--userName">
                                     @<a [routerLink]="['/perfil/' + shout.avatar.userName]" class="a_blue">{{shout.avatar.userName}}</a> dijo:
                                 </div>
 
@@ -32,7 +32,10 @@
                                 <div class="container-fluid pr-0">
                                     <div class="row g-0">
                                         <div class="col-12 col-sm-6 pt-1">
-                                            <i class="text-muted icon {{shout.tipo?.toLowerCase()}}-shout"></i> <span class="story__timeAgo">{{shout.fechaRegistro | date:'long'}}</span>
+                                            <i class="text-muted icon {{shout.tipo?.toLowerCase()}}-shout"></i>
+                                            <span class="story__timeAgo cursor--help" matTooltip="{{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm:ss \', año\' y'}}">
+                                                El {{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm'}}
+                                            </span>
                                         </div>
 
                                         <div class="col-12 col-sm-6 text-end">
