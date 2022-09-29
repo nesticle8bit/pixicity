@@ -34,7 +34,7 @@ export class UserAvatarComponent implements OnInit {
   }
 
   get imageURL(): string {
-    return this.userName && this.avatar ? `${this.backendURL}/${this.userName}/${this.avatar}` : '/assets/images/avatar.gif';
+    return this.userName && this.avatar ? `${this.backendURL}/${this.userName}/${this.avatar}` : '/assets/images/avatar.jpg';
   }
 
   constructor() {}
