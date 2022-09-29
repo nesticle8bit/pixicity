@@ -25,41 +25,55 @@
                             <div class="story__footer">
                                 <div class="container-fluid pr-0">
                                     <div class="row g-0">
-                                        <div class="col-12 col-sm-6 pt-1">
-                                            <i class="text-muted icon {{shout.tipo?.toLowerCase()}}-shout"></i>
+                                        <div class="col-12 col-sm-6">
+                                            <div class="story__timeContainer">
+                                                <i class="text-muted icon {{shout.tipo?.toLowerCase()}}-shout"></i>
+                                                <span class="story__timeAgo cursor--help"
+                                                    matTooltip="{{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm:ss \', año\' y'}}">
+                                                    El {{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm'}}
+                                                </span>
+                                            </div>
                                         </div>
 
                                         <div class="col-12 col-sm-6 text-end">
                                             <ul class="list-inline">
-                                                <!-- <li class="list__inline-item">
-                                                    <a title="Ver actividad">
+                                                <li class="list__inline-item">
+                                                    <a matTooltip="Ver actividad">
                                                         <fa-icon class="pl-2 ml-2" [icon]="['fas', 'clock']"></fa-icon>
                                                         &nbsp;
                                                     </a>
-                                                </li> -->
+                                                </li>
 
-                                                <!-- <li class="list__inline-item">
-                                                    <a title="Comentarios">
+                                                <li class="list__inline-item">
+                                                    <a class="abrir"
+                                                        (click)="clipboard('https://pixicity.io' + '/shouts/' + shout.avatar.userName + '/' + shout.id)">
+                                                        URL
+                                                    </a>
+                                                </li>
+
+                                                <li class="list__inline-item">
+                                                    <a href="#" title="Comentarios">
                                                         <fa-icon class="pl-2 ml-2" [icon]="['fas', 'comments']">
                                                         </fa-icon>
                                                         <span class="counter">0</span>
                                                     </a>
                                                 </li>
-            
+
                                                 <li class="list__inline-item">
                                                     <a title="Favoritos">
                                                         <fa-icon [icon]="['fas', 'star']"></fa-icon>
                                                         <span class="counter">0</span>
                                                     </a>
                                                 </li>
-            
+
                                                 <li class="list__inline-item">
                                                     <a title="Me gusta">
                                                         <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
                                                         <span class="counter">0</span>
                                                     </a>
                                                 </li>
-            
+
+                                                <!-- 
                                                 <li class="list__inline-item">
                                                     <a title="Compartir">
                                                         <fa-icon [icon]="['fas', 'retweet']"></fa-icon>

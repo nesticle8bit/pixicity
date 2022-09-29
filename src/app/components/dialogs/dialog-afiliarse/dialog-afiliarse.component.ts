@@ -41,7 +41,7 @@ export class DialogAfiliarseComponent implements OnInit {
       .subscribe((response: any) => {
         if (response) {
           this.formGroupAfiliacion.patchValue({
-            codigo: `<a href="https://pixicity.net/?ref=${response}" target="_blank" title="Pixicity"><img src="https://pixicity.net/assets/images/logo_ref.png"></a>`,
+            codigo: `<a href="https://pixicity.io/?ref=${response}" target="_blank" title="Pixicity"><img src="https://pixicity.io/assets/images/logo_ref.png"></a>`,
           });
         }
       });
