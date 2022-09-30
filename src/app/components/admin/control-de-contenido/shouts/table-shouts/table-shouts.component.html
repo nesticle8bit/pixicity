@@ -23,7 +23,9 @@
                 </td>
 
                 <td>
-                    {{shout.comentario}}
+                    <span title="{{shout.comentario}}">
+                        {{shout.comentario | truncate:[80]}}
+                    </span>
                 </td>
 
                 <td>
@@ -31,11 +33,13 @@
                 </td>
 
                 <td>
-                    {{shout.usuario.userName}}
+                    <app-user-avatar [class]="'img-avatar'" [avatar]="shout.usuario.avatar" [userName]="shout.usuario.userName">
+                    </app-user-avatar> {{shout.usuario.userName}}
                 </td>
 
                 <td>
-                    {{shout.perfil.userName}}
+                    <app-user-avatar [class]="'img-avatar'" [avatar]="shout.perfil.avatar" [userName]="shout.perfil.userName">
+                    </app-user-avatar> {{shout.perfil.userName}}
                 </td>
 
                 <td class="text-center" width="30px">

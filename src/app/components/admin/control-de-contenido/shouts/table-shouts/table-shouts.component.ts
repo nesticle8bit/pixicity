@@ -19,11 +19,13 @@ export class TableShoutsComponent implements OnInit {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getShouts();
+  }
 
   getShouts(): void {
     this.perfilService.getShoutsAdmin().subscribe((response: any) => {
-      this.shouts = response.data;
+      this.shouts = response.shouts;
       this.totalCount = response.pagination.totalCount;
     });
   }
