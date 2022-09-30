@@ -1,1 +1,60 @@
-<p>table-shouts works!</p>
+<main class="table-responsive" *ngIf="shouts.length > 0">
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Tipo</th>
+                <th>Comentario</th>
+                <th>URL</th>
+                <th>Usuario</th>
+                <th>Perfil</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let shout of shouts; let i = index" [ngClass]="{'favoritos-deleted': shout.eliminado}">
+                <td>
+                    {{shout.fechaRegistro | timeAgo}}
+                </td>
+
+                <td>
+                    {{shout.tipoString}}
+                </td>
+
+                <td>
+                    {{shout.comentario}}
+                </td>
+
+                <td>
+                    {{shout.url}}
+                </td>
+
+                <td>
+                    {{shout.usuario.userName}}
+                </td>
+
+                <td>
+                    {{shout.perfil.userName}}
+                </td>
+
+                <td class="text-center" width="30px">
+                    <button class="btn-menu" [matMenuTriggerFor]="menu">
+                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <!-- <button type="button" mat-menu-item (click)="cambiarSticky(post.id, i)">
+                            <mat-icon>sticky_note_2</mat-icon>
+                            <span *ngIf="post.sticky">Quitar</span> <span *ngIf="!post.sticky">Establecer</span> Sticky
+                        </button> -->
+                    </mat-menu>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="shouts.length > 0">
+</mat-paginator>

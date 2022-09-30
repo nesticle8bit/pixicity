@@ -37,6 +37,27 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getShoutsAdmin(): Observable<any> {
+    return this.http
+      .get<any>(
+        `${environment.api}/api/shouts/getShoutsAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`
+      )
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   createShout(shout: any): Observable<any> {
     return this.http
       .post<any>(`${environment.api}/api/shouts/createShout`, shout)
