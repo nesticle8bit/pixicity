@@ -14,32 +14,7 @@
     </div>
 </section>
 
-<!-- <table class="table table-striped last-posts" *ngIf="lastComments?.length > 0" [ngClass]="{'opacity-50': refreshComments}">
-    <tbody>
-        <tr *ngFor="let comment of lastComments">
-            <td>
-                <small>
-                    <b>
-                        <a class="value" [routerLink]="['/perfil/' + comment.usuario]">
-                            {{comment.usuario}}
-                        </a>
-                    </b>
-
-                    &nbsp;
-
-                    <span class="text-muted">
-                        <a [routerLink]="['/posts/' + comment.post.categoria.seo + '/' + comment.post.id + '/' + comment.post.url]"
-                            title="{{comment.post.titulo}}">
-                            {{comment.post.titulo | truncate:[55]}}
-                        </a>
-                    </span>
-                </small>
-            </td>
-        </tr>
-    </tbody>
-</table> -->
-
-<ng-container class="mb-2" *ngIf="lastComments?.length > 0">
+<ng-container *ngIf="lastComments?.length > 0">
     <article class="list-posts--zebra" [ngClass]="{'opacity-50': refreshComments}" *ngFor="let comment of lastComments">
         <strong>
             <a class="value" [routerLink]="['/perfil/' + comment.usuario]">
@@ -54,4 +29,6 @@
             </a>
         </span>
     </article>
+
+    <div class="mb-3"></div>
 </ng-container>
