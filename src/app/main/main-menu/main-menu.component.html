@@ -3,37 +3,48 @@
         <div class="row">
             <div class="col-12">
                 <ul class="list-unstyled list-inline mb-0 pt-2">
-                    <li class="list-inline-item main-menu--item">
-                        <a [routerLink]="['/mi']">
+                    <!-- <li class="list-inline-item main-menu--item" [routerLink]="['/mi']">
+                        <a>
                             <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                        </a>
-                    </li>
-
-                    <li class="list-inline-item main-menu--item"
-                        [ngClass]="{'main-menu--item--active': active == '/' || active == ''}">
-                        <a [routerLink]="['/']">
-                            <span>Posts</span>
-                        </a>
-                    </li>
-
-                    <!-- <li class="list-inline-item main-menu--item">
-                        <a [routerLink]="['/fotos']">
-                            <span>Fotos</span>
                         </a>
                     </li> -->
 
-                    <li class="list-inline-item main-menu--item"
-                        [ngClass]="{'main-menu--item--active': active == '/tops' || active == 'tops'}">
-                        <a [routerLink]="['/tops']">
-                            <span>TOPs</span>
+                    <li class="list-inline-item main-menu--item" [routerLink]="['/']"
+                        [ngClass]="{'main-menu--item--active': active == '/' || active == ''}">
+                        <a class="d-none d-sm-block" [routerLink]="['/']" title="Posts">
+                            <span class="">Posts</span>
+                        </a>
+
+                        <a class="d-block d-sm-none" [routerLink]="['/']" title="Posts">
+                            <span>
+                                <fa-icon [icon]="['fas', 'house-user']"></fa-icon>
+                            </span>
                         </a>
                     </li>
 
-                    <li class="list-inline-item main-menu--item"
-                        [ngClass]="{'main-menu--item--active': active.startsWith('/administracion')}"
-                        *ngIf="currentUser?.usuario?.rango === 'Administrador'">
-                        <a [routerLink]="['/administracion/dashboard']">
+                    <li class="list-inline-item main-menu--item" [routerLink]="['/tops']"
+                        [ngClass]="{'main-menu--item--active': active == '/tops' || active == 'tops'}">
+                        <a class="d-none d-sm-block" title="TOPs">
+                            <span class="">TOPs</span>
+                        </a>
+                    
+                        <a class="d-block d-sm-none" title="TOPs">
+                            <span>
+                                <fa-icon [icon]="['fas', 'trophy']"></fa-icon>
+                            </span>
+                        </a>
+                    </li>
+
+                    <li class="list-inline-item main-menu--item" [routerLink]="['/administracion/dashboard']" 
+                        [ngClass]="{'main-menu--item--active': active.startsWith('/administracion')}" *ngIf="currentUser?.usuario?.rango === 'Administrador'">
+                        <a class="d-none d-sm-block" title="Administración">
                             <span>Administración</span>
+                        </a>
+
+                        <a class="d-block d-sm-none" title="Administración">
+                            <span>
+                                <fa-icon [icon]="['fas', 'sliders']"></fa-icon>
+                            </span>
                         </a>
                     </li>
                 </ul>

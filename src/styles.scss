@@ -2785,3 +2785,13 @@ i.icon.plus { background-position: -53px -220px }
 .img-avatar {
     width: 20px;
 }
+
+@media (max-width: 575.98px) { 
+    .userInfoLogin {
+        margin: 10px;
+    }
+
+    .main-menu--item {
+        padding-bottom: 7.3px;
+    }
+}
