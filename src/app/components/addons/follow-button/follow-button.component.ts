@@ -41,6 +41,10 @@ export class FollowButtonComponent implements OnInit {
   ngOnInit(): void {}
 
   isFollowingTheUser(userName: string): void {
+    if (!this.currentUser) {
+      return;
+    }
+
     this.securityService
       .isFollowingTheUser(userName)
       .subscribe((value: any) => {
