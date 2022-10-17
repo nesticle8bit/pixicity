@@ -48,7 +48,6 @@ export class DialogChangeAvatarComponent implements OnInit {
 
     this.securityService.changeAvatar(imageFile).subscribe((response: any) => {
       if (response) {
-        debugger
         let currentUser = this.securityService.getCurrentUser();
         currentUser.usuario.avatar = 'avatar.jpeg';
         this.securityService.setUserToLocalStorage(currentUser);

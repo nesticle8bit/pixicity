@@ -11,25 +11,23 @@ import { DialogRecomendarPostComponent } from 'src/app/components/dialogs/dialog
   templateUrl: './posts-meta.component.html',
   styleUrls: ['./posts-meta.component.scss'],
   animations: [
-    trigger(
-      'enterAnimation', [
-        transition(':enter', [
-          style({transform: 'translateY(100%)', opacity: 0}),
-          animate('500ms', style({transform: 'translateY(0)', opacity: 1}))
-        ]),
-        transition(':leave', [
-          style({transform: 'translateY(0)', opacity: 1}),
-          animate('500ms', style({transform: 'translateY(100%)', opacity: 0}))
-        ])
-      ]
-    )
-  ]
+    trigger('enterAnimation', [
+      transition(':enter', [
+        style({ transform: 'translateY(100%)', opacity: 0 }),
+        animate('500ms', style({ transform: 'translateY(0)', opacity: 1 })),
+      ]),
+      transition(':leave', [
+        style({ transform: 'translateY(0)', opacity: 1 }),
+        animate('500ms', style({ transform: 'translateY(100%)', opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class PostsMetaComponent implements OnInit {
   public savedToFavorites: any = {
     message: '',
     type: false,
-    display: false
+    display: false,
   };
 
   private _post: any;
@@ -54,18 +52,22 @@ export class PostsMetaComponent implements OnInit {
     private securityService: IHttpSecurityService,
     private postService: IHttpPostsService,
     private dialog: MatDialog
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.currentUser = this.securityService.getCurrentUser();
   }
 
   getAvailablePuntos(): void {
+    if (!this.currentUser?.usuario) {
+      return;
+    }
+
     this.postService.getAvailableVotos(1).subscribe((response: any) => {
       this.availablePuntos = [];
 
       if (response > 0) {
-        for (let index = 1; index < response+1; index++) {
+        for (let index = 1; index < response + 1; index++) {
           this.availablePuntos.push(index);
         }
       }
@@ -73,19 +75,21 @@ export class PostsMetaComponent implements OnInit {
   }
 
   votarPost(puntos: number): void {
-    this.postService.setVotos({ typeId: this.post.id, cantidad: puntos, votosType: 1 }).subscribe((response: any) => {
-      if (response) {
-        this.addedPuntos = true;
-        this.post.puntos += puntos;
-      }
-    });
+    this.postService
+      .setVotos({ typeId: this.post.id, cantidad: puntos, votosType: 1 })
+      .subscribe((response: any) => {
+        if (response) {
+          this.addedPuntos = true;
+          this.post.puntos += puntos;
+        }
+      });
   }
 
   recomendarPost(postId: number): void {
     this.dialog.open(DialogRecomendarPostComponent, {
       width: '500px',
       disableClose: true,
-      data: postId
+      data: postId,
     });
   }
 
@@ -95,13 +99,13 @@ export class PostsMetaComponent implements OnInit {
         this.savedToFavorites = {
           message: 'Bien! Este post fue agregado a tus favoritos.',
           type: true,
-          display: true
+          display: true,
         };
       } else {
         this.savedToFavorites = {
           message: 'Este post ya lo tienes en tus favoritos.',
           type: false,
-          display: true
+          display: true,
         };
       }
 
@@ -122,12 +126,12 @@ export class PostsMetaComponent implements OnInit {
   seguirPost(): void {
     const postId = this.post.id;
 
-    if(!postId) {
+    if (!postId) {
       return;
     }
 
     this.postService.seguirPost(postId).subscribe((value: any) => {
-      if(value) {
+      if (value) {
         this.post.seguirPost = !this.post.seguirPost;
       }
     });

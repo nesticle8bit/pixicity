@@ -526,7 +526,6 @@ export class AccountComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((value: any) => {
-      debugger
       if (value) {
         this.formGroupCuenta.patchValue({
           avatar: value,

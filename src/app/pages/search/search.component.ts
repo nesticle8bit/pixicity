@@ -36,14 +36,14 @@ export class SearchComponent implements OnInit {
       footer: true,
       searchFooter: true,
       submenu: true,
-      background: ''
+      background: '',
     });
 
     this.searchFormGroup = this.formBuilder.group({
       search: [''],
       searchType: ['titulo'],
       categoria: undefined,
-      autor: ''
+      autor: '',
     });
 
     this.activatedRoute.paramMap.subscribe((route: any) => {
@@ -64,14 +64,15 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    forkJoin([this.parametrosService.getCategoriasDropdown()]).subscribe((response: any) => {
-      this.categorias = response[0];
-      this.searchPosts();
-    });
+    forkJoin([this.parametrosService.getCategoriasDropdown()]).subscribe(
+      (response: any) => {
+        this.categorias = response[0];
+        this.searchPosts();
+      }
+    );
   }
 
   search(): void {
-    debugger
     const query = this.searchFormGroup.value.search;
     let categoria = this.searchFormGroup.value.categoria;
 

@@ -1,14 +1,14 @@
 <div class="esees">
     <div class="eites">
         <a class="nomis" [routerLink]="['/perfil/' + userName]" matTooltip="Ver perfil de {{userName}}">
-            <app-user-avatar [avatar]="info.avatar" [userName]="userName" [height]="97">
+            <app-user-avatar [avatar]="info?.avatar" [userName]="userName" [height]="97">
             </app-user-avatar>
         </a>
 
-        <span [ngStyle]="{'color': info.rango?.color}">
-            <img src="/assets/images/icons/rangos/{{info.rango?.icono}}" matTooltip="{{info.rango?.nombre}}"
+        <span [ngStyle]="{'color': info?.rango?.color}">
+            <img src="/assets/images/icons/rangos/{{info?.rango?.icono}}" matTooltip="{{info?.rango?.nombre}}"
                 [matTooltipPosition]="'below'">
-            <strong class="ms-1">{{info.rango?.nombre}}</strong>
+            <strong class="ms-1">{{info?.rango?.nombre}}</strong>
         </span>
     </div>
 
@@ -21,9 +21,9 @@
         </div>
 
         <div class="float-end">
-            <addon-country-flag [iso2]="info.estado?.pais?.isO2" [title]="info.estado?.pais.nombre">
+            <addon-country-flag [iso2]="info?.estado?.pais?.isO2" [title]="info?.estado?.pais.nombre">
             </addon-country-flag>
-            <app-genre-icon [genre]="info.genero"></app-genre-icon>
+            <app-genre-icon [genre]="info?.genero"></app-genre-icon>
         </div>
 
         <div class="clearfix"></div>
