@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       userName: ['', Validators.required],
       password: ['', Validators.required],
-      captcha: ['', Validators.required]
+      captcha: ['', Validators.required],
     });
   }
 
@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
       footer: true,
       searchFooter: false,
       submenu: false,
-      background: ''
+      background: '',
     });
   }
 
@@ -57,7 +57,8 @@ export class LoginComponent implements OnInit {
       });
 
       if (value === 'error') {
-        this.error = 'Las credenciales son incorrectas, por favor corrige y vuelve a iniciar sesión';
+        this.error =
+          'Las credenciales son incorrectas, por favor corrige y vuelve a iniciar sesión';
         return;
       }
 
@@ -85,7 +86,6 @@ export class LoginComponent implements OnInit {
       }
 
       this.securityService.setUserToLocalStorage(value);
-      // this.router.navigate(['']);
       window.location.href = '';
     });
   }

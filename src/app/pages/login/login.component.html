@@ -15,7 +15,7 @@
                         {{error}}
                     </span>
 
-                    <div style="font-size: 1.2rem;">
+                    <div style="font-size: 1.2rem;" *ngIf="baneo.causa">
                         {{baneo.title}}
                     </div>
 
@@ -23,7 +23,7 @@
                         Causa: {{baneo.causa}}
                     </div>
 
-                    <div *ngIf="baneo.hasta" style="font-size: .8rem;">
+                    <div *ngIf="baneo.causa && baneo.hasta" style="font-size: .8rem;">
                         <strong>Hasta:</strong> {{baneo.hasta | date:'medium'}}
                     </div>
                 </div>
