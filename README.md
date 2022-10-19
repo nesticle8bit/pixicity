@@ -3,7 +3,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/NESTicle/pixicity.svg)](https://GitHub.com/NESTicle/pixicity/issues/)
 
 # pixicity
-Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de las cenizas a Pixicity!, pueden visitarlo pronto en el siguiente enlace [https://www.pixicity.io](https://www.pixicity.io)
+Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de las cenizas a Pixicity!, pueden visitarlo en el siguiente enlace [https://www.pixicity.io](https://www.pixicity.io)
 
 Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .net en el siguiente [enlace](https://github.com/NESTicle/pixicity-backend)
 
