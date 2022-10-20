@@ -1,4 +1,4 @@
 <a class="button-uppercase bazul follow_user_post" (click)="changeRango()"
-    *ngIf="currentUser.usuario.rango === 'Administrador' && data.nombre !== 'Administrador'">
+    *ngIf="currentUser.usuario && currentUser.usuario.rango === 'Administrador' && data.nombre !== 'Administrador'">
     <fa-icon [icon]="['fas', 'redo']"></fa-icon> Cambiar de rango
 </a>
