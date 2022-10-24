@@ -129,7 +129,7 @@
                 <section *ngFor="let respuesta of comentario?.respuestas; let respuestaIndex = index">
                     <article class="comentario-post clearbeta">
                         <aside class="avatar-box" style="z-index: 98;">
-                            <app-user-avatar [class]="'avatar-48 lazy'" [avatar]="comentario?.avatar"
+                            <app-user-avatar [class]="'avatar-48 lazy'" [avatar]="respuesta?.avatar"
                                 [userName]="respuesta?.usuario" [width]="32"
                                 matTooltip="Avatar de {{respuesta?.usuario}}" [matTooltipPosition]="'left'">
                             </app-user-avatar>
