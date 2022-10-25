@@ -5,8 +5,6 @@
 # pixicity
 Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de las cenizas a Pixicity!, pueden visitarlo en el siguiente enlace [https://www.pixicity.io](https://www.pixicity.io)
 
-Lo estoy desarrollando en angular y asp.net core. Pueden ingresar al proyecto .net en el siguiente [enlace](https://github.com/NESTicle/pixicity-backend)
-
 ### 📄 Index
 ![image](https://user-images.githubusercontent.com/1715022/161352397-60379b2d-943a-48aa-84af-18d78553f1ae.png)
 
