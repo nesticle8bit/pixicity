@@ -5,7 +5,7 @@
         <select class="form-select form-select-xs" formControlName="tipoActividad" (change)="getActividadUsuario()">
             <option value="" selected>Todas</option>
             <option *ngFor="let tipo of tipoActividades" value="{{tipo.value}}">{{tipo.key}}</option>
-          </select>
+        </select>
     </strong>
 </h6>
 
