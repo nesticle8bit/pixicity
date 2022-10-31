@@ -48,10 +48,10 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <!-- <button type="button" mat-menu-item (click)="cambiarSticky(post.id, i)">
-                            <mat-icon>sticky_note_2</mat-icon>
-                            <span *ngIf="post.sticky">Quitar</span> <span *ngIf="!post.sticky">Establecer</span> Sticky
-                        </button> -->
+                        <button type="button" mat-menu-item (click)="deleteShout(shout.id, i)">
+                            <mat-icon>delete_outline</mat-icon>
+                            Eliminar
+                        </button>
                     </mat-menu>
                 </td>
             </tr>

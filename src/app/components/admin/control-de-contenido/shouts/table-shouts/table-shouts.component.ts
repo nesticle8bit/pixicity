@@ -30,6 +30,10 @@ export class TableShoutsComponent implements OnInit {
     });
   }
 
+  deleteShout(id: number, index: number): void {
+
+  }
+
   pageChange(event: PageEvent): void {
     this.paginationService.change(event);
     this.getShouts();

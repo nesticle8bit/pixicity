@@ -106,7 +106,10 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.editor = new Editor();
+    this.editor = new Editor({
+      history: true,
+      keyboardShortcuts: true
+    });
   }
 
   ngOnInit(): void {
