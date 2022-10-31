@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-table-shouts',
@@ -31,7 +32,18 @@ export class TableShoutsComponent implements OnInit {
   }
 
   deleteShout(id: number, index: number): void {
+    this.perfilService.deleteShout(id).subscribe((response: any) => {
+      if (response) {
+        Swal.fire({
+          title: 'Eliminado',
+          text: 'El shout ha sido eliminado exitosamente',
+          icon: 'success',
+          timer: 3000,
+        });
 
+        this.shouts.splice(index, 1);
+      }
+    });
   }
 
   pageChange(event: PageEvent): void {

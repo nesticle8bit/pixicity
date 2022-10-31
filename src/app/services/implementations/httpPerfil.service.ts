@@ -79,7 +79,7 @@ export class HttpPerfilService implements IHttpPerfilService {
 
   deleteShout(shoutId: number): Observable<any> {
     return this.http
-      .delete<any>(`${environment.api}/api/shouts/createShout`, {
+      .delete<any>(`${environment.api}/api/shouts/deleteShout`, {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
         }),
