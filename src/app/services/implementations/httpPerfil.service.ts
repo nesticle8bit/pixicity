@@ -101,6 +101,25 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  recoveryShout(shoutId: number): Observable<any> {
+    return this.http
+      .put<any>(`${environment.api}/api/shouts/recoveryShout`, { id: shoutId })
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   getShoutById(shoutId: number): Observable<any> {
     return this.http
       .get<any>(`${environment.api}/api/shouts/getShoutById?id=${shoutId}`)

@@ -58,7 +58,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
     this.httpLogs.getStats().subscribe((value: any) => {
       this.currentStats.notifications = value.notifications;
-      this.currentStats.messages = value.messages;
+      this.currentStats.messages = 0; //value.messages;
     });
   }
 

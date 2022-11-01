@@ -14,7 +14,7 @@
         </thead>
 
         <tbody>
-            <tr *ngFor="let post of posts; let i = index" [ngClass]="{'favoritos-deleted': post.eliminado}">
+            <tr *ngFor="let post of posts; let i = index" [ngClass]="{'row-deleted': post.eliminado}">
                 <td>
                     <img src="/assets/images/categorias/sticky.png" class="sticky-post--home"
                         title="Post fijado por el Staff" alt="Sticky" *ngIf="post.sticky" />

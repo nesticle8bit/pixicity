@@ -13,7 +13,7 @@
         </thead>
 
         <tbody>
-            <tr *ngFor="let shout of shouts; let i = index" [ngClass]="{'favoritos-deleted': shout.eliminado}">
+            <tr *ngFor="let shout of shouts; let i = index" [ngClass]="{'row-deleted': shout.eliminado}">
                 <td>
                     {{shout.fechaRegistro | timeAgo}}
                 </td>
@@ -50,9 +50,14 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <button type="button" mat-menu-item (click)="deleteShout(shout.id, i)">
+                        <button type="button" mat-menu-item (click)="deleteShout(shout.id, i)" *ngIf="!shout.eliminado">
                             <mat-icon>delete_outline</mat-icon>
                             Eliminar
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="recoveryShout(shout.id, i)" *ngIf="shout.eliminado">
+                            <mat-icon>undo</mat-icon>
+                            Recuperar
                         </button>
                     </mat-menu>
                 </td>

@@ -17,7 +17,7 @@
         </thead>
 
         <tbody>
-            <tr *ngFor="let post of posts; let i = index" [ngClass]="{'favoritos-deleted': post.eliminado}">
+            <tr *ngFor="let post of posts; let i = index" [ngClass]="{'row-deleted': post.eliminado}">
                 <td>
                     <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
                         title="{{post.titulo}}">

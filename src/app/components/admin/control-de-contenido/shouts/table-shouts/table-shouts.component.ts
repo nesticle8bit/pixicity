@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { PageEvent } from '@angular/material/paginator';
+import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -41,7 +41,26 @@ export class TableShoutsComponent implements OnInit {
           timer: 3000,
         });
 
-        this.shouts.splice(index, 1);
+        if (this.shouts[index]) {
+          this.shouts[index].eliminado = true;
+        }
+      }
+    });
+  }
+
+  recoveryShout(id: number, index: number): void {
+    this.perfilService.recoveryShout(id).subscribe((response: any) => {
+      if (response) {
+        Swal.fire({
+          title: 'Recuperado',
+          text: 'El shout ha sido recuperado exitosamente',
+          icon: 'success',
+          timer: 3000,
+        });
+
+        if (this.shouts[index]) {
+          this.shouts[index].eliminado = false;
+        }
       }
     });
   }

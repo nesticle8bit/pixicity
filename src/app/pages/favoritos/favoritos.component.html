@@ -26,7 +26,7 @@
                     </thead>
 
                     <tbody>
-                        <tr *ngFor="let favorito of favoritos" [ngClass]="{'favoritos-deleted': favorito.deleted}">
+                        <tr *ngFor="let favorito of favoritos" [ngClass]="{'row-deleted': favorito.deleted}">
                             <td>
                                 <a [routerLink]="['/posts/' + favorito.post.categoria.seo + '/' + favorito.post.id + '/' + favorito.post.url]"
                                     title="{{favorito.post.titulo}}">
