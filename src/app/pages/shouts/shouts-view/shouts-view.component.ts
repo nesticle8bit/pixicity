@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-shouts-view',
@@ -49,11 +50,38 @@ export class ShoutsViewComponent implements OnInit {
 
     this.perfilService.getShoutById(shoutId).subscribe((value: any) => {
       this.shout = value;
-      console.log(value);
+      
+      if(!this.shout) {
+        window.location.href = '';
+      }
     });
   }
 
-  eliminarShout(): void {}
+  eliminarShout(): void {
+    Swal.fire({
+      title: 'Eliminar Shout',
+      text: '¿Seguro que deseas eliminar este shout?',
+      showCancelButton: true,
+      confirmButtonText: `Eliminar`,
+      cancelButtonText: `Cancelar`,
+      icon: 'question',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.perfilService.deleteShout(this.shout.id).subscribe((response: any) => {
+          if (response) {
+            Swal.fire({
+              title: 'Eliminado',
+              text: 'El shout ha sido eliminado exitosamente',
+              icon: 'success',
+              timer: 3000,
+            }).then(() => {
+              window.location.href = '';
+            });
+          }
+        });
+      }
+    });
+  }
 
   clipboard(text: string): void {
     let selBox = document.createElement('textarea');

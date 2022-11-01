@@ -3,6 +3,7 @@
         <thead>
             <tr>
                 <th></th>
+                <th>Id</th>
                 <th>Tipo</th>
                 <th>Comentario</th>
                 <th>URL</th>
@@ -16,6 +17,10 @@
             <tr *ngFor="let shout of shouts; let i = index" [ngClass]="{'row-deleted': shout.eliminado}">
                 <td>
                     {{shout.fechaRegistro | timeAgo}}
+                </td>
+
+                <td>
+                    {{shout.id}}
                 </td>
 
                 <td>
