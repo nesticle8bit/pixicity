@@ -1,8 +1,8 @@
-import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
-import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { MatDialogRef } from '@angular/material/dialog';
+import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dialog-change-avatar',
@@ -15,7 +15,8 @@ export class DialogChangeAvatarComponent implements OnInit {
 
   constructor(
     private securityService: IHttpSecurityService,
-    public dialogRef: MatDialogRef<DialogChangeAvatarComponent>
+    public dialogRef: MatDialogRef<DialogChangeAvatarComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit(): void {}

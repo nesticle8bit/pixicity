@@ -6,6 +6,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
+import { DialogChangeAvatarComponent } from 'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
 
 @Component({
   selector: 'app-table-usuarios',
@@ -79,5 +80,15 @@ export class TableUsuariosComponent implements OnInit {
   pageChange(event: PageEvent): void {
     this.paginationService.change(event);
     this.getUsuarios();
+  }
+
+  changeAvatar(usuario: any): void {
+    this.dialog.open(DialogChangeAvatarComponent, {
+      width: '350px',
+      disableClose: true,
+      data: {
+        isAdmin: true
+      }
+    });
   }
 }
