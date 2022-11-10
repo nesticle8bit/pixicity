@@ -26,13 +26,6 @@ export class TablePostsComponent implements OnInit {
 
   getPosts(): void {
     this.postsService.getPostsAdmin('').subscribe((response: any) => {
-      if (response?.data) {
-        response.data = response.data.map((post: any) => {
-          post.url = post.titulo.toLowerCase().replace(/\s/g, '-');
-          return post;
-        });
-      }
-
       this.posts = response.data;
       this.totalCount = response.pagination.totalCount;
     });

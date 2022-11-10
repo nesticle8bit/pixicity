@@ -45,13 +45,6 @@ export class FavoritosComponent implements OnInit {
 
   getFavoritos(categoriaId: number): void {
     this.httpGeneral.getFavoritosByUser(this.formGroup?.value?.search, categoriaId).subscribe((response: any) => {
-      if (response?.favoritos) {
-        response.favoritos = response.favoritos.map((fav: any) => {
-          fav.post.url = fav.post.titulo.toLowerCase().replace(/\s/g, '-');
-          return fav;
-        });
-      }
-
       this.favoritos = response.favoritos;
 
       if (this.categorias?.length <= 0) {

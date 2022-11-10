@@ -42,23 +42,12 @@ export class HomeLastPostsComponent implements OnInit {
   getPosts(categoria: string): void {
     this.postService.getPosts(categoria).subscribe((response: any) => {
       this.lastPosts = response.data;
-
-      this.lastPosts = this.lastPosts.map((post: any) => {
-        post.url = post.titulo.toLowerCase().replace(/\s/g, '-');
-        return post;
-      });
-
       this.totalCount = response.pagination.totalCount;
     });
   }
 
   getStickyPosts(): void {
     this.postService.getStickyPosts().subscribe((posts: any) => {
-      posts = posts.map((post: any) => {
-        post.url = post.titulo.toLowerCase().replace(/\s/g, '-');
-        return post;
-      });
-
       this.stickyPosts = posts;
     });
   }

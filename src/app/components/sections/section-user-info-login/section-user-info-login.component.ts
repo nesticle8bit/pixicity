@@ -103,13 +103,6 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
   verFavoritos(): void {
     this.favoritosService.getLastFavoritos(5).subscribe((response: any) => {
-      if (response) {
-        response = response.map((fav: any) => {
-          fav.post.url = fav.post.titulo.toLowerCase().replace(/\s/g, '-');
-          return fav;
-        });
-      }
-
       this.favoritos = response;
     });
 
