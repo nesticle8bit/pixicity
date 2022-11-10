@@ -173,6 +173,8 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       (categoria: any) => categoria.id === post.categoriaId
     )[0];
 
+    post.titulo = post.titulo.replaceAll('/', '-');
+
     if (!this.postId) {
       this.postService.savePost(post).subscribe((response: any) => {
         if (response) {

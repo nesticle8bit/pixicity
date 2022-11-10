@@ -88,6 +88,11 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
+                        <button type="button" mat-menu-item (click)="banUser(usuario)">
+                            <mat-icon>photo_camera</mat-icon>
+                            Actualizar Imagen de Perfil
+                        </button>
+
                         <button type="button" mat-menu-item (click)="banUser(usuario)" *ngIf="!usuario.baneado">
                             <mat-icon>do_disturb_alt</mat-icon>
                             Banear
