@@ -24,7 +24,7 @@
                 </td>
 
                 <td>
-                    {{usuario.fechaRegistro | timeAgo}}
+                    <app-user-avatar [height]="20" [avatar]="usuario.avatar" [userName]="usuario.userName"></app-user-avatar> {{usuario.fechaRegistro | timeAgo}}
                 </td>
 
                 <td>

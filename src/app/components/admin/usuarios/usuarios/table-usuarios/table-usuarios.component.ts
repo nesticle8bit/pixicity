@@ -87,7 +87,8 @@ export class TableUsuariosComponent implements OnInit {
       width: '350px',
       disableClose: true,
       data: {
-        isAdmin: true
+        isAdmin: true,
+        usuario
       }
     });
   }

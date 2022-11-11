@@ -507,6 +507,29 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  changeAvatarAdmin(file: Blob, usuarioId: number): Observable<any> {
+    let formData: FormData = new FormData();
+    formData.append('avatar.jpeg', file);
+    formData.append('usuarioId', usuarioId.toString());
+
+    return this.http
+      .post<any>(`${environment.api}/api/usuarios/changeAvatarAdmin`, formData)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   getLastRegisteredUsers(): Observable<any> {
     return this.http
       .get<any>(`${environment.api}/api/usuarios/getLastRegisteredUsers`)

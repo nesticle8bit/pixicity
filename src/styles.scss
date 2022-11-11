@@ -1375,6 +1375,17 @@ p.cupuntos {
     margin-top: 21px;
 }
 
+.button-uppercase {
+    text-align: center;
+    height: 24px;
+    line-height: 24px;
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 2px;
+}
+
 .bverde {
     text-align: center;
     height: 24px;
@@ -1411,17 +1422,6 @@ p.cupuntos {
     }
 }
 
-.button-uppercase {
-    text-align: center;
-    height: 24px;
-    line-height: 24px;
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    border-radius: 2px;
-}
-
 .bazul {
     color: #fff;
     background: #2594ef;
@@ -1449,6 +1449,21 @@ p.cupuntos {
     &:active {
         color: #fff;
         background:#bb3b2d;
+    }
+}
+
+.bnaranja {
+    color: #fff;
+    background: #f39c12;
+
+    &:hover {
+        color: #fff;
+        background:#e29210;
+    }
+
+    &:active {
+        color: #fff;
+        background:#c57f0f;
     }
 }
 

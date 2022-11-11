@@ -186,6 +186,7 @@ import { HttpPerfilService } from './services/implementations/httpPerfil.service
 import { ShoutsViewComponent } from './pages/shouts/shouts-view/shouts-view.component';
 import { DashboardShoutsComponent } from './components/admin/control-de-contenido/shouts/dashboard-shouts/dashboard-shouts.component';
 import { TableShoutsComponent } from './components/admin/control-de-contenido/shouts/table-shouts/table-shouts.component';
+import { ChangeAvatarComponent } from './components/admin/usuarios/usuarios/change-avatar/change-avatar.component';
 
 @NgModule({
   declarations: [
@@ -302,6 +303,7 @@ import { TableShoutsComponent } from './components/admin/control-de-contenido/sh
     ShoutsViewComponent,
     DashboardShoutsComponent,
     TableShoutsComponent,
+    ChangeAvatarComponent,
   ],
   imports: [
     BrowserModule,

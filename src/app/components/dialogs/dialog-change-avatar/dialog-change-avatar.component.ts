@@ -47,15 +47,29 @@ export class DialogChangeAvatarComponent implements OnInit {
       type: 'image/jpeg',
     });
 
-    this.securityService.changeAvatar(imageFile).subscribe((response: any) => {
-      if (response) {
-        let currentUser = this.securityService.getCurrentUser();
-        currentUser.usuario.avatar = 'avatar.jpeg';
-        this.securityService.setUserToLocalStorage(currentUser);
-
-        this.dialogRef.close(response);
-      }
-    });
+    if(this.data?.isAdmin) {
+      this.securityService.changeAvatarAdmin(imageFile, this.data?.usuario?.id).subscribe((response: any) => {
+        if (response) {
+          this.dialogRef.close(response);
+          Swal.fire({
+            title: 'Actualizado',
+            text: `El avatar del usuario ${this.data?.usuario?.userName} ha sido actualizado correctamente`,
+            icon: 'success',
+            timer: 3000
+          });
+        }
+      });
+    } else {
+      this.securityService.changeAvatar(imageFile).subscribe((response: any) => {
+        if (response) {
+          let currentUser = this.securityService.getCurrentUser();
+          currentUser.usuario.avatar = 'avatar.jpeg';
+          this.securityService.setUserToLocalStorage(currentUser);
+  
+          this.dialogRef.close(response);
+        }
+      });
+    }
   }
 
   dataURItoBlob(dataURI: string): Blob {
