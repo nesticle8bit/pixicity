@@ -101,7 +101,7 @@
                                         </app-change-rango>
                                     </div>
 
-                                    <div class="col-12 col-sm-3" *ngIf="currentUser?.rango">
+                                    <div class="col-12 col-sm-3" *ngIf="loggedUser?.usuario?.userName !== currentUser.userName">
                                         <app-change-avatar
                                             [data]="{ id: currentUser?.id, userName: currentUser.userName }">
                                         </app-change-avatar>
