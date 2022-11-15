@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  api: 'http://localhost:58882',
+  api: 'https://api.pixicity.io',
   captchaKey: '6LeppFEfAAAAABDIcFqnMchITEudf5s-E9KVEnn0'
 };
