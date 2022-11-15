@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAfiliarseComponent } from 'src/app/components/dialogs/dialog-afiliarse/dialog-afiliarse.component';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
@@ -10,7 +11,11 @@ import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 })
 export class HomeAfiliadosComponent implements OnInit {
   public afiliados: any[] = [];
-  constructor(private webService: IHttpWebService, private dialog: MatDialog) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
+    private webService: IHttpWebService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.getAfiliados();
@@ -31,7 +36,9 @@ export class HomeAfiliadosComponent implements OnInit {
 
   hit(afiliado: any): void {
     this.webService.hitAfiliado(afiliado.codigo).subscribe((url: any) => {
-      window.open(url, '_blank');
+      if (isPlatformBrowser(this.platformId)) {
+        window.open(url, '_blank');
+      }
     });
   }
 }

@@ -1,8 +1,9 @@
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private displayService: DisplayComponentService,
     private securityService: IHttpSecurityService,
+    @Inject(PLATFORM_ID) private platformId: any,
     private formBuilder: FormBuilder,
     private router: Router
   ) {
@@ -86,7 +88,10 @@ export class LoginComponent implements OnInit {
       }
 
       this.securityService.setUserToLocalStorage(value);
-      window.location.href = '';
+
+      if (isPlatformBrowser(this.platformId)) {
+        window.location.href = '';
+      }
     });
   }
 

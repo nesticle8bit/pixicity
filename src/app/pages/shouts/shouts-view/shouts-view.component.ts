@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
@@ -18,8 +19,9 @@ export class ShoutsViewComponent implements OnInit {
   constructor(
     private displayService: DisplayComponentService,
     private securityService: IHttpSecurityService,
-    private activatedRoute: ActivatedRoute,
+    @Inject(PLATFORM_ID) private platformId: any,
     private perfilService: IHttpPerfilService,
+    private activatedRoute: ActivatedRoute,
     private snackBar: MatSnackBar
   ) {
     this.displayService.setDisplay({
@@ -50,9 +52,11 @@ export class ShoutsViewComponent implements OnInit {
 
     this.perfilService.getShoutById(shoutId).subscribe((value: any) => {
       this.shout = value;
-      
-      if(!this.shout) {
-        window.location.href = '';
+
+      if (!this.shout) {
+        if (isPlatformBrowser(this.platformId)) {
+          window.location.href = '';
+        }
       }
     });
   }
@@ -67,18 +71,22 @@ export class ShoutsViewComponent implements OnInit {
       icon: 'question',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.perfilService.deleteShout(this.shout.id).subscribe((response: any) => {
-          if (response) {
-            Swal.fire({
-              title: 'Eliminado',
-              text: 'El shout ha sido eliminado exitosamente',
-              icon: 'success',
-              timer: 3000,
-            }).then(() => {
-              window.location.href = '';
-            });
-          }
-        });
+        this.perfilService
+          .deleteShout(this.shout.id)
+          .subscribe((response: any) => {
+            if (response) {
+              Swal.fire({
+                title: 'Eliminado',
+                text: 'El shout ha sido eliminado exitosamente',
+                icon: 'success',
+                timer: 3000,
+              }).then(() => {
+                if (isPlatformBrowser(this.platformId)) {
+                  window.location.href = '';
+                }
+              });
+            }
+          });
       }
     });
   }

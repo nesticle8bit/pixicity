@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
@@ -30,8 +31,9 @@ export class SectionUserInfoLoginComponent implements OnInit {
   };
 
   constructor(
-    private securityService: IHttpSecurityService,
     private favoritosService: IHttpFavoritosService,
+    private securityService: IHttpSecurityService,
+    @Inject(PLATFORM_ID) private platformId: any,
     private httpLogs: IHttpLogsService,
     private formBuilder: FormBuilder,
     private router: Router
@@ -113,7 +115,10 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
   cerrarSesion(): void {
     this.securityService.logout();
-    window.location.href = '';
+
+    if (isPlatformBrowser(this.platformId)) {
+      window.location.href = '';
+    }
   }
 
   buscar(): void {

@@ -1,8 +1,9 @@
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import Swal from 'sweetalert2';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-dialog-change-avatar',
@@ -14,8 +15,9 @@ export class DialogChangeAvatarComponent implements OnInit {
   croppedImage: any = '';
 
   constructor(
-    private securityService: IHttpSecurityService,
     public dialogRef: MatDialogRef<DialogChangeAvatarComponent>,
+    private securityService: IHttpSecurityService,
+    @Inject(PLATFORM_ID) private platformId: any,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
@@ -47,43 +49,49 @@ export class DialogChangeAvatarComponent implements OnInit {
       type: 'image/jpeg',
     });
 
-    if(this.data?.isAdmin) {
-      this.securityService.changeAvatarAdmin(imageFile, this.data?.usuario?.id).subscribe((response: any) => {
-        if (response) {
-          this.dialogRef.close(response);
-          Swal.fire({
-            title: 'Actualizado',
-            text: `El avatar del usuario ${this.data?.usuario?.userName} ha sido actualizado correctamente`,
-            icon: 'success',
-            timer: 3000
-          });
-        }
-      });
+    if (this.data?.isAdmin) {
+      this.securityService
+        .changeAvatarAdmin(imageFile, this.data?.usuario?.id)
+        .subscribe((response: any) => {
+          if (response) {
+            this.dialogRef.close(response);
+            Swal.fire({
+              title: 'Actualizado',
+              text: `El avatar del usuario ${this.data?.usuario?.userName} ha sido actualizado correctamente`,
+              icon: 'success',
+              timer: 3000,
+            });
+          }
+        });
     } else {
-      this.securityService.changeAvatar(imageFile).subscribe((response: any) => {
-        if (response) {
-          let currentUser = this.securityService.getCurrentUser();
-          currentUser.usuario.avatar = 'avatar.jpeg';
-          this.securityService.setUserToLocalStorage(currentUser);
-  
-          this.dialogRef.close(response);
-        }
-      });
+      this.securityService
+        .changeAvatar(imageFile)
+        .subscribe((response: any) => {
+          if (response) {
+            let currentUser = this.securityService.getCurrentUser();
+            currentUser.usuario.avatar = 'avatar.jpeg';
+            this.securityService.setUserToLocalStorage(currentUser);
+
+            this.dialogRef.close(response);
+          }
+        });
     }
   }
 
-  dataURItoBlob(dataURI: string): Blob {
+  dataURItoBlob(dataURI: string): any {
     dataURI = dataURI.replace('data:image/jpeg;base64,', '');
 
-    const byteString = window.atob(dataURI);
-    const arrayBuffer = new ArrayBuffer(byteString.length);
-    const int8Array = new Uint8Array(arrayBuffer);
+    if (isPlatformBrowser(this.platformId)) {
+      const byteString = window.atob(dataURI);
+      const arrayBuffer = new ArrayBuffer(byteString.length);
+      const int8Array = new Uint8Array(arrayBuffer);
 
-    for (let i = 0; i < byteString.length; i++) {
-      int8Array[i] = byteString.charCodeAt(i);
+      for (let i = 0; i < byteString.length; i++) {
+        int8Array[i] = byteString.charCodeAt(i);
+      }
+
+      const blob = new Blob([int8Array], { type: 'image/png' });
+      return blob;
     }
-
-    const blob = new Blob([int8Array], { type: 'image/png' });
-    return blob;
   }
 }

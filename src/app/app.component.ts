@@ -1,10 +1,17 @@
 import { DisplayComponentService } from './services/shared/displayComponents.service';
 import { DisplayComponentModel } from './models/shared/displayComponent.model';
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  Output,
+  PLATFORM_ID,
+} from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { SEOService } from './services/shared/seo.service';
 import { SEOModel } from './models/shared/seo.model';
 import { Meta, Title } from '@angular/platform-browser';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +29,7 @@ export class AppComponent {
 
   constructor(
     private displayComponentService: DisplayComponentService,
+    @Inject(PLATFORM_ID) private platformId: any,
     private seoService: SEOService,
     private router: Router,
     private title: Title,
@@ -89,7 +97,10 @@ export class AppComponent {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
-      window.scrollTo(0, 0);
+
+      if (isPlatformBrowser(this.platformId)) {
+        window.scrollTo(0, 0);
+      }
     });
 
     this.welcome();

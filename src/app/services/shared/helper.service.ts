@@ -1,5 +1,6 @@
+import { isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { throwError } from 'rxjs';
 
@@ -7,7 +8,10 @@ import { throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class HelperService {
-  constructor(private toastr: ToastrService) {}
+  constructor(
+    private toastr: ToastrService,
+    @Inject(PLATFORM_ID) private platformId: any
+  ) {}
 
   generateObjectId = (): string => {
     const timestamp = ((new Date().getTime() / 1000) | 0).toString(16);
@@ -23,37 +27,22 @@ export class HelperService {
   };
 
   errorHandler = (httpError: HttpErrorResponse) => {
-    if (httpError.error instanceof ErrorEvent) {
-      if (httpError?.error?.message) {
-        this.toastr.error(
-          `An error occurred ${httpError?.error?.message}`,
-          'Error'
-        );
-        console.error('An error occurred:', httpError?.error?.message);
-      }
-    } else {
-      if (httpError?.message) {
-        console.error(httpError);
-        this.toastr.error(
-          `Un error se ha encontrado: ${httpError?.status}, ` +
-            `Contenido: ${httpError?.message}`,
-          'Error'
-        );
-      }
-    }
-
-    // return an observable with a user-facing error message
+    console.error(httpError);
     return throwError('Something bad happened; please try again later.');
   };
 
   scrollToTop = () => {
+    const platform = this.platformId;
+
     (function smoothscroll() {
       let currentScroll =
         document.documentElement.scrollTop || document.body.scrollTop;
 
       if (currentScroll > 0) {
-        window.requestAnimationFrame(smoothscroll);
-        window.scrollTo(0, currentScroll - currentScroll / 8);
+        if (isPlatformBrowser(platform)) {
+          window.requestAnimationFrame(smoothscroll);
+          window.scrollTo(0, currentScroll - currentScroll / 8);
+        }
       }
     })();
   };

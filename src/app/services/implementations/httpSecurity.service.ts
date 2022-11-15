@@ -7,9 +7,10 @@ import { HelperService } from '../shared/helper.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable()
 export class HttpSecurityService implements IHttpSecurityService {
@@ -20,11 +21,17 @@ export class HttpSecurityService implements IHttpSecurityService {
     private http: HttpClient,
     private helper: HelperService,
     private router: Router,
-    private paginationService: PaginationService
+    private paginationService: PaginationService,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {
-    this.currentUserSubject = new BehaviorSubject<JwtUserModel>(
-      JSON.parse(localStorage.getItem('pixicity') || '{}')
-    );
+    this.currentUserSubject = new BehaviorSubject<JwtUserModel>(JSON.parse('{}'));
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.currentUserSubject = new BehaviorSubject<JwtUserModel>(
+        JSON.parse(localStorage.getItem('pixicity') || '{}')
+      );
+    }
+
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
@@ -213,12 +220,16 @@ export class HttpSecurityService implements IHttpSecurityService {
   }
 
   setUserToLocalStorage(obj: any): any {
-    localStorage.setItem('pixicity', JSON.stringify(obj));
-    this.currentUserSubject.next(obj);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('pixicity', JSON.stringify(obj));
+      this.currentUserSubject.next(obj);
+    }
   }
 
   logout(): void {
-    localStorage.removeItem('pixicity');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('pixicity');
+    }
 
     this.router.navigateByUrl('');
     this.currentUserSubject.next(new JwtUserModel({}, ''));

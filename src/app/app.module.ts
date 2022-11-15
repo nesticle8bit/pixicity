@@ -306,7 +306,7 @@ import { ChangeAvatarComponent } from './components/admin/usuarios/usuarios/chan
     ChangeAvatarComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     FontAwesomeModule,
     BrowserAnimationsModule,
