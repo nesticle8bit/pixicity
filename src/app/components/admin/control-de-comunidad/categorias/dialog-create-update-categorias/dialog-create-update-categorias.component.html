@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>
+    {{data?.id ? 'Actualizar' : 'Crear nueva'}} Categoría
+</h2>
+
+<form [formGroup]="formGroup" (ngSubmit)="saveCategoria()">
+    <mat-dialog-content>
+        <div class="mb-3" *ngIf="formGroup.value?.id">
+            <label>Id</label> <br>
+            <span class="badge bg-primary">{{formGroup.value?.id}}</span>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6">
+                <div class="mb-3">
+                    <label>Ícono <strong class="text-danger">*</strong></label>
+
+                    <ng-select [items]="iconos" formControlName="icono">
+                        <ng-template ng-label-tmp let-item="item">
+                            <img src="/assets/images/categorias/{{item}}" class="image-middle me-1">
+                            {{item}}
+                        </ng-template>
+
+                        <ng-template ng-option-tmp let-item="item" let-index="index">
+                            <img src="/assets/images/categorias/{{item}}" class="image-middle me-1">
+                            {{item}}
+                        </ng-template>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6">
+                <div class="mb-3">
+                    <label>Nombre <strong class="text-danger">*</strong></label>
+                    <input type="text" class="form-control" formControlName="nombre" [maxLength]="100"
+                        cdkFocusInitial />
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-6">
+                <div class="mb-3">
+                    <label>SEO <strong class="text-danger">*</strong></label>
+                    <input type="text" class="form-control" formControlName="seo" [maxLength]="100" />
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <mat-slide-toggle formControlName="eliminado" color="primary">Eliminado</mat-slide-toggle>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>
+            Cancelar
+        </button>
+
+        <button type="submit" mat-button color="primary" [disabled]="formGroup.invalid">
+            {{data?.id ? 'Actualizar' : 'Guardar'}}
+        </button>
+    </mat-dialog-actions>
+</form>
