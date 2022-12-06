@@ -8,5 +8,8 @@ export abstract class IHttpParametrosService {
   abstract savePais(pais: any): Observable<any>;
   abstract updatePais(pais: any): Observable<any>;
   abstract getEstadosByPais(idPais: number): Observable<any>;
+
+  abstract getCategoriasAdmin(): Observable<any>;
   abstract getCategoriasDropdown(): Observable<any>;
+  abstract saveCategoria(categoria: any): Observable<any>;
 }

@@ -115,9 +115,50 @@ export class HttpParametrosService implements IHttpParametrosService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getCategoriasAdmin(): Observable<any> {
+    return this.http
+      .get<any>(
+        `${environment.api}/api/categorias/getCategoriasAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`
+      )
+
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   getCategoriasDropdown(): Observable<any> {
     return this.http
       .get<any>(`${environment.api}/api/categorias/getCategoriasDropdown`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  saveCategoria(categoria: any): Observable<any> {
+    return this.http
+      .post<any>(`${environment.api}/api/categorias/saveCategoria`, categoria)
       .pipe(
         map((response: any) => {
           if (response.status === 200) {

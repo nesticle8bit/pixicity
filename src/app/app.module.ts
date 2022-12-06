@@ -187,6 +187,9 @@ import { ShoutsViewComponent } from './pages/shouts/shouts-view/shouts-view.comp
 import { DashboardShoutsComponent } from './components/admin/control-de-contenido/shouts/dashboard-shouts/dashboard-shouts.component';
 import { TableShoutsComponent } from './components/admin/control-de-contenido/shouts/table-shouts/table-shouts.component';
 import { ChangeAvatarComponent } from './components/admin/usuarios/usuarios/change-avatar/change-avatar.component';
+import { DashboardCategoriasComponent } from './components/admin/control-de-comunidad/categorias/dashboard-categorias/dashboard-categorias.component';
+import { TableCategoriasComponent } from './components/admin/control-de-comunidad/categorias/table-categorias/table-categorias.component';
+import { DialogCreateUpdateCategoriasComponent } from './components/admin/control-de-comunidad/categorias/dialog-create-update-categorias/dialog-create-update-categorias.component';
 
 @NgModule({
   declarations: [
@@ -304,6 +307,9 @@ import { ChangeAvatarComponent } from './components/admin/usuarios/usuarios/chan
     DashboardShoutsComponent,
     TableShoutsComponent,
     ChangeAvatarComponent,
+    DashboardCategoriasComponent,
+    TableCategoriasComponent,
+    DialogCreateUpdateCategoriasComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

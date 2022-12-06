@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardAfiliadosComponent } from './components/admin/control-de-comunidad/afiliados/dashboard-afiliados/dashboard-afiliados.component';
+import { DashboardCategoriasComponent } from './components/admin/control-de-comunidad/categorias/dashboard-categorias/dashboard-categorias.component';
 import { DashboardReportesComponent } from './components/admin/control-de-comunidad/reportes/dashboard-reportes/dashboard-reportes.component';
 import { DashboardCommentsComponent } from './components/admin/control-de-contenido/comentarios/dashboard-comments/dashboard-comments.component';
 import { DashboardPaisesComponent } from './components/admin/control-de-contenido/paises/dashboard-paises/dashboard-paises.component';
@@ -117,18 +118,71 @@ const routes: Routes = [
     path: 'administracion',
     component: DashboardComponent,
     children: [
-      { path: 'dashboard', component: DashboardAdminComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
-      { path: 'configuracion', component: DashboardConfigurationComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
-      { path: 'posts', component: DashboardPostsComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
-      { path: 'afiliados', component: DashboardAfiliadosComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
-      { path: 'publicidad', component: DashboardAdsComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
-      { path: 'comentarios', component: DashboardCommentsComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
-      { path: 'paises', component: DashboardPaisesComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
-      { path: 'sesiones', component: DashboardSesionesComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
-      { path: 'denuncias', component: DashboardReportesComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
-      { path: 'usuarios', component: DashboardUsuariosComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
-      { path: 'rango-usuarios', component: DashboardRangosComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
-      { path: 'shouts', component: DashboardShoutsComponent, canActivate: [AuthGuard, AdministradorAuthorization] },
+      {
+        path: 'dashboard',
+        component: DashboardAdminComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'configuracion',
+        component: DashboardConfigurationComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'posts',
+        component: DashboardPostsComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'afiliados',
+        component: DashboardAfiliadosComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'categorias',
+        component: DashboardCategoriasComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'publicidad',
+        component: DashboardAdsComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'comentarios',
+        component: DashboardCommentsComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'paises',
+        component: DashboardPaisesComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'sesiones',
+        component: DashboardSesionesComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'denuncias',
+        component: DashboardReportesComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'usuarios',
+        component: DashboardUsuariosComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'rango-usuarios',
+        component: DashboardRangosComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'shouts',
+        component: DashboardShoutsComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
     ],
     canActivate: [AuthGuard, AdministradorAuthorization],
   },

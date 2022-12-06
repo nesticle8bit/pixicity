@@ -1,0 +1,75 @@
+<button type="button" (click)="updateCategoria(undefined)" class="mb-3 float-end" mat-flat-button color="primary">
+    <mat-icon>add_circle</mat-icon> Agregar Categoría
+</button>
+
+<div class="clearfix"></div>
+
+<main class="table-responsive" *ngIf="categorias.length > 0">
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Creado</th>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>SEO</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let categoria of categorias; let i = index">
+                <td>
+                    <span class="cursor--help" matTooltip="{{categoria.fechaRegistro | date:'long'}}">
+                        {{categoria.fechaRegistro | timeAgo}}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="text-muted">
+                        {{categoria.id}}
+                    </span>
+                </td>
+
+                <td>
+                    <img [src]="'/assets/images/categorias/' + categoria.icono" alt="{{categoria.seo}}"
+                        matTooltip="{{categoria.icono}}" class="cursor--help me-2" />
+                    {{categoria.nombre}}
+                </td>
+
+                <td>
+                    {{'/' + categoria.seo + '/'}}
+                </td>
+
+                <td>
+                    <span class="badge"
+                        [ngClass]="{'bg-success': !categoria.eliminado, 'bg-warning': categoria.eliminado}">
+                        {{categoria.eliminado ? 'Eliminado' : 'Activo'}}
+                    </span>
+                </td>
+
+                <td class="text-center" width="30px">
+                    <button class="btn-menu" [matMenuTriggerFor]="menu">
+                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button type="button" mat-menu-item (click)="updateCategoria(categoria)">
+                            <mat-icon>edit</mat-icon>
+                            <span>Actualizar</span>
+                        </button>
+
+                        <button type="button" class="text-danger" mat-menu-item (click)="deleteCategoria(categoria, i)">
+                            <mat-icon class="text-danger">delete_outline</mat-icon>
+                            <span>Eliminar</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="categorias.length > 0">
+</mat-paginator>
