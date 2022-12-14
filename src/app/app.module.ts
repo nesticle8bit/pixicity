@@ -190,6 +190,7 @@ import { ChangeAvatarComponent } from './components/admin/usuarios/usuarios/chan
 import { DashboardCategoriasComponent } from './components/admin/control-de-comunidad/categorias/dashboard-categorias/dashboard-categorias.component';
 import { TableCategoriasComponent } from './components/admin/control-de-comunidad/categorias/table-categorias/table-categorias.component';
 import { DialogCreateUpdateCategoriasComponent } from './components/admin/control-de-comunidad/categorias/dialog-create-update-categorias/dialog-create-update-categorias.component';
+import { PostMoreFromOPComponent } from './posts/post-more-from-op/post-more-from-op.component';
 
 @NgModule({
   declarations: [
@@ -310,6 +311,7 @@ import { DialogCreateUpdateCategoriasComponent } from './components/admin/contro
     DashboardCategoriasComponent,
     TableCategoriasComponent,
     DialogCreateUpdateCategoriasComponent,
+    PostMoreFromOPComponent,
   ],
   imports: [
     BrowserModule,

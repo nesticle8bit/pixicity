@@ -495,6 +495,25 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getPostsFromOP(postId: number): Observable<any> {
+    return this.http
+      .get<any>(`${environment.api}/api/posts/getPostsFromOP?postId=${postId}`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   searchPosts(value: any): Observable<any[]> {
     let searchValues = '';
 

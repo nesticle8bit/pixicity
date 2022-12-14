@@ -1,15 +1,15 @@
 <section>
     <div class="titulaw">
-        <h2>Posts Relacionados</h2>
+        <h2>Más posts de {{post?.usuario?.userName}}</h2>
     </div>
 </section>
 
-<main class="alert alert-warning" *ngIf="relatedPosts?.length < 1">
-    🎯 <strong>No se han encontrado posts relacionados</strong>
+<main class="alert alert-warning" *ngIf="posts.length < 1">
+    🌱 <strong>No se han encontrado más posts del autor</strong>
 </main>
 
-<main class="esees mb-4" *ngIf="post && relatedPosts.length > 0">
-    <article class="list-posts--zebra" *ngFor="let post of relatedPosts; let i = index">
+<main class="esees mb-4" *ngIf="post && posts.length > 0">
+    <article class="list-posts--zebra" *ngFor="let post of posts; let i = index">
         <strong class="float-start">{{i + 1}}</strong>
 
         <small>

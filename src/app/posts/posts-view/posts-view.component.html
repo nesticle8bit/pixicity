@@ -36,7 +36,8 @@
         <div class="col-12 col-sm-12 col-md-3">
             <app-post-original-poster-info [userName]="post.usuario?.userName"></app-post-original-poster-info>
 
-            <section class="my-1" *ngIf="post?.usuario?.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador' || currentUser?.usuario?.rango === 'Moderador'">
+            <section class="my-1"
+                *ngIf="post?.usuario?.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador' || currentUser?.usuario?.rango === 'Moderador'">
                 <div class="titulaw">
                     <h2>Herramientas</h2>
                 </div>
@@ -69,9 +70,9 @@
             <div class="titulaw mb-0 mt-4 mb-2">
                 <h2>Publicidad</h2>
             </div>
-            
-            <ads-by-type [hideTitle]="true" [type]="'300x250'"></ads-by-type>
 
+            <ads-by-type [hideTitle]="true" [type]="'300x250'"></ads-by-type>
+            <app-post-more-from-op [post]="post"></app-post-more-from-op>
             <app-post-related-posts [post]="post"></app-post-related-posts>
         </div>
     </div>
