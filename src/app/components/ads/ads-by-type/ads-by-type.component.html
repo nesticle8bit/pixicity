@@ -10,4 +10,4 @@
     </strong>
 </h6>
 
-<section *ngIf="ads" class="mb-4" [innerHTML]="ads"></section>
+<section *ngIf="ads" class="{{class ? class : 'mb-4'}}" [innerHTML]="ads"></section>
