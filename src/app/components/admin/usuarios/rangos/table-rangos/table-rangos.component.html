@@ -30,8 +30,8 @@
                 </td>
 
                 <td>
-                    <img class="me-1 cursor--help" src="/assets/images/icons/rangos/{{rango.icono}}" alt="{{rango.icono}}" matTooltip="{{rango.icono}}"
-                    [matTooltipPosition]="'left'">
+                    <img class="me-1 cursor--help" src="/assets/images/icons/rangos/{{rango.icono}}"
+                        alt="{{rango.icono}}" matTooltip="{{rango.icono}}" [matTooltipPosition]="'left'">
                     <strong [ngStyle]="{'color': rango.color}">
                         {{rango.nombre}}
                     </strong>
@@ -58,7 +58,9 @@
                 </td>
 
                 <td>
-                    <span class="cursor--help" matTooltip="Fecha de última actualización: {{rango.fechaActualiza | date:'medium'}}" [matTooltipPosition]="'above'">
+                    <span class="cursor--help"
+                        matTooltip="Fecha de última actualización: {{rango.fechaActualiza | date:'medium'}}"
+                        [matTooltipPosition]="'above'">
                         {{rango.usuarioActualiza ? rango.usuarioActualiza : '-'}}
                     </span>
                 </td>

@@ -15,8 +15,11 @@
                         <span class="required"></span> Contenido
                     </label>
 
-                    <div class="NgxEditor__Wrapper">
+                    <ngx-editor [editor]="editor">
                         <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                      </ngx-editor>
+                    <div class="NgxEditor__Wrapper">
+                        <!-- <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu> -->
                         <ngx-editor [editor]="editor" formControlName="contenido"
                             [placeholder]="'Ingresa el Contenido'"></ngx-editor>
                     </div>
@@ -52,13 +55,14 @@
                     <label class="control-label">
                         <span class="required"></span> Etiquetas
                     </label>
-                
-                    <ng-select class="ng-select-borders" [items]="[]" [addTag]="true" [multiple]="true" [selectOnTab]="true"
-                        [isOpen]="false" formControlName="etiquetas">
+
+                    <ng-select class="ng-select-borders" [items]="[]" [addTag]="true" [multiple]="true"
+                        [selectOnTab]="true" [isOpen]="false" formControlName="etiquetas">
                     </ng-select>
-                
+
                     <p>
-                        Ingresa por favor <b>al menos 4 etiquetas</b> (ingresando cada una con la tecla <i>Enter</i> ) distintas que
+                        Ingresa por favor <b>al menos 4 etiquetas</b> (ingresando cada una con la tecla <i>Enter</i> )
+                        distintas que
                         describan el contenido de tu post.
                     </p>
                 </section>
@@ -102,13 +106,15 @@
                 <section class="mb-3">
                     <div class="row">
                         <div class="col-12 col-sm-6">
-                            <button mat-flat-button class="mat-gray" (click)="guardarBorrador()" [disabled]="formGroup.invalid">
+                            <button mat-flat-button class="mat-gray" (click)="guardarBorrador()"
+                                [disabled]="formGroup.invalid">
                                 <fa-icon [icon]="['fas', 'save']"></fa-icon> Guardar en Borradores
                             </button>
                         </div>
 
                         <div class="col-12 col-sm-6 text-end">
-                            <button type="submit" mat-flat-button class="mat-success" (click)="publicarPost()" [disabled]="formGroup.invalid">
+                            <button type="submit" mat-flat-button class="mat-success" (click)="publicarPost()"
+                                [disabled]="formGroup.invalid">
                                 <span *ngIf="!postId || formGroup.value.esBorrador">
                                     <fa-icon [icon]="['far', 'check-circle']"></fa-icon> Publicar
                                 </span>

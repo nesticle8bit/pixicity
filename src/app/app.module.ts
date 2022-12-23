@@ -191,6 +191,8 @@ import { DashboardCategoriasComponent } from './components/admin/control-de-comu
 import { TableCategoriasComponent } from './components/admin/control-de-comunidad/categorias/table-categorias/table-categorias.component';
 import { DialogCreateUpdateCategoriasComponent } from './components/admin/control-de-comunidad/categorias/dialog-create-update-categorias/dialog-create-update-categorias.component';
 import { PostMoreFromOPComponent } from './posts/post-more-from-op/post-more-from-op.component';
+import { DashboardEstadisticasComponent } from './components/admin/control-de-comunidad/estadisticas/dashboard-estadisticas/dashboard-estadisticas.component';
+import { DashboardNoticiasComponent } from './components/admin/control-de-contenido/noticias/dashboard-noticias/dashboard-noticias.component';
 
 @NgModule({
   declarations: [
@@ -312,6 +314,8 @@ import { PostMoreFromOPComponent } from './posts/post-more-from-op/post-more-fro
     TableCategoriasComponent,
     DialogCreateUpdateCategoriasComponent,
     PostMoreFromOPComponent,
+    DashboardEstadisticasComponent,
+    DashboardNoticiasComponent,
   ],
   imports: [
     BrowserModule,

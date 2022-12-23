@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
-
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 @Component({
   selector: 'app-posts-create',
   templateUrl: './posts-create.component.html',
@@ -36,6 +36,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   public postId: number = 0;
   public esBorrador: boolean = false;
   public today = new Date();
+  public separatorKeysCodes = [ENTER, COMMA] as const;
 
   public toolbar: Toolbar = [
     ['bold', 'italic'],
@@ -65,7 +66,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       footer: true,
       searchFooter: true,
       submenu: true,
-      background: ''
+      background: '',
     });
 
     this.formGroup = this.formBuilder.group({
@@ -77,7 +78,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       esPrivado: false,
       sinComentarios: false,
       smileys: false,
-      esBorrador: false
+      esBorrador: false,
     });
 
     this.activatedRoute.paramMap.subscribe((value: any) => {
@@ -108,7 +109,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
     this.editor = new Editor({
       history: true,
-      keyboardShortcuts: true
+      keyboardShortcuts: true,
     });
   }
 
@@ -135,7 +136,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       smileys: post.smileys,
       esPrivado: post.esPrivado,
       sinComentarios: post.sinComentarios,
-      esBorrador: post.esBorrador
+      esBorrador: post.esBorrador,
     });
   }
 
@@ -143,17 +144,6 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     this.parametrosService.getCategoriasDropdown().subscribe((value: any) => {
       this.categorias = value;
     });
-  }
-
-  addEtiqueta(event: MatChipInputEvent) {
-    if (event.value) {
-      this.etiquetas.add(event.value);
-      event.chipInput!.clear();
-    }
-  }
-
-  removeEtiqueta(etiqueta: string) {
-    this.etiquetas.delete(etiqueta);
   }
 
   previsualizar(): void {
@@ -223,7 +213,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
           this.today = new Date();
 
           this.formGroup.patchValue({
-            id: response
+            id: response,
           });
         }
       });
@@ -236,7 +226,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
         this.today = new Date();
 
         this.formGroup.patchValue({
-          id: response
+          id: response,
         });
       }
     });
