@@ -43,7 +43,7 @@ export class SectionHomeComponent implements OnInit {
     });
 
     this.title.setTitle('Pixicity - Ciudad Pixelada | Comunidad para Compartir Información');
-    this.http.get('http://api.ipify.org/?format=json').subscribe((value: any) => {
+    this.http.get('https://api.ipify.org/?format=json').subscribe((value: any) => {
       console.log(value);
     })
   }
