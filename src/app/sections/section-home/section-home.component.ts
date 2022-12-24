@@ -6,6 +6,7 @@ import { SEOService } from 'src/app/services/shared/seo.service';
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'section-home',
@@ -28,7 +29,8 @@ export class SectionHomeComponent implements OnInit {
     private securityService: IHttpSecurityService,
     private generalService: IHttpGeneralService,
     private seoService: SEOService,
-    private title: Title
+    private title: Title,
+    private http: HttpClient
   ) {
     this.sessionOnlineUser();
 
@@ -41,6 +43,9 @@ export class SectionHomeComponent implements OnInit {
     });
 
     this.title.setTitle('Pixicity - Ciudad Pixelada | Comunidad para Compartir Información');
+    this.http.get('http://api.ipify.org/?format=json').subscribe((value: any) => {
+      console.log(value);
+    })
   }
 
   ngOnInit(): void {
