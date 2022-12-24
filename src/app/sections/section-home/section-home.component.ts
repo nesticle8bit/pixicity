@@ -6,7 +6,6 @@ import { SEOService } from 'src/app/services/shared/seo.service';
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'section-home',
@@ -20,7 +19,7 @@ export class SectionHomeComponent implements OnInit {
     footer: true,
     searchFooter: true,
     submenu: true,
-    background: ''
+    background: '',
   };
 
   constructor(
@@ -29,23 +28,22 @@ export class SectionHomeComponent implements OnInit {
     private securityService: IHttpSecurityService,
     private generalService: IHttpGeneralService,
     private seoService: SEOService,
-    private title: Title,
-    private http: HttpClient
+    private title: Title
   ) {
     this.sessionOnlineUser();
 
     this.seoService.setSEO({
-      title: 'Pixicity - Ciudad Pixelada | Comunidad para Compartir Información',
+      title:
+        'Pixicity - Ciudad Pixelada | Comunidad para Compartir Información',
       description: '',
       tags: [],
       type: 'Red social',
       imageURL: '',
     });
 
-    this.title.setTitle('Pixicity - Ciudad Pixelada | Comunidad para Compartir Información');
-    this.http.get('https://api.ipify.org/?format=json').subscribe((value: any) => {
-      console.log(value);
-    })
+    this.title.setTitle(
+      'Pixicity - Ciudad Pixelada | Comunidad para Compartir Información'
+    );
   }
 
   ngOnInit(): void {
@@ -61,7 +59,9 @@ export class SectionHomeComponent implements OnInit {
           .setHitInByRefCode(params.ref)
           .subscribe((response: any) => {
             if (response) {
-              console.log('💖 Que bueno tener un referido como tú, bienvenido a nuestra comunidad');
+              console.log(
+                '💖 Que bueno tener un referido como tú, bienvenido a nuestra comunidad'
+              );
             }
           });
       }
@@ -70,7 +70,9 @@ export class SectionHomeComponent implements OnInit {
 
   sessionOnlineUser(): void {
     this.securityService.sessionOnlineUser().subscribe((response: any) => {
-      console.log('🐼 Estos mensajes van a ser temporales, ignora y cierra el inspeccionar \n Att: Pixicity!');
+      console.log(
+        '🐼 Estos mensajes van a ser temporales, ignora y cierra el inspeccionar \n Att: Pixicity!'
+      );
     });
   }
 }
