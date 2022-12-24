@@ -5,6 +5,7 @@ import { DashboardCategoriasComponent } from './components/admin/control-de-comu
 import { DashboardEstadisticasComponent } from './components/admin/control-de-comunidad/estadisticas/dashboard-estadisticas/dashboard-estadisticas.component';
 import { DashboardReportesComponent } from './components/admin/control-de-comunidad/reportes/dashboard-reportes/dashboard-reportes.component';
 import { DashboardCommentsComponent } from './components/admin/control-de-contenido/comentarios/dashboard-comments/dashboard-comments.component';
+import { DashboardMonitorComponent } from './components/admin/control-de-contenido/monitor/dashboard-monitor/dashboard-monitor.component';
 import { DashboardNoticiasComponent } from './components/admin/control-de-contenido/noticias/dashboard-noticias/dashboard-noticias.component';
 import { DashboardPaisesComponent } from './components/admin/control-de-contenido/paises/dashboard-paises/dashboard-paises.component';
 import { DashboardPostsComponent } from './components/admin/control-de-contenido/posts/dashboard-posts/dashboard-posts.component';
@@ -193,6 +194,11 @@ const routes: Routes = [
       {
         path: 'noticias',
         component: DashboardNoticiasComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'monitor',
+        component: DashboardMonitorComponent,
         canActivate: [AuthGuard, AdministradorAuthorization],
       },
     ],

@@ -193,6 +193,8 @@ import { DialogCreateUpdateCategoriasComponent } from './components/admin/contro
 import { PostMoreFromOPComponent } from './posts/post-more-from-op/post-more-from-op.component';
 import { DashboardEstadisticasComponent } from './components/admin/control-de-comunidad/estadisticas/dashboard-estadisticas/dashboard-estadisticas.component';
 import { DashboardNoticiasComponent } from './components/admin/control-de-contenido/noticias/dashboard-noticias/dashboard-noticias.component';
+import { DashboardMonitorComponent } from './components/admin/control-de-contenido/monitor/dashboard-monitor/dashboard-monitor.component';
+import { TableMonitorComponent } from './components/admin/control-de-contenido/monitor/table-monitor/table-monitor.component';
 
 @NgModule({
   declarations: [
@@ -316,6 +318,8 @@ import { DashboardNoticiasComponent } from './components/admin/control-de-conten
     PostMoreFromOPComponent,
     DashboardEstadisticasComponent,
     DashboardNoticiasComponent,
+    DashboardMonitorComponent,
+    TableMonitorComponent,
   ],
   imports: [
     BrowserModule,

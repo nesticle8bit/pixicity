@@ -1,0 +1,97 @@
+<main class="table-responsive" *ngIf="monitors.length > 0">
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Creado</th>
+                <th>Leido</th>
+                <th>Tipo</th>
+                <th>Mensaje</th>
+                <th>Post</th>
+                <th>
+                    <abbr title="Usuario que Realiza la Acción">Usuario</abbr>
+                </th>
+                <th>Perfil</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let monitor of monitors" [ngClass]="{'opacity-50': monitor.eliminado}">
+                <td>
+                    <strong class="text-muted">{{monitor.id}}</strong>
+                </td>
+
+                <td>
+                    <span class="cursor--help" matTooltip="{{monitor.fechaRegistro}}">
+                        {{monitor.fechaRegistro | timeAgo}}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="text-success" *ngIf="monitor.leido">
+                        <fa-icon icon="check-circle"></fa-icon> Leido
+                    </span>
+
+                    <span class="text-warning" *ngIf="!monitor.leido">
+                        <fa-icon [spin]="true" icon="spinner"></fa-icon> Pendiente
+                    </span>
+                </td>
+
+                <td>
+                    {{monitor.tipoString}}
+                </td>
+
+                <td>
+                    <span [innerHTML]="monitor.mensaje"></span>
+                </td>
+
+                <td>
+                    <app-post-url-link
+                        [post]="{ id: monitor.post.id, url: monitor.post.url, titulo: monitor.post.titulo, truncate: 20}"
+                        [categoria]="{ icono: monitor.post.categoria.icono, nombre: monitor.post.categoria.nombre, seo: monitor.post.categoria.seo}">
+                    </app-post-url-link>
+                </td>
+
+                <td>
+                    <app-user-avatar [class]="'img-avatar'" [avatar]="monitor.usuarioQueHaceAccion?.avatar"
+                        [userName]="monitor.usuarioQueHaceAccion?.userName">
+                    </app-user-avatar> <a [routerLink]="['/perfil/' + monitor.usuarioQueHaceAccion?.userName]"
+                        target="_blank">
+                        {{monitor.usuarioQueHaceAccion?.userName}}
+                    </a>
+                </td>
+
+                <td>
+                    <app-user-avatar [class]="'img-avatar'" [avatar]="monitor.usuario?.avatar"
+                        [userName]="monitor.usuario?.userName">
+                    </app-user-avatar> {{monitor.usuario?.userName}}
+                </td>
+
+                <td class="text-center" width="30px">
+                    <button class="btn-menu" [matMenuTriggerFor]="menu">
+                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button type="button" mat-menu-item (click)="deleteNotificacion(monitor)"
+                            *ngIf="!monitor.eliminado">
+                            <mat-icon>delete_outline</mat-icon>
+                            <span>Eliminar</span>
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="deleteNotificacion(monitor)"
+                            *ngIf="monitor.eliminado">
+                            <mat-icon>undo</mat-icon>
+                            <span>Recuperar</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="monitors.length > 0">
+</mat-paginator>
