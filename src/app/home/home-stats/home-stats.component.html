@@ -26,7 +26,7 @@
     </small>
 </div>
 
-<div class="row">
+<!-- <div class="row">
     <small class="col-12 col-sm-6">
         <b>{{estadisticas?.fotos}}</b> fotos
     </small>
@@ -34,10 +34,12 @@
     <small class="col-12 col-sm-6">
         <b>{{estadisticas?.comentariosFotos}}</b> comentarios en fotos
     </small>
-</div>
+</div> -->
 
 <div class="alert alert-info p-1 mt-1 text-center" *ngIf="estadisticas?.recordUsers?.usersOnline">
     <small>
-        🎉 Record conectados &bull; <b>{{estadisticas?.recordUsers?.usersOnline}}</b> el {{estadisticas?.recordUsers?.date | date:'mediumDate'}} a las {{estadisticas?.recordUsers?.date | date:'h:mm a'}} <!--  -  <a [routerLink]="['/en-vivo']">En vivo</a> -->
+        🎉 Record conectados &bull; <b>{{estadisticas?.recordUsers?.usersOnline}}</b> el
+        {{estadisticas?.recordUsers?.date | date:'mediumDate'}} a las {{estadisticas?.recordUsers?.date | date:'h:mm
+        a'}} <!--  -  <a [routerLink]="['/en-vivo']">En vivo</a> -->
     </small>
 </div>

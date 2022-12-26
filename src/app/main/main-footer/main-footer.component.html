@@ -5,12 +5,11 @@
                 <div class="inpie">
                     <div class="busb float-start">
                         <form [formGroup]="formGroup" (ngSubmit)="search()" action="/buscar/posts/" name="top_search_box">
-                            <input class="bbcuerpo" type="text" name="q" value="" formControlName="search"
-                                placeholder="Buscar...">
+                            <input class="bbcuerpo" type="text" name="q" value="" formControlName="search" placeholder="Buscar..." />
                             <input class="bbboton" vspace="2" hspace="10" type="submit" value="" />
                         </form>
                     </div>
-                    
+
                     <a class="ircielo float-end" (click)="goToHeaven()">
                         Ir al cielo
                     </a>
@@ -27,9 +26,9 @@
                 <a [routerLink]="['/terminos-condiciones']">Términos y condiciones</a>
                 <a [routerLink]="['/privacidad-datos']">Privacidad de datos</a>
                 <a [routerLink]="['/dmca']" title="Digital Millennium Copyright Act">DMCA</a>
-                <a [routerLink]="['/api']">🖥️ API</a>
+                <a [routerLink]="['/api']">API</a>
                 <a href="https://discord.gg/rBs8xGTV5S" target="_blank">
-                    Chat
+                    🧙🏽‍♂️Chat
                 </a>
             </div>
         </div>
