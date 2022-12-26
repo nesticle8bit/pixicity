@@ -1,0 +1,64 @@
+<main class="table-responsive" *ngIf="contactos.length > 0">
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Creado</th>
+                <th>Medio</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Mensaje</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let contacto of contactos" [ngClass]="{'opacity-50': contacto.eliminado}">
+                <td>
+                    <strong>{{contacto.id}}</strong>
+                </td>
+
+                <td>
+                    <span class="cursor--help" matTooltip="{{contacto.fechaRegistro}}">
+                        {{contacto.fechaRegistro | timeAgo}}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="cursor--help" matTooltip="{{contacto.medio}}">
+                        {{contacto.medio | truncate:[60]}}
+                    </span>
+                </td>
+
+                <td>
+                    {{contacto.nombre}}
+                </td>
+
+                <td>
+                    <span class="text-primary">{{contacto.email}}</span>
+                </td>
+
+                <td>
+                    {{contacto.comentarios}}
+                </td>
+
+                <td class="text-center" width="30px">
+                    <button class="btn-menu" [matMenuTriggerFor]="menu">
+                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <!-- <button type="button" mat-menu-item (click)="deleteContactos(contacto)" *ngIf="!contacto.eliminado">
+                            <mat-icon>delete_outline</mat-icon>
+                            <span>Eliminar</span>
+                        </button> -->
+                    </mat-menu>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="contactos.length > 0">
+</mat-paginator>
