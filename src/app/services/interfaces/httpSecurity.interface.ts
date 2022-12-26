@@ -44,4 +44,5 @@ export abstract class IHttpSecurityService {
   abstract sessionOnlineUser(): Observable<any>;
   abstract changeBackgroundProfile(obj: any): Observable<any>;
   abstract getAdminsList(): Observable<any>;
+  abstract changeUsuariosRangosByPuntos(): Observable<any>;
 }

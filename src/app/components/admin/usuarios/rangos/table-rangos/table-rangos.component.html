@@ -1,7 +1,17 @@
-<div class="text-end mb-2 mt-0">
-    <button type="button" mat-flat-button color="primary" (click)="addRango()">
-        <mat-icon>add_circle_outline</mat-icon> Agregar rango
-    </button>
+<div class="mb-2 mt-0">
+    <div class="float-start">
+        <button type="button" mat-flat-button color="warn" (click)="updateRangoUsuarios()">
+            <mat-icon>sync_alt</mat-icon> Actualizar rangos de los usuarios
+        </button>
+    </div>
+
+    <div class="float-end">
+        <button type="button" mat-flat-button color="primary" (click)="addRango()">
+            <mat-icon>add_circle_outline</mat-icon> Agregar rango
+        </button>
+    </div>
+
+    <div class="clearfix"></div>
 </div>
 
 <main class="table-responsive" *ngIf="rangos.length > 0">

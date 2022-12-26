@@ -195,6 +195,7 @@ import { DashboardEstadisticasComponent } from './components/admin/control-de-co
 import { DashboardNoticiasComponent } from './components/admin/control-de-contenido/noticias/dashboard-noticias/dashboard-noticias.component';
 import { DashboardMonitorComponent } from './components/admin/control-de-contenido/monitor/dashboard-monitor/dashboard-monitor.component';
 import { TableMonitorComponent } from './components/admin/control-de-contenido/monitor/table-monitor/table-monitor.component';
+import { DialogRangosChangesReportComponent } from './components/admin/usuarios/rangos/dialog-rangos-changes-report/dialog-rangos-changes-report.component';
 
 @NgModule({
   declarations: [
@@ -320,6 +321,7 @@ import { TableMonitorComponent } from './components/admin/control-de-contenido/m
     DashboardNoticiasComponent,
     DashboardMonitorComponent,
     TableMonitorComponent,
+    DialogRangosChangesReportComponent,
   ],
   imports: [
     BrowserModule,

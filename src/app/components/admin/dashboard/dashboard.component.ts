@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,7 +8,12 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  constructor(private displayService: DisplayComponentService) {}
+  constructor(
+    private displayService: DisplayComponentService,
+    private title: Title
+  ) {
+    this.title.setTitle('Panel de Administración | Pixicity');
+  }
 
   ngOnInit(): void {
     this.displayService.setDisplay({
@@ -15,7 +21,7 @@ export class DashboardComponent implements OnInit {
       footer: true,
       searchFooter: false,
       submenu: true,
-      background: ''
+      background: '',
     });
   }
 }

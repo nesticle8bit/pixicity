@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>
+    Reporte de cambio de rangos
+</h2>
+
+<mat-dialog-content>
+    <section class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Id</th>
+                    <th>UserName</th>
+                    <th>Rango</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let item of data; let i = index">
+                    <td>
+                        <span class="text-muted">{{i+1}}</span>
+                    </td>
+                    <td>{{item.usuarioId}}</td>
+                    <td>
+                        <strong>{{item.userName}}</strong>
+                    </td>
+                    <td>
+                        <img class="me-1 cursor--help" src="/assets/images/icons/rangos/{{item.rango.icono}}" alt="{{item.rango.icono}}"
+                            matTooltip="{{item.rango.icono}}" [matTooltipPosition]="'left'">
+                        <strong [ngStyle]="{'color': item.rango.color}">
+                            {{item.rango.nombre}}
+                        </strong>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button type="button" mat-button mat-dialog-close>
+        Cerrar
+    </button>
+</mat-dialog-actions>

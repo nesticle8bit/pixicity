@@ -67,10 +67,22 @@ export class SectionUserInfoLoginComponent implements OnInit {
       if (response) {
         response = response.map((notificacion: any) => {
           if (notificacion.mensaje) {
-            notificacion.mensaje = notificacion.mensaje.replace('tu post', `tu ${this.setURL(notificacion, 'post')}`);
-            notificacion.mensaje = notificacion.mensaje.replace('post que sigues', `${this.setURL(notificacion, 'post que sigues')}`);
-            notificacion.mensaje = notificacion.mensaje.replace('un post', `un ${this.setURL(notificacion, 'post')}`);
-            notificacion.mensaje = notificacion.mensaje.replace('en tu perfil', `en tu ${this.setProfile('perfil')}`);
+            notificacion.mensaje = notificacion.mensaje.replace(
+              'tu post',
+              `tu ${this.setURL(notificacion, 'post')}`
+            );
+            notificacion.mensaje = notificacion.mensaje.replace(
+              'post que sigues',
+              `${this.setURL(notificacion, 'post que sigues')}`
+            );
+            notificacion.mensaje = notificacion.mensaje.replace(
+              'un post',
+              `un ${this.setURL(notificacion, 'post')}`
+            );
+            notificacion.mensaje = notificacion.mensaje.replace(
+              'en tu perfil',
+              `en tu ${this.setProfile('perfil')}`
+            );
           }
 
           return notificacion;
@@ -80,7 +92,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
       this.notificaciones = response;
     });
 
-    this.display.monitor = !this.display.monitor;
+    this.display.monitor = true;
     this.display.mensajes = false;
     this.display.favoritos = false;
 
@@ -94,7 +106,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   setURL(notificacion: any, text: string): string {
-   return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}">${text}</a>`;
+    return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}">${text}</a>`;
   }
 
   setProfile(text: string): string {
@@ -128,7 +140,9 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
   setNotificacionesAsReaded(): void {
     this.httpLogs.setNotificacionesAsReaded().subscribe((response: any) => {
-      console.log('🔔 Se ha cambiado el estado de las últimas notificaciones a leído');
+      console.log(
+        '🔔 Se ha cambiado el estado de las últimas notificaciones a leído'
+      );
     });
   }
 }
