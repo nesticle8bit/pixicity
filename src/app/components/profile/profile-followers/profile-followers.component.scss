@@ -1,0 +1,12 @@
+.user-list {
+    border-bottom: 1px dashed #ddd;
+    padding: 10px 0;
+
+    &:nth-child(even) {
+        background-color: rgb(247 247 247);
+    }
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
