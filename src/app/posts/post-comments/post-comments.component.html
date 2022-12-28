@@ -142,11 +142,13 @@
                                         <a [routerLink]="['/perfil/' + respuesta?.usuario]">
                                             {{respuesta?.usuario}}
                                         </a>
-                                    
-                                        <b class="badge bg-primary mx-1 cursor--help" matTooltip="Original Poster" [matTooltipPosition]="'right'"
+
+                                        <b class="badge bg-primary mx-1 cursor--help" matTooltip="Original Poster"
+                                            [matTooltipPosition]="'right'"
                                             *ngIf="respuesta?.usuario === post?.usuario?.userName">OP</b>
-                                            
-                                        <span (click)="displayHistory(respuesta)" [ngClass]="{'cursor--pointer': respuesta.historial?.length > 0}">
+
+                                        <span (click)="displayHistory(respuesta)"
+                                            [ngClass]="{'cursor--pointer': respuesta.historial?.length > 0}">
                                             {{respuesta?.fechaComentario | timeAgo}}</span>
                                     </div>
 

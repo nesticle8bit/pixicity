@@ -48,6 +48,10 @@ export class TableMonitorComponent implements OnInit {
                 notificacion.usuario?.userName
               )}`
             );
+            notificacion.mensaje = notificacion.mensaje.replace(
+              'nuevo Post',
+              `nuevo ${this.setURL(notificacion, 'Post')}`
+            );
           }
 
           return notificacion;
@@ -60,7 +64,8 @@ export class TableMonitorComponent implements OnInit {
   }
 
   setURL(notificacion: any, text: string): string {
-    return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}">${text}</a>`;
+    console.log(notificacion);
+    return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}" title="${notificacion?.post?.titulo}">${text}</a>`;
   }
 
   setProfile(text: string, userName: any): string {

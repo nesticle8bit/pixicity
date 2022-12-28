@@ -1,3 +1,4 @@
+import { DialogDisplayHistoryCommentsComponent } from 'src/app/components/dialogs/dialog-display-history-comments/dialog-display-history-comments.component';
 import { BottomSheetsEmojisComponent } from 'src/app/components/bottom-sheets/bottom-sheets-emojis/bottom-sheets-emojis.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
@@ -5,7 +6,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogDisplayHistoryCommentsComponent } from 'src/app/components/dialogs/dialog-display-history-comments/dialog-display-history-comments.component';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -102,6 +102,11 @@ export class PostCommentsComponent implements OnInit {
       if (response) {
         comentario.id = response;
         comentario.usuario = this.currentUser.usuario.userName;
+        comentario.avatar = this.currentUser.usuario.avatar;
+
+        if (!respuesta.respuestas) {
+          respuesta.respuestas = [];
+        }
 
         respuesta.respuestas.push(comentario);
         respuesta.responder = false;

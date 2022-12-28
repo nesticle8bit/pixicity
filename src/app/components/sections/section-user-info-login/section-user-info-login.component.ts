@@ -83,6 +83,10 @@ export class SectionUserInfoLoginComponent implements OnInit {
               'en tu perfil',
               `en tu ${this.setProfile('perfil')}`
             );
+            notificacion.mensaje = notificacion.mensaje.replace(
+              'nuevo Post',
+              `nuevo ${this.setURL(notificacion, 'Post')}`
+            );
           }
 
           return notificacion;
@@ -106,7 +110,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   setURL(notificacion: any, text: string): string {
-    return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}">${text}</a>`;
+    return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}" title="${notificacion?.post?.titulo}">${text}</a>`;
   }
 
   setProfile(text: string): string {

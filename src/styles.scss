@@ -1629,6 +1629,10 @@ p.cupuntos {
     overflow: hidden;
     margin-top: 15px;
     clear: both;
+
+    & section:nth-child(even) {
+        background-color: rgb(247 247 247 / 65%);
+    }
 }
 
 #respuestas .comentario-post {
