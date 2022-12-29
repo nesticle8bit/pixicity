@@ -20,12 +20,10 @@
                 </td>
 
                 <td>
-                    <a [routerLink]="['/posts/' + denuncia.post.categoria.seo + '/' + denuncia.post.id + '/' + denuncia.post.url]"
-                        title="{{denuncia.post.titulo}}">
-                        <img src="/assets/images/categorias/{{denuncia.post.categoria.icono}}"
-                            title="{{denuncia.post.categoria.nombre}}" alt="{{denuncia.post.categoria.nombre}}" />
-                        {{denuncia.post.titulo | truncate:[70]}}
-                    </a>
+                    <app-post-url-link
+                        [post]="{ id: denuncia.post.id, url: denuncia.post.url, titulo: denuncia.post.titulo, truncate: 70}"
+                        [categoria]="{ icono: denuncia.post.categoria.icono, nombre: denuncia.post.categoria.nombre, seo: denuncia.post.categoria.seo}">
+                    </app-post-url-link>
                 </td>
 
                 <td>

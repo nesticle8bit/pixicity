@@ -1,0 +1,80 @@
+<main class="table-responsive" *ngIf="votos.length > 0">
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Fecha de Registro</th>
+                <th>Tipo</th>
+                <th>Post</th>
+                <th>Cantidad</th>
+                <th>Usuario que Vota</th>
+                <th>Autor del Post</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let voto of votos" [ngClass]="{'opacity-50': voto.eliminado}">
+                <td>
+                    <span class="text-muted">
+                        {{voto.id}}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="cursor--help" matTooltip="{{voto.fecha}}">
+                        {{voto.fecha | timeAgo}}
+                    </span>
+                </td>
+
+                <td>
+                    <strong class="text-success">
+                        {{voto.tipoString}}
+                    </strong>
+                </td>
+
+                <td>
+                    <app-post-url-link
+                        [post]="{ id: voto.post.id, url: voto.post.url, titulo: voto.post.titulo, truncate: 45}"
+                        [categoria]="{ icono: voto.post.categoria.icono, nombre: voto.post.categoria.nombre, seo: voto.post.categoria.seo}">
+                    </app-post-url-link>
+                </td>
+
+                <td>
+                    <fa-icon icon="coins" class="text-success me-1"></fa-icon> <strong class="text-success">{{voto.cantidad}}</strong>
+                </td>
+
+                <td>
+                    <app-user-avatar [class]="'img-avatar me-1'" [avatar]="voto.usuario.avatar"
+                    [userName]="voto.usuario.userName"></app-user-avatar> <a href="/perfil/{{voto.usuario.userName}}" target="_blank">{{voto.usuario.userName}}</a>
+                </td>
+
+                <td>
+                    <app-user-avatar [class]="'img-avatar me-1'" [avatar]="voto.post.avatar"
+                    [userName]="voto.post.userName"></app-user-avatar> <a href="/perfil/{{voto.post.userName}}" target="_blank">{{voto.post.userName}}</a>
+                </td>
+
+                <td class="text-center" width="30px">
+                    <button class="btn-menu" [matMenuTriggerFor]="menu">
+                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <!-- <button type="button" mat-menu-item (click)="verReporte(voto)">
+                            <mat-icon>visibility</mat-icon>
+                            <span>Ver</span>
+                        </button> -->
+                    </mat-menu>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<div class="alert alert-warning" *ngIf="votos.length < 1">
+    🗃️ Lo sentimos, no se han encontrado votos aún.
+</div>
+
+<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="votos.length > 0">
+</mat-paginator>
