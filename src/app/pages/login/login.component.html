@@ -1,9 +1,10 @@
 <div class="container container--home bg-login mt-3">
     <div class="row p-4 bg-white">
-        <div class="col-12 col-sm-8 text-center main-login--head">
-            <h1>Bienvenido a Pixicity!</h1>
-
-            <p>Te damos la bienvenida nuevamente a nuestra gran familia</p>
+        <div class="col-12 text-center main-login--head" [ngClass]="{'col-sm-12': hide?.sidebar, 'col-sm-8': !hide?.sidebar}">
+            <section *ngIf="!hide?.sidebar">
+                <h1>Bienvenido a Pixicity!</h1>
+                <p>Te damos la bienvenida nuevamente a nuestra gran familia</p>
+            </section>
 
             <div class="dot--ccc">
                 <span class="w200">Identificarme</span>
@@ -46,7 +47,7 @@
             </form>
         </div>
 
-        <div class="col-12 col-sm-4">
+        <div class="col-12 col-sm-4" *ngIf="!hide?.sidebar">
             <div class="text-center">
                 <img src="/assets/images/login-bg.gif" alt="">
 

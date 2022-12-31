@@ -1,6 +1,6 @@
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
@@ -10,6 +10,7 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  @Input() hide: any;
   public loginForm: FormGroup;
   public error: string = '';
   public baneo: any = {
