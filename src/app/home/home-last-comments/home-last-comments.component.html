@@ -24,8 +24,8 @@
 
         <span class="text-muted">
             <a [routerLink]="['/posts/' + comment.post.categoria.seo + '/' + comment.post.id + '/' + comment.post.url]"
-                title="{{comment.post.titulo}}">
-                {{comment.post.titulo | truncate:[55]}}
+                matTooltip="{{comment.post.titulo}}">
+                {{comment.post.titulo | truncate:[35]}}
             </a>
         </span>
     </article>

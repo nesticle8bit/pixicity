@@ -16,13 +16,28 @@
 </article>
 
 <article class="lista-posts" *ngFor="let post of lastPosts">
-    <a [ngClass]="{'post-privado': post.esPrivado}"
-        [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
-        <img src="/assets/images/categorias/{{post.categoria.icono}}" matTooltip="{{post.categoria.nombre}}"
-            matTooltipPosition="left" alt="{{post.categoria.nombre}}" />
-        &nbsp;
-        <span matTooltip="{{post.titulo}}" matTooltipPosition="right">{{post.titulo | truncate:[60]}}</span>
-    </a>
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-7">
+            <a [ngClass]="{'post-privado': post.esPrivado}"
+                [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
+                <img src="/assets/images/categorias/{{post.categoria.icono}}" matTooltip="{{post.categoria.nombre}}"
+                    matTooltipPosition="left" alt="{{post.categoria.nombre}}" />
+                &nbsp;
+                <span matTooltip="{{post.titulo}}" matTooltipPosition="right">{{post.titulo | truncate:[58]}}</span>
+            </a>
+        </div>
+    
+        <div class="col-12 col-sm-12 col-md-2 text-end d-none d-md-block">
+            <small class="text-muted">{{post.fechaRegistro | timeAgo}}</small>
+        </div>
+    
+        <div class="col-12 col-sm-12 col-md-3 text-end d-none d-md-block">
+            <small class="cursor--pointer" [routerLink]="['/perfil/' + post?.userName]">
+                <app-user-avatar [class]="'img-avatar'" [avatar]="post?.avatar"
+                    [userName]="post?.userName"></app-user-avatar> <span class="ms-1 pe-1 text-muted">{{post?.userName}}</span>
+            </small>
+        </div>
+    </div>
 </article>
 
 <div class="row">

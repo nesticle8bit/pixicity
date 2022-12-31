@@ -44,12 +44,13 @@ import { PostNotFoundComponent } from './posts/post-not-found/post-not-found.com
 import { PostPrivadoComponent } from './posts/post-privado/post-privado.component';
 import { PostsCreateComponent } from './posts/posts-create/posts-create.component';
 import { PostsViewComponent } from './posts/posts-view/posts-view.component';
+import { SectionHomeForumComponent } from './sections/section-home-forum/section-home-forum.component';
 import { SectionHomeComponent } from './sections/section-home/section-home.component';
 import { AdministradorAuthorization } from './shared/guards/adminAuthorization.guard';
 import { AuthGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
-  { path: '', component: SectionHomeComponent },
+  { path: '', component: SectionHomeForumComponent },
   { path: 'registro', component: RegisterComponent },
 
   { path: 'buscar', component: SearchComponent },

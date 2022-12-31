@@ -200,6 +200,7 @@ import { DashboardContactosComponent } from './components/admin/control-de-conte
 import { TableContactosComponent } from './components/admin/control-de-contenido/contactos/table-contactos/table-contactos.component';
 import { DashboardVotosComponent } from './components/admin/control-de-comunidad/votos/dashboard-votos/dashboard-votos.component';
 import { TableVotosComponent } from './components/admin/control-de-comunidad/votos/table-votos/table-votos.component';
+import { SectionHomeForumComponent } from './sections/section-home-forum/section-home-forum.component';
 
 @NgModule({
   declarations: [
@@ -330,6 +331,7 @@ import { TableVotosComponent } from './components/admin/control-de-comunidad/vot
     TableContactosComponent,
     DashboardVotosComponent,
     TableVotosComponent,
+    SectionHomeForumComponent,
   ],
   imports: [
     BrowserModule,

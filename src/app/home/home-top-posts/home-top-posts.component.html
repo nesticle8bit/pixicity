@@ -14,10 +14,10 @@
         <strong class="float-start">{{i + 1}}</strong>
 
         <small>
-            <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
-                <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
+            <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
+                <img src="/assets/images/categorias/{{post.categoria.icono}}" matTooltip="{{post.categoria.nombre}}" matTooltipPosition="left"
                     alt="{{post.categoria.nombre}}" />
-                {{post.titulo | truncate:[65]}}
+                <span class="ms-1" matTooltip="{{post.titulo}}">{{post.titulo | truncate:[40]}}</span>
             </a>
         </small>
 
