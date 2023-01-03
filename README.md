@@ -6,7 +6,7 @@
 Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de las cenizas a Pixicity!, pueden visitarlo en el siguiente enlace [https://www.pixicity.io](https://www.pixicity.io)
 
 ### 📄 Index
-![image](https://user-images.githubusercontent.com/1715022/161352397-60379b2d-943a-48aa-84af-18d78553f1ae.png)
+![pixicity.io](https://user-images.githubusercontent.com/1715022/210359272-8d009ca8-58c1-41b3-bfe4-46450268dbb5.png)
 
 <details>
   <summary>🖼️ Screenshots</summary>
@@ -99,6 +99,21 @@ Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de la
 
   - Panel Administrativo
     - [x] Desactivar el registro de usuarios desde el admin
+    - [x] Modificar la información de la web
+    - [x] Gestionar la información de los usuarios
+    - [x] Configurar la publicidad
+    - [x] Gestionar los posts
+    - [x] Gestionar la lista de formularios de contacto
+    - [x] Gestionar los comentarios realizados en la web
+    - [x] Ver la lista de las notificaciones de todos los usuarios
+    - [x] Gestionar los paises
+    - [x] Ver la lista de Shouts desde el panel de administración
+    - [x] Ver los votos y cantidad de puntos realizados a un post
+    - [x] Gestionar los afiliados
+    - [x] Gestionar las categorías
+    - [x] Gestionar las denuncias
+    - [x] Ver la lista de sesiones abiertas por los usuarios de la web
+    - [x] Gestionar los rangos de los usuarios
     - [ ] Administrar IP
     > TODO
 
