@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 })
 export class DialogCreateUpdateCategoriasComponent implements OnInit {
   public iconos: string[] = [
+    'android.png',
     'animaciones.png',
     'apuntes-monografias.png',
     'arte.png',
