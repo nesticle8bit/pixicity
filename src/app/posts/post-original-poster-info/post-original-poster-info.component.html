@@ -1,7 +1,81 @@
-<div class="esees">
+<div class="card border border-0">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-5">
+                <div class="eites">
+                    <a class="nomis" [routerLink]="['/perfil/' + userName]" matTooltip="Ver perfil de {{userName}}">
+                        <app-user-avatar [class]="'user-post-image'" [avatar]="info?.avatar" [userName]="userName"
+                            [height]="97">
+                        </app-user-avatar>
+                    </a>
+
+                    <span [ngStyle]="{'color': info?.rango?.color}">
+                        <img src="/assets/images/icons/rangos/{{info?.rango?.icono}}"
+                            matTooltip="{{info?.rango?.nombre}}" [matTooltipPosition]="'below'">
+                        <strong class="ms-1">{{info?.rango?.nombre}}</strong>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-7">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-8">
+                        <app-user-online-status [userName]="userName"></app-user-online-status>
+
+                        <a [routerLink]="['/perfil/' + userName]">
+                            {{userName}}
+                        </a>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-4">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                                <addon-country-flag [iso2]="info?.estado?.pais?.isO2"
+                                    [title]="info?.estado?.pais.nombre">
+                                </addon-country-flag>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                                <app-genre-icon [genre]="info?.genero"></app-genre-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="eliese mt-2">
+                            <div class="tyes">
+                                <fa-icon [icon]="['far', 'user-circle']"></fa-icon>
+                                <b>{{info?.seguidores ? info?.seguidores : 0}}</b> Seguidores
+                            </div>
+                
+                            <div class="tyes">
+                                <fa-icon [icon]="['fas', 'chart-line']"></fa-icon>
+                                <b>{{info?.puntos ? info?.puntos : 0}}</b> Puntos
+                            </div>
+                
+                            <div class="tyes">
+                                <fa-icon [icon]="['far', 'copy']"></fa-icon>
+                                <b>{{info?.posts ? info?.posts : 0}}</b> Posts
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <app-follow-button [userName]="userName" (followingChange)="changeSeguidores($event)"></app-follow-button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="esees">
     <div class="eites">
         <a class="nomis" [routerLink]="['/perfil/' + userName]" matTooltip="Ver perfil de {{userName}}">
-            <app-user-avatar [avatar]="info?.avatar" [userName]="userName" [height]="97">
+            <app-user-avatar [class]="'user-post-image'" [avatar]="info?.avatar" [userName]="userName" [height]="97">
             </app-user-avatar>
         </a>
 
@@ -14,7 +88,7 @@
 
     <div class="gkes">
         <div class="eolr">
-            <span class="tepe-online vctip" matTooltip="Online" [matTooltipPosition]="'below'"></span>
+            <span class="user-online vctip" matTooltip="Online" [matTooltipPosition]="'below'"></span>
             <a [routerLink]="['/perfil/' + userName]">
                 {{userName}}
             </a>
@@ -48,4 +122,4 @@
         <app-follow-button [userName]="userName" (followingChange)="changeSeguidores($event)">
         </app-follow-button>
     </div>
-</div>
+</div> -->

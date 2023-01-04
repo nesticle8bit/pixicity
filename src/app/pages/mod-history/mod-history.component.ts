@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
@@ -11,9 +12,11 @@ export class ModHistoryComponent implements OnInit {
   public posts: any[] = [];
 
   constructor(
+    private displayService: DisplayComponentService,
     private webService: IHttpWebService,
-    private displayService: DisplayComponentService
+    private title: Title
   ) {
+    this.title.setTitle(`Historial de moderación | Pixicity - Ciudad Pixelada | Comunidad para Compartir Información`);
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,

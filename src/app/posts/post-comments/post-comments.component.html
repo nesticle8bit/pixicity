@@ -9,7 +9,7 @@
     El post se encuentra cerrado y no se permiten comentarios.
 </section>
 
-<div class="mx-auto mt-2" id="post-comentarios" *ngIf="post?.sinComentarios === false">
+<div class="mx-auto mt-2 mb-3" id="post-comentarios" *ngIf="post?.sinComentarios === false">
     <div class="titular">
         <h3>
             <span>{{comentarios?.length}}</span> comentarios - {{post?.titulo}}
@@ -56,7 +56,7 @@
 
                         <div class="float-end answerOptions">
                             <div class="botonear">
-                                <a #tooltip="matTooltip" matTooltip="Responder" (click)="comentario.responder = true">
+                                <a *ngIf="currentUser?.usuario" #tooltip="matTooltip" matTooltip="Responder" (click)="comentario.responder = true">
                                     <fa-icon [icon]="['fas', 'reply']" class="reply"></fa-icon>
                                 </a>
 

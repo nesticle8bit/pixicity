@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-search',
@@ -27,9 +28,11 @@ export class SearchComponent implements OnInit {
     private postService: IHttpPostsService,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private title: Title
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+    this.title.setTitle(`Buscador! | Pixicity - Ciudad Pixelada | Comunidad para Compartir Información`);
 
     this.displayService.setDisplay({
       mainMenu: true,

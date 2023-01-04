@@ -12,6 +12,7 @@ import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-posts-create',
   templateUrl: './posts-create.component.html',
@@ -52,12 +53,13 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   constructor(
     private parametrosService: IHttpParametrosService,
     private displayService: DisplayComponentService,
-    private dialog: MatDialog,
-    private formBuilder: FormBuilder,
+    private securityService: IHttpSecurityService,
     private postService: IHttpPostsService,
-    private router: Router,
     private activatedRoute: ActivatedRoute,
-    private securityService: IHttpSecurityService
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog,
+    private router: Router,
+    private title: Title
   ) {
     this.currentUser = this.securityService.getCurrentUser();
 
@@ -85,9 +87,11 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       this.postId = +value.get('id');
 
       if (!this.postId) {
+        this.title.setTitle(`Crear post | Pixicity - Ciudad Pixelada | Comunidad para Compartir Información`);
         return;
       }
 
+      this.title.setTitle(`Actualizar post | Pixicity - Ciudad Pixelada | Comunidad para Compartir Información`);
       this.postService.getPostById(this.postId).subscribe((response: any) => {
         if (
           this.currentUser.usuario.rango !== 'Administrador' &&

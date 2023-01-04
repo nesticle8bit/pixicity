@@ -12,7 +12,7 @@ export class DashboardComponent implements OnInit {
     private displayService: DisplayComponentService,
     private title: Title
   ) {
-    this.title.setTitle('Panel de Administración | Pixicity');
+    this.title.setTitle('Panel de Administración | Pixicity - Ciudad Pixelada | Comunidad para Compartir Información');
   }
 
   ngOnInit(): void {

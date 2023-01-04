@@ -1,0 +1,2 @@
+<span class="vctip cursor--help {{class}}" [ngClass]="{'user-online': activo && activo <= 15, 'user-offline': !activo || activo > 15}"
+    matTooltip="{{!activo || activo > 15 ? 'Offline' : 'Online'}}" [matTooltipPosition]="'below'"></span>

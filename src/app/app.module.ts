@@ -201,6 +201,7 @@ import { TableContactosComponent } from './components/admin/control-de-contenido
 import { DashboardVotosComponent } from './components/admin/control-de-comunidad/votos/dashboard-votos/dashboard-votos.component';
 import { TableVotosComponent } from './components/admin/control-de-comunidad/votos/table-votos/table-votos.component';
 import { SectionHomeForumComponent } from './sections/section-home-forum/section-home-forum.component';
+import { UserOnlineStatusComponent } from './components/addons/user-online-status/user-online-status.component';
 
 @NgModule({
   declarations: [
@@ -332,6 +333,7 @@ import { SectionHomeForumComponent } from './sections/section-home-forum/section
     DashboardVotosComponent,
     TableVotosComponent,
     SectionHomeForumComponent,
+    UserOnlineStatusComponent,
   ],
   imports: [
     BrowserModule,

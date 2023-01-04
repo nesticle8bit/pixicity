@@ -103,7 +103,7 @@
 
                                     <div class="col-12 col-sm-3" *ngIf="loggedUser?.usuario?.userName !== currentUser.userName">
                                         <app-change-avatar
-                                            [data]="{ id: currentUser?.id, userName: currentUser.userName }">
+                                            [data]="{ id: currentUser?.id, userName: currentUser?.userName }">
                                         </app-change-avatar>
                                     </div>
                                 </div>
@@ -123,7 +123,8 @@
 
                                             <span
                                                 [ngStyle]="{'color': currentUser?.rango?.color}">{{currentUser?.rango?.nombre}}</span>
-                                            <span class="status online"></span>
+                                            <!-- <span class="status online"></span> -->
+                                            <app-user-online-status [class]="'float-end m-0'" [userName]="currentUser?.userName"></app-user-online-status>
                                         </b>
                                         <span>Rango</span>
                                     </p>
