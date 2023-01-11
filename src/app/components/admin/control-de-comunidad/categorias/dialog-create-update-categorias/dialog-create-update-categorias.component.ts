@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 })
 export class DialogCreateUpdateCategoriasComponent implements OnInit {
   public iconos: string[] = [
+    'address-book-open.png',
     'android.png',
     'animaciones.png',
     'apuntes-monografias.png',
@@ -22,6 +23,7 @@ export class DialogCreateUpdateCategoriasComponent implements OnInit {
     'book-open-bookmark.png',
     'book-open-list.png',
     'book-open-text-image.png',
+    'books-brown.png',
     'box.png',
     'box-search-result.png',
     'briefcase.png',
@@ -42,6 +44,8 @@ export class DialogCreateUpdateCategoriasComponent implements OnInit {
     'eye.png',
     'femme.png',
     'films.png',
+    'folder.png',
+    'folder-open-film.png',
     'guitar.png',
     'hamburger.png',
     'hazlotumismo.png',

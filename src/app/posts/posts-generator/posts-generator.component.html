@@ -1,0 +1,89 @@
+<h2 mat-dialog-title>
+    Generador de Posts
+</h2>
+
+<form [formGroup]="formGroup" (ngSubmit)="generarPost()">
+    <mat-dialog-content>
+        <section class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-sm-12">
+                    <div class="mb-3">
+                        <label><fa-icon icon="portrait" class="text-muted"></fa-icon> Imagen Inicial:</label>
+                        <small class="form-text">
+                            Actuará como imagen principal de tu Post (Como una portada)
+                        </small>
+
+                        <input type="text" class="form-control mt-2" formControlName="imagenInicial" />
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-12">
+                    <div class="mb-3">
+                        <label><fa-icon icon="info-circle" class="text-muted"></fa-icon> Información:</label>
+                        <small class="form-text">
+                            Toda la información de texto que contenga tu post (Descripciones, Sinopsis, Tracklist,
+                            etc.):
+                        </small>
+
+                        <textarea class="form-control mt-2" rows="8" formControlName="informacion"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-12">
+                    <div class="mb-3">
+                        <label><fa-icon icon="images" class="text-muted"></fa-icon> Imágenes:</label>
+                        <small class="form-text">
+                            (Agrega la URL de las imágenes que quieras incrustar en tu post, máximo 3 imágenes)
+                        </small>
+
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-4">
+                                <input type="url" placeholder="http://" class="form-control mt-2" formControlName="image1" />
+                            </div>
+
+                            <div class="col-12 col-sm-12 col-md-4">
+                                <input type="url" placeholder="http://" class="form-control mt-2" formControlName="image2" />
+                            </div>
+
+                            <div class="col-12 col-sm-12 col-md-4">
+                                <input type="url" placeholder="http://" class="form-control mt-2" formControlName="image3" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-12">
+                    <div class="mb-3">
+                        <label><fa-icon icon="link" class="text-muted"></fa-icon> Links de Descarga:</label>
+                        <small class="form-text">
+                            Agrega los links de descarga en este recuadro, 1 por fila:
+                        </small>
+
+                        <textarea class="form-control mt-2" rows="4" formControlName="links"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-12">
+                    <div class="mb-3">
+                        <label><fa-icon icon="unlock-alt" class="text-muted"></fa-icon> Password:</label>
+                        <small class="form-text">
+                            Si tus archivos tienen una clave/password, escríbela aquí:
+                        </small>
+
+                        <input type="text" class="form-control mt-2" formControlName="password" />
+                    </div>
+                </div>
+            </div>
+        </section>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button type="button" mat-button mat-dialog-close>
+            Cancelar
+        </button>
+
+        <button type="submit" mat-button color="primary">
+            Generar Post
+        </button>
+    </mat-dialog-actions>
+</form>

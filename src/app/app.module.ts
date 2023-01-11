@@ -202,6 +202,7 @@ import { DashboardVotosComponent } from './components/admin/control-de-comunidad
 import { TableVotosComponent } from './components/admin/control-de-comunidad/votos/table-votos/table-votos.component';
 import { SectionHomeForumComponent } from './sections/section-home-forum/section-home-forum.component';
 import { UserOnlineStatusComponent } from './components/addons/user-online-status/user-online-status.component';
+import { PostsGeneratorComponent } from './posts/posts-generator/posts-generator.component';
 
 @NgModule({
   declarations: [
@@ -334,6 +335,7 @@ import { UserOnlineStatusComponent } from './components/addons/user-online-statu
     TableVotosComponent,
     SectionHomeForumComponent,
     UserOnlineStatusComponent,
+    PostsGeneratorComponent,
   ],
   imports: [
     BrowserModule,

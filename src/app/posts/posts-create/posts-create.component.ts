@@ -4,7 +4,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogPrevisualizarPostComponent } from 'src/app/components/dialogs/dialog-previsualizar-post/dialog-previsualizar-post.component';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
-import { Editor, Toolbar } from 'ngx-editor';
+import { Editor, toDoc, toHTML, Toolbar } from 'ngx-editor';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +13,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Title } from '@angular/platform-browser';
+import { PostsGeneratorComponent } from '../posts-generator/posts-generator.component';
 @Component({
   selector: 'app-posts-create',
   templateUrl: './posts-create.component.html',
@@ -42,12 +43,13 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   public toolbar: Toolbar = [
     ['bold', 'italic'],
     ['underline', 'strike'],
-    ['blockquote'],
+    ['code', 'blockquote'],
     ['ordered_list', 'bullet_list'],
     [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
     ['link', 'image'],
     ['text_color'],
     ['align_left', 'align_center', 'align_right', 'align_justify'],
+    ['horizontal_rule', 'format_clear'],
   ];
 
   constructor(
@@ -87,11 +89,15 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       this.postId = +value.get('id');
 
       if (!this.postId) {
-        this.title.setTitle(`Crear post | Pixicity - Ciudad Pixelada | Comunidad para Compartir Información`);
+        this.title.setTitle(
+          `Crear post | Pixicity - Ciudad Pixelada | Comunidad para Compartir Información`
+        );
         return;
       }
 
-      this.title.setTitle(`Actualizar post | Pixicity - Ciudad Pixelada | Comunidad para Compartir Información`);
+      this.title.setTitle(
+        `Actualizar post | Pixicity - Ciudad Pixelada | Comunidad para Compartir Información`
+      );
       this.postService.getPostById(this.postId).subscribe((response: any) => {
         if (
           this.currentUser.usuario.rango !== 'Administrador' &&
@@ -231,6 +237,21 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
         this.formGroup.patchValue({
           id: response,
+        });
+      }
+    });
+  }
+
+  postGenerator(): void {
+    const dialogRef = this.dialog.open(PostsGeneratorComponent, {
+      width: '980px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((response: any) => {
+      if (response) {
+        this.formGroup.patchValue({
+          contenido: toDoc(response),
         });
       }
     });
