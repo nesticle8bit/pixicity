@@ -114,7 +114,7 @@
                 <section class="mb-3">
                     <div class="row">
                         <div class="col-12 col-sm-6">
-                            <button mat-flat-button class="mat-gray" (click)="guardarBorrador()"
+                            <button type="button" *ngIf="formGroup.value?.esBorrador || !formGroup.value?.id" mat-flat-button class="mat-gray" (click)="guardarBorrador()"
                                 [disabled]="formGroup.invalid">
                                 <fa-icon [icon]="['fas', 'save']"></fa-icon> Guardar en Borradores
                             </button>

@@ -186,25 +186,23 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
           });
         }
       });
-
-      return;
+    } else {
+      this.postService.updatePost(post).subscribe((response: any) => {
+        if (response) {
+          Swal.fire({
+            title: 'Actualizado',
+            text: 'Se ha actualizado recientemente tu post 👋🏼, ahora lo podrás visualizar con los cambios realizados',
+            icon: 'success',
+          }).then(() => {
+            this.router.navigate([
+              `/posts/${categoria.nombre.toLowerCase()}/${post.id}/${
+                post.titulo
+              }`,
+            ]);
+          });
+        }
+      });
     }
-
-    this.postService.updatePost(post).subscribe((response: any) => {
-      if (response) {
-        Swal.fire({
-          title: 'Actualizado',
-          text: 'Se ha actualizado recientemente tu post 👋🏼, ahora lo podrás visualizar con los cambios realizados',
-          icon: 'success',
-        }).then(() => {
-          this.router.navigate([
-            `/posts/${categoria.nombre.toLowerCase()}/${post.id}/${
-              post.titulo
-            }`,
-          ]);
-        });
-      }
-    });
   }
 
   guardarBorrador(): void {
@@ -224,22 +222,22 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
           this.formGroup.patchValue({
             id: response,
+            esBorrador: true,
           });
         }
       });
+    } else {
+      this.postService.updatePost(post).subscribe((response: any) => {
+        if (response) {
+          this.today = new Date();
 
-      return;
+          this.formGroup.patchValue({
+            id: response,
+            esBorrador: true,
+          });
+        }
+      });
     }
-
-    this.postService.updatePost(post).subscribe((response: any) => {
-      if (response) {
-        this.today = new Date();
-
-        this.formGroup.patchValue({
-          id: response,
-        });
-      }
-    });
   }
 
   postGenerator(): void {
