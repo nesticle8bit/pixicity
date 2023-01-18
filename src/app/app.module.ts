@@ -203,6 +203,9 @@ import { TableVotosComponent } from './components/admin/control-de-comunidad/vot
 import { SectionHomeForumComponent } from './sections/section-home-forum/section-home-forum.component';
 import { UserOnlineStatusComponent } from './components/addons/user-online-status/user-online-status.component';
 import { PostsGeneratorComponent } from './posts/posts-generator/posts-generator.component';
+import { TableNoticiasComponent } from './components/admin/control-de-contenido/noticias/table-noticias/table-noticias.component';
+import { IHttpNoticiasService } from './services/interfaces/httpNoticias.interface';
+import { HttpNoticiasService } from './services/implementations/httpNoticias.service';
 
 @NgModule({
   declarations: [
@@ -336,6 +339,7 @@ import { PostsGeneratorComponent } from './posts/posts-generator/posts-generator
     SectionHomeForumComponent,
     UserOnlineStatusComponent,
     PostsGeneratorComponent,
+    TableNoticiasComponent,
   ],
   imports: [
     BrowserModule,
@@ -438,6 +442,7 @@ import { PostsGeneratorComponent } from './posts/posts-generator/posts-generator
     { provide: IHttpDenunciasService, useClass: HttpDenunciasService },
     { provide: IHttpWebService, useClass: HttpWebService },
     { provide: IHttpPerfilService, useClass: HttpPerfilService },
+    { provide: IHttpNoticiasService, useClass: HttpNoticiasService },
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
