@@ -63,7 +63,7 @@ const routes: Routes = [
   { path: 'perfil/:userName', component: PerfilComponent },
   { path: 'shouts/:userName/:id', component: ShoutsViewComponent },
 
-  { path: 'posts/:categoria', component: SectionHomeComponent },
+  { path: 'posts/:categoria', component: SectionHomeForumComponent },
   { path: 'posts/:categoria/:id/:nombre-post', component: PostsViewComponent },
   { path: 'posts/404/:nombre-post', component: PostNotFoundComponent },
   {

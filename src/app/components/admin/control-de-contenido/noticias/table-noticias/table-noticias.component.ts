@@ -19,7 +19,9 @@ export class TableNoticiasComponent implements OnInit {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getNoticias();
+  }
 
   getNoticias(): void {
     this.noticiasService.getNoticias('').subscribe((response: any) => {
