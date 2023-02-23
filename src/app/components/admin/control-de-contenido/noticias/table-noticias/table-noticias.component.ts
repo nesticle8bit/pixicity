@@ -1,10 +1,10 @@
+import { DialogCreateUpdateNoticiasComponent } from '../dialog-create-update-noticias/dialog-create-update-noticias.component';
 import { IHttpNoticiasService } from 'src/app/services/interfaces/httpNoticias.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import { DialogCreateUpdateNoticiasComponent } from '../dialog-create-update-noticias/dialog-create-update-noticias.component';
 
 @Component({
   selector: 'app-table-noticias',
@@ -29,10 +29,8 @@ export class TableNoticiasComponent implements OnInit {
 
   getNoticias(): void {
     this.noticiasService.getNoticias('').subscribe((response: any) => {
-      if (response?.data) {
-        this.noticias = response?.data;
-        this.totalCount = response?.pagination?.totalCount;
-      }
+      this.noticias = response?.noticias;
+      this.totalCount = response?.pagination?.totalCount;
     });
   }
 
