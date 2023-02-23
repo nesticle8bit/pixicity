@@ -206,6 +206,7 @@ import { PostsGeneratorComponent } from './posts/posts-generator/posts-generator
 import { TableNoticiasComponent } from './components/admin/control-de-contenido/noticias/table-noticias/table-noticias.component';
 import { IHttpNoticiasService } from './services/interfaces/httpNoticias.interface';
 import { HttpNoticiasService } from './services/implementations/httpNoticias.service';
+import { DialogCreateUpdateNoticiasComponent } from './components/admin/control-de-contenido/noticias/dialog-create-update-noticias/dialog-create-update-noticias.component';
 
 @NgModule({
   declarations: [
@@ -340,6 +341,7 @@ import { HttpNoticiasService } from './services/implementations/httpNoticias.ser
     UserOnlineStatusComponent,
     PostsGeneratorComponent,
     TableNoticiasComponent,
+    DialogCreateUpdateNoticiasComponent,
   ],
   imports: [
     BrowserModule,

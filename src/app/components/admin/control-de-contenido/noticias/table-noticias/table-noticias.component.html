@@ -1,3 +1,9 @@
+<button type="button" (click)="updateNoticia(undefined)" class="mb-3 float-end" mat-flat-button color="primary">
+    <mat-icon>add_circle</mat-icon> Agregar Noticia
+</button>
+
+<div class="clearfix"></div>
+
 <main class="table-responsive" *ngIf="noticias.length > 0">
     <table class="table table-sm table-striped table-hover">
         <thead>
@@ -38,17 +44,20 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <!-- <button type="button" mat-menu-item (click)="deleteNotificacion(monitor)"
-                            *ngIf="!monitor.eliminado">
+                        <button type="button" mat-menu-item (click)="updateNoticia(noticia)">
+                            <mat-icon>edit</mat-icon>
+                            <span>Actualizar</span>
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="deleteNoticia(noticia)" *ngIf="!noticia.eliminado">
                             <mat-icon>delete_outline</mat-icon>
                             <span>Eliminar</span>
                         </button>
 
-                        <button type="button" mat-menu-item (click)="deleteNotificacion(monitor)"
-                            *ngIf="monitor.eliminado">
+                        <button type="button" mat-menu-item (click)="deleteNoticia(noticia)" *ngIf="noticia.eliminado">
                             <mat-icon>undo</mat-icon>
                             <span>Recuperar</span>
-                        </button> -->
+                        </button>
                     </mat-menu>
                 </td>
             </tr>
