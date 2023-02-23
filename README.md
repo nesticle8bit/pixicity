@@ -6,7 +6,7 @@
 Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de las cenizas a Pixicity!, pueden visitarlo en el siguiente enlace [https://www.pixicity.io](https://www.pixicity.io)
 
 ### 📄 Index
-![pixicity.io](https://user-images.githubusercontent.com/1715022/210359272-8d009ca8-58c1-41b3-bfe4-46450268dbb5.png)
+![pixicity.io](https://user-images.githubusercontent.com/1715022/221032267-533c6ce5-f864-4df8-ae6a-53b19a7a0da5.png)
 
 <details>
   <summary>🖼️ Screenshots</summary>
