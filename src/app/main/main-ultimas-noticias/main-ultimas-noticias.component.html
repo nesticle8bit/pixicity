@@ -1,9 +1,7 @@
-<section class="row">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12" *ngFor="let noticia of noticias; let i = index">
-                <span [innerHTML]="noticia.contenido"></span>
-            </div>
+<section class="last_news container">
+    <div class="row">
+        <div class="col-12" *ngFor="let noticia of noticias; let i = index">
+            <span [innerHTML]="noticia.contenido"></span>
         </div>
     </div>
 </section>
