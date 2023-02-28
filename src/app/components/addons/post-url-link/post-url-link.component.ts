@@ -19,6 +19,8 @@ export class PostUrlLinkComponent implements OnInit {
     seo: '',
   };
 
+  @Input() target: string = '_self';
+
   constructor() {}
 
   ngOnInit(): void {}

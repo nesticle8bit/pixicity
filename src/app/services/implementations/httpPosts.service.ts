@@ -684,7 +684,30 @@ export class HttpPostsService implements IHttpPostsService {
 
   getVotos(): Observable<any> {
     return this.http
-      .get<any>(`${environment.api}/api/votos/getVotosAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`)
+      .get<any>(
+        `${environment.api}/api/votos/getVotosAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`
+      )
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getPostsRelatedByTitle(title: string): Observable<any> {
+    return this.http
+      .get<any>(
+        `${environment.api}/api/posts/getPostsRelatedByTitle?title=${title}`
+      )
       .pipe(
         map((response: any) => {
           if (response.status === 200) {

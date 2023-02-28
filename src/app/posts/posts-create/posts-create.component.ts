@@ -39,6 +39,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   public esBorrador: boolean = false;
   public today = new Date();
   public separatorKeysCodes = [ENTER, COMMA] as const;
+  public relatedPosts: any[] = [];
 
   public toolbar: Toolbar = [
     ['bold', 'italic'],
@@ -253,5 +254,21 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  getPostsRelatedByTitle(): void {
+    const titulo = this.formGroup.value.titulo;
+
+    if (!titulo) {
+      return;
+    }
+
+    this.postService
+      .getPostsRelatedByTitle(titulo)
+      .subscribe((response: any) => {
+        if (response) {
+          this.relatedPosts = response;
+        }
+      });
   }
 }

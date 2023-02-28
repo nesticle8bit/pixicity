@@ -413,6 +413,7 @@ import { MainUltimasNoticiasComponent } from './main/main-ultimas-noticias/main-
         `${environment.api}/api/tops/getTopPosts`,
         `${environment.api}/api/posts/getBorradores`,
         `${environment.api}/api/monitors/setNotificacionesAsReaded`,
+        `${environment.api}/api/posts/getPostsRelatedByTitle`
       ],
     }),
     MatRadioModule,
