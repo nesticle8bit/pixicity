@@ -53,10 +53,6 @@ export class LoginComponent implements OnInit {
     this.error = '';
 
     this.securityService.loginUser(login).subscribe((value: any) => {
-      this.loginForm.patchValue({
-        captcha: '',
-      });
-
       if (value === 'error') {
         this.error =
           'Las credenciales son incorrectas, por favor corrige y vuelve a iniciar sesión';
@@ -88,6 +84,10 @@ export class LoginComponent implements OnInit {
 
       this.securityService.setUserToLocalStorage(value);
       window.location.href = '';
+
+      this.loginForm.patchValue({
+        captcha: '',
+      });
     });
   }
 
