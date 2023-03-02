@@ -11,13 +11,16 @@
         </div>
     </div>
 
-    <div class="row bg-white" *ngIf="configuracion?.disableUserRegistration === false" [ngClass]="{'p-4': !hide?.sidebar}">
-        <div class="col-12 text-center main-login--head" [ngClass]="{'col-sm-12': hide?.sidebar, 'col-sm-8': !hide?.sidebar}">
+    <div class="row bg-white" *ngIf="configuracion?.disableUserRegistration === false"
+        [ngClass]="{'p-4': !hide?.sidebar}">
+        <div class="col-12 text-center main-login--head"
+            [ngClass]="{'col-sm-12': hide?.sidebar, 'col-sm-8': !hide?.sidebar}">
             <section *ngIf="!hide?.sidebar">
                 <h1>Bienvenido a Pixicity!</h1>
-            
+
                 <p>
-                    Crear tu cuenta en Pixicity! solo te tomará algunos segundos y te permitirá acceder al mejor contenido
+                    Crear tu cuenta en Pixicity! solo te tomará algunos segundos y te permitirá acceder al mejor
+                    contenido
                     creado por usuarios como tú.
                 </p>
             </section>
@@ -28,9 +31,15 @@
 
             <form [formGroup]="formGroup" (ngSubmit)="registerUser()" class="login_box mx-auto">
                 <div class="mb-3 pos-relative">
-                    <label>Nombre de Usuario</label>
+                    <label>
+                        Nombre de Usuario <strong class="text-danger">*</strong>
+                    </label>
                     <input type="text" formControlName="userName" autocomplete="off" class="form-control mx-auto"
                         on-focus="onFocus('userName')" on-blur="removePopover()" />
+
+                    <!-- <div class="form-text text-danger">
+                            El campo nombre de usuario es requerido
+                        </div> -->
 
                     <div class="pixicity-popover help info" *ngIf="currentFocus === 'userName'">
                         <span id="puy"></span>
@@ -42,7 +51,9 @@
                 </div>
 
                 <div class="mb-3 pos-relative">
-                    <label>Contraseña Deseada</label>
+                    <label>
+                        Contraseña Deseada <strong class="text-danger">*</strong>
+                    </label>
                     <input id="password" type="password" formControlName="password" autocomplete="off"
                         class="form-control mx-auto" on-focus="onFocus('password')" on-blur="removePopover()" />
 
@@ -56,7 +67,9 @@
                 </div>
 
                 <div class="mb-3 pos-relative">
-                    <label>Correo Electrónico</label>
+                    <label>
+                        Correo Electrónico <strong class="text-danger">*</strong>
+                    </label>
                     <input type="email" formControlName="email" class="form-control mx-auto" on-focus="onFocus('email')"
                         on-blur="removePopover()" />
 
@@ -69,7 +82,7 @@
                     </div>
                 </div>
 
-                <div class="mb-3 pos-relative">
+                <!-- <div class="mb-3 pos-relative">
                     <label>Fecha de Nacimiento</label>
 
                     <div class="row">
@@ -89,9 +102,9 @@
                             <ng-select formControlName="año" [items]="years"></ng-select>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
-                <div class="mb-3 pos-relative">
+                <!-- <div class="mb-3 pos-relative">
                     <label>Género</label>
                     <ng-select formControlName="genero" [items]="generos" bindLabel="label" bindValue="value"
                         (click)="onFocus('genero')" on-blur="removePopover()"></ng-select>
@@ -103,12 +116,26 @@
                             <em>Selecciona tu género</em>
                         </span>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="mb-3 pos-relative">
-                    <label>Pais de Origen</label>
+                    <label>
+                        Pais de Origen <strong class="text-danger">*</strong>
+                    </label>
                     <ng-select formControlName="paisId" [items]="paises" bindLabel="nombre" bindValue="id"
-                        (change)="getEstadosByPais($event)" (click)="onFocus('pais')" on-blur="removePopover()"></ng-select>
+                        (change)="getEstadosByPais($event)" (click)="onFocus('pais')" on-blur="removePopover()">
+                        <ng-template ng-option-tmp let-item="item" let-index="index">
+                            <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1"
+                                *ngIf="item?.iso2">
+                            {{item.nombre}}
+                        </ng-template>
+
+                        <ng-template ng-label-tmp let-item="item">
+                            <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1"
+                                *ngIf="item?.iso2">
+                            {{item.nombre}}
+                        </ng-template>
+                    </ng-select>
 
                     <div class="pixicity-popover help info" *ngIf="currentFocus === 'pais'">
                         <span id="puy"></span>
@@ -120,14 +147,16 @@
                 </div>
 
                 <div class="mb-3 pos-relative">
-                    <label>Estado o Región</label>
-                    <ng-select formControlName="estadoId" [items]="estados" bindLabel="nombre" bindValue="id" (click)="onFocus('estado')"
-                        on-blur="removePopover()">
+                    <label>
+                        Estado o Región <strong class="text-danger">*</strong>
+                    </label>
+                    <ng-select formControlName="estadoId" [items]="estados" bindLabel="nombre" bindValue="id"
+                        (click)="onFocus('estado')" on-blur="removePopover()">
                     </ng-select>
-                
+
                     <div class="pixicity-popover help info" *ngIf="currentFocus === 'estado'">
                         <span id="puy"></span>
-                
+
                         <span>
                             <em>Selecciona tu estado o región</em>
                         </span>
@@ -143,7 +172,9 @@
                     <div class="pixicity-popover help info" *ngIf="currentFocus === 'terms-conditions'">
                         <span id="puy"></span>
                         <span>
-                            <em>¿Aceptas los Términos y Condiciones?</em>
+                            <em>
+                                ¿Aceptas los Términos y Condiciones? <strong class="text-danger">*</strong>
+                            </em>
                         </span>
                     </div>
                 </div>

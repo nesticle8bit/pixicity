@@ -100,14 +100,14 @@ export class RegisterComponent implements OnInit {
       userName: ['', Validators.required],
       password: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      dia: [undefined, Validators.required],
-      mes: [undefined, Validators.required],
-      año: [undefined, Validators.required],
-      genero: [undefined, Validators.required],
+      // dia: [undefined, Validators.required],
+      // mes: [undefined, Validators.required],
+      // año: [undefined, Validators.required],
+      // genero: [undefined, Validators.required],
       paisId: [undefined, Validators.required],
       estadoId: [undefined, Validators.required],
+      termsConditions: false,
       captcha: ['', Validators.required],
-      termsConditions: [false, Validators.requiredTrue]
     });
   }
 
@@ -156,7 +156,7 @@ export class RegisterComponent implements OnInit {
 
   registerUser(): void {
     const user: UserModel = Object.assign({}, this.formGroup.value);
-    user.fechaNacimiento = `${user.dia}/${user.mes}/${user.año}`;
+    // user.fechaNacimiento = `${user.dia}/${user.mes}/${user.año}`;
 
     this.securityService.registerUser(user).subscribe((response: any) => {
       if (response) {
