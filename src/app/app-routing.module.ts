@@ -48,16 +48,17 @@ import { SectionHomeForumComponent } from './sections/section-home-forum/section
 import { SectionHomeComponent } from './sections/section-home/section-home.component';
 import { AdministradorAuthorization } from './shared/guards/adminAuthorization.guard';
 import { AuthGuard } from './shared/guards/auth.guard';
+import { AuthLoggedUserGuard } from './shared/guards/auth.loggedUser.guard';
 
 const routes: Routes = [
   { path: '', component: SectionHomeForumComponent },
-  { path: 'registro', component: RegisterComponent },
+  { path: 'registro', component: RegisterComponent, canActivate: [AuthLoggedUserGuard] },
 
   { path: 'buscar', component: SearchComponent },
   { path: 'buscar/:tipo/:query', component: SearchComponent },
   { path: 'buscar/:tipo/:query/:categoria', component: SearchComponent },
 
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [AuthLoggedUserGuard] },
   { path: 'cuenta', component: AccountComponent, canActivate: [AuthGuard] },
   { path: 'en-vivo', component: EnVivoComponent },
   { path: 'perfil/:userName', component: PerfilComponent },
