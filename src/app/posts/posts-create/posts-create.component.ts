@@ -259,7 +259,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   getPostsRelatedByTitle(): void {
     const titulo = this.formGroup.value.titulo;
 
-    if (!titulo) {
+    if (!titulo || titulo.length < 3) {
       return;
     }
 
