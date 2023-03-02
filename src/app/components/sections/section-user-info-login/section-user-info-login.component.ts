@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
@@ -28,6 +28,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
     notifications: 0,
     messages: 0,
   };
+
 
   constructor(
     private securityService: IHttpSecurityService,
@@ -91,6 +92,8 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
           return notificacion;
         });
+
+        this.setNotificacionesAsReaded();
       }
 
       this.notificaciones = response;
@@ -99,8 +102,6 @@ export class SectionUserInfoLoginComponent implements OnInit {
     this.display.monitor = true;
     this.display.mensajes = false;
     this.display.favoritos = false;
-
-    this.setNotificacionesAsReaded();
   }
 
   verMensajes(): void {

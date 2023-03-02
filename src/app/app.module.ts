@@ -208,6 +208,7 @@ import { IHttpNoticiasService } from './services/interfaces/httpNoticias.interfa
 import { HttpNoticiasService } from './services/implementations/httpNoticias.service';
 import { DialogCreateUpdateNoticiasComponent } from './components/admin/control-de-contenido/noticias/dialog-create-update-noticias/dialog-create-update-noticias.component';
 import { MainUltimasNoticiasComponent } from './main/main-ultimas-noticias/main-ultimas-noticias.component';
+import { ClickOutsideDirective } from './shared/directives/clickOutside.directive';
 
 @NgModule({
   declarations: [
@@ -344,6 +345,7 @@ import { MainUltimasNoticiasComponent } from './main/main-ultimas-noticias/main-
     TableNoticiasComponent,
     DialogCreateUpdateNoticiasComponent,
     MainUltimasNoticiasComponent,
+    ClickOutsideDirective
   ],
   imports: [
     BrowserModule,

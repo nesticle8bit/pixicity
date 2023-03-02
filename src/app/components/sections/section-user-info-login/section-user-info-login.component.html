@@ -10,12 +10,11 @@
         <ul>
             <li class="monitor" style="position: relative">
                 <a class="menu" href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Monitor"
-                    [matTooltipPosition]="'above'" (click)="verNotificaciones()">
+                    [matTooltipPosition]="'above'" (click)="verNotificaciones();" (clickOutside)="display.monitor = false">
                     <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                 </a>
 
-                <div class="notificaciones-list" id="mon_list" [style.display]="display.monitor ? 'block' : 'none'"
-                    (mouseenter)="display.monitor = true" (mouseleave)="display.monitor = false">
+                <div class="notificaciones-list" id="mon_list" [style.display]="display.monitor ? 'block' : 'none'">
                     <div class="timoni">Notificaciones</div>
 
                     <ul>
@@ -68,12 +67,11 @@
 
             <li class="mensajes" style="position:relative">
                 <a class="menu" href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Mensajes"
-                    [matTooltipPosition]="'above'" (click)="verMensajes()">
+                    [matTooltipPosition]="'above'" (click)="verMensajes()" (clickOutside)="display.mensajes = false">
                     <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                 </a>
 
-                <div class="notificaciones-list" id="mon_list" [style.display]="display.mensajes ? 'block' : 'none'"
-                    (mouseenter)="display.mensajes = true" (mouseleave)="display.mensajes = false">
+                <div class="notificaciones-list" id="mon_list" [style.display]="display.mensajes ? 'block' : 'none'">
                     <div class="timoni">Mensajes directos</div>
 
                     <ul>
@@ -119,12 +117,12 @@
             </li>
 
             <li class="favoritos" style="position:relative">
-                <a class="menu" href="javascript:void(0)" title="Posts favoritos" (click)="verFavoritos()">
+                <a class="menu" href="javascript:void(0)" title="Posts favoritos" (click)="verFavoritos()"
+                (clickOutside)="display.favoritos = false">
                     <fa-icon [icon]="['fas', 'star']"></fa-icon>
                 </a>
 
-                <div class="notificaciones-list" id="mon_list" [style.display]="display.favoritos ? 'block' : 'none'"
-                    (mouseenter)="display.favoritos = true" (mouseleave)="display.favoritos = false">
+                <div class="notificaciones-list" id="mon_list" [style.display]="display.favoritos ? 'block' : 'none'">
                     <div class="timoni">Favoritos</div>
 
                     <ul>
