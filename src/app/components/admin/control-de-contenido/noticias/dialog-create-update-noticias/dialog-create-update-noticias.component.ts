@@ -22,13 +22,16 @@ export class DialogCreateUpdateNoticiasComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       id: 0,
       contenido: ['', Validators.required],
+      eliminado: false,
     });
   }
 
   ngOnInit(): void {
     if (this.data?.id) {
       this.formGroup.patchValue({
-        id: this.data.id,
+        id: this.data?.id,
+        contenido: this.data?.contenido,
+        eliminado: this.data?.eliminado,
       });
     }
   }
@@ -49,7 +52,7 @@ export class DialogCreateUpdateNoticiasComponent implements OnInit {
           timer: 3000,
         });
 
-        this.dialogRef.close();
+        this.dialogRef.close(true);
       });
     } else {
       this.noticiasService.saveNoticias(value).subscribe((response: any) => {
@@ -60,7 +63,7 @@ export class DialogCreateUpdateNoticiasComponent implements OnInit {
           timer: 3000,
         });
 
-        this.dialogRef.close();
+        this.dialogRef.close(true);
       });
     }
   }

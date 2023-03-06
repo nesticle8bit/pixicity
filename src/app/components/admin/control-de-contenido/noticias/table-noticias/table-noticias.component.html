@@ -11,7 +11,8 @@
                 <th></th>
                 <th>Creado</th>
                 <th>Contenido</th>
-                <th>Usuario</th>
+                <th>Eliminado</th>
+                <th width="150px">Usuario</th>
                 <th></th>
             </tr>
         </thead>
@@ -29,13 +30,17 @@
                 </td>
 
                 <td>
-                    <span [innerHTML]="noticia.contenido"></span>
+                    <span title="{{noticia.contenido}}" [innerHTML]="noticia.contenido | truncate:[110]"></span>
+                </td>
+
+                <td>
+                    {{noticia.eliminado ? 'Eliminado' : 'Activo'}}
                 </td>
 
                 <td>
                     <app-user-avatar [class]="'img-avatar'" [avatar]="noticia.usuario?.avatar"
                         [userName]="noticia.usuario?.userName">
-                    </app-user-avatar> {{noticia.usuarioRegistra}}
+                    </app-user-avatar> {{noticia.usuario?.userName}}
                 </td>
 
                 <td class="text-center" width="30px">
