@@ -51,26 +51,30 @@ export class TableUsuariosComponent implements OnInit {
     });
   }
 
-  deleteUser(id: number): void {
+  deleteUser(usuario: any): void {
     Swal.fire({
       title: 'Eliminar',
-      text: '¿Está seguro de eliminar el usuario?',
+      text: `¿Está seguro de ${
+        usuario.eliminado ? 'recuperar' : 'eliminar'
+      } el usuario?`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Eliminar',
+      confirmButtonText: `${usuario.eliminado ? 'Recuperar' : 'Eliminar'}`,
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.securityService
-          .deleteSessionById(id)
+          .removeUsuario(usuario.id)
           .subscribe((response: any) => {
             if (response) {
               Swal.fire({
-                title: 'Eliminado',
-                text: 'El usuario ha sido eliminado correctamente',
+                title: `${usuario.eliminado ? 'Recuperado' : 'Eliminado'}`,
+                text: `El usuario ha sido ${usuario.eliminado ? 'recuperado' : 'eliminado'} correctamente`,
                 icon: 'success',
                 timer: 3000,
               });
+
+              this.getUsuarios();
             }
           });
       }
@@ -88,8 +92,8 @@ export class TableUsuariosComponent implements OnInit {
       disableClose: true,
       data: {
         isAdmin: true,
-        usuario
-      }
+        usuario,
+      },
     });
   }
 

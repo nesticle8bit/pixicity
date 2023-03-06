@@ -107,9 +107,11 @@
 
                         <mat-divider></mat-divider>
 
-                        <button type="button" mat-menu-item (click)="deleteUser(usuario.id)" *ngIf="!usuario.eliminado">
-                            <mat-icon>delete_outline</mat-icon>
-                            <span>Eliminar</span>
+                        <button type="button" mat-menu-item (click)="deleteUser(usuario)">
+                            <mat-icon *ngIf="!usuario.eliminado">delete_outline</mat-icon>
+                            <mat-icon *ngIf="usuario.eliminado">undo</mat-icon>
+
+                            <span>{{!usuario.eliminado ? 'Eliminar' : 'Recuperar'}}</span>
                         </button>
                     </mat-menu>
                 </td>
