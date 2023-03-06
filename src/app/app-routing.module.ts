@@ -49,16 +49,25 @@ import { SectionHomeComponent } from './sections/section-home/section-home.compo
 import { AdministradorAuthorization } from './shared/guards/adminAuthorization.guard';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { AuthLoggedUserGuard } from './shared/guards/auth.loggedUser.guard';
+import { DashboardPaginasComponent } from './components/admin/control-de-contenido/paginas/dashboard-paginas/dashboard-paginas.component';
 
 const routes: Routes = [
   { path: '', component: SectionHomeForumComponent },
-  { path: 'registro', component: RegisterComponent, canActivate: [AuthLoggedUserGuard] },
+  {
+    path: 'registro',
+    component: RegisterComponent,
+    canActivate: [AuthLoggedUserGuard],
+  },
 
   { path: 'buscar', component: SearchComponent },
   { path: 'buscar/:tipo/:query', component: SearchComponent },
   { path: 'buscar/:tipo/:query/:categoria', component: SearchComponent },
 
-  { path: 'login', component: LoginComponent, canActivate: [AuthLoggedUserGuard] },
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [AuthLoggedUserGuard],
+  },
   { path: 'cuenta', component: AccountComponent, canActivate: [AuthGuard] },
   { path: 'en-vivo', component: EnVivoComponent },
   { path: 'perfil/:userName', component: PerfilComponent },
@@ -213,6 +222,11 @@ const routes: Routes = [
       {
         path: 'votos',
         component: DashboardVotosComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'paginas',
+        component: DashboardPaginasComponent,
         canActivate: [AuthGuard, AdministradorAuthorization],
       },
     ],

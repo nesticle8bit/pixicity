@@ -209,6 +209,8 @@ import { HttpNoticiasService } from './services/implementations/httpNoticias.ser
 import { DialogCreateUpdateNoticiasComponent } from './components/admin/control-de-contenido/noticias/dialog-create-update-noticias/dialog-create-update-noticias.component';
 import { MainUltimasNoticiasComponent } from './main/main-ultimas-noticias/main-ultimas-noticias.component';
 import { ClickOutsideDirective } from './shared/directives/clickOutside.directive';
+import { DashboardPaginasComponent } from './components/admin/control-de-contenido/paginas/dashboard-paginas/dashboard-paginas.component';
+import { TablePaginasComponent } from './components/admin/control-de-contenido/paginas/table-paginas/table-paginas.component';
 
 @NgModule({
   declarations: [
@@ -345,7 +347,9 @@ import { ClickOutsideDirective } from './shared/directives/clickOutside.directiv
     TableNoticiasComponent,
     DialogCreateUpdateNoticiasComponent,
     MainUltimasNoticiasComponent,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    DashboardPaginasComponent,
+    TablePaginasComponent
   ],
   imports: [
     BrowserModule,
