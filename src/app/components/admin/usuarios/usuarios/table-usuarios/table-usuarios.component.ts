@@ -54,7 +54,7 @@ export class TableUsuariosComponent implements OnInit {
   deleteUser(id: number): void {
     Swal.fire({
       title: 'Eliminar',
-      text: '¿Está seguro de eliminar esta sesión del usuario?',
+      text: '¿Está seguro de eliminar el usuario?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Eliminar',
@@ -67,7 +67,7 @@ export class TableUsuariosComponent implements OnInit {
             if (response) {
               Swal.fire({
                 title: 'Eliminado',
-                text: 'La sesión ha sido eliminado correctamente',
+                text: 'El usuario ha sido eliminado correctamente',
                 icon: 'success',
                 timer: 3000,
               });
@@ -89,6 +89,34 @@ export class TableUsuariosComponent implements OnInit {
       data: {
         isAdmin: true,
         usuario
+      }
+    });
+  }
+
+  removeAvatar(usuario: any): void {
+    Swal.fire({
+      title: 'Eliminar',
+      text: '¿Está seguro de eliminar el avatar del usuario?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.securityService
+          .removeAvatar(usuario.id)
+          .subscribe((response: any) => {
+            if (response) {
+              Swal.fire({
+                title: 'Eliminado',
+                text: 'El avatar del usuario ha sido eliminado correctamente',
+                icon: 'success',
+                timer: 3000,
+              });
+
+              this.getUsuarios();
+            }
+          });
       }
     });
   }

@@ -46,4 +46,5 @@ export abstract class IHttpSecurityService {
   abstract getAdminsList(): Observable<any>;
   abstract changeUsuariosRangosByPuntos(): Observable<any>;
   abstract getUserStatus(userName: string): Observable<any>;
+  abstract removeAvatar(usuarioId: number): Observable<any>;
 }

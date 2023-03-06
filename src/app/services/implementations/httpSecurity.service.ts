@@ -745,4 +745,25 @@ export class HttpSecurityService implements IHttpSecurityService {
       )
       .pipe(catchError(this.helper.errorHandler));
   }
+
+  removeAvatar(usuarioId: number): Observable<any> {
+    return this.http
+      .post<any>(`${environment.api}/api/usuarios/removeAvatar`, {
+        id: usuarioId,
+      })
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
 }

@@ -24,7 +24,8 @@
                 </td>
 
                 <td>
-                    <app-user-avatar [height]="20" [avatar]="usuario.avatar" [userName]="usuario.userName"></app-user-avatar> {{usuario.fechaRegistro | timeAgo}}
+                    <app-user-avatar [height]="20" [avatar]="usuario.avatar"
+                        [userName]="usuario.userName"></app-user-avatar> {{usuario.fechaRegistro | timeAgo}}
                 </td>
 
                 <td>
@@ -93,12 +94,20 @@
                             Actualizar Imagen de Perfil
                         </button>
 
-                        <button type="button" mat-menu-item (click)="banUser(usuario)" *ngIf="!usuario.baneado">
+                        <button type="button" mat-menu-item (click)="removeAvatar(usuario)">
+                            <mat-icon>image_not_supported</mat-icon>
+                            Eliminar Imagen de Perfil
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="banUser(usuario)"
+                            *ngIf="!usuario.baneado && !usuario.eliminado">
                             <mat-icon>do_disturb_alt</mat-icon>
                             Banear
                         </button>
 
-                        <button type="button" mat-menu-item (click)="deleteUser(usuario.id)">
+                        <mat-divider></mat-divider>
+
+                        <button type="button" mat-menu-item (click)="deleteUser(usuario.id)" *ngIf="!usuario.eliminado">
                             <mat-icon>delete_outline</mat-icon>
                             <span>Eliminar</span>
                         </button>
