@@ -239,20 +239,39 @@ export class HttpWebService implements IHttpWebService {
 
   getPaginaBySlug(slug: string): Observable<any> {
     return this.http
-    .get<any>(`${environment.api}/api/paginas/getPaginaBySlug?slug=${slug}`)
-    .pipe(
-      map((response: any) => {
-        if (response.status === 200) {
-          return response.data;
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: response.errors.join(', '),
-          });
-        }
-      })
-    )
-    .pipe(catchError(this.helper.errorHandler));
+      .get<any>(`${environment.api}/api/paginas/getPaginaBySlug?slug=${slug}`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getConfiguracionFooter(): Observable<any> {
+    return this.http
+      .get<any>(`${environment.api}/api/configuracion/getFooter`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
   }
 }

@@ -15,6 +15,9 @@ export class MainFooterComponent implements OnInit {
   public display!: DisplayComponentModel;
   public formGroup: FormGroup;
   public paginas: any[] = [];
+  public configuracion: any = {
+    footer: ''
+  };
 
   constructor(
     private displayService: DisplayComponentService,
@@ -36,11 +39,18 @@ export class MainFooterComponent implements OnInit {
       });
 
     this.getPaginas();
+    this.getFooter();
   }
 
   getPaginas(): void {
     this.webService.getAllPaginas().subscribe((response: any) => {
       this.paginas = response;
+    });
+  }
+
+  getFooter(): void {
+    this.webService.getConfiguracionFooter().subscribe((response: any) => {
+      this.configuracion.footer = response;
     });
   }
 

@@ -17,4 +17,5 @@ export abstract class IHttpWebService {
   abstract savePagina(pagina: any): Observable<any>;
   abstract deletePagina(paginaId: number): Observable<any>;
   abstract getPaginaBySlug(slug: string): Observable<any>;
+  abstract getConfiguracionFooter(): Observable<any>;
 }
