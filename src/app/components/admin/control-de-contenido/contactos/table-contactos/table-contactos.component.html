@@ -13,7 +13,7 @@
         </thead>
 
         <tbody>
-            <tr *ngFor="let contacto of contactos" [ngClass]="{'opacity-50': contacto.eliminado}">
+            <tr *ngFor="let contacto of contactos" [ngClass]="{'opacity-50': contacto.eliminado, 'table-info': contacto.gestionado}">
                 <td>
                     <strong>{{contacto.id}}</strong>
                 </td>
@@ -48,10 +48,15 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
-                        <!-- <button type="button" mat-menu-item (click)="deleteContactos(contacto)" *ngIf="!contacto.eliminado">
-                            <mat-icon>delete_outline</mat-icon>
+                        <button type="button" mat-menu-item (click)="gestionarContacto(contacto)">
+                            <mat-icon>fact_check</mat-icon>
+                            <span>Cambiar Estado a Gestionado</span>
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="deleteContacto(contacto)">
+                            <mat-icon>delete</mat-icon>
                             <span>Eliminar</span>
-                        </button> -->
+                        </button>
                     </mat-menu>
                 </td>
             </tr>
