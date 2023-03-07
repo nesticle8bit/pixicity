@@ -1,9 +1,10 @@
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ViewportScroller } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 
 @Component({
   selector: 'main-footer',
@@ -13,15 +14,17 @@ import { Router } from '@angular/router';
 export class MainFooterComponent implements OnInit {
   public display!: DisplayComponentModel;
   public formGroup: FormGroup;
+  public paginas: any[] = [];
 
   constructor(
     private displayService: DisplayComponentService,
+    private webService: IHttpWebService,
     private viewPort: ViewportScroller,
     private formBuilder: FormBuilder,
     private router: Router
   ) {
     this.formGroup = this.formBuilder.group({
-      search: ''
+      search: '',
     });
   }
 
@@ -31,6 +34,14 @@ export class MainFooterComponent implements OnInit {
       .subscribe((value: DisplayComponentModel) => {
         this.display = value;
       });
+
+    this.getPaginas();
+  }
+
+  getPaginas(): void {
+    this.webService.getAllPaginas().subscribe((response: any) => {
+      this.paginas = response;
+    });
   }
 
   goToHeaven(): void {

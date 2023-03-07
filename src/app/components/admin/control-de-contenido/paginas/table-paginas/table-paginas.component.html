@@ -9,8 +9,11 @@
         <thead>
             <tr>
                 <th></th>
+                <th>Fecha</th>
                 <th>Página</th>
-                <th>Slug</th>
+                <th>Slug / Href</th>
+                <th>Tipo</th>
+                <th>Target</th>
                 <th>Eliminado</th>
                 <th width="150px">Usuario</th>
                 <th></th>
@@ -24,7 +27,7 @@
                 </td>
 
                 <td>
-                    <span class="cursor--help" matTooltip="{{pagina.fechaRegistro}}">
+                    <span class="cursor--help text-secondary" matTooltip="{{pagina.fechaRegistro}}">
                         {{pagina.fechaRegistro | timeAgo}}
                     </span>
                 </td>
@@ -34,7 +37,17 @@
                 </td>
 
                 <td>
-                    {{pagina.slug}}
+                    <span class="text-info">
+                        <fa-icon icon="external-link-alt" class="me-1"></fa-icon> {{pagina.slug}}/
+                    </span>
+                </td>
+
+                <td>
+                    {{pagina.tipo}}
+                </td>
+
+                <td>
+                    {{pagina.target}}
                 </td>
 
                 <td>

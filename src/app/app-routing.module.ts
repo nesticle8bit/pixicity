@@ -31,10 +31,8 @@ import { MensajesComponent } from './components/pages/mensajes/mensajes.componen
 import { ModHistoryComponent } from './components/pages/mod-history/mod-history.component';
 import { MonitorComponent } from './components/pages/monitor/monitor.component';
 import { PageContactoComponent } from './components/pages/page-contacto/page-contacto.component';
-import { PageProtocoloComponent } from './components/pages/page-protocolo/page-protocolo.component';
 import { PageTermsConditionsComponent } from './components/pages/page-terms-conditions/page-terms-conditions.component';
 import { PerfilComponent } from './components/pages/perfil/perfil.component';
-import { PrivacidadDatosComponent } from './components/pages/privacidad-datos/privacidad-datos.component';
 import { RegisterComponent } from './components/pages/register/register.component';
 import { SearchComponent } from './components/pages/search/search.component';
 import { ShoutsViewComponent } from './components/pages/shouts/shouts-view/shouts-view.component';
@@ -50,6 +48,7 @@ import { AdministradorAuthorization } from './shared/guards/adminAuthorization.g
 import { AuthGuard } from './shared/guards/auth.guard';
 import { AuthLoggedUserGuard } from './shared/guards/auth.loggedUser.guard';
 import { DashboardPaginasComponent } from './components/admin/control-de-contenido/paginas/dashboard-paginas/dashboard-paginas.component';
+import { PaginasComponent } from './components/pages/paginas/paginas.component';
 
 const routes: Routes = [
   { path: '', component: SectionHomeForumComponent },
@@ -116,14 +115,19 @@ const routes: Routes = [
     component: BorradoresComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'mi',
+    component: MiHomeComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'paginas/:slug',
+    component: PaginasComponent,
+  },
 
-  { path: 'mi', component: MiHomeComponent, canActivate: [AuthGuard] },
-
-  { path: 'protocolo', component: PageProtocoloComponent },
   { path: 'terminos-condiciones', component: PageTermsConditionsComponent },
   { path: 'contacto', component: PageContactoComponent },
   { path: 'dmca', component: DMCAComponent },
-  { path: 'privacidad-datos', component: PrivacidadDatosComponent },
   {
     path: 'api',
     component: ApiDocumentationComponent,

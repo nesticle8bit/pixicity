@@ -12,4 +12,9 @@ export abstract class IHttpWebService {
   abstract changeAfiliadoActive(obj: any): Observable<any>;
   abstract hitAfiliado(codigo: string): Observable<any>;
   abstract getHistorialModeracion(): Observable<any>;
+  abstract getPaginas(search: any): Observable<any>;
+  abstract getAllPaginas(): Observable<any>;
+  abstract savePagina(pagina: any): Observable<any>;
+  abstract deletePagina(paginaId: number): Observable<any>;
+  abstract getPaginaBySlug(slug: string): Observable<any>;
 }

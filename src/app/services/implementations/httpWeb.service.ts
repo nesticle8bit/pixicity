@@ -4,7 +4,7 @@ import { PaginationService } from '../shared/pagination.service';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -152,5 +152,107 @@ export class HttpWebService implements IHttpWebService {
         })
       )
       .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getPaginas(search: any): Observable<any> {
+    return this.http
+      .get<any>(
+        `${environment.api}/api/paginas/getPaginas?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&searchValue=${search}`
+      )
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getAllPaginas(): Observable<any> {
+    return this.http
+      .get<any>(`${environment.api}/api/paginas/getAllPaginas`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  savePagina(pagina: any): Observable<any> {
+    return this.http
+      .post<any>(`${environment.api}/api/paginas/savePagina`, pagina)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  deletePagina(paginaId: number): Observable<any> {
+    return this.http
+      .delete<any>(`${environment.api}/api/paginas/deletePagina`, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+        body: { id: paginaId },
+      })
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getPaginaBySlug(slug: string): Observable<any> {
+    return this.http
+    .get<any>(`${environment.api}/api/paginas/getPaginaBySlug?slug=${slug}`)
+    .pipe(
+      map((response: any) => {
+        if (response.status === 200) {
+          return response.data;
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: response.errors.join(', '),
+          });
+        }
+      })
+    )
+    .pipe(catchError(this.helper.errorHandler));
   }
 }

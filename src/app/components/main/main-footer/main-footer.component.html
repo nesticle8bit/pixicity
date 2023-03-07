@@ -23,22 +23,22 @@
     <div class="row" *ngIf="display?.footer">
         <div class="col-12">
             <div class="footer text-center">
-                <a [routerLink]="['/contacto']">Contacto</a>
-                <a [routerLink]="['/protocolo']">Protocolo</a>
-                <a [routerLink]="['/terminos-condiciones']">Términos y condiciones</a>
-                <a [routerLink]="['/privacidad-datos']">Privacidad de datos</a>
-                <a [routerLink]="['/dmca']" title="Digital Millennium Copyright Act">DMCA</a>
-                <a [routerLink]="['/api']">API</a>
-                <a href="https://discord.gg/rBs8xGTV5S" target="_blank">
-                    🧙🏽‍♂️Chat
-                </a>
+                <span *ngFor="let pagina of paginas">
+                    <a href="{{pagina.slug}}" target="{{pagina.target}}" *ngIf="pagina.tipo === 'link'">
+                        {{pagina.titulo}}
+                    </a>
+
+                    <a [routerLink]="pagina.slug" *ngIf="pagina.tipo === 'routerLink'">
+                        {{pagina.titulo}}
+                    </a>
+                </span>
             </div>
         </div>
     </div>
 
     <div class="text-center copyright">
         <small>
-            Desarrolado con ❤️ por <a [routerLink]="['/perfil/nesticle8bit']">nesticle8bit</a> | versión: 1.1.50
+            Desarrolado con ❤️ por <a [routerLink]="['/perfil/nesticle8bit']">nesticle8bit</a> | versión: 1.1.65
         </small>
 
         <br><br>

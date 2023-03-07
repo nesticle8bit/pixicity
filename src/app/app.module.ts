@@ -128,7 +128,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { ProfileShoutsComponent } from './components/profile/profile-shouts/profile-shouts.component';
 import { ProfileFollowingComponent } from './components/profile/profile-following/profile-following.component';
 import { ProfileFollowersComponent } from './components/profile/profile-followers/profile-followers.component';
-import { PageProtocoloComponent } from './components/pages/page-protocolo/page-protocolo.component';
 import { MainProfileMenuComponent } from './components/main/main-profile-menu/main-profile-menu.component';
 import { ProfileInformationComponent } from './components/profile/profile-information/profile-information.component';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -177,7 +176,6 @@ import { DialogRecomendarPostComponent } from './components/dialogs/dialog-recom
 import { DialogVerReporteComponent } from './components/admin/control-de-comunidad/reportes/dialog-ver-reporte/dialog-ver-reporte.component';
 import { PostUrlLinkComponent } from './components/addons/post-url-link/post-url-link.component';
 import { DialogDisplayHistoryCommentsComponent } from './components/dialogs/dialog-display-history-comments/dialog-display-history-comments.component';
-import { PrivacidadDatosComponent } from './components/pages/privacidad-datos/privacidad-datos.component';
 import { ApiDocumentationComponent } from './components/pages/api-documentation/api-documentation.component';
 import { ProfileShoutsWallComponent } from './components/profile/profile-shouts-wall/profile-shouts-wall.component';
 import { WhoIsIpComponent } from './components/addons/who-is-ip/who-is-ip.component';
@@ -211,6 +209,8 @@ import { MainUltimasNoticiasComponent } from './components/main/main-ultimas-not
 import { ClickOutsideDirective } from './shared/directives/clickOutside.directive';
 import { DashboardPaginasComponent } from './components/admin/control-de-contenido/paginas/dashboard-paginas/dashboard-paginas.component';
 import { TablePaginasComponent } from './components/admin/control-de-contenido/paginas/table-paginas/table-paginas.component';
+import { DialogCreateUpdatePaginasComponent } from './components/admin/control-de-contenido/paginas/dialog-create-update-paginas/dialog-create-update-paginas.component';
+import { PaginasComponent } from './components/pages/paginas/paginas.component';
 
 @NgModule({
   declarations: [
@@ -284,7 +284,6 @@ import { TablePaginasComponent } from './components/admin/control-de-contenido/p
     ProfileShoutsComponent,
     ProfileFollowingComponent,
     ProfileFollowersComponent,
-    PageProtocoloComponent,
     MainProfileMenuComponent,
     ProfileInformationComponent,
     AdsByTypeComponent,
@@ -320,7 +319,6 @@ import { TablePaginasComponent } from './components/admin/control-de-contenido/p
     DialogVerReporteComponent,
     PostUrlLinkComponent,
     DialogDisplayHistoryCommentsComponent,
-    PrivacidadDatosComponent,
     ApiDocumentationComponent,
     ProfileShoutsWallComponent,
     WhoIsIpComponent,
@@ -350,6 +348,8 @@ import { TablePaginasComponent } from './components/admin/control-de-contenido/p
     ClickOutsideDirective,
     DashboardPaginasComponent,
     TablePaginasComponent,
+    DialogCreateUpdatePaginasComponent,
+    PaginasComponent,
   ],
   imports: [
     BrowserModule,
