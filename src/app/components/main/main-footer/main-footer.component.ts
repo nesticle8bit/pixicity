@@ -16,7 +16,7 @@ export class MainFooterComponent implements OnInit {
   public formGroup: FormGroup;
   public paginas: any[] = [];
   public configuracion: any = {
-    footer: ''
+    footer: '',
   };
 
   constructor(
