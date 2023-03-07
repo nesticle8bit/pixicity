@@ -162,9 +162,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { DialogUpdateAfiliadosComponent } from './components/admin/control-de-comunidad/afiliados/dialog-update-afiliados/dialog-update-afiliados.component';
-import { PageTermsConditionsComponent } from './components/pages/page-terms-conditions/page-terms-conditions.component';
 import { PageContactoComponent } from './components/pages/page-contacto/page-contacto.component';
-import { DMCAComponent } from './components/pages/dmca/dmca.component';
 import { SEOService } from './services/shared/seo.service';
 import {
   RecaptchaFormsModule,
@@ -311,9 +309,7 @@ import { PaginasComponent } from './components/pages/paginas/paginas.component';
     BanearUsuarioComponent,
     DialogBanUserComponent,
     DialogUpdateAfiliadosComponent,
-    PageTermsConditionsComponent,
     PageContactoComponent,
-    DMCAComponent,
     ReCaptchaComponent,
     DialogRecomendarPostComponent,
     DialogVerReporteComponent,

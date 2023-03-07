@@ -23,7 +23,6 @@ import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
 import { AccountComponent } from './components/pages/account/account.component';
 import { ApiDocumentationComponent } from './components/pages/api-documentation/api-documentation.component';
 import { BorradoresComponent } from './components/pages/borradores/borradores.component';
-import { DMCAComponent } from './components/pages/dmca/dmca.component';
 import { EnVivoComponent } from './components/pages/en-vivo/en-vivo.component';
 import { FavoritosComponent } from './components/pages/favoritos/favoritos.component';
 import { LoginComponent } from './components/pages/login/login.component';
@@ -31,7 +30,6 @@ import { MensajesComponent } from './components/pages/mensajes/mensajes.componen
 import { ModHistoryComponent } from './components/pages/mod-history/mod-history.component';
 import { MonitorComponent } from './components/pages/monitor/monitor.component';
 import { PageContactoComponent } from './components/pages/page-contacto/page-contacto.component';
-import { PageTermsConditionsComponent } from './components/pages/page-terms-conditions/page-terms-conditions.component';
 import { PerfilComponent } from './components/pages/perfil/perfil.component';
 import { RegisterComponent } from './components/pages/register/register.component';
 import { SearchComponent } from './components/pages/search/search.component';
@@ -125,9 +123,7 @@ const routes: Routes = [
     component: PaginasComponent,
   },
 
-  { path: 'terminos-condiciones', component: PageTermsConditionsComponent },
   { path: 'contacto', component: PageContactoComponent },
-  { path: 'dmca', component: DMCAComponent },
   {
     path: 'api',
     component: ApiDocumentationComponent,

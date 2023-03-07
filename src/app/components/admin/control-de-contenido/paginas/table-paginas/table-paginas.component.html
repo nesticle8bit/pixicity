@@ -14,6 +14,7 @@
                 <th>Slug / Href</th>
                 <th>Tipo</th>
                 <th>Target</th>
+                <th>Contenido</th>
                 <th>Eliminado</th>
                 <th width="150px">Usuario</th>
                 <th></th>
@@ -48,6 +49,14 @@
 
                 <td>
                     {{pagina.target}}
+                </td>
+
+                <td>
+                    <span *ngIf="pagina.contenido" class="badge bg-success">
+                        Contenido
+                    </span>
+
+                    <span *ngIf="!pagina.contenido">-</span>
                 </td>
 
                 <td>
