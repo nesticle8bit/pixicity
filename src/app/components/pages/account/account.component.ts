@@ -530,6 +530,11 @@ export class AccountComponent implements OnInit {
         this.formGroupCuenta.patchValue({
           avatar: value,
         });
+
+        const currentUser = this.securityService.getCurrentUser();
+        currentUser.usuario.avatar = value;
+
+        this.securityService.setUserToLocalStorage(currentUser);
       }
     });
   }
