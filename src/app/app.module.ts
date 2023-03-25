@@ -209,6 +209,8 @@ import { DashboardPaginasComponent } from './components/admin/control-de-conteni
 import { TablePaginasComponent } from './components/admin/control-de-contenido/paginas/table-paginas/table-paginas.component';
 import { DialogCreateUpdatePaginasComponent } from './components/admin/control-de-contenido/paginas/dialog-create-update-paginas/dialog-create-update-paginas.component';
 import { PaginasComponent } from './components/pages/paginas/paginas.component';
+import { IHttpMensajesService } from './services/interfaces/httpMensajes.interface';
+import { HttpMensajesService } from './services/implementations/httpMensajes.service';
 
 @NgModule({
   declarations: [
@@ -450,6 +452,7 @@ import { PaginasComponent } from './components/pages/paginas/paginas.component';
     { provide: IHttpWebService, useClass: HttpWebService },
     { provide: IHttpPerfilService, useClass: HttpPerfilService },
     { provide: IHttpNoticiasService, useClass: HttpNoticiasService },
+    { provide: IHttpMensajesService, useClass: HttpMensajesService},
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

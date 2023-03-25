@@ -1,9 +1,123 @@
 <div class="container container--home">
     <div class="row">
-        <div class="col-12">
-            <div class="alert alert-warning">
-                ⚠️ <strong>En construcción...</strong>
+        <div class="col-12 col-sm-6 col-md-9">
+            <h6 class="main-title">
+                <span>Mensajes privados</span>
+
+                <strong class="float-end text-info" style="background: #fff; padding-left: 7px;">
+                    {{totalCount}}
+                </strong>
+            </h6>
+
+            <div class="nada-gris my-3" *ngIf="mensajes.length < 1">
+                Aún no se han encontrado mensajes para tí.
             </div>
+
+            <main class="table-responsive" *ngIf="mensajes.length > 0">
+                <table class="table table-sm table-striped table-hover">
+                    <tbody>
+                        <tr *ngFor="let mensaje of mensajes; let i = index">
+                            <td>
+                                <div class="row">
+                                    <div class="col-12 col-sm-1">
+                                        <app-user-avatar [avatar]="mensaje.usuarioDe?.avatar"
+                                            [userName]="mensaje.usuarioDe?.userName" [height]="40">
+                                        </app-user-avatar>
+                                    </div>
+
+                                    <div class="col-12 col-sm-11">
+                                        <div class="row">
+                                            <div class="col-12 col-sm-1">
+                                                <div class="my-auto text-center">
+                                                    <mat-checkbox color="primary"></mat-checkbox>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 col-sm-11">
+                                                <a [routerLink]="['/perfil/' + mensaje.usuarioDe?.userName]">
+                                                    @{{mensaje.usuarioDe?.userName}}
+                                                </a>
+
+                                                &#8226; <strong>{{mensaje.asunto}}</strong>
+
+                                                <br>
+                                                <span class="text-muted"
+                                                    [innerHTML]="mensaje.contenido | truncate:[120]"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="text-end" width="150px">
+                                <small class="text-muted cursor--help"
+                                    matTooltip="{{mensaje.fechaRegistro | date:'medium'}}">
+                                    <i>
+                                        {{mensaje.fechaRegistro | timeAgo}}
+                                    </i>
+                                </small>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </main>
+
+            <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+                [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)"
+                *ngIf="mensajes.length > 0">
+            </mat-paginator>
         </div>
+
+        <section class="col-12 col-sm-6 col-md-3 dotted-border--left">
+            <h6 class="main-title">
+                <span>Menú</span>
+            </h6>
+
+            <section class="mb-3">
+                <div class="dsw">
+                    <ul class="list-unstyled mt-2">
+                        <li>
+                            <label class="cursor--pointer">
+                                <i class="icon message-plus me-1"></i>
+                                Mensaje Nuevo
+                            </label>
+                        </li>
+
+                        <li>
+                            <label class="cursor--pointer">
+                                <i class="icon message me-1"></i>
+                                Recibidos
+                            </label>
+                        </li>
+
+                        <li>
+                            <label class="cursor--pointer">
+                                <i class="icon message-send me-1"></i>
+                                Enviados
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <h6 class="main-title mt-3">
+                <span>Carpetas</span>
+            </h6>
+
+            <section class="mb-3">
+                <div class="dsw">
+                    <ul class="list-unstyled mt-2">
+                        <li>
+                            <label class="cursor--pointer">
+                                <i class="icon folder me-1"></i>
+                                Carpeta
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
+        </section>
     </div>
 </div>
