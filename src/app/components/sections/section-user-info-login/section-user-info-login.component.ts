@@ -1,11 +1,11 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpFavoritosService } from 'src/app/services/interfaces/httpFavoritos.interface';
-import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
-import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
+import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-section-user-info-login',
@@ -29,10 +29,10 @@ export class SectionUserInfoLoginComponent implements OnInit {
     messages: 0,
   };
 
-
   constructor(
     private securityService: IHttpSecurityService,
     private favoritosService: IHttpFavoritosService,
+    private mensajesService: IHttpMensajesService,
     private httpLogs: IHttpLogsService,
     private formBuilder: FormBuilder,
     private router: Router
@@ -59,7 +59,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
     this.httpLogs.getStats().subscribe((value: any) => {
       this.currentStats.notifications = value.notifications;
-      this.currentStats.messages = 0; //value.messages;
+      this.currentStats.messages = value.messages;
     });
   }
 
@@ -108,6 +108,12 @@ export class SectionUserInfoLoginComponent implements OnInit {
     this.display.mensajes = !this.display.mensajes;
     this.display.favoritos = false;
     this.display.monitor = false;
+
+    this.mensajesService.getLastMensajes().subscribe((response: any) => {
+      this.mensajes = response;
+
+      this.setMensajesAsReaded();
+    });
   }
 
   setURL(notificacion: any, text: string): string {
@@ -147,6 +153,14 @@ export class SectionUserInfoLoginComponent implements OnInit {
     this.httpLogs.setNotificacionesAsReaded().subscribe((response: any) => {
       console.log(
         '🔔 Se ha cambiado el estado de las últimas notificaciones a leído'
+      );
+    });
+  }
+
+  setMensajesAsReaded(): void {
+    this.mensajesService.setMensajesAsReaded().subscribe((response: any) => {
+      console.log(
+        '🔔 Se ha cambiado el estado de los últimos mensajes a leído'
       );
     });
   }

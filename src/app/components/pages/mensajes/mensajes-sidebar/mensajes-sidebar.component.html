@@ -1,0 +1,49 @@
+<h6 class="main-title">
+    <span>Menú</span>
+</h6>
+
+<section class="mb-3">
+    <div class="dsw">
+        <ul class="list-unstyled mt-2">
+            <li>
+                <label class="cursor--pointer" (click)="enviarMP()">
+                    <i class="icon message-plus me-1"></i>
+                    Mensaje Nuevo
+                </label>
+            </li>
+
+            <li>
+                <label class="cursor--pointer" [routerLink]="['/mensajes']">
+                    <i class="icon message me-1"></i>
+                    Recibidos
+                </label>
+            </li>
+
+            <li>
+                <label class="cursor--pointer" [routerLink]="['/mensajes/enviados']">
+                    <i class="icon message-send me-1"></i>
+                    Enviados
+                </label>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<!-- <h6 class="main-title mt-3">
+    <span>Carpetas</span>
+</h6>
+
+<section class="mb-3">
+    <div class="dsw">
+        <ul class="list-unstyled mt-2">
+            <li>
+                <label class="cursor--pointer">
+                    <i class="icon folder me-1"></i>
+                    Carpeta
+                </label>
+            </li>
+        </ul>
+    </div>
+</section> -->
+
+<ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>

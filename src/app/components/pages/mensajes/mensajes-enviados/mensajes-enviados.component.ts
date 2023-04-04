@@ -1,17 +1,17 @@
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-mensajes',
-  templateUrl: './mensajes.component.html',
-  styleUrls: ['./mensajes.component.scss'],
+  selector: 'app-mensajes-enviados',
+  templateUrl: './mensajes-enviados.component.html',
+  styleUrls: ['./mensajes-enviados.component.scss'],
 })
-export class MensajesComponent implements OnInit {
+export class MensajesEnviadosComponent implements OnInit {
   public formGroup: FormGroup;
   public mensajes: any[] = [];
   public totalCount: number = 0;
@@ -43,7 +43,7 @@ export class MensajesComponent implements OnInit {
   }
 
   getMensajes(): void {
-    this.mensajesService.getMensajes({}).subscribe((response: any) => {
+    this.mensajesService.getMensajesEnviados({}).subscribe((response: any) => {
       this.mensajes = response?.mensajes;
       this.totalCount = response?.pagination?.totalCount;
     });

@@ -47,6 +47,8 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { AuthLoggedUserGuard } from './shared/guards/auth.loggedUser.guard';
 import { DashboardPaginasComponent } from './components/admin/control-de-contenido/paginas/dashboard-paginas/dashboard-paginas.component';
 import { PaginasComponent } from './components/pages/paginas/paginas.component';
+import { MensajesConversacionComponent } from './components/pages/mensajes/mensajes-conversacion/mensajes-conversacion.component';
+import { MensajesEnviadosComponent } from './components/pages/mensajes/mensajes-enviados/mensajes-enviados.component';
 
 const routes: Routes = [
   { path: '', component: SectionHomeForumComponent },
@@ -95,6 +97,21 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   { path: 'mensajes', component: MensajesComponent, canActivate: [AuthGuard] },
+  {
+    path: 'mensajes/enviados',
+    component: MensajesEnviadosComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'mensajes/carpeta/:nombre',
+    component: MensajesComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'mensajes/conversacion/:id',
+    component: MensajesConversacionComponent,
+    canActivate: [AuthGuard],
+  },
   {
     path: 'mod-history',
     component: ModHistoryComponent,

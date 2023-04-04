@@ -1,0 +1,112 @@
+<div class="container container--home">
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-9">
+            <!-- <h6 class="main-title">
+                <span>
+                    <span class="text-primary cursor--pointer" [routerLink]="['/mensajes']"><fa-icon
+                            [icon]="['fas', 'chevron-circle-left']"></fa-icon> Volver</span> <span class="cursor--help"
+                        matTooltip="{{mensaje?.asunto}}" matTooltipPosition="above">
+                        {{mensaje?.asunto | truncate:[100]}}
+                    </span>
+                </span>
+
+                <strong class="float-end text-info" style="background: #fff; padding-left: 7px;">
+
+                </strong>
+            </h6> -->
+
+            <div class="alert alert-warning mt-2">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-10">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-1">
+                                <app-user-avatar matTooltip="{{mensaje?.usuarioDe?.userName}}"
+                                    [matTooltipPosition]="'before'" [avatar]="mensaje?.usuarioDe?.avatar"
+                                    [userName]="mensaje?.usuarioDe?.userName" [height]="40"></app-user-avatar>
+                            </div>
+
+                            <div class="col-12 col-sm-12 col-md-11">
+                                <h6 class="cursor--help mb-1" matTooltip="{{mensaje?.asunto}}" matTooltipPosition="above">
+                                    {{mensaje?.asunto | truncate:[80]}}
+                                </h6>
+
+                                <p class="userName">
+                                    <a [routerLink]="'/perfil/' + mensaje?.usuarioDe?.userName">
+                                        @{{mensaje?.usuarioDe?.userName}}
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-2">
+                        <span class="text-muted">{{mensaje?.fechaRegistro | date:'medium'}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <article class="alert-body mt-3 mb-4">
+                <span [innerHTML]="mensaje?.contenido"></span>
+            </article>
+            
+            <div class="mb-3" *ngIf="responder">
+                <hr class="my-4">
+
+                <textarea class="form-control" title="Escribir una respuesta..." [(ngModel)]="respuesta"
+                    placeholder="Escribir una respuesta..."></textarea>
+
+                <div class="buttons mt-3">
+                    <div class="float-end">
+                        <input type="button" class="boton azul" (click)="responderMensaje()" value="Responder" [disabled]="!respuesta" />
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <section class="footer-btns mt-2">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-6">
+                        <div class="row">
+                            <div class="col-12 col-sm-4">
+                                <a href="javascript:void(0)" (click)="responder = !responder">
+                                    <fa-icon icon="reply"></fa-icon> Responder
+                                </a>
+                            </div>
+                            
+                            <div class="col-12 col-sm-4">
+
+                            </div>
+
+                            <div class="col-12 col-sm-4">
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-6">
+                        <div class="row">
+                            <div class="col-12 col-sm-4">
+                                
+                            </div>
+                            
+                            <div class="col-12 col-sm-4">
+
+                            </div>
+
+                            <div class="col-12 col-sm-4 text-md-end">
+                                <a href="javascript:void(0)">
+                                    <fa-icon icon="trash-alt"></fa-icon> Eliminar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section class="col-12 col-sm-6 col-md-3 dotted-border--left">
+            <app-mensajes-sidebar></app-mensajes-sidebar>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>
+    Enviar Mensaje Personal
+</h2>
+
+<form [formGroup]="formGroup" (ngSubmit)="enviarMP()">
+    <mat-dialog-content>
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <div class="mb-3">
+                    <mat-form-field class="col-12">
+                        <mat-label>A</mat-label>
+                        <input matInput formControlName="aUserName" />
+
+                        <mat-error *ngIf="userName">
+                            {{userName}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="mb-3">
+                    <mat-form-field class="col-12">
+                        <mat-label>Asunto</mat-label>
+                        <input matInput formControlName="asunto" />
+                    </mat-form-field>
+                </div>
+
+                <div class="mb-2">
+                    <label>Contenido</label>
+                    <ngx-editor [editor]="editor">
+                        <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                    </ngx-editor>
+
+                    <div class="NgxEditor__Wrapper">
+                        <ngx-editor [editor]="editor" formControlName="contenido"
+                            [placeholder]="'Ingresa el Contenido'"></ngx-editor>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button type="button" mat-button mat-dialog-close>
+            Cancelar
+        </button>
+
+        <button type="submit" mat-button color="primary" [disabled]="formGroup.invalid">
+            Enviar <fa-icon icon="paper-plane"></fa-icon>
+        </button>
+    </mat-dialog-actions>
+</form>

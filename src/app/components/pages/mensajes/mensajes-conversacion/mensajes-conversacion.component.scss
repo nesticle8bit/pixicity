@@ -1,0 +1,34 @@
+article {
+    font-size: 14px !important;
+    text-align: justify;
+}
+
+img {
+    max-width: 100%;
+}
+
+.userName {
+    font-size: .79rem;
+}
+
+hr {
+    color: #ccc;
+}
+
+.footer-btns {
+    border-top: 1px solid #dfdfdf;
+    padding-top: .8rem;
+
+    & a {
+        color: #ccc;
+    }
+
+    margin-bottom: 1rem;
+    font-size: .8rem;
+    vertical-align: middle;
+
+    & fa-icon {
+        font-size: 1rem;
+        margin-right: 4px;
+    }
+}

@@ -211,6 +211,10 @@ import { DialogCreateUpdatePaginasComponent } from './components/admin/control-d
 import { PaginasComponent } from './components/pages/paginas/paginas.component';
 import { IHttpMensajesService } from './services/interfaces/httpMensajes.interface';
 import { HttpMensajesService } from './services/implementations/httpMensajes.service';
+import { DialogEnviarMPComponent } from './components/dialogs/dialog-enviar-mp/dialog-enviar-mp.component';
+import { MensajesConversacionComponent } from './components/pages/mensajes/mensajes-conversacion/mensajes-conversacion.component';
+import { MensajesSidebarComponent } from './components/pages/mensajes/mensajes-sidebar/mensajes-sidebar.component';
+import { MensajesEnviadosComponent } from './components/pages/mensajes/mensajes-enviados/mensajes-enviados.component';
 
 @NgModule({
   declarations: [
@@ -348,6 +352,10 @@ import { HttpMensajesService } from './services/implementations/httpMensajes.ser
     TablePaginasComponent,
     DialogCreateUpdatePaginasComponent,
     PaginasComponent,
+    DialogEnviarMPComponent,
+    MensajesConversacionComponent,
+    MensajesSidebarComponent,
+    MensajesEnviadosComponent,
   ],
   imports: [
     BrowserModule,
@@ -413,11 +421,13 @@ import { HttpMensajesService } from './services/implementations/httpMensajes.ser
         `${environment.api}/api/favoritos/getFavoritos`,
         `${environment.api}/api/favoritos/getLastFavoritos`,
         `${environment.api}/api/monitors/getLastNotificaciones`,
+        `${environment.api}/api/mensajes/getLastMensajes`,
         `${environment.api}/api/comentarios/getComentariosRecientes`,
         `${environment.api}/api/tops/getTopPosts`,
         `${environment.api}/api/posts/getBorradores`,
         `${environment.api}/api/monitors/setNotificacionesAsReaded`,
         `${environment.api}/api/posts/getPostsRelatedByTitle`,
+        `${environment.api}/api/mensajes/setMensajesAsReaded`,
       ],
     }),
     MatRadioModule,
@@ -452,7 +462,7 @@ import { HttpMensajesService } from './services/implementations/httpMensajes.ser
     { provide: IHttpWebService, useClass: HttpWebService },
     { provide: IHttpPerfilService, useClass: HttpPerfilService },
     { provide: IHttpNoticiasService, useClass: HttpNoticiasService },
-    { provide: IHttpMensajesService, useClass: HttpMensajesService},
+    { provide: IHttpMensajesService, useClass: HttpMensajesService },
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

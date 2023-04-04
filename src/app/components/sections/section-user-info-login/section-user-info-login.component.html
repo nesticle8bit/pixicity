@@ -10,7 +10,8 @@
         <ul>
             <li class="monitor" style="position: relative">
                 <a class="menu" href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Monitor"
-                    [matTooltipPosition]="'above'" (click)="verNotificaciones();" (clickOutside)="display.monitor = false">
+                    [matTooltipPosition]="'above'" (click)="verNotificaciones();"
+                    (clickOutside)="display.monitor = false">
                     <fa-icon [icon]="['fas', 'eye']"></fa-icon>
                 </a>
 
@@ -34,7 +35,7 @@
 
                                 <div class="flex-grow-1 ms-2">
                                     <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
-                                    
+
                                     <span class="inner-text">
                                         <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion?.userName]">
                                             {{notificacion.usuarioQueHaceAccion?.userName}}
@@ -77,21 +78,26 @@
                     <ul>
                         <div class="errr" *ngIf="mensajes.length < 1">No hay mensajes</div>
 
-                        <li class="list-items" *ngFor="let mensaje of mensajes">
+                        <li class="list-items" *ngFor="let mensaje of mensajes" [ngClass]="{'sin-leer': !mensaje.leido}">
                             <div class="d-flex">
                                 <div class="flex-shrink-0">
-                                    <app-user-avatar matTooltip="{{mensaje.usuarioQueHaceAccion}}"
-                                        [matTooltipPosition]="'before'" [avatar]="mensaje.usuarioQueHaceAccion.avatar"
-                                        [userName]="mensaje.usuarioQueHaceAccion.userName"
-                                        [height]="20"></app-user-avatar>
+                                    <app-user-avatar matTooltip="{{mensaje.usuarioDe.userName}}"
+                                        [matTooltipPosition]="'before'" [avatar]="mensaje.usuarioDe.avatar"
+                                        [userName]="mensaje.usuarioDe.userName" [height]="20"></app-user-avatar>
                                 </div>
 
-                                <div class="flex-grow-1 ms-2">
-                                    <!-- <app-tipo-icon-monitor [tipo]="mensaje.tipoString"></app-tipo-icon-monitor>
-                                    <a [routerLink]="['/perfil/' + mensaje.usuarioQueHaceAccion]">
-                                        {{mensaje.usuarioQueHaceAccion}}
-                                    </a>
-                                    <span [innerHTML]="mensaje.mensaje"></span> -->
+                                <div class="flex-grow-1 ms-2" [routerLink]="['/mensajes/conversacion/' + mensaje.id]">
+                                    <!-- <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor> -->
+
+                                    <span class="inner-text">
+                                        <a [routerLink]="['/perfil/' + mensaje.usuarioDe?.userName]">
+                                            {{mensaje.usuarioDe?.userName}}
+                                        </a>
+
+                                        <article class="cursor--pointer">
+                                            <p [innerHTML]="mensaje.contenido | truncate:[30]"></p>
+                                        </article>
+                                    </span>
 
                                     <br>
 
@@ -118,7 +124,7 @@
 
             <li class="favoritos" style="position:relative">
                 <a class="menu" href="javascript:void(0)" title="Posts favoritos" (click)="verFavoritos()"
-                (clickOutside)="display.favoritos = false">
+                    (clickOutside)="display.favoritos = false">
                     <fa-icon [icon]="['fas', 'star']"></fa-icon>
                 </a>
 
