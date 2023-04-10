@@ -1,0 +1,45 @@
+<h6 class="main-title">
+    <span>
+        <i class="icon visits me-1"></i> Estadísticas
+    </span>
+</h6>
+
+<div class="row">
+    <small class="col-12 col-sm-6">
+        <a [routerLink]="['/usuarios']">
+            <b>{{estadisticas?.usuariosOnline}}</b> usuario(s) online
+        </a>
+    </small>
+
+    <small class="col-12 col-sm-6">
+        <b>{{estadisticas?.usuarios}}</b> usuarios registrados
+    </small>
+</div>
+
+<div class="row">
+    <small class="col-12 col-sm-6">
+        <b>{{estadisticas?.posts}}</b> posts
+    </small>
+
+    <small class="col-12 col-sm-6">
+        <b>{{estadisticas?.comentarios}}</b> comentarios
+    </small>
+</div>
+
+<!-- <div class="row">
+    <small class="col-12 col-sm-6">
+        <b>{{estadisticas?.fotos}}</b> fotos
+    </small>
+
+    <small class="col-12 col-sm-6">
+        <b>{{estadisticas?.comentariosFotos}}</b> comentarios en fotos
+    </small>
+</div> -->
+
+<div class="alert alert-info p-1 mt-1 text-center" *ngIf="estadisticas?.recordUsers?.usersOnline">
+    <small>
+        🎉 Record conectados &bull; <b>{{estadisticas?.recordUsers?.usersOnline}}</b> el
+        {{estadisticas?.recordUsers?.date | date:'mediumDate'}} a las {{estadisticas?.recordUsers?.date | date:'h:mm
+        a'}} <!--  -  <a [routerLink]="['/en-vivo']">En vivo</a> -->
+    </small>
+</div>

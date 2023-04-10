@@ -1,0 +1,72 @@
+<div class="container container--home">
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-9">
+            <h6 class="main-title">
+                <span>Mensajes enviados</span>
+
+                <strong class="float-end text-info" style="background: #fff; padding-left: 7px;">
+                    {{totalCount}}
+                </strong>
+            </h6>
+
+            <div class="nada-gris my-3" *ngIf="mensajes.length < 1">
+                Aún no se has enviado mensajes privados a ningún usuario.
+            </div>
+
+            <main *ngIf="mensajes.length > 0">
+                <section class="table-responsive">
+                    <table class="table table-sm table-striped table-hover">
+                        <tbody>
+                            <tr *ngFor="let mensaje of mensajes; let i = index">
+                                <td>
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-1">
+                                                    <app-user-avatar [avatar]="mensaje.usuarioA?.avatar"
+                                                        [userName]="mensaje.usuarioA?.userName" [height]="40">
+                                                    </app-user-avatar>
+                                                </div>
+
+                                                <div class="col-12 col-sm-11 cursor--pointer"
+                                                    [routerLink]="['/mensajes/conversacion/' + mensaje.id]">
+                                                    <a [routerLink]="['/perfil/' + mensaje.usuarioA?.userName]">
+                                                        @{{mensaje.usuarioA?.userName}}
+                                                    </a>
+
+                                                    &#8226; <strong>{{mensaje.asunto}}</strong>
+
+                                                    <br>
+                                                    <span class="text-muted"
+                                                        [innerHTML]="mensaje.contenido | truncate:[120]"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="text-end" width="150px">
+                                    <small class="text-muted cursor--help"
+                                        matTooltip="{{mensaje.fechaRegistro | date:'medium'}}">
+                                        <i>
+                                            {{mensaje.fechaRegistro | timeAgo}}
+                                        </i>
+                                    </small>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </main>
+
+            <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+                [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)"
+                *ngIf="mensajes.length > 0">
+            </mat-paginator>
+        </div>
+
+        <section class="col-12 col-sm-6 col-md-3 dotted-border--left">
+            <app-mensajes-sidebar></app-mensajes-sidebar>
+        </section>
+    </div>
+</div>

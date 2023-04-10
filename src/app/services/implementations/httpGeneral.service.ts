@@ -219,9 +219,75 @@ export class HttpGeneralService implements IHttpGeneralService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getContactos(): Observable<any> {
+    return this.http
+      .get<any>(
+        `${environment.api}/api/contacto/getContactos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`
+      )
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   saveContacto(contacto: any): Observable<any> {
     return this.http
-      .post<any>(`${environment.api}/api/general/contacto`, contacto)
+      .post<any>(`${environment.api}/api/contacto/saveContacto`, contacto)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  gestionarContacto(contactoId: number): Observable<any> {
+    return this.http
+      .put<any>(`${environment.api}/api/contacto/gestionarContacto`, {
+        id: contactoId,
+      })
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  deleteContacto(contactoId: number): Observable<any> {
+    return this.http
+      .delete<any>(`${environment.api}/api/contacto/deleteContacto`, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+        body: { id: contactoId },
+      })
       .pipe(
         map((response: any) => {
           if (response.status === 200) {

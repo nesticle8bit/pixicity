@@ -1,0 +1,21 @@
+<main class="mb-4">
+    <h6 class="main-title my-2">
+        <span>Seguidores</span>
+
+        <strong class="float-end"
+            style="background: #fff; margin-top: -2px; color: #8B8B8B; padding-left: 7px;">
+            {{totalCount}}
+        </strong>
+    </h6>
+
+    <div class="alert alert-warning" *ngIf="followers.length < 1">
+        😔 <strong>No tiene seguidores</strong>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-2 mb-2" *ngFor="let item of followers">
+            <app-user-avatar class="cursor--pointer" [routerLink]="['/perfil/' + item.userName]" [avatar]="item.avatar" [userName]="item.userName" matTooltip="{{item.userName}}"
+            [matTooltipPosition]="'above'"></app-user-avatar>
+        </div>
+    </div>
+</main>

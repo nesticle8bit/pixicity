@@ -4,6 +4,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
+import { DialogRangosChangesReportComponent } from '../dialog-rangos-changes-report/dialog-rangos-changes-report.component';
 
 @Component({
   selector: 'app-table-rangos',
@@ -19,7 +20,7 @@ export class TableRangosComponent implements OnInit {
     private securityService: IHttpSecurityService,
     private dialog: MatDialog
   ) {
-    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+    this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 
   ngOnInit(): void {
@@ -66,4 +67,18 @@ export class TableRangosComponent implements OnInit {
   }
 
   deleteRango(id: number): void {}
+
+  updateRangoUsuarios(): void {
+    this.securityService
+      .changeUsuariosRangosByPuntos()
+      .subscribe((response: any) => {
+        if (response?.length > 0) {
+          this.dialog.open(DialogRangosChangesReportComponent, {
+            width: '980px',
+            data: response,
+            disableClose: true,
+          });
+        }
+      });
+  }
 }

@@ -1,0 +1,91 @@
+<main class="table-responsive" *ngIf="mensajes?.length > 0">
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Creado</th>
+                <th>Leido</th>
+                <th>De</th>
+                <th>A</th>
+                <th>Mensaje</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let mensaje of mensajes" [ngClass]="{'opacity-50': mensaje.eliminado}">
+                <td>
+                    <strong class="text-muted">{{mensaje.id}}</strong>
+                </td>
+
+                <td>
+                    <span class="cursor--help" matTooltip="{{mensaje.fechaRegistro}}">
+                        {{mensaje.fechaRegistro | timeAgo}}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="text-success" *ngIf="mensaje.leido">
+                        <fa-icon icon="check-circle"></fa-icon> Leido
+                    </span>
+
+                    <span class="text-warning" *ngIf="!mensaje.leido">
+                        <fa-icon [spin]="true" icon="spinner"></fa-icon> Pendiente
+                    </span>
+                </td>
+
+                <td>
+                    <app-user-avatar [class]="'img-avatar'" [avatar]="mensaje.usuarioDe?.avatar"
+                        [userName]="mensaje.usuarioDe?.userName">
+                    </app-user-avatar> <strong class="ms-2 text-muted">{{mensaje.usuarioDe?.userName}}</strong>
+                </td>
+
+                <td>
+                    <app-user-avatar [class]="'img-avatar'" [avatar]="mensaje.usuarioA?.avatar"
+                        [userName]="mensaje.usuarioA?.userName">
+                    </app-user-avatar> <strong class="ms-2 text-muted">{{mensaje.usuarioA?.userName}}</strong>
+                </td>
+
+                <td>
+                    <span matTooltip="{{mensaje.contenido}}">
+                        {{mensaje.contenido | truncate:[80]}}
+                    </span>
+                </td>
+
+                <!-- <td>
+                    <app-user-avatar [class]="'img-avatar'" [avatar]="mensaje.usuario?.avatar"
+                        [userName]="mensaje.usuario?.userName">
+                    </app-user-avatar> {{mensaje.usuario?.userName}}
+                </td> -->
+
+                <td class="text-center" width="30px">
+                    <button class="btn-menu" [matMenuTriggerFor]="menu" *ngIf="!mensaje.eliminado">
+                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button type="button" mat-menu-item (click)="deleteMensaje(mensaje)"
+                            *ngIf="!mensaje.eliminado">
+                            <mat-icon>delete_outline</mat-icon>
+                            <span>Eliminar</span>
+                        </button>
+
+                        <!-- <button type="button" mat-menu-item (click)="deleteNotificacion(mensaje)"
+                            *ngIf="mensaje.eliminado">
+                            <mat-icon>undo</mat-icon>
+                            <span>Recuperar</span>
+                        </button> -->
+                    </mat-menu>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<div class="alert alert-warning" *ngIf="mensajes?.length < 1">
+    📨 <strong>Aún no se ha enviado ningún mensaje privado en la web</strong>
+</div>
+
+<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="mensajes?.length > 0">
+</mat-paginator>

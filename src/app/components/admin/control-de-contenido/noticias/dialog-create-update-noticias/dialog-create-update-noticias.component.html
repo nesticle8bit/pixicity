@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>
+    {{data?.id ? 'Actualizar' : 'Crear nueva'}} Noticia
+</h2>
+
+<form [formGroup]="formGroup" (ngSubmit)="saveNoticia()">
+    <mat-dialog-content>
+        <div class="mb-3" *ngIf="formGroup.value?.id">
+            <label>Id</label> <br>
+            <span class="badge bg-primary">{{formGroup.value?.id}}</span>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12">
+                <div class="mb-3">
+                    <label>Contenido <strong class="text-danger">*</strong></label>
+                    <textarea class="form-control" formControlName="contenido" rows="4"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <mat-slide-toggle formControlName="eliminado" color="primary">Eliminado</mat-slide-toggle>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>
+            Cancelar
+        </button>
+
+        <button type="submit" mat-button color="primary" [disabled]="formGroup.invalid">
+            {{data?.id ? 'Actualizar' : 'Guardar'}}
+        </button>
+    </mat-dialog-actions>
+</form>

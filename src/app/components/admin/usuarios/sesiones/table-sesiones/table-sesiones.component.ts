@@ -19,7 +19,7 @@ export class TableSesionesComponent implements OnInit {
     private securityService: IHttpSecurityService,
     private snackBar: MatSnackBar
   ) {
-    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+    this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 
   ngOnInit(): void {

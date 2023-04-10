@@ -1,0 +1,63 @@
+<h6 class="main-title" style="margin-bottom: 11px">
+    <span>Recientes</span>
+    <app-categories-selector></app-categories-selector>
+</h6>
+
+<article class="lista-posts sticky-post--list" *ngFor="let post of stickyPosts">
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-7">
+            <img width="16" height="16" src="/assets/images/categorias/sticky.png" class="sticky-post--home"
+                matTooltip="Post fijado por el Staff" matTooltipPosition="left" alt="Sticky" *ngIf="post.sticky" />
+        
+            <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
+                <img width="16" height="16" src="/assets/images/categorias/{{post.categoria.icono}}"
+                    matTooltip="{{post.categoria.nombre}}" matTooltipPosition="left" alt="{{post.categoria.nombre}}" />
+                &nbsp;
+                <span matTooltip="{{post.titulo}}" matTooltipPosition="right">{{post.titulo}}</span>
+            </a>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-2 text-end d-none d-md-block">
+            <small class="text-muted">{{post.fechaRegistro | timeAgo}}</small>
+        </div>
+    
+        <div class="col-12 col-sm-12 col-md-3 text-end d-none d-md-block">
+            <small class="cursor--pointer" [routerLink]="['/perfil/' + post?.userName]" matTooltip="Ver perfil de {{post?.userName}}" matTooltipPosition="right">
+                <app-user-avatar [class]="'img-avatar'" [avatar]="post?.avatar"
+                    [userName]="post?.userName"></app-user-avatar> <span class="ms-1 pe-1 text-muted">{{post?.userName}}</span>
+            </small>
+        </div>
+    </div>
+</article>
+
+<article class="lista-posts" *ngFor="let post of lastPosts">
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-7">
+            <a [ngClass]="{'post-privado': post.esPrivado}"
+                [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
+                <img src="/assets/images/categorias/{{post.categoria.icono}}" matTooltip="{{post.categoria.nombre}}"
+                    matTooltipPosition="left" alt="{{post.categoria.nombre}}" />
+                &nbsp;
+                <span matTooltip="{{post.titulo}}" matTooltipPosition="right">{{post.titulo | truncate:[52]}}</span>
+            </a>
+        </div>
+    
+        <div class="col-12 col-sm-12 col-md-2 text-end d-none d-md-block">
+            <small class="text-muted">{{post.fechaRegistro | timeAgo}}</small>
+        </div>
+    
+        <div class="col-12 col-sm-12 col-md-3 text-end d-none d-md-block">
+            <small class="cursor--pointer" [routerLink]="['/perfil/' + post?.userName]" matTooltip="Ver perfil de {{post?.userName}}" matTooltipPosition="right">
+                <app-user-avatar [class]="'img-avatar'" [avatar]="post?.avatar"
+                    [userName]="post?.userName"></app-user-avatar> <span class="ms-1 pe-1 text-muted">{{post?.userName}}</span>
+            </small>
+        </div>
+    </div>
+</article>
+
+<div class="row">
+    <div class="col-12">
+        <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)">
+        </mat-paginator>
+    </div>
+</div>

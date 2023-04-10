@@ -43,7 +43,7 @@ export class AppComponent {
 
     this.seoService.getSEO().subscribe((value: SEOModel) => {
       if (value.title) {
-        this.title.setTitle(`${value.title} - ${this.title.getTitle()}`);
+        this.title.setTitle(`${value.title} - Pixicity - Ciudad Pixelada | Comunidad para Compartir Información`);
 
         this.meta.addTag({
           name: 'og:title',

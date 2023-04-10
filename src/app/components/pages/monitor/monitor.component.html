@@ -1,0 +1,255 @@
+<div class="container container--home">
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-9">
+            <h6 class="main-title">
+                <span>Últimas notificaciones</span>
+
+                <strong class="float-end text-info" style="background: #fff; padding-left: 7px;">
+                    {{totalCount}}
+                </strong>
+            </h6>
+
+            <div class="nada-gris my-3" *ngIf="notificaciones.length < 1">
+                Aún no se han encontrado notificaciones para tí.
+            </div>
+
+            <main class="table-responsive" *ngIf="notificaciones.length > 0">
+                <table class="table table-sm table-striped table-hover">
+                    <tbody>
+                        <tr *ngFor="let notificacion of notificaciones; let i = index">
+                            <td>
+                                <div class="row">
+                                    <div class="col-12 col-sm-1">
+                                        <app-user-avatar [avatar]="notificacion.usuarioQueHaceAccion.avatar"
+                                            [userName]="notificacion.usuarioQueHaceAccion.userName" [height]="40">
+                                        </app-user-avatar>
+                                    </div>
+
+                                    <div class="col-12 col-sm-11">
+                                        <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion?.userName]">
+                                            @{{notificacion.usuarioQueHaceAccion?.userName}}
+                                        </a>
+
+                                        <br>
+
+                                        <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
+
+                                        <span [innerHTML]="notificacion.mensaje"></span> <a
+                                            [routerLink]="['/posts/' + notificacion.post?.categoria?.seo + '/' + notificacion.post?.id + '/' + notificacion.post?.url]"
+                                            title="{{notificacion?.post?.titulo}}">
+                                            {{notificacion.post?.titulo}}
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="text-end" width="150px">
+                                <small class="text-muted cursor--help"
+                                    matTooltip="{{notificacion.fechaRegistro | date:'medium'}}">
+                                    <i>
+                                        {{notificacion.fechaRegistro | timeAgo}}
+                                    </i>
+                                </small>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </main>
+
+            <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+                [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)"
+                *ngIf="notificaciones.length > 0">
+            </mat-paginator>
+        </div>
+
+        <form class="col-12 col-sm-6 col-md-3 dotted-border--left">
+            <h6 class="main-title">
+                <span>Filtrar actividad</span>
+            </h6>
+
+            <form [formGroup]="formGroup">
+                <section class="mb-3">
+                    <div class="dsw">
+
+                        <ul class="list-unstyled mt-2">
+                            <h2 style="margin: 0;">Mis Posts</h2>
+                            <li>
+                                <label>
+                                    <span class="monac_icons ma_star"></span>
+                                    <input type="checkbox" formControlName="favorito" (change)="filtrarActividad()" />
+                                    Favoritos
+                                </label>
+                            </li>
+
+                            <li>
+                                <label>
+                                    <span class="monac_icons ma_comment_post"></span>
+                                    <input type="checkbox" formControlName="comentarios" (change)="filtrarActividad()" />
+                                    Comentarios
+                                </label>
+                            </li>
+
+                            <li>
+                                <label>
+                                    <span class="monac_icons ma_points"></span>
+                                    <input type="checkbox" formControlName="puntos" (change)="filtrarActividad()" />
+                                    Puntos Recibidos
+                                </label>
+                            </li>
+
+                            <!-- <h2>Mis Comentarios</h2>
+                            <li>
+                                <label>
+                                    <span class="monac_icons ma_voto"></span>
+                                    <input type="checkbox" (change)="filtrarActividad()" />
+                                    Votos
+                                </label>
+                            </li>
+    
+                            <li>
+                                <label>
+                                    <span class="monac_icons ma_comment_resp"></span>
+                                    <input type="checkbox" (change)="filtrarActividad()" />
+                                    Respuestas
+                                </label>
+                            </li>
+    
+                            <li>
+                                <label>
+                                    <span class="monac_icons ma_blue_ball"></span>
+                                    <input type="checkbox" (change)="filtrarActividad()" />
+                                    Menciones
+                                </label>
+                            </li> -->
+
+                            <h2>Usuarios que sigo</h2>
+
+                            <li>
+                                <label>
+                                    <span class="monac_icons ma_follow"></span>
+                                    <input type="checkbox" checked="checked" formControlName="seguidores" (change)="filtrarActividad()" />
+                                    Nuevos
+                                </label>
+                            </li>
+
+                            <li>
+                                <label>
+                                    <span class="monac_icons ma_post"></span>
+                                    <input type="checkbox" formControlName="postNuevo" (change)="filtrarActividad()" />
+                                    Posts
+                                </label>
+                            </li>
+
+                            <!-- <li>
+                                <label>
+                                    <span class="monac_icons ma_photo"></span>
+                                    <input type="checkbox" (change)="filtrarActividad()">
+                                    Fotos
+                                </label>
+                            </li> -->
+
+                            <li>
+                                <label>
+                                    <span class="monac_icons ma_share"></span>
+                                    <input type="checkbox" formControlName="recomendaciones" (change)="filtrarActividad()" />
+                                    Recomendaciones
+                                </label>
+                            </li>
+
+                            <h2>Posts que sigo</h2>
+
+                            <li>
+                                <label>
+                                    <span class="monac_icons ma_blue_ball"></span>
+                                    <input type="checkbox"  formControlName="comentariosPostQueSigue" (change)="filtrarActividad()" />
+                                    Comentarios
+                                </label>
+                            </li>
+
+                            <!-- <li>
+                                <h2>Mis Fotos</h2>
+                            </li>
+    
+                            <li>
+                                <label>
+                                    <span class="monac_icons ma_comment_post"></span>
+                                    <input type="checkbox" (change)="filtrarActividad()" />
+                                    Comentarios
+                                </label>
+                            </li>
+    
+                            <h2>Perfil</h2>
+    
+                            <li>
+                                <label>
+                                    <span class="monac_icons ma_status"></span>
+                                    <input type="checkbox" checked="checked" (change)="filtrarActividad()" />
+                                    Publicaciones
+                                </label>
+                            </li>
+    
+                            <li>
+                                <label>
+                                    <span class="monac_icons ma_w_comment"></span>
+                                    <input type="checkbox" checked="checked" (change)="filtrarActividad()" />
+                                    Comentarios
+                                </label>
+                            </li>
+    
+                            <li>
+                                <label>
+                                    <span class="monac_icons ma_w_like"></span>
+                                    <input type="checkbox" checked="checked" (change)="filtrarActividad()" />
+                                    Likes
+                                </label>
+                            </li> -->
+
+                            <!-- <h2>Notificaciones Live</h2>
+    
+                            <li>
+                                <label>
+                                    <input type="checkbox" checked="checked" (change)="filtrarActividad()" />
+                                    Mostrar notificaciones
+                                </label>
+                            </li>
+    
+                            <li>
+                                <label>
+                                    <input type="checkbox" checked="checked" (change)="filtrarActividad()" />
+                                    Mostrar mensajes nuevos
+                                </label>
+                            </li>
+    
+                            <li>
+                                <label>
+                                    <input type="checkbox" checked="checked" (change)="filtrarActividad()" />
+                                    Reproducir sonidos
+                                </label>
+                            </li> -->
+                        </ul>
+                    </div>
+                </section>
+            </form>
+
+            <!-- <h6 class="main-title">
+                <span>Siguiendo</span>
+            </h6>
+
+            <div class="sigoo">
+                <a href="/monitor/seguidores">
+                    Seguidores <span>0</span>
+                </a>
+
+                <a href="/monitor/siguiendo">
+                    Siguiendo <span>1</span>
+                </a>
+
+                <a href="/monitor/posts">
+                    Posts <span>0</span>
+                </a>
+            </div> -->
+        
+            <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
+        </form>
+    </div>
+</div>

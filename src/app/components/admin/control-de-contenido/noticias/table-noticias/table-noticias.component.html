@@ -1,0 +1,79 @@
+<button type="button" (click)="updateNoticia(undefined)" class="mb-3 float-end" mat-flat-button color="primary">
+    <mat-icon>add_circle</mat-icon> Agregar Noticia
+</button>
+
+<div class="clearfix"></div>
+
+<main class="table-responsive" *ngIf="noticias.length > 0">
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Creado</th>
+                <th>Contenido</th>
+                <th>Eliminado</th>
+                <th width="150px">Usuario</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let noticia of noticias" [ngClass]="{'opacity-50': noticia.eliminado}">
+                <td>
+                    <strong class="text-muted">{{noticia.id}}</strong>
+                </td>
+
+                <td>
+                    <span class="cursor--help" matTooltip="{{noticia.fechaRegistro}}">
+                        {{noticia.fechaRegistro | timeAgo}}
+                    </span>
+                </td>
+
+                <td>
+                    <span title="{{noticia.contenido}}" [innerHTML]="noticia.contenido | truncate:[110]"></span>
+                </td>
+
+                <td>
+                    {{noticia.eliminado ? 'Eliminado' : 'Activo'}}
+                </td>
+
+                <td>
+                    <app-user-avatar [class]="'img-avatar'" [avatar]="noticia.usuario?.avatar"
+                        [userName]="noticia.usuario?.userName">
+                    </app-user-avatar> {{noticia.usuario?.userName}}
+                </td>
+
+                <td class="text-center" width="30px">
+                    <button class="btn-menu" [matMenuTriggerFor]="menu">
+                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button type="button" mat-menu-item (click)="updateNoticia(noticia)">
+                            <mat-icon>edit</mat-icon>
+                            <span>Actualizar</span>
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="deleteNoticia(noticia)" *ngIf="!noticia.eliminado">
+                            <mat-icon>delete_outline</mat-icon>
+                            <span>Eliminar</span>
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="deleteNoticia(noticia)" *ngIf="noticia.eliminado">
+                            <mat-icon>undo</mat-icon>
+                            <span>Recuperar</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="noticias.length > 0">
+</mat-paginator>
+
+<section class="alert alert-warning" *ngIf="noticias.length < 1">
+    📖 <strong>No hay noticias en el momento</strong>
+</section>

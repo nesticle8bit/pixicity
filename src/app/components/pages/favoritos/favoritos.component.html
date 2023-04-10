@@ -1,0 +1,106 @@
+<div [formGroup]="formGroup" class="container container--home">
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-9">
+            <h6 class="main-title">
+                <span>Mis posts favoritos</span>
+
+                <input type="text" id="borradores-search" autocomplete="off" formControlName="search"
+                    (keyup)="getFavoritos(0)" />
+            </h6>
+
+            <div class="nada-gris my-3" *ngIf="favoritos.length < 1">
+                No agregaste ningún post a favoritos todavía
+            </div>
+
+            <main class="table-responsive mt-3" *ngIf="favoritos.length > 0">
+                <table class="table table-sm table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Creado</th>
+                            <th>Guardado</th>
+                            <th>Puntos</th>
+                            <th>Comentarios</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let favorito of favoritos" [ngClass]="{'row-deleted': favorito.deleted}">
+                            <td>
+                                <a [routerLink]="['/posts/' + favorito.post.categoria.seo + '/' + favorito.post.id + '/' + favorito.post.url]"
+                                    title="{{favorito.post.titulo}}">
+                                    <img src="/assets/images/categorias/{{favorito.post.categoria.icono}}"
+                                        title="{{favorito.post.categoria.nombre}}"
+                                        alt="{{favorito.post.categoria.nombre}}" />
+                                    {{favorito.post.titulo}}
+                                </a>
+                            </td>
+                            <td>
+                                {{favorito.post.fechaRegistro | timeAgo}}
+                            </td>
+                            <td>
+                                {{favorito.fechaRegistro | timeAgo}}
+                            </td>
+
+                            <td>
+                                0
+                            </td>
+
+                            <td>
+                                9
+                            </td>
+
+                            <td class="text-center" width="30px">
+                                <a href="javascript:void(0)" (click)="deleteFavorito(favorito)">
+                                    <img src="/assets/images/icons/cross.png" alt="Eliminar" #tooltip="matTooltip"
+                                        matTooltip="Eliminar" [matTooltipPosition]="'above'"
+                                        *ngIf="!favorito.deleted" />
+                                    <img src="/assets/images/icons/reload.png" alt="Recuperar" #tooltip="matTooltip"
+                                        matTooltip="Recuperar" [matTooltipPosition]="'above'"
+                                        *ngIf="favorito.deleted" />
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </main>
+
+            <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)"
+                *ngIf="favoritos.length > 0">
+            </mat-paginator>
+        </div>
+
+        <form class="col-12 col-sm-6 col-md-3">
+            <h6 class="main-title">
+                <span>Categorías</span>
+            </h6>
+
+            <table class="table table-sm table-striped table-hover">
+                <tbody>
+                    <tr *ngFor="let categoria of categorias">
+                        <td>
+                            <a href="javascript:void(0)" (click)="filterByCategory(categoria)"
+                                title="{{categoria.categoria.nombre}}">
+                                <img src="/assets/images/categorias/{{categoria.categoria.icono}}"
+                                    alt="{{categoria.categoria.nombre}}" />
+                                {{categoria.categoria.nombre}} <span
+                                    class="badge bg-secondary float-end">{{categoria.count}}</span>
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <a href="javascript:void(0)" (click)="getFavoritos(0)">
+                                Todos
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
+        </form>
+    </div>
+</div>

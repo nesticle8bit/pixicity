@@ -1,6 +1,6 @@
+import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 
 @Injectable({ providedIn: 'root' })
 export class DisplayComponentService {
@@ -18,7 +18,7 @@ export class DisplayComponentService {
       footer: false,
       searchFooter: false,
       submenu: false,
-      background: ''
+      background: '',
     });
   }
 

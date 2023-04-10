@@ -1,0 +1,46 @@
+<footer class="container">
+    <div class="row" *ngIf="display?.searchFooter">
+        <div class="col-12" style="padding: 0 0px;">
+            <div class="seccion">
+                <div class="inpie">
+                    <div class="busb float-start">
+                        <form [formGroup]="formGroup" (ngSubmit)="search()" action="/buscar/posts/"
+                            name="top_search_box">
+                            <input class="bbcuerpo" type="text" name="q" value="" formControlName="search"
+                                placeholder="Buscar..." />
+                            <input class="bbboton" vspace="2" hspace="10" type="submit" value="" />
+                        </form>
+                    </div>
+
+                    <a class="ircielo float-end" (click)="goToHeaven()">
+                        Ir al cielo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="display?.footer">
+        <div class="col-12">
+            <div class="footer text-center">
+                <span *ngFor="let pagina of paginas">
+                    <a href="{{pagina.slug}}" target="{{pagina.target}}" *ngIf="pagina.tipo === 'link'">
+                        {{pagina.titulo}}
+                    </a>
+
+                    <a [routerLink]="pagina.slug" *ngIf="pagina.tipo === 'routerLink'">
+                        {{pagina.titulo}}
+                    </a>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center copyright">
+        <small>
+            <span [innerHTML]="configuracion.footer"></span>
+        </small>
+
+        <br><br>
+    </div>
+</footer>

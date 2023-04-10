@@ -23,7 +23,8 @@
 
                 <td>
                     <fa-icon [icon]="['fas', 'copy']" matTooltip="Copiar al portapapeles"
-                        (click)="clipboard(afiliado.codigo)" class="mr-3 text-secondary cursor--pointer"></fa-icon> &nbsp;
+                        (click)="clipboard(afiliado.codigo)" class="mr-3 text-secondary cursor--pointer"></fa-icon>
+                    &nbsp;
 
                     <span class="badge bg-primary">
                         {{afiliado.codigo}}
@@ -89,6 +90,10 @@
         </tbody>
     </table>
 </main>
+
+<div class="alert alert-warning" *ngIf="afiliados.length < 1">
+    🌱 <strong>Aún no se han encontrado afiliados para esta web</strong>
+</div>
 
 <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
     [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="afiliados.length > 0">

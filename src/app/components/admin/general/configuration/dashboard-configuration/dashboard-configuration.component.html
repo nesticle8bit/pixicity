@@ -27,8 +27,7 @@
         </label>
 
         <div class="col-sm-10">
-            <input type="text" class="form-control" formControlName="url"
-                [ngClass]="{'form-control-plaintext': formGroup.value?.url}" />
+            <input type="text" class="form-control" formControlName="url" />
         </div>
     </div>
 
@@ -88,6 +87,21 @@
             <textarea class="form-control" formControlName="welcomeMessage" rows="3"></textarea>
         </div>
     </div>
+
+    <hr>
+
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">
+            Footer <span>(copyright/etc)</span> <br>
+            <i>Contenido que se visualizará en la parte inferior de la página</i>
+        </label>
+
+        <div class="col-sm-10">
+            <textarea class="form-control" formControlName="footer" rows="4"></textarea>
+        </div>
+    </div>
+
+    <hr>
 
     <div class="form-container--footer text-center mb-3">
         <button mat-flat-button color="primary" type="submit">

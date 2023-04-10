@@ -1,0 +1,29 @@
+.last_news {
+    padding: 7px 10px;
+    border-top: 1px solid #FFF;
+    border-bottom: 1px solid #f0d35b;
+    background: #f9ecb7;
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    text-align: center;
+    color: #a38c2e;
+}
+
+.fade-in {
+    display: block !important;
+    animation: fade-in 1s linear; // infinite
+}
+
+.hide {
+    display: none;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

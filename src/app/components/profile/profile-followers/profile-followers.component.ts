@@ -1,12 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-profile-followers',
   templateUrl: './profile-followers.component.html',
-  styleUrls: ['./profile-followers.component.scss']
+  styleUrls: ['./profile-followers.component.scss'],
 })
 export class ProfileFollowersComponent implements OnInit {
   private _user: any;

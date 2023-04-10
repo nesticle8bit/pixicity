@@ -1,0 +1,7 @@
+<section class="last_news container" *ngIf="noticias.length > 0">
+    <div class="row">
+        <div class="col-12" *ngFor="let noticia of noticias; let i = index">
+            <strong class="hide" [class.fade-in]="i === currentIndex" [innerHTML]="noticia.contenido"></strong>
+        </div>
+    </div>
+</section>

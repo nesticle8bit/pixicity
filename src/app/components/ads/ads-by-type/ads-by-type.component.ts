@@ -8,6 +8,7 @@ import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 })
 export class AdsByTypeComponent implements OnInit {
   @Input() type: string = '';
+  @Input() class: string = '';
   @Input() hideTitle: boolean = false;
 
   public ads: string = '';

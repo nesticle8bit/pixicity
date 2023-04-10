@@ -17,7 +17,7 @@ export class TableShoutsComponent implements OnInit {
     public paginationService: PaginationService,
     private perfilService: IHttpPerfilService
   ) {
-    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+    this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 
   ngOnInit(): void {

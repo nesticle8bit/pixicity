@@ -2,8 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardAfiliadosComponent } from './components/admin/control-de-comunidad/afiliados/dashboard-afiliados/dashboard-afiliados.component';
 import { DashboardCategoriasComponent } from './components/admin/control-de-comunidad/categorias/dashboard-categorias/dashboard-categorias.component';
+import { DashboardEstadisticasComponent } from './components/admin/control-de-comunidad/estadisticas/dashboard-estadisticas/dashboard-estadisticas.component';
 import { DashboardReportesComponent } from './components/admin/control-de-comunidad/reportes/dashboard-reportes/dashboard-reportes.component';
+import { DashboardVotosComponent } from './components/admin/control-de-comunidad/votos/dashboard-votos/dashboard-votos.component';
 import { DashboardCommentsComponent } from './components/admin/control-de-contenido/comentarios/dashboard-comments/dashboard-comments.component';
+import { DashboardContactosComponent } from './components/admin/control-de-contenido/contactos/dashboard-contactos/dashboard-contactos.component';
+import { DashboardMonitorComponent } from './components/admin/control-de-contenido/monitor/dashboard-monitor/dashboard-monitor.component';
+import { DashboardNoticiasComponent } from './components/admin/control-de-contenido/noticias/dashboard-noticias/dashboard-noticias.component';
 import { DashboardPaisesComponent } from './components/admin/control-de-contenido/paises/dashboard-paises/dashboard-paises.component';
 import { DashboardPostsComponent } from './components/admin/control-de-contenido/posts/dashboard-posts/dashboard-posts.component';
 import { DashboardShoutsComponent } from './components/admin/control-de-contenido/shouts/dashboard-shouts/dashboard-shouts.component';
@@ -15,49 +20,60 @@ import { DashboardRangosComponent } from './components/admin/usuarios/rangos/das
 import { DashboardSesionesComponent } from './components/admin/usuarios/sesiones/dashboard-sesiones/dashboard-sesiones.component';
 import { DashboardUsuariosComponent } from './components/admin/usuarios/usuarios/dashboard-usuarios/dashboard-usuarios.component';
 import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
-import { AccountComponent } from './pages/account/account.component';
-import { ApiDocumentationComponent } from './pages/api-documentation/api-documentation.component';
-import { BorradoresComponent } from './pages/borradores/borradores.component';
-import { DMCAComponent } from './pages/dmca/dmca.component';
-import { EnVivoComponent } from './pages/en-vivo/en-vivo.component';
-import { FavoritosComponent } from './pages/favoritos/favoritos.component';
-import { LoginComponent } from './pages/login/login.component';
-import { MensajesComponent } from './pages/mensajes/mensajes.component';
-import { ModHistoryComponent } from './pages/mod-history/mod-history.component';
-import { MonitorComponent } from './pages/monitor/monitor.component';
-import { PageContactoComponent } from './pages/page-contacto/page-contacto.component';
-import { PageProtocoloComponent } from './pages/page-protocolo/page-protocolo.component';
-import { PageTermsConditionsComponent } from './pages/page-terms-conditions/page-terms-conditions.component';
-import { PerfilComponent } from './pages/perfil/perfil.component';
-import { PrivacidadDatosComponent } from './pages/privacidad-datos/privacidad-datos.component';
-import { RegisterComponent } from './pages/register/register.component';
-import { SearchComponent } from './pages/search/search.component';
-import { ShoutsViewComponent } from './pages/shouts/shouts-view/shouts-view.component';
-import { TopsComponent } from './pages/tops/tops.component';
-import { UsuariosComponent } from './pages/usuarios/usuarios.component';
-import { PostNotFoundComponent } from './posts/post-not-found/post-not-found.component';
-import { PostPrivadoComponent } from './posts/post-privado/post-privado.component';
-import { PostsCreateComponent } from './posts/posts-create/posts-create.component';
-import { PostsViewComponent } from './posts/posts-view/posts-view.component';
-import { SectionHomeComponent } from './sections/section-home/section-home.component';
+import { AccountComponent } from './components/pages/account/account.component';
+import { ApiDocumentationComponent } from './components/pages/api-documentation/api-documentation.component';
+import { BorradoresComponent } from './components/pages/borradores/borradores.component';
+import { EnVivoComponent } from './components/pages/en-vivo/en-vivo.component';
+import { FavoritosComponent } from './components/pages/favoritos/favoritos.component';
+import { LoginComponent } from './components/pages/login/login.component';
+import { MensajesComponent } from './components/pages/mensajes/mensajes.component';
+import { ModHistoryComponent } from './components/pages/mod-history/mod-history.component';
+import { MonitorComponent } from './components/pages/monitor/monitor.component';
+import { PageContactoComponent } from './components/pages/page-contacto/page-contacto.component';
+import { PerfilComponent } from './components/pages/perfil/perfil.component';
+import { RegisterComponent } from './components/pages/register/register.component';
+import { SearchComponent } from './components/pages/search/search.component';
+import { ShoutsViewComponent } from './components/pages/shouts/shouts-view/shouts-view.component';
+import { TopsComponent } from './components/pages/tops/tops.component';
+import { UsuariosComponent } from './components/pages/usuarios/usuarios.component';
+import { PostNotFoundComponent } from './components/posts/post-not-found/post-not-found.component';
+import { PostPrivadoComponent } from './components/posts/post-privado/post-privado.component';
+import { PostsCreateComponent } from './components/posts/posts-create/posts-create.component';
+import { PostsViewComponent } from './components/posts/posts-view/posts-view.component';
+import { SectionHomeForumComponent } from './components/sections/section-home-forum/section-home-forum.component';
+import { SectionHomeComponent } from './components/sections/section-home/section-home.component';
 import { AdministradorAuthorization } from './shared/guards/adminAuthorization.guard';
 import { AuthGuard } from './shared/guards/auth.guard';
+import { AuthLoggedUserGuard } from './shared/guards/auth.loggedUser.guard';
+import { DashboardPaginasComponent } from './components/admin/control-de-contenido/paginas/dashboard-paginas/dashboard-paginas.component';
+import { PaginasComponent } from './components/pages/paginas/paginas.component';
+import { MensajesConversacionComponent } from './components/pages/mensajes/mensajes-conversacion/mensajes-conversacion.component';
+import { MensajesEnviadosComponent } from './components/pages/mensajes/mensajes-enviados/mensajes-enviados.component';
+import { DashboardMensajesComponent } from './components/admin/control-de-contenido/mensajes/dashboard-mensajes/dashboard-mensajes.component';
 
 const routes: Routes = [
-  { path: '', component: SectionHomeComponent },
-  { path: 'registro', component: RegisterComponent },
+  { path: '', component: SectionHomeForumComponent },
+  {
+    path: 'registro',
+    component: RegisterComponent,
+    canActivate: [AuthLoggedUserGuard],
+  },
 
   { path: 'buscar', component: SearchComponent },
   { path: 'buscar/:tipo/:query', component: SearchComponent },
   { path: 'buscar/:tipo/:query/:categoria', component: SearchComponent },
 
-  { path: 'login', component: LoginComponent },
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [AuthLoggedUserGuard],
+  },
   { path: 'cuenta', component: AccountComponent, canActivate: [AuthGuard] },
   { path: 'en-vivo', component: EnVivoComponent },
   { path: 'perfil/:userName', component: PerfilComponent },
   { path: 'shouts/:userName/:id', component: ShoutsViewComponent },
 
-  { path: 'posts/:categoria', component: SectionHomeComponent },
+  { path: 'posts/:categoria', component: SectionHomeForumComponent },
   { path: 'posts/:categoria/:id/:nombre-post', component: PostsViewComponent },
   { path: 'posts/404/:nombre-post', component: PostNotFoundComponent },
   {
@@ -83,6 +99,21 @@ const routes: Routes = [
   },
   { path: 'mensajes', component: MensajesComponent, canActivate: [AuthGuard] },
   {
+    path: 'mensajes/enviados',
+    component: MensajesEnviadosComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'mensajes/carpeta/:nombre',
+    component: MensajesComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'mensajes/conversacion/:id',
+    component: MensajesConversacionComponent,
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'mod-history',
     component: ModHistoryComponent,
     canActivate: [AuthGuard],
@@ -100,14 +131,17 @@ const routes: Routes = [
     component: BorradoresComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'mi',
+    component: MiHomeComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'paginas/:slug',
+    component: PaginasComponent,
+  },
 
-  { path: 'mi', component: MiHomeComponent, canActivate: [AuthGuard] },
-
-  { path: 'protocolo', component: PageProtocoloComponent },
-  { path: 'terminos-condiciones', component: PageTermsConditionsComponent },
   { path: 'contacto', component: PageContactoComponent },
-  { path: 'dmca', component: DMCAComponent },
-  { path: 'privacidad-datos', component: PrivacidadDatosComponent },
   {
     path: 'api',
     component: ApiDocumentationComponent,
@@ -181,6 +215,41 @@ const routes: Routes = [
       {
         path: 'shouts',
         component: DashboardShoutsComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'estadisticas',
+        component: DashboardEstadisticasComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'noticias',
+        component: DashboardNoticiasComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'monitor',
+        component: DashboardMonitorComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'contacto',
+        component: DashboardContactosComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'votos',
+        component: DashboardVotosComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'paginas',
+        component: DashboardPaginasComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'mensajes',
+        component: DashboardMensajesComponent,
         canActivate: [AuthGuard, AdministradorAuthorization],
       },
     ],

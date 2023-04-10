@@ -5,7 +5,7 @@ import { UserModel } from 'src/app/models/security/user.model';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
@@ -701,6 +701,91 @@ export class HttpSecurityService implements IHttpSecurityService {
   getAdminsList(): Observable<any> {
     return this.http
       .get<any>(`${environment.api}/api/usuarios/getAdmins`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  changeUsuariosRangosByPuntos(): Observable<any> {
+    return this.http
+      .get<any>(`${environment.api}/api/rangos/changeUsuariosRangosByPuntos`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getUserStatus(userName: string): Observable<any> {
+    return this.http
+      .get<any>(
+        `${environment.api}/api/usuarios/getUserStatus?userName=${userName}`
+      )
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  removeAvatar(usuarioId: number): Observable<any> {
+    return this.http
+      .post<any>(`${environment.api}/api/usuarios/removeAvatar`, {
+        id: usuarioId,
+      })
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  removeUsuario(usuarioId: number): Observable<any> {
+    return this.http
+      .delete<any>(`${environment.api}/api/usuarios/removeUsuario`, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+        body: { id: usuarioId },
+      })
       .pipe(
         map((response: any) => {
           if (response.status === 200) {

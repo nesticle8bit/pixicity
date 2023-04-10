@@ -1,0 +1,105 @@
+<button type="button" (click)="createUpdatePagina(undefined)" class="mb-3 float-end" mat-flat-button color="primary">
+    <mat-icon>add_circle</mat-icon> Agregar Página
+</button>
+
+<div class="clearfix"></div>
+
+<main class="table-responsive" *ngIf="paginas.length > 0">
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Fecha</th>
+                <th>Página</th>
+                <th>Slug / Href</th>
+                <th>Tipo</th>
+                <th>Target</th>
+                <th>Contenido</th>
+                <th>Eliminado</th>
+                <th width="150px">Usuario</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let pagina of paginas" [ngClass]="{'opacity-50': pagina.eliminado}">
+                <td>
+                    <strong class="text-muted">{{pagina.id}}</strong>
+                </td>
+
+                <td>
+                    <span class="cursor--help text-secondary" matTooltip="{{pagina.fechaRegistro}}">
+                        {{pagina.fechaRegistro | timeAgo}}
+                    </span>
+                </td>
+
+                <td>
+                    {{pagina.titulo}}
+                </td>
+
+                <td>
+                    <span class="text-info">
+                        <fa-icon icon="external-link-alt" class="me-1"></fa-icon> {{pagina.slug}}/
+                    </span>
+                </td>
+
+                <td>
+                    {{pagina.tipo}}
+                </td>
+
+                <td>
+                    {{pagina.target}}
+                </td>
+
+                <td>
+                    <span *ngIf="pagina.contenido" class="badge bg-success">
+                        Contenido
+                    </span>
+
+                    <span *ngIf="!pagina.contenido">-</span>
+                </td>
+
+                <td>
+                    {{pagina.eliminado ? 'Eliminado' : 'Activo'}}
+                </td>
+
+                <td>
+                    <app-user-avatar [class]="'img-avatar'" [avatar]="pagina.usuario?.avatar"
+                        [userName]="pagina.usuario?.userName">
+                    </app-user-avatar> {{pagina.usuario?.userName}}
+                </td>
+
+                <td class="text-center" width="30px">
+                    <button class="btn-menu" [matMenuTriggerFor]="menu">
+                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button type="button" mat-menu-item (click)="createUpdatePagina(pagina)">
+                            <mat-icon>edit</mat-icon>
+                            <span>Actualizar</span>
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="deletePagina(pagina)" *ngIf="!pagina.eliminado">
+                            <mat-icon>delete_outline</mat-icon>
+                            <span>Eliminar</span>
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="deletePagina(pagina)" *ngIf="pagina.eliminado">
+                            <mat-icon>undo</mat-icon>
+                            <span>Recuperar</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="paginas.length > 0">
+</mat-paginator>
+
+<section class="alert alert-warning" *ngIf="paginas.length < 1">
+    🗂️ <strong>No hay páginas en el momento</strong>
+</section>

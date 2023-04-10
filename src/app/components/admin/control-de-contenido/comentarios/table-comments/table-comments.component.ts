@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { PageEvent } from '@angular/material/paginator';
+import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -17,7 +17,7 @@ export class TableCommentsComponent implements OnInit {
     public paginationService: PaginationService,
     private postsService: IHttpPostsService
   ) {
-    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+    this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 
   ngOnInit(): void {

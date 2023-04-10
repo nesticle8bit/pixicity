@@ -1,6 +1,5 @@
 <div class="mentop">
-    <div class="actualtop cursor--pointer" id="ucambi" (mouseenter)="displayMenu = true"
-        (mouseleave)="displayMenu = false">
+    <div class="actualtop cursor--pointer" id="ucambi" (mouseenter)="displayMenu = true"> <!-- (mouseleave)="displayMenu = false" -->
         <span *ngIf="selection === 'ayer'">Ayer</span>
         <span *ngIf="selection === 'hoy'">Hoy</span>
         <span *ngIf="selection === 'ultimos7dias'">Semana</span>
@@ -8,8 +7,7 @@
         <span *ngIf="selection === 'all'">Todos</span>
     </div>
 
-    <div class="listop" id="mutops" [style.display]="displayMenu ? 'block' : 'none'" (mouseenter)="displayMenu = true"
-        (mouseleave)="displayMenu = false">
+    <div class="listop" [style.display]="displayMenu ? 'block' : 'none'" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
         <a href="javascript:void(0)" (click)="changeTop('ayer')" class="ttayer">
             Ayer
         </a>

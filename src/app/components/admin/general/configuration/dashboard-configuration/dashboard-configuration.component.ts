@@ -29,7 +29,8 @@ export class DashboardConfigurationComponent implements OnInit {
       disableUserRegistrationMessage: [''],
       welcomeUserId: 0,
       welcomeActivated: false,
-      welcomeMessage: ''
+      welcomeMessage: '',
+      footer: ''
     });
   }
 
@@ -49,13 +50,15 @@ export class DashboardConfigurationComponent implements OnInit {
           maintenanceMessage: configuracion.maintenanceMessage,
           onlineUsersTime: configuracion.onlineUsersTime,
           disableUserRegistration: configuracion.disableUserRegistration,
-          disableUserRegistrationMessage: configuracion.disableUserRegistrationMessage,
+          disableUserRegistrationMessage:
+            configuracion.disableUserRegistrationMessage,
           welcomeUserId: configuracion.welcomeUserId,
           welcomeActivated: configuracion.welcomeActivated,
-          welcomeMessage: configuracion.welcomeMessage
+          welcomeMessage: configuracion.welcomeMessage,
+          footer: configuracion.footer,
         });
 
-        this.formGroup.controls['url'].disable();
+        // this.formGroup.controls['url'].disable();
       }
     });
   }

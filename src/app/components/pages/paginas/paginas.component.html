@@ -1,0 +1,17 @@
+<div class="container container--home">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="dashboard--title">
+                <strong>
+                    {{pagina?.titulo}}
+                </strong>
+            </h1>
+
+            <p><em>Fecha última actualización: {{pagina?.fechaActualiza | date:'medium'}}</em></p>
+
+            <span [innerHTML]="pagina?.contenido"></span>
+
+            <br /><br />
+        </div>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -33,66 +33,109 @@ export class HttpLogsService implements IHttpLogsService {
             });
           }
         })
-      ).pipe(catchError(this.helper.errorHandler));
+      )
+      .pipe(catchError(this.helper.errorHandler));
   }
 
   getLastNotificaciones(): Observable<any> {
     return this.http
-    .get<any>(
-      `${environment.api}/api/monitors/getLastNotificaciones`
-    )
-    .pipe(
-      map((response: any) => {
-        if (response.status === 200) {
-          return response.data;
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: response.errors.join(', '),
-          });
-        }
-      })
-    ).pipe(catchError(this.helper.errorHandler));
+      .get<any>(`${environment.api}/api/monitors/getLastNotificaciones`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
   }
 
   setNotificacionesAsReaded(): Observable<any> {
     return this.http
-    .get<any>(
-      `${environment.api}/api/monitors/setNotificacionesAsReaded`
-    )
-    .pipe(
-      map((response: any) => {
-        if (response.status === 200) {
-          return response.data;
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: response.errors.join(', '),
-          });
-        }
-      })
-    ).pipe(catchError(this.helper.errorHandler));
+      .get<any>(`${environment.api}/api/monitors/setNotificacionesAsReaded`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
   }
 
   getStats(): Observable<any> {
     return this.http
-    .get<any>(
-      `${environment.api}/api/monitors/getStats`
-    )
-    .pipe(
-      map((response: any) => {
-        if (response.status === 200) {
-          return response.data;
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: response.errors.join(', '),
-          });
-        }
+      .get<any>(`${environment.api}/api/monitors/getStats`)
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getMonitorsAdmin(search: any): Observable<any> {
+    return this.http
+      .get<any>(
+        `${environment.api}/api/monitors/getMonitorAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`
+      )
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  deleteNotificacion(id: number): Observable<any> {
+    return this.http
+      .delete<any>(`${environment.api}/api/monitors/deleteNotificacion`, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+        body: { id },
       })
-    ).pipe(catchError(this.helper.errorHandler));
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
   }
 }

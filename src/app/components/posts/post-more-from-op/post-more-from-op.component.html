@@ -1,0 +1,25 @@
+<section>
+    <div class="titulaw">
+        <h2>Más posts de {{post?.usuario?.userName}}</h2>
+    </div>
+</section>
+
+<main class="alert alert-warning" *ngIf="posts.length < 1">
+    🌱 <strong>No se han encontrado más posts del autor</strong>
+</main>
+
+<main class="esees mb-4" *ngIf="post && posts.length > 0">
+    <article class="list-posts--zebra" *ngFor="let post of posts; let i = index">
+        <strong class="float-start">{{i + 1}}</strong>
+
+        <small>
+            <app-post-url-link [post]="{ id: post.id, url: post.url, titulo: post.titulo, truncate: 35}"
+                [categoria]="{ icono: post.categoria.icono, nombre: post.categoria.nombre, seo: post.categoria.seo}">
+            </app-post-url-link>
+        </small>
+
+        <span class="float-end value">
+            {{post.puntos}}
+        </span>
+    </article>
+</main>

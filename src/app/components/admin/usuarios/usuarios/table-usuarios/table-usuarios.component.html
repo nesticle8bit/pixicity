@@ -3,13 +3,16 @@
         <thead>
             <tr>
                 <th></th>
-                <th>Registrado desde</th>
+                <th style="width: 80px"></th>
                 <th>UserName</th>
+                <th>Email</th>
                 <th>Género</th>
                 <th>País</th>
                 <th>Posts</th>
                 <th>Comentarios</th>
-                <th>Última Conexión</th>
+                <th>
+                    <fa-icon icon="wifi" [matTooltip]="'Última Conexión'"></fa-icon>
+                </th>
                 <th>Última IP</th>
                 <th>Baneado</th>
                 <th>Eliminado</th>
@@ -24,7 +27,9 @@
                 </td>
 
                 <td>
-                    <app-user-avatar [height]="20" [avatar]="usuario.avatar" [userName]="usuario.userName"></app-user-avatar> {{usuario.fechaRegistro | timeAgo}}
+                    <app-user-avatar [height]="20" [avatar]="usuario.avatar" [userName]="usuario.userName"></app-user-avatar> <fa-icon
+                        class="ms-2 text-success" icon="calendar-day" matTooltip="{{usuario.fechaRegistro | timeAgo}}"
+                        matTooltipPosition="right"></fa-icon>
                 </td>
 
                 <td>
@@ -34,12 +39,16 @@
                 </td>
 
                 <td>
+                    <span class="text-primary">{{usuario.email}}</span>
+                </td>
+
+                <td>
                     {{usuario.genero}}
                 </td>
 
                 <td>
-                    <addon-country-flag [iso2]="usuario.estado.pais.isO2"></addon-country-flag>
-                    {{usuario.estado.pais.nombre}}
+                    <addon-country-flag [iso2]="usuario.estado.pais.isO2"
+                        [title]="usuario.estado.pais.nombre"></addon-country-flag>
                 </td>
 
                 <td>
@@ -51,7 +60,8 @@
                 </td>
 
                 <td>
-                    {{usuario.ultimaConexion | date:'medium'}}
+                    <fa-icon icon="calendar-alt" class="text-muted" *ngIf="usuario.ultimaConexion"
+                        matTooltip="{{usuario.ultimaConexion | date:'medium'}}" matTooltipPosition="right"></fa-icon>
                 </td>
 
                 <td>
@@ -93,14 +103,30 @@
                             Actualizar Imagen de Perfil
                         </button>
 
-                        <button type="button" mat-menu-item (click)="banUser(usuario)" *ngIf="!usuario.baneado">
+                        <button type="button" mat-menu-item (click)="removeAvatar(usuario)">
+                            <mat-icon>image_not_supported</mat-icon>
+                            Eliminar Imagen de Perfil
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="enviarMP(usuario)"
+                            *ngIf="!usuario.baneado && !usuario.eliminado">
+                            <mat-icon>forward_to_inbox</mat-icon>
+                            Enviar Mensaje Privado
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="banUser(usuario)"
+                            *ngIf="!usuario.baneado && !usuario.eliminado">
                             <mat-icon>do_disturb_alt</mat-icon>
                             Banear
                         </button>
 
-                        <button type="button" mat-menu-item (click)="deleteUser(usuario.id)">
-                            <mat-icon>delete_outline</mat-icon>
-                            <span>Eliminar</span>
+                        <mat-divider></mat-divider>
+
+                        <button type="button" mat-menu-item (click)="deleteUser(usuario)">
+                            <mat-icon *ngIf="!usuario.eliminado">delete_outline</mat-icon>
+                            <mat-icon *ngIf="usuario.eliminado">undo</mat-icon>
+
+                            <span>{{!usuario.eliminado ? 'Eliminar' : 'Recuperar'}}</span>
                         </button>
                     </mat-menu>
                 </td>

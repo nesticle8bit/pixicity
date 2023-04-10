@@ -24,7 +24,7 @@ export class TableAfiliadosComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {
-    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+    this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 
   ngOnInit(): void {

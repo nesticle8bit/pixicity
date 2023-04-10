@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { DialogChangeAvatarComponent } from 'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
+import { DialogEnviarMPComponent } from 'src/app/components/dialogs/dialog-enviar-mp/dialog-enviar-mp.component';
 
 @Component({
   selector: 'app-table-usuarios',
@@ -23,7 +24,7 @@ export class TableUsuariosComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {
-    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+    this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 
   ngOnInit(): void {
@@ -51,26 +52,32 @@ export class TableUsuariosComponent implements OnInit {
     });
   }
 
-  deleteUser(id: number): void {
+  deleteUser(usuario: any): void {
     Swal.fire({
       title: 'Eliminar',
-      text: '¿Está seguro de eliminar esta sesión del usuario?',
+      text: `¿Está seguro de ${
+        usuario.eliminado ? 'recuperar' : 'eliminar'
+      } el usuario?`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Eliminar',
+      confirmButtonText: `${usuario.eliminado ? 'Recuperar' : 'Eliminar'}`,
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.securityService
-          .deleteSessionById(id)
+          .removeUsuario(usuario.id)
           .subscribe((response: any) => {
             if (response) {
               Swal.fire({
-                title: 'Eliminado',
-                text: 'La sesión ha sido eliminado correctamente',
+                title: `${usuario.eliminado ? 'Recuperado' : 'Eliminado'}`,
+                text: `El usuario ha sido ${
+                  usuario.eliminado ? 'recuperado' : 'eliminado'
+                } correctamente`,
                 icon: 'success',
                 timer: 3000,
               });
+
+              this.getUsuarios();
             }
           });
       }
@@ -88,8 +95,46 @@ export class TableUsuariosComponent implements OnInit {
       disableClose: true,
       data: {
         isAdmin: true,
-        usuario
+        usuario,
+      },
+    });
+  }
+
+  removeAvatar(usuario: any): void {
+    Swal.fire({
+      title: 'Eliminar',
+      text: '¿Está seguro de eliminar el avatar del usuario?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.securityService
+          .removeAvatar(usuario.id)
+          .subscribe((response: any) => {
+            if (response) {
+              Swal.fire({
+                title: 'Eliminado',
+                text: 'El avatar del usuario ha sido eliminado correctamente',
+                icon: 'success',
+                timer: 3000,
+              });
+
+              this.getUsuarios();
+            }
+          });
       }
+    });
+  }
+
+  enviarMP(usuario: any): void {
+    this.dialog.open(DialogEnviarMPComponent, {
+      width: '780px',
+      disableClose: true,
+      data: {
+        userName: usuario.userName,
+      },
     });
   }
 }

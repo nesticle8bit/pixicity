@@ -1,0 +1,36 @@
+<h6 class="main-title">
+    <span>TOP's Posts</span>
+    <app-top-times-selector (selectedDate)="dateChanges($event)"></app-top-times-selector>
+</h6>
+
+<section *ngIf="topPosts.length < 1" [ngClass]="{'opacity-50': loading}">
+    <div class="alert alert-warning">
+        😳 <strong>Aún no se han encontrado top de posts en Pixicity!</strong>
+    </div>
+</section>
+
+<ng-container *ngIf="topPosts.length > 0">
+    <article class="list-posts--zebra" *ngFor="let post of topPosts; let i = index" [ngClass]="{'opacity-50': loading}">
+        <strong class="float-start">{{i + 1}}</strong>
+
+        <small>
+            <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
+                <img src="/assets/images/categorias/{{post.categoria.icono}}" matTooltip="{{post.categoria.nombre}}"
+                    matTooltipPosition="left" alt="{{post.categoria.nombre}}" />
+                <span class="ms-1" matTooltip="{{post.titulo}}">{{post.titulo | truncate:[40]}}</span>
+            </a>
+        </small>
+
+        <span class="float-end value">
+            {{post.puntos}}
+        </span>
+    </article>
+
+    <div class="view-more-list">
+        <a [routerLink]="['/tops']">
+            Ver más
+        </a>
+    </div>
+</ng-container>
+
+<br>

@@ -4,9 +4,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpFavoritosService } from 'src/app/services/interfaces/httpFavoritos.interface';
-import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
-import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
+import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
 
 @Component({
   selector: 'app-section-user-info-login',
@@ -34,6 +34,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
     private favoritosService: IHttpFavoritosService,
     private securityService: IHttpSecurityService,
     @Inject(PLATFORM_ID) private platformId: any,
+    private mensajesService: IHttpMensajesService,
     private httpLogs: IHttpLogsService,
     private formBuilder: FormBuilder,
     private router: Router
@@ -60,7 +61,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
     this.httpLogs.getStats().subscribe((value: any) => {
       this.currentStats.notifications = value.notifications;
-      this.currentStats.messages = 0; //value.messages;
+      this.currentStats.messages = value.messages;
     });
   }
 
@@ -69,34 +70,56 @@ export class SectionUserInfoLoginComponent implements OnInit {
       if (response) {
         response = response.map((notificacion: any) => {
           if (notificacion.mensaje) {
-            notificacion.mensaje = notificacion.mensaje.replace('tu post', `tu ${this.setURL(notificacion, 'post')}`);
-            notificacion.mensaje = notificacion.mensaje.replace('post que sigues', `${this.setURL(notificacion, 'post que sigues')}`);
-            notificacion.mensaje = notificacion.mensaje.replace('un post', `un ${this.setURL(notificacion, 'post')}`);
-            notificacion.mensaje = notificacion.mensaje.replace('en tu perfil', `en tu ${this.setProfile('perfil')}`);
+            notificacion.mensaje = notificacion.mensaje.replace(
+              'tu post',
+              `tu ${this.setURL(notificacion, 'post')}`
+            );
+            notificacion.mensaje = notificacion.mensaje.replace(
+              'post que sigues',
+              `${this.setURL(notificacion, 'post que sigues')}`
+            );
+            notificacion.mensaje = notificacion.mensaje.replace(
+              'un post',
+              `un ${this.setURL(notificacion, 'post')}`
+            );
+            notificacion.mensaje = notificacion.mensaje.replace(
+              'en tu perfil',
+              `en tu ${this.setProfile('perfil')}`
+            );
+            notificacion.mensaje = notificacion.mensaje.replace(
+              'nuevo Post',
+              `nuevo ${this.setURL(notificacion, 'Post')}`
+            );
           }
 
           return notificacion;
         });
+
+        this.setNotificacionesAsReaded();
       }
 
       this.notificaciones = response;
     });
 
-    this.display.monitor = !this.display.monitor;
+    this.display.monitor = true;
     this.display.mensajes = false;
     this.display.favoritos = false;
-
-    this.setNotificacionesAsReaded();
   }
 
   verMensajes(): void {
     this.display.mensajes = !this.display.mensajes;
     this.display.favoritos = false;
     this.display.monitor = false;
+
+    this.mensajesService.getLastMensajes().subscribe((response: any) => {
+      this.mensajes = response;
+
+      this.setMensajesAsReaded();
+    });
   }
 
   setURL(notificacion: any, text: string): string {
-   return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}">${text}</a>`;
+    return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}" title="${notificacion?.post?.titulo}">${text}</a>`;
   }
 
   setProfile(text: string): string {
@@ -133,7 +156,17 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
   setNotificacionesAsReaded(): void {
     this.httpLogs.setNotificacionesAsReaded().subscribe((response: any) => {
-      console.log('🔔 Se ha cambiado el estado de las últimas notificaciones a leído');
+      console.log(
+        '🔔 Se ha cambiado el estado de las últimas notificaciones a leído'
+      );
+    });
+  }
+
+  setMensajesAsReaded(): void {
+    this.mensajesService.setMensajesAsReaded().subscribe((response: any) => {
+      console.log(
+        '🔔 Se ha cambiado el estado de los últimos mensajes a leído'
+      );
     });
   }
 }
