@@ -10,7 +10,9 @@
                 <th>País</th>
                 <th>Posts</th>
                 <th>Comentarios</th>
-                <th>Última Conexión</th>
+                <th>
+                    <fa-icon icon="wifi" [matTooltip]="'Última Conexión'"></fa-icon>
+                </th>
                 <th>Última IP</th>
                 <th>Baneado</th>
                 <th>Eliminado</th>
@@ -57,7 +59,8 @@
                 </td>
 
                 <td>
-                    {{usuario.ultimaConexion | date:'medium'}}
+                    <fa-icon icon="network-wired" class="text-muted" *ngIf="usuario.ultimaConexion"
+                        matTooltip="{{usuario.ultimaConexion | date:'medium'}}" matTooltipPosition="right"></fa-icon>
                 </td>
 
                 <td>
