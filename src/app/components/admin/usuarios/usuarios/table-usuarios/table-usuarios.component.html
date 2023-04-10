@@ -3,7 +3,7 @@
         <thead>
             <tr>
                 <th></th>
-                <th>Registrado desde</th>
+                <th></th>
                 <th>UserName</th>
                 <th>Email</th>
                 <th>Género</th>
@@ -27,8 +27,9 @@
                 </td>
 
                 <td>
-                    <app-user-avatar [height]="20" [avatar]="usuario.avatar"
-                        [userName]="usuario.userName"></app-user-avatar> {{usuario.fechaRegistro | timeAgo}}
+                    <app-user-avatar [height]="20" [avatar]="usuario.avatar" [userName]="usuario.userName"></app-user-avatar> <fa-icon
+                        class="ms-2 text-success" icon="calendar-day" matTooltip="{{usuario.fechaRegistro | timeAgo}}"
+                        matTooltipPosition="right"></fa-icon>
                 </td>
 
                 <td>
@@ -59,7 +60,7 @@
                 </td>
 
                 <td>
-                    <fa-icon icon="network-wired" class="text-muted" *ngIf="usuario.ultimaConexion"
+                    <fa-icon icon="calendar-alt" class="text-muted" *ngIf="usuario.ultimaConexion"
                         matTooltip="{{usuario.ultimaConexion | date:'medium'}}" matTooltipPosition="right"></fa-icon>
                 </td>
 
