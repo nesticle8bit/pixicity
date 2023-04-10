@@ -15,8 +15,8 @@
 
         <small>
             <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
-                <img src="/assets/images/categorias/{{post.categoria.icono}}" matTooltip="{{post.categoria.nombre}}" matTooltipPosition="left"
-                    alt="{{post.categoria.nombre}}" />
+                <img src="/assets/images/categorias/{{post.categoria.icono}}" matTooltip="{{post.categoria.nombre}}"
+                    matTooltipPosition="left" alt="{{post.categoria.nombre}}" />
                 <span class="ms-1" matTooltip="{{post.titulo}}">{{post.titulo | truncate:[40]}}</span>
             </a>
         </small>
@@ -25,7 +25,7 @@
             {{post.puntos}}
         </span>
     </article>
-    
+
     <div class="view-more-list">
         <a [routerLink]="['/tops']">
             Ver más

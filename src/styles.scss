@@ -832,23 +832,32 @@ textarea:focus#msg_body {
 
 .listop {
     border: solid #CCC;
-    background: #FFF;
+    background: #fff;
     border-width: 1px 1px 0;
+    margin-top: 24px;
     display: none;
     z-index: 1;
-    position: absolute;
-    top: 13px;
-}
+    top: 24px;
+    left: 10px;
 
-.listop a {
-    border-bottom: 1px solid #CCC;
-    display: block;
-    padding: 5px 6px;
-    font-size: 11px;
+    // border: solid #CCC;
+    // background: #fff;
+    // border-width: 1px 1px 0;
+    // display: none;
+    // z-index: 1;
+    // position: absolute;
+    // top: 18px;
 
-    &:hover {
-        color: #FFF;
-        background: #067CB4;
+    & a {
+        border-bottom: 1px solid #CCC;
+        display: block;
+        padding: 5px 6px;
+        font-size: 11px;
+    
+        &:hover {
+            color: #FFF;
+            background: #067CB4;
+        }
     }
 }
 
@@ -2059,7 +2068,6 @@ span.positivo {
     }
 }
 
-.listop,
 .menuver,
 .tamame ul,
 .tamame ul li {

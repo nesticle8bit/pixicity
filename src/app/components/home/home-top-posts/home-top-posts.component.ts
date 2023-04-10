@@ -1,6 +1,6 @@
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
-import { Component, OnInit } from '@angular/core';
 import { TopPostModel } from 'src/app/models/web/topPost.model';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-home-top-posts',
@@ -28,7 +28,7 @@ export class HomeTopPostsComponent implements OnInit {
   }
 
   dateChanges(date: string): void {
-    if(!date) {
+    if (!date) {
       return;
     }
 
