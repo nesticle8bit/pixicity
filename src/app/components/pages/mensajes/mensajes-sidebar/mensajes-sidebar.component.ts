@@ -13,7 +13,7 @@ export class MensajesSidebarComponent implements OnInit {
   ngOnInit(): void {}
 
   enviarMP(): void {
-    const dialogRef = this.dialog.open(DialogEnviarMPComponent, {
+    this.dialog.open(DialogEnviarMPComponent, {
       width: '780px',
       disableClose: true,
       data: {},

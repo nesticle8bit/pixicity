@@ -49,6 +49,7 @@ import { DashboardPaginasComponent } from './components/admin/control-de-conteni
 import { PaginasComponent } from './components/pages/paginas/paginas.component';
 import { MensajesConversacionComponent } from './components/pages/mensajes/mensajes-conversacion/mensajes-conversacion.component';
 import { MensajesEnviadosComponent } from './components/pages/mensajes/mensajes-enviados/mensajes-enviados.component';
+import { DashboardMensajesComponent } from './components/admin/control-de-contenido/mensajes/dashboard-mensajes/dashboard-mensajes.component';
 
 const routes: Routes = [
   { path: '', component: SectionHomeForumComponent },
@@ -244,6 +245,11 @@ const routes: Routes = [
       {
         path: 'paginas',
         component: DashboardPaginasComponent,
+        canActivate: [AuthGuard, AdministradorAuthorization],
+      },
+      {
+        path: 'mensajes',
+        component: DashboardMensajesComponent,
         canActivate: [AuthGuard, AdministradorAuthorization],
       },
     ],

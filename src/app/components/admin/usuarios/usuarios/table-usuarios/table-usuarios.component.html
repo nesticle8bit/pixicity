@@ -5,6 +5,7 @@
                 <th></th>
                 <th>Registrado desde</th>
                 <th>UserName</th>
+                <th>Email</th>
                 <th>Género</th>
                 <th>País</th>
                 <th>Posts</th>
@@ -35,12 +36,16 @@
                 </td>
 
                 <td>
+                    <span class="text-primary">{{usuario.email}}</span>
+                </td>
+
+                <td>
                     {{usuario.genero}}
                 </td>
 
                 <td>
-                    <addon-country-flag [iso2]="usuario.estado.pais.isO2"></addon-country-flag>
-                    {{usuario.estado.pais.nombre}}
+                    <addon-country-flag [iso2]="usuario.estado.pais.isO2"
+                        [title]="usuario.estado.pais.nombre"></addon-country-flag>
                 </td>
 
                 <td>
@@ -97,6 +102,12 @@
                         <button type="button" mat-menu-item (click)="removeAvatar(usuario)">
                             <mat-icon>image_not_supported</mat-icon>
                             Eliminar Imagen de Perfil
+                        </button>
+
+                        <button type="button" mat-menu-item (click)="enviarMP(usuario)"
+                            *ngIf="!usuario.baneado && !usuario.eliminado">
+                            <mat-icon>forward_to_inbox</mat-icon>
+                            Enviar Mensaje Privado
                         </button>
 
                         <button type="button" mat-menu-item (click)="banUser(usuario)"

@@ -1,0 +1,5 @@
+<main *ngIf="currentUser?.usuario && currentUser?.usuario?.userName !== userName">
+    <a class="button-uppercase bazul" (click)="enviarMP()">
+        <fa-icon *ngIf="icon" [icon]="['fas', 'envelope']"></fa-icon> Enviar MP
+    </a>
+</main>

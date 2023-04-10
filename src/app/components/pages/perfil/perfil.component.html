@@ -89,6 +89,12 @@
                                         <app-follow-button [userName]="currentUser.userName" [icon]="true"></app-follow-button>
                                     </div>
 
+                                    <div class="col-12 col-sm-2" *ngIf="loggedUser?.usuario?.userName !== currentUser.userName">
+                                        <app-send-message-button [userName]="currentUser.userName" [icon]="true"></app-send-message-button>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
                                     <div class="col-12 col-sm-3" *ngIf="currentUser?.id">
                                         <app-banear-usuario
                                             [data]="{ usuarioId: currentUser?.id, nombre: currentUser.rango?.nombre}">

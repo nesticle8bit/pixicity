@@ -1,8 +1,8 @@
 import { Editor, Toolbar } from 'ngx-editor';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -27,12 +27,14 @@ export class DialogEnviarMPComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<DialogEnviarMPComponent>,
     private mensajeService: IHttpMensajesService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder
   ) {
     this.formGroup = this.formBuilder.group({
       aUserName: ['', Validators.required],
       asunto: ['', Validators.required],
       contenido: ['', Validators.required],
+      captcha: ['', Validators.required],
     });
 
     this.editor = new Editor({
@@ -41,7 +43,13 @@ export class DialogEnviarMPComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.data?.userName) {
+      this.formGroup.patchValue({
+        aUserName: this.data.userName,
+      });
+    }
+  }
 
   enviarMP(): void {
     if (this.formGroup.invalid) {
@@ -69,6 +77,12 @@ export class DialogEnviarMPComponent implements OnInit {
       });
 
       this.dialogRef.close(true);
+    });
+  }
+
+  captchaResponse(value: string): void {
+    this.formGroup.patchValue({
+      captcha: value,
     });
   }
 }

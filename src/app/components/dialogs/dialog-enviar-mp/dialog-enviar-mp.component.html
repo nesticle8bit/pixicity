@@ -35,6 +35,8 @@
                             [placeholder]="'Ingresa el Contenido'"></ngx-editor>
                     </div>
                 </div>
+
+                <app-re-captcha (response)="captchaResponse($event)"></app-re-captcha>
             </div>
         </div>
     </mat-dialog-content>

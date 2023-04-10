@@ -13,7 +13,8 @@
         </thead>
 
         <tbody>
-            <tr *ngFor="let contacto of contactos" [ngClass]="{'opacity-50': contacto.eliminado, 'table-info': contacto.gestionado}">
+            <tr *ngFor="let contacto of contactos"
+                [ngClass]="{'opacity-50': contacto.eliminado, 'table-info': contacto.gestionado}">
                 <td>
                     <strong>{{contacto.id}}</strong>
                 </td>
@@ -63,6 +64,10 @@
         </tbody>
     </table>
 </main>
+
+<div class="alert alert-warning" *ngIf="contactos.length < 1">
+    🌨️ <strong>Aún no se han encontrado contactos para esta web</strong>
+</div>
 
 <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
     [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="contactos.length > 0">

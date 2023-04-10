@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { DialogChangeAvatarComponent } from 'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
+import { DialogEnviarMPComponent } from 'src/app/components/dialogs/dialog-enviar-mp/dialog-enviar-mp.component';
 
 @Component({
   selector: 'app-table-usuarios',
@@ -69,7 +70,9 @@ export class TableUsuariosComponent implements OnInit {
             if (response) {
               Swal.fire({
                 title: `${usuario.eliminado ? 'Recuperado' : 'Eliminado'}`,
-                text: `El usuario ha sido ${usuario.eliminado ? 'recuperado' : 'eliminado'} correctamente`,
+                text: `El usuario ha sido ${
+                  usuario.eliminado ? 'recuperado' : 'eliminado'
+                } correctamente`,
                 icon: 'success',
                 timer: 3000,
               });
@@ -122,6 +125,16 @@ export class TableUsuariosComponent implements OnInit {
             }
           });
       }
+    });
+  }
+
+  enviarMP(usuario: any): void {
+    this.dialog.open(DialogEnviarMPComponent, {
+      width: '780px',
+      disableClose: true,
+      data: {
+        userName: usuario.userName,
+      },
     });
   }
 }

@@ -215,6 +215,9 @@ import { DialogEnviarMPComponent } from './components/dialogs/dialog-enviar-mp/d
 import { MensajesConversacionComponent } from './components/pages/mensajes/mensajes-conversacion/mensajes-conversacion.component';
 import { MensajesSidebarComponent } from './components/pages/mensajes/mensajes-sidebar/mensajes-sidebar.component';
 import { MensajesEnviadosComponent } from './components/pages/mensajes/mensajes-enviados/mensajes-enviados.component';
+import { SendMessageButtonComponent } from './components/addons/send-message-button/send-message-button.component';
+import { TableMensajesComponent } from './components/admin/control-de-contenido/mensajes/table-mensajes/table-mensajes.component';
+import { DashboardMensajesComponent } from './components/admin/control-de-contenido/mensajes/dashboard-mensajes/dashboard-mensajes.component';
 
 @NgModule({
   declarations: [
@@ -356,6 +359,9 @@ import { MensajesEnviadosComponent } from './components/pages/mensajes/mensajes-
     MensajesConversacionComponent,
     MensajesSidebarComponent,
     MensajesEnviadosComponent,
+    SendMessageButtonComponent,
+    TableMensajesComponent,
+    DashboardMensajesComponent,
   ],
   imports: [
     BrowserModule,
@@ -438,6 +444,9 @@ import { MensajesEnviadosComponent } from './components/pages/mensajes/mensajes-
         `${environment.api}/api/web/getAdsByType`,
         `${environment.api}/api/categorias/getCategoriasDropdown`,
         `${environment.api}/api/usuarios/isFollowingTheUser`,
+        `${environment.api}/api/posts/getCloudTags`,
+        `${environment.api}/api/web/getAfiliados`,
+        `${environment.api}/api/general/getEstadisticas`,
       ],
     }),
     MatRadioModule,
