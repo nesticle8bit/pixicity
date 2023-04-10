@@ -364,7 +364,7 @@ import { DashboardMensajesComponent } from './components/admin/control-de-conten
     DashboardMensajesComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule.withServerTransition({ appId: 'pixicity' }),
     AppRoutingModule,
     FontAwesomeModule,
     BrowserAnimationsModule,

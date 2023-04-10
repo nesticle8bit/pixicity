@@ -1,6 +1,6 @@
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, Input, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { isPlatformBrowser } from '@angular/common';
