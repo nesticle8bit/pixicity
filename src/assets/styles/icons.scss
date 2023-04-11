@@ -1,14 +1,11 @@
-.i, .icon {
+.i,
+.icon {
     background: url('/assets/images/icons/i.png');
     width: 16px;
     height: 16px;
     display: block;
     float: left;
     margin-top: 1px;
-}
-
-.i.moneda {
-    background-position: -85px -34px;
 }
 
 .i.estrella-plus {
@@ -23,10 +20,35 @@
     background-position: -102px -86px;
 }
 
-i.icon.texto-shout {
-    background-position: 1px -139px;
-    margin-top: 3px;
+i {
+    &.icon {
+        &.texto-shout {
+            background-position: 1px -139px;
+            margin-top: 3px;
+        }
+
+        &.post {
+            background-position: 32px -17px;
+        }
+
+        &.post {
+            background-position: 32px -17px;
+        }
+
+        &.post-plus {
+            background-position: 34px -231px;
+        }
+
+        &.moneda {
+            background-position: -85px -34px;
+        }
+    }
 }
+
+// i.icon.texto-shout {
+//     background-position: 1px -139px;
+//     margin-top: 3px;
+// }
 
 i.icon.foto-shout {
     background-position: -34px -138px;
@@ -103,10 +125,6 @@ i.icon.thumb-down {
 i.icon.thumb-down:hover,
 i.icon.thumb-down.hover {
     background-position: -170px -51px;
-}
-
-i.icon.quote {
-    background-position: -187px -34px;
 }
 
 i.icon.notifications {
@@ -283,6 +301,10 @@ i.icon.message {
 
 i.icon.message-plus {
     background-position: -51px -85px;
+}
+
+i.icon.message-send {
+    background-position: -17px -85px;
 }
 
 i.icon.message-send {

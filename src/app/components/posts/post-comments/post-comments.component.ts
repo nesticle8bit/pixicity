@@ -110,6 +110,7 @@ export class PostCommentsComponent implements OnInit {
 
         respuesta.respuestas.push(comentario);
         respuesta.responder = false;
+        respuesta.respuesta = '';
       }
     });
   }

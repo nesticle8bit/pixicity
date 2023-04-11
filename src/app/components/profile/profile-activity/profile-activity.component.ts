@@ -76,7 +76,7 @@ export class ProfileActivityComponent implements OnInit {
     private formBuilder: FormBuilder
   ) {
     this.formGroup = this.formBuilder.group({
-      tipoActividad: ''
+      tipoActividad: '',
     });
   }
 

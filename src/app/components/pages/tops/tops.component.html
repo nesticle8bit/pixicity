@@ -7,7 +7,7 @@
                         <div class="card tops-container mb-3">
                             <div class="card-header">
                                 <h2>Top post con más puntos</h2>
-                                <i class="i moneda float-end"></i>
+                                <i class="icon moneda float-end"></i>
                             </div>
 
                             <div class="card-body">
@@ -145,7 +145,8 @@
                         <span class="required"></span> Categoría
                     </label>
 
-                    <ng-select [items]="categorias" bindLabel="nombre" bindValue="id" formControlName="categoria" (change)="getTopPosts(date)">
+                    <ng-select [items]="categorias" bindLabel="nombre" bindValue="id" formControlName="categoria"
+                        (change)="getTopPosts(date)">
                         <ng-template ng-label-tmp let-item="item">
                             <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
                                 [src]="'/assets/images/categorias/' + item?.icono" />
@@ -176,7 +177,8 @@
                             Hoy
                         </mat-radio-button>
 
-                        <mat-radio-button class="d-block my-3" value="ultimos7dias" (click)="getTopPosts('ultimos7dias')">
+                        <mat-radio-button class="d-block my-3" value="ultimos7dias"
+                            (click)="getTopPosts('ultimos7dias')">
                             Últimos 7 días
                         </mat-radio-button>
 
