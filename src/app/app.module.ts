@@ -218,6 +218,7 @@ import { MensajesEnviadosComponent } from './components/pages/mensajes/mensajes-
 import { SendMessageButtonComponent } from './components/addons/send-message-button/send-message-button.component';
 import { TableMensajesComponent } from './components/admin/control-de-contenido/mensajes/table-mensajes/table-mensajes.component';
 import { DashboardMensajesComponent } from './components/admin/control-de-contenido/mensajes/dashboard-mensajes/dashboard-mensajes.component';
+import { ShoutsCommentsComponent } from './components/pages/shouts/shouts-comments/shouts-comments.component';
 
 @NgModule({
   declarations: [
@@ -362,6 +363,7 @@ import { DashboardMensajesComponent } from './components/admin/control-de-conten
     SendMessageButtonComponent,
     TableMensajesComponent,
     DashboardMensajesComponent,
+    ShoutsCommentsComponent,
   ],
   imports: [
     BrowserModule,
