@@ -79,7 +79,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       titulo: ['', [Validators.required, Validators.maxLength(80)]],
       contenido: ['', Validators.required],
       categoriaId: [undefined, Validators.required],
-      etiquetas: [[], Validators.required],
+      etiquetas: [],
       esPrivado: false,
       sinComentarios: false,
       smileys: false,
@@ -167,7 +167,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
   publicarPost(): void {
     const post = Object.assign({}, this.formGroup.value);
-    post.etiquetas = post.etiquetas.join();
+    post.etiquetas = post.etiquetas?.join();
     post.esBorrador = false;
 
     const categoria = this.categorias.filter(

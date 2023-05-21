@@ -27,7 +27,7 @@
                         <a class="d-none d-sm-block" title="TOPs">
                             <span class="">TOPs</span>
                         </a>
-                    
+
                         <a class="d-block d-sm-none" title="TOPs">
                             <span>
                                 <fa-icon [icon]="['fas', 'trophy']"></fa-icon>
@@ -35,8 +35,9 @@
                         </a>
                     </li>
 
-                    <li class="list-inline-item main-menu--item" [routerLink]="['/administracion/dashboard']" 
-                        [ngClass]="{'main-menu--item--active': active.startsWith('/administracion')}" *ngIf="currentUser?.usuario?.rango === 'Administrador'">
+                    <li class="list-inline-item main-menu--item" [routerLink]="['/administracion/dashboard']"
+                        [ngClass]="{'main-menu--item--active': active.startsWith('/administracion')}"
+                        *ngIf="currentUser?.usuario?.rango === 'Administrador'">
                         <a class="d-none d-sm-block" title="Administración">
                             <span>Administración</span>
                         </a>
@@ -45,6 +46,22 @@
                             <span>
                                 <fa-icon [icon]="['fas', 'sliders']"></fa-icon>
                             </span>
+                        </a>
+                    </li>
+
+                    <li *ngIf="!currentUser?.usuario" class="list-inline-item main-menu--item" [routerLink]="['/login']"
+                        [ngClass]="{'main-menu--item--active': active == '/login' || active == 'login'}">
+                        <a class="d-block d-sm-none" [routerLink]="['/']" title="Posts">
+                            <span class="">Iniciar sesión</span>
+                        </a>
+                    </li>
+
+                    <li *ngIf="!currentUser?.usuario" class="list-inline-item main-menu--item"
+                        [routerLink]="['/registro']"
+                        [ngClass]="{'main-menu--item--active': active == '/registro' || active == 'registro'}"
+                        style="background: #95c317; text-transform: uppercase;">
+                        <a [routerLink]="['/']" title="Posts">
+                            <span class="">Registrate Ya!</span>
                         </a>
                     </li>
                 </ul>

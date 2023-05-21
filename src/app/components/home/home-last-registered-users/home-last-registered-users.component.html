@@ -10,7 +10,10 @@
             </strong>
     
             <a [routerLink]="['/perfil/' + usuario.userName]" title="{{usuario.userName}}">
+                <addon-country-flag [iso2]="usuario?.pais?.iso2"
+                                                [title]="usuario?.pais?.nombre"></addon-country-flag>
                 <app-genre-icon [genre]="usuario?.genero"></app-genre-icon>
+                
                 <span class="ms-2">{{usuario.userName}}</span>
             </a>
 
