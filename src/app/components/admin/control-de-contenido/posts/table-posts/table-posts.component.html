@@ -62,6 +62,11 @@
                             <span *ngIf="post.sticky">Quitar</span> <span *ngIf="!post.sticky">Establecer</span> Sticky
                         </button>
 
+                        <button type="button" mat-menu-item [routerLink]="['/posts/actualizar/' + post.id]">
+                            <mat-icon>edit</mat-icon>
+                            <span>Actualizar</span>
+                        </button>
+
                         <button type="button" mat-menu-item (click)="eliminarPost(post.id, i)">
                             <mat-icon>delete_outline</mat-icon>
                             <span>Eliminar</span>

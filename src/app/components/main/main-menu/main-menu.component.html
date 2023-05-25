@@ -49,14 +49,14 @@
                         </a>
                     </li>
 
-                    <li *ngIf="!currentUser?.usuario" class="list-inline-item main-menu--item" [routerLink]="['/login']"
+                    <li *ngIf="!currentUser || !currentUser?.usuario" class="list-inline-item main-menu--item" [routerLink]="['/login']"
                         [ngClass]="{'main-menu--item--active': active == '/login' || active == 'login'}">
                         <a class="d-block d-sm-none" [routerLink]="['/']" title="Posts">
                             <span class="">Iniciar sesión</span>
                         </a>
                     </li>
 
-                    <li *ngIf="!currentUser?.usuario" class="list-inline-item main-menu--item"
+                    <li *ngIf="!currentUser || !currentUser?.usuario" class="list-inline-item main-menu--item"
                         [routerLink]="['/registro']"
                         [ngClass]="{'main-menu--item--active': active == '/registro' || active == 'registro'}"
                         style="background: #95c317; text-transform: uppercase;">
