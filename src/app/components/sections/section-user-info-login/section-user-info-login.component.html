@@ -78,7 +78,8 @@
                     <ul>
                         <div class="errr" *ngIf="mensajes.length < 1">No hay mensajes</div>
 
-                        <li class="list-items" *ngFor="let mensaje of mensajes" [ngClass]="{'sin-leer': !mensaje.leido}">
+                        <li class="list-items" *ngFor="let mensaje of mensajes"
+                            [ngClass]="{'sin-leer': !mensaje.leido}">
                             <div class="d-flex">
                                 <div class="flex-shrink-0">
                                     <app-user-avatar matTooltip="{{mensaje.usuarioDe.userName}}"

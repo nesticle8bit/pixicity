@@ -22,7 +22,7 @@ export class MonitorComponent implements OnInit {
     private formBuilder: FormBuilder
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
-    
+
     this.formGroup = this.formBuilder.group({
       favorito: true,
       comentarios: true,
@@ -31,6 +31,7 @@ export class MonitorComponent implements OnInit {
       postNuevo: true,
       recomendaciones: true,
       comentariosPostQueSigue: true,
+      respuestas: true,
     });
 
     this.displayService.setDisplay({
@@ -38,7 +39,7 @@ export class MonitorComponent implements OnInit {
       footer: true,
       searchFooter: true,
       submenu: true,
-      background: ''
+      background: '',
     });
   }
 

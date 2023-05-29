@@ -88,6 +88,10 @@ export class SectionUserInfoLoginComponent implements OnInit {
               'nuevo Post',
               `nuevo ${this.setURL(notificacion, 'Post')}`
             );
+            notificacion.mensaje = notificacion.mensaje.replace(
+              'tu comentario',
+              `tu ${this.setURL(notificacion, 'comentario')}`
+            );
           }
 
           return notificacion;
