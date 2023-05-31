@@ -1,13 +1,13 @@
+import { DialogChangeAvatarComponent } from 'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
+import { DialogEnviarMPComponent } from 'src/app/components/dialogs/dialog-enviar-mp/dialog-enviar-mp.component';
 import { DialogBanUserComponent } from 'src/app/components/dialogs/dialog-ban-user/dialog-ban-user.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import { DialogChangeAvatarComponent } from 'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
-import { DialogEnviarMPComponent } from 'src/app/components/dialogs/dialog-enviar-mp/dialog-enviar-mp.component';
 
 @Component({
   selector: 'app-table-usuarios',
@@ -15,6 +15,8 @@ import { DialogEnviarMPComponent } from 'src/app/components/dialogs/dialog-envia
   styleUrls: ['./table-usuarios.component.scss'],
 })
 export class TableUsuariosComponent implements OnInit {
+  @Input() searchParameters: any;
+
   public usuarios: any[] = [];
   public totalCount: number = 0;
 
@@ -32,7 +34,13 @@ export class TableUsuariosComponent implements OnInit {
   }
 
   getUsuarios(): void {
-    this.securityService.getUsuariosAdmin().subscribe((response: any) => {
+    const parameters: any = {};
+
+    if(this.searchParameters?.rangoId) {
+      parameters.rangoId = this.searchParameters?.rangoId;
+    }
+
+    this.securityService.getUsuariosAdmin(parameters).subscribe((response: any) => {
       this.usuarios = response.usuarios;
       this.totalCount = response.pagination.totalCount;
     });

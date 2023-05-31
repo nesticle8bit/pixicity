@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogRangosChangesReportComponent } from '../dialog-rangos-changes-report/dialog-rangos-changes-report.component';
+import { DialogVerUsuariosComponent } from 'src/app/components/dialogs/dialog-ver-usuarios/dialog-ver-usuarios.component';
 
 @Component({
   selector: 'app-table-rangos',
@@ -80,5 +81,15 @@ export class TableRangosComponent implements OnInit {
           });
         }
       });
+  }
+
+  verUsuariosConRango(rangoId: number): void {
+    this.dialog.open(DialogVerUsuariosComponent, {
+      width: '1200px',
+      disableClose: true,
+      data: {
+        rangoId,
+      },
+    });
   }
 }

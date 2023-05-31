@@ -109,10 +109,16 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getUsuariosAdmin(): Observable<any> {
+  getUsuariosAdmin(search: any): Observable<any> {
+    let searchParams = ``;
+
+    if(search?.rangoId) {
+      searchParams += `&rango=${search.rangoId}`;
+    }
+
     return this.http
       .get<any>(
-        `${environment.api}/api/usuarios/getUsuariosAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`
+        `${environment.api}/api/usuarios/getUsuariosAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${searchParams}`
       )
       .pipe(
         map((response: any) => {

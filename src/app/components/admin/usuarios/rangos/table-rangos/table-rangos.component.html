@@ -61,11 +61,13 @@
                 </td>
 
                 <td>
-                    {{rango.color ? rango.color : '-'}}
+                    <strong [ngStyle]="{'color': rango.color}">
+                        {{rango.color ? rango.color : '-'}}
+                    </strong>
                 </td>
 
                 <td>
-                    <span class="cursor--help"
+                    <span class="cursor--help" (click)="verUsuariosConRango(rango.id)"
                         matTooltip="{{rango.usuariosCount}} es la cantidad de usuarios que poseen el rango de {{rango.nombre}}"
                         [matTooltipPosition]="'above'">
                         {{rango.usuariosCount}}
