@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <div class="row" *ngIf="display?.footer">
+    <div class="row" *ngIf="display?.footer && paginas.length > 0">
         <div class="col-12">
             <div class="footer text-center">
                 <span *ngFor="let pagina of paginas">
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <div class="text-center copyright">
+    <div class="text-center copyright" [ngClass]="{'mt-2': paginas.length < 1}">
         <small>
             <span [innerHTML]="configuracion.footer"></span>
         </small>
