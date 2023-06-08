@@ -59,11 +59,18 @@
                 </td> -->
 
                 <td class="text-center" width="30px">
-                    <button class="btn-menu" [matMenuTriggerFor]="menu" *ngIf="!mensaje.eliminado">
+                    <button class="btn-menu" [matMenuTriggerFor]="menu">
                         <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
                     </button>
 
                     <mat-menu #menu="matMenu">
+                        <button type="button" mat-menu-item (click)="changeRemitente(mensaje)">
+                            <mat-icon>send_and_archive</mat-icon>
+                            <span>Cambiar Remitente</span>
+                        </button>
+
+                        <mat-divider></mat-divider>
+
                         <button type="button" mat-menu-item (click)="deleteMensaje(mensaje)"
                             *ngIf="!mensaje.eliminado">
                             <mat-icon>delete_outline</mat-icon>

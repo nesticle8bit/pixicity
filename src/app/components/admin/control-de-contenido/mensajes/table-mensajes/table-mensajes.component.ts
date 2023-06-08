@@ -2,6 +2,7 @@ import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.i
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-table-mensajes',
@@ -43,5 +44,36 @@ export class TableMensajesComponent implements OnInit {
           mensaje.eliminado = true;
         }
       });
+  }
+
+  changeRemitente(mensaje: any): void {
+    Swal.fire({
+      icon: 'question',
+      title: 'Cambiar Remitente',
+      text: 'Ingresa el nombre de usuario del nuevo remitente de este mensaje, si no existe no se podrá cambiar',
+      input: 'text',
+      inputAttributes: {
+        autocapitalize: 'off',
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Cambiar',
+    }).then((value: any) => {
+      if (value.isConfirmed && value.value) {
+        this.mensajesService
+          .changeRemitente({ mensajeId: mensaje.id, userName: value.value })
+          .subscribe((response: any) => {
+            if (response) {
+              Swal.fire({
+                title: 'Cambiado',
+                text: `El remitente del mensaje ha sido cambiado a ${value.value}`,
+                icon: 'success',
+                timer: 3000,
+              });
+
+              this.getMensajes();
+            }
+          });
+      }
+    });
   }
 }
