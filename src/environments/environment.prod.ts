@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  api: 'https://api.pixicity.io',
+  api: '',
   captchaKey: '6LeppFEfAAAAABDIcFqnMchITEudf5s-E9KVEnn0'
 };

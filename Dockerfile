@@ -5,10 +5,8 @@ WORKDIR /opt/ng
 COPY package.json ./
 RUN npm i --legacy-peer-deps
 
-ENV PATH="./node_modules/.bin:$PATH" 
-
 COPY . ./
-RUN ng build --configuration=production
+RUN node node_modules/@angular/cli/bin/ng build --configuration=production
 
 ### STAGE 2: Run ###
 FROM nginx:1.17.1-alpine
