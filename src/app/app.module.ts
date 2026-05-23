@@ -164,11 +164,6 @@ import { MatInputModule } from '@angular/material/input';
 import { DialogUpdateAfiliadosComponent } from './components/admin/control-de-comunidad/afiliados/dialog-update-afiliados/dialog-update-afiliados.component';
 import { PageContactoComponent } from './components/pages/page-contacto/page-contacto.component';
 import { SEOService } from './services/shared/seo.service';
-import {
-  RecaptchaFormsModule,
-  RecaptchaModule,
-  RECAPTCHA_LANGUAGE,
-} from 'ng-recaptcha';
 import { ReCaptchaComponent } from './components/addons/re-captcha/re-captcha.component';
 import { DialogRecomendarPostComponent } from './components/dialogs/dialog-recomendar-post/dialog-recomendar-post.component';
 import { DialogVerReporteComponent } from './components/admin/control-de-comunidad/reportes/dialog-ver-reporte/dialog-ver-reporte.component';
@@ -468,8 +463,6 @@ import { DialogVerUsuariosComponent } from './components/dialogs/dialog-ver-usua
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    RecaptchaModule,
-    RecaptchaFormsModule,
   ],
   providers: [
     DisplayComponentService,
@@ -493,7 +486,6 @@ import { DialogVerUsuariosComponent } from './components/dialogs/dialog-ver-usua
     { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
     { provide: LOCALE_ID, useValue: 'es' },
 
-    { provide: RECAPTCHA_LANGUAGE, useValue: 'es' },
   ],
   entryComponents: [DialogAfiliarseComponent, DialogPrevisualizarPostComponent],
   bootstrap: [AppComponent],

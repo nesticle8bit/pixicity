@@ -133,22 +133,39 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   }
 
   setPostOnEdit(post: any): void {
-    let etiquetas = post.etiquetas.split(',');
-    etiquetas = etiquetas.map((tag: string) => {
-      return tag.trim();
-    });
+    this.etiquetas = post.etiquetas
+      .split(',')
+      .map((tag: string) => tag.trim())
+      .filter((tag: string) => tag.length > 0);
 
     this.formGroup.patchValue({
       id: this.postId,
       titulo: post.titulo,
       contenido: post.contenido,
       categoriaId: post.categoria.id,
-      etiquetas: etiquetas,
+      etiquetas: this.etiquetas,
       smileys: post.smileys,
       esPrivado: post.esPrivado,
       sinComentarios: post.sinComentarios,
       esBorrador: post.esBorrador,
     });
+  }
+
+  addTag(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    if (value) {
+      this.etiquetas.push(value);
+      this.formGroup.patchValue({ etiquetas: this.etiquetas });
+    }
+    event.chipInput!.clear();
+  }
+
+  removeTag(tag: string): void {
+    const index = this.etiquetas.indexOf(tag);
+    if (index >= 0) {
+      this.etiquetas.splice(index, 1);
+      this.formGroup.patchValue({ etiquetas: this.etiquetas });
+    }
   }
 
   getCategorias(): void {
@@ -167,7 +184,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
   publicarPost(): void {
     const post = Object.assign({}, this.formGroup.value);
-    post.etiquetas = post.etiquetas?.join();
+    post.etiquetas = this.etiquetas.join();
     post.esBorrador = false;
 
     const categoria = this.categorias.filter(
@@ -212,7 +229,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     }
 
     const post = Object.assign({}, this.formGroup.value);
-    post.etiquetas = post.etiquetas.join();
+    post.etiquetas = this.etiquetas.join();
     post.esBorrador = this.esBorrador = true;
 
     if (!this.postId) {

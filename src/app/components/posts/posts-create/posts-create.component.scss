@@ -2,3 +2,74 @@
     height: 580px;
     overflow-y: auto;
 }
+
+:host .tags-input-wrapper {
+    display: block;
+    width: 100%;
+    padding: 6px 8px;
+    background-color: #f8f9fa;
+    border: 1.5px solid #dee2e6;
+    border-radius: 6px;
+    min-height: 46px;
+    cursor: text;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+
+    mat-chip-list {
+        .mat-chip-list-wrapper {
+            margin: 0;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+            min-height: 32px;
+
+            input {
+                font-size: 0.875rem;
+                color: #495057;
+                padding: 4px 6px;
+                margin: 0;
+                flex: 1;
+                min-width: 150px;
+                border: none !important;
+                outline: none !important;
+                box-shadow: none !important;
+                background: transparent;
+
+                &::placeholder {
+                    color: #adb5bd;
+                    font-style: italic;
+                }
+            }
+        }
+    }
+
+    .mat-chip.mat-standard-chip {
+        font-size: 0.78rem;
+        font-weight: 500;
+        min-height: 24px;
+        padding: 2px 6px 2px 10px;
+        border-radius: 20px;
+        background-color: #e7f0fd;
+        color: #1a56db;
+        border: 1px solid #c3d9f9;
+        line-height: 1.4;
+
+        .mat-chip-remove {
+            color: #6ea3f5;
+            opacity: 1;
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+            margin-left: 4px;
+
+            &:hover {
+                color: #1a56db;
+            }
+        }
+    }
+
+    &:focus-within {
+        border-color: #86b7fe;
+        background-color: #fff;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
+    }
+}

@@ -11,6 +11,7 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
 })
 export class LoginComponent implements OnInit {
   @Input() hide: any;
+
   public loginForm: FormGroup;
   public error: string = '';
   public baneo: any = {
@@ -28,7 +29,6 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       userName: ['', Validators.required],
       password: ['', Validators.required],
-      captcha: ['', Validators.required],
     });
   }
 
@@ -49,13 +49,11 @@ export class LoginComponent implements OnInit {
 
     const login = Object.assign({}, this.loginForm.value);
     login.captcha = '';
-
     this.error = '';
 
     this.securityService.loginUser(login).subscribe((value: any) => {
       if (value === 'error') {
-        this.error =
-          'Las credenciales son incorrectas, por favor corrige y vuelve a iniciar sesión';
+        this.error = 'Las credenciales son incorrectas, por favor corrige y vuelve a iniciar sesión';
         return;
       }
 
@@ -66,34 +64,21 @@ export class LoginComponent implements OnInit {
           causa: value.razonBaneo,
           hasta: value.tiempoBaneado,
         };
-
         return;
       }
 
       if (value?.error === 'baneado_permanente') {
         this.error = 'baneado';
-
         this.baneo = {
           title: 'La cuenta se encuentra deshabilitada permanentemente',
           causa: value.razonBaneo,
           hasta: null,
         };
-
         return;
       }
 
       this.securityService.setUserToLocalStorage(value);
       window.location.href = '';
-
-      this.loginForm.patchValue({
-        captcha: '',
-      });
-    });
-  }
-
-  captchaResponse(value: string): void {
-    this.loginForm.patchValue({
-      captcha: value,
     });
   }
 }

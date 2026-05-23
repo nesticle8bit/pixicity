@@ -73,18 +73,29 @@
                 </section>
 
                 <section id="tagsfox" class="mb-3">
-                    <label class="control-label">
-                        <!-- <span class="required"></span> --> Etiquetas (opcional)
-                    </label>
+                    <label class="control-label">Etiquetas (opcional)</label>
 
-                    <ng-select class="ng-select-borders" [items]="[]" [addTag]="true" [multiple]="true"
-                        [selectOnTab]="true" [isOpen]="false" formControlName="etiquetas">
-                    </ng-select>
+                    <div class="tags-input-wrapper">
+                        <mat-chip-list #chipList>
+                            <mat-chip
+                                *ngFor="let tag of etiquetas"
+                                [removable]="true"
+                                (removed)="removeTag(tag)">
+                                {{tag}}
+                                <mat-icon matChipRemove>cancel</mat-icon>
+                            </mat-chip>
+                            <input
+                                placeholder="Agregar etiqueta..."
+                                [matChipInputFor]="chipList"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                [matChipInputAddOnBlur]="true"
+                                (matChipInputTokenEnd)="addTag($event)" />
+                        </mat-chip-list>
+                    </div>
 
                     <p>
-                        Ingresa por favor <b>al menos 4 etiquetas</b> (ingresando cada una con la tecla <i>Enter</i> )
-                        distintas que
-                        describan el contenido de tu post.
+                        Ingresa por favor <b>al menos 4 etiquetas</b> (ingresando cada una con <i>Enter</i> o <i>coma</i>)
+                        distintas que describan el contenido de tu post.
                     </p>
                 </section>
 
