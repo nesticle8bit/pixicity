@@ -71,9 +71,13 @@ export class PostsViewComponent implements OnInit {
       this.post = value.post;
       this.post.id = postId;
 
+      const description = value.post.contenido
+        ? value.post.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 160)
+        : value.post.titulo;
+
       this.seoService.setSEO({
         title: value.post.titulo,
-        description: value.post.titulo,
+        description,
         tags: value.post.tags,
         type: value.post.categoria.nombre,
         imageURL: '',

@@ -35,53 +35,30 @@ export class AppComponent {
 
     this.seoService.getSEO().subscribe((value: SEOModel) => {
       if (value.title) {
-        this.title.setTitle(`${value.title} - Pixicity - Ciudad Pixelada | Comunidad para Compartir Información`);
-
-        this.meta.addTag({
-          name: 'og:title',
-          content: value.title,
-        });
-
-        this.meta.addTag({
-          name: 'twitter:title',
-          content: value.title,
-        });
-
-        this.meta.addTag({
-          name: 'og:site_name',
-          content: value.title,
-        });
+        this.title.setTitle(`${value.title} - Pixicity - Ciudad Pixelada`);
+        this.meta.updateTag({ property: 'og:title', content: value.title });
+        this.meta.updateTag({ name: 'twitter:title', content: value.title });
+        this.meta.updateTag({ property: 'og:site_name', content: 'Pixicity' });
       }
 
-      if (value.tags) {
-        this.meta.addTag({
-          name: 'description',
-          content: value.tags.join()?.toLowerCase(),
-        });
+      if (value.description) {
+        this.meta.updateTag({ name: 'description', content: value.description });
+        this.meta.updateTag({ property: 'og:description', content: value.description });
+        this.meta.updateTag({ name: 'twitter:description', content: value.description });
+      }
+
+      if (value.tags?.length) {
+        this.meta.updateTag({ name: 'keywords', content: value.tags.join(', ').toLowerCase() });
       }
 
       if (value.imageURL) {
-        this.meta.addTag({
-          name: 'og:image',
-          content: value.imageURL,
-        });
-
-        this.meta.addTag({
-          name: 'twitter:image',
-          content: value.imageURL,
-        });
-
-        this.meta.addTag({
-          name: 'twitter:card',
-          content: value.imageURL,
-        });
+        this.meta.updateTag({ property: 'og:image', content: value.imageURL });
+        this.meta.updateTag({ name: 'twitter:image', content: value.imageURL });
+        this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
       }
 
       if (value.type) {
-        this.meta.addTag({
-          name: 'og:type',
-          content: value.type,
-        });
+        this.meta.updateTag({ property: 'og:type', content: value.type });
       }
     });
 
