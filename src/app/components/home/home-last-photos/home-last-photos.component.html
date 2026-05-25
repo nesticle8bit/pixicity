@@ -1,6 +1,57 @@
-<h6 class="main-title">
-    <span>Últimas Fotos</span>
+<h6 class="main-title mb-2">
+  <span>Top Fotos</span>
+
+  <div class="float-end">
+    <img class="cursor--pointer" src="/assets/images/icons/icon_play.png" matTooltip="Ver galería"
+      style="background: #fff; padding-left: 5px" routerLink="/fotos" />
+  </div>
 </h6>
 
-<img src="https://www.wallpaperflare.com/static/179/1005/301/death-metal-death-death-band-chuck-schuldiner-wallpaper.jpg"
-    class="img-fluid img-thumbnail rounded" alt="" />
+@if (loading) {
+<div class="carousel-skeleton"></div>
+}
+
+@if (!loading && fotos.length > 0) {
+<div class="carousel" (mouseenter)="stopTimer()" (mouseleave)="startTimer()">
+
+  <!-- Slides -->
+  @for (foto of fotos; track foto.id; let i = $index) {
+  <a [routerLink]="['/fotos', foto.usuario, foto.id, foto.url]" class="carousel-slide"
+    [class.active]="i === currentIndex">
+    <img [src]="foto.imageUrl" [alt]="foto.titulo" loading="lazy">
+
+    <!-- Progress bar -->
+    <div class="carousel-progress" [class.running]="i === currentIndex"></div>
+
+    <!-- Overlay info -->
+    <div class="carousel-overlay">
+      <div class="overlay-rank">#{{i + 1}}</div>
+      <div class="overlay-body">
+        <span class="overlay-title">{{foto.titulo}}</span>
+        <span class="overlay-author">{{foto.usuario}}</span>
+        <div class="overlay-stats">
+          <span class="stat-pos">
+            <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon> {{foto.votosPositivos}}
+          </span>
+          <span class="stat-views">
+            <fa-icon [icon]="['fas', 'eye']"></fa-icon> {{foto.visitantes}}
+          </span>
+        </div>
+      </div>
+    </div>
+  </a>
+  }
+
+  <!-- Arrows -->
+  <button class="carousel-btn carousel-prev" (click)="prev(); startTimer()">&#8249;</button>
+  <button class="carousel-btn carousel-next" (click)="next(); startTimer()">&#8250;</button>
+
+  <!-- Dots -->
+  <div class="carousel-dots">
+    @for (foto of fotos; track foto.id; let i = $index) {
+    <span class="dot" [class.active]="i === currentIndex" (click)="goTo(i)"></span>
+    }
+  </div>
+
+</div>
+}

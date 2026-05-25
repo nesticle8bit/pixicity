@@ -1,20 +1,21 @@
 <div class="container container--home fotos-page mx-auto">
   <div class="row">
     <div class="col-12">
-      <div class="fotos-header">
-        <h2>
+      <h6 class="main-title mb-2">
+        <span>
           @if (userName) {
           Fotos de <strong>{{userName}}</strong>
           } @else {
           Últimas Fotos
           }
-        </h2>
+        </span>
+
         @if (currentUser?.usuario) {
-        <a routerLink="/crear/foto" class="boton azul">
+        <a routerLink="/crear/foto" class="boton azul float-end fs-11" style="margin-left: 1rem">
           <fa-icon [icon]="['fas', 'plus']"></fa-icon> Subir Foto
         </a>
         }
-      </div>
+      </h6>
 
       @if (loading) {
       <div class="text-center my-4">
@@ -31,9 +32,15 @@
       <div class="fotos-grid">
         @for (foto of fotos; track foto.id) {
         <div class="foto-card">
-          <a [routerLink]="['/fotos', foto.usuario, foto.id, foto.url]">
-            <div class="foto-thumb">
-              <img [src]="foto.imageUrl" [alt]="foto.titulo" loading="lazy">
+          <a [routerLink]="['/fotos', foto.usuario, foto.id, foto.url]" class="foto-thumb">
+            <img [src]="foto.imageUrl" [alt]="foto.titulo" loading="lazy">
+            <div class="foto-overlay">
+              <span class="foto-overlay-title">{{foto.titulo}}</span>
+              <div class="foto-overlay-stats">
+                <span><fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon> {{foto.votosPositivos}}</span>
+                <span><fa-icon [icon]="['fas', 'eye']"></fa-icon> {{foto.visitantes}}</span>
+                <span><fa-icon [icon]="['fas', 'comment']"></fa-icon> {{foto.totalComentarios ?? 0}}</span>
+              </div>
             </div>
           </a>
           <div class="foto-info">
@@ -42,19 +49,11 @@
             </a>
             <div class="foto-meta">
               <a [routerLink]="['/perfil', foto.usuario]" class="foto-author" [appUserPopover]="foto.usuario">
-                <app-user-avatar [class]="'avatar-24'" [avatar]="foto.avatar" [userName]="foto.usuario" [width]="24">
+                <app-user-avatar [class]="'avatar-22'" [avatar]="foto.avatar" [userName]="foto.usuario" [width]="22">
                 </app-user-avatar>
-                {{foto.usuario}}
+                <span>{{foto.usuario}}</span>
               </a>
               <span class="foto-date">{{foto.fechaRegistro | timeAgo}}</span>
-            </div>
-            @if (foto.descripcion) {
-            <p class="foto-desc">{{foto.descripcion | truncate:[80]}}</p>
-            }
-            <div class="foto-stats">
-              <span><fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon> {{foto.votosPositivos}}</span>
-              <span><fa-icon [icon]="['fas', 'thumbs-down']"></fa-icon> {{foto.votosNegativos}}</span>
-              <span><fa-icon [icon]="['fas', 'eye']"></fa-icon> {{foto.visitantes}}</span>
             </div>
           </div>
         </div>

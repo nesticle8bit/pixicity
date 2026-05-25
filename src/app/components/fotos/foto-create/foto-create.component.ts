@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
-import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import Swal from 'sweetalert2';
 
@@ -14,7 +13,6 @@ import Swal from 'sweetalert2';
 })
 export class FotoCreateComponent implements OnInit {
   public formGroup: FormGroup;
-  public categorias: any[] = [];
   public loading: boolean = false;
   public uploading: boolean = false;
   public editId: number = 0;
@@ -26,7 +24,6 @@ export class FotoCreateComponent implements OnInit {
   public uploadedFile: File | null = null;
 
   constructor(
-    private parametrosService: IHttpParametrosService,
     private displayService: DisplayComponentService,
     private fotosService: IHttpFotosService,
     private route: ActivatedRoute,
@@ -37,7 +34,6 @@ export class FotoCreateComponent implements OnInit {
       titulo: ['', [Validators.required, Validators.maxLength(150)]],
       descripcion: ['', Validators.maxLength(1000)],
       imageUrl: ['', Validators.required],
-      categoriaId: [null, Validators.required],
     });
 
     this.displayService.setDisplay({
@@ -50,20 +46,12 @@ export class FotoCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadCategorias();
-
     this.route.params.subscribe((params) => {
       if (params['id']) {
         this.editId = +params['id'];
         this.isEdit = true;
         this.loadFotoForEdit();
       }
-    });
-  }
-
-  loadCategorias(): void {
-    this.parametrosService.getCategoriasDropdown().subscribe((res: any) => {
-      this.categorias = res || [];
     });
   }
 
@@ -74,7 +62,6 @@ export class FotoCreateComponent implements OnInit {
           titulo: res.titulo,
           descripcion: res.descripcion,
           imageUrl: res.imageUrl,
-          categoriaId: res.categoriaId,
         });
         this.previewUrl = res.imageUrl;
         this.imageSource = 'url';

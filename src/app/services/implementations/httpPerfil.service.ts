@@ -138,4 +138,25 @@ export class HttpPerfilService implements IHttpPerfilService {
       )
       .pipe(catchError(this.helper.errorHandler));
   }
+
+  getComentariosByShoutId(shoutId: number): Observable<any> {
+    return this.http
+      .get<any>(`${environment.api}/api/shouts/getComentariosByShoutId?shoutId=${shoutId}`)
+      .pipe(map((r: any) => (r.status === 200 ? r.data : [])))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  addShoutComentario(model: any): Observable<any> {
+    return this.http
+      .post<any>(`${environment.api}/api/shouts/addShoutComentario`, model)
+      .pipe(map((r: any) => (r.status === 200 ? r.data : null)))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  deleteShoutComentario(id: number): Observable<any> {
+    return this.http
+      .delete<any>(`${environment.api}/api/shouts/deleteShoutComentario?id=${id}`)
+      .pipe(map((r: any) => (r.status === 200 ? r.data : null)))
+      .pipe(catchError(this.helper.errorHandler));
+  }
 }

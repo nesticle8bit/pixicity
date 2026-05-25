@@ -1,7 +1,11 @@
 <div class="container container--home pb-3 foto-create-page mx-auto">
   <div class="row">
     <div class="col-12">
-      <h2>{{isEdit ? 'Editar Foto' : 'Subir Foto'}}</h2>
+      <h6 class="main-title mb-2">
+        <span>
+          {{isEdit ? 'Editar Foto' : 'Subir Foto'}}
+        </span>
+      </h6>
 
       <form [formGroup]="formGroup" (ngSubmit)="submit()">
         <div class="form-group">
@@ -13,25 +17,12 @@
           }
         </div>
 
-        <!-- Descripción -->
         <div class="form-group">
           <label>Descripción</label>
           <textarea formControlName="descripcion" class="form-control" placeholder="Descripción de la foto..." rows="3"
             maxlength="1000"></textarea>
         </div>
 
-        <!-- Categoría -->
-        <div class="form-group">
-          <label>Categoría <span class="required">*</span></label>
-          <ng-select formControlName="categoriaId" [items]="categorias" bindLabel="nombre" bindValue="id"
-            placeholder="Selecciona una categoría">
-          </ng-select>
-          @if (formGroup.get('categoriaId')?.invalid && formGroup.get('categoriaId')?.touched) {
-          <small class="text-danger">La categoría es requerida</small>
-          }
-        </div>
-
-        <!-- Fuente de imagen -->
         <div class="form-group">
           <label>Imagen <span class="required">*</span></label>
           <div class="image-source-tabs">

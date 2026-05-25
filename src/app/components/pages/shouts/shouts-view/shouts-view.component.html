@@ -53,10 +53,10 @@
                       </li>
 
                       <li class="list__inline-item">
-                        <a href="#" title="Comentarios">
+                        <a title="Comentarios">
                           <fa-icon class="pl-2 ml-2" [icon]="['fas', 'comments']">
                           </fa-icon>
-                          <span class="counter">0</span>
+                          <span class="counter">{{shoutsComments?.comentarios?.length || 0}}</span>
                         </a>
                       </li>
 
@@ -88,7 +88,7 @@
             </div>
           </div>
 
-          <app-shouts-comments [shout]="shout"></app-shouts-comments>
+          <app-shouts-comments #shoutsComments [shout]="shout"></app-shouts-comments>
         </div>
       </div>
     </div>

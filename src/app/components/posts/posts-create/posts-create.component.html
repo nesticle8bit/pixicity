@@ -24,7 +24,7 @@
           </article>
         </ng-container>
 
-        <section *ngIf="!formGroup?.value?.contenido || formGroup.value?.contenido === '<p></p>'">
+        <section *ngIf="!formGroup.value?.contenido || formGroup.value?.contenido === '<p></p>'">
           <div class="alert alert-info mb-0 mt-3">
             <button type="button" mat-flat-button color="primary" (click)="postGenerator()">
               <mat-icon>design_services</mat-icon> Generador de Posts

@@ -1,0 +1,110 @@
+.comment-count {
+  font-size: 0.85em;
+  color: #888;
+  font-weight: normal;
+}
+
+.sc-empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #888;
+  padding: 16px 0;
+  fa-icon { font-size: 1.2rem; }
+}
+
+.sc-item {
+  display: flex;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child { border-bottom: none; }
+}
+
+.sc-avatar {
+  flex-shrink: 0;
+}
+
+.sc-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.sc-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.sc-username {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1a73e8;
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+.sc-date {
+  font-size: 0.78rem;
+  color: #999;
+}
+
+.sc-delete {
+  margin-left: auto;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 0.85rem;
+  &:hover { color: #e53935; }
+}
+
+.sc-text {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.sc-form {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.sc-textarea {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  resize: vertical;
+  font-family: inherit;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: #1a73e8;
+  }
+}
+
+.sc-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.sc-chars {
+  font-size: 0.78rem;
+  color: #aaa;
+}
+
+.sc-login-prompt {
+  padding: 12px 0;
+  font-size: 0.9rem;
+  color: #666;
+  a { color: #1a73e8; font-weight: 500; }
+}

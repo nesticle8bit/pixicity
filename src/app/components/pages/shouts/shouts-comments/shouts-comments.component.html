@@ -1,9 +1,54 @@
 <h6 class="main-title mt-4 mb-2">
-    <span>Comentarios</span>
+  <span>Comentarios <span class="comment-count">({{comentarios.length}})</span></span>
 </h6>
 
-<div class="alert alert-warning">
-    ⚠️ <strong>En construcción...</strong>
+@if (comentarios.length === 0) {
+<div class="sc-empty">
+  <fa-icon [icon]="['fas', 'comments']"></fa-icon>
+  <span>Sé el primero en comentar</span>
 </div>
+}
 
-<!-- {{shout | json}} -->
+@for (c of comentarios; track c.id) {
+<div class="sc-item">
+  <div class="sc-avatar">
+    <a [routerLink]="['/perfil', c.usuario]" [appUserPopover]="c.usuario">
+      <app-user-avatar [class]="'avatar-32'" [avatar]="c.avatar" [userName]="c.usuario" [width]="32">
+      </app-user-avatar>
+    </a>
+  </div>
+  <div class="sc-body">
+    <div class="sc-header">
+      <a [routerLink]="['/perfil', c.usuario]" class="sc-username" [appUserPopover]="c.usuario">
+        {{c.usuario}}
+      </a>
+      <span class="sc-date">{{c.fechaRegistro | date:'dd/MM/yyyy HH:mm'}}</span>
+      @if (esMio(c)) {
+      <a class="sc-delete" (click)="eliminarComentario(c.id)" matTooltip="Eliminar comentario">
+        <fa-icon [icon]="['fas', 'times']"></fa-icon>
+      </a>
+      }
+    </div>
+    <div class="sc-text">{{c.comentario}}</div>
+  </div>
+</div>
+}
+
+@if (currentUser?.usuario) {
+<div class="sc-form mt-3">
+  <textarea class="sc-textarea" [(ngModel)]="nuevoComentario" placeholder="Escribe un comentario..." rows="3"
+    maxlength="500">
+    </textarea>
+  <div class="sc-form-footer">
+    <span class="sc-chars">{{nuevoComentario.length}}/500</span>
+    <button class="boton azul" (click)="enviarComentario()" [disabled]="enviando || !nuevoComentario.trim()">
+      <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
+      {{enviando ? 'Enviando...' : 'Comentar'}}
+    </button>
+  </div>
+</div>
+} @else {
+<div class="sc-login-prompt">
+  <a [routerLink]="['/seguridad/login']">Inicia sesión</a> para comentar.
+</div>
+}

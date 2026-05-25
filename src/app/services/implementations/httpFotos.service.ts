@@ -24,6 +24,15 @@ export class HttpFotosService implements IHttpFotosService {
       );
   }
 
+  getTopFotos(count: number = 5): Observable<any> {
+    return this.http
+      .get<any>(`${environment.api}/api/fotos/GetTopFotos?count=${count}`)
+      .pipe(
+        map((response: any) => (response.status === 200 ? response.data : [])),
+        catchError(this.helper.errorHandler)
+      );
+  }
+
   getFotosByUsuario(userName: string, search: any = {}): Observable<any> {
     const page = search?.page || 1;
     const pageCount = search?.pageCount || 12;

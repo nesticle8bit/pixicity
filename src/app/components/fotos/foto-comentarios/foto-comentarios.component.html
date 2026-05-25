@@ -1,7 +1,7 @@
 <div class="foto-comentarios mx-auto mt-3">
 
   <div class="titular">
-    <h3><span>{{comentarios?.length}}</span> comentarios</h3>
+    <h3><span>{{comentarios.length}}</span> comentarios</h3>
   </div>
 
   @for (comentario of comentarios; track comentario; let i = $index) {
@@ -70,7 +70,7 @@
     </div>
   }
 
-  @if (comentarios?.length === 0) {
+  @if (comentarios.length === 0) {
     <section class="nada-amarillo mx-auto mt-2" style="width:98%">
       Sé el primero en comentar esta foto
     </section>

@@ -1,54 +1,52 @@
 <footer class="container">
-  @if (display.searchFooter) {
-    <div class="row">
-      <div class="col-12" style="padding: 0 0px;">
-        <div class="seccion">
-          <div class="inpie">
-            <div class="busb float-start">
-              <form [formGroup]="formGroup" (ngSubmit)="search()" action="/buscar/posts/"
-                name="top_search_box">
-                <input class="bbcuerpo" type="text" name="q" value="" formControlName="search"
-                  placeholder="Buscar..." />
-                  <input class="bbboton" vspace="2" hspace="10" type="submit" value="" />
-                </form>
-              </div>
-              <a class="ircielo float-end" (click)="goToHeaven()">
-                Ir al cielo
-              </a>
-            </div>
+  @if (display && display.searchFooter) {
+  <div class="row">
+    <div class="col-12" style="padding: 0 0px;">
+      <div class="seccion">
+        <div class="inpie">
+          <div class="busb float-start">
+            <form [formGroup]="formGroup" (ngSubmit)="search()" action="/buscar/posts/" name="top_search_box">
+              <input class="bbcuerpo" type="text" name="q" value="" formControlName="search" placeholder="Buscar..." />
+              <input class="bbboton" vspace="2" hspace="10" type="submit" value="" />
+            </form>
           </div>
+          <a class="ircielo float-end" (click)="goToHeaven()">
+            Ir al cielo
+          </a>
         </div>
       </div>
-    }
-
-    @if (display.footer && paginas.length > 0) {
-      <div class="row">
-        <div class="col-12">
-          <div class="footer text-center">
-            @for (pagina of paginas; track pagina) {
-              <span>
-                @if (pagina.tipo === 'link') {
-                  <a href="{{pagina.slug}}" target="{{pagina.target}}">
-                    {{pagina.titulo}}
-                  </a>
-                }
-                @if (pagina.tipo === 'routerLink') {
-                  <a [routerLink]="pagina.slug">
-                    {{pagina.titulo}}
-                  </a>
-                }
-              </span>
-            }
-          </div>
-        </div>
-      </div>
-    }
-
-    <div class="text-center copyright" [ngClass]="{'mt-2': paginas.length < 1}">
-      <small>
-        <span [innerHTML]="configuracion.footer"></span>
-      </small>
-
-      <br><br>
     </div>
-  </footer>
+  </div>
+  }
+
+  @if (display && display.footer && paginas.length > 0) {
+  <div class="row">
+    <div class="col-12">
+      <div class="footer text-center">
+        @for (pagina of paginas; track pagina) {
+        <span>
+          @if (pagina.tipo === 'link') {
+          <a href="{{pagina.slug}}" target="{{pagina.target}}">
+            {{pagina.titulo}}
+          </a>
+          }
+          @if (pagina.tipo === 'routerLink') {
+          <a [routerLink]="pagina.slug">
+            {{pagina.titulo}}
+          </a>
+          }
+        </span>
+        }
+      </div>
+    </div>
+  </div>
+  }
+
+  <div class="text-center copyright" [ngClass]="{'mt-2': paginas.length < 1}">
+    <small>
+      <span [innerHTML]="configuracion.footer"></span>
+    </small>
+
+    <br><br>
+  </div>
+</footer>

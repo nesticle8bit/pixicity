@@ -35,6 +35,19 @@
           </a>
         </li>
 
+        <li class="list-inline-item main-menu--item" [routerLink]="['/fotos']"
+          [ngClass]="{'main-menu--item--active': active == '/fotos' || active == 'fotos'}">
+          <a class="d-none d-sm-block" title="Fotos">
+            <span class="">Fotos</span>
+          </a>
+
+          <a class="d-block d-sm-none" title="Fotos">
+            <span>
+              <fa-icon [icon]="['fas', 'camera']"></fa-icon>
+            </span>
+          </a>
+        </li>
+
         @if (currentUser?.usuario?.rango === 'Administrador') {
           <li class="list-inline-item main-menu--item" [routerLink]="['/administracion/dashboard']"
             [ngClass]="{'main-menu--item--active': active.startsWith('/administracion')}"

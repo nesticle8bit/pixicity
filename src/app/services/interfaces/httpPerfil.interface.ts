@@ -9,4 +9,7 @@ export abstract class IHttpPerfilService {
   abstract deleteShout(shoutId: number): Observable<any>;
   abstract recoveryShout(shoutId: number): Observable<any>;
   abstract getShoutById(shoutId: number): Observable<any>;
+  abstract getComentariosByShoutId(shoutId: number): Observable<any>;
+  abstract addShoutComentario(model: any): Observable<any>;
+  abstract deleteShoutComentario(id: number): Observable<any>;
 }

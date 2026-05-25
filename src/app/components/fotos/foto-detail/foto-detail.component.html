@@ -10,36 +10,109 @@
     <div class="col-12">
       <div class="foto-detail-layout">
 
-        <!-- Sidebar izquierdo: fotos del usuario -->
+        <!-- Sidebar izquierdo -->
         <aside class="foto-sidebar">
-          <div class="sidebar-user">
-            <a [routerLink]="['/perfil', foto.usuario]" [appUserPopover]="foto.usuario">
-              <app-user-avatar [class]="'avatar-48'" [avatar]="foto.avatar" [userName]="foto.usuario" [width]="48">
+
+          <!-- User card -->
+          <div class="sidebar-user-card">
+            <a [routerLink]="['/perfil', foto.usuario]" [appUserPopover]="foto.usuario" class="sidebar-avatar-link">
+              <app-user-avatar [class]="'avatar-56'" [avatar]="foto.avatar" [userName]="foto.usuario" [width]="56">
               </app-user-avatar>
             </a>
-            <div>
+            <div class="sidebar-user-info">
               <a [routerLink]="['/perfil', foto.usuario]" class="sidebar-username" [appUserPopover]="foto.usuario">
                 {{foto.usuario}}
+              </a>
+              @if (foto.usuarioUltimaConexion) {
+              <span class="sidebar-last-seen">
+                <fa-icon [icon]="['fas', 'circle']" class="online-dot"></fa-icon>
+                {{foto.usuarioUltimaConexion | timeAgo}}
+              </span>
+              }
+              <a [routerLink]="['/perfil', foto.usuario]" class="sidebar-ver-perfil">Ver perfil →</a>
+            </div>
+          </div>
+
+          <!-- Stats del autor -->
+          <div class="sidebar-card">
+            <div class="sidebar-section-title">Actividad del autor</div>
+            <div class="sidebar-stats-grid">
+              <div class="sidebar-stat">
+                <span class="stat-val">{{foto.usuarioPuntos | number}}</span>
+                <span class="stat-lbl">Puntos</span>
+              </div>
+              <div class="sidebar-stat">
+                <span class="stat-val">{{foto.usuarioTotalPosts | number}}</span>
+                <span class="stat-lbl">Posts</span>
+              </div>
+              <div class="sidebar-stat">
+                <span class="stat-val">{{foto.usuarioTotalFotos | number}}</span>
+                <span class="stat-lbl">Fotos</span>
+              </div>
+            </div>
+            <div class="sidebar-user-links">
+              <a [routerLink]="['/posts', foto.usuario]" class="sidebar-link-chip">
+                <fa-icon [icon]="['fas', 'file-alt']"></fa-icon> Ver posts
+              </a>
+              <a [routerLink]="['/fotos', foto.usuario]" class="sidebar-link-chip">
+                <fa-icon [icon]="['fas', 'images']"></fa-icon> Ver fotos
               </a>
             </div>
           </div>
 
+          <!-- Stats de esta foto -->
+          <div class="sidebar-card">
+            <div class="sidebar-section-title">Esta foto</div>
+            <ul class="sidebar-foto-stats">
+              <li>
+                <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
+                <span>{{foto.fechaRegistro | date:'dd MMM yyyy'}}</span>
+              </li>
+              <li>
+                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                <span>{{foto.visitantes | number}} visitas</span>
+              </li>
+              <li class="stat-pos">
+                <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
+                <span>{{foto.votosPositivos}} positivos</span>
+              </li>
+              <li class="stat-neg">
+                <fa-icon [icon]="['fas', 'thumbs-down']"></fa-icon>
+                <span>{{foto.votosNegativos}} negativos</span>
+              </li>
+              <li>
+                <fa-icon [icon]="['fas', 'comment']"></fa-icon>
+                <span>{{foto.totalComentarios}} comentarios</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Otras fotos -->
           @if (foto.otrasFotosUsuario?.length > 0) {
-          <div class="sidebar-otras">
-            <h4>Fotos de {{foto.usuario}}</h4>
-            @for (otraFoto of foto.otrasFotosUsuario; track otraFoto.id) {
-            <a [routerLink]="['/fotos', foto.usuario, otraFoto.id, otraFoto.url]" class="sidebar-foto-item">
-              <div class="sidebar-thumb">
+          <div class="sidebar-card">
+            <div class="sidebar-otras-header">
+              <span class="sidebar-section-title" style="margin-bottom:0">Más fotos</span>
+              <a [routerLink]="['/fotos', foto.usuario]" class="ver-todas-link">Ver todas</a>
+            </div>
+            <div class="sidebar-grid">
+              @for (otraFoto of foto.otrasFotosUsuario; track otraFoto.id) {
+              <a [routerLink]="['/fotos', foto.usuario, otraFoto.id, otraFoto.url]" class="sidebar-thumb"
+                [title]="otraFoto.titulo">
                 <img [src]="otraFoto.imageUrl" [alt]="otraFoto.titulo" loading="lazy">
-              </div>
-              <span>{{otraFoto.fechaRegistro | date:'dd/MM/yyyy'}}</span>
-            </a>
-            }
-            <a [routerLink]="['/fotos', foto.usuario]" class="ver-todas-link">
-              Ver todas
-            </a>
+                <div class="sidebar-thumb-overlay">
+                  <span class="overlay-title">{{otraFoto.titulo}}</span>
+                  <span class="overlay-stat">
+                    <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon> {{otraFoto.votosPositivos}}
+                    &nbsp;
+                    <fa-icon [icon]="['fas', 'eye']"></fa-icon> {{otraFoto.visitantes}}
+                  </span>
+                </div>
+              </a>
+              }
+            </div>
           </div>
           }
+
         </aside>
 
         <!-- Contenido principal -->

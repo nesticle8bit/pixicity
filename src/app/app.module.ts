@@ -314,6 +314,7 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
                 `${environment.api}/api/usuarios/isFollowingTheUser`,
                 `${environment.api}/api/posts/getCloudTags`,
                 `${environment.api}/api/web/getAfiliados`,
+                `${environment.api}/api/fotos/GetTopFotos`,
                 `${environment.api}/api/general/getEstadisticas`,
                 `${environment.api}/api/usuarios/getUsuarioInfo`,
                 `${environment.api}/api/usuarios/getUserStatus`
