@@ -8,8 +8,8 @@ describe('WhoIsIpComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WhoIsIpComponent ]
-    })
+    imports: [WhoIsIpComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(WhoIsIpComponent);

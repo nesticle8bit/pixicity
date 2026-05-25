@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-table-comments',
   templateUrl: './table-comments.component.html',
   styleUrls: ['./table-comments.component.scss'],

@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-section-user-info-login',
   templateUrl: './section-user-info-login.component.html',
   styleUrls: ['./section-user-info-login.component.scss'],

@@ -1,58 +1,58 @@
 <h6 class="main-title">
-    <span>TOP's Usuarios</span>
-    <!-- <app-top-times-selector></app-top-times-selector> -->
+  <span>TOP's Usuarios</span>
+  <!-- <app-top-times-selector></app-top-times-selector> -->
 </h6>
 
-<section *ngIf="topUsers.length < 1">
+@if (topUsers.length < 1) {
+  <section>
     <div class="alert alert-warning">
-        😳 <strong>Aún no se han encontrado top de usuarios en Pixicity!</strong>
+      😳 <strong>Aún no se han encontrado top de usuarios en Taringas!</strong>
     </div>
-</section>
+  </section>
+}
 
-<article class="top-user mb-3" *ngIf="topUsers.length > 0">
+@if (topUsers.length > 0) {
+  <article class="top-user mb-3">
     <a class="avatar-top">
-        <app-user-avatar [avatar]="topUsers[0].avatar" [userName]="topUsers[0].userName" [height]="55" [width]="55"
-            matTooltip="Avatar de {{topUsers[0].userName}}" [matTooltipPosition]="'left'">
-        </app-user-avatar>
-
-        <h3 class="float-start" [routerLink]="['/perfil/' + topUsers[0].userName]">
-            {{topUsers[0].userName}}
-        </h3>
-
-        <span class="float-end puntos">
-            {{topUsers[0].puntos}}
-        </span>
-
-        <div class="clearfix"></div>
+      <app-user-avatar [avatar]="topUsers[0].avatar" [userName]="topUsers[0].userName" [height]="55" [width]="55"
+        matTooltip="Avatar de {{topUsers[0].userName}}" [matTooltipPosition]="'left'">
+      </app-user-avatar>
+      <h3 class="float-start" [routerLink]="['/perfil/' + topUsers[0].userName]" [appUserPopover]="topUsers[0].userName">
+        {{topUsers[0].userName}}
+      </h3>
+      <span class="float-end puntos">
+        {{topUsers[0].puntos}}
+      </span>
+      <div class="clearfix"></div>
     </a>
-
     <div id="sigueme">
-        <app-follow-button [userName]="topUsers[0].userName"></app-follow-button>
+      <app-follow-button [userName]="topUsers[0].userName"></app-follow-button>
     </div>
-</article>
+  </article>
+}
 
-<ng-container class="last-posts" *ngIf="topUsers.length > 0">
-    <article class="list-posts--zebra" *ngFor="let topUser of topUsers; let first = first; let i = index">
-        <ng-container *ngIf="!first">
-            <strong class="float-start">{{i + 1}}</strong>
-
-            <small>
-                <a [routerLink]="['/perfil/' + topUser.userName]">
-                    {{topUser.userName}}
-                </a>
-            </small>
-
-            <span class="float-end value">
-                {{topUser.puntos}}
-            </span>
-        </ng-container>
-    </article>
-
+@if (topUsers.length > 0) {
+  <ng-container class="last-posts">
+    @for (topUser of topUsers; track topUser; let first = $first; let i = $index) {
+      <article class="list-posts--zebra">
+        @if (!first) {
+          <strong class="float-start">{{i + 1}}</strong>
+          <small>
+            <a [routerLink]="['/perfil/' + topUser.userName]" [appUserPopover]="topUser.userName">
+              {{topUser.userName}}
+            </a>
+          </small>
+          <span class="float-end value">
+            {{topUser.puntos}}
+          </span>
+        }
+      </article>
+    }
     <div class="view-more-list">
-        <a [routerLink]="['/tops']">
-            Ver más
-        </a>
+      <a [routerLink]="['/tops']">
+        Ver más
+      </a>
     </div>
-
     <br>
-</ng-container>
+    </ng-container>
+  }

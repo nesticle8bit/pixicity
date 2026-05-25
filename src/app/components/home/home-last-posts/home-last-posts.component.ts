@@ -5,6 +5,7 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 
 @Component({
+  standalone: false,
   selector: 'app-home-last-posts',
   templateUrl: './home-last-posts.component.html',
   styleUrls: ['./home-last-posts.component.scss'],

@@ -1,7 +1,9 @@
 <section class="textrank-tags">
-        <div *ngFor="let current of cloudTags" class="tag-size{{current.class}}">
-                <a rel="tag" [routerLink]="['/buscar/posts/' + current.tag]">
-                        {{current.tag}}
-                </a>
-        </div>
+  @for (current of cloudTags; track current) {
+    <div class="tag-size{{current.class}}">
+      <a rel="tag" [routerLink]="['/buscar/posts/' + current.tag]">
+        {{current.tag}}
+      </a>
+    </div>
+  }
 </section>

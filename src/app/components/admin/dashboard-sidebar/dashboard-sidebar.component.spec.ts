@@ -8,8 +8,8 @@ describe('DashboardSidebarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DashboardSidebarComponent ]
-    })
+    imports: [DashboardSidebarComponent]
+})
     .compileComponents();
   });
 

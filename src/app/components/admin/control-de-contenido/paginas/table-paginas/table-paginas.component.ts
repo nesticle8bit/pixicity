@@ -8,6 +8,7 @@ import { DialogCreateUpdatePaginasComponent } from '../dialog-create-update-pagi
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-table-paginas',
   templateUrl: './table-paginas.component.html',
   styleUrls: ['./table-paginas.component.scss'],

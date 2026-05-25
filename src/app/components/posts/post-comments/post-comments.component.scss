@@ -1,0 +1,33 @@
+.voto-btn {
+  cursor: pointer;
+  color: #999;
+  padding: 0 4px;
+  transition: color 0.15s;
+
+  &:hover {
+    color: #555;
+  }
+
+  &.active-like {
+    color: #4caf50;
+  }
+
+  &.active-dislike {
+    color: #f44336;
+  }
+}
+
+.votos-count {
+  font-size: 0.85em;
+  font-weight: 600;
+  padding: 0 3px;
+  color: #888;
+
+  &.positivo {
+    color: #4caf50;
+  }
+
+  &.negativo {
+    color: #f44336;
+  }
+}

@@ -14,6 +14,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],

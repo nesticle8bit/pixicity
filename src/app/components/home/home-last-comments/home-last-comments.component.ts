@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-home-last-comments',
   templateUrl: './home-last-comments.component.html',
   styleUrls: ['./home-last-comments.component.scss'],

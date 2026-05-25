@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-home-last-registered-users',
   templateUrl: './home-last-registered-users.component.html',
   styleUrls: ['./home-last-registered-users.component.scss']

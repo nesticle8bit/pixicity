@@ -1,20 +1,41 @@
 <div class="container--home container">
     <div class="row">
-        <div class="col-12 col-sm-4">
-            <app-home-last-posts [categoria]="categoria"></app-home-last-posts>
+        <!-- izquierda: posts list + stats column -->
+        <div class="col-12 col-md-8 home-izquierda">
+            <div class="row">
+                <!-- boxi: recent posts -->
+                <div class="col-12 col-md-7 home-boxi">
+                    <app-home-last-posts [categoria]="categoria"></app-home-last-posts>
+                </div>
+
+                <!-- boxd: stats, comments, top posts, top users -->
+                <div class="col-12 col-md-5 home-boxd">
+                    <app-home-stats></app-home-stats>
+
+                    <div class="boxposts separa">
+                        <app-home-last-comments></app-home-last-comments>
+                    </div>
+
+                    <div class="boxposts separa">
+                        <app-home-top-posts></app-home-top-posts>
+                    </div>
+
+                    <div class="boxposts separa">
+                        <app-home-top-users></app-home-top-users>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="col-12 col-sm-4">
-            <app-home-stats></app-home-stats>
-            <app-home-last-comments></app-home-last-comments>
-            <app-home-top-posts></app-home-top-posts>
-            <app-home-top-users></app-home-top-users>
-        </div>
+        <!-- derecha: sidebar -->
+        <div class="col-12 col-md-4 home-derecha">
+            <div class="boxposts separa">
+                <app-tags-cloud></app-tags-cloud>
+            </div>
 
-        <div class="col-12 col-sm-4">
-            <app-tags-cloud></app-tags-cloud>
-            <!-- <app-home-last-photos></app-home-last-photos> -->
-            <app-home-afiliados></app-home-afiliados>
+            <div class="boxposts separa">
+                <app-home-afiliados></app-home-afiliados>
+            </div>
 
             <div class="text-center">
                 <ads-by-type class="d-none d-sm-block" [type]="'160x600'"></ads-by-type>

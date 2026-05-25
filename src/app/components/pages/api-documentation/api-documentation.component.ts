@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
+  standalone: false,
   selector: 'app-api-documentation',
   templateUrl: './api-documentation.component.html',
   styleUrls: ['./api-documentation.component.scss'],

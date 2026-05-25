@@ -17,6 +17,15 @@ export class HttpGeneralService implements IHttpGeneralService {
     private paginationService: PaginationService
   ) {}
 
+  getAdminEstadisticas(): Observable<any> {
+    return this.http
+      .get<any>(`${environment.api}/api/general/getAdminEstadisticas`)
+      .pipe(
+        map((response: any) => (response.status === 200 ? response.data : null))
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   getEstadisticas(): Observable<any> {
     return this.http
       .get<any>(`${environment.api}/api/general/getEstadisticas`)

@@ -1,0 +1,110 @@
+<div class="container container--home pb-3 foto-create-page mx-auto">
+  <div class="row">
+    <div class="col-12">
+      <h2>{{isEdit ? 'Editar Foto' : 'Subir Foto'}}</h2>
+
+      <form [formGroup]="formGroup" (ngSubmit)="submit()">
+        <div class="form-group">
+          <label>Título <span class="required">*</span></label>
+          <input type="text" formControlName="titulo" class="form-control" placeholder="Título de la foto"
+            maxlength="150">
+          @if (formGroup.get('titulo')?.invalid && formGroup.get('titulo')?.touched) {
+          <small class="text-danger">El título es requerido (máx. 150 caracteres)</small>
+          }
+        </div>
+
+        <!-- Descripción -->
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea formControlName="descripcion" class="form-control" placeholder="Descripción de la foto..." rows="3"
+            maxlength="1000"></textarea>
+        </div>
+
+        <!-- Categoría -->
+        <div class="form-group">
+          <label>Categoría <span class="required">*</span></label>
+          <ng-select formControlName="categoriaId" [items]="categorias" bindLabel="nombre" bindValue="id"
+            placeholder="Selecciona una categoría">
+          </ng-select>
+          @if (formGroup.get('categoriaId')?.invalid && formGroup.get('categoriaId')?.touched) {
+          <small class="text-danger">La categoría es requerida</small>
+          }
+        </div>
+
+        <!-- Fuente de imagen -->
+        <div class="form-group">
+          <label>Imagen <span class="required">*</span></label>
+          <div class="image-source-tabs">
+            <button type="button" class="tab-btn" [ngClass]="{'active': imageSource === 'url'}"
+              (click)="imageSource = 'url'">
+              <fa-icon [icon]="['fas', 'link']"></fa-icon> Por URL
+            </button>
+            <button type="button" class="tab-btn" [ngClass]="{'active': imageSource === 'upload'}"
+              (click)="imageSource = 'upload'">
+              <fa-icon [icon]="['fas', 'upload']"></fa-icon> Subir archivo
+            </button>
+          </div>
+
+          @if (imageSource === 'url') {
+          <input type="url" formControlName="imageUrl" class="form-control mt-2"
+            placeholder="https://ejemplo.com/imagen.jpg" (input)="onUrlChange($event)">
+          }
+
+          @if (imageSource === 'upload') {
+          <div class="upload-area mt-2">
+            <input type="file" accept="image/*" (change)="onFileSelected($event)" class="file-input" #fileInput>
+            <button type="button" class="boton gris" (click)="fileInput.click()">
+              <fa-icon [icon]="['fas', 'image']"></fa-icon> Seleccionar imagen
+            </button>
+            @if (uploadedFile) {
+            <span class="file-name">{{uploadedFile.name}}</span>
+            @if (!formGroup.value.imageUrl?.startsWith('/images/')) {
+            <button type="button" class="boton azul ms-2" (click)="uploadAndSetUrl()" [disabled]="uploading">
+              @if (uploading) {
+              <img src="/assets/images/min-carga.gif" style="height:16px"> Subiendo...
+              } @else {
+              <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon> Comprimir y subir
+              }
+            </button>
+            } @else {
+            <span class="text-success ms-2">
+              <fa-icon [icon]="['fas', 'check']"></fa-icon> Subida correctamente
+            </span>
+            }
+            }
+          </div>
+          <!-- Hidden field so validation works -->
+          <input type="hidden" formControlName="imageUrl">
+          }
+
+          @if (formGroup.get('imageUrl')?.invalid && formGroup.get('imageUrl')?.touched) {
+          <small class="text-danger">La imagen es requerida</small>
+          }
+        </div>
+
+        @if (previewUrl) {
+        <div class="form-group">
+          <label>Vista previa</label>
+          <div class="image-preview">
+            <img [src]="previewUrl" alt="Vista previa">
+          </div>
+        </div>
+        }
+
+        <div class="form-actions">
+          <button type="button" class="boton gris me-2" routerLink="/fotos">
+            Cancelar
+          </button>
+          <button type="submit" class="boton azul" [disabled]="loading || uploading">
+            @if (loading) {
+            <img src="/assets/images/min-carga.gif" style="height:16px"> Guardando...
+            } @else {
+            <fa-icon [icon]="['fas', isEdit ? 'save' : 'plus']"></fa-icon>
+            {{isEdit ? 'Actualizar' : 'Publicar Foto'}}
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

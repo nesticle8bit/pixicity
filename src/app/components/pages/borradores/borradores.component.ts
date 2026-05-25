@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-borradores',
   templateUrl: './borradores.component.html',
   styleUrls: ['./borradores.component.scss'],

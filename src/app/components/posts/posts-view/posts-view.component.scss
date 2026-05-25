@@ -1,0 +1,10 @@
+.post-view-content {
+    padding-right: 38px;
+}
+
+@media (max-width: 767.98px) {
+    .post-view-content {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}

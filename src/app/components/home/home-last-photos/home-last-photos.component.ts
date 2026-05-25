@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-home-last-photos',
   templateUrl: './home-last-photos.component.html',
   styleUrls: ['./home-last-photos.component.scss']

@@ -1,4 +1,3 @@
-import { Editor, Toolbar } from 'ngx-editor';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnInit } from '@angular/core';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
@@ -6,40 +5,26 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-dialog-enviar-mp',
   templateUrl: './dialog-enviar-mp.component.html',
   styleUrls: ['./dialog-enviar-mp.component.scss'],
 })
 export class DialogEnviarMPComponent implements OnInit {
   public formGroup: FormGroup;
-  public editor: Editor;
-  public toolbar: Toolbar = [
-    ['bold', 'italic'],
-    ['underline', 'strike'],
-    ['code', 'blockquote'],
-    ['ordered_list', 'bullet_list'],
-    ['text_color'],
-    ['align_left', 'align_center', 'align_right', 'align_justify'],
-    ['horizontal_rule', 'format_clear'],
-  ];
   public userName: string = '';
 
   constructor(
     private dialogRef: MatDialogRef<DialogEnviarMPComponent>,
     private mensajeService: IHttpMensajesService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
   ) {
     this.formGroup = this.formBuilder.group({
       aUserName: ['', Validators.required],
       asunto: ['', Validators.required],
       contenido: ['', Validators.required],
-      captcha: ['', Validators.required],
-    });
-
-    this.editor = new Editor({
-      history: true,
-      keyboardShortcuts: true,
+      // captcha: ['', Validators.required],
     });
   }
 

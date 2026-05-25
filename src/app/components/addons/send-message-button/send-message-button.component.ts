@@ -4,6 +4,7 @@ import { DialogEnviarMPComponent } from '../../dialogs/dialog-enviar-mp/dialog-e
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
+  standalone: false,
   selector: 'app-send-message-button',
   templateUrl: './send-message-button.component.html',
   styleUrls: ['./send-message-button.component.scss'],

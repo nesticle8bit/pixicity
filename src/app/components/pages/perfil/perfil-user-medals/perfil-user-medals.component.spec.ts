@@ -8,8 +8,8 @@ describe('PerfilUserMedalsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PerfilUserMedalsComponent ]
-    })
+    imports: [PerfilUserMedalsComponent]
+})
     .compileComponents();
   });
 

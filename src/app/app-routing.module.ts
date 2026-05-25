@@ -1,24 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardAfiliadosComponent } from './components/admin/control-de-comunidad/afiliados/dashboard-afiliados/dashboard-afiliados.component';
-import { DashboardCategoriasComponent } from './components/admin/control-de-comunidad/categorias/dashboard-categorias/dashboard-categorias.component';
-import { DashboardEstadisticasComponent } from './components/admin/control-de-comunidad/estadisticas/dashboard-estadisticas/dashboard-estadisticas.component';
-import { DashboardReportesComponent } from './components/admin/control-de-comunidad/reportes/dashboard-reportes/dashboard-reportes.component';
-import { DashboardVotosComponent } from './components/admin/control-de-comunidad/votos/dashboard-votos/dashboard-votos.component';
-import { DashboardCommentsComponent } from './components/admin/control-de-contenido/comentarios/dashboard-comments/dashboard-comments.component';
-import { DashboardContactosComponent } from './components/admin/control-de-contenido/contactos/dashboard-contactos/dashboard-contactos.component';
-import { DashboardMonitorComponent } from './components/admin/control-de-contenido/monitor/dashboard-monitor/dashboard-monitor.component';
-import { DashboardNoticiasComponent } from './components/admin/control-de-contenido/noticias/dashboard-noticias/dashboard-noticias.component';
-import { DashboardPaisesComponent } from './components/admin/control-de-contenido/paises/dashboard-paises/dashboard-paises.component';
-import { DashboardPostsComponent } from './components/admin/control-de-contenido/posts/dashboard-posts/dashboard-posts.component';
-import { DashboardShoutsComponent } from './components/admin/control-de-contenido/shouts/dashboard-shouts/dashboard-shouts.component';
-import { DashboardAdminComponent } from './components/admin/dashboard-admin/dashboard-admin.component';
-import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
-import { DashboardConfigurationComponent } from './components/admin/general/configuration/dashboard-configuration/dashboard-configuration.component';
-import { DashboardAdsComponent } from './components/admin/general/publicidad/dashboard-ads/dashboard-ads.component';
-import { DashboardRangosComponent } from './components/admin/usuarios/rangos/dashboard-rangos/dashboard-rangos.component';
-import { DashboardSesionesComponent } from './components/admin/usuarios/sesiones/dashboard-sesiones/dashboard-sesiones.component';
-import { DashboardUsuariosComponent } from './components/admin/usuarios/usuarios/dashboard-usuarios/dashboard-usuarios.component';
 import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
 import { AccountComponent } from './components/pages/account/account.component';
 import { ApiDocumentationComponent } from './components/pages/api-documentation/api-documentation.component';
@@ -39,17 +20,17 @@ import { UsuariosComponent } from './components/pages/usuarios/usuarios.componen
 import { PostNotFoundComponent } from './components/posts/post-not-found/post-not-found.component';
 import { PostPrivadoComponent } from './components/posts/post-privado/post-privado.component';
 import { PostsCreateComponent } from './components/posts/posts-create/posts-create.component';
+import { FotosIndexComponent } from './components/fotos/fotos-index/fotos-index.component';
+import { FotoDetailComponent } from './components/fotos/foto-detail/foto-detail.component';
+import { FotoCreateComponent } from './components/fotos/foto-create/foto-create.component';
 import { PostsViewComponent } from './components/posts/posts-view/posts-view.component';
 import { SectionHomeForumComponent } from './components/sections/section-home-forum/section-home-forum.component';
-import { SectionHomeComponent } from './components/sections/section-home/section-home.component';
 import { AdministradorAuthorization } from './shared/guards/adminAuthorization.guard';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { AuthLoggedUserGuard } from './shared/guards/auth.loggedUser.guard';
-import { DashboardPaginasComponent } from './components/admin/control-de-contenido/paginas/dashboard-paginas/dashboard-paginas.component';
 import { PaginasComponent } from './components/pages/paginas/paginas.component';
 import { MensajesConversacionComponent } from './components/pages/mensajes/mensajes-conversacion/mensajes-conversacion.component';
 import { MensajesEnviadosComponent } from './components/pages/mensajes/mensajes-enviados/mensajes-enviados.component';
-import { DashboardMensajesComponent } from './components/admin/control-de-contenido/mensajes/dashboard-mensajes/dashboard-mensajes.component';
 
 const routes: Routes = [
   { path: '', component: SectionHomeForumComponent },
@@ -136,6 +117,20 @@ const routes: Routes = [
     component: MiHomeComponent,
     canActivate: [AuthGuard],
   },
+  { path: 'fotos', component: FotosIndexComponent },
+  { path: 'fotos/:userName', component: FotosIndexComponent },
+  { path: 'fotos/:userName/:id/:slug', component: FotoDetailComponent },
+  {
+    path: 'crear/foto',
+    component: FotoCreateComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'fotos/actualizar/:id',
+    component: FotoCreateComponent,
+    canActivate: [AuthGuard],
+  },
+
   {
     path: 'paginas/:slug',
     component: PaginasComponent,
@@ -150,110 +145,9 @@ const routes: Routes = [
 
   {
     path: 'administracion',
-    component: DashboardComponent,
-    children: [
-      {
-        path: 'dashboard',
-        component: DashboardAdminComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'configuracion',
-        component: DashboardConfigurationComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'posts',
-        component: DashboardPostsComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'afiliados',
-        component: DashboardAfiliadosComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'categorias',
-        component: DashboardCategoriasComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'publicidad',
-        component: DashboardAdsComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'comentarios',
-        component: DashboardCommentsComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'paises',
-        component: DashboardPaisesComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'sesiones',
-        component: DashboardSesionesComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'denuncias',
-        component: DashboardReportesComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'usuarios',
-        component: DashboardUsuariosComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'rango-usuarios',
-        component: DashboardRangosComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'shouts',
-        component: DashboardShoutsComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'estadisticas',
-        component: DashboardEstadisticasComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'noticias',
-        component: DashboardNoticiasComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'monitor',
-        component: DashboardMonitorComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'contacto',
-        component: DashboardContactosComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'votos',
-        component: DashboardVotosComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'paginas',
-        component: DashboardPaginasComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-      {
-        path: 'mensajes',
-        component: DashboardMensajesComponent,
-        canActivate: [AuthGuard, AdministradorAuthorization],
-      },
-    ],
     canActivate: [AuthGuard, AdministradorAuthorization],
+    loadChildren: () =>
+      import('./modules/admin/admin.module').then((m) => m.AdminModule),
   },
 
   { path: '*', redirectTo: '' },

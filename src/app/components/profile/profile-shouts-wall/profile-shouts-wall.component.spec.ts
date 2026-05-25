@@ -8,8 +8,8 @@ describe('ProfileShoutsWallComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProfileShoutsWallComponent ]
-    })
+    imports: [ProfileShoutsWallComponent]
+})
     .compileComponents();
   });
 

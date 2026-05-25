@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-table-shouts',
   templateUrl: './table-shouts.component.html',
   styleUrls: ['./table-shouts.component.scss'],

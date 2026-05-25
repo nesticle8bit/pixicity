@@ -1,12 +1,12 @@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Validators } from 'ngx-editor';
+import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import Swal from 'sweetalert2';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-dialog-update-afiliados',
   templateUrl: './dialog-update-afiliados.component.html',
   styleUrls: ['./dialog-update-afiliados.component.scss'],

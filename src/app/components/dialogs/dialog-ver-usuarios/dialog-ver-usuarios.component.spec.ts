@@ -8,8 +8,8 @@ describe('DialogVerUsuariosComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogVerUsuariosComponent ]
-    })
+    imports: [DialogVerUsuariosComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(DialogVerUsuariosComponent);

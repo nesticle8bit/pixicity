@@ -1,0 +1,110 @@
+<div class="upop">
+
+  <!-- Skeleton -->
+  @if (loading) {
+    <div class="upop__skeleton">
+      <div class="skel-avatar"></div>
+      <div class="skel-lines">
+        <div class="skel-line w70"></div>
+        <div class="skel-line w50"></div>
+        <div class="skel-line w80"></div>
+      </div>
+    </div>
+  }
+
+  <!-- Card content -->
+  @if (!loading && userData) {
+    <!-- Header -->
+    <div class="upop__header">
+      <div class="upop__avatar-wrap">
+        <app-user-avatar
+          [class]="'upop__avatar'"
+          [avatar]="userData.avatar"
+          [userName]="userData.userName"
+          [width]="64">
+        </app-user-avatar>
+        <span class="upop__online-dot"
+          [ngClass]="{'online': isOnline, 'offline': !isOnline}"
+          [title]="isOnline ? 'Online' : 'Offline'">
+        </span>
+      </div>
+
+      <div class="upop__user-info">
+        <div class="upop__username">
+          {{userData.userName}}
+          <span class="upop__online-label" [ngClass]="{'online': isOnline}">
+            {{isOnline ? 'Online' : 'Offline'}}
+          </span>
+        </div>
+
+        @if (userData.completeName) {
+          <div class="upop__fullname">{{userData.completeName}}</div>
+        }
+
+        @if (userData.rango) {
+          <span class="upop__rango" [style.color]="userData.rango.color">
+            <!-- <fa-icon [icon]="['fas', 'star']" class="me-1"></fa-icon> -->
+             <img [src]="'/assets/images/icons/rangos/' + userData?.rango?.icono"
+                  [alt]="userData.rango.nombre"
+                  class="upop__rango-icon image-middle me-1">
+            {{userData.rango.nombre}}
+          </span>
+        }
+
+        @if (userData.pais) {
+          <div class="upop__country">
+            <addon-country-flag
+              [iso2]="userData.pais.iso2 || userData.pais.isO2"
+              [title]="userData.pais.nombre">
+            </addon-country-flag>
+            <span>{{userData.pais.nombre}}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Personal message -->
+    @if (userData.mensajePersonal) {
+      <div class="upop__msg">
+        <fa-icon [icon]="['fas', 'quote-left']"></fa-icon>
+        {{userData.mensajePersonal | truncate:[90]}}
+      </div>
+    }
+
+    <!-- Stats -->
+    <div class="upop__stats">
+      <div class="upop__stat">
+        <span class="upop__stat-val">{{userData.postsCount || 0}}</span>
+        <span class="upop__stat-lbl">Posts</span>
+      </div>
+      <div class="upop__stat">
+        <span class="upop__stat-val">{{userData.comentariosCount || 0}}</span>
+        <span class="upop__stat-lbl">Comentarios</span>
+      </div>
+      <div class="upop__stat">
+        <span class="upop__stat-val">{{userData.seguidoresCount || 0}}</span>
+        <span class="upop__stat-lbl">Seguidores</span>
+      </div>
+      <div class="upop__stat">
+        <span class="upop__stat-val">{{userData.puntos || 0}}</span>
+        <span class="upop__stat-lbl">Puntos</span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="upop__footer">
+      <span class="upop__since">
+        <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
+        Miembro desde {{memberSince}}
+      </span>
+      <a [routerLink]="['/perfil', userData.userName]" class="upop__link">
+        Ver perfil →
+      </a>
+    </div>
+  }
+
+  @if (!loading && !userData) {
+    <div class="upop__error">Usuario no encontrado</div>
+  }
+
+</div>

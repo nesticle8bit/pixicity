@@ -8,8 +8,8 @@ describe('TableVotosComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TableVotosComponent ]
-    })
+    imports: [TableVotosComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(TableVotosComponent);

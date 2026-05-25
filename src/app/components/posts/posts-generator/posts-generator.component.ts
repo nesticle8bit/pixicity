@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Validators } from 'ngx-editor';
 
 @Component({
+  standalone: false,
   selector: 'app-posts-generator',
   templateUrl: './posts-generator.component.html',
   styleUrls: ['./posts-generator.component.scss'],
@@ -33,7 +33,7 @@ export class PostsGeneratorComponent implements OnInit {
     let buildPost = ``;
 
     if (form.imagenInicial) {
-      buildPost += `<img src='https://i.imgur.com/m7UFsBF.png' alt='Bienvenidos a Pixicity!' title='Bienvenidos a Pixicity!' /><br/><br/>`;
+      buildPost += `<img src='https://i.imgur.com/m7UFsBF.png' alt='Bienvenidos a Taringas!' title='Bienvenidos a Taringas!' /><br/><br/>`;
       buildPost += `<img src='${form.imagenInicial}' alt='Imagen Principal del Post' title='Imagen Principal del Post' /><br/><br/>`;
     }
 

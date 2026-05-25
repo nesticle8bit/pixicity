@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-table-monitor',
   templateUrl: './table-monitor.component.html',
   styleUrls: ['./table-monitor.component.scss'],

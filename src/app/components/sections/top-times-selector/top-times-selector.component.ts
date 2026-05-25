@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-top-times-selector',
   templateUrl: './top-times-selector.component.html',
   styleUrls: ['./top-times-selector.component.scss'],

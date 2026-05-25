@@ -2,6 +2,7 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-post-related-posts',
   templateUrl: './post-related-posts.component.html',
   styleUrls: ['./post-related-posts.component.scss'],

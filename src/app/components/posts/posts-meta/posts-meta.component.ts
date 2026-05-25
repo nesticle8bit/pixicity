@@ -7,6 +7,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { DialogRecomendarPostComponent } from 'src/app/components/dialogs/dialog-recomendar-post/dialog-recomendar-post.component';
 
 @Component({
+  standalone: false,
   selector: 'app-posts-meta',
   templateUrl: './posts-meta.component.html',
   styleUrls: ['./posts-meta.component.scss'],

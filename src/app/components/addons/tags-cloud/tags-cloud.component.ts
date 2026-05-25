@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-tags-cloud',
   templateUrl: './tags-cloud.component.html',
   styleUrls: ['./tags-cloud.component.scss'],

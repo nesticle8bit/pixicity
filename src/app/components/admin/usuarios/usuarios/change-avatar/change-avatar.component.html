@@ -1,4 +1,6 @@
-<a class="button-uppercase bnaranja follow_user_post" (click)="changeAvatar()"
-    *ngIf="currentUser.usuario && currentUser.usuario.rango === 'Administrador' && data.nombre !== 'Administrador'">
+@if (currentUser.usuario && currentUser.usuario.rango === 'Administrador' && data.nombre !== 'Administrador') {
+  <a class="button-uppercase bnaranja follow_user_post" (click)="changeAvatar()"
+    >
     <fa-icon [icon]="['fas', 'image']"></fa-icon> Cambiar avatar
-</a>
+  </a>
+}

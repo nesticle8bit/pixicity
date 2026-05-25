@@ -8,6 +8,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-section-home-forum',
   templateUrl: './section-home-forum.component.html',
   styleUrls: ['./section-home-forum.component.scss'],
@@ -34,7 +35,7 @@ export class SectionHomeForumComponent implements OnInit {
 
     this.seoService.setSEO({
       title:
-        'Pixicity - Ciudad Pixelada | Comunidad para Compartir Información',
+        'Taringas - Inteligencia colectiva | Comunidad para Compartir Información',
       description: '',
       tags: [],
       type: 'Red social',
@@ -42,7 +43,7 @@ export class SectionHomeForumComponent implements OnInit {
     });
 
     this.title.setTitle(
-      'Pixicity - Ciudad Pixelada | Comunidad para Compartir Información'
+      'Taringas - Inteligencia colectiva | Comunidad para Compartir Información'
     );
   }
 
@@ -71,7 +72,7 @@ export class SectionHomeForumComponent implements OnInit {
   sessionOnlineUser(): void {
     this.securityService.sessionOnlineUser().subscribe((response: any) => {
       console.log(
-        '🐼 Estos mensajes van a ser temporales, ignora y cierra el inspeccionar \n Att: Pixicity!'
+        '🐼 Estos mensajes van a ser temporales, ignora y cierra el inspeccionar \n Att: Taringas!'
       );
     });
   }

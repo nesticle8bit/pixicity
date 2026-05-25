@@ -8,8 +8,8 @@ describe('DialogAfiliarseComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogAfiliarseComponent ]
-    })
+    imports: [DialogAfiliarseComponent]
+})
     .compileComponents();
   });
 

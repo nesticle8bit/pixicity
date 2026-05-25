@@ -8,8 +8,8 @@ describe('DialogDenunciarPostComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogDenunciarPostComponent ]
-    })
+    imports: [DialogDenunciarPostComponent]
+})
     .compileComponents();
   });
 

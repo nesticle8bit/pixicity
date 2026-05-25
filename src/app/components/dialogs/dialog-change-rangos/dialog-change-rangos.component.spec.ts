@@ -8,8 +8,8 @@ describe('DialogChangeRangosComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogChangeRangosComponent ]
-    })
+    imports: [DialogChangeRangosComponent]
+})
     .compileComponents();
   });
 

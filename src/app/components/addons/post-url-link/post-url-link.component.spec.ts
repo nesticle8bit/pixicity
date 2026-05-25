@@ -8,8 +8,8 @@ describe('PostUrlLinkComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PostUrlLinkComponent ]
-    })
+    imports: [PostUrlLinkComponent]
+})
     .compileComponents();
   });
 

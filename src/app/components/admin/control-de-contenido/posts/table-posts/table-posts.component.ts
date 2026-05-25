@@ -5,6 +5,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-table-posts',
   templateUrl: './table-posts.component.html',
   styleUrls: ['./table-posts.component.scss'],

@@ -8,8 +8,8 @@ describe('DialogVerReporteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogVerReporteComponent ]
-    })
+    imports: [DialogVerReporteComponent]
+})
     .compileComponents();
   });
 

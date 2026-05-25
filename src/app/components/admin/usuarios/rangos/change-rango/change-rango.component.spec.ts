@@ -8,8 +8,8 @@ describe('ChangeRangoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ChangeRangoComponent ]
-    })
+    imports: [ChangeRangoComponent]
+})
     .compileComponents();
   });
 

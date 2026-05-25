@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-posts-nav',
   templateUrl: './posts-nav.component.html',
   styleUrls: ['./posts-nav.component.scss'],

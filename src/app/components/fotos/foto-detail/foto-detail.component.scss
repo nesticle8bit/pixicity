@@ -1,0 +1,174 @@
+.foto-detail-page {
+  // max-width: 1000px;
+  padding-bottom: 16px;
+}
+
+.foto-detail-layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 20px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Sidebar
+.foto-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-username {
+  font-weight: 600;
+  color: #333;
+  text-decoration: none;
+  &:hover { color: #007bff; }
+}
+
+.sidebar-otras {
+  h4 {
+    font-size: .9rem;
+    color: #555;
+    margin: 0 0 8px;
+  }
+}
+
+.sidebar-foto-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  text-decoration: none;
+  color: #666;
+  font-size: .8rem;
+
+  &:hover { color: #007bff; }
+}
+
+.sidebar-thumb {
+  width: 48px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: 3px;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.ver-todas-link {
+  display: block;
+  font-size: .82rem;
+  color: #007bff;
+  text-decoration: none;
+  margin-top: 4px;
+  &:hover { text-decoration: underline; }
+}
+
+// Main
+.foto-main-img {
+  max-width: 100%;
+  border-radius: 6px;
+  display: block;
+}
+
+.foto-main-title {
+  font-size: 1.4rem;
+  margin: 14px 0 6px;
+}
+
+.foto-main-meta {
+  display: flex;
+  gap: 12px;
+  font-size: .85rem;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.foto-cat {
+  background: #eef;
+  border-radius: 3px;
+  padding: 1px 6px;
+  color: #446;
+}
+
+.foto-main-desc {
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.foto-votos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  background: #f8f8f8;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.voto-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.voto-label {
+  font-weight: 600;
+  font-size: .9rem;
+}
+
+.voto-btn {
+  cursor: pointer;
+  padding: 5px 14px;
+  border-radius: 4px;
+  font-size: .9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid transparent;
+  transition: all .15s;
+
+  &.positivo {
+    color: #4caf50;
+    border-color: #4caf50;
+    &:hover, &.voted { background: #4caf50; color: #fff; }
+  }
+
+  &.negativo {
+    color: #f44336;
+    border-color: #f44336;
+    &:hover, &.voted { background: #f44336; color: #fff; }
+  }
+}
+
+.voto-counts {
+  display: flex;
+  gap: 20px;
+  font-size: .88rem;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #666;
+  }
+}
+
+.foto-owner-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}

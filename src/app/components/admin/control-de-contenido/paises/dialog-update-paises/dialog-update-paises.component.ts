@@ -5,6 +5,7 @@ import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametr
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-dialog-update-paises',
   templateUrl: './dialog-update-paises.component.html',
   styleUrls: ['./dialog-update-paises.component.scss'],

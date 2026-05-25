@@ -1,40 +1,25 @@
-import { Injectable } from '@angular/core';
-import {
-  Router,
-  CanActivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-} from '@angular/router';
+import { inject } from '@angular/core';
+import { Router, CanActivateFn } from '@angular/router';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import * as jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
-@Injectable({ providedIn: 'root' })
-export class AdministradorAuthorization implements CanActivate {
-  constructor(
-    private router: Router,
-    private securityService: IHttpSecurityService
-  ) {}
+export const AdministradorAuthorization: CanActivateFn = () => {
+  const router = inject(Router);
+  const securityService = inject(IHttpSecurityService);
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): boolean {
-    const currentUser = this.securityService.getCurrentUser();
+  const currentUser = securityService.getCurrentUser();
 
-    if (!currentUser) {
-      this.router.navigate(['/login']);
-    }
-
-    const decoded = jwt_decode.default(currentUser.token) as any;
-
-    if (!decoded) {
-      this.router.navigate(['']);
-    }
-
-    if (decoded.role !== 'Administrador') {
-      this.router.navigate(['']);
-    }
-
-    return true;
+  if (!currentUser) {
+    router.navigate(['/login']);
+    return false;
   }
-}
+
+  const decoded = jwtDecode(currentUser.token) as any;
+
+  if (!decoded || decoded.role !== 'Administrador') {
+    router.navigate(['']);
+    return false;
+  }
+
+  return true;
+};

@@ -8,8 +8,8 @@ describe('BanearUsuarioComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BanearUsuarioComponent ]
-    })
+    imports: [BanearUsuarioComponent]
+})
     .compileComponents();
   });
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-categories-selector',
   templateUrl: './categories-selector.component.html',
   styleUrls: ['./categories-selector.component.scss']

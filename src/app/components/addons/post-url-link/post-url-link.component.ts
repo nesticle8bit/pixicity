@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-post-url-link',
   templateUrl: './post-url-link.component.html',
   styleUrls: ['./post-url-link.component.scss'],

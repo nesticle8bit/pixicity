@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
+  standalone: false,
   selector: 'app-en-vivo',
   templateUrl: './en-vivo.component.html',
   styleUrls: ['./en-vivo.component.scss'],

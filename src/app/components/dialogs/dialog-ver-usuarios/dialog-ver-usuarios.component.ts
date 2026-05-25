@@ -2,6 +2,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-dialog-ver-usuarios',
   templateUrl: './dialog-ver-usuarios.component.html',
   styleUrls: ['./dialog-ver-usuarios.component.scss'],

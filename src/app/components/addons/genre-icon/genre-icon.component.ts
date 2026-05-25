@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-genre-icon',
   templateUrl: './genre-icon.component.html',
   styleUrls: ['./genre-icon.component.scss']

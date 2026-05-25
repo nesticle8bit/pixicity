@@ -8,8 +8,8 @@ describe('CountryFlagComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CountryFlagComponent ]
-    })
+    imports: [CountryFlagComponent]
+})
     .compileComponents();
   });
 

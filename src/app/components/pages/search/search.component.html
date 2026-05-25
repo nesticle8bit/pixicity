@@ -1,142 +1,127 @@
 <form [formGroup]="searchFormGroup" (ngSubmit)="search()">
-    <div class="container container--home">
-        <div class="row" *ngIf="!isSearch">
-            <div class="col-12 p-3">
-                <div class="buscador-home mx-auto p-5">
-                    <span id="buscador" class="mb-4"></span>
+  <div class="container container--home">
+    @if (!isSearch) {
+      <div class="row">
+        <div class="col-12 p-3">
+          <div class="buscador-home mx-auto p-5">
+            <span id="buscador" class="mb-4"></span>
+            <input class="buscador me-3" type="text" formControlName="search" />
+            <button type="submit" mat-flat-button color="primary" class="btn-buscar verde">
+              <mat-icon>search</mat-icon> Buscar
+            </button>
+          </div>
+        </div>
+      </div>
+    }
 
-                    <input class="buscador me-3" type="text" formControlName="search" />
-
-                    <button type="submit" mat-flat-button color="primary" class="btn-buscar verde">
-                        <mat-icon>search</mat-icon> Buscar
+    @if (isSearch) {
+      <div class="row">
+        <div class="row">
+          <div class="col-12 col-sm-12 col-md-9">
+            <div class="ladoi">
+              <section class="text-center">
+                <div class="row">
+                  <div class="col-12 col-sm-12 col-md-10 my-2">
+                    <input class="form-control" type="text" formControlName="search" />
+                  </div>
+                  <div class="col-12 col-sm-12 col-md-2 my-2">
+                    <button type="button" (click)="search()" mat-flat-button color="primary" class="col-12"
+                      [disabled]="!searchFormGroup.value.search">
+                      <mat-icon>search</mat-icon> Buscar
                     </button>
+                  </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="row" *ngIf="isSearch">
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-9">
-                    <div class="ladoi">
-                        <section class="text-center">
-                            <div class="row">
-                                <div class="col-12 col-sm-12 col-md-10 my-2">
-                                    <input class="form-control" type="text" formControlName="search" />
-                                </div>
-
-                                <div class="col-12 col-sm-12 col-md-2 my-2">
-                                    <button type="button" (click)="search()" mat-flat-button color="primary" class="col-12"
-                                    [disabled]="!searchFormGroup.value.search">
-                                        <mat-icon>search</mat-icon> Buscar
-                                    </button>
-                                </div>
-                            </div>
+              </section>
+              <section>
+                <h6 class="main-title my-2">
+                  <span style="padding-right: 0;">Posts</span>
+                  <small style="background: #fff; color: #b4b4b4; padding: 0 4px; font-size: .65rem; position: relative; top: -2px;">
+                    ({{totalCount}})
+                  </small>
+                </h6>
+                @if (posts.length > 0) {
+                  @for (post of posts; track post) {
+                    <article class="list-posts row">
+                      <section class="col-12 col-sm-12 col-md-11">
+                        <a class="post-title" [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
+                          <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
+                            alt="{{post.categoria.nombre}}" />
+                            {{post.titulo}}
+                          </a>
+                          <p class="info mt-1">
+                            {{post.fechaRegistro | timeAgo}} - En <a target="_blank" [routerLink]="['/posts/' + post.categoria.seo]">{{post.categoria.nombre}}</a> - Por <a target="_blank" [routerLink]="['/perfil/' + post.usuario.userName]" [appUserPopover]="post.usuario.userName">{{post.usuario.userName}}</a> - 1 Favoritos - {{post.comentarios}} {{post.comentarios === 1 ? 'Comentario' : 'Comentarios'}}
+                          </p>
                         </section>
-
-                        <section>
-                            <h6 class="main-title my-2">
-                                <span style="padding-right: 0;">Posts</span>
-
-                                <small style="background: #fff; color: #b4b4b4; padding: 0 4px; font-size: .65rem; position: relative; top: -2px;">
-                                    ({{totalCount}})
-                                </small>
-                            </h6>
-
-                            <ng-container *ngIf="posts.length > 0">
-                                <article class="list-posts row" *ngFor="let post of posts">
-                                    <section class="col-12 col-sm-12 col-md-11">
-                                        <a class="post-title" [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
-                                            <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
-                                                alt="{{post.categoria.nombre}}" />
-                                            {{post.titulo}}
-                                        </a>
-    
-                                        <p class="info mt-1">
-                                            {{post.fechaRegistro | timeAgo}} - En <a target="_blank" [routerLink]="['/posts/' + post.categoria.seo]">{{post.categoria.nombre}}</a> - Por <a target="_blank" [routerLink]="['/perfil/' + post.usuario.userName]">{{post.usuario.userName}}</a> - 1 Favoritos - {{post.comentarios}} {{post.comentarios === 1 ? 'Comentario' : 'Comentarios'}}
-                                        </p>
-                                    </section>
-    
-                                    <section class="col-12 col-sm-12 col-md-1 text-end">
-                                        <span class="post-points d-block">
-                                            {{post.puntos}}
-                                        </span>
-
-                                        <p class="info mt-0">
-                                            Puntos
-                                        </p>
-                                    </section>
-                                </article>
-                            </ng-container>
-
-                            <div class="alert alert-warning" *ngIf="posts.length < 1">
-                                <h3>👀 Oops... Nada por aquí</h3>
-                                <h6>No hay resultados para "{{searchFormGroup.value?.search}}" intenta usando alguno de los filtros</h6>
-                            </div>
-
-                            <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)">
-                            </mat-paginator>
+                        <section class="col-12 col-sm-12 col-md-1 text-end">
+                          <span class="post-points d-block">
+                            {{post.puntos}}
+                          </span>
+                          <p class="info mt-0">
+                            Puntos
+                          </p>
                         </section>
+                      </article>
+                    }
+                  }
+                  @if (posts.length < 1) {
+                    <div class="alert alert-warning">
+                      <h3>👀 Oops... Nada por aquí</h3>
+                      <h6>No hay resultados para "{{searchFormGroup.value?.search}}" intenta usando alguno de los filtros</h6>
                     </div>
-                </div>
-
-                <div class="col-12 col-sm-12 col-md-3 dotted-border--left">
-                    <h6 class="main-title my-2">
-                        <span>Filtros</span>
-                    </h6>
-
-                    <section class="mb-3">
-                        <label class="control-label">
-                            <span class="required"></span> Categoría
-                        </label>
-    
-                        <ng-select [items]="categorias" bindLabel="nombre" bindValue="seo" formControlName="categoria">
-                            <ng-template ng-label-tmp let-item="item">
-                                <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
-                                    [src]="'/assets/images/categorias/' + item?.icono" />
-                                {{item.nombre}}
-                            </ng-template>
-    
-                            <ng-template ng-option-tmp let-item="item" let-index="index">
-                                <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
-                                    [src]="'/assets/images/categorias/' + item?.icono" />
-                                {{item.nombre}}
-                            </ng-template>
-                        </ng-select>
-                    </section>
-
-                    <section class="mb-3">
-                        <label class="control-label">
-                            <span class="required"></span> Tipo
-                        </label>
-
-                        <br>
-                    
-                        <mat-radio-group class="mt-1" color="primary" formControlName="searchType">
-                            <mat-radio-button class="d-block my-3" value="titulo">
-                                Título
-                            </mat-radio-button>
-
-                            <mat-radio-button class="d-block my-3" value="contenido">
-                                Contenido
-                            </mat-radio-button>
-
-                            <mat-radio-button class="d-block my-3" value="tags">
-                                Tags
-                            </mat-radio-button>
-                        </mat-radio-group>
-                    </section>
-
-                    <section class="mb-3">
-                        <label class="control-label">
-                            <span class="required"></span> Autor
-                        </label>
-
-                        <input type="text" class="form-control" formControlName="autor" />
-                    </section>
-
-                    <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
-                </div>
+                  }
+                  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)">
+                  </mat-paginator>
+                </section>
+              </div>
             </div>
-        </div>
-    </div>
-</form>
+            <div class="col-12 col-sm-12 col-md-3 dotted-border--left">
+              <h6 class="main-title my-2">
+                <span>Filtros</span>
+              </h6>
+              <section class="mb-3">
+                <label class="control-label">
+                  <span class="required"></span> Categoría
+                </label>
+                <ng-select [items]="categorias" bindLabel="nombre" bindValue="seo" formControlName="categoria">
+                  <ng-template ng-label-tmp let-item="item">
+                    <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
+                      [src]="'/assets/images/categorias/' + item?.icono" />
+                      {{item.nombre}}
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-index="index">
+                      <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
+                        [src]="'/assets/images/categorias/' + item?.icono" />
+                        {{item.nombre}}
+                      </ng-template>
+                    </ng-select>
+                  </section>
+                  <section class="mb-3">
+                    <label class="control-label">
+                      <span class="required"></span> Tipo
+                    </label>
+                    <br>
+                      <mat-radio-group class="mt-1" color="primary" formControlName="searchType">
+                        <mat-radio-button class="d-block my-3" value="titulo">
+                          Título
+                        </mat-radio-button>
+                        <mat-radio-button class="d-block my-3" value="contenido">
+                          Contenido
+                        </mat-radio-button>
+                        <mat-radio-button class="d-block my-3" value="tags">
+                          Tags
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </section>
+                    <section class="mb-3">
+                      <label class="control-label">
+                        <span class="required"></span> Autor
+                      </label>
+                      <input type="text" class="form-control" formControlName="autor" />
+                    </section>
+                    <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </form>

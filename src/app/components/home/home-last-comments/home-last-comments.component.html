@@ -1,34 +1,36 @@
 <h6 class="main-title">
-    <span>Comentarios recientes</span>
+  <span>Comentarios recientes</span>
 
-    <div class="float-end">
-        <img class="cursor--pointer" src="/assets/images/icons/arrow-circle-double.png"
-            style="background: #fff; padding-left: 5px" (click)="getUltimosComentarios()" #tooltip="matTooltip"
-            matTooltip="Actualizar comentarios" [matTooltipPosition]="'above'" />
+  <div class="float-end">
+    <img class="cursor--pointer" src="/assets/images/icons/arrow-circle-double.png"
+      style="background: #fff; padding-left: 5px" (click)="getUltimosComentarios()" #tooltip="matTooltip"
+      matTooltip="Actualizar comentarios" [matTooltipPosition]="'above'" />
     </div>
-</h6>
+  </h6>
 
-<section *ngIf="lastComments?.length < 1">
-    <div class="alert alert-warning">
-        😴 <strong>Aún no se han realizado comentarios en Pixicity!</strong>
-    </div>
-</section>
+  @if (lastComments?.length < 1) {
+    <section>
+      <div class="alert alert-warning">
+        😴 <strong>Aún no se han realizado comentarios en Taringas!</strong>
+      </div>
+    </section>
+  }
 
-<ng-container *ngIf="lastComments?.length > 0">
-    <article class="list-posts--zebra" [ngClass]="{'opacity-50': refreshComments}" *ngFor="let comment of lastComments">
+  @if (lastComments?.length > 0) {
+    @for (comment of lastComments; track comment) {
+      <article class="list-posts--zebra" [ngClass]="{'opacity-50': refreshComments}">
         <strong>
-            <a class="value" [routerLink]="['/perfil/' + comment.usuario]">
-                {{comment.usuario}}
-            </a>
+          <a class="value" [routerLink]="['/perfil/' + comment.usuario]" [appUserPopover]="comment.usuario">
+            {{comment.usuario}}
+          </a>
         </strong>
-
         <span class="text-muted">
-            <a [routerLink]="['/posts/' + comment.post.categoria.seo + '/' + comment.post.id + '/' + comment.post.url]"
-                matTooltip="{{comment.post.titulo}}">
-                {{comment.post.titulo | truncate:[28]}}
-            </a>
+          <a [routerLink]="['/posts/' + comment.post.categoria.seo + '/' + comment.post.id + '/' + comment.post.url]"
+            matTooltip="{{comment.post.titulo}}">
+            {{comment.post.titulo | truncate:[28]}}
+          </a>
         </span>
-    </article>
-
+      </article>
+    }
     <div class="mb-3"></div>
-</ng-container>
+  }

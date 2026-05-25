@@ -1,100 +1,99 @@
-<main class="table-responsive" *ngIf="afiliados.length > 0">
+@if (afiliados.length > 0) {
+  <main class="table-responsive">
     <table class="table table-sm table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Creado</th>
-                <th>Código</th>
-                <th>Título</th>
-                <th>URL</th>
-                <th>In <fa-icon class="text-success ms-1" icon="long-arrow-alt-down"></fa-icon></th>
-                <th>Out <fa-icon class="text-primary ms-1" icon="long-arrow-alt-up"></fa-icon></th>
-                <th>Estado</th>
-                <th></th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr *ngFor="let afiliado of afiliados; let i = index">
-                <td>
-                    <span class="cursor--help" matTooltip="{{afiliado.fechaRegistro}}">
-                        {{afiliado.fechaRegistro | timeAgo}}
+      <thead>
+        <tr>
+          <th>Creado</th>
+          <th>Código</th>
+          <th>Título</th>
+          <th>URL</th>
+          <th>In <fa-icon class="text-success ms-1" icon="long-arrow-alt-down"></fa-icon></th>
+          <th>Out <fa-icon class="text-primary ms-1" icon="long-arrow-alt-up"></fa-icon></th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (afiliado of afiliados; track afiliado; let i = $index) {
+          <tr>
+            <td>
+              <span class="cursor--help" matTooltip="{{afiliado.fechaRegistro}}">
+                {{afiliado.fechaRegistro | timeAgo}}
+              </span>
+            </td>
+            <td>
+              <fa-icon [icon]="['fas', 'copy']" matTooltip="Copiar al portapapeles"
+              (click)="clipboard(afiliado.codigo)" class="mr-3 text-secondary cursor--pointer"></fa-icon>
+              &nbsp;
+              <span class="badge bg-primary">
+                {{afiliado.codigo}}
+              </span>
+            </td>
+            <td>
+              {{afiliado.titulo}}
+            </td>
+            <td>
+              <strong>
+                <a href="{{afiliado.url}}" target="_blank" matTooltip="{{afiliado.url}}">
+                  <fa-icon icon="external-link-alt"></fa-icon> {{afiliado.url}}
+                </a>
+              </strong>
+            </td>
+            <td>
+              {{afiliado.hitsIn}}
+            </td>
+            <td>
+              {{afiliado.hitsOut}}
+            </td>
+            <td>
+              <span class="badge" [ngClass]="{'bg-success': afiliado.activo, 'bg-warning': !afiliado.activo}">
+                {{afiliado.activo ? 'Activo' : 'Pendiente'}}
+              </span>
+            </td>
+            <td class="text-center" width="30px">
+              <button class="btn-menu" [matMenuTriggerFor]="menu">
+                <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button type="button" mat-menu-item (click)="activarDesactivarAfiliado(afiliado)">
+                  @if (afiliado.activo) {
+                    <span>
+                      <mat-icon>toggle_off</mat-icon>
+                      Desactivar
                     </span>
-                </td>
-
-                <td>
-                    <fa-icon [icon]="['fas', 'copy']" matTooltip="Copiar al portapapeles"
-                        (click)="clipboard(afiliado.codigo)" class="mr-3 text-secondary cursor--pointer"></fa-icon>
-                    &nbsp;
-
-                    <span class="badge bg-primary">
-                        {{afiliado.codigo}}
+                  }
+                  @if (!afiliado.activo) {
+                    <span>
+                      <mat-icon>toggle_on</mat-icon>
+                      Activar
                     </span>
-                </td>
-
-                <td>
-                    {{afiliado.titulo}}
-                </td>
-
-                <td>
-                    <strong>
-                        <a href="{{afiliado.url}}" target="_blank" matTooltip="{{afiliado.url}}">
-                            <fa-icon icon="external-link-alt"></fa-icon> {{afiliado.url}}
-                        </a>
-                    </strong>
-                </td>
-
-                <td>
-                    {{afiliado.hitsIn}}
-                </td>
-
-                <td>
-                    {{afiliado.hitsOut}}
-                </td>
-
-                <td>
-                    <span class="badge" [ngClass]="{'bg-success': afiliado.activo, 'bg-warning': !afiliado.activo}">
-                        {{afiliado.activo ? 'Activo' : 'Pendiente'}}
-                    </span>
-                </td>
-
-                <td class="text-center" width="30px">
-                    <button class="btn-menu" [matMenuTriggerFor]="menu">
-                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
-                    </button>
-
-                    <mat-menu #menu="matMenu">
-                        <button type="button" mat-menu-item (click)="activarDesactivarAfiliado(afiliado)">
-                            <span *ngIf="afiliado.activo">
-                                <mat-icon>toggle_off</mat-icon>
-                                Desactivar
-                            </span>
-
-                            <span *ngIf="!afiliado.activo">
-                                <mat-icon>toggle_on</mat-icon>
-                                Activar
-                            </span>
-                        </button>
-
-                        <button type="button" mat-menu-item (click)="updateAfiliado(afiliado)">
-                            <mat-icon>edit</mat-icon>
-                            <span>Actualizar</span>
-                        </button>
-
-                        <button type="button" class="text-danger" mat-menu-item (click)="deleteAfiliado(afiliado, i)">
-                            <mat-icon class="text-danger">delete_outline</mat-icon>
-                            <span>Eliminar</span>
-                        </button>
-                    </mat-menu>
-                </td>
-            </tr>
-        </tbody>
+                  }
+                </button>
+                <button type="button" mat-menu-item (click)="updateAfiliado(afiliado)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Actualizar</span>
+                </button>
+                <button type="button" class="text-danger" mat-menu-item (click)="deleteAfiliado(afiliado, i)">
+                  <mat-icon class="text-danger">delete_outline</mat-icon>
+                  <span>Eliminar</span>
+                </button>
+              </mat-menu>
+            </td>
+          </tr>
+        }
+      </tbody>
     </table>
-</main>
+  </main>
+}
 
-<div class="alert alert-warning" *ngIf="afiliados.length < 1">
+@if (afiliados.length < 1) {
+  <div class="alert alert-warning">
     🌱 <strong>Aún no se han encontrado afiliados para esta web</strong>
-</div>
+  </div>
+}
 
-<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
-    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="afiliados.length > 0">
-</mat-paginator>
+@if (afiliados.length > 0) {
+  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
+  </mat-paginator>
+}

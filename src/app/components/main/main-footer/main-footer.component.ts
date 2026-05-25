@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 
 @Component({
+  standalone: false,
   selector: 'main-footer',
   templateUrl: './main-footer.component.html',
   styleUrls: ['./main-footer.component.scss'],

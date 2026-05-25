@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
+  standalone: false,
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],

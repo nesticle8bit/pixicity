@@ -8,8 +8,8 @@ describe('TableAfiliadosComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TableAfiliadosComponent ]
-    })
+    imports: [TableAfiliadosComponent]
+})
     .compileComponents();
   });
 

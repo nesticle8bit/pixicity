@@ -8,8 +8,8 @@ describe('DialogDisplayHistoryCommentsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogDisplayHistoryCommentsComponent ]
-    })
+    imports: [DialogDisplayHistoryCommentsComponent]
+})
     .compileComponents();
   });
 

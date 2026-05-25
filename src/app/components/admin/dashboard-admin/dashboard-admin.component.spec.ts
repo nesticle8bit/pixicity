@@ -8,8 +8,8 @@ describe('DashboardAdminComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DashboardAdminComponent ]
-    })
+    imports: [DashboardAdminComponent]
+})
     .compileComponents();
   });
 

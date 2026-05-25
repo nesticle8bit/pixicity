@@ -8,8 +8,8 @@ describe('BorradoresComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BorradoresComponent ]
-    })
+    imports: [BorradoresComponent]
+})
     .compileComponents();
   });
 

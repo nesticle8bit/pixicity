@@ -8,8 +8,8 @@ describe('DialogRecomendarPostComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogRecomendarPostComponent ]
-    })
+    imports: [DialogRecomendarPostComponent]
+})
     .compileComponents();
   });
 

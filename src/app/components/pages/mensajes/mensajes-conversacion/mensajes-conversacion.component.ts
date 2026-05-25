@@ -5,6 +5,7 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-mensajes-conversacion',
   templateUrl: './mensajes-conversacion.component.html',
   styleUrls: ['./mensajes-conversacion.component.scss'],

@@ -1,8 +1,19 @@
+@use 'ngx-toastr/toastr';
+@use "@ctrl/ngx-emoji-mart/picker";
+@use "assets/styles/icons";
+
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 @import "@ng-select/ng-select/themes/default.theme.css";
-@import 'ngx-toastr/toastr';
 @import "animate.css";
-@import "assets/styles/icons.scss";
+
+// CDK overlay: ensure user popover renders above everything
+.user-popover-panel {
+  z-index: 1100;
+}
+
+.cdk-overlay-container {
+  z-index: 1100;
+}
 
 $background-color: #F0EEEE;
 $main-color: #0B6EA5;
@@ -69,14 +80,14 @@ header {
 .main-logo {
     width: 184px;
     height: 48px;
-    background: url('assets/images/logo.png') no-repeat;
+    background: url('assets/images/logo.svg') no-repeat;
     float: left;
-    margin-top: 11px;
+    margin-top: 16px;
 }
 
-.main-logo:hover {
-    background-position: 0 -47px;
-}
+// .main-logo:hover {
+//     background-position: 0 -47px;
+// }
 
 .main-menu {
     background: $accent-color;
@@ -853,7 +864,7 @@ textarea:focus#msg_body {
         display: block;
         padding: 5px 6px;
         font-size: 11px;
-    
+
         &:hover {
             color: #FFF;
             background: #067CB4;
@@ -979,7 +990,7 @@ textarea:focus#msg_body {
     background: -webkit-linear-gradient(top, #fcfcfc 0%, #eee 100%);
     background: -o-linear-gradient(top, #fcfcfc 0%, #eee 100%);
     background: -ms-linear-gradient(top, #fcfcfc 0%, #eee 100%);
-    background: linear-gradient(top, #fcfcfc 0%, #eee 100%);
+    background: linear-gradient(to bottom, #fcfcfc 0%, #eee 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#eeeeee', GradientType=0)
 }
 
@@ -1015,7 +1026,7 @@ textarea:focus#msg_body {
     background: -webkit-linear-gradient(top, #88e64f 0%, #5ed037 100%);
     background: -o-linear-gradient(top, #88e64f 0%, #5ed037 100%);
     background: -ms-linear-gradient(top, #88e64f 0%, #5ed037 100%);
-    background: linear-gradient(top, #88e64f 0%, #5ed037 100%);
+    background: linear-gradient(to bottom, #88e64f 0%, #5ed037 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#88e64f', endColorstr='#5ed037', GradientType=0)
 }
 
@@ -1027,7 +1038,7 @@ textarea:focus#msg_body {
     background: -webkit-linear-gradient(top, #78da40 0%, #45b31d 100%);
     background: -o-linear-gradient(top, #78da40 0%, #45b31d 100%);
     background: -ms-linear-gradient(top, #78da40 0%, #45b31d 100%);
-    background: linear-gradient(top, #78da40 0%, #45b31d 100%);
+    background: linear-gradient(to bottom, #78da40 0%, #45b31d 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#78da40', endColorstr='#45b31d', GradientType=0)
 }
 
@@ -1049,7 +1060,7 @@ textarea:focus#msg_body {
     background: -webkit-linear-gradient(top, #e64f64 0%, #d0373a 100%);
     background: -o-linear-gradient(top, #e64f64 0%, #d0373a 100%);
     background: -ms-linear-gradient(top, #e64f64 0%, #d0373a 100%);
-    background: linear-gradient(top, #e64f64 0%, #d0373a 100%);
+    background: linear-gradient(to bottom, #e64f64 0%, #d0373a 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e64f64', endColorstr='#d0373a', GradientType=0)
 }
 
@@ -1063,7 +1074,7 @@ textarea:focus#msg_body {
     background: -webkit-linear-gradient(top, #e5344d 0%, #c12c41 100%);
     background: -o-linear-gradient(top, #e5344d 0%, #c12c41 100%);
     background: -ms-linear-gradient(top, #e5344d 0%, #c12c41 100%);
-    background: linear-gradient(top, #e5344d 0%, #c12c41 100%);
+    background: linear-gradient(to bottom, #e5344d 0%, #c12c41 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e5344d', endColorstr='#c12c41', GradientType=0)
 }
 
@@ -1082,7 +1093,7 @@ textarea:focus#msg_body {
     background: -webkit-linear-gradient(top, #52a8e8 0%, #377ad0 100%);
     background: -o-linear-gradient(top, #52a8e8 0%, #377ad0 100%);
     background: -ms-linear-gradient(top, #52a8e8 0%, #377ad0 100%);
-    background: linear-gradient(top, #52a8e8 0%, #377ad0 100%);
+    background: linear-gradient(to bottom, #52a8e8 0%, #377ad0 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#52a8e8', endColorstr='#377ad0', GradientType=0)
 }
 
@@ -1097,7 +1108,7 @@ textarea:focus#msg_body {
     background: -webkit-linear-gradient(top, #3e9ee5 0%, #206bcb 100%);
     background: -o-linear-gradient(top, #3e9ee5 0%, #206bcb 100%);
     background: -ms-linear-gradient(top, #3e9ee5 0%, #206bcb 100%);
-    background: linear-gradient(top, #3e9ee5 0%, #206bcb 100%);
+    background: linear-gradient(to bottom, #3e9ee5 0%, #206bcb 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3e9ee5', endColorstr='#206bcb', GradientType=0);
     text-decoration: none !important
 }
@@ -2901,5 +2912,399 @@ span.ma_monitor_rango {
 
     .main-menu--item {
         padding-bottom: 7.3px;
+    }
+}
+
+/* ============================================
+   RESPONSIVE — POST VIEW (md y menor)
+   ============================================ */
+@media (max-width: 767.98px) {
+
+    /* Título del post */
+    .boxpc {
+        padding: 10px 12px 2px;
+    }
+
+    .boxpc h1 {
+        font-size: 22px;
+        line-height: 30px;
+        margin-bottom: 10px;
+    }
+
+    .contenido {
+        min-height: 0;
+    }
+
+    /* Barra de puntos — fila superior del meta */
+    .metacentro {
+        height: auto;
+        min-height: 44px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        padding: 0 4px;
+    }
+
+    .barpuntos {
+        display: flex;
+        overflow-x: auto;
+    }
+
+    .barpuntos a,
+    .topdar a {
+        float: none;
+        flex-shrink: 0;
+        width: 36px;
+        padding: 0 4px;
+        font-size: 15px;
+        display: inline-block;
+    }
+
+    p.cupuntos {
+        font-size: 18px;
+        white-space: nowrap;
+    }
+
+    #puntos-agregados {
+        width: 100%;
+    }
+
+    /* Fila inferior del meta (botones de acción + stats) */
+    .metabottom {
+        height: auto;
+        overflow: hidden;
+        padding: .4em .6em;
+    }
+
+    .botones li a {
+        padding: 0 .5em;
+        font-size: 10px;
+    }
+
+    .bulto {
+        font-size: 9px;
+        line-height: 10px;
+    }
+
+    /* Card de autor */
+    .eliese {
+        height: auto;
+        min-height: 50px;
+    }
+
+    /* Sección de comentarios */
+    #post-comentarios {
+        width: 100% !important;
+        padding: 7px 8px 20px;
+    }
+
+    .miComentario {
+        width: 100% !important;
+        padding: 12px 10px;
+    }
+
+    #respuestas .comentario-post {
+        margin-left: 20px;
+    }
+
+    #respuestas_comentario {
+        margin-left: 20px;
+        padding: 8px;
+    }
+
+    /* Aviso sin comentarios */
+    .nada-amarillo {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    /* Tags */
+    .tagbox {
+        padding: 10px 12px;
+    }
+
+    /* Femas header: stack vertically on mobile */
+    .femas {
+        display: block;
+    }
+
+    .panero {
+        max-width: 100%;
+        float: none;
+        margin-bottom: 8px;
+    }
+
+    #socialr {
+        float: none;
+        display: flex;
+        justify-content: flex-start;
+        padding-top: 0;
+        margin-bottom: 8px;
+    }
+
+    .recosr {
+        float: none;
+        margin-left: 0;
+        margin-right: 8px;
+    }
+}
+
+/* ============================================
+   V5 — POST HEADER BAR (.femas)
+   ============================================ */
+
+.femas {
+    overflow: hidden;
+    padding-bottom: 12px;
+    margin-bottom: 4px;
+}
+
+.panero {
+    float: left;
+    max-width: calc(100% - 90px);
+
+    & h1 {
+        /* inherits .boxpc h1 */
+        margin-bottom: 6px;
+    }
+
+    & a {
+        color: #006595;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    & span {
+        color: #999;
+        font-size: 12px;
+    }
+}
+
+#socialr {
+    float: right;
+    padding-top: 6px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.recosr {
+    float: right;
+    margin-left: 6px;
+
+    & a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        cursor: pointer;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+
+        &:hover {
+            opacity: .85;
+            color: #fff;
+            text-decoration: none;
+        }
+    }
+}
+
+.fosrf {
+    background-color: #1877f2;
+}
+
+.fosrt {
+    background-color: #1da1f2;
+}
+
+.fosrg {
+    background-color: #e42929;
+}
+
+/* ============================================
+   V5 — SIDEBAR / WIDGET BOXES (.boxposts)
+   ============================================ */
+
+.boxposts {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+    overflow: hidden;
+
+    &.separa {
+        margin-bottom: 10px;
+    }
+
+    & .titular {
+        background: #f5f5f5;
+        border-bottom: 1px solid #e5e5e5;
+        padding: 8px 10px;
+        overflow: hidden;
+
+        & h2 {
+            color: #555;
+            font-size: 13px;
+            font-weight: 700;
+            margin: 0;
+            float: left;
+            line-height: 20px;
+        }
+    }
+
+    & .normab {
+        padding: 8px 10px;
+    }
+
+    & .paginar {
+        background: #f5f5f5;
+        border-top: 1px solid #e5e5e5;
+        padding: 6px 10px;
+        font-size: 11px;
+        color: #666;
+        text-align: center;
+
+        & a {
+            color: #006595;
+            font-weight: 700;
+        }
+    }
+}
+
+/* ============================================
+   V5 — HOME STATS BOX
+   ============================================ */
+
+.box-crear-post {
+    background: linear-gradient(135deg, #006595 0%, #0085c4 100%);
+    padding: 10px;
+    text-align: center;
+
+    & p {
+        color: #fff;
+        font-size: 12px;
+        margin: 0 0 6px;
+    }
+
+    & a {
+        display: inline-block;
+        background: #fff;
+        color: #006595;
+        font-weight: 700;
+        font-size: 12px;
+        padding: 4px 14px;
+        border-radius: 3px;
+        text-decoration: none;
+
+        &:hover {
+            background: #e8f4fb;
+        }
+    }
+}
+
+.estabox {
+    padding: 8px 10px;
+}
+
+.lin {
+    overflow: hidden;
+    padding: 4px 0;
+    border-bottom: 1px dotted #e5e5e5;
+    font-size: 12px;
+    color: #555;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    & b {
+        color: #006595;
+    }
+}
+
+/* ============================================
+   V5 — HOME LAYOUT
+   ============================================ */
+
+.home-boxi {
+    padding-right: 6px;
+}
+
+.home-boxd {
+    padding-left: 6px;
+}
+
+@media (max-width: 767.98px) {
+    .home-boxi,
+    .home-boxd {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+}
+
+/* ============================================
+   V5 — .main-title inside .boxposts context
+   ============================================ */
+
+.boxposts .main-title {
+    background: #f5f5f5 !important;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 8px 10px !important;
+    height: auto !important;
+    margin-bottom: 0 !important;
+    overflow: hidden;
+
+    & span {
+        background: transparent !important;
+        padding: 0 !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        color: #555 !important;
+        display: inline;
+    }
+}
+
+/* tags-cloud inside .boxposts */
+.boxposts .textrank-tags {
+    padding: 8px 10px;
+    line-height: 2;
+
+    & a {
+        display: inline-block;
+        margin: 2px 3px;
+        padding: 2px 8px;
+        background: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        color: #006595;
+        font-size: 11px;
+        font-weight: 400;
+        text-decoration: none;
+
+        &:hover {
+            background: #e0f0fa;
+            border-color: #006595;
+        }
+    }
+}
+
+/* home last-posts list: V5 lipost style */
+.lista-posts {
+    padding: 5px 0 5px 6px !important;
+    background: #f5f5f5;
+    border-top: #e0e0e0 1px solid !important;
+
+    &:nth-child(2n+1) {
+        background: #fff;
+    }
+
+    & a {
+        color: #006595;
+        font-size: 12px;
     }
 }

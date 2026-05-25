@@ -6,6 +6,7 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-page-contacto',
   templateUrl: './page-contacto.component.html',
   styleUrls: ['./page-contacto.component.scss'],

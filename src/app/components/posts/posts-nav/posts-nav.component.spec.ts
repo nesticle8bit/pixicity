@@ -8,8 +8,8 @@ describe('PostsNavComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PostsNavComponent ]
-    })
+    imports: [PostsNavComponent]
+})
     .compileComponents();
   });
 

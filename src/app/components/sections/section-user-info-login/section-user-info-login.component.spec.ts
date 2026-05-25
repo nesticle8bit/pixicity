@@ -8,8 +8,8 @@ describe('SectionUserInfoLoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SectionUserInfoLoginComponent ]
-    })
+    imports: [SectionUserInfoLoginComponent]
+})
     .compileComponents();
   });
 

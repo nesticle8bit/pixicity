@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-perfil-user-medals',
   templateUrl: './perfil-user-medals.component.html',
   styleUrls: ['./perfil-user-medals.component.scss'],

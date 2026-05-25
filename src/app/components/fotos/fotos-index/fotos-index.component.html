@@ -1,0 +1,74 @@
+<div class="container container--home fotos-page mx-auto">
+  <div class="row">
+    <div class="col-12">
+      <div class="fotos-header">
+        <h2>
+          @if (userName) {
+          Fotos de <strong>{{userName}}</strong>
+          } @else {
+          Últimas Fotos
+          }
+        </h2>
+        @if (currentUser?.usuario) {
+        <a routerLink="/crear/foto" class="boton azul">
+          <fa-icon [icon]="['fas', 'plus']"></fa-icon> Subir Foto
+        </a>
+        }
+      </div>
+
+      @if (loading) {
+      <div class="text-center my-4">
+        <img src="/assets/images/min-carga.gif" alt="Cargando...">
+      </div>
+      }
+
+      @if (!loading && fotos.length === 0) {
+      <section class="nada-amarillo mx-auto">
+        No hay fotos publicadas aún.
+      </section>
+      }
+
+      <div class="fotos-grid">
+        @for (foto of fotos; track foto.id) {
+        <div class="foto-card">
+          <a [routerLink]="['/fotos', foto.usuario, foto.id, foto.url]">
+            <div class="foto-thumb">
+              <img [src]="foto.imageUrl" [alt]="foto.titulo" loading="lazy">
+            </div>
+          </a>
+          <div class="foto-info">
+            <a [routerLink]="['/fotos', foto.usuario, foto.id, foto.url]" class="foto-title">
+              {{foto.titulo}}
+            </a>
+            <div class="foto-meta">
+              <a [routerLink]="['/perfil', foto.usuario]" class="foto-author" [appUserPopover]="foto.usuario">
+                <app-user-avatar [class]="'avatar-24'" [avatar]="foto.avatar" [userName]="foto.usuario" [width]="24">
+                </app-user-avatar>
+                {{foto.usuario}}
+              </a>
+              <span class="foto-date">{{foto.fechaRegistro | timeAgo}}</span>
+            </div>
+            @if (foto.descripcion) {
+            <p class="foto-desc">{{foto.descripcion | truncate:[80]}}</p>
+            }
+            <div class="foto-stats">
+              <span><fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon> {{foto.votosPositivos}}</span>
+              <span><fa-icon [icon]="['fas', 'thumbs-down']"></fa-icon> {{foto.votosNegativos}}</span>
+              <span><fa-icon [icon]="['fas', 'eye']"></fa-icon> {{foto.visitantes}}</span>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+
+      @if (pagination.totalPages > 1) {
+      <div class="fotos-pagination">
+        @for (page of totalPages; track page) {
+        <a class="page-btn" [ngClass]="{'active': page === pagination.currentPage}"
+          (click)="goToPage(page)">{{page}}</a>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</div>

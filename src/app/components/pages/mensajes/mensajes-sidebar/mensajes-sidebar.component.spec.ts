@@ -8,8 +8,8 @@ describe('MensajesSidebarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MensajesSidebarComponent ]
-    })
+    imports: [MensajesSidebarComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(MensajesSidebarComponent);

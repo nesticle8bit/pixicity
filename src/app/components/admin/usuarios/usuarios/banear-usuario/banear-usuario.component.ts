@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-banear-usuario',
   templateUrl: './banear-usuario.component.html',
   styleUrls: ['./banear-usuario.component.scss'],

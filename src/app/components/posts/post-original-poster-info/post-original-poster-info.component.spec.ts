@@ -8,8 +8,8 @@ describe('PostOriginalPosterInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PostOriginalPosterInfoComponent ]
-    })
+    imports: [PostOriginalPosterInfoComponent]
+})
     .compileComponents();
   });
 

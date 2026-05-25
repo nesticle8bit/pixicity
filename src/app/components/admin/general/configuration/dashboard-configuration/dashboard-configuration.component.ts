@@ -5,6 +5,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-dashboard-configuration',
   templateUrl: './dashboard-configuration.component.html',
   styleUrls: ['./dashboard-configuration.component.scss'],

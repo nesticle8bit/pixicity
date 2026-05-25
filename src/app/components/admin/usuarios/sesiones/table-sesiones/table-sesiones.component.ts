@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-table-sesiones',
   templateUrl: './table-sesiones.component.html',
   styleUrls: ['./table-sesiones.component.scss'],

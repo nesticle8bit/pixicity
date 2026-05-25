@@ -8,8 +8,8 @@ describe('TopTimesSelectorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TopTimesSelectorComponent ]
-    })
+    imports: [TopTimesSelectorComponent]
+})
     .compileComponents();
   });
 

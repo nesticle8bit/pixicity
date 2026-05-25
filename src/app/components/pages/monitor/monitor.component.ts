@@ -6,6 +6,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
+  standalone: false,
   selector: 'app-monitor',
   templateUrl: './monitor.component.html',
   styleUrls: ['./monitor.component.scss'],

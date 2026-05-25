@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-dashboard-rangos',
   templateUrl: './dashboard-rangos.component.html',
   styleUrls: ['./dashboard-rangos.component.scss']

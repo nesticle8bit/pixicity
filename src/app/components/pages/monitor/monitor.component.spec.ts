@@ -8,8 +8,8 @@ describe('MonitorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MonitorComponent ]
-    })
+    imports: [MonitorComponent]
+})
     .compileComponents();
   });
 

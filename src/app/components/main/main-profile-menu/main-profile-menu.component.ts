@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-main-profile-menu',
   templateUrl: './main-profile-menu.component.html',
   styleUrls: ['./main-profile-menu.component.scss'],

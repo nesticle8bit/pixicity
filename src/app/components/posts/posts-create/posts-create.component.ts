@@ -4,7 +4,6 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogPrevisualizarPostComponent } from 'src/app/components/dialogs/dialog-previsualizar-post/dialog-previsualizar-post.component';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
-import { Editor, toDoc, toHTML, Toolbar } from 'ngx-editor';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,13 +13,14 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Title } from '@angular/platform-browser';
 import { PostsGeneratorComponent } from '../posts-generator/posts-generator.component';
+
 @Component({
+  standalone: false,
   selector: 'app-posts-create',
   templateUrl: './posts-create.component.html',
   styleUrls: ['./posts-create.component.scss'],
 })
 export class PostsCreateComponent implements OnInit, OnDestroy {
-  public editor: Editor;
   public formGroup: FormGroup;
   public categorias: any[] = [];
   public etiquetas: any = [];
@@ -40,18 +40,6 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   public today = new Date();
   public separatorKeysCodes = [ENTER, COMMA] as const;
   public relatedPosts: any[] = [];
-
-  public toolbar: Toolbar = [
-    ['bold', 'italic'],
-    ['underline', 'strike'],
-    ['code', 'blockquote'],
-    ['ordered_list', 'bullet_list'],
-    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
-    ['link', 'image'],
-    ['text_color'],
-    ['align_left', 'align_center', 'align_right', 'align_justify'],
-    ['horizontal_rule', 'format_clear'],
-  ];
 
   constructor(
     private parametrosService: IHttpParametrosService,
@@ -91,13 +79,13 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
       if (!this.postId) {
         this.title.setTitle(
-          `Crear post | Pixicity - Ciudad Pixelada | Comunidad para Compartir Información`
+          `Crear post | Taringas - Inteligencia colectiva | Comunidad para Compartir Información`
         );
         return;
       }
 
       this.title.setTitle(
-        `Actualizar post | Pixicity - Ciudad Pixelada | Comunidad para Compartir Información`
+        `Actualizar post | Taringas - Inteligencia colectiva | Comunidad para Compartir Información`
       );
       this.postService.getPostById(this.postId).subscribe((response: any) => {
         if (
@@ -118,19 +106,13 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.editor = new Editor({
-      history: true,
-      keyboardShortcuts: true,
-    });
   }
 
   ngOnInit(): void {
     this.getCategorias();
   }
 
-  ngOnDestroy(): void {
-    this.editor.destroy();
-  }
+  ngOnDestroy(): void {}
 
   setPostOnEdit(post: any): void {
     this.etiquetas = post.etiquetas
@@ -267,7 +249,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((response: any) => {
       if (response) {
         this.formGroup.patchValue({
-          contenido: toDoc(response),
+          contenido: response,
         });
       }
     });
@@ -276,16 +258,15 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   getPostsRelatedByTitle(): void {
     const titulo = this.formGroup.value.titulo;
 
-    if (!titulo || titulo.length < 3) {
+    if (!titulo || titulo.length < 5) {
+      this.relatedPosts = [];
       return;
     }
 
     this.postService
       .getPostsRelatedByTitle(titulo)
       .subscribe((response: any) => {
-        if (response) {
-          this.relatedPosts = response;
-        }
+        this.relatedPosts = response || [];
       });
   }
 }

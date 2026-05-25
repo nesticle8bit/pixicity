@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-post-not-found',
   templateUrl: './post-not-found.component.html',
   styleUrls: ['./post-not-found.component.scss']

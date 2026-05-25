@@ -1,55 +1,62 @@
 <h2 mat-dialog-title>Nueva Afiliación</h2>
 
 <form [formGroup]="formGroupAfiliacion" (ngSubmit)="enviarAfiliacion()">
-    <mat-dialog-content class="mat-typography">
-        <div class="alert alert-warning" *ngIf="!formGroupAfiliacion.value?.codigo">
-            Ingresa los datos de tu web para afiliarte a Pixicity!
+  <mat-dialog-content class="mat-typography">
+    @if (!formGroupAfiliacion.value?.codigo) {
+      <div class="alert alert-warning">
+        Ingresa los datos de tu web para afiliarte a Taringas!
+      </div>
+    }
+
+    @if (!formGroupAfiliacion.value?.codigo) {
+      <div id="modalBody" class="mx-auto">
+        <div class="mb-3">
+          <label>Título</label>
+          <input type="text" formControlName="titulo" [maxLength]="100" cdkFocusInitial />
         </div>
-
-        <div id="modalBody" class="mx-auto" *ngIf="!formGroupAfiliacion.value?.codigo">
-            <div class="mb-3">
-                <label>Título</label>
-                <input type="text" formControlName="titulo" [maxLength]="100" cdkFocusInitial />
-            </div>
-
-            <div class="mb-3">
-                <label>URL</label>
-                <input type="text" formControlName="url" [maxLength]="350" />
-            </div>
-
-            <div class="mb-3">
-                <label>Favicon (16x16px)</label>
-                <input type="text" formControlName="banner" [maxLength]="350" />
-            </div>
-
-            <div class="mb-3">
-                <label>Descripción</label>
-                <textarea rows="4" formControlName="descripcion" [maxLength]="200"></textarea>
-            </div>
-
-            <app-re-captcha (response)="captchaResponse($event)"></app-re-captcha>
+        <div class="mb-3">
+          <label>URL</label>
+          <input type="text" formControlName="url" [maxLength]="350" />
         </div>
+        <div class="mb-3">
+          <label>Favicon (16x16px)</label>
+          <input type="text" formControlName="banner" [maxLength]="350" />
+        </div>
+        <div class="mb-3">
+          <label>Descripción</label>
+          <textarea rows="4" formControlName="descripcion" [maxLength]="200"></textarea>
+        </div>
+        <app-re-captcha (response)="captchaResponse($event)"></app-re-captcha>
+      </div>
+    }
 
-        <section id="modalBody" *ngIf="formGroupAfiliacion.value?.codigo">
-            <div class="alert alert-info">
-                Se le ha notificado al administrador tu afiliación para que la apruebe, mientras tanto copia el siguiente código, será con el cual nos debes enlazar.
-            </div>
+    @if (formGroupAfiliacion.value?.codigo) {
+      <section id="modalBody">
+        <div class="alert alert-info">
+          Se le ha notificado al administrador tu afiliación para que la apruebe, mientras tanto copia el siguiente código, será con el cual nos debes enlazar.
+        </div>
+        <div class="mb-1">
+          <label>Código HTML</label>
+          <textarea rows="4" formControlName="codigo"></textarea>
+        </div>
+      </section>
+    }
+  </mat-dialog-content>
 
-            <div class="mb-1">
-                <label>Código HTML</label>
-                <textarea rows="4" formControlName="codigo"></textarea>
-            </div>
-        </section>
-    </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>
+      @if (!formGroupAfiliacion.value?.codigo) {
+        <span>Cancelar</span>
+      }
+      @if (formGroupAfiliacion.value?.codigo) {
+        <span>Cerrar</span>
+      }
+    </button>
 
-    <mat-dialog-actions align="end">
-        <button mat-button mat-dialog-close>
-            <span *ngIf="!formGroupAfiliacion.value?.codigo">Cancelar</span>
-            <span *ngIf="formGroupAfiliacion.value?.codigo">Cerrar</span>
-        </button>
-
-        <button type="submit" mat-button color="primary" [disabled]="formGroupAfiliacion.invalid" *ngIf="!formGroupAfiliacion.value?.codigo">
-            Enviar
-        </button>
-    </mat-dialog-actions>
+    @if (!formGroupAfiliacion.value?.codigo) {
+      <button type="submit" mat-button color="primary" [disabled]="formGroupAfiliacion.invalid">
+        Enviar
+      </button>
+    }
+  </mat-dialog-actions>
 </form>

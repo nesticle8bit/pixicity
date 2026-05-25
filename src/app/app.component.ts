@@ -7,6 +7,7 @@ import { SEOModel } from './models/shared/seo.model';
 import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
@@ -35,10 +36,10 @@ export class AppComponent {
 
     this.seoService.getSEO().subscribe((value: SEOModel) => {
       if (value.title) {
-        this.title.setTitle(`${value.title} - Pixicity - Ciudad Pixelada`);
+        this.title.setTitle(`${value.title} - Taringas - Inteligencia colectiva`);
         this.meta.updateTag({ property: 'og:title', content: value.title });
         this.meta.updateTag({ name: 'twitter:title', content: value.title });
-        this.meta.updateTag({ property: 'og:site_name', content: 'Pixicity' });
+        this.meta.updateTag({ property: 'og:site_name', content: 'Taringas! - Inteligencia colectiva' });
       }
 
       if (value.description) {
@@ -74,7 +75,7 @@ export class AppComponent {
 
   welcome(): void {
     console.log(
-      ` _______________________\r\n< Bienvenido a Pixicity >\r\n -----------------------\r\n         \\\r\n          \\\r\n           ___\r\n          (o o)\r\n         (  V  )\r\n        \/--m-m-\r\n`
+      ` _______________________\r\n< Bienvenido a Taringas >\r\n -----------------------\r\n         \\\r\n          \\\r\n           ___\r\n          (o o)\r\n         (  V  )\r\n        \/--m-m-\r\n`
     );
   }
 }

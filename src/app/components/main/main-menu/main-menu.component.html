@@ -1,71 +1,76 @@
 <section class="main-menu">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <ul class="list-unstyled list-inline mb-0 pt-2">
-                    <!-- <li class="list-inline-item main-menu--item" [routerLink]="['/mi']">
-                        <a>
-                            <fa-icon [icon]="['fas', 'home']"></fa-icon>
-                        </a>
-                    </li> -->
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <ul class="list-unstyled list-inline mb-0 pt-2">
+          <!-- <li class="list-inline-item main-menu--item" [routerLink]="['/mi']">
+          <a>
+            <fa-icon [icon]="['fas', 'home']"></fa-icon>
+          </a>
+        </li> -->
 
-                    <li class="list-inline-item main-menu--item" [routerLink]="['/']"
-                        [ngClass]="{'main-menu--item--active': active == '/' || active == ''}">
-                        <a class="d-none d-sm-block" [routerLink]="['/']" title="Posts">
-                            <span class="">Posts</span>
-                        </a>
+        <li class="list-inline-item main-menu--item" [routerLink]="['/']"
+          [ngClass]="{'main-menu--item--active': active == '/' || active == ''}">
+          <a class="d-none d-sm-block" [routerLink]="['/']" title="Posts">
+            <span class="">Posts</span>
+          </a>
 
-                        <a class="d-block d-sm-none" [routerLink]="['/']" title="Posts">
-                            <span>
-                                <fa-icon [icon]="['fas', 'house-user']"></fa-icon>
-                            </span>
-                        </a>
-                    </li>
+          <a class="d-block d-sm-none" [routerLink]="['/']" title="Posts">
+            <span>
+              <fa-icon [icon]="['fas', 'house-user']"></fa-icon>
+            </span>
+          </a>
+        </li>
 
-                    <li class="list-inline-item main-menu--item" [routerLink]="['/tops']"
-                        [ngClass]="{'main-menu--item--active': active == '/tops' || active == 'tops'}">
-                        <a class="d-none d-sm-block" title="TOPs">
-                            <span class="">TOPs</span>
-                        </a>
+        <li class="list-inline-item main-menu--item" [routerLink]="['/tops']"
+          [ngClass]="{'main-menu--item--active': active == '/tops' || active == 'tops'}">
+          <a class="d-none d-sm-block" title="TOPs">
+            <span class="">TOPs</span>
+          </a>
 
-                        <a class="d-block d-sm-none" title="TOPs">
-                            <span>
-                                <fa-icon [icon]="['fas', 'trophy']"></fa-icon>
-                            </span>
-                        </a>
-                    </li>
+          <a class="d-block d-sm-none" title="TOPs">
+            <span>
+              <fa-icon [icon]="['fas', 'trophy']"></fa-icon>
+            </span>
+          </a>
+        </li>
 
-                    <li class="list-inline-item main-menu--item" [routerLink]="['/administracion/dashboard']"
-                        [ngClass]="{'main-menu--item--active': active.startsWith('/administracion')}"
-                        *ngIf="currentUser?.usuario?.rango === 'Administrador'">
-                        <a class="d-none d-sm-block" title="Administración">
-                            <span>Administración</span>
-                        </a>
+        @if (currentUser?.usuario?.rango === 'Administrador') {
+          <li class="list-inline-item main-menu--item" [routerLink]="['/administracion/dashboard']"
+            [ngClass]="{'main-menu--item--active': active.startsWith('/administracion')}"
+            >
+            <a class="d-none d-sm-block" title="Administración">
+              <span>Administración</span>
+            </a>
+            <a class="d-block d-sm-none" title="Administración">
+              <span>
+                <fa-icon [icon]="['fas', 'sliders']"></fa-icon>
+              </span>
+            </a>
+          </li>
+        }
 
-                        <a class="d-block d-sm-none" title="Administración">
-                            <span>
-                                <fa-icon [icon]="['fas', 'sliders']"></fa-icon>
-                            </span>
-                        </a>
-                    </li>
+        @if (!currentUser?.usuario) {
+          <li class="list-inline-item main-menu--item" [routerLink]="['/login']"
+            [ngClass]="{'main-menu--item--active': active == '/login' || active == 'login'}">
+            <a [routerLink]="['/']" title="Iniciar sesión">
+              <span class="">Iniciar sesión</span>
+            </a>
+          </li>
+        }
 
-                    <li *ngIf="!currentUser?.usuario" class="list-inline-item main-menu--item" [routerLink]="['/login']"
-                        [ngClass]="{'main-menu--item--active': active == '/login' || active == 'login'}">
-                        <a [routerLink]="['/']" title="Iniciar sesión">
-                            <span class="">Iniciar sesión</span>
-                        </a>
-                    </li>
-
-                    <li *ngIf="!currentUser?.usuario" class="list-inline-item main-menu--item"
-                        [routerLink]="['/registro']"
-                        [ngClass]="{'main-menu--item--active': active == '/registro' || active == 'registro'}"
-                        style="background: #95c317; text-transform: uppercase;">
-                        <a [routerLink]="['/']" title="Registrate Ya!">
-                            <span class="">Registrate Ya!</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        @if (!currentUser?.usuario) {
+          <li class="list-inline-item main-menu--item"
+            [routerLink]="['/registro']"
+            [ngClass]="{'main-menu--item--active': active == '/registro' || active == 'registro'}"
+            style="background: #95c317; text-transform: uppercase;">
+            <a [routerLink]="['/']" title="Registrate Ya!">
+              <span class="">Registrate Ya!</span>
+            </a>
+          </li>
+        }
+      </ul>
     </div>
+  </div>
+</div>
 </section>

@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-mensajes-enviados',
   templateUrl: './mensajes-enviados.component.html',
   styleUrls: ['./mensajes-enviados.component.scss'],

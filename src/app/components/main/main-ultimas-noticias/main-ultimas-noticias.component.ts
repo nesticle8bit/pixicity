@@ -9,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 import { IHttpNoticiasService } from 'src/app/services/interfaces/httpNoticias.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-main-ultimas-noticias',
   templateUrl: './main-ultimas-noticias.component.html',
   styleUrls: ['./main-ultimas-noticias.component.scss'],

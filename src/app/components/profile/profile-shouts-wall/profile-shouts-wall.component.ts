@@ -4,6 +4,7 @@ import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.inter
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 
 @Component({
+  standalone: false,
   selector: 'app-profile-shouts-wall',
   templateUrl: './profile-shouts-wall.component.html',
   styleUrls: ['./profile-shouts-wall.component.scss']

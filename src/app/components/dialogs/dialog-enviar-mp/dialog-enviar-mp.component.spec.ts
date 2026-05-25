@@ -8,8 +8,8 @@ describe('DialogEnviarMPComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogEnviarMPComponent ]
-    })
+    imports: [DialogEnviarMPComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(DialogEnviarMPComponent);

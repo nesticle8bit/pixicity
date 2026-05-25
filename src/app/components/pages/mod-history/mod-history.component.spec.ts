@@ -8,8 +8,8 @@ describe('ModHistoryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ModHistoryComponent ]
-    })
+    imports: [ModHistoryComponent]
+})
     .compileComponents();
   });
 

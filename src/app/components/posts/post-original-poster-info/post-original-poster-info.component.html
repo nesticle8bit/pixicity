@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-5">
                 <div class="eites">
-                    <a class="nomis" [routerLink]="['/perfil/' + userName]" matTooltip="Ver perfil de {{userName}}">
+                    <a class="nomis" [routerLink]="['/perfil/' + userName]" matTooltip="Ver perfil de {{userName}}" [appUserPopover]="userName">
                         <app-user-avatar [class]="'user-post-image'" [avatar]="info?.avatar" [userName]="userName"
                             [height]="97">
                         </app-user-avatar>
@@ -22,7 +22,7 @@
                     <div class="col-12 col-sm-12 col-md-12 col-lg-8">
                         <app-user-online-status [userName]="userName"></app-user-online-status>
 
-                        <a [routerLink]="['/perfil/' + userName]">
+                        <a [routerLink]="['/perfil/' + userName]" [appUserPopover]="userName">
                             {{userName}}
                         </a>
                     </div>

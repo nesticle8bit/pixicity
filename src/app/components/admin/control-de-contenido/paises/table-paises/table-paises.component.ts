@@ -6,6 +6,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { DialogUpdatePaisesComponent } from '../dialog-update-paises/dialog-update-paises.component';
 
 @Component({
+  standalone: false,
   selector: 'app-table-paises',
   templateUrl: './table-paises.component.html',
   styleUrls: ['./table-paises.component.scss'],

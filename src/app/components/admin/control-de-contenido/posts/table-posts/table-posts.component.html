@@ -1,83 +1,84 @@
-<main class="table-responsive" *ngIf="posts.length > 0">
+@if (posts.length > 0) {
+  <main class="table-responsive">
     <table class="table table-sm table-striped table-hover">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Creado</th>
-                <th>Título</th>
-                <th>Puntos</th>
-                <th>Etiquetas</th>
-                <th>IP</th>
-                <th>Usuario</th>
-                <th></th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr *ngFor="let post of posts; let i = index" [ngClass]="{'row-deleted': post.eliminado}">
-                <td>
-                    <img src="/assets/images/categorias/sticky.png" class="sticky-post--home"
-                        title="Post fijado por el Staff" alt="Sticky" *ngIf="post.sticky" />
-                </td>
-
-                <td>
-                    {{post.fechaRegistro | timeAgo}}
-                </td>
-
-                <td>
-                    <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
-                        title="{{post.titulo}}">
-                        <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
-                            alt="{{post.categoria.nombre}}" />
-                        {{post.titulo}}
-                    </a>
-                </td>
-
-                <td>
-                    {{post.puntos}}
-                </td>
-
-                <td>
-                    {{post.etiquetas}}
-                </td>
-
-                <td>
-                    <app-who-is-ip [IP]="post.ip"></app-who-is-ip>
-                </td>
-
-                <td>
-                    <a [routerLink]="['/perfil/' + post.userName]" target="_blank">
-                        {{post.userName}}
-                    </a>
-                </td>
-
-                <td class="text-center" width="30px">
-                    <button class="btn-menu" [matMenuTriggerFor]="menu">
-                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Creado</th>
+          <th>Título</th>
+          <th>Puntos</th>
+          <th>Etiquetas</th>
+          <th>IP</th>
+          <th>Usuario</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (post of posts; track post; let i = $index) {
+          <tr [ngClass]="{'row-deleted': post.eliminado}">
+            <td>
+              @if (post.sticky) {
+                <img src="/assets/images/categorias/sticky.png" class="sticky-post--home"
+                  title="Post fijado por el Staff" alt="Sticky" />
+              }
+            </td>
+            <td>
+              {{post.fechaRegistro | timeAgo}}
+            </td>
+            <td>
+              <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
+                title="{{post.titulo}}">
+                <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
+                  alt="{{post.categoria.nombre}}" />
+                  {{post.titulo}}
+                </a>
+              </td>
+              <td>
+                {{post.puntos}}
+              </td>
+              <td>
+                {{post.etiquetas}}
+              </td>
+              <td>
+                <app-who-is-ip [IP]="post.ip"></app-who-is-ip>
+              </td>
+              <td>
+                <a [routerLink]="['/perfil/' + post.userName]" target="_blank" [appUserPopover]="post.userName">
+                  {{post.userName}}
+                </a>
+              </td>
+              <td class="text-center" width="30px">
+                <button class="btn-menu" [matMenuTriggerFor]="menu">
+                  <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button type="button" mat-menu-item (click)="cambiarSticky(post.id, i)">
+                    <mat-icon>sticky_note_2</mat-icon>
+                    @if (post.sticky) {
+                      <span>Quitar</span>
+                      } @if (!post.sticky) {
+                      <span>Establecer</span>
+                      } Sticky
                     </button>
-
-                    <mat-menu #menu="matMenu">
-                        <button type="button" mat-menu-item (click)="cambiarSticky(post.id, i)">
-                            <mat-icon>sticky_note_2</mat-icon>
-                            <span *ngIf="post.sticky">Quitar</span> <span *ngIf="!post.sticky">Establecer</span> Sticky
-                        </button>
-
-                        <button type="button" mat-menu-item [routerLink]="['/posts/actualizar/' + post.id]">
-                            <mat-icon>edit</mat-icon>
-                            <span>Actualizar</span>
-                        </button>
-
-                        <button type="button" mat-menu-item (click)="eliminarPost(post.id, i)">
-                            <mat-icon>delete_outline</mat-icon>
-                            <span>Eliminar</span>
-                        </button>
-                    </mat-menu>
+                    <button type="button" mat-menu-item [routerLink]="['/posts/actualizar/' + post.id]">
+                      <mat-icon>edit</mat-icon>
+                      <span>Actualizar</span>
+                    </button>
+                    <button type="button" mat-menu-item (click)="eliminarPost(post.id, i)">
+                      <mat-icon>delete_outline</mat-icon>
+                      <span>Eliminar</span>
+                    </button>
+                  </mat-menu>
                 </td>
-            </tr>
-        </tbody>
-    </table>
-</main>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </main>
+    }
 
-<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
-    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="posts.length > 0">
-</mat-paginator>
+    @if (posts.length > 0) {
+      <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+        [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
+      </mat-paginator>
+    }

@@ -8,8 +8,8 @@ describe('DialogPrevisualizarPostComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogPrevisualizarPostComponent ]
-    })
+    imports: [DialogPrevisualizarPostComponent]
+})
     .compileComponents();
   });
 

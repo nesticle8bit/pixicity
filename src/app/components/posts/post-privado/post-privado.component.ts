@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-post-privado',
   templateUrl: './post-privado.component.html',
   styleUrls: ['./post-privado.component.scss']

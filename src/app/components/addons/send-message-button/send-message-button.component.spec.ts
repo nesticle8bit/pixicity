@@ -8,8 +8,8 @@ describe('SendMessageButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SendMessageButtonComponent ]
-    })
+    imports: [SendMessageButtonComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(SendMessageButtonComponent);

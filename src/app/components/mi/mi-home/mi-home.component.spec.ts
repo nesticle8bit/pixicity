@@ -8,8 +8,8 @@ describe('MiHomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MiHomeComponent ]
-    })
+    imports: [MiHomeComponent]
+})
     .compileComponents();
   });
 

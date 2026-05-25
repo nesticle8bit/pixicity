@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-post-comments',
   templateUrl: './post-comments.component.html',
   styleUrls: ['./post-comments.component.scss'],
@@ -239,6 +240,22 @@ export class PostCommentsComponent implements OnInit {
     this.dialog.open(DialogDisplayHistoryCommentsComponent, {
       width: '700px',
       data: comentario.historial,
+    });
+  }
+
+  voteComentario(comentario: any, cantidad: number): void {
+    if (!this.currentUser?.usuario) {
+      return;
+    }
+
+    this.postService.votarComentario(comentario.id, cantidad).subscribe({
+      next: (response: any) => {
+        if (response !== undefined && response !== null) {
+          comentario.votos = response;
+          comentario.miVoto = cantidad;
+        }
+      },
+      error: () => {}
     });
   }
 }

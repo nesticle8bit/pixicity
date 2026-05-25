@@ -8,8 +8,8 @@ describe('PerfilSocialMediaButtonsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PerfilSocialMediaButtonsComponent ]
-    })
+    imports: [PerfilSocialMediaButtonsComponent]
+})
     .compileComponents();
   });
 

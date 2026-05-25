@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-dashboard-paises',
   templateUrl: './dashboard-paises.component.html',
   styleUrls: ['./dashboard-paises.component.scss']

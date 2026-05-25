@@ -8,8 +8,8 @@ describe('BottomSheetsEmojisComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BottomSheetsEmojisComponent ]
-    })
+    imports: [BottomSheetsEmojisComponent]
+})
     .compileComponents();
   });
 

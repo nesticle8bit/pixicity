@@ -2,6 +2,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-dialog-rangos-changes-report',
   templateUrl: './dialog-rangos-changes-report.component.html',
   styleUrls: ['./dialog-rangos-changes-report.component.scss'],

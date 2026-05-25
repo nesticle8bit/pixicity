@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
+  standalone: false,
   selector: 'main-submenu',
   templateUrl: './main-submenu.component.html',
   styleUrls: ['./main-submenu.component.scss'],

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-profile-activity',
   templateUrl: './profile-activity.component.html',
   styleUrls: ['./profile-activity.component.scss'],

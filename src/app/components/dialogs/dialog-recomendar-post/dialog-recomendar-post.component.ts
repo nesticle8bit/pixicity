@@ -4,6 +4,7 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-dialog-recomendar-post',
   templateUrl: './dialog-recomendar-post.component.html',
   styleUrls: ['./dialog-recomendar-post.component.scss'],

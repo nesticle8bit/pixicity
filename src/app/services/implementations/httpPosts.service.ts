@@ -663,6 +663,28 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  votarComentario(comentarioId: number, cantidad: number): Observable<any> {
+    return this.http
+      .post<any>(`${environment.api}/api/comentarios/votarComentario`, {
+        comentarioId,
+        cantidad,
+      })
+      .pipe(
+        map((response: any) => {
+          if (response.status === 200) {
+            return response.data;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.errors.join(', '),
+            });
+          }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   recomendarPost(postId: number): Observable<any> {
     return this.http
       .post<any>(`${environment.api}/api/posts/recomendarPost`, { id: postId })

@@ -1,44 +1,47 @@
 <h6 class="main-title my-2">
-    <span>Últimos posts creados</span>
+  <span>Últimos posts creados</span>
 </h6>
 
-<main class="alert alert-warning" *ngIf="posts.length < 1">
+@if (posts.length < 1) {
+  <main class="alert alert-warning">
     🐱‍💻 <strong>El usuario {{user.userName}} no ha publicado ningun post hasta el momento.</strong>
-</main>
+  </main>
+}
 
-<main class="table-responsive" *ngIf="posts.length > 0">
+@if (posts.length > 0) {
+  <main class="table-responsive">
     <table class="table table-sm table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Puntos</th>
-                <th>Creado</th>
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Puntos</th>
+          <th>Creado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (post of posts; track post; let i = $index) {
+          <tr [ngClass]="{'row-deleted': post.eliminado}">
+            <td>
+              <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
+                title="{{post.titulo}}">
+                <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
+                  alt="{{post.categoria.nombre}}" />
+                  {{post.titulo}}
+                </a>
+              </td>
+              <td>
+                {{post.puntos}}
+              </td>
+              <td>
+                {{post.fechaRegistro | timeAgo}}
+              </td>
             </tr>
-        </thead>
-
-        <tbody>
-            <tr *ngFor="let post of posts; let i = index" [ngClass]="{'row-deleted': post.eliminado}">
-                <td>
-                    <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
-                        title="{{post.titulo}}">
-                        <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
-                            alt="{{post.categoria.nombre}}" />
-                        {{post.titulo}}
-                    </a>
-                </td>
-
-                <td>
-                    {{post.puntos}}
-                </td>
-
-                <td>
-                    {{post.fechaRegistro | timeAgo}}
-                </td>
-            </tr>
+          }
         </tbody>
-    </table>
-</main>
+      </table>
+    </main>
+  }
 
-<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
     [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
-</mat-paginator>
+  </mat-paginator>

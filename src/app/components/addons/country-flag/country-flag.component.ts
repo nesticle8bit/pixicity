@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'addon-country-flag',
   templateUrl: './country-flag.component.html',
   styleUrls: ['./country-flag.component.scss'],

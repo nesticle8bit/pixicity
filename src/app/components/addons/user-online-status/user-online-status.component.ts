@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-user-online-status',
   templateUrl: './user-online-status.component.html',
   styleUrls: ['./user-online-status.component.scss'],

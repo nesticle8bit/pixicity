@@ -5,6 +5,7 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-dialog-denunciar-post',
   templateUrl: './dialog-denunciar-post.component.html',
   styleUrls: ['./dialog-denunciar-post.component.scss']
@@ -43,7 +44,7 @@ export class DialogDenunciarPostComponent implements OnInit {
     label: 'Post demasiado pobre / Crap'
   },{
     id: 11,
-    label: 'Pixicity! no es un foro'
+    label: 'Taringas! no es un foro'
   },{
     id: 12,
     label: 'No cumple con el protocolo'

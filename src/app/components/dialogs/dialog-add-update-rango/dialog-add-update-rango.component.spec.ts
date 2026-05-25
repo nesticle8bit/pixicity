@@ -8,8 +8,8 @@ describe('DialogAddUpdateRangoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogAddUpdateRangoComponent ]
-    })
+    imports: [DialogAddUpdateRangoComponent]
+})
     .compileComponents();
   });
 

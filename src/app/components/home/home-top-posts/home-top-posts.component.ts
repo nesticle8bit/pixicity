@@ -3,6 +3,7 @@ import { TopPostModel } from 'src/app/models/web/topPost.model';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-home-top-posts',
   templateUrl: './home-top-posts.component.html',
   styleUrls: ['./home-top-posts.component.scss'],

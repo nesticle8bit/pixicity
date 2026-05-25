@@ -2,6 +2,7 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-post-more-from-op',
   templateUrl: './post-more-from-op.component.html',
   styleUrls: ['./post-more-from-op.component.scss'],

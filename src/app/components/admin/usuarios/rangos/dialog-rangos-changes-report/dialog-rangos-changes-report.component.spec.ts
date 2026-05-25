@@ -8,8 +8,8 @@ describe('DialogRangosChangesReportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogRangosChangesReportComponent ]
-    })
+    imports: [DialogRangosChangesReportComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(DialogRangosChangesReportComponent);

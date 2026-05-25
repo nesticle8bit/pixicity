@@ -4,6 +4,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 
 @Component({
+  standalone: false,
   selector: 'app-profile-following',
   templateUrl: './profile-following.component.html',
   styleUrls: ['./profile-following.component.scss'],

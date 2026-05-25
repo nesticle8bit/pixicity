@@ -1,140 +1,142 @@
-<main class="table-responsive" *ngIf="usuarios.length > 0">
+@if (usuarios.length > 0) {
+  <main class="table-responsive">
     <table class="table table-sm table-striped table-hover">
-        <thead>
-            <tr>
-                <th></th>
-                <th style="width: 80px"></th>
-                <th>UserName</th>
-                <th>Email</th>
-                <th>Género</th>
-                <th>País</th>
-                <th>Posts</th>
-                <th>Comentarios</th>
-                <th>
-                    <fa-icon icon="wifi" [matTooltip]="'Última Conexión'"></fa-icon>
-                </th>
-                <th>Última IP</th>
-                <th>Baneado</th>
-                <th>Eliminado</th>
-                <th></th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr *ngFor="let usuario of usuarios; let i = index" [ngClass]="{'opacity-50': usuario.eliminado}">
-                <td>
-                    <strong>{{usuario.id}}</strong>
-                </td>
-
-                <td>
-                    <app-user-avatar [height]="20" [avatar]="usuario.avatar" [userName]="usuario.userName"></app-user-avatar> <fa-icon
-                        class="ms-2 text-success" icon="calendar-day" matTooltip="{{usuario.fechaRegistro | timeAgo}}"
-                        matTooltipPosition="right"></fa-icon>
-                </td>
-
-                <td>
-                    <a href="/perfil/{{usuario.userName}}" target="_blank">
-                        {{usuario.userName}}
-                    </a>
-                </td>
-
-                <td>
-                    <span class="text-primary">{{usuario.email}}</span>
-                </td>
-
-                <td>
-                    {{usuario.genero}}
-                </td>
-
-                <td>
-                    <addon-country-flag [iso2]="usuario.estado.pais.isO2"
-                        [title]="usuario.estado.pais.nombre"></addon-country-flag>
-                </td>
-
-                <td>
-                    {{usuario.cantidadPosts}}
-                </td>
-
-                <td>
-                    {{usuario.cantidadComentarios}}
-                </td>
-
-                <td>
-                    <fa-icon icon="calendar-alt" class="text-muted" *ngIf="usuario.ultimaConexion"
-                        matTooltip="{{usuario.ultimaConexion | date:'medium'}}" matTooltipPosition="right"></fa-icon>
-                </td>
-
-                <td>
-                    {{usuario.ultimaIP}}
-                </td>
-
-                <td>
-                    <span class="badge" [ngClass]="{'bg-danger': usuario.baneado, 'bg-info': !usuario.baneado}">
-                        <span *ngIf="usuario.baneado">
-                            <fa-icon [icon]="['fas', 'ban']"></fa-icon> Baneado
-                        </span>
-
-                        <span *ngIf="!usuario.baneado">
-                            <fa-icon [icon]="['fas', 'check-circle']"></fa-icon> Activo
-                        </span>
-                    </span>
-                </td>
-
-                <td>
-                    <span *ngIf="usuario.eliminado" class="badge bg-danger"
-                        matTooltip="Eliminado el ({{usuario.fechaElimina | date:'dd/MM/yyyy HH:mm:ss'}}) por {{usuario.usuarioElimina}}">
-                        Eliminado &nbsp; <fa-icon class="cursor--help ml-3" [icon]="['fas', 'calendar-alt']">
-                        </fa-icon>
-                    </span>
-
-                    <span *ngIf="!usuario.eliminado" class="badge bg-success">
-                        Activo
-                    </span>
-                </td>
-
-                <td class="text-center" width="30px">
-                    <button class="btn-menu" [matMenuTriggerFor]="menu">
-                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
-                    </button>
-
-                    <mat-menu #menu="matMenu">
-                        <button type="button" mat-menu-item (click)="changeAvatar(usuario)">
-                            <mat-icon>photo_camera</mat-icon>
-                            Actualizar Imagen de Perfil
-                        </button>
-
-                        <button type="button" mat-menu-item (click)="removeAvatar(usuario)">
-                            <mat-icon>image_not_supported</mat-icon>
-                            Eliminar Imagen de Perfil
-                        </button>
-
-                        <button type="button" mat-menu-item (click)="enviarMP(usuario)"
-                            *ngIf="!usuario.baneado && !usuario.eliminado">
-                            <mat-icon>forward_to_inbox</mat-icon>
-                            Enviar Mensaje Privado
-                        </button>
-
-                        <button type="button" mat-menu-item (click)="banUser(usuario)"
-                            *ngIf="!usuario.baneado && !usuario.eliminado">
-                            <mat-icon>do_disturb_alt</mat-icon>
-                            Banear
-                        </button>
-
-                        <mat-divider></mat-divider>
-
-                        <button type="button" mat-menu-item (click)="deleteUser(usuario)">
-                            <mat-icon *ngIf="!usuario.eliminado">delete_outline</mat-icon>
-                            <mat-icon *ngIf="usuario.eliminado">undo</mat-icon>
-
-                            <span>{{!usuario.eliminado ? 'Eliminar' : 'Recuperar'}}</span>
-                        </button>
-                    </mat-menu>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+      <thead>
+        <tr>
+          <th></th>
+          <th style="width: 80px"></th>
+          <th>UserName</th>
+          <th>Email</th>
+          <th>Género</th>
+          <th>País</th>
+          <th>Posts</th>
+          <th>Comentarios</th>
+          <th>
+            <fa-icon icon="wifi" [matTooltip]="'Última Conexión'"></fa-icon>
+          </th>
+          <th>Última IP</th>
+          <th>Baneado</th>
+          <th>Eliminado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (usuario of usuarios; track usuario; let i = $index) {
+          <tr [ngClass]="{'opacity-50': usuario.eliminado}">
+            <td>
+              <strong>{{usuario.id}}</strong>
+            </td>
+            <td>
+              <app-user-avatar [height]="20" [avatar]="usuario.avatar" [userName]="usuario.userName"></app-user-avatar> <fa-icon
+              class="ms-2 text-success" icon="calendar-day" matTooltip="{{usuario.fechaRegistro | timeAgo}}"
+            matTooltipPosition="right"></fa-icon>
+          </td>
+          <td>
+            <a href="/perfil/{{usuario.userName}}" target="_blank" [appUserPopover]="usuario.userName">
+              {{usuario.userName}}
+            </a>
+          </td>
+          <td>
+            <span class="text-primary">{{usuario.email}}</span>
+          </td>
+          <td>
+            {{usuario.genero}}
+          </td>
+          <td>
+            <addon-country-flag [iso2]="usuario.estado.pais.isO2"
+            [title]="usuario.estado.pais.nombre"></addon-country-flag>
+          </td>
+          <td>
+            {{usuario.cantidadPosts}}
+          </td>
+          <td>
+            {{usuario.cantidadComentarios}}
+          </td>
+          <td>
+            @if (usuario.ultimaConexion) {
+              <fa-icon icon="calendar-alt" class="text-muted"
+              matTooltip="{{usuario.ultimaConexion | date:'medium'}}" matTooltipPosition="right"></fa-icon>
+            }
+          </td>
+          <td>
+            {{usuario.ultimaIP}}
+          </td>
+          <td>
+            <span class="badge" [ngClass]="{'bg-danger': usuario.baneado, 'bg-info': !usuario.baneado}">
+              @if (usuario.baneado) {
+                <span>
+                  <fa-icon [icon]="['fas', 'ban']"></fa-icon> Baneado
+                </span>
+              }
+              @if (!usuario.baneado) {
+                <span>
+                  <fa-icon [icon]="['fas', 'check-circle']"></fa-icon> Activo
+                </span>
+              }
+            </span>
+          </td>
+          <td>
+            @if (usuario.eliminado) {
+              <span class="badge bg-danger"
+                matTooltip="Eliminado el ({{usuario.fechaElimina | date:'dd/MM/yyyy HH:mm:ss'}}) por {{usuario.usuarioElimina}}">
+                Eliminado &nbsp; <fa-icon class="cursor--help ml-3" [icon]="['fas', 'calendar-alt']">
+              </fa-icon>
+            </span>
+          }
+          @if (!usuario.eliminado) {
+            <span class="badge bg-success">
+              Activo
+            </span>
+          }
+        </td>
+        <td class="text-center" width="30px">
+          <button class="btn-menu" [matMenuTriggerFor]="menu">
+            <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button type="button" mat-menu-item (click)="changeAvatar(usuario)">
+              <mat-icon>photo_camera</mat-icon>
+              Actualizar Imagen de Perfil
+            </button>
+            <button type="button" mat-menu-item (click)="removeAvatar(usuario)">
+              <mat-icon>image_not_supported</mat-icon>
+              Eliminar Imagen de Perfil
+            </button>
+            @if (!usuario.baneado && !usuario.eliminado) {
+              <button type="button" mat-menu-item (click)="enviarMP(usuario)"
+                >
+                <mat-icon>forward_to_inbox</mat-icon>
+                Enviar Mensaje Privado
+              </button>
+            }
+            @if (!usuario.baneado && !usuario.eliminado) {
+              <button type="button" mat-menu-item (click)="banUser(usuario)"
+                >
+                <mat-icon>do_disturb_alt</mat-icon>
+                Banear
+              </button>
+            }
+            <mat-divider></mat-divider>
+            <button type="button" mat-menu-item (click)="deleteUser(usuario)">
+              @if (!usuario.eliminado) {
+                <mat-icon>delete_outline</mat-icon>
+              }
+              @if (usuario.eliminado) {
+                <mat-icon>undo</mat-icon>
+              }
+              <span>{{!usuario.eliminado ? 'Eliminar' : 'Recuperar'}}</span>
+            </button>
+          </mat-menu>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
 </main>
+}
 
-<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
-    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="usuarios.length > 0">
-</mat-paginator>
+@if (usuarios.length > 0) {
+  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
+  </mat-paginator>
+}

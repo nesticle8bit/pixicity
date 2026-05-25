@@ -1,25 +1,24 @@
 <section class="mb-2">
-    <h6 class="main-title">
-        <span>Últimos Registrados</span>
-    </h6>
-    
-    <ng-container *ngIf="users.length > 0">
-        <article class="list-posts--zebra" *ngFor="let usuario of users; let i = index">
-            <strong class="float-start">
-                {{i + 1}}
-            </strong>
-    
-            <a [routerLink]="['/perfil/' + usuario.userName]" title="{{usuario.userName}}">
-                <addon-country-flag [iso2]="usuario?.pais?.iso2"
-                                                [title]="usuario?.pais?.nombre"></addon-country-flag>
-                <app-genre-icon [genre]="usuario?.genero"></app-genre-icon>
-                
-                <span class="ms-2">{{usuario.userName}}</span>
-            </a>
+  <h6 class="main-title">
+    <span>Últimos Registrados</span>
+  </h6>
 
-            <span class="float-end value">
-                {{usuario.registro | timeAgo}}
-            </span>
-        </article>
-    </ng-container>
+  @if (users.length > 0) {
+    @for (usuario of users; track usuario; let i = $index) {
+      <article class="list-posts--zebra">
+        <strong class="float-start">
+          {{i + 1}}
+        </strong>
+        <a [routerLink]="['/perfil/' + usuario.userName]" title="{{usuario.userName}}" [appUserPopover]="usuario.userName">
+          <addon-country-flag [iso2]="usuario?.pais?.iso2"
+          [title]="usuario?.pais?.nombre"></addon-country-flag>
+          <app-genre-icon [genre]="usuario?.genero"></app-genre-icon>
+          <span class="ms-2">{{usuario.userName}}</span>
+        </a>
+        <span class="float-end value">
+          {{usuario.registro | timeAgo}}
+        </span>
+      </article>
+    }
+  }
 </section>

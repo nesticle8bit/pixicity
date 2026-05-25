@@ -8,8 +8,8 @@ describe('ReCaptchaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ReCaptchaComponent ]
-    })
+    imports: [ReCaptchaComponent]
+})
     .compileComponents();
   });
 

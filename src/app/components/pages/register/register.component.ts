@@ -10,6 +10,7 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
@@ -107,7 +108,7 @@ export class RegisterComponent implements OnInit {
       paisId: [undefined, Validators.required],
       estadoId: [undefined, Validators.required],
       termsConditions: false,
-      captcha: ['', Validators.required],
+      // captcha: ['', Validators.required],
     });
   }
 

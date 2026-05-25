@@ -4,6 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
+  standalone: false,
   selector: 'app-profile-posts',
   templateUrl: './profile-posts.component.html',
   styleUrls: ['./profile-posts.component.scss'],

@@ -1,41 +1,257 @@
-:host .NgxEditor__Wrapper {
-    height: 580px;
-    overflow-y: auto;
+/* ===========================
+   FORM ADD POST — HOST STYLES
+   =========================== */
+
+:host {
+    display: block;
 }
 
+/* Page header */
+.form-add-post__header {
+    padding: 16px 0 10px;
+    border-bottom: 2px solid #006595;
+    margin-bottom: 18px;
+
+    h1 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #333;
+        margin: 0 0 2px;
+
+        fa-icon {
+            color: #006595;
+            margin-right: 6px;
+        }
+    }
+
+    p {
+        color: #999;
+        font-size: 12px;
+        margin: 0;
+    }
+}
+
+/* Section boxes — .titular from global styles applies */
+.form-add-post__section {
+    margin-bottom: 12px;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+    background: #fff;
+    overflow: hidden;
+
+    .titular {
+        background: #f5f5f5;
+        border-bottom: 1px solid #e5e5e5;
+        padding: 8px 10px;
+        overflow: hidden;
+
+        h2 {
+            float: left;
+            font-size: 13px;
+            font-weight: 700;
+            color: #555;
+            margin: 0;
+            line-height: 20px;
+
+            fa-icon {
+                color: #006595;
+                margin-right: 5px;
+            }
+        }
+    }
+
+    .normab {
+        padding: 10px;
+    }
+}
+
+/* Title counter in header */
+.titular__counter {
+    float: right;
+    font-size: 11px;
+    color: #aaa;
+    font-weight: 400;
+    line-height: 20px;
+
+    &--warn {
+        color: #e67e22;
+        font-weight: 700;
+    }
+}
+
+/* Action link in titular (Generador) */
+.titular__action {
+    float: right;
+    font-size: 11px;
+    color: #006595;
+    font-weight: 700;
+    line-height: 20px;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    fa-icon {
+        margin-right: 3px;
+    }
+}
+
+/* Title input */
+.form-add-post__title-input {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    border-radius: 3px;
+    border-color: #ddd;
+
+    &:focus {
+        border-color: #006595;
+        box-shadow: 0 0 0 2px rgba(0, 101, 149, 0.1);
+    }
+}
+
+/* Re-post warning */
+.form-add-post__repost-warn {
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    border-radius: 3px;
+    padding: 8px 10px;
+    font-size: 12px;
+    color: #795548;
+}
+
+/* Editor wrapper */
+.normab--editor {
+    padding: 0 !important;
+}
+
+:host .NgxEditor__Wrapper {
+    height: 500px;
+    overflow-y: auto;
+    border: none;
+}
+
+/* Hint text */
+.form-add-post__hint {
+    font-size: 11px;
+    color: #888;
+    margin: 6px 0 0;
+
+    b { color: #555; }
+
+    kbd {
+        background: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        padding: 1px 4px;
+        font-size: 10px;
+    }
+}
+
+/* Publish box */
+.form-add-post__publish-box {
+    border-color: #006595;
+
+    .titular {
+        background: #006595;
+        border-bottom-color: #005580;
+
+        h2 {
+            color: #fff;
+
+            fa-icon {
+                color: #fff;
+            }
+        }
+    }
+}
+
+.btn-publish {
+    font-weight: 700;
+    letter-spacing: .3px;
+}
+
+/* Draft saved */
+.form-add-post__draft-saved {
+    font-size: 11px;
+    color: #27ae60;
+    font-weight: 600;
+}
+
+/* Option row */
+.form-add-post__option {
+    padding: 4px 0 8px;
+
+    small {
+        display: block;
+        color: #999;
+        font-size: 11px;
+        margin-top: 2px;
+        margin-left: 2px;
+    }
+}
+
+/* Tips */
+.form-add-post__tips {
+    border-color: #dde;
+
+    .titular {
+        background: #f0f4ff;
+        border-bottom-color: #dde;
+
+        h2 {
+            color: #556;
+        }
+    }
+}
+
+.form-add-post__tips-list {
+    margin: 0;
+    padding-left: 16px;
+    font-size: 11px;
+    color: #666;
+    line-height: 2;
+
+    li::marker {
+        color: #006595;
+    }
+}
+
+/* Tags */
 :host .tags-input-wrapper {
     display: block;
     width: 100%;
     padding: 6px 8px;
-    background-color: #f8f9fa;
+    background-color: #fafafa;
     border: 1.5px solid #dee2e6;
-    border-radius: 6px;
+    border-radius: 4px;
     min-height: 46px;
     cursor: text;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
     mat-chip-list {
         .mat-chip-list-wrapper {
             margin: 0;
-            gap: 6px;
+            gap: 4px;
             flex-wrap: wrap;
             align-items: center;
-            min-height: 32px;
+            min-height: 28px;
 
             input {
-                font-size: 0.875rem;
+                font-size: 13px;
                 color: #495057;
-                padding: 4px 6px;
+                padding: 2px 4px;
                 margin: 0;
                 flex: 1;
-                min-width: 150px;
+                min-width: 140px;
                 border: none !important;
                 outline: none !important;
                 box-shadow: none !important;
                 background: transparent;
 
                 &::placeholder {
-                    color: #adb5bd;
+                    color: #bbb;
                     font-style: italic;
                 }
             }
@@ -43,33 +259,31 @@
     }
 
     .mat-chip.mat-standard-chip {
-        font-size: 0.78rem;
-        font-weight: 500;
-        min-height: 24px;
+        font-size: 11px;
+        font-weight: 600;
+        min-height: 22px;
         padding: 2px 6px 2px 10px;
         border-radius: 20px;
-        background-color: #e7f0fd;
-        color: #1a56db;
-        border: 1px solid #c3d9f9;
+        background-color: #e3f2fd;
+        color: #1565c0;
+        border: 1px solid #bbdefb;
         line-height: 1.4;
-
-        .mat-chip-remove {
-            color: #6ea3f5;
-            opacity: 1;
-            font-size: 16px;
-            width: 16px;
-            height: 16px;
-            margin-left: 4px;
-
-            &:hover {
-                color: #1a56db;
-            }
-        }
     }
 
     &:focus-within {
-        border-color: #86b7fe;
+        border-color: #006595;
         background-color: #fff;
-        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
+        box-shadow: 0 0 0 2px rgba(0, 101, 149, 0.1);
+    }
+}
+
+/* Responsive */
+@media (max-width: 767.98px) {
+    .form-add-post__header h1 {
+        font-size: 16px;
+    }
+
+    :host .NgxEditor__Wrapper {
+        height: 350px;
     }
 }

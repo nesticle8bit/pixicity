@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-dashboard-votos',
   templateUrl: './dashboard-votos.component.html',
   styleUrls: ['./dashboard-votos.component.scss']

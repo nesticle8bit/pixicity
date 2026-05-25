@@ -8,8 +8,8 @@ describe('DialogUpdatePaisesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogUpdatePaisesComponent ]
-    })
+    imports: [DialogUpdatePaisesComponent]
+})
     .compileComponents();
   });
 

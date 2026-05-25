@@ -1,10 +1,10 @@
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Validators } from 'ngx-editor';
+import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-profile-shouts',
   templateUrl: './profile-shouts.component.html',
   styleUrls: ['./profile-shouts.component.scss'],

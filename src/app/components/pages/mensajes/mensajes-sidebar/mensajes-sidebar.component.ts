@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-mensajes-sidebar',
   templateUrl: './mensajes-sidebar.component.html',
   styleUrls: ['./mensajes-sidebar.component.scss'],

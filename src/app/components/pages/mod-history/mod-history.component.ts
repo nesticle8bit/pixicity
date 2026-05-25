@@ -4,6 +4,7 @@ import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
+  standalone: false,
   selector: 'app-mod-history',
   templateUrl: './mod-history.component.html',
   styleUrls: ['./mod-history.component.scss'],
@@ -16,7 +17,7 @@ export class ModHistoryComponent implements OnInit {
     private webService: IHttpWebService,
     private title: Title
   ) {
-    this.title.setTitle(`Historial de moderación | Pixicity - Ciudad Pixelada | Comunidad para Compartir Información`);
+    this.title.setTitle(`Historial de moderación | Taringas - Inteligencia colectiva | Comunidad para Compartir Información`);
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,

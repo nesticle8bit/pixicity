@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-table-reportes',
   templateUrl: './table-reportes.component.html',
   styleUrls: ['./table-reportes.component.scss'],

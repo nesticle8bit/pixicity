@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-tipo-icon-monitor',
   templateUrl: './tipo-icon-monitor.component.html',
   styleUrls: ['./tipo-icon-monitor.component.scss'],

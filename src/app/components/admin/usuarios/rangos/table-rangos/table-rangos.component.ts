@@ -8,6 +8,7 @@ import { DialogRangosChangesReportComponent } from '../dialog-rangos-changes-rep
 import { DialogVerUsuariosComponent } from 'src/app/components/dialogs/dialog-ver-usuarios/dialog-ver-usuarios.component';
 
 @Component({
+  standalone: false,
   selector: 'app-table-rangos',
   templateUrl: './table-rangos.component.html',
   styleUrls: ['./table-rangos.component.scss'],

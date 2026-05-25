@@ -1,185 +1,176 @@
-<section *ngIf="currentUser?.usuario">
+@if (currentUser.usuario) {
+  <section>
     <form [formGroup]="formGroup" (ngSubmit)="buscar()" class="d-none d-md-block"
-        style="float:right; margin-top: 17px;">
-        <input type="text" id="ibuscadorq" name="q" placeholder="Buscar..." title="Buscar..." formControlName="search"
-            class="mini_ibuscador onblur_effect">
+      style="float:right; margin-top: 17px;">
+      <input type="text" id="ibuscadorq" name="q" placeholder="Buscar..." title="Buscar..." formControlName="search"
+        class="mini_ibuscador onblur_effect">
         <input vspace="2" hspace="10" type="submit" alt="Buscar" value="" title="Buscar" class="mini_bbuscador" />
-    </form>
-
-    <div class="userInfoLogin">
+      </form>
+      <div class="userInfoLogin">
         <ul>
-            <li class="monitor" style="position: relative">
-                <a class="menu" href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Monitor"
-                    [matTooltipPosition]="'above'" (click)="verNotificaciones();"
-                    (clickOutside)="display.monitor = false">
-                    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+          <li class="monitor" style="position: relative">
+            <a class="menu" href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Monitor"
+              [matTooltipPosition]="'above'" (click)="verNotificaciones();"
+              (clickOutside)="display.monitor = false">
+              <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+            </a>
+            <div class="notificaciones-list" id="mon_list" [style.display]="display.monitor ? 'block' : 'none'">
+              <div class="timoni">Notificaciones</div>
+              <ul>
+                @if (notificaciones.length < 1) {
+                  <div class="errr">No hay notificaciones</div>
+                }
+                @for (notificacion of notificaciones; track notificacion) {
+                  <li class="list-items"
+                    [ngClass]="{'sin-leer': !notificacion.leido}">
+                    <div class="d-flex">
+                      <div class="flex-shrink-0">
+                        @if (notificacion.usuarioQueHaceAccion) {
+                          <app-user-avatar
+                            matTooltip="{{notificacion.usuarioQueHaceAccion?.userName}}"
+                            [matTooltipPosition]="'before'"
+                            [avatar]="notificacion.usuarioQueHaceAccion.avatar"
+                            [userName]="notificacion.usuarioQueHaceAccion?.userName"
+                          [height]="20"></app-user-avatar>
+                        }
+                      </div>
+                      <div class="flex-grow-1 ms-2">
+                        <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
+                        <span class="inner-text">
+                          <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion?.userName]" [appUserPopover]="notificacion.usuarioQueHaceAccion?.userName">
+                            {{notificacion.usuarioQueHaceAccion?.userName}}
+                          </a>
+                          <span [innerHTML]="notificacion.mensaje"></span>
+                        </span>
+                        <br>
+                          <small class="text-muted cursor--help"
+                            matTooltip="{{notificacion.fechaRegistro | date:'medium'}}">
+                            {{notificacion.fechaRegistro | timeAgo}}
+                          </small>
+                        </div>
+                      </div>
+                    </li>
+                  }
+                </ul>
+                <a [routerLink]="['/monitor']" class="vemas">
+                  Más
                 </a>
-
-                <div class="notificaciones-list" id="mon_list" [style.display]="display.monitor ? 'block' : 'none'">
-                    <div class="timoni">Notificaciones</div>
-
-                    <ul>
-                        <div class="errr" *ngIf="notificaciones.length < 1">No hay notificaciones</div>
-
-                        <li class="list-items" *ngFor="let notificacion of notificaciones"
-                            [ngClass]="{'sin-leer': !notificacion.leido}">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <app-user-avatar *ngIf="notificacion.usuarioQueHaceAccion"
-                                        matTooltip="{{notificacion.usuarioQueHaceAccion?.userName}}"
-                                        [matTooltipPosition]="'before'"
-                                        [avatar]="notificacion.usuarioQueHaceAccion.avatar"
-                                        [userName]="notificacion.usuarioQueHaceAccion?.userName"
-                                        [height]="20"></app-user-avatar>
-                                </div>
-
-                                <div class="flex-grow-1 ms-2">
-                                    <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
-
-                                    <span class="inner-text">
-                                        <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion?.userName]">
-                                            {{notificacion.usuarioQueHaceAccion?.userName}}
-                                        </a>
-                                        <span [innerHTML]="notificacion.mensaje"></span>
-                                    </span>
-
-                                    <br>
-
-                                    <small class="text-muted cursor--help"
-                                        matTooltip="{{notificacion.fechaRegistro | date:'medium'}}">
-                                        {{notificacion.fechaRegistro | timeAgo}}
-                                    </small>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <a [routerLink]="['/monitor']" class="vemas">
-                        Más
-                    </a>
+              </div>
+              @if (currentStats.notifications > 0) {
+                <div class="alertas" id="alerta_mon" style="top: -10px;">
+                  <a title="{{currentStats.notifications}} notificaciones">
+                    <span>{{currentStats.notifications}}</span>
+                  </a>
                 </div>
-
-                <div class="alertas" id="alerta_mon" style="top: -10px;" *ngIf="currentStats.notifications > 0">
-                    <a title="{{currentStats.notifications}} notificaciones">
-                        <span>{{currentStats.notifications}}</span>
-                    </a>
-                </div>
+              }
             </li>
-
             <li class="mensajes" style="position:relative">
-                <a class="menu" href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Mensajes"
-                    [matTooltipPosition]="'above'" (click)="verMensajes()" (clickOutside)="display.mensajes = false">
-                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
-                </a>
-
-                <div class="notificaciones-list" id="mon_list" [style.display]="display.mensajes ? 'block' : 'none'">
-                    <div class="timoni">Mensajes directos</div>
-
-                    <ul>
-                        <div class="errr" *ngIf="mensajes.length < 1">No hay mensajes</div>
-
-                        <li class="list-items" *ngFor="let mensaje of mensajes"
-                            [ngClass]="{'sin-leer': !mensaje.leido}">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <app-user-avatar matTooltip="{{mensaje.usuarioDe.userName}}"
-                                        [matTooltipPosition]="'before'" [avatar]="mensaje.usuarioDe.avatar"
-                                        [userName]="mensaje.usuarioDe.userName" [height]="20"></app-user-avatar>
-                                </div>
-
-                                <div class="flex-grow-1 ms-2" [routerLink]="['/mensajes/conversacion/' + mensaje.id]">
-                                    <!-- <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor> -->
-
-                                    <span class="inner-text">
-                                        <a [routerLink]="['/perfil/' + mensaje.usuarioDe?.userName]">
-                                            {{mensaje.usuarioDe?.userName}}
-                                        </a>
-
-                                        <article class="cursor--pointer">
-                                            <p [innerHTML]="mensaje.contenido | truncate:[30]"></p>
-                                        </article>
-                                    </span>
-
-                                    <br>
-
-                                    <small class="text-muted cursor--help"
-                                        matTooltip="{{mensaje.fechaRegistro | date:'medium'}}">
-                                        {{mensaje.fechaRegistro | timeAgo}}
-                                    </small>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <a [routerLink]="['/mensajes']" class="vemas">
-                        Más
-                    </a>
-                </div>
-
-                <div class="alertas" id="alerta_mon" style="top: -10px;" *ngIf="currentStats.messages > 0">
-                    <a title="{{currentStats.messages}} mensajes">
-                        <span>{{currentStats.messages}}</span>
-                    </a>
-                </div>
-            </li>
-
-            <li class="favoritos" style="position:relative">
-                <a class="menu" href="javascript:void(0)" title="Posts favoritos" (click)="verFavoritos()"
-                    (clickOutside)="display.favoritos = false">
-                    <fa-icon [icon]="['fas', 'star']"></fa-icon>
-                </a>
-
-                <div class="notificaciones-list" id="mon_list" [style.display]="display.favoritos ? 'block' : 'none'">
-                    <div class="timoni">Favoritos</div>
-
-                    <ul>
-                        <div class="errr" *ngIf="favoritos.length < 1">No hay favoritos</div>
-
-                        <li class="list-items" *ngFor="let favorito of favoritos">
-                            <a [routerLink]="['/posts/' + favorito.post.categoria.seo + '/' + favorito.post.id + '/' + favorito.post.url]"
-                                title="{{favorito.post.titulo}}">
-                                <img src="/assets/images/categorias/{{favorito.post.categoria.icono}}"
-                                    title="{{favorito.post.categoria.nombre}}"
-                                    alt="{{favorito.post.categoria.nombre}}" />
-                                {{favorito.post.titulo | truncate:[44]}}
+              <a class="menu" href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Mensajes"
+                [matTooltipPosition]="'above'" (click)="verMensajes()" (clickOutside)="display.mensajes = false">
+                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+              </a>
+              <div class="notificaciones-list" id="mon_list" [style.display]="display.mensajes ? 'block' : 'none'">
+                <div class="timoni">Mensajes directos</div>
+                <ul>
+                  @if (mensajes.length < 1) {
+                    <div class="errr">No hay mensajes</div>
+                  }
+                  @for (mensaje of mensajes; track mensaje) {
+                    <li class="list-items"
+                      [ngClass]="{'sin-leer': !mensaje.leido}">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0">
+                          <app-user-avatar matTooltip="{{mensaje.usuarioDe.userName}}"
+                            [matTooltipPosition]="'before'" [avatar]="mensaje.usuarioDe.avatar"
+                          [userName]="mensaje.usuarioDe.userName" [height]="20"></app-user-avatar>
+                        </div>
+                        <div class="flex-grow-1 ms-2" [routerLink]="['/mensajes/conversacion/' + mensaje.id]">
+                          <!-- <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor> -->
+                          <span class="inner-text">
+                            <a [routerLink]="['/perfil/' + mensaje.usuarioDe?.userName]" [appUserPopover]="mensaje.usuarioDe?.userName">
+                              {{mensaje.usuarioDe?.userName}}
                             </a>
-                        </li>
-                    </ul>
-
-                    <a href="javascript:void(0)" [routerLink]="['/favoritos']" class="vemas">Más</a>
+                            <article class="cursor--pointer">
+                              <p [innerHTML]="mensaje.contenido | truncate:[30]"></p>
+                            </article>
+                          </span>
+                          <br>
+                            <small class="text-muted cursor--help"
+                              matTooltip="{{mensaje.fechaRegistro | date:'medium'}}">
+                              {{mensaje.fechaRegistro | timeAgo}}
+                            </small>
+                          </div>
+                        </div>
+                      </li>
+                    }
+                  </ul>
+                  <a [routerLink]="['/mensajes']" class="vemas">
+                    Más
+                  </a>
                 </div>
-            </li>
-
-            <li class="usernameMenu" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
-                <a class="nick menu" href="javascript:void(0)"
+                @if (currentStats.messages > 0) {
+                  <div class="alertas" id="alerta_mon" style="top: -10px;">
+                    <a title="{{currentStats.messages}} mensajes">
+                      <span>{{currentStats.messages}}</span>
+                    </a>
+                  </div>
+                }
+              </li>
+              <li class="favoritos" style="position:relative">
+                <a class="menu" href="javascript:void(0)" title="Posts favoritos" (click)="verFavoritos()"
+                  (clickOutside)="display.favoritos = false">
+                  <fa-icon [icon]="['fas', 'star']"></fa-icon>
+                </a>
+                <div class="notificaciones-list" id="mon_list" [style.display]="display.favoritos ? 'block' : 'none'">
+                  <div class="timoni">Favoritos</div>
+                  <ul>
+                    @if (favoritos.length < 1) {
+                      <div class="errr">No hay favoritos</div>
+                    }
+                    @for (favorito of favoritos; track favorito) {
+                      <li class="list-items">
+                        <a [routerLink]="['/posts/' + favorito.post.categoria.seo + '/' + favorito.post.id + '/' + favorito.post.url]"
+                          title="{{favorito.post.titulo}}">
+                          <img src="/assets/images/categorias/{{favorito.post.categoria.icono}}"
+                            title="{{favorito.post.categoria.nombre}}"
+                            alt="{{favorito.post.categoria.nombre}}" />
+                            {{favorito.post.titulo | truncate:[44]}}
+                          </a>
+                        </li>
+                      }
+                    </ul>
+                    <a href="javascript:void(0)" [routerLink]="['/favoritos']" class="vemas">Más</a>
+                  </div>
+                </li>
+                <li class="usernameMenu" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
+                  <a class="nick menu" href="javascript:void(0)"
                     [routerLink]="['/perfil/' + currentUser.usuario?.userName]">
                     <app-user-avatar [class]="'avamu'" [avatar]="currentUser.usuario?.avatar"
-                        [userName]="currentUser.usuario?.userName" [height]="20"></app-user-avatar>
-
+                    [userName]="currentUser.usuario?.userName" [height]="20"></app-user-avatar>
                     <span>{{currentUser.usuario?.userName}}</span>
                     <img class="punti" src="/assets/images/ui/arrowd.png" />
-                </a>
-
-                <div class="menuver" style="top: 16px; z-index: 1;" [style.display]="displayMenu ? 'block' : 'none'"
+                  </a>
+                  <div class="menuver" style="top: 16px; z-index: 1;" [style.display]="displayMenu ? 'block' : 'none'"
                     (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
                     <a [routerLink]="['cuenta']" class="menu">
-                        Cuenta
+                      Cuenta
                     </a>
-
                     <a class="menu" [routerLink]="['/borradores']">
-                        Borradores
+                      Borradores
                     </a>
-
                     <a class="menu" href="javascript:void(0)" (click)="cerrarSesion()">
-                        Salir
+                      Salir
                     </a>
-                </div>
-            </li>
-        </ul>
-    </div>
-</section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        }
 
-<div *ngIf="!currentUser?.usuario">
-    <a class="registro float-end" [routerLink]="['/registro']"></a>
-    <a class="identificarse float-end" [routerLink]="['/login']">Identificarme</a>
-</div>
+        @if (!currentUser.usuario) {
+          <div>
+            <a class="registro float-end" [routerLink]="['/registro']"></a>
+            <a class="identificarse float-end" [routerLink]="['/login']">Identificarme</a>
+          </div>
+        }

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-perfil-user-followers',
   templateUrl: './perfil-user-followers.component.html',
   styleUrls: ['./perfil-user-followers.component.scss'],

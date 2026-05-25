@@ -1,225 +1,255 @@
 <main class="mt-3">
-    <h6 class="main-title my-2">
-        <span>Información de {{user.userName}}</span>
-    </h6>
+  <h6 class="main-title my-2">
+    <span>Información de {{user.userName}}</span>
+  </h6>
 
-    <main class="alert alert-warning mt-3" *ngIf="!userInformation">
-        👾 <strong>El usuario {{user.userName}} aún no ha llenado la información de esta sección.</strong>
+  @if (!userInformation) {
+    <main class="alert alert-warning mt-3">
+      👾 <strong>El usuario {{user.userName}} aún no ha llenado la información de esta sección.</strong>
     </main>
+  }
 
-    <article *ngIf="userInformation">
-        <ul>
-            <li>
-                <label>País</label>
-                <strong>Pendiente</strong>
-            </li>
-
-            <!-- <li>
-                <pre>
-                    {{perfil | json}}
-                </pre>
-            </li> -->
-
-            <li *ngIf="perfil?.website">
-                <label>Sitio Web</label>
-                <strong>
-                    <a rel="nofollow" href="{{perfil?.website}}">
-                        {{perfil?.website}}
-                    </a>
-                </strong>
-            </li>
-
-            <li *ngIf="perfil?.fechaRegistro">
-                <label>Es usuario desde</label>
-                <strong>{{perfil?.fechaRegistro |
-                    date:'dd'}} de {{perfil?.fechaRegistro | date:'MMMM'}} del
-                    {{perfil?.fechaRegistro | date: 'YYYY'}}</strong>
-            </li>
-
-            <!-- <li>
-                <label>Última vez activo</label>
-                <strong>Hace unos segundos</strong>
-            </li> -->
-            
-            <li *ngIf="perfil?.estudios">
-                <label>Estudios</label>
-                <strong>{{perfil?.estudios}}</strong>
-            </li>
-
-            <li class="sep">
-                <h4>Idiomas</h4>
-            </li>
-
-            <li>
-                <label>Español</label>
-                <strong>Nativo</strong>
-            </li>
-
-            <li>
-                <label>Inglés</label>
-                <strong>Intermedio</strong>
-            </li>
-            
-            <li class="sep">
-                <h4>Datos profesionales</h4>
-            </li>
-
-            <li *ngIf="perfil?.profesion">
-                <label>Profesión</label>
-                <strong>{{perfil?.profesion}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.empresa">
-                <label>Empresa</label>
-                <strong>{{perfil?.empresa}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.interesesProfesionales">
-                <label>Intereses profesionales</label>
-                <strong>{{perfil?.interesesProfesionales}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.habilidadesProfesionales">
-                <label>Habilidades profesionales</label>
-                <strong>{{perfil?.habilidadesProfesionales}}</strong>
-            </li>
-
-            <li class="sep">
-                <h4>Vida personal</h4>
-            </li>
-
-            <li *ngIf="perfil?.like1 || perfil?.like2 || perfil?.like3 || perfil?.like4 || perfil?.like_All">
-                <label>Le gustaría</label>
-                <strong>
-                    <span *ngIf="perfil?.like1">Hacer amigos, </span>
-                    <span *ngIf="perfil?.like2">Conocer gente con mis intereses, </span>
-                    <span *ngIf="perfil?.like3">Conocer gente para negocios, </span>
-                    <span *ngIf="perfil?.like4">Encontrar pareja, </span>
-                    <span *ngIf="perfil?.like_All">De todo.</span>
-                </strong>
-            </li>
-
-            <li *ngIf="perfil?.estadoCivil">
-                <label>Estado civil</label>
-                <strong>{{perfil?.estadoCivil}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.hijos">
-                <label>Hijos</label>
-                <strong>{{perfil?.hijos}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.vivoCon">
-                <label>Vive con</label>
-                <strong>{{perfil?.vivoCon}}</strong>
-            </li>
-
-            <li class="sep">
-                <h4>¿Cómo es?</h4>
-            </li>
-
-            <li *ngIf="perfil?.altura">
-                <label>Mide</label>
-                <strong>{{perfil?.altura}} centimetros</strong>
-            </li>
-
-            <li *ngIf="perfil?.peso">
-                <label>Pesa</label>
-                <strong>{{perfil?.peso}} kilos</strong>
-            </li>
-
-            <li *ngIf="perfil?.colorCabello">
-                <label>Su pelo es</label>
-                <strong>{{perfil?.colorCabello}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.colorOjos">
-                <label>Sus ojos son</label>
-                <strong>{{perfil?.colorOjos}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.complexion">
-                <label>Su físico es</label>
-                <strong>{{perfil?.complexion}}</strong>
-            </li>
-            
-            <li>
-                <label></label>
-                <strong>{{perfil?.tatuajes ? 'Tiene' : 'No tiene'}} Tatuajes</strong>
-            </li>
-
-            <li>
-                <label></label>
-                <strong>{{perfil?.piercings ? 'Tiene' : 'No tiene'}} Piercings</strong>
-            </li>
-
-            <li class="sep">
-                <h4>Habitos personales</h4>
-            </li>
-
-            <li *ngIf="perfil?.dieta">
-                <label>Mantiene una dieta</label>
-                <strong>{{perfil?.dieta}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.fumo">
-                <label>Fuma</label>
-                <strong>{{perfil?.fumo}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.alcohol">
-                <label>Toma alcohol</label>
-                <strong>{{perfil?.alcohol}}</strong>
-            </li>
-
-            <li class="sep">
-                <h4>Sus propias palabras</h4>
-            </li>
-
-            <li *ngIf="perfil?.intereses">
-                <label>Intereses</label>
-                <strong>{{perfil?.intereses}}</strong>
-            </li>
-            
-            <li *ngIf="perfil?.hobbies">
-                <label>Hobbies</label>
-                <strong>{{perfil?.hobbies}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.seriesTV">
-                <label>Series de TV favoritas</label>
-                <strong>{{perfil?.seriesTV}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.musicaFavorita">
-                <label>Música favorita</label>
-                <strong>{{perfil?.musicaFavorita}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.deportesFavoritos">
-                <label>Deportes y Equipos</label>
-                <strong>{{perfil?.deportesFavoritos}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.librosFavoritos">
-                <label>Libros favoritos</label>
-                <strong>{{perfil?.librosFavoritos}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.peliculasFavoritas">
-                <label>Películas favoritas</label>
-                <strong>{{perfil?.peliculasFavoritas}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.comidaFavorita">
-                <label>Comida favorita</label>
-                <strong>{{perfil?.comidaFavorita}}</strong>
-            </li>
-
-            <li *ngIf="perfil?.misHeroesSon">
-                <label>Sus heroes son</label>
-                <strong>{{perfil?.misHeroesSon}}</strong>
-            </li>
-        </ul>
-    </article>
+  @if (userInformation) {
+    <article>
+      <ul>
+        <li>
+          <label>País</label>
+          <strong>Pendiente</strong>
+        </li>
+        <!-- <li>
+        <pre>
+          {{perfil | json}}
+        </pre>
+      </li> -->
+      @if (perfil?.website) {
+        <li>
+          <label>Sitio Web</label>
+          <strong>
+            <a rel="nofollow" href="{{perfil?.website}}">
+              {{perfil?.website}}
+            </a>
+          </strong>
+        </li>
+      }
+      @if (perfil?.fechaRegistro) {
+        <li>
+          <label>Es usuario desde</label>
+          <strong>{{perfil?.fechaRegistro |
+            date:'dd'}} de {{perfil?.fechaRegistro | date:'MMMM'}} del
+          {{perfil?.fechaRegistro | date: 'YYYY'}}</strong>
+        </li>
+      }
+      <!-- <li>
+      <label>Última vez activo</label>
+      <strong>Hace unos segundos</strong>
+    </li> -->
+    @if (perfil?.estudios) {
+      <li>
+        <label>Estudios</label>
+        <strong>{{perfil?.estudios}}</strong>
+      </li>
+    }
+    <li class="sep">
+      <h4>Idiomas</h4>
+    </li>
+    <li>
+      <label>Español</label>
+      <strong>Nativo</strong>
+    </li>
+    <li>
+      <label>Inglés</label>
+      <strong>Intermedio</strong>
+    </li>
+    <li class="sep">
+      <h4>Datos profesionales</h4>
+    </li>
+    @if (perfil?.profesion) {
+      <li>
+        <label>Profesión</label>
+        <strong>{{perfil?.profesion}}</strong>
+      </li>
+    }
+    @if (perfil?.empresa) {
+      <li>
+        <label>Empresa</label>
+        <strong>{{perfil?.empresa}}</strong>
+      </li>
+    }
+    @if (perfil?.interesesProfesionales) {
+      <li>
+        <label>Intereses profesionales</label>
+        <strong>{{perfil?.interesesProfesionales}}</strong>
+      </li>
+    }
+    @if (perfil?.habilidadesProfesionales) {
+      <li>
+        <label>Habilidades profesionales</label>
+        <strong>{{perfil?.habilidadesProfesionales}}</strong>
+      </li>
+    }
+    <li class="sep">
+      <h4>Vida personal</h4>
+    </li>
+    @if (perfil?.like1 || perfil?.like2 || perfil?.like3 || perfil?.like4 || perfil?.like_All) {
+      <li>
+        <label>Le gustaría</label>
+        <strong>
+          @if (perfil?.like1) {
+            <span>Hacer amigos, </span>
+          }
+          @if (perfil?.like2) {
+            <span>Conocer gente con mis intereses, </span>
+          }
+          @if (perfil?.like3) {
+            <span>Conocer gente para negocios, </span>
+          }
+          @if (perfil?.like4) {
+            <span>Encontrar pareja, </span>
+          }
+          @if (perfil?.like_All) {
+            <span>De todo.</span>
+          }
+        </strong>
+      </li>
+    }
+    @if (perfil?.estadoCivil) {
+      <li>
+        <label>Estado civil</label>
+        <strong>{{perfil?.estadoCivil}}</strong>
+      </li>
+    }
+    @if (perfil?.hijos) {
+      <li>
+        <label>Hijos</label>
+        <strong>{{perfil?.hijos}}</strong>
+      </li>
+    }
+    @if (perfil?.vivoCon) {
+      <li>
+        <label>Vive con</label>
+        <strong>{{perfil?.vivoCon}}</strong>
+      </li>
+    }
+    <li class="sep">
+      <h4>¿Cómo es?</h4>
+    </li>
+    @if (perfil?.altura) {
+      <li>
+        <label>Mide</label>
+        <strong>{{perfil?.altura}} centimetros</strong>
+      </li>
+    }
+    @if (perfil?.peso) {
+      <li>
+        <label>Pesa</label>
+        <strong>{{perfil?.peso}} kilos</strong>
+      </li>
+    }
+    @if (perfil?.colorCabello) {
+      <li>
+        <label>Su pelo es</label>
+        <strong>{{perfil?.colorCabello}}</strong>
+      </li>
+    }
+    @if (perfil?.colorOjos) {
+      <li>
+        <label>Sus ojos son</label>
+        <strong>{{perfil?.colorOjos}}</strong>
+      </li>
+    }
+    @if (perfil?.complexion) {
+      <li>
+        <label>Su físico es</label>
+        <strong>{{perfil?.complexion}}</strong>
+      </li>
+    }
+    <li>
+      <label></label>
+      <strong>{{perfil?.tatuajes ? 'Tiene' : 'No tiene'}} Tatuajes</strong>
+    </li>
+    <li>
+      <label></label>
+      <strong>{{perfil?.piercings ? 'Tiene' : 'No tiene'}} Piercings</strong>
+    </li>
+    <li class="sep">
+      <h4>Habitos personales</h4>
+    </li>
+    @if (perfil?.dieta) {
+      <li>
+        <label>Mantiene una dieta</label>
+        <strong>{{perfil?.dieta}}</strong>
+      </li>
+    }
+    @if (perfil?.fumo) {
+      <li>
+        <label>Fuma</label>
+        <strong>{{perfil?.fumo}}</strong>
+      </li>
+    }
+    @if (perfil?.alcohol) {
+      <li>
+        <label>Toma alcohol</label>
+        <strong>{{perfil?.alcohol}}</strong>
+      </li>
+    }
+    <li class="sep">
+      <h4>Sus propias palabras</h4>
+    </li>
+    @if (perfil?.intereses) {
+      <li>
+        <label>Intereses</label>
+        <strong>{{perfil?.intereses}}</strong>
+      </li>
+    }
+    @if (perfil?.hobbies) {
+      <li>
+        <label>Hobbies</label>
+        <strong>{{perfil?.hobbies}}</strong>
+      </li>
+    }
+    @if (perfil?.seriesTV) {
+      <li>
+        <label>Series de TV favoritas</label>
+        <strong>{{perfil?.seriesTV}}</strong>
+      </li>
+    }
+    @if (perfil?.musicaFavorita) {
+      <li>
+        <label>Música favorita</label>
+        <strong>{{perfil?.musicaFavorita}}</strong>
+      </li>
+    }
+    @if (perfil?.deportesFavoritos) {
+      <li>
+        <label>Deportes y Equipos</label>
+        <strong>{{perfil?.deportesFavoritos}}</strong>
+      </li>
+    }
+    @if (perfil?.librosFavoritos) {
+      <li>
+        <label>Libros favoritos</label>
+        <strong>{{perfil?.librosFavoritos}}</strong>
+      </li>
+    }
+    @if (perfil?.peliculasFavoritas) {
+      <li>
+        <label>Películas favoritas</label>
+        <strong>{{perfil?.peliculasFavoritas}}</strong>
+      </li>
+    }
+    @if (perfil?.comidaFavorita) {
+      <li>
+        <label>Comida favorita</label>
+        <strong>{{perfil?.comidaFavorita}}</strong>
+      </li>
+    }
+    @if (perfil?.misHeroesSon) {
+      <li>
+        <label>Sus heroes son</label>
+        <strong>{{perfil?.misHeroesSon}}</strong>
+      </li>
+    }
+  </ul>
+</article>
+}
 </main>

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'addons-tipo-actividad-icon',
   templateUrl: './tipo-actividad-icon.component.html',
   styleUrls: ['./tipo-actividad-icon.component.scss'],

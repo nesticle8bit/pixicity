@@ -1,4 +1,6 @@
-<a class="button-uppercase brojo follow_user_post" (click)="banearUsuario()" 
-    *ngIf="currentUser?.usuario && (currentUser.usuario.rango === 'Moderador' || currentUser.usuario.rango === 'Administrador') && data.nombre !== 'Administrador'">
+@if (currentUser?.usuario && (currentUser.usuario.rango === 'Moderador' || currentUser.usuario.rango === 'Administrador') && data.nombre !== 'Administrador') {
+  <a class="button-uppercase brojo follow_user_post" (click)="banearUsuario()"
+    >
     <fa-icon [icon]="['fas', 'ban']"></fa-icon> Banear usuario
-</a>
+  </a>
+}

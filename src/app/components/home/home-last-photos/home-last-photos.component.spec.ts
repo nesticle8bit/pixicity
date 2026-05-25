@@ -8,8 +8,8 @@ describe('HomeLastPhotosComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HomeLastPhotosComponent ]
-    })
+    imports: [HomeLastPhotosComponent]
+})
     .compileComponents();
   });
 

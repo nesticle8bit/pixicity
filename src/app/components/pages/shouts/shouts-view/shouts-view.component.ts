@@ -7,6 +7,7 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-shouts-view',
   templateUrl: './shouts-view.component.html',
   styleUrls: ['./shouts-view.component.scss'],

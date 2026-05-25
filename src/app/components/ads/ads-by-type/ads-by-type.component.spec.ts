@@ -8,8 +8,8 @@ describe('AdsByTypeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AdsByTypeComponent ]
-    })
+    imports: [AdsByTypeComponent]
+})
     .compileComponents();
   });
 

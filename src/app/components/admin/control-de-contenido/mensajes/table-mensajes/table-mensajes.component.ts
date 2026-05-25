@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-table-mensajes',
   templateUrl: './table-mensajes.component.html',
   styleUrls: ['./table-mensajes.component.scss'],

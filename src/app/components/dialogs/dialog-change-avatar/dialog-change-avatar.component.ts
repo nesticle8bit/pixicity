@@ -5,6 +5,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-dialog-change-avatar',
   templateUrl: './dialog-change-avatar.component.html',
   styleUrls: ['./dialog-change-avatar.component.scss'],

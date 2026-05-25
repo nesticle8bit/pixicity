@@ -3,6 +3,7 @@ import { TopUserModel } from 'src/app/models/web/topUser.model';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-home-top-users',
   templateUrl: './home-top-users.component.html',
   styleUrls: ['./home-top-users.component.scss'],

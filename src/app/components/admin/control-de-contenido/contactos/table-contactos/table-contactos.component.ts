@@ -5,6 +5,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-table-contactos',
   templateUrl: './table-contactos.component.html',
   styleUrls: ['./table-contactos.component.scss'],

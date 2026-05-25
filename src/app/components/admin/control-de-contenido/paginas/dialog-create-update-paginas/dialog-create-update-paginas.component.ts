@@ -1,31 +1,19 @@
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Editor, Toolbar, Validators } from 'ngx-editor';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-dialog-create-update-paginas',
   templateUrl: './dialog-create-update-paginas.component.html',
   styleUrls: ['./dialog-create-update-paginas.component.scss'],
 })
-export class DialogCreateUpdatePaginasComponent implements OnInit, OnDestroy {
+export class DialogCreateUpdatePaginasComponent implements OnInit {
   public formGroup: FormGroup;
   public tipos: any[] = ['routerLink', 'link'];
   public targets: any[] = ['_blank', '_parent', '_self', '_top'];
-  public editor: Editor;
-  public toolbar: Toolbar = [
-    ['bold', 'italic'],
-    ['underline', 'strike'],
-    ['code', 'blockquote'],
-    ['ordered_list', 'bullet_list'],
-    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
-    ['link', 'image'],
-    ['text_color'],
-    ['align_left', 'align_center', 'align_right', 'align_justify'],
-    ['horizontal_rule', 'format_clear'],
-  ];
 
   constructor(
     public dialogRef: MatDialogRef<DialogCreateUpdatePaginasComponent>,
@@ -43,14 +31,6 @@ export class DialogCreateUpdatePaginasComponent implements OnInit, OnDestroy {
       eliminado: false,
     });
 
-    this.editor = new Editor({
-      history: true,
-      keyboardShortcuts: true,
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.editor.destroy();
   }
 
   ngOnInit(): void {

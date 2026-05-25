@@ -23,7 +23,7 @@ export class HttpSecurityService implements IHttpSecurityService {
     private paginationService: PaginationService
   ) {
     this.currentUserSubject = new BehaviorSubject<JwtUserModel>(
-      JSON.parse(localStorage.getItem('pixicity') || '{}')
+      JSON.parse(localStorage.getItem('taringas') || '{}')
     );
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -219,12 +219,12 @@ export class HttpSecurityService implements IHttpSecurityService {
   }
 
   setUserToLocalStorage(obj: any): any {
-    localStorage.setItem('pixicity', JSON.stringify(obj));
+    localStorage.setItem('taringas', JSON.stringify(obj));
     this.currentUserSubject.next(obj);
   }
 
   logout(): void {
-    localStorage.removeItem('pixicity');
+    localStorage.removeItem('taringas');
 
     this.router.navigateByUrl('');
     this.currentUserSubject.next(new JwtUserModel({}, ''));

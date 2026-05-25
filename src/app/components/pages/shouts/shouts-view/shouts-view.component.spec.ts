@@ -8,8 +8,8 @@ describe('ShoutsViewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ShoutsViewComponent ]
-    })
+    imports: [ShoutsViewComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(ShoutsViewComponent);

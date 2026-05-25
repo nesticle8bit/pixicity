@@ -5,6 +5,7 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
+  standalone: false,
   selector: 'app-tops',
   templateUrl: './tops.component.html',
   styleUrls: ['./tops.component.scss'],

@@ -1,0 +1,124 @@
+@if (loading) {
+<div class="text-center my-5">
+  <img src="/assets/images/min-carga.gif" alt="Cargando...">
+</div>
+}
+
+@if (!loading && foto) {
+<div class="container container--home foto-detail-page mx-auto">
+  <div class="row">
+    <div class="col-12">
+      <div class="foto-detail-layout">
+
+        <!-- Sidebar izquierdo: fotos del usuario -->
+        <aside class="foto-sidebar">
+          <div class="sidebar-user">
+            <a [routerLink]="['/perfil', foto.usuario]" [appUserPopover]="foto.usuario">
+              <app-user-avatar [class]="'avatar-48'" [avatar]="foto.avatar" [userName]="foto.usuario" [width]="48">
+              </app-user-avatar>
+            </a>
+            <div>
+              <a [routerLink]="['/perfil', foto.usuario]" class="sidebar-username" [appUserPopover]="foto.usuario">
+                {{foto.usuario}}
+              </a>
+            </div>
+          </div>
+
+          @if (foto.otrasFotosUsuario?.length > 0) {
+          <div class="sidebar-otras">
+            <h4>Fotos de {{foto.usuario}}</h4>
+            @for (otraFoto of foto.otrasFotosUsuario; track otraFoto.id) {
+            <a [routerLink]="['/fotos', foto.usuario, otraFoto.id, otraFoto.url]" class="sidebar-foto-item">
+              <div class="sidebar-thumb">
+                <img [src]="otraFoto.imageUrl" [alt]="otraFoto.titulo" loading="lazy">
+              </div>
+              <span>{{otraFoto.fechaRegistro | date:'dd/MM/yyyy'}}</span>
+            </a>
+            }
+            <a [routerLink]="['/fotos', foto.usuario]" class="ver-todas-link">
+              Ver todas
+            </a>
+          </div>
+          }
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="foto-main">
+          <div class="foto-image-container">
+            <img [src]="foto.imageUrl" [alt]="foto.titulo" class="foto-main-img">
+          </div>
+
+          <h1 class="foto-main-title">{{foto.titulo}}</h1>
+
+          <div class="foto-main-meta">
+            <span>{{foto.fechaRegistro | date:'dd/MM/yyyy'}}</span>
+            @if (foto.categoria) {
+            <span class="foto-cat">{{foto.categoria}}</span>
+            }
+          </div>
+
+          @if (foto.descripcion) {
+          <p class="foto-main-desc">{{foto.descripcion}}</p>
+          }
+
+          <!-- Votos -->
+          <div class="foto-votos">
+            <div class="voto-group">
+              <span class="voto-label">Calificar:</span>
+              @if (currentUser?.usuario && !esMio) {
+              <a class="voto-btn positivo" [ngClass]="{'voted': foto.miVoto === 1}" (click)="votar(1)"
+                matTooltip="Votar positivo">
+                <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
+              </a>
+              <a class="voto-btn negativo" [ngClass]="{'voted': foto.miVoto === -1}" (click)="votar(-1)"
+                matTooltip="Votar negativo">
+                <fa-icon [icon]="['fas', 'thumbs-down']"></fa-icon>
+              </a>
+              }
+            </div>
+            <div class="voto-counts">
+              <span class="positivo-count">
+                <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
+                Positivos: <strong>{{foto.votosPositivos}}</strong>
+              </span>
+              <span class="negativo-count">
+                <fa-icon [icon]="['fas', 'thumbs-down']"></fa-icon>
+                Negativos: <strong>{{foto.votosNegativos}}</strong>
+              </span>
+              <span class="visitas-count">
+                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                Visitas: <strong>{{foto.visitantes}}</strong>
+              </span>
+            </div>
+          </div>
+
+          <!-- Acciones del dueño -->
+          @if (esMio || currentUser?.usuario?.isAdmin) {
+          <div class="foto-owner-actions">
+            <a [routerLink]="['/fotos/actualizar', foto.id]" class="boton azul me-2">
+              <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon> Editar
+            </a>
+            <a class="boton rojo" (click)="eliminar()">
+              <fa-icon [icon]="['fas', 'times']"></fa-icon> Eliminar
+            </a>
+          </div>
+          }
+
+          <!-- Comentarios -->
+          <app-foto-comentarios [fotoId]="foto.id"></app-foto-comentarios>
+        </main>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+@if (!loading && !foto) {
+<section class="container container--home">
+  <div class="row">
+    <div class="col-12 nada-amarillo mx-auto">
+      Foto no encontrada.
+    </div>
+  </div>
+</section>
+}

@@ -8,8 +8,8 @@ describe('DialogBanUserComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogBanUserComponent ]
-    })
+    imports: [DialogBanUserComponent]
+})
     .compileComponents();
   });
 

@@ -6,6 +6,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { DialogCreateUpdateCategoriasComponent } from '../dialog-create-update-categorias/dialog-create-update-categorias.component';
 
 @Component({
+  standalone: false,
   selector: 'app-table-categorias',
   templateUrl: './table-categorias.component.html',
   styleUrls: ['./table-categorias.component.scss'],

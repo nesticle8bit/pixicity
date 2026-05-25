@@ -1,80 +1,90 @@
 <h6 [formGroup]="formGroup" class="main-title my-2">
-    <span>Última actividad de {{user.userName}}</span>
+  <span>Última actividad de {{user.userName}}</span>
 
-    <strong class="float-end">
-        <select class="form-select form-select-xs" formControlName="tipoActividad" (change)="getActividadUsuario()">
-            <option value="" selected>Todas</option>
-            <option *ngFor="let tipo of tipoActividades" value="{{tipo.value}}">{{tipo.key}}</option>
-        </select>
-    </strong>
+  <strong class="float-end">
+    <select class="form-select form-select-xs" formControlName="tipoActividad" (change)="getActividadUsuario()">
+      <option value="" selected>Todas</option>
+      @for (tipo of tipoActividades; track tipo) {
+        <option value="{{tipo.value}}">{{tipo.key}}</option>
+      }
+    </select>
+  </strong>
 </h6>
 
 <article class="mt-1">
-    <ul *ngIf="actividad?.hoy?.length > 0">
-        <li class="sep">
-            <h4>Hoy</h4>
+  @if (actividad?.hoy?.length > 0) {
+    <ul>
+      <li class="sep">
+        <h4>Hoy</h4>
+      </li>
+      @for (actividad of actividad?.hoy; track actividad) {
+        <li>
+          <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
+          </addons-tipo-actividad-icon>
+          <span [innerHTML]="actividad.texto"></span>
+          <aside class="float-end">
+            <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
+          </aside>
+          <div class="clearfix"></div>
         </li>
-
-        <li *ngFor="let actividad of actividad?.hoy">
-            <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
-            </addons-tipo-actividad-icon>
-            <span [innerHTML]="actividad.texto"></span>
-
-            <aside class="float-end">
-                <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
-            </aside>
-            <div class="clearfix"></div>
-        </li>
+      }
     </ul>
+  }
 
-    <ul *ngIf="actividad?.ayer?.length > 0">
-        <li class="sep">
-            <h4>Ayer</h4>
+  @if (actividad?.ayer?.length > 0) {
+    <ul>
+      <li class="sep">
+        <h4>Ayer</h4>
+      </li>
+      @for (actividad of actividad?.ayer; track actividad) {
+        <li>
+          <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
+          </addons-tipo-actividad-icon>
+          <span [innerHTML]="actividad.texto"></span>
+          <aside class="float-end">
+            <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
+          </aside>
+          <div class="clearfix"></div>
         </li>
-
-        <li *ngFor="let actividad of actividad?.ayer">
-            <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
-            </addons-tipo-actividad-icon>
-            <span [innerHTML]="actividad.texto"></span>
-
-            <aside class="float-end">
-                <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
-            </aside>
-            <div class="clearfix"></div>
-        </li>
+      }
     </ul>
+  }
 
-    <ul *ngIf="actividad?.semana?.length > 0">
-        <li class="sep">
-            <h4>Semanas Anteriores</h4>
+  @if (actividad?.semana?.length > 0) {
+    <ul>
+      <li class="sep">
+        <h4>Semanas Anteriores</h4>
+      </li>
+      @for (actividad of actividad?.semana; track actividad) {
+        <li>
+          <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
+          </addons-tipo-actividad-icon>
+          <span [innerHTML]="actividad.texto"></span>
+          <aside class="float-end">
+            <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
+          </aside>
+          <div class="clearfix"></div>
         </li>
-
-        <li *ngFor="let actividad of actividad?.semana">
-            <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
-            </addons-tipo-actividad-icon>
-            <span [innerHTML]="actividad.texto"></span>
-
-            <aside class="float-end">
-                <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
-            </aside>
-            <div class="clearfix"></div>
-        </li>
+      }
     </ul>
+  }
 
-    <ul *ngIf="actividad?.mes?.length > 0">
-        <li class="sep">
-            <h4>Actividad más antigua</h4>
+  @if (actividad?.mes?.length > 0) {
+    <ul>
+      <li class="sep">
+        <h4>Actividad más antigua</h4>
+      </li>
+      @for (actividad of actividad?.mes; track actividad) {
+        <li>
+          <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
+          </addons-tipo-actividad-icon>
+          <span [innerHTML]="actividad.texto"></span>
+          <aside class="float-end">
+            <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
+          </aside>
+          <div class="clearfix"></div>
         </li>
-
-        <li *ngFor="let actividad of actividad?.mes">
-            <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
-            </addons-tipo-actividad-icon>
-            <span [innerHTML]="actividad.texto"></span>
-
-            <aside class="float-end">
-                <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
-            </aside>
-            <div class="clearfix"></div>
-        </li>
+      }
     </ul>
+  }
 </article>

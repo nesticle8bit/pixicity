@@ -4,6 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
+  standalone: false,
   selector: 'app-change-rango',
   templateUrl: './change-rango.component.html',
   styleUrls: ['./change-rango.component.scss'],

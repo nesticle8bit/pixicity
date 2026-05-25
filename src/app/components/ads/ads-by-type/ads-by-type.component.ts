@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 
 @Component({
+  standalone: false,
   selector: 'ads-by-type',
   templateUrl: './ads-by-type.component.html',
   styleUrls: ['./ads-by-type.component.scss']

@@ -8,8 +8,8 @@ describe('PostMoreFromOPComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PostMoreFromOPComponent ]
-    })
+    imports: [PostMoreFromOPComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(PostMoreFromOPComponent);

@@ -1,5 +1,239 @@
 <h1 class="dashboard--title">Estadísticas</h1>
 
-<div class="alert alert-warning">
-    ✒️ WIP
-</div>
+<!-- Loading -->
+@if (loading) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary" role="status" style="width:2.5rem;height:2.5rem;">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="text-muted mt-2">Cargando estadísticas...</p>
+  </div>
+}
+
+@if (!loading && stats) {
+  <!-- ===== TARJETAS RESUMEN ===== -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="stat-card stat-card--blue">
+        <div class="stat-card__icon">
+          <fa-icon [icon]="['fas', 'users']"></fa-icon>
+        </div>
+        <div class="stat-card__body">
+          <div class="stat-card__value">{{stats.totalUsuarios | number}}</div>
+          <div class="stat-card__label">Usuarios registrados</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card stat-card--green">
+        <div class="stat-card__icon">
+          <fa-icon [icon]="['far', 'copy']"></fa-icon>
+        </div>
+        <div class="stat-card__body">
+          <div class="stat-card__value">{{stats.totalPosts | number}}</div>
+          <div class="stat-card__label">Posts publicados</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card stat-card--orange">
+        <div class="stat-card__icon">
+          <fa-icon [icon]="['fas', 'comments']"></fa-icon>
+        </div>
+        <div class="stat-card__body">
+          <div class="stat-card__value">{{stats.totalComentarios | number}}</div>
+          <div class="stat-card__label">Comentarios</div>
+          <div class="stat-card__sub">~{{comentariosPorPost}} por post</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card stat-card--teal">
+        <div class="stat-card__icon">
+          <span class="stat-card__dot"></span>
+          <fa-icon [icon]="['fas', 'circle']"></fa-icon>
+        </div>
+        <div class="stat-card__body">
+          <div class="stat-card__value">{{stats.usuariosOnline}}</div>
+          <div class="stat-card__label">Online ahora</div>
+          <div class="stat-card__sub">
+            {{stats.usuariosOnlineRegistrados}} registrados &bull; {{stats.invitados}} invitados
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ===== RECORD + ONLINE LIST ===== -->
+  <div class="row g-3 mb-4">
+    <!-- Record usuarios -->
+    <div class="col-12 col-md-4">
+      <div class="stat-panel">
+        <div class="stat-panel__header">
+          <fa-icon [icon]="['fas', 'trophy']"></fa-icon> Récord de usuarios online
+        </div>
+        @if (stats.recordUsers?.usersOnline) {
+          <div class="stat-panel__body text-center py-3">
+            <div class="stat-record__number">{{stats.recordUsers.usersOnline}}</div>
+            <div class="stat-record__label">usuarios simultáneos</div>
+            <div class="text-muted mt-1" style="font-size:12px">
+              el {{stats.recordUsers.date | date:'dd/MM/yyyy'}} a las {{stats.recordUsers.date | date:'HH:mm'}}
+            </div>
+          </div>
+        }
+        @if (!stats.recordUsers?.usersOnline) {
+          <div class="stat-panel__body text-center py-3 text-muted">
+            Sin récord registrado
+          </div>
+        }
+      </div>
+      <!-- % Online -->
+      <div class="stat-panel mt-3">
+        <div class="stat-panel__header">
+          <fa-icon [icon]="['fas', 'chart-bar']"></fa-icon> Actividad actual
+        </div>
+        <div class="stat-panel__body">
+          <div class="stat-ratio">
+            <div class="stat-ratio__row">
+              <span>Registrados online</span>
+              <strong>{{stats.usuariosOnlineRegistrados}}</strong>
+            </div>
+            <div class="stat-ratio__bar">
+              <div class="stat-ratio__fill stat-ratio__fill--blue"
+                [style.width.%]="onlinePct > 100 ? 100 : onlinePct">
+              </div>
+            </div>
+            <div class="stat-ratio__row mt-2">
+              <span>Invitados online</span>
+              <strong>{{stats.invitados}}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Usuarios online registrados -->
+    <div class="col-12 col-md-4">
+      <div class="stat-panel h-100">
+        <div class="stat-panel__header">
+          <fa-icon [icon]="['fas', 'user-clock']"></fa-icon>
+          Registrados online ({{stats.listaOnline?.registrados?.length || 0}})
+        </div>
+        <div class="stat-panel__body stat-panel__body--scroll">
+          @if (stats.listaOnline?.registrados?.length > 0) {
+            @for (u of stats.listaOnline.registrados; track u) {
+              <div class="stat-user-row">
+                <app-user-avatar [class]="'stat-avatar'" [avatar]="u.avatar"
+                  [userName]="u.userName" [height]="28">
+                </app-user-avatar>
+                <a [routerLink]="['/perfil/' + u.userName]" target="_blank" [appUserPopover]="u.userName">{{u.userName}}</a>
+                <span class="stat-rango" [ngStyle]="{'color': u.rango?.color}">
+                  {{u.rango?.nombre}}
+                </span>
+              </div>
+            }
+          } @else {
+            <div class="text-muted text-center py-3" style="font-size:13px">
+              No hay usuarios registrados online
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    <!-- Últimos usuarios registrados -->
+    <div class="col-12 col-md-4">
+      <div class="stat-panel h-100">
+        <div class="stat-panel__header">
+          <fa-icon [icon]="['fas', 'user-plus']"></fa-icon> Últimos registros
+        </div>
+        <div class="stat-panel__body stat-panel__body--scroll">
+          @if (stats.ultimosUsuarios?.length > 0) {
+            @for (u of stats.ultimosUsuarios; track u) {
+              <div class="stat-user-row">
+                <app-user-avatar [class]="'stat-avatar'" [avatar]="u.avatar"
+                  [userName]="u.userName" [height]="28">
+                </app-user-avatar>
+                <div class="stat-user-info">
+                  <a [routerLink]="['/perfil/' + u.userName]" target="_blank" [appUserPopover]="u.userName">{{u.userName}}</a>
+                  <small class="text-muted d-block">{{u.fechaRegistro | date:'dd/MM/yy HH:mm'}}</small>
+                </div>
+                <span class="stat-puntos">
+                  <fa-icon [icon]="['fas', 'chart-line']"></fa-icon> {{u.puntos || 0}}
+                </span>
+              </div>
+            }
+          } @else {
+            <div class="text-muted text-center py-3" style="font-size:13px">Sin datos</div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ===== TOP POSTS ===== -->
+  <div class="row g-3">
+    <!-- Top posts hoy -->
+    <div class="col-12 col-md-6">
+      <div class="stat-panel">
+        <div class="stat-panel__header">
+          <fa-icon [icon]="['fas', 'fire']"></fa-icon> Top Posts — Hoy
+        </div>
+        <div class="stat-panel__body">
+          @if (stats.topPostsHoy?.posts?.length > 0) {
+            @for (p of stats.topPostsHoy.posts; track p; let i = $index) {
+              <div class="stat-post-row">
+                <span class="stat-post-rank" [class.gold]="i===0" [class.silver]="i===1" [class.bronze]="i===2">
+                  {{i + 1}}
+                </span>
+                <div class="stat-post-info">
+                  <a [routerLink]="['/posts/' + p.categoria?.seo + '/' + p.id + '/' + p.url]"
+                    target="_blank" class="stat-post-title">
+                    {{p.titulo | slice:0:55}}{{p.titulo?.length > 55 ? '…' : ''}}
+                  </a>
+                  <small class="text-muted">
+                    {{'@'}}{{p.userName}} &bull; {{p.puntos}} pts &bull; {{p.comentarios}} cmts
+                  </small>
+                </div>
+              </div>
+            }
+          } @else {
+            <div class="text-muted text-center py-3" style="font-size:13px">Sin posts hoy</div>
+          }
+        </div>
+      </div>
+    </div>
+    <!-- Top posts semana -->
+    <div class="col-12 col-md-6">
+      <div class="stat-panel">
+        <div class="stat-panel__header">
+          <fa-icon [icon]="['fas', 'chart-line']"></fa-icon> Top Posts — Esta semana
+        </div>
+        <div class="stat-panel__body">
+          @if (stats.topPostsSemana?.posts?.length > 0) {
+            @for (p of stats.topPostsSemana.posts; track p; let i = $index) {
+              <div class="stat-post-row">
+                <span class="stat-post-rank" [class.gold]="i===0" [class.silver]="i===1" [class.bronze]="i===2">
+                  {{i + 1}}
+                </span>
+                <div class="stat-post-info">
+                  <a [routerLink]="['/posts/' + p.categoria?.seo + '/' + p.id + '/' + p.url]"
+                    target="_blank" class="stat-post-title">
+                    {{p.titulo | slice:0:55}}{{p.titulo?.length > 55 ? '…' : ''}}
+                  </a>
+                  <small class="text-muted">
+                    {{'@'}}{{p.userName}} &bull; {{p.puntos}} pts &bull; {{p.comentarios}} cmts
+                  </small>
+                </div>
+              </div>
+            }
+          } @else {
+            <div class="text-muted text-center py-3" style="font-size:13px">Sin posts esta semana</div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Refresh button -->
+  <div class="text-end mt-3">
+    <button mat-stroked-button (click)="load()">
+      <fa-icon [icon]="['fas', 'sync-alt']"></fa-icon> Actualizar
+    </button>
+  </div>
+}

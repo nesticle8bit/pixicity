@@ -4,6 +4,7 @@ import { DialogChangeAvatarComponent } from 'src/app/components/dialogs/dialog-c
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-change-avatar',
   templateUrl: './change-avatar.component.html',
   styleUrls: ['./change-avatar.component.scss'],

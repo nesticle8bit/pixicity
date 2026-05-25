@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Validators } from 'ngx-editor';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-dialog-ban-user',
   templateUrl: './dialog-ban-user.component.html',
   styleUrls: ['./dialog-ban-user.component.scss'],

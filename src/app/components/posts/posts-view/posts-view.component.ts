@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { SEOService } from 'src/app/services/shared/seo.service';
 
 @Component({
+  standalone: false,
   selector: 'app-posts-view',
   templateUrl: './posts-view.component.html',
   styleUrls: ['./posts-view.component.scss'],
@@ -115,6 +116,17 @@ export class PostsViewComponent implements OnInit {
           });
       }
     });
+  }
+
+  openShare(network: string): void {
+    const url = encodeURIComponent(window.location.href);
+    const urls: { [key: string]: string } = {
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      twitter: `https://twitter.com/intent/tweet?url=${url}&text=${encodeURIComponent(this.post?.titulo || '')}`,
+    };
+    if (urls[network]) {
+      window.open(urls[network], '_blank', 'width=640,height=480,scrollbars=yes');
+    }
   }
 
   quitarSticky(): void {

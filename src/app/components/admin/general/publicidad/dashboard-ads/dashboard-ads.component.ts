@@ -4,6 +4,7 @@ import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.int
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-dashboard-ads',
   templateUrl: './dashboard-ads.component.html',
   styleUrls: ['./dashboard-ads.component.scss'],

@@ -4,6 +4,7 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 
 @Component({
+  standalone: false,
   selector: 'app-table-votos',
   templateUrl: './table-votos.component.html',
   styleUrls: ['./table-votos.component.scss'],

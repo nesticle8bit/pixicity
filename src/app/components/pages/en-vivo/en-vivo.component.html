@@ -1,105 +1,109 @@
 <div class="container container--home">
+  <div class="row">
     <div class="row">
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-9">
-                <div class="ladoi">
-                    <div class="table-responsive">
-                        <table class="table table-sm table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Usuario</th>
-                                    <th>Acción</th>
-                                    <th>Título</th>
-                                </tr>
-                            </thead>
+      <div class="col-12 col-sm-12 col-md-9">
+        <div class="ladoi">
+          <div class="table-responsive">
+            <table class="table table-sm table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Usuario</th>
+                  <th>Acción</th>
+                  <th>Título</th>
+                </tr>
+              </thead>
 
-                            <tbody>
-                                <tr class="post comentario-votar">
-                                    <td class="usuario">
-                                        <a href="#" target="_blank">nesticle8bit</a>
-                                    </td>
+              <tbody>
+                <tr class="post comentario-votar">
+                  <td class="usuario">
+                    <a href="#" target="_blank">nesticle8bit</a>
+                  </td>
 
-                                    <td class="accion">
-                                        Votó un comentario en el post
-                                    </td>
+                  <td class="accion">
+                    Votó un comentario en el post
+                  </td>
 
-                                    <td class="titulo">
-                                        <a href="#" target="_blank">Metallica - Discografia Completa</a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-12 col-md-3 dotted-border--left">
-                <h6 class="main-title my-2">
-                    <span>Estadísticas</span>
-
-                    <strong class="float-end" style="background: #fff; margin-top: -2px; padding-left: 7px;">
-                        <img src="/assets/images/icons/icon_pause.png" *ngIf="play" class="cursor--pointer"
-                            (click)="play = !play" />
-                        <img src="/assets/images/icons/icon_play.png" *ngIf="!play" class="cursor--pointer"
-                            (click)="play = !play" />
-                    </strong>
-                </h6>
-
-                <section class="mb-3">
-                    <ul class="list-unstyled">
-                        <li>
-                            <strong class="text-muted float-start">
-                                Tiempo
-                            </strong>
-
-                            <span class="number float-end">
-                                {{time}}
-                            </span>
-
-                            <div class="clearfix"></div>
-                        </li>
-
-                        <li>
-                            <strong class="text-muted float-start">
-                                Velocidad actual
-                            </strong>
-
-                            <span class="number float-end" [matTooltip]="'Medido en acciones por segundo'"
-                                [matTooltipPosition]="'right'">
-                                11,35 a/s
-                            </span>
-
-                            <div class="clearfix"></div>
-                        </li>
-
-                        <li>
-                            <strong class="text-muted float-start">
-                                Acciones totales
-                            </strong>
-
-                            <span class="number float-end" [matTooltip]="'Medido en acciones por segundo'">
-                                {{acciones.length}}
-                            </span>
-
-                            <div class="clearfix"></div>
-                        </li>
-                    </ul>
-                </section>
-
-                <h6 class="main-title my-2">
-                    <span>Filtrar Actividad</span>
-                </h6>
-
-                <section class="mb-3">
-                    <ul class="list-unstyled vivo-filter">
-                        <li>
-                            
-                        </li>
-                    </ul>
-                </section>
-
-                <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
-            </div>
+                  <td class="titulo">
+                    <a href="#" target="_blank">Metallica - Discografia Completa</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-3 dotted-border--left">
+        <h6 class="main-title my-2">
+          <span>Estadísticas</span>
+
+          <strong class="float-end" style="background: #fff; margin-top: -2px; padding-left: 7px;">
+            @if (play) {
+              <img src="/assets/images/icons/icon_pause.png" class="cursor--pointer"
+                (click)="play = !play" />
+            }
+            @if (!play) {
+              <img src="/assets/images/icons/icon_play.png" class="cursor--pointer"
+                (click)="play = !play" />
+            }
+          </strong>
+        </h6>
+
+        <section class="mb-3">
+          <ul class="list-unstyled">
+            <li>
+              <strong class="text-muted float-start">
+                Tiempo
+              </strong>
+
+              <span class="number float-end">
+                {{time}}
+              </span>
+
+              <div class="clearfix"></div>
+            </li>
+
+            <li>
+              <strong class="text-muted float-start">
+                Velocidad actual
+              </strong>
+
+              <span class="number float-end" [matTooltip]="'Medido en acciones por segundo'"
+                [matTooltipPosition]="'right'">
+                11,35 a/s
+              </span>
+
+              <div class="clearfix"></div>
+            </li>
+
+            <li>
+              <strong class="text-muted float-start">
+                Acciones totales
+              </strong>
+
+              <span class="number float-end" [matTooltip]="'Medido en acciones por segundo'">
+                {{acciones.length}}
+              </span>
+
+              <div class="clearfix"></div>
+            </li>
+          </ul>
+        </section>
+
+        <h6 class="main-title my-2">
+          <span>Filtrar Actividad</span>
+        </h6>
+
+        <section class="mb-3">
+          <ul class="list-unstyled vivo-filter">
+            <li>
+
+            </li>
+          </ul>
+        </section>
+
+        <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
+      </div>
     </div>
+  </div>
 </div>

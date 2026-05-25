@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-post-original-poster-info',
   templateUrl: './post-original-poster-info.component.html',
   styleUrls: ['./post-original-poster-info.component.scss'],

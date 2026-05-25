@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-posts-breadcrumb',
   templateUrl: './posts-breadcrumb.component.html',
   styleUrls: ['./posts-breadcrumb.component.scss']

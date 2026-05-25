@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-perfil-social-media-buttons',
   templateUrl: './perfil-social-media-buttons.component.html',
   styleUrls: ['./perfil-social-media-buttons.component.scss'],

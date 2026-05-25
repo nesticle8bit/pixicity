@@ -8,8 +8,8 @@ describe('MainFooterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MainFooterComponent ]
-    })
+    imports: [MainFooterComponent]
+})
     .compileComponents();
   });
 

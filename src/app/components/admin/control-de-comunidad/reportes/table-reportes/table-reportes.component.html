@@ -1,69 +1,69 @@
-<main class="table-responsive" *ngIf="denuncias.length > 0">
+@if (denuncias.length > 0) {
+  <main class="table-responsive">
     <table class="table table-sm table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Creado</th>
-                <th>Post</th>
-                <th>Razón</th>
-                <th>Comentario</th>
-                <th>Usuario que Reporta</th>
-                <th></th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr *ngFor="let denuncia of denuncias" [ngClass]="{'opacity-50': denuncia.eliminado}">
-                <td>
-                    <span class="cursor--help" matTooltip="{{denuncia.fechaRegistro}}">
-                        {{denuncia.fechaRegistro | timeAgo}}
-                    </span>
-                </td>
-
-                <td>
-                    <app-post-url-link
-                        [post]="{ id: denuncia.post.id, url: denuncia.post.url, titulo: denuncia.post.titulo, truncate: 70}"
-                        [categoria]="{ icono: denuncia.post.categoria.icono, nombre: denuncia.post.categoria.nombre, seo: denuncia.post.categoria.seo}">
-                    </app-post-url-link>
-                </td>
-
-                <td>
-                    {{denuncia.razon}}
-                </td>
-
-                <td>
-                    {{denuncia.comentarios}}
-                </td>
-
-                <td>
-                    {{denuncia.usuarioDenuncia}}
-                </td>
-
-                <td class="text-center" width="30px">
-                    <button class="btn-menu" [matMenuTriggerFor]="menu">
-                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
-                    </button>
-
-                    <mat-menu #menu="matMenu">
-                        <button type="button" mat-menu-item (click)="verReporte(denuncia)">
-                            <mat-icon>visibility</mat-icon>
-                            <span>Ver</span>
-                        </button>
-
-                        <button type="button" mat-menu-item (click)="deleteReporte(denuncia)">
-                            <mat-icon>delete_outline</mat-icon>
-                            <span>Eliminar</span>
-                        </button>
-                    </mat-menu>
-                </td>
-            </tr>
-        </tbody>
+      <thead>
+        <tr>
+          <th>Creado</th>
+          <th>Post</th>
+          <th>Razón</th>
+          <th>Comentario</th>
+          <th>Usuario que Reporta</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (denuncia of denuncias; track denuncia) {
+          <tr [ngClass]="{'opacity-50': denuncia.eliminado}">
+            <td>
+              <span class="cursor--help" matTooltip="{{denuncia.fechaRegistro}}">
+                {{denuncia.fechaRegistro | timeAgo}}
+              </span>
+            </td>
+            <td>
+              <app-post-url-link
+                [post]="{ id: denuncia.post.id, url: denuncia.post.url, titulo: denuncia.post.titulo, truncate: 70}"
+                [categoria]="{ icono: denuncia.post.categoria.icono, nombre: denuncia.post.categoria.nombre, seo: denuncia.post.categoria.seo}">
+              </app-post-url-link>
+            </td>
+            <td>
+              {{denuncia.razon}}
+            </td>
+            <td>
+              {{denuncia.comentarios}}
+            </td>
+            <td>
+              {{denuncia.usuarioDenuncia}}
+            </td>
+            <td class="text-center" width="30px">
+              <button class="btn-menu" [matMenuTriggerFor]="menu">
+                <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button type="button" mat-menu-item (click)="verReporte(denuncia)">
+                  <mat-icon>visibility</mat-icon>
+                  <span>Ver</span>
+                </button>
+                <button type="button" mat-menu-item (click)="deleteReporte(denuncia)">
+                  <mat-icon>delete_outline</mat-icon>
+                  <span>Eliminar</span>
+                </button>
+              </mat-menu>
+            </td>
+          </tr>
+        }
+      </tbody>
     </table>
-</main>
+  </main>
+}
 
-<div class="alert alert-warning" *ngIf="denuncias.length < 1">
+@if (denuncias.length < 1) {
+  <div class="alert alert-warning">
     🗃️ Lo sentimos, no se han encontrado datos.
-</div>
+  </div>
+}
 
-<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
-    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="denuncias.length > 0">
-</mat-paginator>
+@if (denuncias.length > 0) {
+  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
+  </mat-paginator>
+}

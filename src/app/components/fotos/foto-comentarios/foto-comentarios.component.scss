@@ -1,0 +1,127 @@
+.foto-comentarios {
+  max-width: 860px;
+
+  .titular h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #444;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+
+    span { color: #3b82f6; }
+  }
+}
+
+.comentario-post {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.avatar-box {
+  flex-shrink: 0;
+}
+
+.comment-box {
+  flex: 1;
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 10px 12px;
+  border: 1px solid #eee;
+}
+
+.comment-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.floatL {
+  a {
+    font-weight: 600;
+    color: #333;
+    text-decoration: none;
+    &:hover { color: #3b82f6; }
+  }
+}
+
+.comment-content {
+  font-size: .9rem;
+  color: #444;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.numbersvotes {
+  margin-top: 4px;
+
+  .overview {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+}
+
+.votos-count {
+  font-weight: 700;
+  font-size: .85rem;
+  color: #888;
+  min-width: 20px;
+  text-align: center;
+
+  &.positivo { color: #16a34a; }
+  &.negativo { color: #dc2626; }
+}
+
+.voto-btn {
+  cursor: pointer;
+  font-size: .82rem;
+  color: #bbb;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: color .15s, background .15s;
+
+  &:hover { color: #555; background: #eee; }
+  &.active-like { color: #16a34a; }
+  &.active-dislike { color: #dc2626; }
+}
+
+.botonear {
+  a {
+    cursor: pointer;
+    color: #ccc;
+    font-size: .8rem;
+    padding: 2px 5px;
+    &:hover { color: #dc2626; }
+  }
+}
+
+.miComentario {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+
+  .creul { flex-shrink: 0; }
+
+  .Container {
+    flex: 1;
+
+    textarea {
+      width: 100%;
+      min-height: 70px;
+      resize: vertical;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: .9rem;
+      outline: none;
+      transition: border-color .2s;
+
+      &:focus { border-color: #3b82f6; }
+    }
+
+    .buttons { margin-top: 6px; }
+  }
+}

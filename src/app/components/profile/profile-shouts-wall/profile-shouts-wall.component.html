@@ -1,96 +1,90 @@
-<div class="row wall__container" *ngIf="shoutsList.length > 0">
+@if (shoutsList.length > 0) {
+  <div class="row wall__container">
     <div class="col-12">
-        <article class="wall__story">
-            <div class="story mb-4" *ngFor="let shout of shoutsList; let i = index">
-                <div class="row">
-                    <div class="col-12 col-sm-1">
-                        <div class="boxreshout">
-                            <!-- <a href="/perfil/nesticle8bit" class="story__profile-image">
-                                <img alt="nesticle8bit" src="https://i.imgur.com/2Rs9AVg.jpeg" />
-                            </a> -->
-
-                            <a [routerLink]="['/perfil/' + shout.avatar.userName]" class="story__profile-image">
-                                <app-user-avatar [class]="''" [avatar]="shout?.avatar?.avatar" [userName]="shout?.avatar?.userName"></app-user-avatar>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-sm-11">
-                        <div class="story__content">
-                            <span class="story__arrow"></span>
-                            <div class="story__header">
-                                <div class="story__header--userName">
-                                    @<a [routerLink]="['/perfil/' + shout.avatar.userName]" class="a_blue">{{shout.avatar.userName}}</a> dijo:
-                                </div>
-
-                                <div class="shoutbody">
-                                    {{shout.comentario}}
-                                </div>
-                            </div>
-
-                            <div class="story__footer">
-                                <div class="container-fluid pr-0">
-                                    <div class="row g-0">
-                                        <div class="col-12 col-sm-6">
-                                            <div class="story__timeContainer">
-                                                <i class="text-muted icon {{shout.tipo?.toLowerCase()}}-shout"></i>
-                                                <span class="story__timeAgo cursor--help"
-                                                    matTooltip="{{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm:ss \', año\' y'}}">
-                                                    El {{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm'}}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 col-sm-6 text-end">
-                                            <ul class="list-inline">
-                                                <li class="list__inline-item">
-                                                    <a matTooltip="Ver actividad">
-                                                        <fa-icon class="pl-2 ml-2" [icon]="['fas', 'clock']"></fa-icon>
-                                                        &nbsp;
-                                                    </a>
-                                                </li>
-
-                                                <li class="list__inline-item">
-                                                    <a class="abrir" [routerLink]="['/shouts/' + shout.avatar.userName + '/' + shout.id]">Abrir</a>
-                                                </li>
-
-                                                <li class="list__inline-item">
-                                                    <a href="#" title="Comentarios">
-                                                        <fa-icon class="pl-2 ml-2" [icon]="['fas', 'comments']"></fa-icon>
-                                                        <span class="counter">0</span>
-                                                    </a>
-                                                </li>
-
-                                                <li class="list__inline-item">
-                                                    <a title="Favoritos">
-                                                        <fa-icon [icon]="['fas', 'star']"></fa-icon>
-                                                        <span class="counter">0</span>
-                                                    </a>
-                                                </li>
-
-                                                <li class="list__inline-item">
-                                                    <a title="Me gusta">
-                                                        <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
-                                                        <span class="counter">0</span>
-                                                    </a>
-                                                </li>
-
-                                                <!-- 
-                                                <li class="list__inline-item">
-                                                    <a title="Compartir">
-                                                        <fa-icon [icon]="['fas', 'retweet']"></fa-icon>
-                                                        <span class="counter">0</span>
-                                                    </a>
-                                                </li> -->
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <article class="wall__story">
+        @for (shout of shoutsList; track shout; let i = $index) {
+          <div class="story mb-4">
+            <div class="row">
+              <div class="col-12 col-sm-1">
+                <div class="boxreshout">
+                  <!-- <a href="/perfil/nesticle8bit" class="story__profile-image">
+                  <img alt="nesticle8bit" src="https://i.imgur.com/2Rs9AVg.jpeg" />
+                </a> -->
+                <a [routerLink]="['/perfil/' + shout.avatar.userName]" class="story__profile-image" [appUserPopover]="shout.avatar.userName">
+                  <app-user-avatar [class]="''" [avatar]="shout?.avatar?.avatar" [userName]="shout?.avatar?.userName"></app-user-avatar>
+                </a>
+              </div>
             </div>
-        </article>
-    </div>
+            <div class="col-12 col-sm-11">
+              <div class="story__content">
+                <span class="story__arrow"></span>
+                <div class="story__header">
+                  <div class="story__header--userName">
+                    {{'@'}}<a [routerLink]="['/perfil/' + shout.avatar.userName]" class="a_blue" [appUserPopover]="shout.avatar.userName">{{shout.avatar.userName}}</a> dijo:
+                  </div>
+                  <div class="shoutbody">
+                    {{shout.comentario}}
+                  </div>
+                </div>
+                <div class="story__footer">
+                  <div class="container-fluid pr-0">
+                    <div class="row g-0">
+                      <div class="col-12 col-sm-6">
+                        <div class="story__timeContainer">
+                          <i class="text-muted icon {{shout.tipo?.toLowerCase()}}-shout"></i>
+                          <span class="story__timeAgo cursor--help"
+                            matTooltip="{{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm:ss \', año\' y'}}">
+                            El {{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm'}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6 text-end">
+                        <ul class="list-inline">
+                          <li class="list__inline-item">
+                            <a matTooltip="Ver actividad">
+                              <fa-icon class="pl-2 ml-2" [icon]="['fas', 'clock']"></fa-icon>
+                              &nbsp;
+                            </a>
+                          </li>
+                          <li class="list__inline-item">
+                            <a class="abrir" [routerLink]="['/shouts/' + shout.avatar.userName + '/' + shout.id]">Abrir</a>
+                          </li>
+                          <li class="list__inline-item">
+                            <a href="#" title="Comentarios">
+                              <fa-icon class="pl-2 ml-2" [icon]="['fas', 'comments']"></fa-icon>
+                              <span class="counter">0</span>
+                            </a>
+                          </li>
+                          <li class="list__inline-item">
+                            <a title="Favoritos">
+                              <fa-icon [icon]="['fas', 'star']"></fa-icon>
+                              <span class="counter">0</span>
+                            </a>
+                          </li>
+                          <li class="list__inline-item">
+                            <a title="Me gusta">
+                              <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
+                              <span class="counter">0</span>
+                            </a>
+                          </li>
+                          <!--
+                          <li class="list__inline-item">
+                            <a title="Compartir">
+                              <fa-icon [icon]="['fas', 'retweet']"></fa-icon>
+                              <span class="counter">0</span>
+                            </a>
+                          </li> -->
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </article>
+  </div>
 </div>
+}

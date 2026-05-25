@@ -8,8 +8,8 @@ describe('DialogCreateUpdateNoticiasComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogCreateUpdateNoticiasComponent ]
-    })
+    imports: [DialogCreateUpdateNoticiasComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(DialogCreateUpdateNoticiasComponent);

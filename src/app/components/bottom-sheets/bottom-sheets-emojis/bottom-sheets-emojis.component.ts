@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 
 @Component({
+  standalone: false,
   selector: 'app-bottom-sheets-emojis',
   templateUrl: './bottom-sheets-emojis.component.html',
   styleUrls: ['./bottom-sheets-emojis.component.scss'],

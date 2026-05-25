@@ -4,6 +4,7 @@ import { DialogAfiliarseComponent } from 'src/app/components/dialogs/dialog-afil
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 
 @Component({
+  standalone: false,
   selector: 'app-home-afiliados',
   templateUrl: './home-afiliados.component.html',
   styleUrls: ['./home-afiliados.component.scss'],

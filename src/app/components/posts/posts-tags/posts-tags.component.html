@@ -1,13 +1,16 @@
 <section class="tagbox">
-    <div class="fortags">
-        <div class="letres">Tags:</div>
+  <div class="fortags">
+    <div class="letres">Tags:</div>
 
-        <div *ngFor="let etiqueta of post?.tags; let last = last">
-            <a rel="tag" [routerLink]="['/buscar/posts/' + etiqueta]">
-                {{etiqueta}}
-            </a>
-
-            <span *ngIf="!last">|</span>
-        </div>
-    </div>
+    @for (etiqueta of post?.tags; track etiqueta; let last = $last) {
+      <div>
+        <a rel="tag" [routerLink]="['/buscar/posts/' + etiqueta]">
+          {{etiqueta}}
+        </a>
+        @if (!last) {
+          <span>|</span>
+        }
+      </div>
+    }
+  </div>
 </section>

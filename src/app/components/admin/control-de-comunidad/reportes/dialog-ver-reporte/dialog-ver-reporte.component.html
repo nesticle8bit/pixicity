@@ -31,7 +31,7 @@
         <div class="col-12 col-sm-12 col-md-4">
             <div class="mb-3">
                 <label>Usuario que denuncia</label>
-                <a class="cursor--pointer d-block pt-1" href="/perfil/{{data?.usuarioDenuncia}}" target="_blank">
+                <a class="cursor--pointer d-block pt-1" href="/perfil/{{data?.usuarioDenuncia}}" target="_blank" [appUserPopover]="data?.usuarioDenuncia">
                     {{data?.usuarioDenuncia}}
                 </a>
             </div>

@@ -1,0 +1,98 @@
+<div class="foto-comentarios mx-auto mt-3">
+
+  <div class="titular">
+    <h3><span>{{comentarios?.length}}</span> comentarios</h3>
+  </div>
+
+  @for (comentario of comentarios; track comentario; let i = $index) {
+    <div class="comentario-post clearbeta">
+      <div class="avatar-box">
+        <a [routerLink]="['/perfil/' + comentario?.usuario]" [appUserPopover]="comentario?.usuario">
+          <app-user-avatar [class]="'avatar-48 lazy'" [avatar]="comentario?.avatar"
+            [userName]="comentario?.usuario" [width]="48"
+            matTooltip="Avatar de {{comentario?.usuario}}" [matTooltipPosition]="'left'">
+          </app-user-avatar>
+        </a>
+      </div>
+
+      <div class="comment-box">
+        <div class="comment-info clearbeta">
+          <div class="float-start">
+            <div class="floatL">
+              <a [routerLink]="['/perfil/' + comentario?.usuario]" [appUserPopover]="comentario?.usuario">
+                {{comentario?.usuario}}
+              </a>
+              <span class="text-muted ms-2" style="font-size:.8rem">
+                {{comentario?.fechaComentario | timeAgo}}
+              </span>
+            </div>
+
+            <div class="numbersvotes">
+              <div class="overview">
+                <span class="votos-count"
+                  [ngClass]="{'positivo': comentario?.votos > 0, 'negativo': comentario?.votos < 0}">
+                  {{comentario?.votos || 0}}
+                </span>
+
+                @if (currentUser?.usuario && currentUser?.usuario?.userName !== comentario?.usuario) {
+                  <a class="voto-btn"
+                    [ngClass]="{'active-like': comentario?.miVoto === 1}"
+                    (click)="voteComentario(comentario, 1)"
+                    matTooltip="Me gusta">
+                    <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
+                  </a>
+                  <a class="voto-btn"
+                    [ngClass]="{'active-dislike': comentario?.miVoto === -1}"
+                    (click)="voteComentario(comentario, -1)"
+                    matTooltip="No me gusta">
+                    <fa-icon [icon]="['fas', 'thumbs-down']"></fa-icon>
+                  </a>
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="float-end answerOptions">
+            @if (currentUser?.usuario?.userName === comentario?.usuario) {
+              <div class="botonear">
+                <a matTooltip="Eliminar Comentario" (click)="eliminarComentario(comentario, i)">
+                  <fa-icon [icon]="['fas', 'times']" class="times"></fa-icon>
+                </a>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="comment-content">
+          <span>{{comentario?.contenido}}</span>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (comentarios?.length === 0) {
+    <section class="nada-amarillo mx-auto mt-2" style="width:98%">
+      Sé el primero en comentar esta foto
+    </section>
+  }
+
+  @if (currentUser?.usuario) {
+    <form class="miComentario mx-auto mt-3" [formGroup]="formGroup">
+      <div class="creul">
+        <app-user-avatar [class]="'avese'" [avatar]="currentUser?.usuario?.avatar"
+          [userName]="currentUser?.usuario?.userName" [width]="48">
+        </app-user-avatar>
+      </div>
+      <div class="Container">
+        <textarea class="onblur_effect" placeholder="Escribir un comentario..."
+          formControlName="contenido"></textarea>
+        <div class="buttons">
+          <div class="float-end">
+            <a class="boton azul" (click)="enviarComentario()">Comentar</a>
+          </div>
+        </div>
+      </div>
+    </form>
+  }
+
+</div>

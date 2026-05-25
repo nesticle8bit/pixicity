@@ -8,8 +8,8 @@ describe('TipoIconMonitorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TipoIconMonitorComponent ]
-    })
+    imports: [TipoIconMonitorComponent]
+})
     .compileComponents();
   });
 

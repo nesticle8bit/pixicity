@@ -8,8 +8,8 @@ describe('ChangeAvatarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ChangeAvatarComponent ]
-    })
+    imports: [ChangeAvatarComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(ChangeAvatarComponent);

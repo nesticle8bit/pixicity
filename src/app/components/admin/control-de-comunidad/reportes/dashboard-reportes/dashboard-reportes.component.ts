@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-dashboard-reportes',
   templateUrl: './dashboard-reportes.component.html',
   styleUrls: ['./dashboard-reportes.component.scss']

@@ -8,8 +8,8 @@ describe('EnVivoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EnVivoComponent ]
-    })
+    imports: [EnVivoComponent]
+})
     .compileComponents();
   });
 

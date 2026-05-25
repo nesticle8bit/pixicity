@@ -1,11 +1,11 @@
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Validators } from 'ngx-editor';
+import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-dialog-change-rangos',
   templateUrl: './dialog-change-rangos.component.html',
   styleUrls: ['./dialog-change-rangos.component.scss'],

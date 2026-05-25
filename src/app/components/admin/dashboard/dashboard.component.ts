@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 @Component({
+  standalone: false,
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
@@ -12,7 +13,7 @@ export class DashboardComponent implements OnInit {
     private displayService: DisplayComponentService,
     private title: Title
   ) {
-    this.title.setTitle('Panel de Administración | Pixicity - Ciudad Pixelada | Comunidad para Compartir Información');
+    this.title.setTitle('Panel de Administración | Taringas - Inteligencia colectiva | Comunidad para Compartir Información');
   }
 
   ngOnInit(): void {

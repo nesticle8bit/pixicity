@@ -10,6 +10,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
+  standalone: false,
   selector: 'app-table-usuarios',
   templateUrl: './table-usuarios.component.html',
   styleUrls: ['./table-usuarios.component.scss'],

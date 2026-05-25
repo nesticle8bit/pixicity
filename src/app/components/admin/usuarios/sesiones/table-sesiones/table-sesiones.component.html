@@ -1,81 +1,84 @@
-<main class="table-responsive" *ngIf="sesiones.length > 0">
+@if (sesiones.length > 0) {
+  <main class="table-responsive">
     <table class="table table-sm table-striped table-hover">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Creado</th>
-                <th>Token</th>
-                <th>Expira</th>
-                <th>Usuario</th>
-                <th>Eliminado</th>
-                <th></th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr *ngFor="let sesion of sesiones" [ngClass]="{'opacity-50': sesion.eliminado}">
-                <td>
-                    <strong>{{sesion.id}}</strong>
-                </td>
-
-                <td>
-                    {{sesion.fechaRegistro | timeAgo}}
-                </td>
-
-                <td>
-                    <fa-icon [icon]="['fas', 'copy']" matTooltip="Copiar al portapapeles"
-                        (click)="clipboard(sesion.token)" class="mr-3 text-secondary cursor--pointer"></fa-icon> &nbsp;
-
-                    <span class="cursor--help" matTooltip="{{sesion.token}}">
-                        {{sesion.token | truncate:[60]}}
-                    </span>
-                </td>
-
-                <td>
-                    <span *ngIf="!sesion.eliminado">
-                        {{sesion.fechaExpiracion | date: 'dd/MM/yyyy HH:mm:ss'}} <small
-                            class="text-muted">({{sesion.diffExpira}} {{sesion.diffExpira === 1 ? 'día' :
-                            'días'}})</small>
-                    </span>
-
-                    <span *ngIf="sesion.eliminado">
-                        -
-                    </span>
-                </td>
-
-                <td>
-                    {{sesion.usuario}}
-                </td>
-
-                <td>
-                    <span *ngIf="sesion.eliminado" class="badge bg-danger"
-                        matTooltip="Eliminado el ({{sesion.fechaElimina | date:'dd/MM/yyyy HH:mm:ss'}}) por {{sesion.usuarioElimina}}">
-                        Eliminado &nbsp; <fa-icon class="cursor--help ml-3" [icon]="['fas', 'calendar-alt']">
-                        </fa-icon>
-                    </span>
-
-                    <span *ngIf="!sesion.eliminado" class="badge bg-success">
-                        Activo
-                    </span>
-                </td>
-
-                <td class="text-center" width="30px">
-                    <button class="btn-menu" [matMenuTriggerFor]="menu">
-                        <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
-                    </button>
-
-                    <mat-menu #menu="matMenu">
-                        <button type="button" mat-menu-item (click)="deleteSession(sesion.id)">
-                            <mat-icon>delete_outline</mat-icon>
-                            <span>Eliminar</span>
-                        </button>
-                    </mat-menu>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Creado</th>
+          <th>Token</th>
+          <th>Expira</th>
+          <th>Usuario</th>
+          <th>Eliminado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (sesion of sesiones; track sesion) {
+          <tr [ngClass]="{'opacity-50': sesion.eliminado}">
+            <td>
+              <strong>{{sesion.id}}</strong>
+            </td>
+            <td>
+              {{sesion.fechaRegistro | timeAgo}}
+            </td>
+            <td>
+              <fa-icon [icon]="['fas', 'copy']" matTooltip="Copiar al portapapeles"
+              (click)="clipboard(sesion.token)" class="mr-3 text-secondary cursor--pointer"></fa-icon> &nbsp;
+              <span class="cursor--help" matTooltip="{{sesion.token}}">
+                {{sesion.token | truncate:[60]}}
+              </span>
+            </td>
+            <td>
+              @if (!sesion.eliminado) {
+                <span>
+                  {{sesion.fechaExpiracion | date: 'dd/MM/yyyy HH:mm:ss'}} <small
+                  class="text-muted">({{sesion.diffExpira}} {{sesion.diffExpira === 1 ? 'día' :
+                'días'}})</small>
+              </span>
+            }
+            @if (sesion.eliminado) {
+              <span>
+                -
+              </span>
+            }
+          </td>
+          <td>
+            {{sesion.usuario}}
+          </td>
+          <td>
+            @if (sesion.eliminado) {
+              <span class="badge bg-danger"
+                matTooltip="Eliminado el ({{sesion.fechaElimina | date:'dd/MM/yyyy HH:mm:ss'}}) por {{sesion.usuarioElimina}}">
+                Eliminado &nbsp; <fa-icon class="cursor--help ml-3" [icon]="['fas', 'calendar-alt']">
+              </fa-icon>
+            </span>
+          }
+          @if (!sesion.eliminado) {
+            <span class="badge bg-success">
+              Activo
+            </span>
+          }
+        </td>
+        <td class="text-center" width="30px">
+          <button class="btn-menu" [matMenuTriggerFor]="menu">
+            <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button type="button" mat-menu-item (click)="deleteSession(sesion.id)">
+              <mat-icon>delete_outline</mat-icon>
+              <span>Eliminar</span>
+            </button>
+          </mat-menu>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
 </main>
+}
 
-<mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
-    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)" *ngIf="sesiones.length > 0">
-</mat-paginator>
+@if (sesiones.length > 0) {
+  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
+  </mat-paginator>
+}

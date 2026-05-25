@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-follow-button',
   templateUrl: './follow-button.component.html',
   styleUrls: ['./follow-button.component.scss'],

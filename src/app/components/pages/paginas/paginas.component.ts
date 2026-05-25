@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
+  standalone: false,
   selector: 'app-paginas',
   templateUrl: './paginas.component.html',
   styleUrls: ['./paginas.component.scss'],

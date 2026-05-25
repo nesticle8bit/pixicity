@@ -3,10 +3,10 @@
 [![GitHub issues](https://img.shields.io/github/issues/NESTicle/pixicity.svg)](https://GitHub.com/NESTicle/pixicity/issues/)
 
 # pixicity
-Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de las cenizas a Pixicity!
+Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de las cenizas a Taringas!
 
 ### 📄 Index
-![pixicity.io](https://user-images.githubusercontent.com/1715022/221032267-533c6ce5-f864-4df8-ae6a-53b19a7a0da5.png)
+![taringas.net](https://user-images.githubusercontent.com/1715022/221032267-533c6ce5-f864-4df8-ae6a-53b19a7a0da5.png)
 
 <details>
   <summary>🖼️ Screenshots</summary>
@@ -21,7 +21,7 @@ Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de la
 ![image](https://user-images.githubusercontent.com/1715022/157444548-5a256888-93f0-47e2-b6a4-626bce6d341a.png)
 
 ### 🙂 Perfil del Usuario
-![pixicity.io](https://user-images.githubusercontent.com/1715022/210439435-cd856012-813d-4735-baf6-3fc457af2b08.png)
+![taringas.net](https://user-images.githubusercontent.com/1715022/210439435-cd856012-813d-4735-baf6-3fc457af2b08.png)
 
 ### 🔍️ Buscador
 ![Buscador](https://user-images.githubusercontent.com/1715022/152900078-a5f5daf6-914c-45a0-96f6-ba04d653c13d.png)
@@ -30,10 +30,10 @@ Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de la
 ![image](https://user-images.githubusercontent.com/1715022/153098093-db1d3959-c795-48e4-9602-4b8672c25fa4.png)
 
 ### 👀 Ver post
-![pixicity.io](https://user-images.githubusercontent.com/1715022/210439192-f852a280-7787-44e1-a1fd-389e4c99c21c.png)
+![taringas.net](https://user-images.githubusercontent.com/1715022/210439192-f852a280-7787-44e1-a1fd-389e4c99c21c.png)
 
 ### 🧮 Dashboard
-![pixicity.io](https://user-images.githubusercontent.com/1715022/210439355-64ba9429-ad06-475d-bb2d-865ffed52eb7.png)
+![taringas.net](https://user-images.githubusercontent.com/1715022/210439355-64ba9429-ad06-475d-bb2d-865ffed52eb7.png)
 </details>
 
 ----

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-shouts-comments',
   templateUrl: './shouts-comments.component.html',
   styleUrls: ['./shouts-comments.component.scss'],
