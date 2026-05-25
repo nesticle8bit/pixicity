@@ -86,11 +86,11 @@ Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de la
     - [x] Crear sección para visualizar los comentarios realizados por el usuario
     
   - Fotos
-    - [ ] Implementar sección para subir fotos a la comunidad
-    - [ ] Visualizar las fotos
-    - [ ] Comentar las fotos
-    - [ ] Votar 👍🏼 y 👎🏼 en las fotos
-    - [ ] Crear un slider automático en el Index de la página y visualizar las últimas fotos publicadas en la comunidad
+    - [x] Implementar sección para subir fotos a la comunidad
+    - [x] Visualizar las fotos
+    - [x] Comentar las fotos
+    - [x] Votar 👍🏼 y 👎🏼 en las fotos
+    - [x] Crear un slider automático en el Index de la página y visualizar las últimas fotos publicadas en la comunidad
 
   - Medallas
     - [ ] Implementar medallas para los usuarios
