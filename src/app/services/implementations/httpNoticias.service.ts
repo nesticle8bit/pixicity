@@ -6,33 +6,30 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import Swal from 'sweetalert2';
+import { NotificationService } from '../shared/notification.service';
 
 @Injectable()
 export class HttpNoticiasService implements IHttpNoticiasService {
   constructor(
-    private http: HttpClient,
+    private notificationService: NotificationService,
+    private paginationService: PaginationService,
     private helper: HelperService,
-    private paginationService: PaginationService
+    private http: HttpClient,
   ) {}
 
   getNoticias(search: string): Observable<any> {
     return this.http
       .get<any>(
-        `${environment.api}/api/noticias/getNoticias?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${search}`
+        `${environment.api}/api/noticias/getNoticias?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${search}`,
       )
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -45,13 +42,9 @@ export class HttpNoticiasService implements IHttpNoticiasService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -64,13 +57,9 @@ export class HttpNoticiasService implements IHttpNoticiasService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -88,13 +77,9 @@ export class HttpNoticiasService implements IHttpNoticiasService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -107,13 +92,9 @@ export class HttpNoticiasService implements IHttpNoticiasService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }

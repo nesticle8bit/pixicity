@@ -167,17 +167,17 @@
     font-size: .82rem;
     color: #555;
 
-    fa-icon {
+    i.ti {
       width: 14px;
       text-align: center;
       color: #aaa;
     }
 
-    &.stat-pos fa-icon {
+    &.stat-pos i.ti {
       color: #4caf50;
     }
 
-    &.stat-neg fa-icon {
+    &.stat-neg i.ti {
       color: #f44336;
     }
   }

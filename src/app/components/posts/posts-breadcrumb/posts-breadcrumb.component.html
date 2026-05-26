@@ -1,6 +1,6 @@
 <ul class="list-unstyled list-inline post-header-list">
     <li class="list-inline-item mr-2">
-        <fa-icon [icon]="['far', 'clock']"></fa-icon> {{post?.fechaRegistro | timeAgo}}
+        <i class="ti ti-clock"></i> {{post?.fechaRegistro | timeAgo}}
     </li>
 
     <li class="list-inline-item">
@@ -11,13 +11,13 @@
 
     <li class="list-inline-item">
         <a [routerLink]="['/posts/' + post?.categoria?.seo]">
-            <fa-icon [icon]="['fas', 'angle-right']"></fa-icon> {{post?.categoria?.nombre}}
+            <i class="ti ti-chevron-right"></i> {{post?.categoria?.nombre}}
         </a>
     </li>
 
     <li class="list-inline-item">
         <a [routerLink]="['/posts/' + post?.categoria?.seo + '/' + post?.id + '/' + post?.url]">
-            <fa-icon [icon]="['fas', 'angle-right']"></fa-icon> {{post?.titulo}}
+            <i class="ti ti-chevron-right"></i> {{post?.titulo}}
         </a>
     </li>
 </ul>

@@ -16,7 +16,7 @@
     <div class="col-6 col-md-3">
       <div class="stat-card stat-card--blue">
         <div class="stat-card__icon">
-          <fa-icon [icon]="['fas', 'users']"></fa-icon>
+          <i class="ti ti-users"></i>
         </div>
         <div class="stat-card__body">
           <div class="stat-card__value">{{stats.totalUsuarios | number}}</div>
@@ -27,7 +27,7 @@
     <div class="col-6 col-md-3">
       <div class="stat-card stat-card--green">
         <div class="stat-card__icon">
-          <fa-icon [icon]="['far', 'copy']"></fa-icon>
+          <i class="ti ti-copy"></i>
         </div>
         <div class="stat-card__body">
           <div class="stat-card__value">{{stats.totalPosts | number}}</div>
@@ -38,7 +38,7 @@
     <div class="col-6 col-md-3">
       <div class="stat-card stat-card--orange">
         <div class="stat-card__icon">
-          <fa-icon [icon]="['fas', 'comments']"></fa-icon>
+          <i class="ti ti-messages"></i>
         </div>
         <div class="stat-card__body">
           <div class="stat-card__value">{{stats.totalComentarios | number}}</div>
@@ -51,7 +51,7 @@
       <div class="stat-card stat-card--teal">
         <div class="stat-card__icon">
           <span class="stat-card__dot"></span>
-          <fa-icon [icon]="['fas', 'circle']"></fa-icon>
+          <i class="ti ti-circle-dot"></i>
         </div>
         <div class="stat-card__body">
           <div class="stat-card__value">{{stats.usuariosOnline}}</div>
@@ -69,7 +69,7 @@
     <div class="col-12 col-md-4">
       <div class="stat-panel">
         <div class="stat-panel__header">
-          <fa-icon [icon]="['fas', 'trophy']"></fa-icon> Récord de usuarios online
+          <i class="ti ti-trophy"></i> Récord de usuarios online
         </div>
         @if (stats.recordUsers?.usersOnline) {
           <div class="stat-panel__body text-center py-3">
@@ -89,7 +89,7 @@
       <!-- % Online -->
       <div class="stat-panel mt-3">
         <div class="stat-panel__header">
-          <fa-icon [icon]="['fas', 'chart-bar']"></fa-icon> Actividad actual
+          <i class="ti ti-chart-bar"></i> Actividad actual
         </div>
         <div class="stat-panel__body">
           <div class="stat-ratio">
@@ -114,7 +114,7 @@
     <div class="col-12 col-md-4">
       <div class="stat-panel h-100">
         <div class="stat-panel__header">
-          <fa-icon [icon]="['fas', 'user-clock']"></fa-icon>
+          <i class="ti ti-user-clock"></i>
           Registrados online ({{stats.listaOnline?.registrados?.length || 0}})
         </div>
         <div class="stat-panel__body stat-panel__body--scroll">
@@ -142,7 +142,7 @@
     <div class="col-12 col-md-4">
       <div class="stat-panel h-100">
         <div class="stat-panel__header">
-          <fa-icon [icon]="['fas', 'user-plus']"></fa-icon> Últimos registros
+          <i class="ti ti-user-plus"></i> Últimos registros
         </div>
         <div class="stat-panel__body stat-panel__body--scroll">
           @if (stats.ultimosUsuarios?.length > 0) {
@@ -156,7 +156,7 @@
                   <small class="text-muted d-block">{{u.fechaRegistro | date:'dd/MM/yy HH:mm'}}</small>
                 </div>
                 <span class="stat-puntos">
-                  <fa-icon [icon]="['fas', 'chart-line']"></fa-icon> {{u.puntos || 0}}
+                  <i class="ti ti-chart-line"></i> {{u.puntos || 0}}
                 </span>
               </div>
             }
@@ -173,7 +173,7 @@
     <div class="col-12 col-md-6">
       <div class="stat-panel">
         <div class="stat-panel__header">
-          <fa-icon [icon]="['fas', 'fire']"></fa-icon> Top Posts — Hoy
+          <i class="ti ti-flame"></i> Top Posts — Hoy
         </div>
         <div class="stat-panel__body">
           @if (stats.topPostsHoy?.posts?.length > 0) {
@@ -203,7 +203,7 @@
     <div class="col-12 col-md-6">
       <div class="stat-panel">
         <div class="stat-panel__header">
-          <fa-icon [icon]="['fas', 'chart-line']"></fa-icon> Top Posts — Esta semana
+          <i class="ti ti-chart-line"></i> Top Posts — Esta semana
         </div>
         <div class="stat-panel__body">
           @if (stats.topPostsSemana?.posts?.length > 0) {
@@ -233,7 +233,7 @@
   <!-- Refresh button -->
   <div class="text-end mt-3">
     <button mat-stroked-button (click)="load()">
-      <fa-icon [icon]="['fas', 'sync-alt']"></fa-icon> Actualizar
+      <i class="ti ti-refresh"></i> Actualizar
     </button>
   </div>
 }

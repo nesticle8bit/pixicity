@@ -2,7 +2,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -17,7 +17,8 @@ export class DialogChangeAvatarComponent implements OnInit {
   constructor(
     private securityService: IHttpSecurityService,
     public dialogRef: MatDialogRef<DialogChangeAvatarComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {}
@@ -31,11 +32,7 @@ export class DialogChangeAvatarComponent implements OnInit {
   }
 
   loadImageFailed(): void {
-    Swal.fire({
-      title: 'Error',
-      text: 'Se ha encontrado un error al tratar de actualizar la imagen de perfil, por favor recarga la página',
-      icon: 'error',
-    });
+    this.notificationService.error('Se ha encontrado un error al tratar de actualizar la imagen de perfil, por favor recarga la página', 'Error');
   }
 
   saveAvatar(): void {
@@ -52,12 +49,7 @@ export class DialogChangeAvatarComponent implements OnInit {
       this.securityService.changeAvatarAdmin(imageFile, this.data?.usuario?.id).subscribe((response: any) => {
         if (response) {
           this.dialogRef.close(response);
-          Swal.fire({
-            title: 'Actualizado',
-            text: `El avatar del usuario ${this.data?.usuario?.userName} ha sido actualizado correctamente`,
-            icon: 'success',
-            timer: 3000
-          });
+          this.notificationService.success(`El avatar del usuario ${this.data?.usuario?.userName} ha sido actualizado correctamente`, 'Actualizado');
         }
       });
     } else {

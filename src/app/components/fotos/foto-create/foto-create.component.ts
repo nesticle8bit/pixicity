@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -29,6 +29,7 @@ export class FotoCreateComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private router: Router,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.fb.group({
       titulo: ['', [Validators.required, Validators.maxLength(150)]],
@@ -145,12 +146,7 @@ export class FotoCreateComponent implements OnInit {
       this.fotosService.updateFoto(model).subscribe({
         next: () => {
           this.loading = false;
-          Swal.fire({
-            title: 'Actualizado',
-            text: 'Foto actualizada correctamente',
-            icon: 'success',
-            timer: 2000,
-          });
+          this.notificationService.success('Foto actualizada correctamente', 'Actualizado');
           this.router.navigate(['/fotos']);
         },
         error: () => {
@@ -161,12 +157,7 @@ export class FotoCreateComponent implements OnInit {
       this.fotosService.saveFoto(model).subscribe({
         next: () => {
           this.loading = false;
-          Swal.fire({
-            title: 'Publicada',
-            text: 'Foto publicada correctamente',
-            icon: 'success',
-            timer: 2000,
-          });
+          this.notificationService.success('Foto publicada correctamente', 'Publicada');
           this.router.navigate(['/fotos']);
         },
         error: () => {

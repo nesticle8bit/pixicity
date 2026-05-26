@@ -5,34 +5,31 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import Swal from 'sweetalert2';
+import { NotificationService } from '../shared/notification.service';
 import { PaginationService } from '../shared/pagination.service';
 
 @Injectable()
 export class HttpParametrosService implements IHttpParametrosService {
   constructor(
-    private http: HttpClient,
+    private notificationService: NotificationService,
+    private paginationService: PaginationService,
     private helper: HelperService,
-    private paginationService: PaginationService
+    private http: HttpClient,
   ) {}
 
   getPaises(): Observable<any> {
     return this.http
       .get<any>(
-        `${environment.api}/api/paises/getPaises?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`
+        `${environment.api}/api/paises/getPaises?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -45,13 +42,9 @@ export class HttpParametrosService implements IHttpParametrosService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -64,13 +57,9 @@ export class HttpParametrosService implements IHttpParametrosService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -83,13 +72,9 @@ export class HttpParametrosService implements IHttpParametrosService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -97,20 +82,16 @@ export class HttpParametrosService implements IHttpParametrosService {
   getEstadosByPais(idPais: number): Observable<any> {
     return this.http
       .get<any>(
-        `${environment.api}/api/paises/getEstadosByPais?idPais=${idPais}`
+        `${environment.api}/api/paises/getEstadosByPais?idPais=${idPais}`,
       )
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -118,7 +99,7 @@ export class HttpParametrosService implements IHttpParametrosService {
   getCategoriasAdmin(): Observable<any> {
     return this.http
       .get<any>(
-        `${environment.api}/api/categorias/getCategoriasAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`
+        `${environment.api}/api/categorias/getCategoriasAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
 
       .pipe(
@@ -126,13 +107,9 @@ export class HttpParametrosService implements IHttpParametrosService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -145,13 +122,9 @@ export class HttpParametrosService implements IHttpParametrosService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -164,13 +137,9 @@ export class HttpParametrosService implements IHttpParametrosService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }

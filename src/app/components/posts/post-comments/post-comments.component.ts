@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -37,7 +37,8 @@ export class PostCommentsComponent implements OnInit {
     private postService: IHttpPostsService,
     private bottomSheet: MatBottomSheet,
     private formBuilder: FormBuilder,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
       contenido: ['', Validators.required],
@@ -117,63 +118,38 @@ export class PostCommentsComponent implements OnInit {
   }
 
   eliminarComentario(comentarioId: any, i: number): void {
-    Swal.fire({
-      title: 'Eliminar',
-      text: '¿Estás seguro de eliminar este comentario? Recuerda que no se podrá recuperar',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.postService
-          .deleteComentario(comentarioId)
-          .subscribe((response: any) => {
-            if (response) {
-              Swal.fire({
-                title: 'Eliminado',
-                text: `El comentario ha sido eliminado correctamente`,
-                icon: 'success',
-                timer: 3000,
-              });
+    if (!this.notificationService.confirm('¿Estás seguro de eliminar este comentario? Recuerda que no se podrá recuperar')) {
+      return;
+    }
 
-              this.comentarios.splice(i, 1);
-            }
-          });
-      }
-    });
+    this.postService
+      .deleteComentario(comentarioId)
+      .subscribe((response: any) => {
+        if (response) {
+          this.notificationService.success('El comentario ha sido eliminado correctamente', 'Eliminado');
+          this.comentarios.splice(i, 1);
+        }
+      });
   }
 
   eliminarRespuesta(respuestaId: any, comentario: number, i: number): void {
-    Swal.fire({
-      title: 'Eliminar',
-      text: '¿Estás seguro de eliminar esta respuesta? Recuerda que no se podrá recuperar',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.postService
-          .deleteComentario(respuestaId)
-          .subscribe((response: any) => {
-            if (response) {
-              Swal.fire({
-                title: 'Eliminado',
-                text: `La respuesta ha sido eliminado correctamente`,
-                icon: 'success',
-                timer: 3000,
-              });
+    if (!this.notificationService.confirm('¿Estás seguro de eliminar esta respuesta? Recuerda que no se podrá recuperar')) {
+      return;
+    }
 
-              const comment = this.comentarios[comentario];
+    this.postService
+      .deleteComentario(respuestaId)
+      .subscribe((response: any) => {
+        if (response) {
+          this.notificationService.success('La respuesta ha sido eliminada correctamente', 'Eliminado');
 
-              if (comment && comment?.respuestas) {
-                this.comentarios[comentario].respuestas.splice(i, 1);
-              }
-            }
-          });
-      }
-    });
+          const comment = this.comentarios[comentario];
+
+          if (comment && comment?.respuestas) {
+            this.comentarios[comentario].respuestas.splice(i, 1);
+          }
+        }
+      });
   }
 
   addEmoji(event: any): void {

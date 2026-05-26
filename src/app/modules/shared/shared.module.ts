@@ -8,7 +8,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { RichEditorComponent } from '../../components/shared/rich-editor/rich-editor.component';
 import { CountryFlagComponent } from '../../components/addons/country-flag/country-flag.component';
@@ -57,7 +56,6 @@ const SHARED = [
     MatDividerModule,
     MatPaginatorModule,
     MatButtonModule,
-    FontAwesomeModule,
   ],
   exports: SHARED,
 })

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -17,7 +17,8 @@ export class DashboardConfigurationComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private generalService: IHttpGeneralService,
-    private securityService: IHttpSecurityService
+    private securityService: IHttpSecurityService,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
       siteName: [''],
@@ -72,12 +73,7 @@ export class DashboardConfigurationComponent implements OnInit {
       .updateConfiguracion(formValue)
       .subscribe((response: any) => {
         if (response) {
-          Swal.fire({
-            title: 'Actualizado',
-            text: 'La información de la configuración del sitio ha sido actualizado correctamente',
-            icon: 'success',
-            timer: 3000,
-          });
+          this.notificationService.success('La información de la configuración del sitio ha sido actualizado correctamente', 'Actualizado');
         }
       });
   }

@@ -25,7 +25,7 @@
               </a>
               @if (foto.usuarioUltimaConexion) {
               <span class="sidebar-last-seen">
-                <fa-icon [icon]="['fas', 'circle']" class="online-dot"></fa-icon>
+                <i class="ti ti-circle-dot online-dot"></i>
                 {{foto.usuarioUltimaConexion | timeAgo}}
               </span>
               }
@@ -52,10 +52,10 @@
             </div>
             <div class="sidebar-user-links">
               <a [routerLink]="['/posts', foto.usuario]" class="sidebar-link-chip">
-                <fa-icon [icon]="['fas', 'file-alt']"></fa-icon> Ver posts
+                <i class="ti ti-file-text"></i> Ver posts
               </a>
               <a [routerLink]="['/fotos', foto.usuario]" class="sidebar-link-chip">
-                <fa-icon [icon]="['fas', 'images']"></fa-icon> Ver fotos
+                <i class="ti ti-photos"></i> Ver fotos
               </a>
             </div>
           </div>
@@ -65,23 +65,23 @@
             <div class="sidebar-section-title">Esta foto</div>
             <ul class="sidebar-foto-stats">
               <li>
-                <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
+                <i class="ti ti-calendar"></i>
                 <span>{{foto.fechaRegistro | date:'dd MMM yyyy'}}</span>
               </li>
               <li>
-                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                <i class="ti ti-eye"></i>
                 <span>{{foto.visitantes | number}} visitas</span>
               </li>
               <li class="stat-pos">
-                <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
+                <i class="ti ti-thumb-up"></i>
                 <span>{{foto.votosPositivos}} positivos</span>
               </li>
               <li class="stat-neg">
-                <fa-icon [icon]="['fas', 'thumbs-down']"></fa-icon>
+                <i class="ti ti-thumb-down"></i>
                 <span>{{foto.votosNegativos}} negativos</span>
               </li>
               <li>
-                <fa-icon [icon]="['fas', 'comment']"></fa-icon>
+                <i class="ti ti-message"></i>
                 <span>{{foto.totalComentarios}} comentarios</span>
               </li>
             </ul>
@@ -102,9 +102,9 @@
                 <div class="sidebar-thumb-overlay">
                   <span class="overlay-title">{{otraFoto.titulo}}</span>
                   <span class="overlay-stat">
-                    <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon> {{otraFoto.votosPositivos}}
+                    <i class="ti ti-thumb-up"></i> {{otraFoto.votosPositivos}}
                     &nbsp;
-                    <fa-icon [icon]="['fas', 'eye']"></fa-icon> {{otraFoto.visitantes}}
+                    <i class="ti ti-eye"></i> {{otraFoto.visitantes}}
                   </span>
                 </div>
               </a>
@@ -141,25 +141,25 @@
               @if (currentUser?.usuario && !esMio) {
               <a class="voto-btn positivo" [ngClass]="{'voted': foto.miVoto === 1}" (click)="votar(1)"
                 matTooltip="Votar positivo">
-                <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
+                <i class="ti ti-thumb-up"></i>
               </a>
               <a class="voto-btn negativo" [ngClass]="{'voted': foto.miVoto === -1}" (click)="votar(-1)"
                 matTooltip="Votar negativo">
-                <fa-icon [icon]="['fas', 'thumbs-down']"></fa-icon>
+                <i class="ti ti-thumb-down"></i>
               </a>
               }
             </div>
             <div class="voto-counts">
               <span class="positivo-count">
-                <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
+                <i class="ti ti-thumb-up"></i>
                 Positivos: <strong>{{foto.votosPositivos}}</strong>
               </span>
               <span class="negativo-count">
-                <fa-icon [icon]="['fas', 'thumbs-down']"></fa-icon>
+                <i class="ti ti-thumb-down"></i>
                 Negativos: <strong>{{foto.votosNegativos}}</strong>
               </span>
               <span class="visitas-count">
-                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                <i class="ti ti-eye"></i>
                 Visitas: <strong>{{foto.visitantes}}</strong>
               </span>
             </div>
@@ -169,10 +169,10 @@
           @if (esMio || currentUser?.usuario?.isAdmin) {
           <div class="foto-owner-actions">
             <a [routerLink]="['/fotos/actualizar', foto.id]" class="boton azul me-2">
-              <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon> Editar
+              <i class="ti ti-pencil"></i> Editar
             </a>
             <a class="boton rojo" (click)="eliminar()">
-              <fa-icon [icon]="['fas', 'times']"></fa-icon> Eliminar
+              <i class="ti ti-x"></i> Eliminar
             </a>
           </div>
           }

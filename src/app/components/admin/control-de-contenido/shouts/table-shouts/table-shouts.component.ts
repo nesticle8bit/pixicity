@@ -2,7 +2,7 @@ import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.inter
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -16,7 +16,8 @@ export class TableShoutsComponent implements OnInit {
 
   constructor(
     public paginationService: PaginationService,
-    private perfilService: IHttpPerfilService
+    private perfilService: IHttpPerfilService,
+    private notificationService: NotificationService
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
@@ -35,12 +36,7 @@ export class TableShoutsComponent implements OnInit {
   deleteShout(id: number, index: number): void {
     this.perfilService.deleteShout(id).subscribe((response: any) => {
       if (response) {
-        Swal.fire({
-          title: 'Eliminado',
-          text: 'El shout ha sido eliminado exitosamente',
-          icon: 'success',
-          timer: 3000,
-        });
+        this.notificationService.success('El shout ha sido eliminado exitosamente', 'Eliminado');
 
         if (this.shouts[index]) {
           this.shouts[index].eliminado = true;
@@ -52,12 +48,7 @@ export class TableShoutsComponent implements OnInit {
   recoveryShout(id: number, index: number): void {
     this.perfilService.recoveryShout(id).subscribe((response: any) => {
       if (response) {
-        Swal.fire({
-          title: 'Recuperado',
-          text: 'El shout ha sido recuperado exitosamente',
-          icon: 'success',
-          timer: 3000,
-        });
+        this.notificationService.success('El shout ha sido recuperado exitosamente', 'Recuperado');
 
         if (this.shouts[index]) {
           this.shouts[index].eliminado = false;

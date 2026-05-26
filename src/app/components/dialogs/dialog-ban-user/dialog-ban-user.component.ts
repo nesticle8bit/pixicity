@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -17,7 +17,8 @@ export class DialogBanUserComponent implements OnInit {
     private dialogRef: MatDialogRef<DialogBanUserComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
-    private securityService: IHttpSecurityService
+    private securityService: IHttpSecurityService,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
       id: [this.data.usuarioId],
@@ -36,12 +37,7 @@ export class DialogBanUserComponent implements OnInit {
 
     this.securityService.banUser(usuario).subscribe((response: any) => {
       if (response) {
-        Swal.fire({
-          title: 'Baneado',
-          text: 'El usuario ha sido baneado correctamente y se le ha notificado',
-          icon: 'success',
-          timer: 3000,
-        });
+        this.notificationService.success('El usuario ha sido baneado correctamente y se le ha notificado', 'Baneado');
 
         this.dialogRef.close(response);
       }

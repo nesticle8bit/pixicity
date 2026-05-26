@@ -135,7 +135,7 @@
             <div class="col-12 col-sm-6">
               <button type="button" *ngIf="formGroup.value?.esBorrador || !formGroup.value?.id" mat-flat-button
                 class="mat-gray" (click)="guardarBorrador()" [disabled]="formGroup.invalid">
-                <fa-icon [icon]="['fas', 'save']"></fa-icon> Guardar en Borradores
+                <i class="ti ti-device-floppy"></i> Guardar en Borradores
               </button>
             </div>
 
@@ -143,11 +143,11 @@
               <button type="submit" mat-flat-button class="mat-success" (click)="publicarPost()"
                 [disabled]="formGroup.invalid">
                 <span *ngIf="!postId || formGroup.value.esBorrador">
-                  <fa-icon [icon]="['far', 'check-circle']"></fa-icon> Publicar
+                  <i class="ti ti-circle-check"></i> Publicar
                 </span>
 
                 <span *ngIf="postId && !formGroup.value.esBorrador">
-                  <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon> Actualizar
+                  <i class="ti ti-pencil"></i> Actualizar
                 </span>
               </button>
             </div>

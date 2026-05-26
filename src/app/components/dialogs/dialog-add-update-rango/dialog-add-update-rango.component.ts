@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -42,7 +42,8 @@ export class DialogAddUpdateRangoComponent implements OnInit {
     private dialogRef: MatDialogRef<DialogAddUpdateRangoComponent>,
     private securityService: IHttpSecurityService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
       id: 0,
@@ -77,12 +78,7 @@ export class DialogAddUpdateRangoComponent implements OnInit {
 
     this.securityService.addUpdateRango(rango).subscribe((value: number) => {
       if (value) {
-        Swal.fire({
-          title: 'Guardado',
-          text: 'El rango se ha guardado correctamente',
-          icon: 'success',
-          timer: 3000,
-        });
+        this.notificationService.success('El rango se ha guardado correctamente', 'Guardado');
 
         this.dialogRef.close(value);
       }

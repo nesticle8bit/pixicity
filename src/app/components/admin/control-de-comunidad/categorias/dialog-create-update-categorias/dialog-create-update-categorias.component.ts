@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -102,7 +102,8 @@ export class DialogCreateUpdateCategoriasComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogCreateUpdateCategoriasComponent>,
     private parametrosService: IHttpParametrosService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
       id: this.data?.id ? this.data?.id : 0,
@@ -126,12 +127,7 @@ export class DialogCreateUpdateCategoriasComponent implements OnInit {
       .saveCategoria(categoria)
       .subscribe((response: any) => {
         if (response) {
-          Swal.fire({
-            title: 'Guardado',
-            text: 'La categoría se ha guardado correctamente',
-            icon: 'success',
-            timer: 3000,
-          });
+          this.notificationService.success('La categoría se ha guardado correctamente', 'Guardado');
 
           this.dialogRef.close(true);
         }

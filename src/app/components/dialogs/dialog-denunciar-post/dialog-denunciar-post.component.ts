@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -57,7 +57,8 @@ export class DialogDenunciarPostComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
     private postService: IHttpPostsService,
-    private dialogRef: MatDialogRef<DialogDenunciarPostComponent>
+    private dialogRef: MatDialogRef<DialogDenunciarPostComponent>,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
       postId: [this.data?.id, Validators.required],
@@ -74,14 +75,8 @@ export class DialogDenunciarPostComponent implements OnInit {
 
     this.postService.reportPost(form).subscribe((response: any) => {
       if(response) {
-        Swal.fire({
-          title: 'Denunciado',
-          text: `El post ${this.data?.titulo} ha sido denunciado correctamente, el equipo de modaración revisará en la brevedad`,
-          icon: 'success',
-          timer: 3000
-        }).then(() => {
-          this.dialogRef.close(response);
-        });
+        this.notificationService.success(`El post ${this.data?.titulo} ha sido denunciado correctamente, el equipo de modaración revisará en la brevedad`, 'Denunciado');
+        this.dialogRef.close(response);
       }
     });
   }

@@ -4,7 +4,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -19,7 +19,8 @@ export class TableReportesComponent implements OnInit {
   constructor(
     public paginationService: PaginationService,
     private denunciaService: IHttpDenunciasService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificationService: NotificationService
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
@@ -41,31 +42,14 @@ export class TableReportesComponent implements OnInit {
   }
 
   deleteReporte(denuncia: any): void {
-    Swal.fire({
-      title: 'Eliminar',
-      text: `¿Está seguro de eliminar esta denuncia?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.denunciaService
-          .deleteDenuncia(denuncia.id)
-          .subscribe((response: any) => {
-            if (response) {
-              Swal.fire({
-                title: 'Eliminado',
-                text: `La denuncia ha sido eliminada correctamente`,
-                icon: 'success',
-                timer: 3000,
-              });
-
-              denuncia.eliminado = !denuncia.eliminado;
-            }
-          });
-      }
-    });
+    if (this.notificationService.confirm('¿Está seguro de eliminar esta denuncia?')) {
+      this.denunciaService.deleteDenuncia(denuncia.id).subscribe((response: any) => {
+        if (response) {
+          this.notificationService.success('La denuncia ha sido eliminada correctamente', 'Eliminado');
+          denuncia.eliminado = !denuncia.eliminado;
+        }
+      });
+    }
   }
 
   verReporte(denuncia: any): void {

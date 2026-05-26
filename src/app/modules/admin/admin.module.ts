@@ -27,7 +27,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 
 // Third-party
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 
 // Admin components — control-de-comunidad
@@ -167,7 +167,6 @@ import { AdminRoutingModule } from './admin-routing.module';
     MatPaginatorModule,
     MatSelectModule,
     // Third-party
-    FontAwesomeModule,
     NgSelectModule,
     // Shared
     SharedModule,

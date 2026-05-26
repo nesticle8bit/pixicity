@@ -61,7 +61,7 @@
                           [ngClass]="{'active-like': comentario?.miVoto === 1}"
                           (click)="voteComentario(comentario, 1)"
                           matTooltip="Me gusta">
-                          <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
+                          <i class="ti ti-thumb-up"></i>
                         </a>
                       }
 
@@ -70,7 +70,7 @@
                           [ngClass]="{'active-dislike': comentario?.miVoto === -1}"
                           (click)="voteComentario(comentario, -1)"
                           matTooltip="No me gusta">
-                          <fa-icon [icon]="['fas', 'thumbs-down']"></fa-icon>
+                          <i class="ti ti-thumb-down"></i>
                         </a>
                       }
                     </div>
@@ -80,21 +80,21 @@
                   <div class="botonear">
                     @if (currentUser?.usuario) {
                       <a #tooltip="matTooltip" matTooltip="Responder" (click)="comentario.responder = true">
-                        <fa-icon [icon]="['fas', 'reply']" class="reply"></fa-icon>
+                        <i class="ti ti-arrow-back-up reply"></i>
                       </a>
                     }
                     @if (currentUser?.usuario?.userName === comentario?.usuario) {
                       <a #tooltip="matTooltip" matTooltip="Actualizar Comentario"
                         (click)="comentario.update = true; lastComment = comentario.contenido"
                         >
-                        <fa-icon [icon]="['fas', 'pencil-alt']" class="edit"></fa-icon>
+                        <i class="ti ti-pencil edit"></i>
                       </a>
                     }
                     @if (currentUser?.usuario?.userName === comentario?.usuario) {
                       <a #tooltip="matTooltip" matTooltip="Eliminar Comentario"
                         (click)="eliminarComentario(comentario.id, i)"
                         >
-                        <fa-icon [icon]="['fas', 'times']" class="times"></fa-icon>
+                        <i class="ti ti-x times"></i>
                       </a>
                     }
                   </div>
@@ -181,7 +181,7 @@
                                       [ngClass]="{'active-like': respuesta?.miVoto === 1}"
                                       (click)="voteComentario(respuesta, 1)"
                                       matTooltip="Me gusta">
-                                      <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
+                                      <i class="ti ti-thumb-up"></i>
                                     </a>
                                   }
                                   <span class="votos-count" [ngClass]="{'positivo': respuesta?.votos > 0, 'negativo': respuesta?.votos < 0}">
@@ -192,7 +192,7 @@
                                       [ngClass]="{'active-dislike': respuesta?.miVoto === -1}"
                                       (click)="voteComentario(respuesta, -1)"
                                       matTooltip="No me gusta">
-                                      <fa-icon [icon]="['fas', 'thumbs-down']"></fa-icon>
+                                      <i class="ti ti-thumb-down"></i>
                                     </a>
                                   }
                                 </div>
@@ -201,20 +201,20 @@
                             <div class="float-end answerOptions">
                               <div class="botonear">
                                 <!-- <a #tooltip="matTooltip" matTooltip="Responder" (click)="comentario.responder = true">
-                                <fa-icon [icon]="['fas', 'reply']" class="reply"></fa-icon>
+                                <i class="ti ti-arrow-back-up reply"></i>
                               </a> -->
                               @if (currentUser?.usuario?.userName === respuesta?.usuario) {
                                 <a #tooltip="matTooltip" matTooltip="Actualizar Comentario"
                                   (click)="respuesta.update = true; lastComment = respuesta.contenido"
                                   >
-                                  <fa-icon [icon]="['fas', 'pencil-alt']" class="edit"></fa-icon>
+                                  <i class="ti ti-pencil edit"></i>
                                 </a>
                               }
                               @if (currentUser?.usuario?.userName === respuesta?.usuario) {
                                 <a #tooltip="matTooltip" matTooltip="Eliminar Comentario"
                                   (click)="eliminarRespuesta(respuesta.id, i, respuestaIndex)"
                                   >
-                                  <fa-icon [icon]="['fas', 'times']" class="times"></fa-icon>
+                                  <i class="ti ti-x times"></i>
                                 </a>
                               }
                             </div>
@@ -274,19 +274,19 @@
               <!-- <section class="comments-menu">
               <ul class="list-inline mb-0">
                 <li class="list-inline-item" (click)="emojiBottomSheet()">
-                  <fa-icon [icon]="['far', 'laugh-beam']"></fa-icon>
+                  <i class="ti ti-mood-happy"></i>
                 </li>
                 <li class="list-inline-item">
-                  <fa-icon [icon]="['fas', 'bold']"></fa-icon>
+                  <i class="ti ti-bold"></i>
                 </li>
                 <li class="list-inline-item">
-                  <fa-icon [icon]="['fas', 'italic']"></fa-icon>
+                  <i class="ti ti-italic"></i>
                 </li>
                 <li class="list-inline-item">
-                  <fa-icon [icon]="['fas', 'underline']"></fa-icon>
+                  <i class="ti ti-underline"></i>
                 </li>
                 <li class="list-inline-item">
-                  <fa-icon [icon]="['fas', 'image']"></fa-icon>
+                  <i class="ti ti-photo"></i>
                 </li>
               </ul>
             </section> -->

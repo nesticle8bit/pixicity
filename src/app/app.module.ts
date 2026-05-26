@@ -4,13 +4,7 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { AppComponent } from './app.component';
-import {
-  FontAwesomeModule,
-  FaIconLibrary,
-} from '@fortawesome/angular-fontawesome';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { far } from '@fortawesome/free-regular-svg-icons';
-import { fab } from '@fortawesome/free-brands-svg-icons';
+
 import { MainHeaderComponent } from './components/main/main-header/main-header.component';
 import { MainMenuComponent } from './components/main/main-menu/main-menu.component';
 import { MainSubmenuComponent } from './components/main/main-submenu/main-submenu.component';
@@ -268,7 +262,6 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     BrowserModule,
     AppRoutingModule,
     SharedModule,
-    FontAwesomeModule,
     BrowserAnimationsModule,
     MatButtonModule,
     FormsModule,
@@ -361,9 +354,7 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(library: FaIconLibrary, private ngSelectConfig: NgSelectConfig) {
-    library.addIconPacks(fas, far, fab);
-
+  constructor(private ngSelectConfig: NgSelectConfig) {
     ngSelectConfig.notFoundText = 'No hay elementos';
     ngSelectConfig.appendTo = 'body';
 

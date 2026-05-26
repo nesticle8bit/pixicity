@@ -43,7 +43,7 @@
 
         @if (userData.rango) {
           <span class="upop__rango" [style.color]="userData.rango.color">
-            <!-- <fa-icon [icon]="['fas', 'star']" class="me-1"></fa-icon> -->
+            <!-- <i class="ti ti-star me-1"></i> -->
              <img [src]="'/assets/images/icons/rangos/' + userData?.rango?.icono"
                   [alt]="userData.rango.nombre"
                   class="upop__rango-icon image-middle me-1">
@@ -66,7 +66,7 @@
     <!-- Personal message -->
     @if (userData.mensajePersonal) {
       <div class="upop__msg">
-        <fa-icon [icon]="['fas', 'quote-left']"></fa-icon>
+        <i class="ti ti-quote"></i>
         {{userData.mensajePersonal | truncate:[90]}}
       </div>
     }
@@ -94,7 +94,7 @@
     <!-- Footer -->
     <div class="upop__footer">
       <span class="upop__since">
-        <fa-icon [icon]="['fas', 'calendar-alt']"></fa-icon>
+        <i class="ti ti-calendar"></i>
         Miembro desde {{memberSince}}
       </span>
       <a [routerLink]="['/perfil', userData.userName]" class="upop__link">

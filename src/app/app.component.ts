@@ -26,36 +26,56 @@ export class AppComponent {
     private seoService: SEOService,
     private router: Router,
     private title: Title,
-    private meta: Meta
+    private meta: Meta,
   ) {
     this.displayComponentService
       .getDisplay()
       .subscribe(
-        (value: DisplayComponentModel) => (this.displayComponent = value)
+        (value: DisplayComponentModel) => (this.displayComponent = value),
       );
 
     this.seoService.getSEO().subscribe((value: SEOModel) => {
       if (value.title) {
-        this.title.setTitle(`${value.title} - Taringas - Inteligencia colectiva`);
+        this.title.setTitle(
+          `${value.title} - Taringas - Inteligencia colectiva`,
+        );
         this.meta.updateTag({ property: 'og:title', content: value.title });
         this.meta.updateTag({ name: 'twitter:title', content: value.title });
-        this.meta.updateTag({ property: 'og:site_name', content: 'Taringas! - Inteligencia colectiva' });
+        this.meta.updateTag({
+          property: 'og:site_name',
+          content: 'Taringas! - Inteligencia colectiva',
+        });
       }
 
       if (value.description) {
-        this.meta.updateTag({ name: 'description', content: value.description });
-        this.meta.updateTag({ property: 'og:description', content: value.description });
-        this.meta.updateTag({ name: 'twitter:description', content: value.description });
+        this.meta.updateTag({
+          name: 'description',
+          content: value.description,
+        });
+        this.meta.updateTag({
+          property: 'og:description',
+          content: value.description,
+        });
+        this.meta.updateTag({
+          name: 'twitter:description',
+          content: value.description,
+        });
       }
 
       if (value.tags?.length) {
-        this.meta.updateTag({ name: 'keywords', content: value.tags.join(', ').toLowerCase() });
+        this.meta.updateTag({
+          name: 'keywords',
+          content: value.tags.join(', ').toLowerCase(),
+        });
       }
 
       if (value.imageURL) {
         this.meta.updateTag({ property: 'og:image', content: value.imageURL });
         this.meta.updateTag({ name: 'twitter:image', content: value.imageURL });
-        this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+        this.meta.updateTag({
+          name: 'twitter:card',
+          content: 'summary_large_image',
+        });
       }
 
       if (value.type) {
@@ -69,13 +89,5 @@ export class AppComponent {
       }
       window.scrollTo(0, 0);
     });
-
-    this.welcome();
-  }
-
-  welcome(): void {
-    console.log(
-      ` _______________________\r\n< Bienvenido a Taringas >\r\n -----------------------\r\n         \\\r\n          \\\r\n           ___\r\n          (o o)\r\n         (  V  )\r\n        \/--m-m-\r\n`
-    );
   }
 }

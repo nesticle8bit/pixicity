@@ -3,7 +3,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -18,7 +18,8 @@ export class TableSesionesComponent implements OnInit {
   constructor(
     public paginationService: PaginationService,
     private securityService: IHttpSecurityService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private notificationService: NotificationService
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
@@ -53,29 +54,14 @@ export class TableSesionesComponent implements OnInit {
   }
 
   deleteSession(id: number): void {
-    Swal.fire({
-      title: 'Eliminar',
-      text: '¿Está seguro de eliminar esta sesión del usuario?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.securityService.deleteSessionById(id).subscribe((response: any) => {
-          if(response) {
-            Swal.fire({
-              title: 'Eliminado',
-              text: 'La sesión ha sido eliminado correctamente',
-              icon: 'success',
-              timer: 3000
-            });
-
-            this.getSesiones();
-          }
-        });
-      }
-    });
+    if (this.notificationService.confirm('¿Está seguro de eliminar esta sesión del usuario?')) {
+      this.securityService.deleteSessionById(id).subscribe((response: any) => {
+        if(response) {
+          this.notificationService.success('La sesión ha sido eliminado correctamente', 'Eliminado');
+          this.getSesiones();
+        }
+      });
+    }
   }
 
   pageChange(event: PageEvent): void {

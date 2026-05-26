@@ -5,7 +5,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { DialogCreateUpdatePaginasComponent } from '../dialog-create-update-paginas/dialog-create-update-paginas.component';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -22,7 +22,8 @@ export class TablePaginasComponent implements OnInit {
     public paginationService: PaginationService,
     private webService: IHttpWebService,
     private formBuilder: FormBuilder,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
       search: '',
@@ -59,33 +60,18 @@ export class TablePaginasComponent implements OnInit {
   }
 
   deletePagina(pagina: any): void {
-    Swal.fire({
-      title: pagina.eliminado ? 'Recuperar' : 'Eliminar',
-      text: `¿Está seguro de ${
-        pagina.eliminado ? 'recuperar' : 'eliminar'
-      } esta página?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: pagina.eliminado ? 'Recuperar' : 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.webService.deletePagina(pagina.id).subscribe((response: any) => {
-          if (response) {
-            Swal.fire({
-              title: pagina.eliminado ? 'Recuperada' : 'Eliminada',
-              text: `La página ha sido ${
-                pagina.eliminado ? 'recuperada' : 'eliminada'
-              } correctamente`,
-              icon: 'success',
-              timer: 3000,
-            });
-
-            pagina.eliminado = !pagina.eliminado;
-          }
-        });
-      }
-    });
+    const accion = pagina.eliminado ? 'recuperar' : 'eliminar';
+    if (this.notificationService.confirm(`¿Está seguro de ${accion} esta página?`)) {
+      this.webService.deletePagina(pagina.id).subscribe((response: any) => {
+        if (response) {
+          this.notificationService.success(
+            `La página ha sido ${pagina.eliminado ? 'recuperada' : 'eliminada'} correctamente`,
+            pagina.eliminado ? 'Recuperada' : 'Eliminada'
+          );
+          pagina.eliminado = !pagina.eliminado;
+        }
+      });
+    }
   }
 
   pageChange(event: PageEvent): void {

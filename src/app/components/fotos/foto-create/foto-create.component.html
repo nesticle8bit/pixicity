@@ -28,11 +28,11 @@
           <div class="image-source-tabs">
             <button type="button" class="tab-btn" [ngClass]="{'active': imageSource === 'url'}"
               (click)="imageSource = 'url'">
-              <fa-icon [icon]="['fas', 'link']"></fa-icon> Por URL
+              <i class="ti ti-link"></i> Por URL
             </button>
             <button type="button" class="tab-btn" [ngClass]="{'active': imageSource === 'upload'}"
               (click)="imageSource = 'upload'">
-              <fa-icon [icon]="['fas', 'upload']"></fa-icon> Subir archivo
+              <i class="ti ti-upload"></i> Subir archivo
             </button>
           </div>
 
@@ -45,7 +45,7 @@
           <div class="upload-area mt-2">
             <input type="file" accept="image/*" (change)="onFileSelected($event)" class="file-input" #fileInput>
             <button type="button" class="boton gris" (click)="fileInput.click()">
-              <fa-icon [icon]="['fas', 'image']"></fa-icon> Seleccionar imagen
+              <i class="ti ti-photo"></i> Seleccionar imagen
             </button>
             @if (uploadedFile) {
             <span class="file-name">{{uploadedFile.name}}</span>
@@ -54,12 +54,12 @@
               @if (uploading) {
               <img src="/assets/images/min-carga.gif" style="height:16px"> Subiendo...
               } @else {
-              <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon> Comprimir y subir
+              <i class="ti ti-cloud-upload"></i> Comprimir y subir
               }
             </button>
             } @else {
             <span class="text-success ms-2">
-              <fa-icon [icon]="['fas', 'check']"></fa-icon> Subida correctamente
+              <i class="ti ti-check"></i> Subida correctamente
             </span>
             }
             }
@@ -90,7 +90,7 @@
             @if (loading) {
             <img src="/assets/images/min-carga.gif" style="height:16px"> Guardando...
             } @else {
-            <fa-icon [icon]="['fas', isEdit ? 'save' : 'plus']"></fa-icon>
+            <i class="ti" [class.ti-device-floppy]="isEdit" [class.ti-plus]="!isEdit"></i>
             {{isEdit ? 'Actualizar' : 'Publicar Foto'}}
             }
           </button>

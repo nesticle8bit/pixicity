@@ -8,17 +8,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
+import { NotificationService } from '../shared/notification.service';
 import { TopUserModel } from 'src/app/models/web/topUser.model';
 import { TopPostModel } from 'src/app/models/web/topPost.model';
 
 @Injectable()
 export class HttpWebService implements IHttpWebService {
   constructor(
-    private http: HttpClient,
+    private notificationService: NotificationService,
+    private paginationService: PaginationService,
     private helper: HelperService,
+    private http: HttpClient,
     private router: Router,
-    private paginationService: PaginationService
   ) {}
 
   getTopUsers(): Observable<TopUserModel[]> {
@@ -29,13 +30,9 @@ export class HttpWebService implements IHttpWebService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -48,13 +45,9 @@ export class HttpWebService implements IHttpWebService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -67,13 +60,9 @@ export class HttpWebService implements IHttpWebService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -86,13 +75,9 @@ export class HttpWebService implements IHttpWebService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -105,13 +90,9 @@ export class HttpWebService implements IHttpWebService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -124,13 +105,9 @@ export class HttpWebService implements IHttpWebService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -143,13 +120,9 @@ export class HttpWebService implements IHttpWebService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -157,20 +130,16 @@ export class HttpWebService implements IHttpWebService {
   getPaginas(search: any): Observable<any> {
     return this.http
       .get<any>(
-        `${environment.api}/api/paginas/getPaginas?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&searchValue=${search}`
+        `${environment.api}/api/paginas/getPaginas?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&searchValue=${search}`,
       )
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -183,13 +152,9 @@ export class HttpWebService implements IHttpWebService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -202,13 +167,9 @@ export class HttpWebService implements IHttpWebService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -226,13 +187,9 @@ export class HttpWebService implements IHttpWebService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -245,13 +202,9 @@ export class HttpWebService implements IHttpWebService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -264,13 +217,9 @@ export class HttpWebService implements IHttpWebService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }

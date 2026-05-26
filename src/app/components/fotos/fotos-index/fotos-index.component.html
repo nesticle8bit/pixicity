@@ -1,7 +1,7 @@
 <div class="container container--home fotos-page mx-auto">
   <div class="row">
     <div class="col-12">
-      <h6 class="main-title mb-2">
+      <h6 class="main-title mb-3">
         <span>
           @if (userName) {
           Fotos de <strong>{{userName}}</strong>
@@ -12,7 +12,7 @@
 
         @if (currentUser?.usuario) {
         <a routerLink="/crear/foto" class="boton azul float-end fs-11" style="margin-left: 1rem">
-          <fa-icon [icon]="['fas', 'plus']"></fa-icon> Subir Foto
+          <i class="ti ti-plus"></i> Subir Foto
         </a>
         }
       </h6>
@@ -37,9 +37,9 @@
             <div class="foto-overlay">
               <span class="foto-overlay-title">{{foto.titulo}}</span>
               <div class="foto-overlay-stats">
-                <span><fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon> {{foto.votosPositivos}}</span>
-                <span><fa-icon [icon]="['fas', 'eye']"></fa-icon> {{foto.visitantes}}</span>
-                <span><fa-icon [icon]="['fas', 'comment']"></fa-icon> {{foto.totalComentarios ?? 0}}</span>
+                <span><i class="ti ti-thumb-up"></i> {{foto.votosPositivos}}</span>
+                <span><i class="ti ti-eye"></i> {{foto.visitantes}}</span>
+                <span><i class="ti ti-message"></i> {{foto.totalComentarios ?? 0}}</span>
               </div>
             </div>
           </a>

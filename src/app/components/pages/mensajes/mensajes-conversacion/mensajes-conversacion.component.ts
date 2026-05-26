@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -20,7 +20,8 @@ export class MensajesConversacionComponent implements OnInit {
     private displayService: DisplayComponentService,
     private mensajesService: IHttpMensajesService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     this.activatedRoute.paramMap.subscribe((value: any) => {
       this.id = value.get('id');
@@ -64,12 +65,7 @@ export class MensajesConversacionComponent implements OnInit {
 
     this.mensajesService.sendMensajePrivado(mp).subscribe((response: any) => {
       if (response) {
-        Swal.fire({
-          title: 'Respuesta Enviada',
-          text: 'La respuesta ha sido enviada correctamente',
-          icon: 'success',
-          timer: 3000,
-        });
+        this.notificationService.success('La respuesta ha sido enviada correctamente', 'Respuesta Enviada');
 
         this.router.navigate(['/mensajes']);
       }

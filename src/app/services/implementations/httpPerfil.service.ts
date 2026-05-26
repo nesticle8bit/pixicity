@@ -6,33 +6,30 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import Swal from 'sweetalert2';
+import { NotificationService } from '../shared/notification.service';
 
 @Injectable()
 export class HttpPerfilService implements IHttpPerfilService {
   constructor(
-    private http: HttpClient,
+    private notificationService: NotificationService,
+    private paginationService: PaginationService,
     private helper: HelperService,
-    private paginationService: PaginationService
+    private http: HttpClient,
   ) {}
 
   getShouts(userId: number): Observable<any> {
     return this.http
       .get<any>(
-        `${environment.api}/api/shouts/getShouts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&userId=${userId}`
+        `${environment.api}/api/shouts/getShouts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&userId=${userId}`,
       )
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -40,20 +37,16 @@ export class HttpPerfilService implements IHttpPerfilService {
   getShoutsAdmin(): Observable<any> {
     return this.http
       .get<any>(
-        `${environment.api}/api/shouts/getShoutsAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`
+        `${environment.api}/api/shouts/getShoutsAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -66,13 +59,9 @@ export class HttpPerfilService implements IHttpPerfilService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -90,13 +79,9 @@ export class HttpPerfilService implements IHttpPerfilService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -109,13 +94,9 @@ export class HttpPerfilService implements IHttpPerfilService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -128,20 +109,18 @@ export class HttpPerfilService implements IHttpPerfilService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
   getComentariosByShoutId(shoutId: number): Observable<any> {
     return this.http
-      .get<any>(`${environment.api}/api/shouts/getComentariosByShoutId?shoutId=${shoutId}`)
+      .get<any>(
+        `${environment.api}/api/shouts/getComentariosByShoutId?shoutId=${shoutId}`,
+      )
       .pipe(map((r: any) => (r.status === 200 ? r.data : [])))
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -155,7 +134,9 @@ export class HttpPerfilService implements IHttpPerfilService {
 
   deleteShoutComentario(id: number): Observable<any> {
     return this.http
-      .delete<any>(`${environment.api}/api/shouts/deleteShoutComentario?id=${id}`)
+      .delete<any>(
+        `${environment.api}/api/shouts/deleteShoutComentario?id=${id}`,
+      )
       .pipe(map((r: any) => (r.status === 200 ? r.data : null)))
       .pipe(catchError(this.helper.errorHandler));
   }

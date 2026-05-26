@@ -2,7 +2,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Inject, OnInit } from '@angular/core';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -19,6 +19,7 @@ export class DialogEnviarMPComponent implements OnInit {
     private mensajeService: IHttpMensajesService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
       aUserName: ['', Validators.required],
@@ -54,12 +55,7 @@ export class DialogEnviarMPComponent implements OnInit {
         return;
       }
 
-      Swal.fire({
-        title: 'Enviado',
-        text: `El mensaje privado enviado a ${mp.aUserName} se ha entregado correctamente`,
-        icon: 'success',
-        timer: 3000,
-      });
+      this.notificationService.success(`El mensaje privado enviado a ${mp.aUserName} se ha entregado correctamente`, 'Enviado');
 
       this.dialogRef.close(true);
     });

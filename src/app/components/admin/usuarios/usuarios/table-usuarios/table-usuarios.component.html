@@ -12,7 +12,7 @@
           <th>Posts</th>
           <th>Comentarios</th>
           <th>
-            <fa-icon icon="wifi" [matTooltip]="'Última Conexión'"></fa-icon>
+            <i class="ti ti-wifi" [matTooltip]="'Última Conexión'"></i>
           </th>
           <th>Última IP</th>
           <th>Baneado</th>
@@ -27,9 +27,7 @@
               <strong>{{usuario.id}}</strong>
             </td>
             <td>
-              <app-user-avatar [height]="20" [avatar]="usuario.avatar" [userName]="usuario.userName"></app-user-avatar> <fa-icon
-              class="ms-2 text-success" icon="calendar-day" matTooltip="{{usuario.fechaRegistro | timeAgo}}"
-            matTooltipPosition="right"></fa-icon>
+              <app-user-avatar [height]="20" [avatar]="usuario.avatar" [userName]="usuario.userName"></app-user-avatar> <i class="ti ti-calendar-day ms-2 text-success" matTooltip="{{usuario.fechaRegistro | timeAgo}}" matTooltipPosition="right"></i>
           </td>
           <td>
             <a href="/perfil/{{usuario.userName}}" target="_blank" [appUserPopover]="usuario.userName">
@@ -54,8 +52,7 @@
           </td>
           <td>
             @if (usuario.ultimaConexion) {
-              <fa-icon icon="calendar-alt" class="text-muted"
-              matTooltip="{{usuario.ultimaConexion | date:'medium'}}" matTooltipPosition="right"></fa-icon>
+              <i class="ti ti-calendar text-muted" matTooltip="{{usuario.ultimaConexion | date:'medium'}}" matTooltipPosition="right"></i>
             }
           </td>
           <td>
@@ -65,12 +62,12 @@
             <span class="badge" [ngClass]="{'bg-danger': usuario.baneado, 'bg-info': !usuario.baneado}">
               @if (usuario.baneado) {
                 <span>
-                  <fa-icon [icon]="['fas', 'ban']"></fa-icon> Baneado
+                  <i class="ti ti-ban"></i> Baneado
                 </span>
               }
               @if (!usuario.baneado) {
                 <span>
-                  <fa-icon [icon]="['fas', 'check-circle']"></fa-icon> Activo
+                  <i class="ti ti-circle-check"></i> Activo
                 </span>
               }
             </span>
@@ -79,8 +76,7 @@
             @if (usuario.eliminado) {
               <span class="badge bg-danger"
                 matTooltip="Eliminado el ({{usuario.fechaElimina | date:'dd/MM/yyyy HH:mm:ss'}}) por {{usuario.usuarioElimina}}">
-                Eliminado &nbsp; <fa-icon class="cursor--help ml-3" [icon]="['fas', 'calendar-alt']">
-              </fa-icon>
+                Eliminado &nbsp; <i class="ti ti-calendar cursor--help ml-3"></i>
             </span>
           }
           @if (!usuario.eliminado) {
@@ -91,7 +87,7 @@
         </td>
         <td class="text-center" width="30px">
           <button class="btn-menu" [matMenuTriggerFor]="menu">
-            <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+            <i class="ti ti-dots-vertical"></i>
           </button>
           <mat-menu #menu="matMenu">
             <button type="button" mat-menu-item (click)="changeAvatar(usuario)">

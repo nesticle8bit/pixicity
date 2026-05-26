@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -17,7 +17,8 @@ export class DialogUpdatePaisesComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<DialogUpdatePaisesComponent>,
     private formBuilder: FormBuilder,
-    private httpParametros: IHttpParametrosService
+    private httpParametros: IHttpParametrosService,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
       id: [undefined],
@@ -50,26 +51,14 @@ export class DialogUpdatePaisesComponent implements OnInit {
     if(pais.id) {
       this.httpParametros.updatePais(pais).subscribe((response: any) => {
         if (response) {
-          Swal.fire({
-            title: 'Actualizar',
-            text: 'El pais se ha actualizado correctamente',
-            icon: 'success',
-            timer: 3000,
-          });
-
+          this.notificationService.success('El pais se ha actualizado correctamente', 'Actualizar');
           this.dialogRef.close(pais);
         }
       });
     } else {
       this.httpParametros.savePais(pais).subscribe((response: any) => {
         if (response) {
-          Swal.fire({
-            title: 'Guardar',
-            text: 'El pais se ha guardado correctamente',
-            icon: 'success',
-            timer: 3000,
-          });
-
+          this.notificationService.success('El pais se ha guardado correctamente', 'Guardar');
           this.dialogRef.close(pais);
         }
       });

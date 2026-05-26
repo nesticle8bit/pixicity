@@ -7,7 +7,7 @@ import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametr
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -96,6 +96,7 @@ export class RegisterComponent implements OnInit {
     private generalService: IHttpGeneralService,
     private formBuilder: FormBuilder,
     private router: Router,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
       userName: ['', Validators.required],
@@ -161,14 +162,8 @@ export class RegisterComponent implements OnInit {
 
     this.securityService.registerUser(user).subscribe((response: any) => {
       if (response) {
-        Swal.fire({
-          title: 'Guardado',
-          text: 'Se ha creado un usuario correctamente',
-          icon: 'success',
-          timer: 3000
-        }).then(() => {
-          this.router.navigate(['/login']);
-        });
+        this.notificationService.success('Se ha creado un usuario correctamente', 'Guardado');
+        this.router.navigate(['/login']);
       }
     });
   }

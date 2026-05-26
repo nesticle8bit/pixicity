@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IHttpNoticiasService } from 'src/app/services/interfaces/httpNoticias.interface';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -17,7 +17,8 @@ export class DialogCreateUpdateNoticiasComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogCreateUpdateNoticiasComponent>,
     private noticiasService: IHttpNoticiasService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
       id: 0,
@@ -45,24 +46,12 @@ export class DialogCreateUpdateNoticiasComponent implements OnInit {
 
     if (value.id) {
       this.noticiasService.updateNoticias(value).subscribe((response: any) => {
-        Swal.fire({
-          title: 'Actualizar',
-          text: 'La noticia se ha actualizado correctamente',
-          icon: 'success',
-          timer: 3000,
-        });
-
+        this.notificationService.success('La noticia se ha actualizado correctamente', 'Actualizar');
         this.dialogRef.close(true);
       });
     } else {
       this.noticiasService.saveNoticias(value).subscribe((response: any) => {
-        Swal.fire({
-          title: 'Guardar',
-          text: 'La noticia se ha guardado correctamente',
-          icon: 'success',
-          timer: 3000,
-        });
-
+        this.notificationService.success('La noticia se ha guardado correctamente', 'Guardar');
         this.dialogRef.close(true);
       });
     }

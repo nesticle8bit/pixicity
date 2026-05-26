@@ -3,14 +3,14 @@
     @if (isFollowing) {
       <a class=" bgris unfollow_user_post" (click)="followUser(false)">
         @if (icon) {
-          <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+          <i class="ti ti-eye"></i>
           } Siguiendo
         </a>
       }
       @if (!isFollowing) {
         <a class="bverde follow_user_post" (click)="followUser(!isFollowing)">
           @if (icon) {
-            <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+            <i class="ti ti-eye"></i>
             } Seguir
           </a>
         }

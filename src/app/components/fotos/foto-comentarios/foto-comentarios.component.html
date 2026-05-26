@@ -39,13 +39,13 @@
                     [ngClass]="{'active-like': comentario?.miVoto === 1}"
                     (click)="voteComentario(comentario, 1)"
                     matTooltip="Me gusta">
-                    <fa-icon [icon]="['fas', 'thumbs-up']"></fa-icon>
+                    <i class="ti ti-thumb-up"></i>
                   </a>
                   <a class="voto-btn"
                     [ngClass]="{'active-dislike': comentario?.miVoto === -1}"
                     (click)="voteComentario(comentario, -1)"
                     matTooltip="No me gusta">
-                    <fa-icon [icon]="['fas', 'thumbs-down']"></fa-icon>
+                    <i class="ti ti-thumb-down"></i>
                   </a>
                 }
               </div>
@@ -56,7 +56,7 @@
             @if (currentUser?.usuario?.userName === comentario?.usuario) {
               <div class="botonear">
                 <a matTooltip="Eliminar Comentario" (click)="eliminarComentario(comentario, i)">
-                  <fa-icon [icon]="['fas', 'times']" class="times"></fa-icon>
+                  <i class="ti ti-x times"></i>
                 </a>
               </div>
             }

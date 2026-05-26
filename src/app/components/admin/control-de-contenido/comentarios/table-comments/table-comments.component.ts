@@ -2,7 +2,7 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -16,7 +16,8 @@ export class TableCommentsComponent implements OnInit {
 
   constructor(
     public paginationService: PaginationService,
-    private postsService: IHttpPostsService
+    private postsService: IHttpPostsService,
+    private notificationService: NotificationService
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
@@ -38,34 +39,17 @@ export class TableCommentsComponent implements OnInit {
   }
 
   deleteComentario(comentario: any): void {
-    Swal.fire({
-      title: comentario.eliminado ? 'Recuperar' : 'Eliminar',
-      text: `¿Está seguro de ${
-        comentario.eliminado ? 'recuperar' : 'eliminar'
-      } este comentario?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: comentario.eliminado ? 'Recuperar' : 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.postsService
-          .deleteComentario(comentario.id)
-          .subscribe((response: any) => {
-            if (response) {
-              Swal.fire({
-                title: comentario.eliminado ? 'Recuperado' : 'Eliminado',
-                text: `El comentario ha sido ${
-                  comentario.eliminado ? 'recuperado' : 'eliminado'
-                } correctamente`,
-                icon: 'success',
-                timer: 3000,
-              });
-
-              comentario.eliminado = !comentario.eliminado;
-            }
-          });
-      }
-    });
+    const accion = comentario.eliminado ? 'recuperar' : 'eliminar';
+    if (this.notificationService.confirm(`¿Está seguro de ${accion} este comentario?`)) {
+      this.postsService.deleteComentario(comentario.id).subscribe((response: any) => {
+        if (response) {
+          this.notificationService.success(
+            `El comentario ha sido ${comentario.eliminado ? 'recuperado' : 'eliminado'} correctamente`,
+            comentario.eliminado ? 'Recuperado' : 'Eliminado'
+          );
+          comentario.eliminado = !comentario.eliminado;
+        }
+      });
+    }
   }
 }

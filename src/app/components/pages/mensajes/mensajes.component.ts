@@ -4,7 +4,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -21,7 +21,8 @@ export class MensajesComponent implements OnInit {
     private displayService: DisplayComponentService,
     private mensajesService: IHttpMensajesService,
     public paginationService: PaginationService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private notificationService: NotificationService
   ) {
     this.displaySections();
 
@@ -73,11 +74,7 @@ export class MensajesComponent implements OnInit {
 
     this.mensajesService.deleteMensajesById(ids).subscribe((response: any) => {
       if (response) {
-        Swal.fire({
-          title: 'Eliminados',
-          text: 'Los mensajes seleccionados han sido eliminados',
-          icon: 'success',
-        });
+        this.notificationService.success('Los mensajes seleccionados han sido eliminados', 'Eliminados');
 
         this.getMensajes();
       }

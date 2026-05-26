@@ -6,22 +6,25 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import Swal from 'sweetalert2';
+import { NotificationService } from '../shared/notification.service';
 import { PaginationService } from '../shared/pagination.service';
 
 @Injectable()
 export class HttpGeneralService implements IHttpGeneralService {
   constructor(
-    private http: HttpClient,
+    private notificationService: NotificationService,
+    private paginationService: PaginationService,
     private helper: HelperService,
-    private paginationService: PaginationService
+    private http: HttpClient,
   ) {}
 
   getAdminEstadisticas(): Observable<any> {
     return this.http
       .get<any>(`${environment.api}/api/general/getAdminEstadisticas`)
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : null))
+        map((response: any) =>
+          response.status === 200 ? response.data : null,
+        ),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -34,13 +37,9 @@ export class HttpGeneralService implements IHttpGeneralService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -53,13 +52,9 @@ export class HttpGeneralService implements IHttpGeneralService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -72,13 +67,9 @@ export class HttpGeneralService implements IHttpGeneralService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -86,20 +77,16 @@ export class HttpGeneralService implements IHttpGeneralService {
   getFavoritosByUser(search: string, categoriaId: number): Observable<any> {
     return this.http
       .get<any>(
-        `${environment.api}/api/favoritos/getFavoritos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}&categoriaId=${categoriaId}`
+        `${environment.api}/api/favoritos/getFavoritos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}&categoriaId=${categoriaId}`,
       )
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -112,13 +99,9 @@ export class HttpGeneralService implements IHttpGeneralService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -127,20 +110,16 @@ export class HttpGeneralService implements IHttpGeneralService {
     return this.http
       .put<any>(
         `${environment.api}/api/configuracion/updateConfiguracion`,
-        configuracion
+        configuracion,
       )
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -153,13 +132,9 @@ export class HttpGeneralService implements IHttpGeneralService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -172,13 +147,9 @@ export class HttpGeneralService implements IHttpGeneralService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -193,13 +164,9 @@ export class HttpGeneralService implements IHttpGeneralService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -217,13 +184,9 @@ export class HttpGeneralService implements IHttpGeneralService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -231,20 +194,16 @@ export class HttpGeneralService implements IHttpGeneralService {
   getContactos(): Observable<any> {
     return this.http
       .get<any>(
-        `${environment.api}/api/contacto/getContactos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`
+        `${environment.api}/api/contacto/getContactos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -257,13 +216,9 @@ export class HttpGeneralService implements IHttpGeneralService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -278,13 +233,9 @@ export class HttpGeneralService implements IHttpGeneralService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -302,13 +253,9 @@ export class HttpGeneralService implements IHttpGeneralService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }

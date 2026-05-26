@@ -2,7 +2,7 @@ import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -16,7 +16,8 @@ export class TableMonitorComponent implements OnInit {
 
   constructor(
     public paginationService: PaginationService,
-    private logsService: IHttpLogsService
+    private logsService: IHttpLogsService,
+    private notificationService: NotificationService
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
@@ -79,34 +80,17 @@ export class TableMonitorComponent implements OnInit {
   }
 
   deleteNotificacion(notificacion: any): void {
-    Swal.fire({
-      title: notificacion.eliminado ? 'Recuperar' : 'Eliminar',
-      text: `¿Está seguro de ${
-        notificacion.eliminado ? 'recuperar' : 'eliminar'
-      } esta notificación?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: notificacion.eliminado ? 'Recuperar' : 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.logsService
-          .deleteNotificacion(notificacion.id)
-          .subscribe((response: any) => {
-            if (response) {
-              Swal.fire({
-                title: notificacion.eliminado ? 'Recuperada' : 'Eliminada',
-                text: `La notificación ha sido ${
-                  notificacion.eliminado ? 'recuperada' : 'eliminada'
-                } correctamente`,
-                icon: 'success',
-                timer: 3000,
-              });
-
-              notificacion.eliminado = !notificacion.eliminado;
-            }
-          });
-      }
-    });
+    const accion = notificacion.eliminado ? 'recuperar' : 'eliminar';
+    if (this.notificationService.confirm(`¿Está seguro de ${accion} esta notificación?`)) {
+      this.logsService.deleteNotificacion(notificacion.id).subscribe((response: any) => {
+        if (response) {
+          this.notificationService.success(
+            `La notificación ha sido ${notificacion.eliminado ? 'recuperada' : 'eliminada'} correctamente`,
+            notificacion.eliminado ? 'Recuperada' : 'Eliminada'
+          );
+          notificacion.eliminado = !notificacion.eliminado;
+        }
+      });
+    }
   }
 }

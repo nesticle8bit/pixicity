@@ -38,7 +38,7 @@
               </app-post-url-link>
             </td>
             <td>
-              <fa-icon icon="coins" class="text-success me-1"></fa-icon> <strong class="text-success">{{voto.cantidad}}</strong>
+              <i class="ti ti-coin text-success me-1"></i> <strong class="text-success">{{voto.cantidad}}</strong>
             </td>
             <td>
               <app-user-avatar [class]="'img-avatar me-1'" [avatar]="voto.usuario.avatar"
@@ -50,7 +50,7 @@
                 </td>
                 <td class="text-center" width="30px">
                   <button class="btn-menu" [matMenuTriggerFor]="menu">
-                    <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                    <i class="ti ti-dots-vertical"></i>
                   </button>
                   <mat-menu #menu="matMenu">
                     <!-- <button type="button" mat-menu-item (click)="verReporte(voto)">

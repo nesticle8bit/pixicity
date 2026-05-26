@@ -6,33 +6,30 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import Swal from 'sweetalert2';
+import { NotificationService } from '../shared/notification.service';
 
 @Injectable()
 export class HttpDenunciasService implements IHttpDenunciasService {
   constructor(
-    private http: HttpClient,
+    private notificationService: NotificationService,
+    private paginationService: PaginationService,
     private helper: HelperService,
-    private paginationService: PaginationService
+    private http: HttpClient,
   ) {}
 
   getDenuncias(): Observable<any> {
     return this.http
       .get<any>(
-        `${environment.api}/api/denuncias/getDenuncias?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`
+        `${environment.api}/api/denuncias/getDenuncias?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
         map((response: any) => {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -50,13 +47,9 @@ export class HttpDenunciasService implements IHttpDenunciasService {
           if (response.status === 200) {
             return response.data;
           } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.errors.join(', '),
-            });
+            this.notificationService.error(response.errors.join(', '), 'Error');
           }
-        })
+        }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }

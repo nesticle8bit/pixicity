@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogPrevisualizarPostComponent } from 'src/app/components/dialogs/dialog-previsualizar-post/dialog-previsualizar-post.component';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -50,7 +50,8 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private router: Router,
-    private title: Title
+    private title: Title,
+    private notificationService: NotificationService
   ) {
     this.currentUser = this.securityService.getCurrentUser();
 
@@ -95,11 +96,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
         ) {
           this.router.navigate(['']);
 
-          Swal.fire({
-            title: 'Actualizar Post',
-            text: 'Oye cerebrito!, no puedes actualizar el post de otra persona 😥',
-            icon: 'warning',
-          });
+          this.notificationService.warning('Oye cerebrito!, no puedes actualizar el post de otra persona 😥', 'Actualizar Post');
         }
 
         this.setPostOnEdit(response.post);
@@ -176,30 +173,17 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     if (!this.postId) {
       this.postService.savePost(post).subscribe((response: any) => {
         if (response) {
-          Swal.fire({
-            title: 'Creado',
-            text: 'Se ha creado recientemente tu post 👋🏼',
-            icon: 'success',
-            timer: 3000,
-          }).then(() => {
-            this.router.navigate(['']);
-          });
+          this.notificationService.success('Se ha creado recientemente tu post 👋🏼', 'Creado');
+          this.router.navigate(['']);
         }
       });
     } else {
       this.postService.updatePost(post).subscribe((response: any) => {
         if (response) {
-          Swal.fire({
-            title: 'Actualizado',
-            text: 'Se ha actualizado recientemente tu post 👋🏼, ahora lo podrás visualizar con los cambios realizados',
-            icon: 'success',
-          }).then(() => {
-            this.router.navigate([
-              `/posts/${categoria.nombre.toLowerCase()}/${post.id}/${
-                post.titulo
-              }`,
-            ]);
-          });
+          this.notificationService.success('Se ha actualizado recientemente tu post 👋🏼, ahora lo podrás visualizar con los cambios realizados', 'Actualizado');
+          this.router.navigate([
+            `/posts/${categoria.nombre.toLowerCase()}/${post.id}/${post.titulo}`,
+          ]);
         }
       });
     }

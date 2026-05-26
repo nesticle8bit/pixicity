@@ -4,7 +4,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -19,7 +19,8 @@ export class TableNoticiasComponent implements OnInit {
   constructor(
     public paginationService: PaginationService,
     private noticiasService: IHttpNoticiasService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificationService: NotificationService
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
@@ -50,35 +51,18 @@ export class TableNoticiasComponent implements OnInit {
   }
 
   deleteNoticia(noticia: any): void {
-    Swal.fire({
-      title: noticia.eliminado ? 'Recuperar' : 'Eliminar',
-      text: `¿Está seguro de ${
-        noticia.eliminado ? 'recuperar' : 'eliminar'
-      } esta noticia?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: noticia.eliminado ? 'Recuperar' : 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.noticiasService
-          .deleteNoticias(noticia.id)
-          .subscribe((response: any) => {
-            if (response) {
-              Swal.fire({
-                title: noticia.eliminado ? 'Recuperada' : 'Eliminada',
-                text: `La noticia ha sido ${
-                  noticia.eliminado ? 'recuperada' : 'eliminada'
-                } correctamente`,
-                icon: 'success',
-                timer: 3000,
-              });
-
-              noticia.eliminado = !noticia.eliminado;
-            }
-          });
-      }
-    });
+    const accion = noticia.eliminado ? 'recuperar' : 'eliminar';
+    if (this.notificationService.confirm(`¿Está seguro de ${accion} esta noticia?`)) {
+      this.noticiasService.deleteNoticias(noticia.id).subscribe((response: any) => {
+        if (response) {
+          this.notificationService.success(
+            `La noticia ha sido ${noticia.eliminado ? 'recuperada' : 'eliminada'} correctamente`,
+            noticia.eliminado ? 'Recuperada' : 'Eliminada'
+          );
+          noticia.eliminado = !noticia.eliminado;
+        }
+      });
+    }
   }
 
   pageChange(event: PageEvent): void {

@@ -21,12 +21,12 @@
           <div id="socialr">
             <div class="recosr">
               <a class="fosrf" (click)="openShare('facebook')" title="Compartir en Facebook">
-                <fa-icon [icon]="['fab', 'facebook-f']"></fa-icon>
+                <i class="ti ti-brand-facebook"></i>
               </a>
             </div>
             <div class="recosr">
               <a class="fosrt" (click)="openShare('twitter')" title="Compartir en Twitter">
-                <fa-icon [icon]="['fab', 'twitter']"></fa-icon>
+                <i class="ti ti-brand-twitter"></i>
               </a>
             </div>
           </div>
@@ -66,12 +66,12 @@
           <div class="row">
             <div class="col-6 d-grid">
               <button mat-flat-button color="primary" (click)="actualizarPost()">
-                <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon> Editar
+                <i class="ti ti-pencil"></i> Editar
               </button>
             </div>
             <div class="col-6 d-grid">
               <button mat-flat-button color="warn" (click)="eliminarPost()">
-                <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon> Borrar
+                <i class="ti ti-trash"></i> Borrar
               </button>
             </div>
           </div>
@@ -80,7 +80,7 @@
               >
               <div class="col-12 d-grid">
                 <button mat-flat-button color="accent" (click)="quitarSticky()">
-                  <fa-icon [icon]="['fas', 'thumbtack']"></fa-icon>
+                  <i class="ti ti-pin"></i>
                   @if (post.sticky) {
                     <span> Quitar</span>
                   }

@@ -1,6 +1,6 @@
 @if (currentUser?.usuario && (currentUser.usuario.rango === 'Moderador' || currentUser.usuario.rango === 'Administrador') && data.nombre !== 'Administrador') {
   <a class="button-uppercase brojo follow_user_post" (click)="banearUsuario()"
     >
-    <fa-icon [icon]="['fas', 'ban']"></fa-icon> Banear usuario
+    <i class="ti ti-ban"></i> Banear usuario
   </a>
 }

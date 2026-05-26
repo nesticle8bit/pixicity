@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -27,7 +27,8 @@ export class FotoComentariosComponent implements OnInit {
   constructor(
     private fotosService: IHttpFotosService,
     private securityService: IHttpSecurityService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.fb.group({ contenido: ['', Validators.required] });
   }
@@ -62,20 +63,11 @@ export class FotoComentariosComponent implements OnInit {
   }
 
   eliminarComentario(comentario: any, index: number): void {
-    Swal.fire({
-      title: 'Eliminar',
-      text: '¿Eliminar este comentario?',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.fotosService.deleteComentario(comentario.id).subscribe(() => {
-          this.comentarios.splice(index, 1);
-        });
-      }
-    });
+    if (this.notificationService.confirm('¿Eliminar este comentario?')) {
+      this.fotosService.deleteComentario(comentario.id).subscribe(() => {
+        this.comentarios.splice(index, 1);
+      });
+    }
   }
 
   voteComentario(comentario: any, cantidad: number): void {

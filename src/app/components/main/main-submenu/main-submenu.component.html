@@ -10,7 +10,7 @@
         </li>
         <li class="list-inline-item sub-menu--item">
           <a [routerLink]="['/buscar']">
-            <fa-icon [icon]="['fas', 'search']" [fixedWidth]="true"></fa-icon>
+            <i class="ti ti-search"></i>
             <span style="margin-left: 2px;">Buscador</span>
           </a>
         </li>
@@ -24,14 +24,14 @@
         }
         <li class="list-inline-item sub-menu--item">
           <a [routerLink]="['/mod-history']">
-            <fa-icon [icon]="['fas', 'history']" [fixedWidth]="true"></fa-icon>
+            <i class="ti ti-history"></i>
             <span style="margin-left: 2px;">Historial</span>
           </a>
         </li>
         @if (currentUser?.usuario?.rango === 'Moderador') {
         <li class="list-inline-item sub-menu--item">
           <a [routerLink]="['/moderacion']">
-            <fa-icon [icon]="['fas', 'toolbox']" [fixedWidth]="true"></fa-icon>
+            <i class="ti ti-tool"></i>
             <span style="margin-left: 2px;">Moderación</span>
           </a>
         </li>

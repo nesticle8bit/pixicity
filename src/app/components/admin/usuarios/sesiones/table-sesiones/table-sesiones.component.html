@@ -22,8 +22,7 @@
               {{sesion.fechaRegistro | timeAgo}}
             </td>
             <td>
-              <fa-icon [icon]="['fas', 'copy']" matTooltip="Copiar al portapapeles"
-              (click)="clipboard(sesion.token)" class="mr-3 text-secondary cursor--pointer"></fa-icon> &nbsp;
+              <i class="ti ti-copy mr-3 text-secondary cursor--pointer" matTooltip="Copiar al portapapeles" (click)="clipboard(sesion.token)"></i> &nbsp;
               <span class="cursor--help" matTooltip="{{sesion.token}}">
                 {{sesion.token | truncate:[60]}}
               </span>
@@ -49,8 +48,7 @@
             @if (sesion.eliminado) {
               <span class="badge bg-danger"
                 matTooltip="Eliminado el ({{sesion.fechaElimina | date:'dd/MM/yyyy HH:mm:ss'}}) por {{sesion.usuarioElimina}}">
-                Eliminado &nbsp; <fa-icon class="cursor--help ml-3" [icon]="['fas', 'calendar-alt']">
-              </fa-icon>
+                Eliminado &nbsp; <i class="ti ti-calendar cursor--help ml-3"></i>
             </span>
           }
           @if (!sesion.eliminado) {
@@ -61,7 +59,7 @@
         </td>
         <td class="text-center" width="30px">
           <button class="btn-menu" [matMenuTriggerFor]="menu">
-            <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+            <i class="ti ti-dots-vertical"></i>
           </button>
           <mat-menu #menu="matMenu">
             <button type="button" mat-menu-item (click)="deleteSession(sesion.id)">

@@ -3,8 +3,7 @@
     <div class="col-12 col-sm-6 col-md-9">
       <!-- <h6 class="main-title">
       <span>
-        <span class="text-primary cursor--pointer" [routerLink]="['/mensajes']"><fa-icon
-        [icon]="['fas', 'chevron-circle-left']"></fa-icon> Volver</span> <span class="cursor--help"
+        <span class="text-primary cursor--pointer" [routerLink]="['/mensajes']"><i class="ti ti-circle-chevron-left"></i> Volver</span> <span class="cursor--help"
         matTooltip="{{mensaje?.asunto}}" matTooltipPosition="above">
         {{mensaje?.asunto | truncate:[100]}}
       </span>
@@ -69,7 +68,7 @@
         <div class="row">
           <div class="col-12 col-sm-4">
             <a href="javascript:void(0)" (click)="responder = !responder">
-              <fa-icon icon="reply"></fa-icon> Responder
+              <i class="ti ti-arrow-back-up"></i> Responder
             </a>
           </div>
 
@@ -95,7 +94,7 @@
 
           <div class="col-12 col-sm-4 text-md-end">
             <a href="javascript:void(0)">
-              <fa-icon icon="trash-alt"></fa-icon> Eliminar
+              <i class="ti ti-trash"></i> Eliminar
             </a>
           </div>
         </div>

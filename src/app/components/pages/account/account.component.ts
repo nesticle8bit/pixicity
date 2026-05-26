@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogChangeAvatarComponent } from 'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -264,7 +264,8 @@ export class AccountComponent implements OnInit {
     private securityService: IHttpSecurityService,
     private parametrosService: IHttpParametrosService,
     private formBuilder: FormBuilder,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificationService: NotificationService
   ) {
     this.formGroupCuenta = this.formBuilder.group({
       avatar: '',
@@ -472,12 +473,7 @@ export class AccountComponent implements OnInit {
 
     this.securityService.updateUsuario(cuenta).subscribe((response: any) => {
       if (response) {
-        Swal.fire({
-          title: 'Actualizado',
-          text: 'La información de la cuenta ha sido actualizado correctamente',
-          icon: 'success',
-          timer: 3000,
-        });
+        this.notificationService.success('La información de la cuenta ha sido actualizado correctamente', 'Actualizado');
       }
     });
   }
@@ -495,12 +491,7 @@ export class AccountComponent implements OnInit {
             confirmPassword: '',
           });
 
-          Swal.fire({
-            title: 'Actualizado',
-            text: 'La contraseña ha sido actualizada correctamente',
-            icon: 'success',
-            timer: 3000,
-          });
+          this.notificationService.success('La contraseña ha sido actualizada correctamente', 'Actualizado');
         }
       });
   }
@@ -510,12 +501,7 @@ export class AccountComponent implements OnInit {
 
     this.securityService.savePerfilInfo(perfil).subscribe((response: any) => {
       if (response) {
-        Swal.fire({
-          title: 'Actualizado',
-          text: 'Los cambios fueron aceptados y serán aplicados',
-          icon: 'success',
-          timer: 3000,
-        });
+        this.notificationService.success('Los cambios fueron aceptados y serán aplicados', 'Actualizado');
       }
     });
   }
@@ -544,12 +530,7 @@ export class AccountComponent implements OnInit {
     const personalization = Object.assign({}, this.formGroupPersonalizacion.value);
 
     this.securityService.changeBackgroundProfile(personalization).subscribe((value: string) => {
-      Swal.fire({
-        title: 'Actualizado',
-        text: 'El background de tu perfil ha sido actualizado correctamente',
-        icon: 'success',
-        timer: 3000
-      })
+      this.notificationService.success('El background de tu perfil ha sido actualizado correctamente', 'Actualizado');
     });
   }
 }

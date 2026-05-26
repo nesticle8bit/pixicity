@@ -4,7 +4,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -22,7 +22,8 @@ export class BorradoresComponent implements OnInit {
     private displayService: DisplayComponentService,
     public paginationService: PaginationService,
     private postService: IHttpPostsService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private notificationService: NotificationService
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
 
@@ -65,33 +66,20 @@ export class BorradoresComponent implements OnInit {
   }
 
   deleteBorrador(borrador: any): void {
-    Swal.fire({
-      title: !borrador.eliminado ? 'Eliminar Borrador' : 'Recuperar Borrador',
-      text: `¿Seguro que deseas ${
-        !borrador.eliminado ? 'eliminar' : 'recuperar'
-      } este borrador?`,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: !borrador.eliminado ? `Borrar` : 'Recuperar',
-      cancelButtonText: `Cancelar`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.postService
-          .deletePost(borrador.id, '')
-          .subscribe((response: boolean) => {
-            Swal.fire({
-              title: !borrador.eliminado ? 'Eliminado' : 'Recuperado',
-              text: `El post ha sido ${
-                !borrador.eliminado ? 'eliminado' : 'recuperado'
-              } correctamente, ahora nadie lo podrá visualizar`,
-              icon: 'success',
-              timer: 3000,
-            });
+    const accion = !borrador.eliminado ? 'eliminar' : 'recuperar';
 
-            borrador.eliminado = !borrador.eliminado;
-          });
-      }
-    });
+    if (!this.notificationService.confirm(`¿Seguro que deseas ${accion} este borrador?`)) {
+      return;
+    }
+
+    this.postService
+      .deletePost(borrador.id, '')
+      .subscribe((response: boolean) => {
+        const titulo = !borrador.eliminado ? 'Eliminado' : 'Recuperado';
+        const texto = `El post ha sido ${accion}do correctamente, ahora nadie lo podrá visualizar`;
+        this.notificationService.success(texto, titulo);
+        borrador.eliminado = !borrador.eliminado;
+      });
   }
 
   pageChange(event: PageEvent): void {

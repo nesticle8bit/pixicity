@@ -2,7 +2,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 
 @Component({
@@ -18,7 +18,8 @@ export class DialogUpdateAfiliadosComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogUpdateAfiliadosComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private generalService: IHttpGeneralService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private notificationService: NotificationService
   ) {
     this.formGroupAfiliacion = this.formBuilder.group({
       activo: this.data.activo,
@@ -43,12 +44,7 @@ export class DialogUpdateAfiliadosComponent implements OnInit {
 
     this.generalService.updateAfiliacion(afiliacion).subscribe((response: any) => {
       if (response) {
-        Swal.fire({
-          title: 'Actualizado',
-          text: 'La información de la afiliación ha sido actualizada correctamente',
-          icon: 'success',
-          timer: 3000,
-        });
+        this.notificationService.success('La información de la afiliación ha sido actualizada correctamente', 'Actualizado');
 
         this.dialogRef.close(afiliacion);
       }

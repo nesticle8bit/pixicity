@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -16,7 +16,8 @@ export class TableContactosComponent implements OnInit {
 
   constructor(
     public paginationService: PaginationService,
-    private generalService: IHttpGeneralService
+    private generalService: IHttpGeneralService,
+    private notificationService: NotificationService
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
@@ -38,57 +39,24 @@ export class TableContactosComponent implements OnInit {
   }
 
   gestionarContacto(contacto: any): void {
-    Swal.fire({
-      title: 'Eliminar',
-      text: '¿Está seguro de gestionar este contacto?',
-      icon: 'info',
-      showCancelButton: true,
-      confirmButtonText: 'Gestionar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.generalService
-          .gestionarContacto(contacto.id)
-          .subscribe((response: any) => {
-            if (response) {
-              Swal.fire({
-                title: 'Gestionado',
-                text: 'El contacto ha sido gestionado correctamente',
-                icon: 'success',
-                timer: 3000,
-              });
-
-              this.getContactos();
-            }
-          });
-      }
-    });
+    if (this.notificationService.confirm('¿Está seguro de gestionar este contacto?')) {
+      this.generalService.gestionarContacto(contacto.id).subscribe((response: any) => {
+        if (response) {
+          this.notificationService.success('El contacto ha sido gestionado correctamente', 'Gestionado');
+          this.getContactos();
+        }
+      });
+    }
   }
 
   deleteContacto(contacto: any): void {
-    Swal.fire({
-      title: 'Eliminar',
-      text: '¿Está seguro de eliminar este contacto?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.generalService
-          .deleteContacto(contacto.id)
-          .subscribe((response: any) => {
-            if (response) {
-              Swal.fire({
-                title: 'Eliminado',
-                text: 'El contacto ha sido eliminado correctamente',
-                icon: 'success',
-                timer: 3000,
-              });
-              this.getContactos();
-            }
-          });
-      }
-    });
+    if (this.notificationService.confirm('¿Está seguro de eliminar este contacto?')) {
+      this.generalService.deleteContacto(contacto.id).subscribe((response: any) => {
+        if (response) {
+          this.notificationService.success('El contacto ha sido eliminado correctamente', 'Eliminado');
+          this.getContactos();
+        }
+      });
+    }
   }
 }

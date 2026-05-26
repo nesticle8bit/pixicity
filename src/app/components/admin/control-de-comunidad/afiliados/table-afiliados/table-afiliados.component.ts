@@ -3,7 +3,7 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogUpdateAfiliadosComponent } from '../dialog-update-afiliados/dialog-update-afiliados.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -23,7 +23,8 @@ export class TableAfiliadosComponent implements OnInit {
     private generalService: IHttpGeneralService,
     private webService: IHttpWebService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificationService: NotificationService
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
@@ -53,14 +54,12 @@ export class TableAfiliadosComponent implements OnInit {
       .changeAfiliadoActive({ id: afiliado.id, activo: afiliado.activo })
       .subscribe((response: any) => {
         if (response) {
-          Swal.fire({
-            title: afiliado.activo ? 'Desactivado' : 'Activado',
-            text: afiliado.activo
+          this.notificationService.success(
+            afiliado.activo
               ? 'El afiliado ha sido deshabilitado en el inicio de la página'
               : 'El afiliado ha sido activado en el inicio de la página',
-            icon: 'success',
-            timer: 3000,
-          });
+            afiliado.activo ? 'Desactivado' : 'Activado'
+          );
 
           afiliado.activo = !afiliado.activo;
         }
@@ -104,30 +103,13 @@ export class TableAfiliadosComponent implements OnInit {
   }
 
   deleteAfiliado(afiliado: any, index: number): void {
-    Swal.fire({
-      title: 'Eliminar',
-      text: '¿Está seguro de eliminar esta afiliación?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.generalService
-          .deleteAfiliado(afiliado.id)
-          .subscribe((response: any) => {
-            if (response) {
-              Swal.fire({
-                title: 'Eliminado',
-                text: 'La afiliación ha sido eliminada correctamente',
-                icon: 'success',
-                timer: 3000,
-              });
-
-              this.afiliados.splice(index, 1);
-            }
-          });
-      }
-    });
+    if (this.notificationService.confirm('¿Está seguro de eliminar esta afiliación?')) {
+      this.generalService.deleteAfiliado(afiliado.id).subscribe((response: any) => {
+        if (response) {
+          this.notificationService.success('La afiliación ha sido eliminada correctamente', 'Eliminado');
+          this.afiliados.splice(index, 1);
+        }
+      });
+    }
   }
 }

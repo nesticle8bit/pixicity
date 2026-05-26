@@ -1,5 +1,3 @@
-import { IHttpGeneralService } from "../interfaces/httpGeneral.interface";
-import { AfiliacionModel } from "src/app/models/general/afiliacion.model";
 import { environment } from "src/environments/environment";
 import { HelperService } from "../shared/helper.service";
 import { HttpClient } from "@angular/common/http";
@@ -8,14 +6,15 @@ import { Injectable } from "@angular/core";
 import { IHttpFavoritosService } from "../interfaces/httpFavoritos.interface";
 import { PaginationService } from "../shared/pagination.service";
 import { Observable } from "rxjs";
-import Swal from "sweetalert2";
+import { NotificationService } from '../shared/notification.service';
 
 @Injectable()
 export class HttpFavoritosService implements IHttpFavoritosService {
     constructor(
         private http: HttpClient,
         private helper: HelperService,
-        private paginationService: PaginationService) { }
+        private paginationService: PaginationService,
+        private notificationService: NotificationService) { }
 
     getLastFavoritos(count: number): Observable<any> {
         return this.http.get<any>(`${environment.api}/api/favoritos/getLastFavoritos?count=${count}`)
@@ -23,11 +22,7 @@ export class HttpFavoritosService implements IHttpFavoritosService {
             if (response.status === 200) {
                 return response.data;
             } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: response.errors.join(', ')
-                });
+                this.notificationService.error(response.errors.join(', '), 'Error');
             }
         })).pipe(catchError(this.helper.errorHandler));
     }
@@ -38,11 +33,7 @@ export class HttpFavoritosService implements IHttpFavoritosService {
                 if (response.status === 200) {
                     return response.data;
                 } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.errors.join(', ')
-                    });
+                    this.notificationService.error(response.errors.join(', '), 'Error');
                 }
             })).pipe(catchError(this.helper.errorHandler));
     }
@@ -53,11 +44,7 @@ export class HttpFavoritosService implements IHttpFavoritosService {
                 if (response.status === 200) {
                     return response.data;
                 } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.errors.join(', ')
-                    });
+                    this.notificationService.error(response.errors.join(', '), 'Error');
                 }
             })).pipe(catchError(this.helper.errorHandler));
     }

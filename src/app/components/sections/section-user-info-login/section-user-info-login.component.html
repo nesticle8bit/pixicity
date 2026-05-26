@@ -12,7 +12,7 @@
             <a class="menu" href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Monitor"
               [matTooltipPosition]="'above'" (click)="verNotificaciones();"
               (clickOutside)="display.monitor = false">
-              <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+              <i class="ti ti-eye"></i>
             </a>
             <div class="notificaciones-list" id="mon_list" [style.display]="display.monitor ? 'block' : 'none'">
               <div class="timoni">Notificaciones</div>
@@ -67,7 +67,7 @@
             <li class="mensajes" style="position:relative">
               <a class="menu" href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Mensajes"
                 [matTooltipPosition]="'above'" (click)="verMensajes()" (clickOutside)="display.mensajes = false">
-                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                <i class="ti ti-mail"></i>
               </a>
               <div class="notificaciones-list" id="mon_list" [style.display]="display.mensajes ? 'block' : 'none'">
                 <div class="timoni">Mensajes directos</div>
@@ -119,7 +119,7 @@
               <li class="favoritos" style="position:relative">
                 <a class="menu" href="javascript:void(0)" title="Posts favoritos" (click)="verFavoritos()"
                   (clickOutside)="display.favoritos = false">
-                  <fa-icon [icon]="['fas', 'star']"></fa-icon>
+                  <i class="ti ti-star"></i>
                 </a>
                 <div class="notificaciones-list" id="mon_list" [style.display]="display.favoritos ? 'block' : 'none'">
                   <div class="timoni">Favoritos</div>

@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, Input, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -25,7 +25,8 @@ export class TableUsuariosComponent implements OnInit {
     public paginationService: PaginationService,
     private securityService: IHttpSecurityService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificationService: NotificationService
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
@@ -62,35 +63,18 @@ export class TableUsuariosComponent implements OnInit {
   }
 
   deleteUser(usuario: any): void {
-    Swal.fire({
-      title: 'Eliminar',
-      text: `¿Está seguro de ${
-        usuario.eliminado ? 'recuperar' : 'eliminar'
-      } el usuario?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: `${usuario.eliminado ? 'Recuperar' : 'Eliminar'}`,
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.securityService
-          .removeUsuario(usuario.id)
-          .subscribe((response: any) => {
-            if (response) {
-              Swal.fire({
-                title: `${usuario.eliminado ? 'Recuperado' : 'Eliminado'}`,
-                text: `El usuario ha sido ${
-                  usuario.eliminado ? 'recuperado' : 'eliminado'
-                } correctamente`,
-                icon: 'success',
-                timer: 3000,
-              });
-
-              this.getUsuarios();
-            }
-          });
-      }
-    });
+    const accion = usuario.eliminado ? 'recuperar' : 'eliminar';
+    if (this.notificationService.confirm(`¿Está seguro de ${accion} el usuario?`)) {
+      this.securityService.removeUsuario(usuario.id).subscribe((response: any) => {
+        if (response) {
+          this.notificationService.success(
+            `El usuario ha sido ${usuario.eliminado ? 'recuperado' : 'eliminado'} correctamente`,
+            usuario.eliminado ? 'Recuperado' : 'Eliminado'
+          );
+          this.getUsuarios();
+        }
+      });
+    }
   }
 
   pageChange(event: PageEvent): void {
@@ -110,31 +94,14 @@ export class TableUsuariosComponent implements OnInit {
   }
 
   removeAvatar(usuario: any): void {
-    Swal.fire({
-      title: 'Eliminar',
-      text: '¿Está seguro de eliminar el avatar del usuario?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.securityService
-          .removeAvatar(usuario.id)
-          .subscribe((response: any) => {
-            if (response) {
-              Swal.fire({
-                title: 'Eliminado',
-                text: 'El avatar del usuario ha sido eliminado correctamente',
-                icon: 'success',
-                timer: 3000,
-              });
-
-              this.getUsuarios();
-            }
-          });
-      }
-    });
+    if (this.notificationService.confirm('¿Está seguro de eliminar el avatar del usuario?')) {
+      this.securityService.removeAvatar(usuario.id).subscribe((response: any) => {
+        if (response) {
+          this.notificationService.success('El avatar del usuario ha sido eliminado correctamente', 'Eliminado');
+          this.getUsuarios();
+        }
+      });
+    }
   }
 
   enviarMP(usuario: any): void {

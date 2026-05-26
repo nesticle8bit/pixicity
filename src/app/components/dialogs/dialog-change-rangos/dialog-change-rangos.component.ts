@@ -2,7 +2,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -18,7 +18,8 @@ export class DialogChangeRangosComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogChangeRangosComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private securityService: IHttpSecurityService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
       id: 0,
@@ -52,12 +53,7 @@ export class DialogChangeRangosComponent implements OnInit {
 
     this.securityService.changeRango(obj).subscribe((response: any) => {
       if (response) {
-        Swal.fire({
-          title: 'Actualizado',
-          text: 'El rango del usuario ha sido actualizado correctamente',
-          icon: 'success',
-          timer: 3000,
-        });
+        this.notificationService.success('El rango del usuario ha sido actualizado correctamente', 'Actualizado');
 
         this.dialogRef.close(obj.rango);
       }

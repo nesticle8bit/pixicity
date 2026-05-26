@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -21,7 +21,8 @@ export class ShoutsViewComponent implements OnInit {
     private securityService: IHttpSecurityService,
     private activatedRoute: ActivatedRoute,
     private perfilService: IHttpPerfilService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private notificationService: NotificationService
   ) {
     this.displayService.setDisplay({
       mainMenu: true,
@@ -59,27 +60,14 @@ export class ShoutsViewComponent implements OnInit {
   }
 
   eliminarShout(): void {
-    Swal.fire({
-      title: 'Eliminar Shout',
-      text: '¿Seguro que deseas eliminar este shout?',
-      showCancelButton: true,
-      confirmButtonText: `Eliminar`,
-      cancelButtonText: `Cancelar`,
-      icon: 'question',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.perfilService.deleteShout(this.shout.id).subscribe((response: any) => {
-          if (response) {
-            Swal.fire({
-              title: 'Eliminado',
-              text: 'El shout ha sido eliminado exitosamente',
-              icon: 'success',
-              timer: 3000,
-            }).then(() => {
-              window.location.href = '';
-            });
-          }
-        });
+    if (!this.notificationService.confirm('¿Seguro que deseas eliminar este shout?')) {
+      return;
+    }
+
+    this.perfilService.deleteShout(this.shout.id).subscribe((response: any) => {
+      if (response) {
+        this.notificationService.success('El shout ha sido eliminado exitosamente', 'Eliminado');
+        window.location.href = '';
       }
     });
   }

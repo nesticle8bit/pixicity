@@ -30,12 +30,12 @@
             <td>
               @if (monitor.leido) {
                 <span class="text-success">
-                  <fa-icon icon="check-circle"></fa-icon> Leido
+                  <i class="ti ti-circle-check"></i> Leido
                 </span>
               }
               @if (!monitor.leido) {
                 <span class="text-warning">
-                  <fa-icon [animation]="'spin'" icon="spinner"></fa-icon> Pendiente
+                  <i class="ti ti-loader-2"></i> Pendiente
                 </span>
               }
             </td>
@@ -66,7 +66,7 @@
           </td>
           <td class="text-center" width="30px">
             <button class="btn-menu" [matMenuTriggerFor]="menu">
-              <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+              <i class="ti ti-dots-vertical"></i>
             </button>
             <mat-menu #menu="matMenu">
               @if (!monitor.eliminado) {

@@ -2,7 +2,7 @@ import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.i
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -16,7 +16,8 @@ export class TableMensajesComponent implements OnInit {
 
   constructor(
     public paginationService: PaginationService,
-    private mensajesService: IHttpMensajesService
+    private mensajesService: IHttpMensajesService,
+    private notificationService: NotificationService
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
@@ -48,33 +49,14 @@ export class TableMensajesComponent implements OnInit {
   }
 
   changeRemitente(mensaje: any): void {
-    Swal.fire({
-      icon: 'question',
-      title: 'Cambiar Remitente',
-      text: 'Ingresa el nombre de usuario del nuevo remitente de este mensaje, si no existe no se podrá cambiar',
-      input: 'text',
-      inputAttributes: {
-        autocapitalize: 'off',
-      },
-      showCancelButton: true,
-      confirmButtonText: 'Cambiar',
-    }).then((value: any) => {
-      if (value.isConfirmed && value.value) {
-        this.mensajesService
-          .changeRemitente({ mensajeId: mensaje.id, userName: value.value })
-          .subscribe((response: any) => {
-            if (response) {
-              Swal.fire({
-                title: 'Cambiado',
-                text: `El remitente del mensaje ha sido cambiado a ${value.value}`,
-                icon: 'success',
-                timer: 3000,
-              });
-
-              this.getMensajes();
-            }
-          });
-      }
-    });
+    const userName = this.notificationService.prompt('Ingresa el nombre de usuario del nuevo remitente de este mensaje, si no existe no se podrá cambiar');
+    if (userName) {
+      this.mensajesService.changeRemitente({ mensajeId: mensaje.id, userName }).subscribe((response: any) => {
+        if (response) {
+          this.notificationService.success(`El remitente del mensaje ha sido cambiado a ${userName}`, 'Cambiado');
+          this.getMensajes();
+        }
+      });
+    }
   }
 }

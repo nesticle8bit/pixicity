@@ -7,8 +7,8 @@
           <th>Código</th>
           <th>Título</th>
           <th>URL</th>
-          <th>In <fa-icon class="text-success ms-1" icon="long-arrow-alt-down"></fa-icon></th>
-          <th>Out <fa-icon class="text-primary ms-1" icon="long-arrow-alt-up"></fa-icon></th>
+          <th>In <i class="ti ti-arrow-down text-success ms-1"></i></th>
+          <th>Out <i class="ti ti-arrow-up text-primary ms-1"></i></th>
           <th>Estado</th>
           <th></th>
         </tr>
@@ -22,8 +22,7 @@
               </span>
             </td>
             <td>
-              <fa-icon [icon]="['fas', 'copy']" matTooltip="Copiar al portapapeles"
-              (click)="clipboard(afiliado.codigo)" class="mr-3 text-secondary cursor--pointer"></fa-icon>
+              <i class="ti ti-copy mr-3 text-secondary cursor--pointer" matTooltip="Copiar al portapapeles" (click)="clipboard(afiliado.codigo)"></i>
               &nbsp;
               <span class="badge bg-primary">
                 {{afiliado.codigo}}
@@ -35,7 +34,7 @@
             <td>
               <strong>
                 <a href="{{afiliado.url}}" target="_blank" matTooltip="{{afiliado.url}}">
-                  <fa-icon icon="external-link-alt"></fa-icon> {{afiliado.url}}
+                  <i class="ti ti-external-link"></i> {{afiliado.url}}
                 </a>
               </strong>
             </td>
@@ -52,7 +51,7 @@
             </td>
             <td class="text-center" width="30px">
               <button class="btn-menu" [matMenuTriggerFor]="menu">
-                <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                <i class="ti ti-dots-vertical"></i>
               </button>
               <mat-menu #menu="matMenu">
                 <button type="button" mat-menu-item (click)="activarDesactivarAfiliado(afiliado)">

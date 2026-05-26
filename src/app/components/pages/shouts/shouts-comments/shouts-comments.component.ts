@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -32,7 +32,8 @@ export class ShoutsCommentsComponent implements OnInit {
   constructor(
     private perfilService: IHttpPerfilService,
     private securityService: IHttpSecurityService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -64,20 +65,13 @@ export class ShoutsCommentsComponent implements OnInit {
   }
 
   eliminarComentario(id: number): void {
-    Swal.fire({
-      title: 'Eliminar comentario',
-      text: '¿Seguro que deseas eliminar este comentario?',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.perfilService.deleteShoutComentario(id).subscribe(() => {
-          this.comentarios = this.comentarios.filter((c) => c.id !== id);
-          this.snackBar.open('Comentario eliminado', '', { duration: 2000 });
-        });
-      }
+    if (!this.notificationService.confirm('¿Seguro que deseas eliminar este comentario?')) {
+      return;
+    }
+
+    this.perfilService.deleteShoutComentario(id).subscribe(() => {
+      this.comentarios = this.comentarios.filter((c) => c.id !== id);
+      this.snackBar.open('Comentario eliminado', '', { duration: 2000 });
     });
   }
 

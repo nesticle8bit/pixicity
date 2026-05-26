@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -18,7 +18,8 @@ export class PageContactoComponent implements OnInit {
     private displayService: DisplayComponentService,
     private generalService: IHttpGeneralService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
       nombre: ['', Validators.required],
@@ -47,13 +48,7 @@ export class PageContactoComponent implements OnInit {
 
     this.generalService.saveContacto(form).subscribe((response: any) => {
       if (response) {
-        Swal.fire({
-          title: 'Enviado',
-          text: 'Se ha enviado correctamente los datos de contacto, pronto nos pondremos en contacto contigo, muchas gracias! 💖',
-          icon: 'success',
-          confirmButtonText: 'Aceptar',
-        });
-
+        this.notificationService.success('Se ha enviado correctamente los datos de contacto, pronto nos pondremos en contacto contigo, muchas gracias! 💖', 'Enviado');
         this.router.navigate(['']);
       }
     });

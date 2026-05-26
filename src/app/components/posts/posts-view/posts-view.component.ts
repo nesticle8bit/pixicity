@@ -4,7 +4,7 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import { SEOModel } from 'src/app/models/shared/seo.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
 
 @Component({
@@ -31,7 +31,8 @@ export class PostsViewComponent implements OnInit {
     private postService: IHttpPostsService,
     private displayService: DisplayComponentService,
     private seoService: SEOService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     this.currentUser = this.securityService.getCurrentUser();
   }
@@ -91,31 +92,18 @@ export class PostsViewComponent implements OnInit {
   }
 
   eliminarPost(): void {
-    Swal.fire({
-      title: 'Borrar Post',
-      text: '¿Seguro que deseas borrar este post?',
-      showCancelButton: true,
-      confirmButtonText: `Borrar`,
-      cancelButtonText: `Cancelar`,
-      icon: 'question',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.postService
-          .deletePost(this.post.id, '')
-          .subscribe((response: boolean) => {
-            if (response) {
-              Swal.fire({
-                title: 'Eliminado',
-                text: 'El post ha sido eliminado correctamente, ahora nadie lo podrá visualizar',
-                icon: 'success',
-                timer: 3000,
-              }).then(() => {
-                this.router.navigate(['']);
-              });
-            }
-          });
-      }
-    });
+    if (!this.notificationService.confirm('¿Seguro que deseas borrar este post?')) {
+      return;
+    }
+
+    this.postService
+      .deletePost(this.post.id, '')
+      .subscribe((response: boolean) => {
+        if (response) {
+          this.notificationService.success('El post ha sido eliminado correctamente, ahora nadie lo podrá visualizar', 'Eliminado');
+          this.router.navigate(['']);
+        }
+      });
   }
 
   openShare(network: string): void {
@@ -134,13 +122,7 @@ export class PostsViewComponent implements OnInit {
       .changeStickyPost(this.post.id)
       .subscribe((response: any) => {
         if (response) {
-          Swal.fire({
-            title: 'Sticky',
-            text: 'Se ha cambiado el sticky para este post correctamente',
-            icon: 'success',
-            timer: 3000,
-          });
-
+          this.notificationService.success('Se ha cambiado el sticky para este post correctamente', 'Sticky');
           this.post.sticky = !this.post.sticky;
         }
       });

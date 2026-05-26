@@ -2,7 +2,7 @@ import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -19,7 +19,8 @@ export class DialogCreateUpdatePaginasComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogCreateUpdatePaginasComponent>,
     private webService: IHttpWebService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
       id: 0,
@@ -52,19 +53,9 @@ export class DialogCreateUpdatePaginasComponent implements OnInit {
     this.webService.savePagina(value).subscribe((response: any) => {
       if (response) {
         if (value.id) {
-          Swal.fire({
-            title: 'Actualizar',
-            text: 'La página se ha actualizado correctamente',
-            icon: 'success',
-            timer: 3000,
-          });
+          this.notificationService.success('La página se ha actualizado correctamente', 'Actualizar');
         } else {
-          Swal.fire({
-            title: 'Guardar',
-            text: 'La página se ha guardado correctamente',
-            icon: 'success',
-            timer: 3000,
-          });
+          this.notificationService.success('La página se ha guardado correctamente', 'Guardar');
         }
 
         this.dialogRef.close(response);

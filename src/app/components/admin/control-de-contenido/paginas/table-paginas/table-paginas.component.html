@@ -37,7 +37,7 @@
             </td>
             <td>
               <span class="text-info">
-                <fa-icon icon="external-link-alt" class="me-1"></fa-icon> {{pagina.slug}}/
+                <i class="ti ti-external-link me-1"></i> {{pagina.slug}}/
               </span>
             </td>
             <td>
@@ -66,7 +66,7 @@
             </td>
             <td class="text-center" width="30px">
               <button class="btn-menu" [matMenuTriggerFor]="menu">
-                <fa-icon [icon]="['fas', 'ellipsis-v']"></fa-icon>
+                <i class="ti ti-dots-vertical"></i>
               </button>
               <mat-menu #menu="matMenu">
                 <button type="button" mat-menu-item (click)="createUpdatePagina(pagina)">
