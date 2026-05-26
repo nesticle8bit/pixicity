@@ -7,7 +7,7 @@
 
     <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
         [containWithinAspectRatio]="true" [aspectRatio]="1 / 1" [imageQuality]="93" format="jpeg"
-        [resizeToWidth]="200" [resizeToHeight]="200"
+        [resizeToWidth]="200" [resizeToHeight]="200" [output]="'base64'"
         (imageCropped)="imageCropped($event)" (loadImageFailed)="loadImageFailed()">
     </image-cropper>
 </mat-dialog-content>
