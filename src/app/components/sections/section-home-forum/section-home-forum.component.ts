@@ -3,7 +3,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 import { SEOService } from 'src/app/services/shared/seo.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
@@ -13,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './section-home-forum.component.html',
   styleUrls: ['./section-home-forum.component.scss'],
 })
-export class SectionHomeForumComponent implements OnInit {
+export class SectionHomeForumComponent implements OnInit, OnDestroy {
   public categoria: string = '';
   public displayComponent: DisplayComponentModel = {
     mainMenu: true,
@@ -22,6 +22,10 @@ export class SectionHomeForumComponent implements OnInit {
     submenu: true,
     background: '',
   };
+
+  // Heartbeat de presencia online (ms). Mantiene Activo fresco mientras el usuario sigue en la página.
+  private readonly onlineHeartbeatMs = 120000;
+  private onlineHeartbeatTimer: any = null;
 
   constructor(
     private displayService: DisplayComponentService,
@@ -69,11 +73,24 @@ export class SectionHomeForumComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    if (this.onlineHeartbeatTimer) {
+      clearInterval(this.onlineHeartbeatTimer);
+      this.onlineHeartbeatTimer = null;
+    }
+  }
+
   sessionOnlineUser(): void {
-    this.securityService.sessionOnlineUser().subscribe((response: any) => {
-      console.log(
-        '🐼 Estos mensajes van a ser temporales, ignora y cierra el inspeccionar \n Att: Taringas!'
-      );
-    });
+    // Primer ping inmediato + ping periódico para que el conteo refleje presencia real
+    this.pingOnline();
+
+    this.onlineHeartbeatTimer = setInterval(
+      () => this.pingOnline(),
+      this.onlineHeartbeatMs
+    );
+  }
+
+  private pingOnline(): void {
+    this.securityService.sessionOnlineUser().subscribe(() => {});
   }
 }

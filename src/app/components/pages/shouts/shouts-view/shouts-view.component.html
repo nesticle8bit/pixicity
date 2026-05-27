@@ -7,98 +7,98 @@
         <div class="row">
           <div class="col-12 p-3 pt-1">
             <div class="titulaw">
-              <h2>{{shout.fechaRegistro | date:'long'}}</h2>
+              <h2>{{shout?.fechaRegistro | date:'long'}}</h2>
             </div>
 
             <div class="story__content">
               <div class="story__header">
                 <div class="story__header--userName">
-                  {{'@'}}<a [routerLink]="['/perfil/' + shout.avatar.userName]"
-                class="a_blue" [appUserPopover]="shout.avatar.userName">{{shout.avatar.userName}}</a> dijo:
+                  {{'@'}}<a [routerLink]="['/perfil/' + shout?.avatar.userName]" class="a_blue"
+                    [appUserPopover]="shout.avatar.userName">{{shout?.avatar.userName}}</a> dijo:
+                </div>
+
+                <div class="shoutbody">
+                  {{shout.comentario}}
+                </div>
               </div>
 
-              <div class="shoutbody">
-                {{shout.comentario}}
-              </div>
-            </div>
-
-            <div class="story__footer">
-              <div class="container-fluid pr-0">
-                <div class="row g-0">
-                  <div class="col-12 col-sm-6">
-                    <div class="story__timeContainer">
-                      <i class="text-muted icon {{shout.tipo?.toLowerCase()}}-shout"></i>
-                      <span class="story__timeAgo cursor--help"
-                        matTooltip="{{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm:ss \', año\' y'}}">
-                        El {{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\'
-                        h:mm'}}
-                      </span>
+              <div class="story__footer">
+                <div class="container-fluid pr-0">
+                  <div class="row g-0">
+                    <div class="col-12 col-sm-6">
+                      <div class="story__timeContainer">
+                        <i class="text-muted icon {{shout.tipo?.toLowerCase()}}-shout"></i>
+                        <span class="story__timeAgo cursor--help"
+                          matTooltip="{{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm:ss \', año\' y'}}">
+                          El {{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\'
+                          h:mm'}}
+                        </span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-12 col-sm-6 text-end">
-                    <ul class="list-inline">
-                      <li class="list__inline-item">
-                        <a matTooltip="Ver actividad">
-                          <i class="ti ti-clock pl-2 ml-2"></i>
-                          &nbsp;
-                        </a>
-                      </li>
+                    <div class="col-12 col-sm-6 text-end">
+                      <ul class="list-inline">
+                        <li class="list__inline-item">
+                          <a matTooltip="Ver actividad">
+                            <i class="ti ti-clock pl-2 ml-2"></i>
+                            &nbsp;
+                          </a>
+                        </li>
 
-                      <li class="list__inline-item">
-                        <a class="abrir"
-                          (click)="clipboard('https://taringas.net' + '/shouts/' + shout.avatar.userName + '/' + shout.id)">
-                          URL
-                        </a>
-                      </li>
+                        <li class="list__inline-item">
+                          <a class="abrir"
+                            (click)="clipboard('https://taringas.net' + '/shouts/' + shout.avatar.userName + '/' + shout.id)">
+                            URL
+                          </a>
+                        </li>
 
-                      <li class="list__inline-item">
-                        <a title="Comentarios">
-                          <i class="ti ti-messages pl-2 ml-2"></i>
-                          <span class="counter">{{shoutsComments?.comentarios?.length || 0}}</span>
-                        </a>
-                      </li>
+                        <li class="list__inline-item">
+                          <a title="Comentarios">
+                            <i class="ti ti-messages pl-2 ml-2"></i>
+                            <span class="counter">{{shoutsComments?.comentarios?.length || 0}}</span>
+                          </a>
+                        </li>
 
-                      <li class="list__inline-item">
-                        <a title="Favoritos">
-                          <i class="ti ti-star"></i>
-                          <span class="counter">0</span>
-                        </a>
-                      </li>
+                        <li class="list__inline-item">
+                          <a title="Favoritos">
+                            <i class="ti ti-star"></i>
+                            <span class="counter">0</span>
+                          </a>
+                        </li>
 
-                      <li class="list__inline-item">
-                        <a title="Me gusta">
-                          <i class="ti ti-thumb-up"></i>
-                          <span class="counter">0</span>
-                        </a>
-                      </li>
+                        <li class="list__inline-item">
+                          <a title="Me gusta">
+                            <i class="ti ti-thumb-up"></i>
+                            <span class="counter">0</span>
+                          </a>
+                        </li>
 
-                      <!--
+                        <!--
                       <li class="list__inline-item">
                         <a title="Compartir">
                           <i class="ti ti-refresh"></i>
                           <span class="counter">0</span>
                         </a>
                       </li> -->
-                    </ul>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <app-shouts-comments #shoutsComments [shout]="shout"></app-shouts-comments>
+            <app-shouts-comments #shoutsComments [shout]="shout"></app-shouts-comments>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="dotted-border--left col-12 col-sm-3 mt-3">
-    <app-post-original-poster-info [userName]="shout.avatar?.userName"></app-post-original-poster-info>
+    <div class="dotted-border--left col-12 col-sm-3 mt-3">
+      <app-post-original-poster-info [userName]="shout.avatar?.userName"></app-post-original-poster-info>
 
-    @if (shout.avatar.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador' || currentUser?.usuario?.rango === 'Moderador') {
-      <section class="my-1"
-        >
+      @if (shout.avatar.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador'
+      || currentUser?.usuario?.rango === 'Moderador') {
+      <section class="my-1">
         <div class="titulaw">
           <h2>Herramientas</h2>
         </div>
@@ -110,11 +110,11 @@
           </div>
         </div>
       </section>
-    }
+      }
 
-    @if (shout.avatar.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador' || currentUser?.usuario?.rango === 'Moderador') {
-      <section class="my-3"
-        >
+      @if (shout.avatar.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador'
+      || currentUser?.usuario?.rango === 'Moderador') {
+      <section class="my-3">
         <div class="titulaw">
           <h2>Compartido por</h2>
         </div>
@@ -126,7 +126,7 @@
           </div>
         </div>
       </section>
-    }
+      }
+    </div>
   </div>
-</div>
 </div>
