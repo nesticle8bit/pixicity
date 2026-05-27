@@ -8,7 +8,7 @@
   grid-template-columns: 210px 1fr;
   gap: 20px;
 
-  @media (max-width: 640px) {
+  @media (max-width: 767px) {
     grid-template-columns: 1fr;
   }
 }
@@ -21,6 +21,17 @@
   position: sticky;
   top: 12px;
   align-self: start;
+
+  @media (max-width: 767px) {
+    position: static;
+    order: 2;
+  }
+}
+
+.foto-main {
+  @media (max-width: 767px) {
+    order: 1;
+  }
 }
 
 // Shared card shell

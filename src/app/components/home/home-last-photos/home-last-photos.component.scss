@@ -67,6 +67,10 @@
   &.running {
     animation: progress 4s linear forwards;
   }
+
+  &.paused {
+    animation-play-state: paused;
+  }
 }
 
 @keyframes progress {

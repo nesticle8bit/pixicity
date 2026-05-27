@@ -1,125 +1,75 @@
-<div class="card border border-0">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-5">
-                <div class="eites">
-                    <a class="nomis" [routerLink]="['/perfil/' + userName]" matTooltip="Ver perfil de {{userName}}" [appUserPopover]="userName">
-                        <app-user-avatar [class]="'user-post-image'" [avatar]="info?.avatar" [userName]="userName"
-                            [height]="97">
-                        </app-user-avatar>
-                    </a>
+<div class="op-card boxposts separa">
+  <div class="op-header">
+    <div class="op-avatar-wrap">
+      <a [routerLink]="['/perfil/' + userName]" [appUserPopover]="userName"
+        matTooltip="Ver perfil de {{userName}}">
+        <app-user-avatar [class]="'user-post-image'" [avatar]="info?.avatar"
+          [userName]="userName" [height]="90">
+        </app-user-avatar>
+      </a>
 
-                    <span [ngStyle]="{'color': info?.rango?.color}">
-                        <img src="/assets/images/icons/rangos/{{info?.rango?.icono}}"
-                            matTooltip="{{info?.rango?.nombre}}" [matTooltipPosition]="'below'">
-                        <strong class="ms-1">{{info?.rango?.nombre}}</strong>
-                    </span>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-12 col-md-12 col-lg-7">
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-8">
-                        <app-user-online-status [userName]="userName"></app-user-online-status>
-
-                        <a [routerLink]="['/perfil/' + userName]" [appUserPopover]="userName">
-                            {{userName}}
-                        </a>
-                    </div>
-
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-4">
-                        <div class="row">
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-                                <addon-country-flag [iso2]="info?.estado?.pais?.isO2"
-                                    [title]="info?.estado?.pais.nombre">
-                                </addon-country-flag>
-                            </div>
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-                                <app-genre-icon [genre]="info?.genero"></app-genre-icon>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12">
-                        <div class="eliese mt-2">
-                            <div class="tyes">
-                                <i class="ti ti-user-circle"></i>
-                                <b>{{info?.seguidores ? info?.seguidores : 0}}</b> Seguidores
-                            </div>
-                
-                            <div class="tyes">
-                                <i class="ti ti-chart-line"></i>
-                                <b>{{info?.puntos ? info?.puntos : 0}}</b> Puntos
-                            </div>
-                
-                            <div class="tyes">
-                                <i class="ti ti-copy"></i>
-                                <b>{{info?.posts ? info?.posts : 0}}</b> Posts
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row mt-2">
-            <div class="col-12">
-                <app-follow-button [userName]="userName" (followingChange)="changeSeguidores($event)"></app-follow-button>
-            </div>
-        </div>
+      <span class="op-rango" [ngStyle]="{'color': info?.rango?.color}">
+        <img src="/assets/images/icons/rangos/{{info?.rango?.icono}}"
+          matTooltip="{{info?.rango?.nombre}}" [matTooltipPosition]="'below'">
+        <span>{{info?.rango?.nombre}}</span>
+      </span>
     </div>
-</div>
 
-<!-- <div class="esees">
-    <div class="eites">
-        <a class="nomis" [routerLink]="['/perfil/' + userName]" matTooltip="Ver perfil de {{userName}}">
-            <app-user-avatar [class]="'user-post-image'" [avatar]="info?.avatar" [userName]="userName" [height]="97">
-            </app-user-avatar>
+    <div class="op-main-info">
+      <div class="op-name-row">
+        <app-user-online-status [userName]="userName"></app-user-online-status>
+        <a class="op-username" [routerLink]="['/perfil/' + userName]" [appUserPopover]="userName">
+          {{userName}}
         </a>
+        <addon-country-flag [iso2]="info?.estado?.pais?.isO2"
+          [title]="info?.estado?.pais?.nombre">
+        </addon-country-flag>
+        <app-genre-icon [genre]="info?.genero"></app-genre-icon>
+      </div>
 
-        <span [ngStyle]="{'color': info?.rango?.color}">
-            <img src="/assets/images/icons/rangos/{{info?.rango?.icono}}" matTooltip="{{info?.rango?.nombre}}"
-                [matTooltipPosition]="'below'">
-            <strong class="ms-1">{{info?.rango?.nombre}}</strong>
-        </span>
+      <div class="op-fullname" *ngIf="info?.completeName">
+        {{info?.completeName}}
+      </div>
+
+      <div class="op-bio" *ngIf="info?.mensajePersonal">
+        <i class="ti ti-quote"></i> {{info?.mensajePersonal}}
+      </div>
+
+      <div class="op-since" *ngIf="info?.fechaRegistro">
+        <i class="ti ti-calendar"></i>
+        Miembro desde {{info?.fechaRegistro | date:'MMM yyyy'}}
+      </div>
     </div>
+  </div>
 
-    <div class="gkes">
-        <div class="eolr">
-            <span class="user-online vctip" matTooltip="Online" [matTooltipPosition]="'below'"></span>
-            <a [routerLink]="['/perfil/' + userName]">
-                {{userName}}
-            </a>
-        </div>
-
-        <div class="float-end">
-            <addon-country-flag [iso2]="info?.estado?.pais?.isO2" [title]="info?.estado?.pais.nombre">
-            </addon-country-flag>
-            <app-genre-icon [genre]="info?.genero"></app-genre-icon>
-        </div>
-
-        <div class="clearfix"></div>
-
-        <div class="eliese mt-2">
-            <div class="tyes">
-                <i class="ti ti-user-circle"></i>
-                <b>{{info?.seguidores ? info?.seguidores : 0}}</b> Seguidores
-            </div>
-
-            <div class="tyes">
-                <i class="ti ti-chart-line"></i>
-                <b>{{info?.puntos ? info?.puntos : 0}}</b> Puntos
-            </div>
-
-            <div class="tyes">
-                <i class="ti ti-copy"></i>
-                <b>{{info?.posts ? info?.posts : 0}}</b> Posts
-            </div>
-        </div>
-
-        <app-follow-button [userName]="userName" (followingChange)="changeSeguidores($event)">
-        </app-follow-button>
+  <!-- Stats -->
+  <div class="op-stats">
+    <div class="op-stat">
+      <i class="ti ti-users"></i>
+      <b>{{info?.seguidoresCount ? info?.seguidoresCount : 0}}</b>
+      <span>Seguidores</span>
     </div>
-</div> -->
+    <div class="op-stat">
+      <i class="ti ti-copy"></i>
+      <b>{{info?.postsCount ? info?.postsCount : 0}}</b>
+      <span>Posts</span>
+    </div>
+    <div class="op-stat">
+      <i class="ti ti-message-circle"></i>
+      <b>{{info?.comentariosCount ? info?.comentariosCount : 0}}</b>
+      <span>Comentarios</span>
+    </div>
+    <div class="op-stat">
+      <i class="ti ti-chart-line"></i>
+      <b>{{info?.puntos ? info?.puntos : 0}}</b>
+      <span>Puntos</span>
+    </div>
+  </div>
+
+  <!-- Acciones -->
+  <div class="op-actions">
+    <app-follow-button [userName]="userName" (followingChange)="changeSeguidores($event)">
+    </app-follow-button>
+  </div>
+
+</div>

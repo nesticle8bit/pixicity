@@ -11,6 +11,7 @@ export class HomeLastPhotosComponent implements OnInit, OnDestroy {
   public fotos: any[] = [];
   public loading = true;
   public currentIndex = 0;
+  public paused = false;
 
   private readonly interval = 4000;
   private timer: any = null;
@@ -32,7 +33,13 @@ export class HomeLastPhotosComponent implements OnInit, OnDestroy {
     this.stopTimer();
   }
 
+  togglePause(): void {
+    this.paused = !this.paused;
+    this.paused ? this.stopTimer() : this.startTimer();
+  }
+
   startTimer(): void {
+    if (this.paused) return;
     this.stopTimer();
     this.timer = setInterval(() => this.next(), this.interval);
   }

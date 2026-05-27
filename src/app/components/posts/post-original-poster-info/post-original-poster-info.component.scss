@@ -1,0 +1,159 @@
+.op-card {
+  padding: 14px;
+
+  .op-header {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+
+    @media (max-width: 576px) {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  .op-avatar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 6px;
+  }
+
+  .op-rango {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+
+    img {
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  .op-main-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .op-name-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+
+    @media (max-width: 576px) {
+      justify-content: center;
+    }
+  }
+
+  .op-username {
+    font-size: 0.97rem;
+    font-weight: 700;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .op-fullname {
+    font-size: 0.79rem;
+    color: #888;
+    margin-top: -2px;
+  }
+
+  .op-bio {
+    font-size: 0.81rem;
+    color: #666;
+    font-style: italic;
+    line-height: 1.4;
+
+    i {
+      margin-right: 3px;
+      opacity: 0.6;
+    }
+  }
+
+  .op-since {
+    font-size: 0.74rem;
+    color: #999;
+
+    i {
+      margin-right: 3px;
+    }
+  }
+
+  .op-stats {
+    display: flex;
+    margin-top: 14px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 10px 0;
+
+    @media (max-width: 400px) {
+      flex-wrap: wrap;
+
+      .op-stat {
+        width: 50%;
+
+        &:nth-child(2) {
+          border-right: none;
+        }
+
+        &:nth-child(3) {
+          border-top: 1px solid rgba(0, 0, 0, 0.08);
+          border-right: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        &:nth-child(4) {
+          border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+      }
+    }
+  }
+
+  .op-stat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    text-align: center;
+
+    &:not(:last-child) {
+      border-right: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    i {
+      font-size: 1rem;
+      color: #888;
+      margin-bottom: 1px;
+    }
+
+    b {
+      font-size: 0.92rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    span {
+      color: #888;
+      font-size: 0.68rem;
+    }
+  }
+
+  .op-actions {
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+  }
+}
