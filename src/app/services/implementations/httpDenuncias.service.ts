@@ -7,6 +7,18 @@ import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
+import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
+
+interface DenunciaViewModel {
+  id: number;
+  fechaRegistro: string;
+  razon: string;
+  postId: number;
+  usuarioId: number;
+  gestionada: boolean;
+  postTitulo?: string;
+  userName?: string;
+}
 
 @Injectable()
 export class HttpDenunciasService implements IHttpDenunciasService {
@@ -17,37 +29,39 @@ export class HttpDenunciasService implements IHttpDenunciasService {
     private http: HttpClient,
   ) {}
 
-  getDenuncias(): Observable<any> {
+  getDenuncias(): Observable<PaginatedData<DenunciaViewModel>> {
     return this.http
-      .get<any>(
+      .get<ApiResponse<PaginatedData<DenunciaViewModel>>>(
         `${environment.api}/api/denuncias/getDenuncias?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  deleteDenuncia(denunciaId: number): Observable<any> {
+  deleteDenuncia(denunciaId: number): Observable<boolean> {
     return this.http
-      .delete<any>(`${environment.api}/api/denuncias/deleteDenuncia`, {
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/denuncias/deleteDenuncia`, {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
         }),
         body: { id: denunciaId },
       })
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )

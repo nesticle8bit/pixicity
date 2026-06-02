@@ -7,6 +7,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { PaginationService } from '../shared/pagination.service';
+import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
+import { CategoriaViewModel, PaisViewModel, EstadoViewModel } from 'src/app/models/parametros/parametros-vm.model';
 
 @Injectable()
 export class HttpParametrosService implements IHttpParametrosService {
@@ -17,127 +19,134 @@ export class HttpParametrosService implements IHttpParametrosService {
     private http: HttpClient,
   ) {}
 
-  getPaises(): Observable<any> {
+  getPaises(): Observable<PaginatedData<PaisViewModel>> {
     return this.http
-      .get<any>(
+      .get<ApiResponse<PaginatedData<PaisViewModel>>>(
         `${environment.api}/api/paises/getPaises?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getPaisesDropdown(): Observable<any> {
+  getPaisesDropdown(): Observable<PaisViewModel[]> {
     return this.http
-      .get<any>(`${environment.api}/api/paises/getPaisesDropdown`)
+      .get<ApiResponse<PaisViewModel[]>>(`${environment.api}/api/paises/getPaisesDropdown`)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  savePais(pais: any): Observable<any> {
+  savePais(pais: Partial<PaisViewModel>): Observable<number> {
     return this.http
-      .post<any>(`${environment.api}/api/paises/savePais`, pais)
+      .post<ApiResponse<number>>(`${environment.api}/api/paises/savePais`, pais)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  updatePais(pais: any): Observable<any> {
+  updatePais(pais: PaisViewModel): Observable<number> {
     return this.http
-      .put<any>(`${environment.api}/api/paises/updatePais`, pais)
+      .put<ApiResponse<number>>(`${environment.api}/api/paises/updatePais`, pais)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getEstadosByPais(idPais: number): Observable<any> {
+  getEstadosByPais(idPais: number): Observable<EstadoViewModel[]> {
     return this.http
-      .get<any>(
+      .get<ApiResponse<EstadoViewModel[]>>(
         `${environment.api}/api/paises/getEstadosByPais?idPais=${idPais}`,
       )
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getCategoriasAdmin(): Observable<any> {
+  getCategoriasAdmin(): Observable<PaginatedData<CategoriaViewModel>> {
     return this.http
-      .get<any>(
+      .get<ApiResponse<PaginatedData<CategoriaViewModel>>>(
         `${environment.api}/api/categorias/getCategoriasAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
-
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getCategoriasDropdown(): Observable<any> {
+  getCategoriasDropdown(): Observable<CategoriaViewModel[]> {
     return this.http
-      .get<any>(`${environment.api}/api/categorias/getCategoriasDropdown`)
+      .get<ApiResponse<CategoriaViewModel[]>>(`${environment.api}/api/categorias/getCategoriasDropdown`)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  saveCategoria(categoria: any): Observable<any> {
+  saveCategoria(categoria: Partial<CategoriaViewModel>): Observable<number> {
     return this.http
-      .post<any>(`${environment.api}/api/categorias/saveCategoria`, categoria)
+      .post<ApiResponse<number>>(`${environment.api}/api/categorias/saveCategoria`, categoria)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )

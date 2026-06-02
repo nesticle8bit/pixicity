@@ -3,7 +3,8 @@ import { IHttpNoticiasService } from 'src/app/services/interfaces/httpNoticias.i
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
@@ -13,6 +14,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./table-noticias.component.scss'],
 })
 export class TableNoticiasComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public noticias: any[] = [];
   public totalCount: number = 0;
 
@@ -30,7 +33,7 @@ export class TableNoticiasComponent implements OnInit {
   }
 
   getNoticias(): void {
-    this.noticiasService.getNoticias('').subscribe((response: any) => {
+    this.noticiasService.getNoticias('').pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.noticias = response?.noticias;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -43,7 +46,7 @@ export class TableNoticiasComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe((value: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       if (value) {
         this.getNoticias();
       }
@@ -53,7 +56,7 @@ export class TableNoticiasComponent implements OnInit {
   deleteNoticia(noticia: any): void {
     const accion = noticia.eliminado ? 'recuperar' : 'eliminar';
     if (this.notificationService.confirm(`¿Está seguro de ${accion} esta noticia?`)) {
-      this.noticiasService.deleteNoticias(noticia.id).subscribe((response: any) => {
+      this.noticiasService.deleteNoticias(noticia.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (response) {
           this.notificationService.success(
             `La noticia ha sido ${noticia.eliminado ? 'recuperada' : 'eliminada'} correctamente`,

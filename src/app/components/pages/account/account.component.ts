@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
   FormBuilder,
@@ -20,6 +21,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./account.component.scss'],
 })
 export class AccountComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public currentUser: any;
   public changeEmailStatus: boolean = false;
   public currentStep: number = 0;
@@ -343,7 +346,7 @@ export class AccountComponent implements OnInit {
   }
 
   getCurrentPerfilInfo(): void {
-    this.securityService.getCurrentPerfilInfo().subscribe((response: any) => {
+    this.securityService.getCurrentPerfilInfo().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.formGroupPerfil.patchValue({
           completeName: response.perfil?.completeName,
@@ -416,7 +419,7 @@ export class AccountComponent implements OnInit {
   }
 
   getCurrentUser(): void {
-    this.securityService.getLoggedUserByJwt().subscribe((value: any) => {
+    this.securityService.getLoggedUserByJwt().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       if (value) {
         const fechaNacimiento = value.fechaNacimiento?.split('/') ?? [];
 
@@ -448,7 +451,7 @@ export class AccountComponent implements OnInit {
   }
 
   getPaises(): void {
-    this.parametrosService.getPaisesDropdown().subscribe((values: any) => {
+    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
       this.paises = values;
     });
   }
@@ -458,7 +461,7 @@ export class AccountComponent implements OnInit {
       return;
     }
 
-    this.parametrosService.getEstadosByPais(paisId).subscribe((values: any) => {
+    this.parametrosService.getEstadosByPais(paisId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
       this.estados = values;
     });
   }
@@ -471,7 +474,7 @@ export class AccountComponent implements OnInit {
     const cuenta = Object.assign({}, this.formGroupCuenta.value);
     cuenta.fechaNacimiento = `${cuenta.dia}/${cuenta.mes}/${cuenta.año}`;
 
-    this.securityService.updateUsuario(cuenta).subscribe((response: any) => {
+    this.securityService.updateUsuario(cuenta).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.notificationService.success('La información de la cuenta ha sido actualizado correctamente', 'Actualizado');
       }
@@ -483,6 +486,7 @@ export class AccountComponent implements OnInit {
 
     this.securityService
       .changePassword(passwords)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         if (response) {
           this.formGroupCambiarContrasena.patchValue({
@@ -499,7 +503,7 @@ export class AccountComponent implements OnInit {
   savePerfilInfo(): void {
     const perfil = Object.assign({}, this.formGroupPerfil.value);
 
-    this.securityService.savePerfilInfo(perfil).subscribe((response: any) => {
+    this.securityService.savePerfilInfo(perfil).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.notificationService.success('Los cambios fueron aceptados y serán aplicados', 'Actualizado');
       }
@@ -512,7 +516,7 @@ export class AccountComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe((value: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       if (value) {
         this.formGroupCuenta.patchValue({
           avatar: value,
@@ -529,7 +533,7 @@ export class AccountComponent implements OnInit {
   saveFormGroupPersonalizacion(): void {
     const personalization = Object.assign({}, this.formGroupPersonalizacion.value);
 
-    this.securityService.changeBackgroundProfile(personalization).subscribe((value: string) => {
+    this.securityService.changeBackgroundProfile(personalization).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: string) => {
       this.notificationService.success('El background de tu perfil ha sido actualizado correctamente', 'Actualizado');
     });
   }

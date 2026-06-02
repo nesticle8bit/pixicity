@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./shouts-comments.component.scss'],
 })
 export class ShoutsCommentsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   private _shout: any;
 
   comentarios: any[] = [];
@@ -41,7 +44,7 @@ export class ShoutsCommentsComponent implements OnInit {
   }
 
   loadComentarios(): void {
-    this.perfilService.getComentariosByShoutId(this._shout.id).subscribe((data: any[]) => {
+    this.perfilService.getComentariosByShoutId(this._shout.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data: any[]) => {
       this.comentarios = data || [];
     });
   }
@@ -52,6 +55,7 @@ export class ShoutsCommentsComponent implements OnInit {
     this.enviando = true;
     this.perfilService
       .addShoutComentario({ shoutId: this._shout.id, comentario: this.nuevoComentario.trim() })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.nuevoComentario = '';
@@ -69,7 +73,7 @@ export class ShoutsCommentsComponent implements OnInit {
       return;
     }
 
-    this.perfilService.deleteShoutComentario(id).subscribe(() => {
+    this.perfilService.deleteShoutComentario(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.comentarios = this.comentarios.filter((c) => c.id !== id);
       this.snackBar.open('Comentario eliminado', '', { duration: 2000 });
     });

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 
 @Component({
@@ -8,6 +9,8 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
   styleUrls: ['./tags-cloud.component.scss'],
 })
 export class TagsCloudComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public cloudTags: any;
 
   constructor(private postService: IHttpPostsService) {}
@@ -17,7 +20,7 @@ export class TagsCloudComponent implements OnInit {
   }
 
   getCloudTags(): void {
-    this.postService.getCloudTags().subscribe((value: any) => {
+    this.postService.getCloudTags().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       this.cloudTags = value;
 
       if (this.cloudTags?.length > 0) {

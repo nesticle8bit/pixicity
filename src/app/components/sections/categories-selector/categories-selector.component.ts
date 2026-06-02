@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 
 @Component({
@@ -8,6 +9,8 @@ import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametr
   styleUrls: ['./categories-selector.component.scss']
 })
 export class CategoriesSelectorComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public display: boolean = false;
   public categorias: any[] = [];
 
@@ -20,9 +23,12 @@ export class CategoriesSelectorComponent implements OnInit {
   }
 
   getCategorias(): void {
-    this.httpParametrosService.getCategoriasDropdown().subscribe((values: any) => {
-      this.categorias = values;
-    });
+    this.httpParametrosService
+      .getCategoriasDropdown()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((values: any) => {
+        this.categorias = values;
+      });
   }
 
 }

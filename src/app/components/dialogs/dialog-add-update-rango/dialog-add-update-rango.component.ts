@@ -1,4 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./dialog-add-update-rango.component.scss'],
 })
 export class DialogAddUpdateRangoComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public iconos: string[] = [
     'administrador.png',
     'amateur.png',
@@ -76,7 +79,7 @@ export class DialogAddUpdateRangoComponent implements OnInit {
     const rango = Object.assign({}, this.formGroup.value);
     rango.tipo = parseInt(rango.tipo);
 
-    this.securityService.addUpdateRango(rango).subscribe((value: number) => {
+    this.securityService.addUpdateRango(rango).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: number) => {
       if (value) {
         this.notificationService.success('El rango se ha guardado correctamente', 'Guardado');
 

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAfiliarseComponent } from 'src/app/components/dialogs/dialog-afiliarse/dialog-afiliarse.component';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
@@ -10,6 +11,8 @@ import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
   styleUrls: ['./home-afiliados.component.scss'],
 })
 export class HomeAfiliadosComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public afiliados: any[] = [];
   constructor(private webService: IHttpWebService, private dialog: MatDialog) {}
 
@@ -25,13 +28,13 @@ export class HomeAfiliadosComponent implements OnInit {
   }
 
   getAfiliados(): void {
-    this.webService.getAfiliados().subscribe((response: any) => {
+    this.webService.getAfiliados().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.afiliados = response;
     });
   }
 
   hit(afiliado: any): void {
-    this.webService.hitAfiliado(afiliado.codigo).subscribe((url: any) => {
+    this.webService.hitAfiliado(afiliado.codigo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((url: any) => {
       window.open(url, '_blank');
     });
   }

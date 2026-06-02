@@ -1,7 +1,8 @@
 import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./table-monitor.component.scss'],
 })
 export class TableMonitorComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public monitors: any[] = [];
   public totalCount: number = 0;
 
@@ -27,7 +30,7 @@ export class TableMonitorComponent implements OnInit {
   }
 
   getMonitors(): void {
-    this.logsService.getMonitorsAdmin({}).subscribe((response: any) => {
+    this.logsService.getMonitorsAdmin({}).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response?.data) {
         response.data = response.data.map((notificacion: any) => {
           if (notificacion.mensaje) {
@@ -82,7 +85,7 @@ export class TableMonitorComponent implements OnInit {
   deleteNotificacion(notificacion: any): void {
     const accion = notificacion.eliminado ? 'recuperar' : 'eliminar';
     if (this.notificationService.confirm(`¿Está seguro de ${accion} esta notificación?`)) {
-      this.logsService.deleteNotificacion(notificacion.id).subscribe((response: any) => {
+      this.logsService.deleteNotificacion(notificacion.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (response) {
           this.notificationService.success(
             `La notificación ha sido ${notificacion.eliminado ? 'recuperada' : 'eliminada'} correctamente`,

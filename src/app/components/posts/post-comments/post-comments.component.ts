@@ -4,7 +4,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
@@ -15,6 +16,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./post-comments.component.scss'],
 })
 export class PostCommentsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public commented: boolean = false;
   private _post: any;
 
@@ -58,7 +61,7 @@ export class PostCommentsComponent implements OnInit {
     comentario.postId = this.post?.id;
     comentario.respuestas = [];
 
-    this.postService.addComentario(comentario).subscribe((response: any) => {
+    this.postService.addComentario(comentario).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.formGroup.patchValue({
           contenido: '',
@@ -80,6 +83,7 @@ export class PostCommentsComponent implements OnInit {
   getComentariosByPostId(): void {
     this.postService
       .getComentariosByPostId(this.post.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         this.comentarios = response;
       });
@@ -100,7 +104,7 @@ export class PostCommentsComponent implements OnInit {
       fechaComentario: new Date(),
     };
 
-    this.postService.addComentario(comentario).subscribe((response: any) => {
+    this.postService.addComentario(comentario).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         comentario.id = response;
         comentario.usuario = this.currentUser.usuario.userName;
@@ -124,6 +128,7 @@ export class PostCommentsComponent implements OnInit {
 
     this.postService
       .deleteComentario(comentarioId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         if (response) {
           this.notificationService.success('El comentario ha sido eliminado correctamente', 'Eliminado');
@@ -139,6 +144,7 @@ export class PostCommentsComponent implements OnInit {
 
     this.postService
       .deleteComentario(respuestaId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         if (response) {
           this.notificationService.success('La respuesta ha sido eliminada correctamente', 'Eliminado');
@@ -166,7 +172,7 @@ export class PostCommentsComponent implements OnInit {
       closeOnNavigation: true,
     });
 
-    ref.afterDismissed().subscribe((value: any) => {
+    ref.afterDismissed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       if (value) {
         this.addEmoji(value);
       }
@@ -190,6 +196,7 @@ export class PostCommentsComponent implements OnInit {
 
     this.postService
       .updateComentario(updateComentario)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         if (response) {
           comentario.update = false;
@@ -224,7 +231,7 @@ export class PostCommentsComponent implements OnInit {
       return;
     }
 
-    this.postService.votarComentario(comentario.id, cantidad).subscribe({
+    this.postService.votarComentario(comentario.id, cantidad).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (response: any) => {
         if (response !== undefined && response !== null) {
           comentario.votos = response;

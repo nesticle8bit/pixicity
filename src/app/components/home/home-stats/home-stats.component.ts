@@ -1,5 +1,6 @@
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   standalone: false,
@@ -8,6 +9,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
   styleUrls: ['./home-stats.component.scss'],
 })
 export class HomeStatsComponent implements OnInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
+
   public estadisticas: any;
 
   // Refresca el contador online para que no quede congelado en el valor de carga.
@@ -30,7 +33,7 @@ export class HomeStatsComponent implements OnInit, OnDestroy {
   }
 
   private loadStats(): void {
-    this.generalService.getEstadisticas().subscribe((values: any) => {
+    this.generalService.getEstadisticas().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
       this.estadisticas = values;
     });
   }

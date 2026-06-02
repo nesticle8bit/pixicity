@@ -1,7 +1,8 @@
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   standalone: false,
@@ -10,6 +11,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dialog-afiliarse.component.scss'],
 })
 export class DialogAfiliarseComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroupAfiliacion: FormGroup;
 
   constructor(
@@ -39,6 +42,7 @@ export class DialogAfiliarseComponent implements OnInit {
 
     this.httpGeneralService
       .saveAfiliacion(afiliacion)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         if (response) {
           this.formGroupAfiliacion.patchValue({

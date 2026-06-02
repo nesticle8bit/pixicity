@@ -1,6 +1,7 @@
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
@@ -10,6 +11,8 @@ import { PageEvent } from '@angular/material/paginator';
   styleUrls: ['./profile-posts.component.scss'],
 })
 export class ProfilePostsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   private _user: any;
 
   @Input() set user(value: any) {
@@ -39,6 +42,7 @@ export class ProfilePostsComponent implements OnInit {
   getPosts(): void {
     this.postService
       .getPostsByUserId(this.user.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         this.posts = response.data;
         this.totalCount = response.pagination.totalCount;

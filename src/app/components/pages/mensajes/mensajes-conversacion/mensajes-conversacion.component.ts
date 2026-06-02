@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./mensajes-conversacion.component.scss'],
 })
 export class MensajesConversacionComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public mensaje: any;
   public id: number = 0;
   public responder = false;
@@ -23,7 +26,7 @@ export class MensajesConversacionComponent implements OnInit {
     private router: Router,
     private notificationService: NotificationService
   ) {
-    this.activatedRoute.paramMap.subscribe((value: any) => {
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       this.id = value.get('id');
     });
 
@@ -47,6 +50,7 @@ export class MensajesConversacionComponent implements OnInit {
   getMensajePrivadoById(): void {
     this.mensajesService
       .getMensajePrivadoById(this.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: any) => {
         this.mensaje = value;
       });
@@ -63,7 +67,7 @@ export class MensajesConversacionComponent implements OnInit {
       contenido: this.respuesta.trim(),
     };
 
-    this.mensajesService.sendMensajePrivado(mp).subscribe((response: any) => {
+    this.mensajesService.sendMensajePrivado(mp).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.notificationService.success('La respuesta ha sido enviada correctamente', 'Respuesta Enviada');
 

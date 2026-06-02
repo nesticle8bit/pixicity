@@ -1,6 +1,7 @@
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
@@ -10,6 +11,8 @@ import { PageEvent } from '@angular/material/paginator';
   styleUrls: ['./profile-comments.component.scss'],
 })
 export class ProfileCommentsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   private _user: any;
 
   @Input() set user(value: any) {
@@ -37,7 +40,7 @@ export class ProfileCommentsComponent implements OnInit {
   ngOnInit(): void {}
 
   getCommentsByUserId(): void {
-    this.postService.getComentariosByUserId(this.user.id).subscribe((response: any) => {
+    this.postService.getComentariosByUserId(this.user.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.comments = response?.data;
       this.totalCount = response?.pagination?.totalCount;
     });

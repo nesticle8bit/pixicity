@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -11,6 +12,8 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
   styleUrls: ['./fotos-index.component.scss'],
 })
 export class FotosIndexComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public fotos: any[] = [];
   public pagination: any = {};
   public currentUser: any;
@@ -37,7 +40,7 @@ export class FotosIndexComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.securityService.getCurrentUser();
-    this.route.params.subscribe((params) => {
+    this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.userName = params['userName'] || '';
       this.page = 1;
       this.loadFotos();
@@ -52,7 +55,7 @@ export class FotosIndexComponent implements OnInit {
       ? this.fotosService.getFotosByUsuario(this.userName, search)
       : this.fotosService.getFotos(search);
 
-    obs.subscribe({
+    obs.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (response: any) => {
         this.fotos = response?.data || [];
         this.pagination = response?.pagination || {};

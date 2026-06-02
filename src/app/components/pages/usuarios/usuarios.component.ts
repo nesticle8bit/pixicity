@@ -4,7 +4,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   standalone: false,
@@ -13,6 +14,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./usuarios.component.scss'],
 })
 export class UsuariosComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public usuarios: any = [];
   public generos: any[] = [
     { label: 'Hombre', value: 1 },
@@ -64,20 +67,20 @@ export class UsuariosComponent implements OnInit {
   getUsuarios(): void {
     const search = Object.assign({}, this.formGroup.value);
 
-    this.securityService.getUsuarios(search).subscribe((response: any) => {
+    this.securityService.getUsuarios(search).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.usuarios = response.usuarios;
       this.totalCount = response.pagination.totalCount;
     });
   }
 
   getPaises(): void {
-    this.parametrosService.getPaisesDropdown().subscribe((values: any) => {
+    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
       this.paises = values;
     });
   }
 
   getRangos(): void {
-    this.securityService.getRangosDropdown().subscribe((values: any) => {
+    this.securityService.getRangosDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
       this.rangos = values;
     });
   }

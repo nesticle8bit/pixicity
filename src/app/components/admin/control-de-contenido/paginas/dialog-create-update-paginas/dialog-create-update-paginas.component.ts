@@ -1,6 +1,7 @@
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./dialog-create-update-paginas.component.scss'],
 })
 export class DialogCreateUpdatePaginasComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroup: FormGroup;
   public tipos: any[] = ['routerLink', 'link'];
   public targets: any[] = ['_blank', '_parent', '_self', '_top'];
@@ -50,7 +53,7 @@ export class DialogCreateUpdatePaginasComponent implements OnInit {
 
   savePagina(): void {
     const value = Object.assign({}, this.formGroup.value);
-    this.webService.savePagina(value).subscribe((response: any) => {
+    this.webService.savePagina(value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         if (value.id) {
           this.notificationService.success('La página se ha actualizado correctamente', 'Actualizar');

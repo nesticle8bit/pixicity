@@ -1,7 +1,8 @@
 import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
@@ -12,6 +13,8 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
   styleUrls: ['./monitor.component.scss'],
 })
 export class MonitorComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroup: FormGroup;
   public notificaciones: any[] = [];
   public totalCount: number = 0;
@@ -49,7 +52,7 @@ export class MonitorComponent implements OnInit {
   }
 
   getNotificaciones(search: string = ''): void {
-    this.logsService.getNotificaciones(search).subscribe((response: any) => {
+    this.logsService.getNotificaciones(search).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.notificaciones = response.data;
       this.totalCount = response.pagination.totalCount;
     });

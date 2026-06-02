@@ -4,7 +4,8 @@ import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.int
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   standalone: false,
@@ -13,6 +14,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./favoritos.component.scss']
 })
 export class FavoritosComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public favoritos: any[] = [];
   public categorias: any[] = [];
   public totalCount: number = 0;
@@ -45,7 +48,7 @@ export class FavoritosComponent implements OnInit {
   }
 
   getFavoritos(categoriaId: number): void {
-    this.httpGeneral.getFavoritosByUser(this.formGroup?.value?.search, categoriaId).subscribe((response: any) => {
+    this.httpGeneral.getFavoritosByUser(this.formGroup?.value?.search, categoriaId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.favoritos = response.favoritos;
 
       if (this.categorias?.length <= 0) {
@@ -57,7 +60,7 @@ export class FavoritosComponent implements OnInit {
   }
 
   deleteFavorito(favorito: any): void {
-    this.favoritosService.deleteFavorito(favorito.id).subscribe((response: any) => {
+    this.favoritosService.deleteFavorito(favorito.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         favorito.deleted = response.eliminado;
       }

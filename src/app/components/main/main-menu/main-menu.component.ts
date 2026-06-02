@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
@@ -9,6 +10,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./main-menu.component.scss'],
 })
 export class MainMenuComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public active: string = '';
   public currentUser: any;
 
@@ -18,11 +21,13 @@ export class MainMenuComponent implements OnInit {
   ) {
     this.currentUser = this.securityService.getCurrentUser();
 
-    this.router.events.subscribe((val: any) => {
-      if(val?.url) {
-        this.active = val?.url;
-      }
-    });
+    this.router.events
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((val: any) => {
+        if (val?.url) {
+          this.active = val?.url;
+        }
+      });
   }
 
   ngOnInit(): void {}

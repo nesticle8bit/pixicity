@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
@@ -9,6 +10,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./profile-activity.component.scss'],
 })
 export class ProfileActivityComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   private _user: any;
 
   @Input() set user(value: any) {
@@ -86,6 +89,7 @@ export class ProfileActivityComponent implements OnInit {
   getActividadUsuario(): void {
     this.securityService
       .getActividadUsuario(this.user.id, this.formGroup.value.tipoActividad)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         this.actividad = response;
       });

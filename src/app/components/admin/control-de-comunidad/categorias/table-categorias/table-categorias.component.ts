@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
@@ -12,6 +13,8 @@ import { DialogCreateUpdateCategoriasComponent } from '../dialog-create-update-c
   styleUrls: ['./table-categorias.component.scss'],
 })
 export class TableCategoriasComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public categorias: any[] = [];
   public totalCount: number = 0;
 
@@ -28,7 +31,7 @@ export class TableCategoriasComponent implements OnInit {
   }
 
   getCategorias(): void {
-    this.parametrosService.getCategoriasAdmin().subscribe((response: any) => {
+    this.parametrosService.getCategoriasAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.categorias = response.categorias;
       this.totalCount = response.pagination.totalCount;
     });
@@ -46,7 +49,7 @@ export class TableCategoriasComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe((value: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       if (value) {
         this.getCategorias();
       }

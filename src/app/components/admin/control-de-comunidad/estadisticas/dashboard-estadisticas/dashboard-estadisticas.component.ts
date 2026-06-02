@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 
 @Component({
@@ -8,6 +9,8 @@ import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.int
   styleUrls: ['./dashboard-estadisticas.component.scss']
 })
 export class DashboardEstadisticasComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public stats: any = null;
   public loading = true;
 
@@ -19,7 +22,7 @@ export class DashboardEstadisticasComponent implements OnInit {
 
   load(): void {
     this.loading = true;
-    this.generalService.getAdminEstadisticas().subscribe({
+    this.generalService.getAdminEstadisticas().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data: any) => {
         this.stats = data;
         this.loading = false;

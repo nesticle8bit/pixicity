@@ -2,11 +2,14 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import {
   AfterViewInit,
   Component,
+  DestroyRef,
   EventEmitter,
+  inject,
   Input,
   OnInit,
   Output,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   standalone: false,
@@ -15,6 +18,8 @@ import {
   styleUrls: ['./follow-button.component.scss'],
 })
 export class FollowButtonComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   @Input() icon: boolean = false;
 
   private _userName: any;
@@ -48,6 +53,7 @@ export class FollowButtonComponent implements OnInit {
 
     this.securityService
       .isFollowingTheUser(userName)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: any) => {
         this.isFollowing = value;
       });
@@ -58,7 +64,7 @@ export class FollowButtonComponent implements OnInit {
       userName: this.userName,
     };
 
-    this.securityService.seguirUsuario(follow).subscribe((response: any) => {
+    this.securityService.seguirUsuario(follow).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.isFollowing = !this.isFollowing;
         this.followingChange.emit(this.isFollowing);

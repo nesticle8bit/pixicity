@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./table-contactos.component.scss'],
 })
 export class TableContactosComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public contactos: any[] = [];
   public totalCount: number = 0;
 
@@ -27,7 +30,7 @@ export class TableContactosComponent implements OnInit {
   }
 
   getContactos(): void {
-    this.generalService.getContactos().subscribe((response: any) => {
+    this.generalService.getContactos().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.contactos = response?.contactos;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -40,7 +43,7 @@ export class TableContactosComponent implements OnInit {
 
   gestionarContacto(contacto: any): void {
     if (this.notificationService.confirm('¿Está seguro de gestionar este contacto?')) {
-      this.generalService.gestionarContacto(contacto.id).subscribe((response: any) => {
+      this.generalService.gestionarContacto(contacto.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (response) {
           this.notificationService.success('El contacto ha sido gestionado correctamente', 'Gestionado');
           this.getContactos();
@@ -51,7 +54,7 @@ export class TableContactosComponent implements OnInit {
 
   deleteContacto(contacto: any): void {
     if (this.notificationService.confirm('¿Está seguro de eliminar este contacto?')) {
-      this.generalService.deleteContacto(contacto.id).subscribe((response: any) => {
+      this.generalService.deleteContacto(contacto.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (response) {
           this.notificationService.success('El contacto ha sido eliminado correctamente', 'Eliminado');
           this.getContactos();

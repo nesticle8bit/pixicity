@@ -1,6 +1,7 @@
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
@@ -10,6 +11,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./main-submenu.component.scss'],
 })
 export class MainSubmenuComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public currentUser: any;
   public display!: DisplayComponentModel;
 
@@ -23,6 +26,7 @@ export class MainSubmenuComponent implements OnInit {
   ngOnInit(): void {
     this.displayService
       .getDisplay()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: DisplayComponentModel) => {
         this.display = value;
       });

@@ -1,4 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./dialog-create-update-categorias.component.scss'],
 })
 export class DialogCreateUpdateCategoriasComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public iconos: string[] = [
     'address-book-open.png',
     'android.png',
@@ -125,6 +128,7 @@ export class DialogCreateUpdateCategoriasComponent implements OnInit {
 
     this.parametrosService
       .saveCategoria(categoria)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         if (response) {
           this.notificationService.success('La categoría se ha guardado correctamente', 'Guardado');

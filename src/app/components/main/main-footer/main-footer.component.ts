@@ -2,7 +2,8 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ViewportScroller } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 
@@ -13,6 +14,8 @@ import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
   styleUrls: ['./main-footer.component.scss'],
 })
 export class MainFooterComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public display!: DisplayComponentModel;
   public formGroup: FormGroup;
   public paginas: any[] = [];
@@ -35,6 +38,7 @@ export class MainFooterComponent implements OnInit {
   ngOnInit(): void {
     this.displayService
       .getDisplay()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: DisplayComponentModel) => {
         this.display = value;
       });
@@ -44,13 +48,13 @@ export class MainFooterComponent implements OnInit {
   }
 
   getPaginas(): void {
-    this.webService.getAllPaginas().subscribe((response: any) => {
+    this.webService.getAllPaginas().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.paginas = response;
     });
   }
 
   getFooter(): void {
-    this.webService.getConfiguracionFooter().subscribe((response: any) => {
+    this.webService.getConfiguracionFooter().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.configuracion.footer = response;
     });
   }

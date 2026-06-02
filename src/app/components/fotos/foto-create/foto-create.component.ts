@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
@@ -12,6 +13,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./foto-create.component.scss'],
 })
 export class FotoCreateComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroup: FormGroup;
   public loading: boolean = false;
   public uploading: boolean = false;
@@ -47,7 +50,7 @@ export class FotoCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
+    this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       if (params['id']) {
         this.editId = +params['id'];
         this.isEdit = true;
@@ -57,7 +60,7 @@ export class FotoCreateComponent implements OnInit {
   }
 
   loadFotoForEdit(): void {
-    this.fotosService.getFotoById(this.editId).subscribe((res: any) => {
+    this.fotosService.getFotoById(this.editId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((res: any) => {
       if (res) {
         this.formGroup.patchValue({
           titulo: res.titulo,
@@ -92,7 +95,7 @@ export class FotoCreateComponent implements OnInit {
     if (!this.uploadedFile) return;
 
     this.uploading = true;
-    this.fotosService.uploadImage(this.uploadedFile).subscribe({
+    this.fotosService.uploadImage(this.uploadedFile).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (url: string) => {
         if (url) {
           this.formGroup.patchValue({ imageUrl: url });
@@ -119,7 +122,7 @@ export class FotoCreateComponent implements OnInit {
       !this.formGroup.value.imageUrl?.startsWith('/images/')
     ) {
       this.uploading = true;
-      this.fotosService.uploadImage(this.uploadedFile).subscribe({
+      this.fotosService.uploadImage(this.uploadedFile).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (url: string) => {
           this.uploading = false;
           if (url) {
@@ -143,7 +146,7 @@ export class FotoCreateComponent implements OnInit {
 
     if (this.isEdit) {
       model.id = this.editId;
-      this.fotosService.updateFoto(model).subscribe({
+      this.fotosService.updateFoto(model).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: () => {
           this.loading = false;
           this.notificationService.success('Foto actualizada correctamente', 'Actualizado');
@@ -154,7 +157,7 @@ export class FotoCreateComponent implements OnInit {
         },
       });
     } else {
-      this.fotosService.saveFoto(model).subscribe({
+      this.fotosService.saveFoto(model).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: () => {
           this.loading = false;
           this.notificationService.success('Foto publicada correctamente', 'Publicada');

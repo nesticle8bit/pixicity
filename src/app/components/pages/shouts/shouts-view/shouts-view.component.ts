@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
@@ -13,6 +14,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./shouts-view.component.scss'],
 })
 export class ShoutsViewComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public currentUser: any;
   public shout: any;
 
@@ -40,7 +43,7 @@ export class ShoutsViewComponent implements OnInit {
   }
 
   getParameters(): void {
-    this.activatedRoute.paramMap.subscribe((paramsMap: any) => {
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((paramsMap: any) => {
       this.getCurrentShout(paramsMap.params?.id);
     });
   }
@@ -50,7 +53,7 @@ export class ShoutsViewComponent implements OnInit {
       return;
     }
 
-    this.perfilService.getShoutById(shoutId).subscribe((value: any) => {
+    this.perfilService.getShoutById(shoutId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       this.shout = value;
       
       if(!this.shout) {
@@ -64,7 +67,7 @@ export class ShoutsViewComponent implements OnInit {
       return;
     }
 
-    this.perfilService.deleteShout(this.shout.id).subscribe((response: any) => {
+    this.perfilService.deleteShout(this.shout.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.notificationService.success('El shout ha sido eliminado exitosamente', 'Eliminado');
         window.location.href = '';

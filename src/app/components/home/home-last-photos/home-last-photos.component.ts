@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 
 @Component({
@@ -8,6 +9,8 @@ import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interfa
   styleUrls: ['./home-last-photos.component.scss']
 })
 export class HomeLastPhotosComponent implements OnInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
+
   public fotos: any[] = [];
   public loading = true;
   public currentIndex = 0;
@@ -19,7 +22,7 @@ export class HomeLastPhotosComponent implements OnInit, OnDestroy {
   constructor(private fotosService: IHttpFotosService) {}
 
   ngOnInit(): void {
-    this.fotosService.getTopFotos(5).subscribe({
+    this.fotosService.getTopFotos(5).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data: any[]) => {
         this.fotos = data || [];
         this.loading = false;

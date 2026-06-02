@@ -1,6 +1,7 @@
 import { DisplayComponentService } from './services/shared/displayComponents.service';
 import { DisplayComponentModel } from './models/shared/displayComponent.model';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, inject, Output } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { SEOService } from './services/shared/seo.service';
 import { SEOModel } from './models/shared/seo.model';
@@ -13,6 +14,8 @@ import { Meta, Title } from '@angular/platform-browser';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  private readonly destroyRef = inject(DestroyRef);
+
   public displayComponent: DisplayComponentModel = {
     mainMenu: true,
     footer: true,
@@ -30,11 +33,15 @@ export class AppComponent {
   ) {
     this.displayComponentService
       .getDisplay()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(
         (value: DisplayComponentModel) => (this.displayComponent = value),
       );
 
-    this.seoService.getSEO().subscribe((value: SEOModel) => {
+    this.seoService
+      .getSEO()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value: SEOModel) => {
       if (value.title) {
         this.title.setTitle(
           `${value.title} - Taringas - Inteligencia colectiva`,
@@ -83,7 +90,9 @@ export class AppComponent {
       }
     });
 
-    this.router.events.subscribe((evt) => {
+    this.router.events
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }

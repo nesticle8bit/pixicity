@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserModel } from 'src/app/models/security/user.model';
@@ -16,6 +17,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   @Input() hide: any;
   public configuracion: any;
   public formGroup: FormGroup;
@@ -135,13 +138,13 @@ export class RegisterComponent implements OnInit {
   }
 
   getConfiguracion(): void {
-    this.generalService.getConfiguracion().subscribe((value: any) => {
+    this.generalService.getConfiguracion().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       this.configuracion = value;
     });
   }
 
   getPaises(): void {
-    this.parametrosService.getPaisesDropdown().subscribe((values: any) => {
+    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
       this.paises = values;
     });
   }
@@ -151,7 +154,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    this.parametrosService.getEstadosByPais(pais.id).subscribe((values: any) => {
+    this.parametrosService.getEstadosByPais(pais.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
       this.estados = values;
     });
   }
@@ -160,7 +163,7 @@ export class RegisterComponent implements OnInit {
     const user: UserModel = Object.assign({}, this.formGroup.value);
     // user.fechaNacimiento = `${user.dia}/${user.mes}/${user.año}`;
 
-    this.securityService.registerUser(user).subscribe((response: any) => {
+    this.securityService.registerUser(user).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.notificationService.success('Se ha creado un usuario correctamente', 'Guardado');
         this.router.navigate(['/login']);

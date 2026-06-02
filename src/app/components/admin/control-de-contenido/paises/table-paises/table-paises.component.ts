@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
@@ -12,6 +13,8 @@ import { DialogUpdatePaisesComponent } from '../dialog-update-paises/dialog-upda
   styleUrls: ['./table-paises.component.scss'],
 })
 export class TablePaisesComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public paises: any[] = [];
   public totalCount: number = 0;
 
@@ -28,7 +31,7 @@ export class TablePaisesComponent implements OnInit {
   }
 
   getPaises(): void {
-    this.parametrosService.getPaises().subscribe((response: any) => {
+    this.parametrosService.getPaises().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if(response.data) {
         response.data = response.data.map((pais: any) => {
           pais.isO2 = pais.isO2?.toLowerCase();
@@ -50,7 +53,7 @@ export class TablePaisesComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe((value: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       if (value) {
         this.getPaises();
       }

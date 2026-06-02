@@ -1,4 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./dialog-denunciar-post.component.scss']
 })
 export class DialogDenunciarPostComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroup: FormGroup;
   public razonDenuncia: any[] = [{
     id: 1,
@@ -73,7 +76,7 @@ export class DialogDenunciarPostComponent implements OnInit {
   enviarDenuncia(): void {
     const form = Object.assign({}, this.formGroup.value);
 
-    this.postService.reportPost(form).subscribe((response: any) => {
+    this.postService.reportPost(form).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if(response) {
         this.notificationService.success(`El post ${this.data?.titulo} ha sido denunciado correctamente, el equipo de modaración revisará en la brevedad`, 'Denunciado');
         this.dialogRef.close(response);

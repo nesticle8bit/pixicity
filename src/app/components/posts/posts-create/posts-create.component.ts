@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,6 +22,8 @@ import { PostsGeneratorComponent } from '../posts-generator/posts-generator.comp
   styleUrls: ['./posts-create.component.scss'],
 })
 export class PostsCreateComponent implements OnInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroup: FormGroup;
   public categorias: any[] = [];
   public etiquetas: any = [];
@@ -75,7 +78,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       esBorrador: false,
     });
 
-    this.activatedRoute.paramMap.subscribe((value: any) => {
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       this.postId = +value.get('id');
 
       if (!this.postId) {
@@ -88,7 +91,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       this.title.setTitle(
         `Actualizar post | Taringas - Inteligencia colectiva | Comunidad para Compartir Información`
       );
-      this.postService.getPostById(this.postId).subscribe((response: any) => {
+      this.postService.getPostById(this.postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (
           this.currentUser.usuario.rango !== 'Administrador' &&
           this.currentUser.usuario.rango !== 'Moderador' &&
@@ -148,7 +151,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   }
 
   getCategorias(): void {
-    this.parametrosService.getCategoriasDropdown().subscribe((value: any) => {
+    this.parametrosService.getCategoriasDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       this.categorias = value;
     });
   }
@@ -171,14 +174,14 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     )[0];
 
     if (!this.postId) {
-      this.postService.savePost(post).subscribe((response: any) => {
+      this.postService.savePost(post).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (response) {
           this.notificationService.success('Se ha creado recientemente tu post 👋🏼', 'Creado');
           this.router.navigate(['']);
         }
       });
     } else {
-      this.postService.updatePost(post).subscribe((response: any) => {
+      this.postService.updatePost(post).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (response) {
           this.notificationService.success('Se ha actualizado recientemente tu post 👋🏼, ahora lo podrás visualizar con los cambios realizados', 'Actualizado');
           this.router.navigate([
@@ -199,7 +202,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     post.esBorrador = this.esBorrador = true;
 
     if (!this.postId) {
-      this.postService.savePost(post).subscribe((response: any) => {
+      this.postService.savePost(post).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (response) {
           this.postId = response;
           this.today = new Date();
@@ -211,7 +214,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      this.postService.updatePost(post).subscribe((response: any) => {
+      this.postService.updatePost(post).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (response) {
           this.today = new Date();
 
@@ -230,7 +233,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe((response: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.formGroup.patchValue({
           contenido: response,
@@ -249,6 +252,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
     this.postService
       .getPostsRelatedByTitle(titulo)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         this.relatedPosts = response || [];
       });

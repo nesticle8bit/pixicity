@@ -1,6 +1,7 @@
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDenunciarPostComponent } from 'src/app/components/dialogs/dialog-denunciar-post/dialog-denunciar-post.component';
 import { animate, style, transition, trigger } from '@angular/animations';
@@ -25,6 +26,8 @@ import { DialogRecomendarPostComponent } from 'src/app/components/dialogs/dialog
   ],
 })
 export class PostsMetaComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public savedToFavorites: any = {
     message: '',
     type: false,
@@ -64,7 +67,7 @@ export class PostsMetaComponent implements OnInit {
       return;
     }
 
-    this.postService.getAvailableVotos(1).subscribe((response: any) => {
+    this.postService.getAvailableVotos(1).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.availablePuntos = [];
 
       if (response > 0) {
@@ -78,6 +81,7 @@ export class PostsMetaComponent implements OnInit {
   votarPost(puntos: number): void {
     this.postService
       .setVotos({ typeId: this.post.id, cantidad: puntos, votosType: 1 })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         if (response) {
           this.addedPuntos = true;
@@ -95,7 +99,7 @@ export class PostsMetaComponent implements OnInit {
   }
 
   agregarFavorito(postId: number): void {
-    this.postService.addFavoritePost(postId).subscribe((response: any) => {
+    this.postService.addFavoritePost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.savedToFavorites = {
           message: 'Bien! Este post fue agregado a tus favoritos.',
@@ -131,7 +135,7 @@ export class PostsMetaComponent implements OnInit {
       return;
     }
 
-    this.postService.seguirPost(postId).subscribe((value: any) => {
+    this.postService.seguirPost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       if (value) {
         this.post.seguirPost = !this.post.seguirPost;
       }

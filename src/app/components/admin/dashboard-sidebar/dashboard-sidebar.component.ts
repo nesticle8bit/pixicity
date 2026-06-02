@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -8,6 +9,8 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./dashboard-sidebar.component.scss']
 })
 export class DashboardSidebarComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public currentURL = '';
 
   constructor(
@@ -15,7 +18,7 @@ export class DashboardSidebarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.activatedRoute.url.subscribe((value: any) => {
+    this.activatedRoute.url.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       this.currentURL = value[0]?.path;
     });
   }

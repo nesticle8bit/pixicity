@@ -1,5 +1,6 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NotificationService } from 'src/app/services/shared/notification.service';
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./dialog-enviar-mp.component.scss'],
 })
 export class DialogEnviarMPComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroup: FormGroup;
   public userName: string = '';
 
@@ -45,7 +48,7 @@ export class DialogEnviarMPComponent implements OnInit {
     this.userName = '';
     const mp = Object.assign({}, this.formGroup.value);
 
-    this.mensajeService.sendMensajePrivado(mp).subscribe((response: any) => {
+    this.mensajeService.sendMensajePrivado(mp).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response?.type === 'username') {
         this.userName = response.message;
         this.formGroup.patchValue({

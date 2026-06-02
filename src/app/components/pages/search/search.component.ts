@@ -5,7 +5,8 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { forkJoin } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
@@ -16,6 +17,8 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public isSearch: boolean = false;
   public searchFormGroup: FormGroup;
   public posts: any[] = [];
@@ -50,7 +53,7 @@ export class SearchComponent implements OnInit {
       autor: '',
     });
 
-    this.activatedRoute.paramMap.subscribe((route: any) => {
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((route: any) => {
       if (route?.params?.query) {
         this.isSearch = true;
         this.searchFormGroup.patchValue({
@@ -68,7 +71,7 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    forkJoin([this.parametrosService.getCategoriasDropdown()]).subscribe(
+    forkJoin([this.parametrosService.getCategoriasDropdown()]).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(
       (response: any) => {
         this.categorias = response[0];
         this.searchPosts();
@@ -107,7 +110,7 @@ export class SearchComponent implements OnInit {
       }
     }
 
-    this.postService.searchPosts(search).subscribe((response: any) => {
+    this.postService.searchPosts(search).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.posts = response.data;
       this.totalCount = response.pagination.totalCount;
     });

@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { PaginationService } from '../shared/pagination.service';
 import { IHttpMensajesService } from '../interfaces/httpMensajes.interface';
+import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
+import { MensajeViewModel, SendMPViewModel, ResponseMPViewModel } from 'src/app/models/mensajes/mensaje-vm.model';
 
 @Injectable()
 export class HttpMensajesService implements IHttpMensajesService {
@@ -17,148 +19,157 @@ export class HttpMensajesService implements IHttpMensajesService {
     private http: HttpClient,
   ) {}
 
-  getMensajes(search: any): Observable<any> {
+  getMensajes(): Observable<PaginatedData<MensajeViewModel>> {
     return this.http
-      .get<any>(
+      .get<ApiResponse<PaginatedData<MensajeViewModel>>>(
         `${environment.api}/api/mensajes/getMensajes?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getMensajesAdmin(search: any): Observable<any> {
+  getMensajesAdmin(): Observable<PaginatedData<MensajeViewModel>> {
     return this.http
-      .get<any>(
+      .get<ApiResponse<PaginatedData<MensajeViewModel>>>(
         `${environment.api}/api/mensajes/getMensajesAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getMensajesEnviados(search: any): Observable<any> {
+  getMensajesEnviados(): Observable<PaginatedData<MensajeViewModel>> {
     return this.http
-      .get<any>(
+      .get<ApiResponse<PaginatedData<MensajeViewModel>>>(
         `${environment.api}/api/mensajes/getMensajesEnviados?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getLastMensajes(): Observable<any> {
+  getLastMensajes(): Observable<MensajeViewModel[]> {
     return this.http
-      .get<any>(`${environment.api}/api/mensajes/getLastMensajes`)
+      .get<ApiResponse<MensajeViewModel[]>>(`${environment.api}/api/mensajes/getLastMensajes`)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  sendMensajePrivado(mp: any): Observable<any> {
+  sendMensajePrivado(mp: SendMPViewModel): Observable<ResponseMPViewModel> {
     return this.http
-      .post<any>(`${environment.api}/api/mensajes/sendMensajePrivado`, mp)
+      .post<ApiResponse<ResponseMPViewModel>>(`${environment.api}/api/mensajes/sendMensajePrivado`, mp)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getMensajePrivadoById(id: number): Observable<any> {
+  getMensajePrivadoById(id: number): Observable<MensajeViewModel> {
     return this.http
-      .get<any>(
+      .get<ApiResponse<MensajeViewModel>>(
         `${environment.api}/api/mensajes/getMensajePrivadoById?id=${id}`,
       )
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  setMensajesAsReaded(): Observable<any> {
+  setMensajesAsReaded(): Observable<boolean> {
     return this.http
-      .get<any>(`${environment.api}/api/mensajes/setMensajesAsReaded`)
+      .get<ApiResponse<boolean>>(`${environment.api}/api/mensajes/setMensajesAsReaded`)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  deleteMensajesById(ids: number[]): Observable<any> {
+  deleteMensajesById(ids: number[]): Observable<boolean> {
     return this.http
-      .delete<any>(`${environment.api}/api/mensajes/deleteMensajes`, {
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/mensajes/deleteMensajes`, {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
         }),
         body: ids,
       })
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  changeRemitente(obj: any): Observable<any> {
+  changeRemitente(obj: { mensajeId: number; userName: string }): Observable<boolean> {
     return this.http
-      .put<any>(`${environment.api}/api/mensajes/changeRemitente`, obj)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/mensajes/changeRemitente`, obj)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )

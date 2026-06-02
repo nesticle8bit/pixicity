@@ -1,6 +1,7 @@
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./dialog-change-rangos.component.scss'],
 })
 export class DialogChangeRangosComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroup: FormGroup;
   public rangos: any[] = [];
 
@@ -39,7 +42,7 @@ export class DialogChangeRangosComponent implements OnInit {
       });
     }
 
-    this.securityService.getRangosDropdown().subscribe((response: any) => {
+    this.securityService.getRangosDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.rangos = response;
     });
   }
@@ -51,7 +54,7 @@ export class DialogChangeRangosComponent implements OnInit {
 
     const obj = Object.assign({}, this.formGroup.value);
 
-    this.securityService.changeRango(obj).subscribe((response: any) => {
+    this.securityService.changeRango(obj).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.notificationService.success('El rango del usuario ha sido actualizado correctamente', 'Actualizado');
 

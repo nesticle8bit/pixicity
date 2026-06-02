@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
@@ -10,6 +11,8 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
   styleUrls: ['./table-votos.component.scss'],
 })
 export class TableVotosComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public votos: any[] = [];
   public totalCount: number = 0;
 
@@ -25,7 +28,7 @@ export class TableVotosComponent implements OnInit {
   }
 
   getVotos(): void {
-    this.postService.getVotos().subscribe((response: any) => {
+    this.postService.getVotos().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.votos = response.data;
       this.totalCount = response.pagination.totalCount;
     });

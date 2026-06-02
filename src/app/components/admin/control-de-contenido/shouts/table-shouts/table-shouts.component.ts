@@ -1,7 +1,8 @@
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./table-shouts.component.scss'],
 })
 export class TableShoutsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public shouts: any[] = [];
   public totalCount: number = 0;
 
@@ -27,14 +30,14 @@ export class TableShoutsComponent implements OnInit {
   }
 
   getShouts(): void {
-    this.perfilService.getShoutsAdmin().subscribe((response: any) => {
+    this.perfilService.getShoutsAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.shouts = response.shouts;
       this.totalCount = response.pagination.totalCount;
     });
   }
 
   deleteShout(id: number, index: number): void {
-    this.perfilService.deleteShout(id).subscribe((response: any) => {
+    this.perfilService.deleteShout(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.notificationService.success('El shout ha sido eliminado exitosamente', 'Eliminado');
 
@@ -46,7 +49,7 @@ export class TableShoutsComponent implements OnInit {
   }
 
   recoveryShout(id: number, index: number): void {
-    this.perfilService.recoveryShout(id).subscribe((response: any) => {
+    this.perfilService.recoveryShout(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.notificationService.success('El shout ha sido recuperado exitosamente', 'Recuperado');
 

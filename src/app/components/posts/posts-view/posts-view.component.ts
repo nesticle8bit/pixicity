@@ -3,7 +3,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { SEOModel } from 'src/app/models/shared/seo.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
 
@@ -14,6 +15,8 @@ import { SEOService } from 'src/app/services/shared/seo.service';
   styleUrls: ['./posts-view.component.scss'],
 })
 export class PostsViewComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public seo: SEOModel = {
     title: '',
     description: '',
@@ -38,7 +41,7 @@ export class PostsViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.paramMap.subscribe((values: any) => {
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
       this.getPostById(+values.get('id'));
       this.post = {
         titulo: values.get('nombre-post'),
@@ -55,7 +58,7 @@ export class PostsViewComponent implements OnInit {
   }
 
   getPostById(postId: number): void {
-    this.postService.getPostById(postId).subscribe((value: any) => {
+    this.postService.getPostById(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       if (!value) {
         this.router.navigate([`/posts/404/${this.post.titulo}`]);
         return;
@@ -98,6 +101,7 @@ export class PostsViewComponent implements OnInit {
 
     this.postService
       .deletePost(this.post.id, '')
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: boolean) => {
         if (response) {
           this.notificationService.success('El post ha sido eliminado correctamente, ahora nadie lo podrá visualizar', 'Eliminado');
@@ -120,6 +124,7 @@ export class PostsViewComponent implements OnInit {
   quitarSticky(): void {
     this.postService
       .changeStickyPost(this.post.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         if (response) {
           this.notificationService.success('Se ha cambiado el sticky para este post correctamente', 'Sticky');

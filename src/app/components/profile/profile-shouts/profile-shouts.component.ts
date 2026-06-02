@@ -1,5 +1,6 @@
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
@@ -10,6 +11,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./profile-shouts.component.scss'],
 })
 export class ProfileShoutsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public reloadShouts: boolean = false;
   private _user: any;
 
@@ -54,7 +57,7 @@ export class ProfileShoutsComponent implements OnInit {
       return;
     }
 
-    this.perfilService.createShout(shout).subscribe((response: any) => {
+    this.perfilService.createShout(shout).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.formGroup.patchValue({
           comentario: '',

@@ -3,7 +3,8 @@ import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.i
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
@@ -13,6 +14,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./mensajes-enviados.component.scss'],
 })
 export class MensajesEnviadosComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroup: FormGroup;
   public mensajes: any[] = [];
   public totalCount: number = 0;
@@ -45,14 +48,14 @@ export class MensajesEnviadosComponent implements OnInit {
   }
 
   getMensajes(): void {
-    this.mensajesService.getMensajesEnviados({}).subscribe((response: any) => {
+    this.mensajesService.getMensajesEnviados({}).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.mensajes = response?.mensajes;
       this.totalCount = response?.pagination?.totalCount;
     });
   }
 
   getMensajesEnviados(): void {
-    this.mensajesService.getMensajesEnviados({}).subscribe((response: any) => {
+    this.mensajesService.getMensajesEnviados({}).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.mensajes = response?.mensajes;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -72,7 +75,7 @@ export class MensajesEnviadosComponent implements OnInit {
       return;
     }
 
-    this.mensajesService.deleteMensajesById(ids).subscribe((response: any) => {
+    this.mensajesService.deleteMensajesById(ids).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.notificationService.success('Los mensajes seleccionados han sido eliminados', 'Eliminados');
 

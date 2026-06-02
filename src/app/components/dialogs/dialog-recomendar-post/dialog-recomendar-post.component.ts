@@ -1,4 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
@@ -10,6 +11,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./dialog-recomendar-post.component.scss'],
 })
 export class DialogRecomendarPostComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<DialogRecomendarPostComponent>,
@@ -24,7 +27,7 @@ export class DialogRecomendarPostComponent implements OnInit {
       return;
     }
 
-    this.postService.recomendarPost(this.data).subscribe((response: any) => {
+    this.postService.recomendarPost(this.data).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if ((response !== undefined || response !== null) && response === 0) {
         this.notificationService.info('Debes tener al menos un seguidor para poder recomendar posts', 'Recomendar Posts');
       }

@@ -1,6 +1,7 @@
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
@@ -11,6 +12,8 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   @Input() hide: any;
 
   public loginForm: FormGroup;
@@ -52,7 +55,7 @@ export class LoginComponent implements OnInit {
     login.captcha = '';
     this.error = '';
 
-    this.securityService.loginUser(login).subscribe((value: any) => {
+    this.securityService.loginUser(login).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       if (value === 'error') {
         this.error = 'Las credenciales son incorrectas, por favor corrige y vuelve a iniciar sesión';
         return;

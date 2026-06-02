@@ -1,4 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./dialog-ban-user.component.scss'],
 })
 export class DialogBanUserComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroup: FormGroup;
 
   constructor(
@@ -35,7 +38,7 @@ export class DialogBanUserComponent implements OnInit {
     const usuario = Object.assign({}, this.formGroup.value);
     usuario.baneadoPermanente = usuario.baneadoPermanente === 'true';
 
-    this.securityService.banUser(usuario).subscribe((response: any) => {
+    this.securityService.banUser(usuario).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.notificationService.success('El usuario ha sido baneado correctamente y se le ha notificado', 'Baneado');
 

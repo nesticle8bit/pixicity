@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./foto-comentarios.component.scss'],
 })
 export class FotoComentariosComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   private _fotoId: number = 0;
 
   @Input() set fotoId(value: number) {
@@ -38,7 +41,7 @@ export class FotoComentariosComponent implements OnInit {
   }
 
   loadComentarios(): void {
-    this.fotosService.getComentariosByFotoId(this._fotoId).subscribe((data: any) => {
+    this.fotosService.getComentariosByFotoId(this._fotoId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data: any) => {
       this.comentarios = data || [];
     });
   }
@@ -46,7 +49,7 @@ export class FotoComentariosComponent implements OnInit {
   enviarComentario(): void {
     if (this.formGroup.invalid) return;
     const payload = { fotoId: this._fotoId, contenido: this.formGroup.value.contenido };
-    this.fotosService.addComentario(payload).subscribe((id: any) => {
+    this.fotosService.addComentario(payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((id: any) => {
       if (id) {
         this.comentarios.push({
           id,
@@ -64,14 +67,14 @@ export class FotoComentariosComponent implements OnInit {
 
   eliminarComentario(comentario: any, index: number): void {
     if (this.notificationService.confirm('¿Eliminar este comentario?')) {
-      this.fotosService.deleteComentario(comentario.id).subscribe(() => {
+      this.fotosService.deleteComentario(comentario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
         this.comentarios.splice(index, 1);
       });
     }
   }
 
   voteComentario(comentario: any, cantidad: number): void {
-    this.fotosService.votarComentario(comentario.id, cantidad).subscribe((res: any) => {
+    this.fotosService.votarComentario(comentario.id, cantidad).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((res: any) => {
       if (res) {
         comentario.votos = res.votos;
         comentario.miVoto = res.miVoto;

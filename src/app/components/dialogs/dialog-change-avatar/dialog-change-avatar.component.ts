@@ -1,7 +1,8 @@
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./dialog-change-avatar.component.scss'],
 })
 export class DialogChangeAvatarComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   imageChangedEvent: any = '';
   croppedImage: any = '';
 
@@ -46,14 +49,14 @@ export class DialogChangeAvatarComponent implements OnInit {
     });
 
     if(this.data?.isAdmin) {
-      this.securityService.changeAvatarAdmin(imageFile, this.data?.usuario?.id).subscribe((response: any) => {
+      this.securityService.changeAvatarAdmin(imageFile, this.data?.usuario?.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (response) {
           this.dialogRef.close(response);
           this.notificationService.success(`El avatar del usuario ${this.data?.usuario?.userName} ha sido actualizado correctamente`, 'Actualizado');
         }
       });
     } else {
-      this.securityService.changeAvatar(imageFile).subscribe((response: any) => {
+      this.securityService.changeAvatar(imageFile).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (response) {
           let currentUser = this.securityService.getCurrentUser();
           currentUser.usuario.avatar = 'avatar.jpeg';

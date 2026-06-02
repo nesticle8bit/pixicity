@@ -1,5 +1,6 @@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
@@ -12,6 +13,8 @@ import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.int
   styleUrls: ['./dialog-update-afiliados.component.scss'],
 })
 export class DialogUpdateAfiliadosComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroupAfiliacion: FormGroup;
 
   constructor(
@@ -42,7 +45,7 @@ export class DialogUpdateAfiliadosComponent implements OnInit {
 
     const afiliacion = Object.assign({}, this.formGroupAfiliacion.value);
 
-    this.generalService.updateAfiliacion(afiliacion).subscribe((response: any) => {
+    this.generalService.updateAfiliacion(afiliacion).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.notificationService.success('La información de la afiliación ha sido actualizada correctamente', 'Actualizado');
 

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TopUserModel } from 'src/app/models/web/topUser.model';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 
@@ -9,6 +10,8 @@ import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
   styleUrls: ['./home-top-users.component.scss'],
 })
 export class HomeTopUsersComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public topUsers: TopUserModel[] = [];
 
   constructor(private httpWeb: IHttpWebService) {}
@@ -18,8 +21,11 @@ export class HomeTopUsersComponent implements OnInit {
   }
 
   getTopUsers(): void {
-    this.httpWeb.getTopUsers().subscribe((value: TopUserModel[]) => {
-      this.topUsers = value;
-    });
+    this.httpWeb
+      .getTopUsers()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value: TopUserModel[]) => {
+        this.topUsers = value;
+      });
   }
 }

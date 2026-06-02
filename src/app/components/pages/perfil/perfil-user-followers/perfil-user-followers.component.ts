@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
@@ -8,6 +9,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./perfil-user-followers.component.scss'],
 })
 export class PerfilUserFollowersComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   private _usuarioId: any;
   public followers: any[] = [];
   public totalCount: number = 0;
@@ -35,6 +38,7 @@ export class PerfilUserFollowersComponent implements OnInit {
 
     this.securityService
       .getLastFollowersByUserId(this._usuarioId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         this.followers = response.followers;
         this.totalCount = response.totalCount;

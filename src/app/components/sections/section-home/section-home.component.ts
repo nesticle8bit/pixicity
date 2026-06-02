@@ -3,7 +3,8 @@ import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.int
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
@@ -14,6 +15,8 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./section-home.component.scss'],
 })
 export class SectionHomeComponent implements OnInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
+
   public categoria: string = '';
   public displayComponent: DisplayComponentModel = {
     mainMenu: true,
@@ -54,14 +57,15 @@ export class SectionHomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.displayService.setDisplay(this.displayComponent);
 
-    this.activatedRoute.paramMap.subscribe((params: any) => {
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: any) => {
       this.categoria = params.get('categoria');
     });
 
-    this.activatedRoute.queryParams.subscribe((params: any) => {
+    this.activatedRoute.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: any) => {
       if (params?.ref) {
         this.generalService
           .setHitInByRefCode(params.ref)
+          .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((response: any) => {
             if (response) {
               console.log(
@@ -91,6 +95,6 @@ export class SectionHomeComponent implements OnInit, OnDestroy {
   }
 
   private pingOnline(): void {
-    this.securityService.sessionOnlineUser().subscribe(() => {});
+    this.securityService.sessionOnlineUser().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {});
   }
 }

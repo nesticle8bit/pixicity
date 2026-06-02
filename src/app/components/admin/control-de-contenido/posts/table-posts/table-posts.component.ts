@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./table-posts.component.scss'],
 })
 export class TablePostsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public posts: any[] = [];
   public totalCount: number = 0;
 
@@ -27,7 +30,7 @@ export class TablePostsComponent implements OnInit {
   }
 
   getPosts(): void {
-    this.postsService.getPostsAdmin('').subscribe((response: any) => {
+    this.postsService.getPostsAdmin('').pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.posts = response.data;
       this.totalCount = response.pagination.totalCount;
     });
@@ -39,7 +42,7 @@ export class TablePostsComponent implements OnInit {
   }
 
   cambiarSticky(postId: number, index: number): void {
-    this.postsService.changeStickyPost(postId).subscribe((response: any) => {
+    this.postsService.changeStickyPost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.notificationService.success('Se ha cambiado el sticky para este post correctamente', 'Sticky');
         this.posts[index].sticky = !this.posts[index].sticky;
@@ -51,7 +54,7 @@ export class TablePostsComponent implements OnInit {
     if (this.notificationService.confirm('¿Seguro que deseas borrar este post?')) {
       const razon = this.notificationService.prompt('Ingrese por favor la razón por la cual va a eliminar este post');
       if (razon) {
-        this.postsService.deletePost(postId, razon).subscribe((response: boolean) => {
+        this.postsService.deletePost(postId, razon).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: boolean) => {
           if (response) {
             this.notificationService.success('El post ha sido eliminado correctamente, ahora nadie lo podrá visualizar', 'Eliminado');
             this.posts[index].eliminado = !this.posts[index].eliminado;

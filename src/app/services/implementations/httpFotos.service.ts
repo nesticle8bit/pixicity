@@ -5,6 +5,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HelperService } from '../shared/helper.service';
 import { IHttpFotosService } from '../interfaces/httpFotos.interface';
+import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
+import { FotoViewModel, FotoComentarioViewModel } from 'src/app/models/fotos/foto-vm.model';
+
+interface FotoSearchParams {
+  page?: number;
+  pageCount?: number;
+}
 
 @Injectable()
 export class HttpFotosService implements IHttpFotosService {
@@ -13,134 +20,170 @@ export class HttpFotosService implements IHttpFotosService {
     private helper: HelperService
   ) {}
 
-  getFotos(search: any = {}): Observable<any> {
+  getFotos(search: FotoSearchParams = {}): Observable<PaginatedData<FotoViewModel>> {
     const page = search?.page || 1;
     const pageCount = search?.pageCount || 12;
     return this.http
-      .get<any>(`${environment.api}/api/fotos/GetFotos?page=${page}&pageCount=${pageCount}`)
+      .get<ApiResponse<PaginatedData<FotoViewModel>>>(`${environment.api}/api/fotos/GetFotos?page=${page}&pageCount=${pageCount}`)
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : null)),
+        map((response) => {
+          if (response.status === 200) { return response.data!; }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
         catchError(this.helper.errorHandler)
       );
   }
 
-  getTopFotos(count: number = 5): Observable<any> {
+  getTopFotos(count: number = 5): Observable<FotoViewModel[]> {
     return this.http
-      .get<any>(`${environment.api}/api/fotos/GetTopFotos?count=${count}`)
+      .get<ApiResponse<FotoViewModel[]>>(`${environment.api}/api/fotos/GetTopFotos?count=${count}`)
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : [])),
+        map((response) => (response.status === 200 ? response.data! : [])),
         catchError(this.helper.errorHandler)
       );
   }
 
-  getFotosByUsuario(userName: string, search: any = {}): Observable<any> {
+  getFotosByUsuario(userName: string, search: FotoSearchParams = {}): Observable<PaginatedData<FotoViewModel>> {
     const page = search?.page || 1;
     const pageCount = search?.pageCount || 12;
     return this.http
-      .get<any>(`${environment.api}/api/fotos/GetFotosByUsuario?userName=${encodeURIComponent(userName)}&page=${page}&pageCount=${pageCount}`)
+      .get<ApiResponse<PaginatedData<FotoViewModel>>>(`${environment.api}/api/fotos/GetFotosByUsuario?userName=${encodeURIComponent(userName)}&page=${page}&pageCount=${pageCount}`)
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : null)),
+        map((response) => {
+          if (response.status === 200) { return response.data!; }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
         catchError(this.helper.errorHandler)
       );
   }
 
-  getFotoById(fotoId: number): Observable<any> {
+  getFotoById(fotoId: number): Observable<FotoViewModel> {
     return this.http
-      .get<any>(`${environment.api}/api/fotos/GetFotoById?id=${fotoId}`)
+      .get<ApiResponse<FotoViewModel>>(`${environment.api}/api/fotos/GetFotoById?id=${fotoId}`)
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : null)),
+        map((response) => {
+          if (response.status === 200) { return response.data!; }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
         catchError(this.helper.errorHandler)
       );
   }
 
-  saveFoto(foto: any): Observable<any> {
+  saveFoto(foto: Partial<FotoViewModel>): Observable<number> {
     return this.http
-      .post<any>(`${environment.api}/api/fotos/SaveFoto`, foto)
+      .post<ApiResponse<number>>(`${environment.api}/api/fotos/SaveFoto`, foto)
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : null)),
+        map((response) => {
+          if (response.status === 200) { return response.data!; }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
         catchError(this.helper.errorHandler)
       );
   }
 
-  updateFoto(foto: any): Observable<any> {
+  updateFoto(foto: Partial<FotoViewModel>): Observable<number> {
     return this.http
-      .post<any>(`${environment.api}/api/fotos/UpdateFoto`, foto)
+      .post<ApiResponse<number>>(`${environment.api}/api/fotos/UpdateFoto`, foto)
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : null)),
+        map((response) => {
+          if (response.status === 200) { return response.data!; }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
         catchError(this.helper.errorHandler)
       );
   }
 
-  deleteFoto(fotoId: number): Observable<any> {
+  deleteFoto(fotoId: number): Observable<boolean> {
     return this.http
-      .delete<any>(`${environment.api}/api/fotos/DeleteFoto?id=${fotoId}`)
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/fotos/DeleteFoto?id=${fotoId}`)
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : null)),
+        map((response) => {
+          if (response.status === 200) { return response.data!; }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
         catchError(this.helper.errorHandler)
       );
   }
 
-  votarFoto(fotoId: number, cantidad: number): Observable<any> {
+  votarFoto(fotoId: number, cantidad: number): Observable<FotoViewModel> {
     return this.http
-      .post<any>(`${environment.api}/api/fotos/VotarFoto`, { fotoId, cantidad })
+      .post<ApiResponse<FotoViewModel>>(`${environment.api}/api/fotos/VotarFoto`, { fotoId, cantidad })
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : null)),
+        map((response) => {
+          if (response.status === 200) { return response.data!; }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
         catchError(this.helper.errorHandler)
       );
   }
 
-  incrementVisitas(fotoId: number): Observable<any> {
+  incrementVisitas(fotoId: number): Observable<boolean> {
     return this.http
-      .post<any>(`${environment.api}/api/fotos/IncrementVisitas`, fotoId)
+      .post<ApiResponse<boolean>>(`${environment.api}/api/fotos/IncrementVisitas`, fotoId)
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : null)),
+        map((response) => {
+          if (response.status === 200) { return response.data!; }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
         catchError(this.helper.errorHandler)
       );
   }
 
-  uploadImage(file: File): Observable<any> {
+  uploadImage(file: File): Observable<string> {
     const formData = new FormData();
     formData.append('file', file);
     return this.http
-      .post<any>(`${environment.api}/api/fotos/UploadImage`, formData)
+      .post<ApiResponse<string>>(`${environment.api}/api/fotos/UploadImage`, formData)
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : null)),
+        map((response) => {
+          if (response.status === 200) { return response.data!; }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
         catchError(this.helper.errorHandler)
       );
   }
 
-  getComentariosByFotoId(fotoId: number): Observable<any> {
+  getComentariosByFotoId(fotoId: number): Observable<FotoComentarioViewModel[]> {
     return this.http
-      .get<any>(`${environment.api}/api/fotos/GetComentariosByFotoId?fotoId=${fotoId}`)
+      .get<ApiResponse<FotoComentarioViewModel[]>>(`${environment.api}/api/fotos/GetComentariosByFotoId?fotoId=${fotoId}`)
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : [])),
+        map((response) => (response.status === 200 ? response.data! : [])),
         catchError(this.helper.errorHandler)
       );
   }
 
-  addComentario(comentario: any): Observable<any> {
+  addComentario(comentario: Partial<FotoComentarioViewModel>): Observable<FotoComentarioViewModel> {
     return this.http
-      .post<any>(`${environment.api}/api/fotos/AddComentario`, comentario)
+      .post<ApiResponse<FotoComentarioViewModel>>(`${environment.api}/api/fotos/AddComentario`, comentario)
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : null)),
+        map((response) => {
+          if (response.status === 200) { return response.data!; }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
         catchError(this.helper.errorHandler)
       );
   }
 
-  deleteComentario(id: number): Observable<any> {
+  deleteComentario(id: number): Observable<boolean> {
     return this.http
-      .delete<any>(`${environment.api}/api/fotos/DeleteComentario?id=${id}`)
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/fotos/DeleteComentario?id=${id}`)
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : null)),
+        map((response) => {
+          if (response.status === 200) { return response.data!; }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
         catchError(this.helper.errorHandler)
       );
   }
 
-  votarComentario(comentarioId: number, cantidad: number): Observable<any> {
+  votarComentario(comentarioId: number, cantidad: number): Observable<FotoComentarioViewModel> {
     return this.http
-      .post<any>(`${environment.api}/api/fotos/VotarComentario`, { comentarioId, cantidad })
+      .post<ApiResponse<FotoComentarioViewModel>>(`${environment.api}/api/fotos/VotarComentario`, { comentarioId, cantidad })
       .pipe(
-        map((response: any) => (response.status === 200 ? response.data : null)),
+        map((response) => {
+          if (response.status === 200) { return response.data!; }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
         catchError(this.helper.errorHandler)
       );
   }

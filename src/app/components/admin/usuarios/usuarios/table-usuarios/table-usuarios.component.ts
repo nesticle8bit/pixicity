@@ -6,7 +6,8 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
@@ -16,6 +17,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./table-usuarios.component.scss'],
 })
 export class TableUsuariosComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   @Input() searchParameters: any;
 
   public usuarios: any[] = [];
@@ -42,7 +45,7 @@ export class TableUsuariosComponent implements OnInit {
       parameters.rangoId = this.searchParameters?.rangoId;
     }
 
-    this.securityService.getUsuariosAdmin(parameters).subscribe((response: any) => {
+    this.securityService.getUsuariosAdmin(parameters).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.usuarios = response.usuarios;
       this.totalCount = response.pagination.totalCount;
     });
@@ -55,7 +58,7 @@ export class TableUsuariosComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe((value: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       if (value) {
         this.getUsuarios();
       }
@@ -65,7 +68,7 @@ export class TableUsuariosComponent implements OnInit {
   deleteUser(usuario: any): void {
     const accion = usuario.eliminado ? 'recuperar' : 'eliminar';
     if (this.notificationService.confirm(`¿Está seguro de ${accion} el usuario?`)) {
-      this.securityService.removeUsuario(usuario.id).subscribe((response: any) => {
+      this.securityService.removeUsuario(usuario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (response) {
           this.notificationService.success(
             `El usuario ha sido ${usuario.eliminado ? 'recuperado' : 'eliminado'} correctamente`,
@@ -95,7 +98,7 @@ export class TableUsuariosComponent implements OnInit {
 
   removeAvatar(usuario: any): void {
     if (this.notificationService.confirm('¿Está seguro de eliminar el avatar del usuario?')) {
-      this.securityService.removeAvatar(usuario.id).subscribe((response: any) => {
+      this.securityService.removeAvatar(usuario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (response) {
           this.notificationService.success('El avatar del usuario ha sido eliminado correctamente', 'Eliminado');
           this.getUsuarios();

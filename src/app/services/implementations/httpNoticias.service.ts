@@ -7,6 +7,8 @@ import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
+import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
+import { NoticiaModel } from 'src/app/models/web/noticia.model';
 
 @Injectable()
 export class HttpNoticiasService implements IHttpNoticiasService {
@@ -17,82 +19,87 @@ export class HttpNoticiasService implements IHttpNoticiasService {
     private http: HttpClient,
   ) {}
 
-  getNoticias(search: string): Observable<any> {
+  getNoticias(search: string): Observable<PaginatedData<NoticiaModel>> {
     return this.http
-      .get<any>(
+      .get<ApiResponse<PaginatedData<NoticiaModel>>>(
         `${environment.api}/api/noticias/getNoticias?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${search}`,
       )
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  saveNoticias(noticia: any): Observable<any> {
+  saveNoticias(noticia: Partial<NoticiaModel>): Observable<number> {
     return this.http
-      .post<any>(`${environment.api}/api/noticias/saveNoticias`, noticia)
+      .post<ApiResponse<number>>(`${environment.api}/api/noticias/saveNoticias`, noticia)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  updateNoticias(noticia: any): Observable<any> {
+  updateNoticias(noticia: Partial<NoticiaModel>): Observable<boolean> {
     return this.http
-      .put<any>(`${environment.api}/api/noticias/updateNoticias`, noticia)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/noticias/updateNoticias`, noticia)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  deleteNoticias(id: number): Observable<any> {
+  deleteNoticias(id: number): Observable<boolean> {
     return this.http
-      .delete<any>(`${environment.api}/api/noticias/deleteNoticias`, {
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/noticias/deleteNoticias`, {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
         }),
         body: { id },
       })
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getAllNoticias(): Observable<any> {
+  getAllNoticias(): Observable<NoticiaModel[]> {
     return this.http
-      .get<any>(`${environment.api}/api/noticias/getAllNoticias`)
+      .get<ApiResponse<NoticiaModel[]>>(`${environment.api}/api/noticias/getAllNoticias`)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )

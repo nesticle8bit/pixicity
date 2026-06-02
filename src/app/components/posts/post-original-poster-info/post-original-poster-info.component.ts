@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
@@ -8,6 +9,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./post-original-poster-info.component.scss'],
 })
 export class PostOriginalPosterInfoComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   private _userName: any;
 
   @Input() set userName(value: any) {
@@ -36,7 +39,7 @@ export class PostOriginalPosterInfoComponent implements OnInit {
       return;
     }
 
-    this.securityService.getUsuarioInfo(userName).subscribe((response: any) => {
+    this.securityService.getUsuarioInfo(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.info = response;
       }

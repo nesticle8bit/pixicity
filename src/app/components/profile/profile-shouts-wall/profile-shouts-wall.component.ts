@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
@@ -10,6 +11,8 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
   styleUrls: ['./profile-shouts-wall.component.scss']
 })
 export class ProfileShoutsWallComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   private _user: any;
   private _load: any;
 
@@ -47,7 +50,7 @@ export class ProfileShoutsWallComponent implements OnInit {
   }
 
   getShouts(): void {
-    this.perfilService.getShouts(this.user.id).subscribe((response: any) => {
+    this.perfilService.getShouts(this.user.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.shoutsList = response.shouts;
       this.totalCount = response.pagination.totalCount;
     });

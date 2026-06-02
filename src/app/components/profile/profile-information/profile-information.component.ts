@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
@@ -9,6 +10,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./profile-information.component.scss'],
 })
 export class ProfileInformationComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   private _user: any;
 
   @Input() set user(value: any) {
@@ -38,6 +41,7 @@ export class ProfileInformationComponent implements OnInit {
 
     this.securityService
       .getPerfilInfoByUserId(this.user.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         if (response) {
           this.perfil = response;

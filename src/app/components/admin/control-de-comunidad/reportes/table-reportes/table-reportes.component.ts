@@ -3,7 +3,8 @@ import { IHttpDenunciasService } from 'src/app/services/interfaces/httpDenuncias
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
@@ -13,6 +14,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./table-reportes.component.scss'],
 })
 export class TableReportesComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public denuncias: any[] = [];
   public totalCount: number = 0;
 
@@ -30,7 +33,7 @@ export class TableReportesComponent implements OnInit {
   }
 
   getDenuncias(): void {
-    this.denunciaService.getDenuncias().subscribe((response: any) => {
+    this.denunciaService.getDenuncias().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.denuncias = response.data;
       this.totalCount = response.pagination.totalCount;
     });
@@ -43,7 +46,7 @@ export class TableReportesComponent implements OnInit {
 
   deleteReporte(denuncia: any): void {
     if (this.notificationService.confirm('¿Está seguro de eliminar esta denuncia?')) {
-      this.denunciaService.deleteDenuncia(denuncia.id).subscribe((response: any) => {
+      this.denunciaService.deleteDenuncia(denuncia.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (response) {
           this.notificationService.success('La denuncia ha sido eliminada correctamente', 'Eliminado');
           denuncia.eliminado = !denuncia.eliminado;

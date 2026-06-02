@@ -4,7 +4,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,6 +15,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./section-user-info-login.component.scss'],
 })
 export class SectionUserInfoLoginComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroup: FormGroup;
   public displayMenu: boolean = false;
   public currentUser: JwtUserModel = { usuario: undefined, token: '' };
@@ -40,6 +43,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
   ) {
     this.securityService
       .getCurrentUserAsObservable()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: JwtUserModel) => {
         this.currentUser = value;
       });
@@ -58,14 +62,14 @@ export class SectionUserInfoLoginComponent implements OnInit {
       return;
     }
 
-    this.httpLogs.getStats().subscribe((value: any) => {
+    this.httpLogs.getStats().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       this.currentStats.notifications = value.notifications;
       this.currentStats.messages = value.messages;
     });
   }
 
   verNotificaciones(): void {
-    this.httpLogs.getLastNotificaciones().subscribe((response: any) => {
+    this.httpLogs.getLastNotificaciones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         response = response.map((notificacion: any) => {
           if (notificacion.mensaje) {
@@ -114,7 +118,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
     this.display.favoritos = false;
     this.display.monitor = false;
 
-    this.mensajesService.getLastMensajes().subscribe((response: any) => {
+    this.mensajesService.getLastMensajes().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.mensajes = response;
 
       this.setMensajesAsReaded();
@@ -130,7 +134,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   verFavoritos(): void {
-    this.favoritosService.getLastFavoritos(5).subscribe((response: any) => {
+    this.favoritosService.getLastFavoritos(5).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.favoritos = response;
     });
 
@@ -155,7 +159,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   setNotificacionesAsReaded(): void {
-    this.httpLogs.setNotificacionesAsReaded().subscribe((response: any) => {
+    this.httpLogs.setNotificacionesAsReaded().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       console.log(
         '🔔 Se ha cambiado el estado de las últimas notificaciones a leído'
       );
@@ -163,7 +167,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   setMensajesAsReaded(): void {
-    this.mensajesService.setMensajesAsReaded().subscribe((response: any) => {
+    this.mensajesService.setMensajesAsReaded().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       console.log(
         '🔔 Se ha cambiado el estado de los últimos mensajes a leído'
       );

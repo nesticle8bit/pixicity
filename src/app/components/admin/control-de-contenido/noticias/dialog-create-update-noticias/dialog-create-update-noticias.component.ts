@@ -1,4 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup , Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IHttpNoticiasService } from 'src/app/services/interfaces/httpNoticias.interface';
@@ -11,6 +12,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./dialog-create-update-noticias.component.scss'],
 })
 export class DialogCreateUpdateNoticiasComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroup: FormGroup;
 
   constructor(
@@ -45,12 +48,12 @@ export class DialogCreateUpdateNoticiasComponent implements OnInit {
     const value = Object.assign({}, this.formGroup.value);
 
     if (value.id) {
-      this.noticiasService.updateNoticias(value).subscribe((response: any) => {
+      this.noticiasService.updateNoticias(value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         this.notificationService.success('La noticia se ha actualizado correctamente', 'Actualizar');
         this.dialogRef.close(true);
       });
     } else {
-      this.noticiasService.saveNoticias(value).subscribe((response: any) => {
+      this.noticiasService.saveNoticias(value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         this.notificationService.success('La noticia se ha guardado correctamente', 'Guardar');
         this.dialogRef.close(true);
       });

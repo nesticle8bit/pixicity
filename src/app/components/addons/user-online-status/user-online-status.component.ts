@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
@@ -8,6 +9,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./user-online-status.component.scss'],
 })
 export class UserOnlineStatusComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   private _userName: any;
 
   @Input() set userName(value: any) {
@@ -31,7 +34,7 @@ export class UserOnlineStatusComponent implements OnInit {
   ngOnInit(): void {}
 
   getUserStatus(userName: string): void {
-    this.securityService.getUserStatus(userName).subscribe((response: any) => {
+    this.securityService.getUserStatus(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.activo = response;
     });
   }

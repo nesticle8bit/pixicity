@@ -1,7 +1,8 @@
 import { DialogAddUpdateRangoComponent } from 'src/app/components/dialogs/dialog-add-update-rango/dialog-add-update-rango.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogRangosChangesReportComponent } from '../dialog-rangos-changes-report/dialog-rangos-changes-report.component';
@@ -14,6 +15,8 @@ import { DialogVerUsuariosComponent } from 'src/app/components/dialogs/dialog-ve
   styleUrls: ['./table-rangos.component.scss'],
 })
 export class TableRangosComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public rangos: any[] = [];
   public totalCount: number = 0;
 
@@ -30,7 +33,7 @@ export class TableRangosComponent implements OnInit {
   }
 
   getRangos(): void {
-    this.securityService.getRangosUsuarios().subscribe((response: any) => {
+    this.securityService.getRangosUsuarios().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.rangos = response?.rangos;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -47,7 +50,7 @@ export class TableRangosComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe((value: number) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: number) => {
       if (value) {
         this.getRangos();
       }
@@ -61,7 +64,7 @@ export class TableRangosComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe((value: number) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: number) => {
       if (value) {
         this.getRangos();
       }
@@ -73,6 +76,7 @@ export class TableRangosComponent implements OnInit {
   updateRangoUsuarios(): void {
     this.securityService
       .changeUsuariosRangosByPuntos()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         if (response?.length > 0) {
           this.dialog.open(DialogRangosChangesReportComponent, {

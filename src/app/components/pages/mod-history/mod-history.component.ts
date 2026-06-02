@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -10,6 +11,8 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
   styleUrls: ['./mod-history.component.scss'],
 })
 export class ModHistoryComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public posts: any[] = [];
 
   constructor(
@@ -32,7 +35,7 @@ export class ModHistoryComponent implements OnInit {
   }
 
   getHistorialModeracion(): void {
-    this.webService.getHistorialModeracion().subscribe((response: any) => {
+    this.webService.getHistorialModeracion().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.posts = response;
     });
   }

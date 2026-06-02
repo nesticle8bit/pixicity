@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
@@ -12,6 +13,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./page-contacto.component.scss'],
 })
 export class PageContactoComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroup: FormGroup;
 
   constructor(
@@ -46,7 +49,7 @@ export class PageContactoComponent implements OnInit {
 
     const form = Object.assign({}, this.formGroup.value);
 
-    this.generalService.saveContacto(form).subscribe((response: any) => {
+    this.generalService.saveContacto(form).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
         this.notificationService.success('Se ha enviado correctamente los datos de contacto, pronto nos pondremos en contacto contigo, muchas gracias! 💖', 'Enviado');
         this.router.navigate(['']);

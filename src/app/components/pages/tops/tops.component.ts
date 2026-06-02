@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
@@ -11,6 +12,8 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
   styleUrls: ['./tops.component.scss'],
 })
 export class TopsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroup: FormGroup;
   public categorias: any[] = [];
   public topPosts: any;
@@ -47,6 +50,7 @@ export class TopsComponent implements OnInit {
 
     this.postService
       .getTopPosts(date, categoriaId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         this.topPosts = response;
       });
@@ -55,6 +59,7 @@ export class TopsComponent implements OnInit {
   getCategorias(): void {
     this.httpParametrosService
       .getCategoriasDropdown()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((values: any) => {
         this.categorias = values;
       });

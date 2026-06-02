@@ -2,7 +2,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
@@ -12,6 +13,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./table-sesiones.component.scss'],
 })
 export class TableSesionesComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public sesiones: any[] = [];
   public totalCount: number = 0;
 
@@ -29,7 +32,7 @@ export class TableSesionesComponent implements OnInit {
   }
 
   getSesiones(): void {
-    this.securityService.getSesiones().subscribe((response: any) => {
+    this.securityService.getSesiones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.sesiones = response?.data;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -55,7 +58,7 @@ export class TableSesionesComponent implements OnInit {
 
   deleteSession(id: number): void {
     if (this.notificationService.confirm('¿Está seguro de eliminar esta sesión del usuario?')) {
-      this.securityService.deleteSessionById(id).subscribe((response: any) => {
+      this.securityService.deleteSessionById(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if(response) {
           this.notificationService.success('La sesión ha sido eliminado correctamente', 'Eliminado');
           this.getSesiones();

@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
@@ -8,6 +9,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./perfil-social-media-buttons.component.scss'],
 })
 export class PerfilSocialMediaButtonsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   private _usuarioId: any;
 
   @Input() set usuarioId(value: any) {
@@ -31,6 +34,7 @@ export class PerfilSocialMediaButtonsComponent implements OnInit {
   getSocialMedia(): void {
     this.securityService
       .getSocialMediaByUsuarioId(this.usuarioId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: any) => {
         this.socialMedia = value;
       });

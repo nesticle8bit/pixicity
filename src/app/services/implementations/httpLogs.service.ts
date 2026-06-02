@@ -7,6 +7,8 @@ import { HelperService } from '../shared/helper.service';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
+import { MonitorViewModel, StatsViewModel } from 'src/app/models/logs/logs-vm.model';
 
 @Injectable()
 export class HttpLogsService implements IHttpLogsService {
@@ -17,99 +19,105 @@ export class HttpLogsService implements IHttpLogsService {
     private http: HttpClient,
   ) {}
 
-  getNotificaciones(search: string): Observable<any> {
+  getNotificaciones(search: string): Observable<PaginatedData<MonitorViewModel>> {
     return this.http
-      .get<any>(
+      .get<ApiResponse<PaginatedData<MonitorViewModel>>>(
         `${environment.api}/api/monitors/getNotificaciones?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${search}`,
       )
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getLastNotificaciones(): Observable<any> {
+  getLastNotificaciones(): Observable<MonitorViewModel[]> {
     return this.http
-      .get<any>(`${environment.api}/api/monitors/getLastNotificaciones`)
+      .get<ApiResponse<MonitorViewModel[]>>(`${environment.api}/api/monitors/getLastNotificaciones`)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  setNotificacionesAsReaded(): Observable<any> {
+  setNotificacionesAsReaded(): Observable<boolean> {
     return this.http
-      .get<any>(`${environment.api}/api/monitors/setNotificacionesAsReaded`)
+      .get<ApiResponse<boolean>>(`${environment.api}/api/monitors/setNotificacionesAsReaded`)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getStats(): Observable<any> {
+  getStats(): Observable<StatsViewModel> {
     return this.http
-      .get<any>(`${environment.api}/api/monitors/getStats`)
+      .get<ApiResponse<StatsViewModel>>(`${environment.api}/api/monitors/getStats`)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getMonitorsAdmin(search: any): Observable<any> {
+  getMonitorsAdmin(search: string): Observable<PaginatedData<MonitorViewModel>> {
     return this.http
-      .get<any>(
+      .get<ApiResponse<PaginatedData<MonitorViewModel>>>(
         `${environment.api}/api/monitors/getMonitorAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  deleteNotificacion(id: number): Observable<any> {
+  deleteNotificacion(id: number): Observable<boolean> {
     return this.http
-      .delete<any>(`${environment.api}/api/monitors/deleteNotificacion`, {
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/monitors/deleteNotificacion`, {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
         }),
         body: { id },
       })
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )

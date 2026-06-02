@@ -3,7 +3,8 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
@@ -13,6 +14,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./borradores.component.scss'],
 })
 export class BorradoresComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public borradores: any[] = [];
   public categorias: any[] = [];
   public totalCount: number = 0;
@@ -47,6 +50,7 @@ export class BorradoresComponent implements OnInit {
   getBorradores(categoriaId: number): void {
     this.postService
       .getBorradores(this.formGroup?.value?.search, categoriaId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         if (this.categorias?.length <= 0) {
           this.categorias = response.categorias;
@@ -74,6 +78,7 @@ export class BorradoresComponent implements OnInit {
 
     this.postService
       .deletePost(borrador.id, '')
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: boolean) => {
         const titulo = !borrador.eliminado ? 'Eliminado' : 'Recuperado';
         const texto = `El post ha sido ${accion}do correctamente, ahora nadie lo podrá visualizar`;

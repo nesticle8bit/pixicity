@@ -1,5 +1,6 @@
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   standalone: false,
@@ -8,6 +9,8 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./post-related-posts.component.scss'],
 })
 export class PostRelatedPostsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   private _post: any;
 
   @Input() set post(value: any) {
@@ -28,7 +31,7 @@ export class PostRelatedPostsComponent implements OnInit {
   ngOnInit(): void {}
 
   getRelatedPosts(postId: number): void {
-    this.postService.getRelatedPosts(postId).subscribe((value: any) => {
+    this.postService.getRelatedPosts(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       this.relatedPosts = value;
     });
   }

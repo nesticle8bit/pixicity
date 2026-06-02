@@ -1,5 +1,6 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
@@ -11,6 +12,8 @@ import { PaginationService } from 'src/app/services/shared/pagination.service';
   styleUrls: ['./home-last-posts.component.scss'],
 })
 export class HomeLastPostsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   private _categoria: string = '';
 
   @Input() set categoria(value: string) {
@@ -41,16 +44,22 @@ export class HomeLastPostsComponent implements OnInit {
   }
 
   getPosts(categoria: string): void {
-    this.postService.getPosts(categoria).subscribe((response: any) => {
-      this.lastPosts = response.data;
-      this.totalCount = response.pagination.totalCount;
-    });
+    this.postService
+      .getPosts(categoria)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((response: any) => {
+        this.lastPosts = response.data;
+        this.totalCount = response.pagination.totalCount;
+      });
   }
 
   getStickyPosts(): void {
-    this.postService.getStickyPosts().subscribe((posts: any) => {
-      this.stickyPosts = posts;
-    });
+    this.postService
+      .getStickyPosts()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((posts: any) => {
+        this.stickyPosts = posts;
+      });
   }
 
   pageChange(event: PageEvent): void {

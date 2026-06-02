@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 
 @Component({
@@ -8,6 +9,8 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
   styleUrls: ['./home-last-comments.component.scss'],
 })
 export class HomeLastCommentsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public refreshComments: boolean = false;
   public lastComments: any = [];
 
@@ -20,9 +23,12 @@ export class HomeLastCommentsComponent implements OnInit {
   getUltimosComentarios(): void {
     this.refreshComments = true;
 
-    this.postService.getUltimosComentarios().subscribe((comentarios: any) => {
-      this.lastComments = comentarios;
-      this.refreshComments = false;
-    });
+    this.postService
+      .getUltimosComentarios()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((comentarios: any) => {
+        this.lastComments = comentarios;
+        this.refreshComments = false;
+      });
   }
 }

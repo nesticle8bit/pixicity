@@ -1,6 +1,7 @@
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { TopPostModel } from 'src/app/models/web/topPost.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   standalone: false,
@@ -9,6 +10,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home-top-posts.component.scss'],
 })
 export class HomeTopPostsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public date: string = '';
   public loading: boolean = false;
   public topPosts: TopPostModel[] = [];
@@ -22,10 +25,13 @@ export class HomeTopPostsComponent implements OnInit {
   getTopPosts(): void {
     this.loading = true;
 
-    this.httpWeb.getTopPosts(this.date).subscribe((value: TopPostModel[]) => {
-      this.topPosts = value;
-      this.loading = false;
-    });
+    this.httpWeb
+      .getTopPosts(this.date)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value: TopPostModel[]) => {
+        this.topPosts = value;
+        this.loading = false;
+      });
   }
 
   dateChanges(date: string): void {

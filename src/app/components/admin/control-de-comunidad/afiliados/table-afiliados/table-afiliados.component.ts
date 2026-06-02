@@ -1,7 +1,8 @@
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,6 +16,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./table-afiliados.component.scss'],
 })
 export class TableAfiliadosComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public afiliados: any[] = [];
   public totalCount: number = 0;
 
@@ -34,7 +37,7 @@ export class TableAfiliadosComponent implements OnInit {
   }
 
   getAfiliados(): void {
-    this.generalService.getAfiliados().subscribe((response: any) => {
+    this.generalService.getAfiliados().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.afiliados = response.data;
       this.totalCount = response.pagination.totalCount;
     });
@@ -52,6 +55,7 @@ export class TableAfiliadosComponent implements OnInit {
 
     this.webService
       .changeAfiliadoActive({ id: afiliado.id, activo: afiliado.activo })
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: any) => {
         if (response) {
           this.notificationService.success(
@@ -73,7 +77,7 @@ export class TableAfiliadosComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe((value: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       if (value) {
         afiliado.activo = value.activo;
         afiliado.banner = value.banner;
@@ -104,7 +108,7 @@ export class TableAfiliadosComponent implements OnInit {
 
   deleteAfiliado(afiliado: any, index: number): void {
     if (this.notificationService.confirm('¿Está seguro de eliminar esta afiliación?')) {
-      this.generalService.deleteAfiliado(afiliado.id).subscribe((response: any) => {
+      this.generalService.deleteAfiliado(afiliado.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (response) {
           this.notificationService.success('La afiliación ha sido eliminada correctamente', 'Eliminado');
           this.afiliados.splice(index, 1);

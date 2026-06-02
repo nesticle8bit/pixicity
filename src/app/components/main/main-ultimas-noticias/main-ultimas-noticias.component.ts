@@ -5,7 +5,8 @@ import {
   transition,
   animate,
 } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpNoticiasService } from 'src/app/services/interfaces/httpNoticias.interface';
 
 @Component({
@@ -15,6 +16,8 @@ import { IHttpNoticiasService } from 'src/app/services/interfaces/httpNoticias.i
   styleUrls: ['./main-ultimas-noticias.component.scss'],
 })
 export class MainUltimasNoticiasComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public noticias: any[] = [];
   public currentIndex = -1;
 
@@ -25,10 +28,13 @@ export class MainUltimasNoticiasComponent implements OnInit {
   }
 
   getNoticias(): void {
-    this.noticiasService.getAllNoticias().subscribe((response: any) => {
-      this.noticias = response;
-      this.showNext();
-    });
+    this.noticiasService
+      .getAllNoticias()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((response: any) => {
+        this.noticias = response;
+        this.showNext();
+      });
   }
 
   showNext() {

@@ -8,6 +8,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { PaginationService } from '../shared/pagination.service';
+import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
+import { EstadisticasViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { FavoritosViewModel } from 'src/app/models/posts/post-vm.model';
 
 @Injectable()
 export class HttpGeneralService implements IHttpGeneralService {
@@ -18,242 +21,256 @@ export class HttpGeneralService implements IHttpGeneralService {
     private http: HttpClient,
   ) {}
 
-  getAdminEstadisticas(): Observable<any> {
+  getAdminEstadisticas(): Observable<unknown> {
     return this.http
-      .get<any>(`${environment.api}/api/general/getAdminEstadisticas`)
+      .get<ApiResponse<unknown>>(`${environment.api}/api/general/getAdminEstadisticas`)
       .pipe(
-        map((response: any) =>
+        map((response) =>
           response.status === 200 ? response.data : null,
         ),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getEstadisticas(): Observable<any> {
+  getEstadisticas(): Observable<EstadisticasViewModel> {
     return this.http
-      .get<any>(`${environment.api}/api/general/getEstadisticas`)
+      .get<ApiResponse<EstadisticasViewModel>>(`${environment.api}/api/general/getEstadisticas`)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getAfiliados(): Observable<any> {
+  getAfiliados(): Observable<AfiliacionModel[]> {
     return this.http
-      .get<any>(`${environment.api}/api/afiliados/getAfiliados`)
+      .get<ApiResponse<AfiliacionModel[]>>(`${environment.api}/api/afiliados/getAfiliados`)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  saveAfiliacion(afiliacion: AfiliacionModel): Observable<any> {
+  saveAfiliacion(afiliacion: AfiliacionModel): Observable<number> {
     return this.http
-      .post<any>(`${environment.api}/api/afiliados/saveAfiliacion`, afiliacion)
+      .post<ApiResponse<number>>(`${environment.api}/api/afiliados/saveAfiliacion`, afiliacion)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getFavoritosByUser(search: string, categoriaId: number): Observable<any> {
+  getFavoritosByUser(search: string, categoriaId: number): Observable<PaginatedData<FavoritosViewModel>> {
     return this.http
-      .get<any>(
+      .get<ApiResponse<PaginatedData<FavoritosViewModel>>>(
         `${environment.api}/api/favoritos/getFavoritos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}&categoriaId=${categoriaId}`,
       )
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getConfiguracion(): Observable<any> {
+  getConfiguracion(): Observable<unknown> {
     return this.http
-      .get<any>(`${environment.api}/api/configuracion/getConfiguracion`)
+      .get<ApiResponse<unknown>>(`${environment.api}/api/configuracion/getConfiguracion`)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  updateConfiguracion(configuracion: any): Observable<any> {
+  updateConfiguracion(configuracion: unknown): Observable<boolean> {
     return this.http
-      .put<any>(
+      .put<ApiResponse<boolean>>(
         `${environment.api}/api/configuracion/updateConfiguracion`,
         configuracion,
       )
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  updateAds(configuration: any): Observable<any> {
+  updateAds(configuration: unknown): Observable<boolean> {
     return this.http
-      .put<any>(`${environment.api}/api/configuracion/updateAds`, configuration)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/configuracion/updateAds`, configuration)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  updateAfiliacion(afiliacion: any): Observable<any> {
+  updateAfiliacion(afiliacion: AfiliacionModel): Observable<boolean> {
     return this.http
-      .put<any>(`${environment.api}/api/afiliados/updateAfiliacion`, afiliacion)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/afiliados/updateAfiliacion`, afiliacion)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  setHitInByRefCode(refCode: string): Observable<any> {
+  setHitInByRefCode(refCode: string): Observable<boolean> {
     return this.http
-      .post<any>(`${environment.api}/api/afiliados/setHitIn`, {
+      .post<ApiResponse<boolean>>(`${environment.api}/api/afiliados/setHitIn`, {
         codigo: refCode,
       })
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  deleteAfiliado(id: number): Observable<any> {
+  deleteAfiliado(id: number): Observable<boolean> {
     return this.http
-      .delete<any>(`${environment.api}/api/afiliados/deleteAfiliado`, {
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/afiliados/deleteAfiliado`, {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
         }),
         body: { id },
       })
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getContactos(): Observable<any> {
+  getContactos(): Observable<unknown> {
     return this.http
-      .get<any>(
+      .get<ApiResponse<unknown>>(
         `${environment.api}/api/contacto/getContactos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  saveContacto(contacto: any): Observable<any> {
+  saveContacto(contacto: unknown): Observable<boolean> {
     return this.http
-      .post<any>(`${environment.api}/api/contacto/saveContacto`, contacto)
+      .post<ApiResponse<boolean>>(`${environment.api}/api/contacto/saveContacto`, contacto)
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  gestionarContacto(contactoId: number): Observable<any> {
+  gestionarContacto(contactoId: number): Observable<boolean> {
     return this.http
-      .put<any>(`${environment.api}/api/contacto/gestionarContacto`, {
+      .put<ApiResponse<boolean>>(`${environment.api}/api/contacto/gestionarContacto`, {
         id: contactoId,
       })
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  deleteContacto(contactoId: number): Observable<any> {
+  deleteContacto(contactoId: number): Observable<boolean> {
     return this.http
-      .delete<any>(`${environment.api}/api/contacto/deleteContacto`, {
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/contacto/deleteContacto`, {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
         }),
         body: { id: contactoId },
       })
       .pipe(
-        map((response: any) => {
+        map((response) => {
           if (response.status === 200) {
-            return response.data;
+            return response.data!;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
         }),
       )

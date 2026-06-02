@@ -1,5 +1,6 @@
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   standalone: false,
@@ -8,6 +9,8 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./post-more-from-op.component.scss'],
 })
 export class PostMoreFromOPComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public posts: any[] = [];
   private _post: any;
 
@@ -28,7 +31,7 @@ export class PostMoreFromOPComponent implements OnInit {
   ngOnInit(): void {}
 
   getPostsFromOP(postId: number): void {
-    this.postService.getPostsFromOP(postId).subscribe((value: any) => {
+    this.postService.getPostsFromOP(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       this.posts = value;
     });
   }

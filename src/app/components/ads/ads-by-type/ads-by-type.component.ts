@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 
 @Component({
@@ -8,6 +9,8 @@ import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
   styleUrls: ['./ads-by-type.component.scss']
 })
 export class AdsByTypeComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   @Input() type: string = '';
   @Input() class: string = '';
   @Input() hideTitle: boolean = false;
@@ -23,7 +26,7 @@ export class AdsByTypeComponent implements OnInit {
       return;
     }
 
-    this.webService.getAdsByType(this.type).subscribe((value: string) => {
+    this.webService.getAdsByType(this.type).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: string) => {
       this.ads = value;
     });
   }
