@@ -1,9 +1,12 @@
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { IHttpBloqueosService } from 'src/app/services/interfaces/httpBloqueos.interface';
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
+import { BloqueoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -18,10 +21,13 @@ export class PerfilComponent implements OnInit {
   public currentUser: any = {};
   public loggedUser: any = {};
   public currentSelection = 'shouts';
+  public bloqueoActivo: BloqueoViewModel | null = null;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private securityService: IHttpSecurityService,
+    private bloqueosService: IHttpBloqueosService,
+    private notificationService: NotificationService,
     private displayService: DisplayComponentService,
   ) {
     this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
@@ -38,9 +44,40 @@ export class PerfilComponent implements OnInit {
   getUserByUserName(userName: string): void {
     this.securityService.getUserByUserName(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       this.currentUser = value;
-
       this.display.background = this.currentUser.profileBackground;
       this.displayService.setDisplay(this.display);
+
+      if (this.loggedUser && this.loggedUser.userName !== userName) {
+        this.loadBloqueo(userName);
+      }
+    });
+  }
+
+  loadBloqueo(userName: string): void {
+    this.bloqueosService.getBloqueoContraPerfil(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (bloqueo) => this.bloqueoActivo = bloqueo,
+      error: () => {}
+    });
+  }
+
+  bloquearUsuario(): void {
+    this.bloqueosService.bloquearUsuario(this.currentUser.userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (id) => {
+        this.bloqueoActivo = { id, bloqueadoId: this.currentUser.id, userName: this.currentUser.userName, avatar: this.currentUser.avatar, fechaRegistro: new Date().toISOString() };
+        this.notificationService.success(`${this.currentUser.userName} ha sido bloqueado`, 'Bloqueado');
+      },
+      error: () => {}
+    });
+  }
+
+  desbloquearUsuario(): void {
+    if (!this.bloqueoActivo) return;
+    this.bloqueosService.desbloquearUsuario(this.bloqueoActivo.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => {
+        this.notificationService.success(`${this.currentUser.userName} ha sido desbloqueado`, 'Desbloqueado');
+        this.bloqueoActivo = null;
+      },
+      error: () => {}
     });
   }
 

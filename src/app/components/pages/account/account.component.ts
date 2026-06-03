@@ -12,6 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogChangeAvatarComponent } from 'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { IHttpBloqueosService } from 'src/app/services/interfaces/httpBloqueos.interface';
+import { BloqueoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
@@ -258,6 +260,8 @@ export class AccountComponent implements OnInit {
     'Ventas Internacionales/Exportación',
   ];
 
+  public bloqueados: BloqueoViewModel[] = [];
+
   public formGroupCuenta: FormGroup;
   public formGroupPerfil: FormGroup;
   public formGroupCambiarContrasena: FormGroup;
@@ -266,6 +270,7 @@ export class AccountComponent implements OnInit {
   constructor(
     private securityService: IHttpSecurityService,
     private parametrosService: IHttpParametrosService,
+    private bloqueosService: IHttpBloqueosService,
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private notificationService: NotificationService
@@ -416,6 +421,24 @@ export class AccountComponent implements OnInit {
     this.getCurrentUser();
     this.getPaises();
     this.initFechas();
+    this.loadBloqueados();
+  }
+
+  loadBloqueados(): void {
+    this.bloqueosService.getBloqueados().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (data) => this.bloqueados = data,
+      error: () => {}
+    });
+  }
+
+  desbloquearUsuario(bloqueo: BloqueoViewModel): void {
+    this.bloqueosService.desbloquearUsuario(bloqueo.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => {
+        this.bloqueados = this.bloqueados.filter(b => b.id !== bloqueo.id);
+        this.notificationService.success(`${bloqueo.userName} ha sido desbloqueado`, 'Desbloqueado');
+      },
+      error: () => {}
+    });
   }
 
   getCurrentUser(): void {

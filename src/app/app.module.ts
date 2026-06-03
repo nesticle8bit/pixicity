@@ -136,6 +136,8 @@ import { ApiDocumentationComponent } from './components/pages/api-documentation/
 import { ProfileShoutsWallComponent } from './components/profile/profile-shouts-wall/profile-shouts-wall.component';
 import { IHttpPerfilService } from './services/interfaces/httpPerfil.interface';
 import { HttpPerfilService } from './services/implementations/httpPerfil.service';
+import { IHttpBloqueosService } from './services/interfaces/httpBloqueos.interface';
+import { HttpBloqueosService } from './services/implementations/httpBloqueos.service';
 import { ShoutsViewComponent } from './components/pages/shouts/shouts-view/shouts-view.component';
 import { PostMoreFromOPComponent } from './components/posts/post-more-from-op/post-more-from-op.component';
 import { SectionHomeForumComponent } from './components/sections/section-home-forum/section-home-forum.component';
@@ -345,6 +347,7 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
         { provide: IHttpNoticiasService, useClass: HttpNoticiasService },
         { provide: IHttpMensajesService, useClass: HttpMensajesService },
         { provide: IHttpFotosService, useClass: HttpFotosService },
+        { provide: IHttpBloqueosService, useClass: HttpBloqueosService },
         provideHttpClient(withInterceptorsFromDi()),
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

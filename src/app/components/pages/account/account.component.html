@@ -745,8 +745,25 @@
                 Bloqueados
               </ng-template>
 
-              <div class="alert alert-warning mt-3">
-                ⚠️ <strong>En construcción...</strong>
+              <div class="mt-3">
+                <div *ngIf="bloqueados.length === 0" class="alert alert-info">
+                  No tienes usuarios bloqueados.
+                </div>
+
+                <div *ngFor="let b of bloqueados" class="d-flex align-items-center justify-content-between p-2 border-bottom">
+                  <div class="d-flex align-items-center gap-2">
+                    <img
+                      [src]="b.avatar ? '/assets/avatars/' + b.avatar : '/assets/images/default-avatar.png'"
+                      width="40" height="40"
+                      class="rounded-circle"
+                      [alt]="b.userName"
+                    />
+                    <a [routerLink]="['/u', b.userName]" class="fw-bold text-decoration-none">{{ b.userName }}</a>
+                  </div>
+                  <button mat-stroked-button color="warn" (click)="desbloquearUsuario(b)">
+                    <mat-icon>lock_open</mat-icon> Desbloquear
+                  </button>
+                </div>
               </div>
             </mat-tab>
 

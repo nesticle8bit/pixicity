@@ -104,6 +104,22 @@
                   <app-send-message-button [userName]="currentUser.userName" [icon]="true"></app-send-message-button>
                 </div>
               }
+
+              @if (loggedUser?.usuario?.userName !== currentUser.userName) {
+                <div class="col-12 col-sm-2">
+                  <main>
+                    @if (!bloqueoActivo) {
+                      <a class="button-uppercase brojo" (click)="bloquearUsuario()">
+                        <i class="ti ti-ban"></i> Bloquear
+                      </a>
+                    } @else {
+                      <a class="bgris" (click)="desbloquearUsuario()">
+                        <i class="ti ti-lock-open"></i> Desbloquear
+                      </a>
+                    }
+                  </main>
+                </div>
+              }
             </div>
 
             <div class="row mt-2">

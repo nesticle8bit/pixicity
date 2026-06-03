@@ -58,6 +58,14 @@ export interface OnlineUsersListViewModel {
   total: number;
 }
 
+export interface BloqueoViewModel {
+  id: number;
+  bloqueadoId: number;
+  userName: string;
+  avatar: string;
+  fechaRegistro: string;
+}
+
 export interface EstadisticasViewModel {
   onlineUsers: OnlineUsersListViewModel;
   totalUsuarios: number;
