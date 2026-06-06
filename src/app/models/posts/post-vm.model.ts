@@ -56,6 +56,11 @@ export interface PostSimpleViewModel {
   id: number;
   url: string;
   titulo: string;
+  categoria: {
+    icono: string;
+    nombre: string;
+    seo: string;
+  };
 }
 
 export interface CloudTagViewModel {

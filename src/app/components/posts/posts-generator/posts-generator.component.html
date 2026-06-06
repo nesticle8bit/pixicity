@@ -1,89 +1,110 @@
-<h2 mat-dialog-title>
-    Generador de Posts
-</h2>
+<div mat-dialog-title class="pg-header">
+  <div class="pg-header__icon">
+    <i class="ti ti-wand"></i>
+  </div>
+  <div class="pg-header__text">
+    <h2 class="pg-header__title">Generador de Posts</h2>
+    <p class="pg-header__sub">Arma un post estructurado y con estilo en segundos</p>
+  </div>
+</div>
 
 <form [formGroup]="formGroup" (ngSubmit)="generarPost()">
-    <mat-dialog-content>
-        <section class="container-fluid">
-            <div class="row">
-                <div class="col-12 col-sm-12">
-                    <div class="mb-3">
-                        <label><i class="ti ti-id-badge text-muted"></i> Imagen Inicial:</label>
-                        <small class="form-text">
-                            Actuará como imagen principal de tu Post (Como una portada)
-                        </small>
+  <mat-dialog-content class="pg-content">
+    <div class="pg-grid">
+      <div class="pg-field pg-field--full">
+        <div class="pg-field__icon">
+          <i class="ti ti-layout-distribute-horizontal"></i>
+        </div>
+        <div class="pg-field__body">
+          <label class="pg-field__label">Estilo de los divisores</label>
+          <p class="pg-field__hint">Elige el diseño que separará cada sección de tu post.</p>
 
-                        <input type="text" class="form-control mt-2" formControlName="imagenInicial" />
-                    </div>
-                </div>
+          <div class="divider-picker">
+            @for (d of dividers; track d.id) {
+            <button type="button" class="divider-picker__card" [class.selected]="formGroup.value.divisor === d.id"
+              (click)="selectDivider(d.id)">
+              <div class="ph-sep ph-sep--{{ d.id }}">
+                <span class="ph-sep__txt">Sección</span>
+              </div>
+              <span class="divider-picker__label">{{ d.label }}</span>
+            </button>
+            }
+          </div>
+        </div>
+      </div>
 
-                <div class="col-12 col-sm-12">
-                    <div class="mb-3">
-                        <label><i class="ti ti-info-circle text-muted"></i> Información:</label>
-                        <small class="form-text">
-                            Toda la información de texto que contenga tu post (Descripciones, Sinopsis, Tracklist,
-                            etc.):
-                        </small>
+      <div class="pg-field pg-field--full">
+        <div class="pg-field__icon">
+          <i class="ti ti-id-badge"></i>
+        </div>
+        <div class="pg-field__body">
+          <label class="pg-field__label">Imagen inicial</label>
+          <p class="pg-field__hint">Actuará como portada de tu post.</p>
+          <input type="text" class="pg-input" placeholder="https://..." formControlName="imagenInicial" />
+        </div>
+      </div>
 
-                        <textarea class="form-control mt-2" rows="8" formControlName="informacion"></textarea>
-                    </div>
-                </div>
+      <div class="pg-field pg-field--full">
+        <div class="pg-field__icon">
+          <i class="ti ti-info-circle"></i>
+        </div>
+        <div class="pg-field__body">
+          <label class="pg-field__label">Información</label>
+          <p class="pg-field__hint">Descripciones, sinopsis, tracklist…</p>
+          <textarea class="pg-input" rows="6" formControlName="informacion"
+            placeholder="Escribe la información de tu post..."></textarea>
+        </div>
+      </div>
 
-                <div class="col-12 col-sm-12">
-                    <div class="mb-3">
-                        <label><i class="ti ti-photos text-muted"></i> Imágenes:</label>
-                        <small class="form-text">
-                            (Agrega la URL de las imágenes que quieras incrustar en tu post, máximo 3 imágenes)
-                        </small>
+      <div class="pg-field pg-field--full">
+        <div class="pg-field__icon">
+          <i class="ti ti-photo"></i>
+        </div>
+        <div class="pg-field__body">
+          <label class="pg-field__label">Imágenes</label>
+          <p class="pg-field__hint">URLs de las imágenes a incrustar (máximo 3).</p>
 
-                        <div class="row">
-                            <div class="col-12 col-sm-12 col-md-4">
-                                <input type="url" placeholder="http://" class="form-control mt-2" formControlName="image1" />
-                            </div>
+          <div class="pg-imgrow">
+            <input type="url" placeholder="http://" class="pg-input" formControlName="image1" />
+            <input type="url" placeholder="http://" class="pg-input" formControlName="image2" />
+            <input type="url" placeholder="http://" class="pg-input" formControlName="image3" />
+          </div>
+        </div>
+      </div>
 
-                            <div class="col-12 col-sm-12 col-md-4">
-                                <input type="url" placeholder="http://" class="form-control mt-2" formControlName="image2" />
-                            </div>
+      <div class="pg-field pg-field--full">
+        <div class="pg-field__icon">
+          <i class="ti ti-link"></i>
+        </div>
+        <div class="pg-field__body">
+          <label class="pg-field__label">Links de descarga</label>
+          <p class="pg-field__hint">Un link por fila.</p>
+          <textarea class="pg-input" rows="5" formControlName="links"
+            placeholder="https://...&#10;https://..."></textarea>
+        </div>
+      </div>
 
-                            <div class="col-12 col-sm-12 col-md-4">
-                                <input type="url" placeholder="http://" class="form-control mt-2" formControlName="image3" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <div class="pg-field">
+        <div class="pg-field__icon">
+          <i class="ti ti-lock-open"></i>
+        </div>
+        <div class="pg-field__body">
+          <label class="pg-field__label">Contraseña</label>
+          <p class="pg-field__hint">Si tus archivos tienen clave, escríbela aquí.</p>
+          <input type="text" class="pg-input" placeholder="Contraseña de los archivos" formControlName="password" />
+        </div>
+      </div>
 
-                <div class="col-12 col-sm-12">
-                    <div class="mb-3">
-                        <label><i class="ti ti-link text-muted"></i> Links de Descarga:</label>
-                        <small class="form-text">
-                            Agrega los links de descarga en este recuadro, 1 por fila:
-                        </small>
+    </div>
+  </mat-dialog-content>
 
-                        <textarea class="form-control mt-2" rows="4" formControlName="links"></textarea>
-                    </div>
-                </div>
+  <mat-dialog-actions class="pg-actions">
+    <button type="button" mat-button mat-dialog-close>
+      Cancelar
+    </button>
 
-                <div class="col-12 col-sm-12">
-                    <div class="mb-3">
-                        <label><i class="ti ti-lock-open text-muted"></i> Password:</label>
-                        <small class="form-text">
-                            Si tus archivos tienen una clave/password, escríbela aquí:
-                        </small>
-
-                        <input type="text" class="form-control mt-2" formControlName="password" />
-                    </div>
-                </div>
-            </div>
-        </section>
-    </mat-dialog-content>
-
-    <mat-dialog-actions align="end">
-        <button type="button" mat-button mat-dialog-close>
-            Cancelar
-        </button>
-
-        <button type="submit" mat-button color="primary">
-            Generar Post
-        </button>
-    </mat-dialog-actions>
+    <button type="submit" mat-flat-button color="primary" class="pg-actions__submit">
+      <i class="ti ti-sparkles"></i> Generar Post
+    </button>
+  </mat-dialog-actions>
 </form>

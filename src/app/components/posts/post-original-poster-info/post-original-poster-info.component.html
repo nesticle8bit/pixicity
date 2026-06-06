@@ -1,16 +1,14 @@
 <div class="op-card boxposts separa">
   <div class="op-header">
     <div class="op-avatar-wrap">
-      <a [routerLink]="['/perfil/' + userName]" [appUserPopover]="userName"
-        matTooltip="Ver perfil de {{userName}}">
-        <app-user-avatar [class]="'user-post-image'" [avatar]="info?.avatar"
-          [userName]="userName" [height]="90">
+      <a [routerLink]="['/perfil/' + userName]" [appUserPopover]="userName" matTooltip="Ver perfil de {{userName}}">
+        <app-user-avatar [class]="'user-post-image'" [avatar]="info?.avatar" [userName]="userName" [height]="90">
         </app-user-avatar>
       </a>
 
       <span class="op-rango" [ngStyle]="{'color': info?.rango?.color}">
-        <img src="/assets/images/icons/rangos/{{info?.rango?.icono}}"
-          matTooltip="{{info?.rango?.nombre}}" [matTooltipPosition]="'below'">
+        <img src="/assets/images/icons/rangos/{{info?.rango?.icono}}" matTooltip="{{info?.rango?.nombre}}"
+          [matTooltipPosition]="'below'">
         <span>{{info?.rango?.nombre}}</span>
       </span>
     </div>
@@ -21,8 +19,7 @@
         <a class="op-username" [routerLink]="['/perfil/' + userName]" [appUserPopover]="userName">
           {{userName}}
         </a>
-        <addon-country-flag [iso2]="info?.estado?.pais?.isO2"
-          [title]="info?.estado?.pais?.nombre">
+        <addon-country-flag [iso2]="info?.estado?.pais?.isO2" [title]="info?.estado?.pais?.nombre">
         </addon-country-flag>
         <app-genre-icon [genre]="info?.genero"></app-genre-icon>
       </div>
@@ -42,7 +39,6 @@
     </div>
   </div>
 
-  <!-- Stats -->
   <div class="op-stats">
     <div class="op-stat">
       <i class="ti ti-users"></i>
@@ -66,10 +62,8 @@
     </div>
   </div>
 
-  <!-- Acciones -->
   <div class="op-actions">
-    <app-follow-button [userName]="userName" (followingChange)="changeSeguidores($event)">
+    <app-follow-button [userName]="userName" [icon]="true" (followingChange)="changeSeguidores($event)">
     </app-follow-button>
   </div>
-
 </div>

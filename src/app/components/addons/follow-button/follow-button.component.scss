@@ -1,0 +1,7 @@
+// El anchor usa las clases globales .bverde/.bgris (display:block sin padding
+// horizontal). En contenedores flex se encoge al texto y queda pegado a los
+// bordes; el padding asegura espacio a los lados en cualquier contenedor.
+a.follow_user_post,
+a.unfollow_user_post {
+  padding: 0 18px;
+}

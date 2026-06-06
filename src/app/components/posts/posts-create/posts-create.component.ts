@@ -1,5 +1,6 @@
 import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { debounceTime, distinctUntilChanged, map, of, switchMap } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
@@ -110,6 +111,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getCategorias();
+    this.watchRelatedPosts();
   }
 
   ngOnDestroy(): void {}
@@ -230,7 +232,10 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   postGenerator(): void {
     const dialogRef = this.dialog.open(PostsGeneratorComponent, {
       width: '980px',
+      maxWidth: '94vw',
       disableClose: true,
+      panelClass: 'pg-dialog',
+      autoFocus: false,
     });
 
     dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
@@ -242,17 +247,20 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     });
   }
 
-  getPostsRelatedByTitle(): void {
-    const titulo = this.formGroup.value.titulo;
-
-    if (!titulo || titulo.length < 5) {
-      this.relatedPosts = [];
-      return;
-    }
-
-    this.postService
-      .getPostsRelatedByTitle(titulo)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+  private watchRelatedPosts(): void {
+    this.formGroup
+      .get('titulo')!
+      .valueChanges.pipe(
+        map((value: string) => (value || '').trim()),
+        debounceTime(350),
+        distinctUntilChanged(),
+        switchMap((titulo: string) =>
+          titulo.length >= 3
+            ? this.postService.getPostsRelatedByTitle(titulo)
+            : of([])
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe((response: any) => {
         this.relatedPosts = response || [];
       });

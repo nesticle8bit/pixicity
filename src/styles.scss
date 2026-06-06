@@ -15,6 +15,14 @@
   z-index: 1100;
 }
 
+// Dialog moderno del Generador de Posts: esquinas redondeadas + clip del header
+.pg-dialog {
+  .mat-mdc-dialog-surface {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+}
+
 $background-color: #F0EEEE;
 $main-color: #0B6EA5;
 $accent-color: #004160;
@@ -1127,32 +1135,48 @@ textarea:focus#msg_body {
   text-shadow: 0 -1px 1px #2361A4 !important
 }
 
+// Clases helper de color para botones. Setean los tokens de Material v21
+// (--mat-button-filled-*) para que funcionen sobre mat-flat-button (que por
+// defecto usa container-color: white), además del background-color plano para
+// usos no-MDC (snackbars, etc.).
 .mat-success {
+  --mat-button-filled-container-color: #05c46b;
+  --mat-button-filled-label-text-color: #fff;
   background-color: #05c46b;
   color: #fff;
 }
 
 .mat-orange {
+  --mat-button-filled-container-color: #ff5e57;
+  --mat-button-filled-label-text-color: #fff;
   background-color: #ff5e57;
   color: #fff;
 }
 
 .mat-gray {
-  background-color: #7F8C8D;
+  --mat-button-filled-container-color: #7f8c8d;
+  --mat-button-filled-label-text-color: #fff;
+  background-color: #7f8c8d;
   color: #fff;
 }
 
 .mat-blue {
+  --mat-button-filled-container-color: #3c40c6;
+  --mat-button-filled-label-text-color: #fff;
   background-color: #3c40c6;
   color: #fff;
 }
 
 .mat-danger {
+  --mat-button-filled-container-color: #e74c3c;
+  --mat-button-filled-label-text-color: #fff;
   background-color: #e74c3c;
   color: #fff;
 }
 
 .mat-warning {
+  --mat-button-filled-container-color: #f39c12;
+  --mat-button-filled-label-text-color: #fff;
   background-color: #f39c12;
   color: #fff;
 }
@@ -1237,6 +1261,94 @@ textarea:focus#msg_body {
     border-left: 4px solid rgb(222 222 222 / 58%);
     margin-left: 1rem;
     padding-left: 1rem;
+  }
+}
+
+// Separadores de sección del generador de posts (app-rich-editor + post publicado)
+// Base: solo tipografía. El layout lo define cada variante .ph-sep--*
+.ph-sep {
+  margin: 28px 0 16px;
+  color: #1976d2;
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+
+  &__txt {
+    white-space: nowrap;
+  }
+
+  // 1) Líneas a los lados + título centrado
+  &--lines {
+    display: flex;
+    align-items: center;
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1;
+      height: 2px;
+      background: rgba(25, 118, 210, 0.35);
+    }
+
+    .ph-sep__txt {
+      padding: 0 16px;
+    }
+  }
+
+  // 2) Líneas punteadas a los lados
+  &--dotted {
+    display: flex;
+    align-items: center;
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1;
+      border-top: 2px dotted rgba(25, 118, 210, 0.55);
+    }
+
+    .ph-sep__txt {
+      padding: 0 16px;
+    }
+  }
+
+  // 3) Barra con gradiente, texto blanco
+  &--bar {
+    color: #fff;
+    background: linear-gradient(90deg, #1976d2, #6a3ab2);
+    padding: 12px 16px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.25);
+  }
+
+  // 4) Borde lateral + fondo tenue (callout)
+  &--side {
+    text-align: left;
+    background: rgba(25, 118, 210, 0.08);
+    border-left: 5px solid #1976d2;
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+  }
+
+  // 5) Doble línea arriba y abajo
+  &--double {
+    border-top: 3px double rgba(25, 118, 210, 0.55);
+    border-bottom: 3px double rgba(25, 118, 210, 0.55);
+    padding: 10px 0;
+  }
+
+  // 6) Píldora / badge centrado
+  &--pill {
+    .ph-sep__txt {
+      display: inline-block;
+      background: #1976d2;
+      color: #fff;
+      padding: 8px 24px;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(25, 118, 210, 0.25);
+    }
   }
 }
 

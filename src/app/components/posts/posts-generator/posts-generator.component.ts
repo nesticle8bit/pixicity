@@ -11,6 +11,15 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class PostsGeneratorComponent implements OnInit {
   public formGroup: FormGroup;
 
+  public readonly dividers = [
+    { id: 'lines', label: 'Líneas' },
+    { id: 'dotted', label: 'Punteado' },
+    { id: 'bar', label: 'Barra' },
+    { id: 'side', label: 'Lateral' },
+    { id: 'double', label: 'Doble línea' },
+    { id: 'pill', label: 'Píldora' },
+  ];
+
   constructor(
     private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<PostsGeneratorComponent>
@@ -23,7 +32,12 @@ export class PostsGeneratorComponent implements OnInit {
       image3: '',
       links: '',
       password: '',
+      divisor: 'lines',
     });
+  }
+
+  selectDivider(id: string): void {
+    this.formGroup.patchValue({ divisor: id });
   }
 
   ngOnInit(): void {}
@@ -84,12 +98,7 @@ export class PostsGeneratorComponent implements OnInit {
   }
 
   private sectionDivider(title: string): string {
-    return (
-      `<div style="display:flex;align-items:center;text-align:center;margin:28px 0 16px;color:#1976d2;font-weight:700;font-size:17px;letter-spacing:1px;text-transform:uppercase;">` +
-      `<span style="flex:1;height:2px;background:#1976d2;opacity:0.35;"></span>` +
-      `<span style="padding:0 16px;white-space:nowrap;">${title}</span>` +
-      `<span style="flex:1;height:2px;background:#1976d2;opacity:0.35;"></span>` +
-      `</div>`
-    );
+    const variant = this.formGroup.value.divisor || 'lines';
+    return `<div class="ph-sep ph-sep--${variant}"><span class="ph-sep__txt">${title}</span></div>`;
   }
 }
