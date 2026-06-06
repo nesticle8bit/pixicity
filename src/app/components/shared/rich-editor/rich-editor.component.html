@@ -1,136 +1,193 @@
-<div class="rich-editor">
-
-  <!--  Toolbar  -->
+<div class="rich-editor" #wrapperEl>
   <div class="rich-editor__toolbar">
-
-    <!-- Basic formatting -->
     <div class="rich-editor__group">
-      <button type="button" title="Negrita (Ctrl+B)" (click)="bold()">
+      <button type="button" title="Negrita (Ctrl+B)" [class.active]="isActive('bold')"
+        (mousedown)="preventLoseSelection($event)" (click)="bold()">
         <mat-icon>format_bold</mat-icon>
       </button>
-      <button type="button" title="Cursiva (Ctrl+I)" (click)="italic()">
+      <button type="button" title="Cursiva (Ctrl+I)" [class.active]="isActive('italic')"
+        (mousedown)="preventLoseSelection($event)" (click)="italic()">
         <mat-icon>format_italic</mat-icon>
       </button>
     </div>
 
     <div class="rich-editor__group">
-      <button type="button" title="Subrayado (Ctrl+U)" (click)="underline()">
+      <button type="button" title="Subrayado (Ctrl+U)" [class.active]="isActive('underline')"
+        (mousedown)="preventLoseSelection($event)" (click)="underline()">
         <mat-icon>format_underlined</mat-icon>
       </button>
-      <button type="button" title="Tachado" (click)="strikeThrough()">
+      <button type="button" title="Tachado" [class.active]="isActive('strikeThrough')"
+        (mousedown)="preventLoseSelection($event)" (click)="strikeThrough()">
         <mat-icon>format_strikethrough</mat-icon>
       </button>
     </div>
 
     <div class="rich-editor__group">
-      <button type="button" title="Código inline" (click)="toggleCode()">
+      <button type="button" title="Código inline" (mousedown)="preventLoseSelection($event)" (click)="toggleCode()">
         <mat-icon>code</mat-icon>
       </button>
-      <button type="button" title="Cita" (click)="toggleBlockquote()">
+      <button type="button" title="Cita" (mousedown)="preventLoseSelection($event)" (click)="toggleBlockquote()">
         <mat-icon>format_quote</mat-icon>
       </button>
     </div>
 
-    <!-- Lists -->
     <div class="rich-editor__group">
-      <button type="button" title="Lista ordenada" (click)="orderedList()">
+      <button type="button" title="Lista ordenada" (mousedown)="preventLoseSelection($event)" (click)="orderedList()">
         <mat-icon>format_list_numbered</mat-icon>
       </button>
-      <button type="button" title="Lista de viñetas" (click)="bulletList()">
+      <button type="button" title="Lista de viñetas" (mousedown)="preventLoseSelection($event)" (click)="bulletList()">
         <mat-icon>format_list_bulleted</mat-icon>
       </button>
     </div>
 
-    <!-- Heading dropdown -->
     <div class="rich-editor__group rich-editor__dropdown">
-      <button type="button" class="btn-dropdown" title="Encabezado"
+      <button type="button" class="btn-dropdown" title="Encabezado" (mousedown)="preventLoseSelection($event)"
         (click)="showHeadingMenu = !showHeadingMenu; showColorPicker = false">
         <mat-icon>title</mat-icon>
         <mat-icon class="arrow">arrow_drop_down</mat-icon>
       </button>
       @if (showHeadingMenu) {
-        <div class="rich-editor__menu">
-          @for (h of headings; track h) {
-            <button type="button" (click)="formatHeading(h)">{{ h.toUpperCase() }}</button>
-          }
-          <button type="button" (click)="formatHeading('p')">Normal</button>
-        </div>
+      <div class="rich-editor__menu">
+        @for (h of headings; track h) {
+        <button type="button" (mousedown)="preventLoseSelection($event)" (click)="formatHeading(h)">{{ h.toUpperCase()
+          }}</button>
+        }
+        <button type="button" (mousedown)="preventLoseSelection($event)" (click)="formatHeading('p')">Normal</button>
+      </div>
       }
     </div>
 
-    <!-- Link & Image -->
     <div class="rich-editor__group">
-      <button type="button" title="Insertar enlace" (click)="insertLink()">
+      <button type="button" title="Insertar enlace" (mousedown)="preventLoseSelection($event)" (click)="insertLink()">
         <mat-icon>link</mat-icon>
       </button>
-      <button type="button" title="Insertar imagen" (click)="insertImage()">
+      <button type="button" title="Insertar imagen" (mousedown)="preventLoseSelection($event)" (click)="insertImage()">
         <mat-icon>image</mat-icon>
       </button>
     </div>
 
-    <!-- Color picker -->
     <div class="rich-editor__group rich-editor__dropdown">
-      <button type="button" class="btn-dropdown" title="Color de texto"
+      <button type="button" class="btn-dropdown" title="Color de texto" (mousedown)="preventLoseSelection($event)"
         (click)="showColorPicker = !showColorPicker; showHeadingMenu = false">
         <mat-icon>format_color_text</mat-icon>
         <mat-icon class="arrow">arrow_drop_down</mat-icon>
       </button>
       @if (showColorPicker) {
-        <div class="rich-editor__menu rich-editor__palette">
-          @for (color of colors; track color) {
-            <span class="swatch" [style.background]="color"
-              (click)="setColor(color)" [title]="color"></span>
-          }
-        </div>
+      <div class="rich-editor__menu rich-editor__palette">
+        @for (color of colors; track color) {
+        <span class="swatch" [style.background]="color" (mousedown)="preventLoseSelection($event)"
+          (click)="setColor(color)" [title]="color"></span>
+        }
+      </div>
       }
     </div>
 
-    <!-- Alignment -->
     <div class="rich-editor__group">
-      <button type="button" title="Alinear izquierda" (click)="alignLeft()">
+      <button type="button" title="Alinear izquierda" (mousedown)="preventLoseSelection($event)" (click)="alignLeft()">
         <mat-icon>format_align_left</mat-icon>
       </button>
-      <button type="button" title="Centrar" (click)="alignCenter()">
+      <button type="button" title="Centrar" (mousedown)="preventLoseSelection($event)" (click)="alignCenter()">
         <mat-icon>format_align_center</mat-icon>
       </button>
-      <button type="button" title="Alinear derecha" (click)="alignRight()">
+      <button type="button" title="Alinear derecha" (mousedown)="preventLoseSelection($event)" (click)="alignRight()">
         <mat-icon>format_align_right</mat-icon>
       </button>
-      <button type="button" title="Justificar" (click)="alignJustify()">
+      <button type="button" title="Justificar" (mousedown)="preventLoseSelection($event)" (click)="alignJustify()">
         <mat-icon>format_align_justify</mat-icon>
       </button>
     </div>
 
-    <!-- Misc -->
     <div class="rich-editor__group">
-      <button type="button" title="Línea horizontal" (click)="horizontalRule()">
+      <button type="button" title="Línea horizontal" (mousedown)="preventLoseSelection($event)"
+        (click)="horizontalRule()">
         <mat-icon>horizontal_rule</mat-icon>
       </button>
-      <button type="button" title="Eliminar formato" (click)="removeFormat()">
+      <button type="button" title="Eliminar formato" (mousedown)="preventLoseSelection($event)"
+        (click)="removeFormat()">
         <mat-icon>format_clear</mat-icon>
       </button>
     </div>
 
-    <!-- History -->
     <div class="rich-editor__group">
-      <button type="button" title="Deshacer (Ctrl+Z)" (click)="undo()">
+      <button type="button" title="Deshacer (Ctrl+Z)" (mousedown)="preventLoseSelection($event)" (click)="undo()">
         <mat-icon>undo</mat-icon>
       </button>
-      <button type="button" title="Rehacer (Ctrl+Y)" (click)="redo()">
+      <button type="button" title="Rehacer (Ctrl+Y)" (mousedown)="preventLoseSelection($event)" (click)="redo()">
         <mat-icon>redo</mat-icon>
       </button>
     </div>
 
   </div>
 
-  <!--  Content area  -->
-  <div
-    #editorEl
-    class="rich-editor__content"
-    contenteditable="true"
-    [attr.data-placeholder]="placeholder"
-    (input)="onInput()"
-    (blur)="onBlur()">
+  <div #editorEl class="rich-editor__content" contenteditable="true" [attr.data-placeholder]="placeholder"
+    (input)="onInput()" (blur)="onBlur()" (keydown)="onKeydown($event)">
   </div>
 
+  <div #bubbleEl class="rich-editor__bubble" [class.is-visible]="showBubble" [style.top.px]="bubbleTop"
+    [style.left.px]="bubbleLeft">
+
+    @if (!showLinkInput) {
+    <div class="rich-editor__bubble-row">
+      <button type="button" title="Negrita" [class.active]="isActive('bold')" (mousedown)="preventLoseSelection($event)"
+        (click)="bold()">
+        <mat-icon>format_bold</mat-icon>
+      </button>
+      <button type="button" title="Cursiva" [class.active]="isActive('italic')"
+        (mousedown)="preventLoseSelection($event)" (click)="italic()">
+        <mat-icon>format_italic</mat-icon>
+      </button>
+      <button type="button" title="Subrayado" [class.active]="isActive('underline')"
+        (mousedown)="preventLoseSelection($event)" (click)="underline()">
+        <mat-icon>format_underlined</mat-icon>
+      </button>
+      <button type="button" title="Tachado" [class.active]="isActive('strikeThrough')"
+        (mousedown)="preventLoseSelection($event)" (click)="strikeThrough()">
+        <mat-icon>format_strikethrough</mat-icon>
+      </button>
+      <button type="button" title="Código" (mousedown)="preventLoseSelection($event)" (click)="toggleCode()">
+        <mat-icon>code</mat-icon>
+      </button>
+
+      <span class="rich-editor__bubble-sep"></span>
+
+      <button type="button" title="Enlace" (mousedown)="preventLoseSelection($event)" (click)="openLink()">
+        <mat-icon>link</mat-icon>
+      </button>
+      <button type="button" class="btn-color" title="Color de texto" (mousedown)="preventLoseSelection($event)"
+        (click)="toggleBubbleColors()">
+        <mat-icon>format_color_text</mat-icon>
+        <mat-icon class="arrow">arrow_drop_down</mat-icon>
+      </button>
+
+      <span class="rich-editor__bubble-sep"></span>
+
+      <button type="button" title="Quitar formato" (mousedown)="preventLoseSelection($event)" (click)="removeFormat()">
+        <mat-icon>format_clear</mat-icon>
+      </button>
+    </div>
+
+    @if (showBubbleColors) {
+    <div class="rich-editor__bubble-palette">
+      @for (color of colors; track color) {
+      <span class="swatch" [style.background]="color" [title]="color" (mousedown)="preventLoseSelection($event)"
+        (click)="applyColor(color)"></span>
+      }
+    </div>
+    }
+    } @else {
+    <div class="rich-editor__bubble-link">
+      <mat-icon>link</mat-icon>
+      <input #linkInputEl type="text" placeholder="Pega o escribe un enlace…" [value]="linkUrl"
+        (keydown.enter)="applyLink()" (keydown.escape)="showLinkInput = false" />
+      <button type="button" class="apply" title="Aplicar" (mousedown)="preventLoseSelection($event)"
+        (click)="applyLink()">
+        <mat-icon>check</mat-icon>
+      </button>
+      <button type="button" class="remove" title="Quitar enlace" (mousedown)="preventLoseSelection($event)"
+        (click)="removeLink()">
+        <mat-icon>link_off</mat-icon>
+      </button>
+    </div>
+    }
+  </div>
 </div>

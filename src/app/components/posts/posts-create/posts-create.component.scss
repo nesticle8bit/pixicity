@@ -1,289 +1,392 @@
-/* ===========================
-   FORM ADD POST — HOST STYLES
-   =========================== */
+$accent: #006595;
+$accent-dark: #004160;
+$accent-soft: rgba(0, 101, 149, 0.08);
+$bar-h: 64px;
 
 :host {
-    display: block;
+  display: block;
 }
 
-/* Page header */
-.form-add-post__header {
-    padding: 16px 0 10px;
-    border-bottom: 2px solid #006595;
-    margin-bottom: 18px;
-
-    h1 {
-        font-size: 20px;
-        font-weight: 700;
-        color: #333;
-        margin: 0 0 2px;
-
-        i.ti {
-            color: #006595;
-            margin-right: 6px;
-        }
-    }
-
-    p {
-        color: #999;
-        font-size: 12px;
-        margin: 0;
-    }
+.cp {
+  margin: 0 auto;
+  padding: 0 12px 40px;
 }
 
-/* Section boxes — .titular from global styles applies */
-.form-add-post__section {
-    margin-bottom: 12px;
-    border: 1px solid #e5e5e5;
-    border-radius: 3px;
-    background: #fff;
-    overflow: hidden;
+// ---------- Barra de acciones sticky ----------
+.cp-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  min-height: $bar-h;
+  padding: 12px 4px;
+  margin-bottom: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #e6e6e6;
 
-    .titular {
-        background: #f5f5f5;
-        border-bottom: 1px solid #e5e5e5;
-        padding: 8px 10px;
-        overflow: hidden;
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
-        h2 {
-            float: left;
-            font-size: 13px;
-            font-weight: 700;
-            color: #555;
-            margin: 0;
-            line-height: 20px;
+  &__icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg, $accent, $accent-dark);
+    color: #fff;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
 
-            i.ti {
-                color: #006595;
-                margin-right: 5px;
-            }
-        }
-    }
-
-    .normab {
-        padding: 10px;
-    }
-}
-
-/* Title counter in header */
-.titular__counter {
-    float: right;
-    font-size: 11px;
-    color: #aaa;
-    font-weight: 400;
-    line-height: 20px;
-
-    &--warn {
-        color: #e67e22;
-        font-weight: 700;
-    }
-}
-
-/* Action link in titular (Generador) */
-.titular__action {
-    float: right;
-    font-size: 11px;
-    color: #006595;
-    font-weight: 700;
-    line-height: 20px;
-    cursor: pointer;
-
-    &:hover {
-        text-decoration: underline;
-    }
-
-    i.ti {
-        margin-right: 3px;
-    }
-}
-
-/* Title input */
-.form-add-post__title-input {
-    font-size: 15px;
-    font-weight: 600;
-    color: #333;
-    border-radius: 3px;
-    border-color: #ddd;
-
-    &:focus {
-        border-color: #006595;
-        box-shadow: 0 0 0 2px rgba(0, 101, 149, 0.1);
-    }
-}
-
-/* Re-post warning */
-.form-add-post__repost-warn {
-    background: #fff8e1;
-    border: 1px solid #ffe082;
-    border-radius: 3px;
-    padding: 8px 10px;
-    font-size: 12px;
-    color: #795548;
-}
-
-/* Editor wrapper */
-.normab--editor {
-    padding: 0 !important;
-}
-
-:host .NgxEditor__Wrapper {
-    height: 500px;
-    overflow-y: auto;
-    border: none;
-}
-
-/* Hint text */
-.form-add-post__hint {
-    font-size: 11px;
-    color: #888;
-    margin: 6px 0 0;
-
-    b { color: #555; }
-
-    kbd {
-        background: #f0f0f0;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        padding: 1px 4px;
-        font-size: 10px;
-    }
-}
-
-/* Publish box */
-.form-add-post__publish-box {
-    border-color: #006595;
-
-    .titular {
-        background: #006595;
-        border-bottom-color: #005580;
-
-        h2 {
-            color: #fff;
-
-            i.ti {
-                color: #fff;
-            }
-        }
-    }
-}
-
-.btn-publish {
-    font-weight: 700;
-    letter-spacing: .3px;
-}
-
-/* Draft saved */
-.form-add-post__draft-saved {
-    font-size: 11px;
-    color: #27ae60;
-    font-weight: 600;
-}
-
-/* Option row */
-.form-add-post__option {
-    padding: 4px 0 8px;
-
-    small {
-        display: block;
-        color: #999;
-        font-size: 11px;
-        margin-top: 2px;
-        margin-left: 2px;
-    }
-}
-
-/* Tips */
-.form-add-post__tips {
-    border-color: #dde;
-
-    .titular {
-        background: #f0f4ff;
-        border-bottom-color: #dde;
-
-        h2 {
-            color: #556;
-        }
-    }
-}
-
-.form-add-post__tips-list {
+  h1 {
     margin: 0;
-    padding-left: 16px;
+    font-size: 19px;
+    font-weight: 700;
+    color: #222;
+    line-height: 1.1;
+  }
+
+  p {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: #999;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    i {
+      margin-right: 5px;
+    }
+  }
+}
+
+// ---------- Aviso borrador guardado ----------
+.cp-saved {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 9px 14px;
+  border-radius: 8px;
+  background: #e9f9ef;
+  border: 1px solid #b6e6c8;
+  color: #1c7c46;
+  font-size: 13px;
+  font-weight: 600;
+
+  i {
+    font-size: 18px;
+  }
+}
+
+// ---------- Grid principal ----------
+.cp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 18px;
+  align-items: start;
+
+  @media (max-width: 991px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cp-main,
+.cp-side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.cp-side {
+  position: sticky;
+  top: calc(#{$bar-h} + 16px);
+
+  @media (max-width: 991px) {
+    position: static;
+  }
+}
+
+// ---------- Card ----------
+.cp-card {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  &__head-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+
+    i {
+      color: $accent;
+      font-size: 18px;
+    }
+  }
+
+  &__head-badge {
     font-size: 11px;
-    color: #666;
-    line-height: 2;
+    font-weight: 700;
+    color: #999;
+    background: #f1f1f1;
+    border-radius: 20px;
+    padding: 2px 9px;
+
+    &--ok {
+      color: #1c7c46;
+      background: #e9f9ef;
+    }
+  }
+}
+
+// ---------- Campo / título ----------
+.cp-field__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.cp-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #444;
+}
+
+.cp-req {
+  color: #e53935;
+}
+
+.cp-counter {
+  font-size: 11px;
+  color: #aaa;
+  font-weight: 600;
+
+  &--warn {
+    color: #e67e22;
+  }
+}
+
+.cp-title-input {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2b2b2b;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &::placeholder {
+    color: #c2c2c2;
+    font-weight: 500;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $accent;
+    box-shadow: 0 0 0 3px $accent-soft;
+  }
+}
+
+// ---------- Aviso re-posts ----------
+.cp-repost {
+  margin-top: 14px;
+  border: 1px solid #ffe082;
+  background: #fff8e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #8a6d3b;
+    margin-bottom: 6px;
+
+    i {
+      color: #e6a700;
+      font-size: 16px;
+    }
+  }
+
+  &__item {
+    font-size: 13px;
+    padding: 3px 0;
+
+    &:not(:last-child) {
+      border-bottom: 1px dashed #f0dca5;
+    }
+  }
+}
+
+// ---------- Botón generador ----------
+.cp-generator-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: $accent-soft;
+  color: $accent;
+  border: 1px solid rgba(0, 101, 149, 0.2);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: $accent;
+    color: #fff;
+  }
+}
+
+// ---------- Hint editor vacío ----------
+.cp-empty-hint {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 12px 0 0;
+  font-size: 12.5px;
+  color: #777;
+
+  i {
+    color: #e6a700;
+  }
+
+  a {
+    color: $accent;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+// ---------- Opciones ----------
+.cp-opt {
+  margin-bottom: 14px;
+
+  .cp-label {
+    display: block;
+    margin-bottom: 6px;
+  }
+}
+
+.cp-toggle {
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+
+  small {
+    display: block;
+    margin-top: 4px;
+    color: #999;
+    font-size: 11.5px;
+  }
+}
+
+.cp-hint {
+  margin: 8px 0 0;
+  font-size: 11.5px;
+  color: #888;
+  line-height: 1.5;
+
+  b {
+    color: #555;
+  }
+}
+
+// ---------- Tips ----------
+.cp-tips {
+  background: #f6f9ff;
+  border-color: #dde7f7;
+
+  &__list {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 12.5px;
+    color: #5a6473;
+    line-height: 1.9;
 
     li::marker {
-        color: #006595;
+      color: $accent;
     }
+  }
 }
 
-/* Tags */
+// ---------- Tags (mat-chip-grid) ----------
 :host .tags-input-wrapper {
-    display: block;
-    width: 100%;
-    padding: 6px 8px;
-    background-color: #fafafa;
-    border: 1.5px solid #dee2e6;
-    border-radius: 4px;
-    min-height: 46px;
-    cursor: text;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  min-height: 44px;
+  cursor: text;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
 
-    mat-chip-list {
-        .mat-chip-list-wrapper {
-            margin: 0;
-            gap: 4px;
-            flex-wrap: wrap;
-            align-items: center;
-            min-height: 28px;
+  input {
+    font-size: 13px;
+    color: #495057;
+    padding: 2px 4px;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent;
+    min-width: 120px;
 
-            input {
-                font-size: 13px;
-                color: #495057;
-                padding: 2px 4px;
-                margin: 0;
-                flex: 1;
-                min-width: 140px;
-                border: none !important;
-                outline: none !important;
-                box-shadow: none !important;
-                background: transparent;
-
-                &::placeholder {
-                    color: #bbb;
-                    font-style: italic;
-                }
-            }
-        }
+    &::placeholder {
+      color: #bbb;
+      font-style: italic;
     }
+  }
 
-    .mat-chip.mat-standard-chip {
-        font-size: 11px;
-        font-weight: 600;
-        min-height: 22px;
-        padding: 2px 6px 2px 10px;
-        border-radius: 20px;
-        background-color: #e3f2fd;
-        color: #1565c0;
-        border: 1px solid #bbdefb;
-        line-height: 1.4;
-    }
-
-    &:focus-within {
-        border-color: #006595;
-        background-color: #fff;
-        box-shadow: 0 0 0 2px rgba(0, 101, 149, 0.1);
-    }
+  &:focus-within {
+    border-color: $accent;
+    background: #fff;
+    box-shadow: 0 0 0 3px $accent-soft;
+  }
 }
 
-/* Responsive */
-@media (max-width: 767.98px) {
-    .form-add-post__header h1 {
-        font-size: 16px;
-    }
+// ---------- Responsive ----------
+@media (max-width: 575px) {
+  .cp-bar {
+    &__actions {
+      width: 100%;
 
-    :host .NgxEditor__Wrapper {
-        height: 350px;
+      button {
+        flex: 1;
+      }
     }
+  }
 }

@@ -1,4 +1,5 @@
 .rich-editor {
+  position: relative;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   overflow: visible;
@@ -192,6 +193,175 @@
       max-width: 100%;
       height: auto;
       border-radius: 4px;
+    }
+  }
+
+  //  Bubble menu (estilo Notion)
+  &__bubble {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1200;
+    display: flex;
+    flex-direction: column;
+    background: #2b2b2b;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+    // oculto pero medible (offsetWidth/Height) para posicionar bien
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.12s ease, transform 0.12s ease;
+    pointer-events: none;
+
+    &.is-visible {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+  }
+
+  &__bubble-row {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    padding: 4px 5px;
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 6px;
+      cursor: pointer;
+      color: #e8e8e8;
+      line-height: 1;
+      transition: background 0.12s, color 0.12s;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.14);
+        color: #fff;
+      }
+
+      &.active {
+        color: #6cb6ff;
+      }
+
+      &.btn-color {
+        padding-right: 2px;
+
+        .arrow {
+          font-size: 15px;
+          width: 13px;
+          height: 15px;
+          margin-left: -3px;
+        }
+      }
+    }
+  }
+
+  &__bubble-sep {
+    width: 1px;
+    align-self: stretch;
+    margin: 4px 3px;
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  &__bubble-palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: 184px;
+    padding: 6px 8px 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+
+    .swatch {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      transition: transform 0.1s;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+
+  &__bubble-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    width: 320px;
+
+    > mat-icon {
+      color: #9a9a9a;
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      background: #1f1f1f;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 5px;
+      padding: 6px 9px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+
+      &::placeholder {
+        color: #888;
+      }
+
+      &:focus {
+        border-color: #6cb6ff;
+      }
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      border-radius: 5px;
+      padding: 5px;
+      cursor: pointer;
+      color: #e8e8e8;
+      flex-shrink: 0;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.14);
+      }
+
+      &.apply:hover {
+        color: #5ed07a;
+      }
+
+      &.remove:hover {
+        color: #ff7b7b;
+      }
     }
   }
 }
