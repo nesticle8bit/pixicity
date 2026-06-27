@@ -1,0 +1,191 @@
+<div class="container container--home comunidad-create">
+  <!-- Hero -->
+  <header class="cc-hero">
+    <div class="cc-hero__icon"><i class="ti ti-users-group"></i></div>
+    <div class="cc-hero__text">
+      <h1>Crear una comunidad</h1>
+      <p>Reúne a personas con tus mismos intereses y empieza a compartir temas.</p>
+    </div>
+  </header>
+
+  <form [formGroup]="formGroup" (ngSubmit)="crear()" class="cc-grid">
+    <!-- Columna principal -->
+    <main class="cc-main">
+      <!-- Identidad -->
+      <section class="cc-card">
+        <div class="cc-card__head">
+          <span class="cc-card__title"><i class="ti ti-id-badge-2"></i> Identidad</span>
+        </div>
+
+        <div class="cc-field">
+          <div class="cc-field__head">
+            <label>Nombre <span class="cc-req">*</span></label>
+            <span class="cc-counter" [class.cc-counter--warn]="(formGroup.value?.nombre?.length || 0) >= 70">
+              {{ formGroup.value?.nombre?.length || 0 }}/80
+            </span>
+          </div>
+          <input type="text" formControlName="nombre" (input)="onNombreChange()" maxlength="80"
+            placeholder="Ej. Amantes del café" />
+          @if (formGroup.get('nombre')?.touched && formGroup.get('nombre')?.invalid) {
+            <small class="cc-err">El nombre es obligatorio.</small>
+          }
+        </div>
+
+        <div class="cc-field">
+          <label>Nombre corto (URL) <span class="cc-req">*</span></label>
+          <div class="cc-slug">
+            <span class="cc-slug__prefix">taringas.net/comunidades/</span>
+            <input type="text" formControlName="nombreCorto" placeholder="amantes-del-cafe" />
+          </div>
+          <small class="cc-hint">
+            Sólo minúsculas, números y guiones medios (-). <strong>No se podrá modificar después.</strong>
+          </small>
+          @if (formGroup.get('nombreCorto')?.touched && formGroup.get('nombreCorto')?.invalid) {
+            <small class="cc-err">Formato inválido (solo a-z, 0-9 y guiones).</small>
+          }
+        </div>
+
+        <div class="cc-field">
+          <div class="cc-field__head">
+            <label>Descripción <span class="cc-req">*</span></label>
+            <span class="cc-counter" [class.cc-counter--warn]="(formGroup.value?.descripcion?.length || 0) >= 900">
+              {{ formGroup.value?.descripcion?.length || 0 }}/1000
+            </span>
+          </div>
+          <textarea formControlName="descripcion" maxlength="1000" rows="4"
+            placeholder="¿De qué trata tu comunidad? Cuéntale a la gente por qué debería unirse…"></textarea>
+          @if (formGroup.get('descripcion')?.touched && formGroup.get('descripcion')?.invalid) {
+            <small class="cc-err">La descripción es obligatoria.</small>
+          }
+        </div>
+      </section>
+
+      <!-- Clasificación -->
+      <section class="cc-card">
+        <div class="cc-card__head">
+          <span class="cc-card__title"><i class="ti ti-category"></i> Clasificación</span>
+        </div>
+
+        <div class="cc-row">
+          <div class="cc-field">
+            <label>Categoría <span class="cc-req">*</span></label>
+            <app-select [items]="categorias" bindLabel="nombre" bindValue="id"
+              formControlName="comunidadCategoriaId" placeholder="Selecciona una categoría"
+              (change)="onCategoriaChange()"></app-select>
+          </div>
+
+          <div class="cc-field">
+            <label>Sub-categoría</label>
+            <app-select [items]="subCategorias" bindLabel="nombre" bindValue="id"
+              formControlName="comunidadSubCategoriaId"
+              [disabled]="subCategorias.length === 0"
+              [placeholder]="subCategorias.length === 0 ? 'Elige una categoría primero' : 'Selecciona una sub-categoría'"></app-select>
+          </div>
+        </div>
+
+        <div class="cc-field">
+          <label>País</label>
+          <app-select [items]="paises" bindLabel="nombre" bindValue="id" formControlName="paisId"
+            placeholder="Selecciona un país (opcional)">
+            <ng-template appSelectOption let-item="item">
+              @if (item?.iso2) {
+                <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1">
+              }
+              {{ item.nombre }}
+            </ng-template>
+            <ng-template appSelectLabel let-item="item">
+              @if (item?.iso2) {
+                <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1">
+              }
+              {{ item.nombre }}
+            </ng-template>
+          </app-select>
+        </div>
+      </section>
+
+      <!-- Acceso -->
+      <section class="cc-card">
+        <div class="cc-card__head">
+          <span class="cc-card__title"><i class="ti ti-lock-access"></i> Acceso</span>
+        </div>
+
+        <label class="cc-choice" [class.cc-choice--on]="+formGroup.value.acceso === 1">
+          <input type="radio" formControlName="acceso" [value]="1" />
+          <i class="ti ti-world"></i>
+          <span>
+            <b>Todos <em class="cc-tag">Recomendado</em></b>
+            Cualquier persona que visite el sitio podrá acceder.
+          </span>
+        </label>
+        <label class="cc-choice" [class.cc-choice--on]="+formGroup.value.acceso === 2">
+          <input type="radio" formControlName="acceso" [value]="2" />
+          <i class="ti ti-user-shield"></i>
+          <span>
+            <b>Sólo usuarios registrados</b>
+            El acceso estará restringido a usuarios registrados.
+          </span>
+        </label>
+      </section>
+
+      <!-- Permisos -->
+      <section class="cc-card">
+        <div class="cc-card__head">
+          <span class="cc-card__title"><i class="ti ti-adjustments"></i> Permisos de los miembros</span>
+        </div>
+
+        <label class="cc-choice" [class.cc-choice--on]="+formGroup.value.permisos === 3">
+          <input type="radio" formControlName="permisos" [value]="3" />
+          <i class="ti ti-pencil-plus"></i>
+          <span><b>Posteador</b> Los miembros podrán comentar y crear temas.</span>
+        </label>
+        <label class="cc-choice" [class.cc-choice--on]="+formGroup.value.permisos === 2">
+          <input type="radio" formControlName="permisos" [value]="2" />
+          <i class="ti ti-message"></i>
+          <span><b>Comentador</b> Los miembros sólo podrán comentar, no crear temas.</span>
+        </label>
+        <label class="cc-choice" [class.cc-choice--on]="+formGroup.value.permisos === 1">
+          <input type="radio" formControlName="permisos" [value]="1" />
+          <i class="ti ti-eye"></i>
+          <span><b>Visitante</b> Los miembros no podrán comentar ni crear temas.</span>
+        </label>
+
+        <div class="cc-note">
+          <i class="ti ti-info-circle"></i>
+          La opción seleccionada asigna el mismo rango a los nuevos miembros; podrás cambiarlo después por participante.
+        </div>
+      </section>
+
+      <div class="cc-actions">
+        <a [routerLink]="['/comunidades']" class="cc-btn cc-btn--ghost">Cancelar</a>
+        <button type="submit" class="cc-btn cc-btn--primary" [disabled]="loading">
+          <i class="ti ti-check"></i> Crear comunidad
+        </button>
+      </div>
+    </main>
+
+    <!-- Sidebar de reglas -->
+    <aside class="cc-aside">
+      <div class="cc-rules">
+        <span class="cc-rules__title"><i class="ti ti-shield-check"></i> Reglas para tu comunidad</span>
+        <p>Para que tu comunidad sea exitosa, ten en cuenta estos puntos:</p>
+
+        <p class="cc-rules__si"><i class="ti ti-circle-check"></i> Una comunidad SÍ puede:</p>
+        <ul class="cc-rules__list cc-rules__list--ok">
+          <li>Compartir ideas y pensamientos.</li>
+          <li>Ser interesante para otras personas.</li>
+          <li>Preguntar y consultar.</li>
+          <li>Compartir gustos y experiencias.</li>
+        </ul>
+
+        <p class="cc-rules__no"><i class="ti ti-circle-x"></i> Una comunidad NO puede:</p>
+        <ul class="cc-rules__list cc-rules__list--no">
+          <li>Generar odio o violencia.</li>
+          <li>Contenido racista o peyorativo.</li>
+          <li>Insultar a otros miembros.</li>
+          <li>Hacer apología al delito.</li>
+          <li>Hacer spam o difundir malware.</li>
+        </ul>
+      </div>
+    </aside>
+  </form>
+</div>

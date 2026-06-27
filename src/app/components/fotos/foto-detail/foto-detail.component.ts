@@ -88,4 +88,8 @@ export class FotoDetailComponent implements OnInit {
   get esMio(): boolean {
     return this.currentUser?.usuario?.userName === this.foto?.usuario;
   }
+
+  get esAdmin(): boolean {
+    return this.currentUser?.usuario?.rango === 'Administrador';
+  }
 }

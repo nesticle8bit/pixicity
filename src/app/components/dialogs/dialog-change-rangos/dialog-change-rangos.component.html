@@ -9,8 +9,8 @@
         <div class="mb-3">
           <label class="form-label">Rango</label>
 
-          <ng-select [items]="rangos" formControlName="id" bindLabel="nombre" bindValue="id">
-            <ng-template ng-label-tmp let-item="item">
+          <app-select [items]="rangos" formControlName="id" bindLabel="nombre" bindValue="id">
+            <ng-template appSelectLabel let-item="item">
               @if (item.icono) {
                 <img src="/assets/images/icons/rangos/{{item.icono}}" class="image-middle me-1"
                   >
@@ -18,11 +18,11 @@
               <span [ngStyle]="{'color': item.color}">{{item.nombre ? item.nombre : item | json}}</span>
             </ng-template>
 
-            <ng-template ng-option-tmp let-item="item" let-index="index">
+            <ng-template appSelectOption let-item="item" let-index="index">
               <img src="/assets/images/icons/rangos/{{item.icono}}" class="image-middle me-1">
               <span [ngStyle]="{'color': item.color}">{{item.nombre}}</span>
             </ng-template>
-          </ng-select>
+          </app-select>
         </div>
       </div>
     </div>

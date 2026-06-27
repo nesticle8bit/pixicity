@@ -5,8 +5,13 @@ import { DashboardComponent } from '../../components/admin/dashboard/dashboard.c
 import { DashboardAdminComponent } from '../../components/admin/dashboard-admin/dashboard-admin.component';
 import { DashboardConfigurationComponent } from '../../components/admin/general/configuration/dashboard-configuration/dashboard-configuration.component';
 import { DashboardPostsComponent } from '../../components/admin/control-de-contenido/posts/dashboard-posts/dashboard-posts.component';
+import { DashboardFotosComponent } from '../../components/admin/control-de-contenido/fotos/dashboard-fotos/dashboard-fotos.component';
+import { DashboardCensurasComponent } from '../../components/admin/control-de-contenido/censuras/dashboard-censuras/dashboard-censuras.component';
 import { DashboardAfiliadosComponent } from '../../components/admin/control-de-comunidad/afiliados/dashboard-afiliados/dashboard-afiliados.component';
 import { DashboardCategoriasComponent } from '../../components/admin/control-de-comunidad/categorias/dashboard-categorias/dashboard-categorias.component';
+import { DashboardComunidadesComponent } from '../../components/admin/control-de-comunidad/comunidades/dashboard-comunidades/dashboard-comunidades.component';
+import { DashboardDenunciasComunidadComponent } from '../../components/admin/control-de-comunidad/denuncias-comunidad/dashboard-denuncias-comunidad/dashboard-denuncias-comunidad.component';
+import { DashboardDenunciasComentariosComponent } from '../../components/admin/control-de-contenido/denuncias-comentarios/dashboard-denuncias-comentarios/dashboard-denuncias-comentarios.component';
 import { DashboardAdsComponent } from '../../components/admin/general/publicidad/dashboard-ads/dashboard-ads.component';
 import { DashboardCommentsComponent } from '../../components/admin/control-de-contenido/comentarios/dashboard-comments/dashboard-comments.component';
 import { DashboardPaisesComponent } from '../../components/admin/control-de-contenido/paises/dashboard-paises/dashboard-paises.component';
@@ -31,8 +36,13 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardAdminComponent },
       { path: 'configuracion', component: DashboardConfigurationComponent },
       { path: 'posts', component: DashboardPostsComponent },
+      { path: 'fotos', component: DashboardFotosComponent },
+      { path: 'censuras', component: DashboardCensurasComponent },
       { path: 'afiliados', component: DashboardAfiliadosComponent },
       { path: 'categorias', component: DashboardCategoriasComponent },
+      { path: 'comunidades-categorias', component: DashboardComunidadesComponent },
+      { path: 'comunidades-denuncias', component: DashboardDenunciasComunidadComponent },
+      { path: 'comentarios-denuncias', component: DashboardDenunciasComentariosComponent },
       { path: 'publicidad', component: DashboardAdsComponent },
       { path: 'comentarios', component: DashboardCommentsComponent },
       { path: 'paises', component: DashboardPaisesComponent },

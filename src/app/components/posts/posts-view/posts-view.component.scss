@@ -1,3 +1,11 @@
+/* El contenedor del post no debe generar scroll horizontal ni descentrarse.
+   Sin el padding:0 que tenía antes, Bootstrap centra el .container y sus
+   gutters compensan los márgenes negativos del .row. */
+.post-view-container {
+    max-width: 100%;
+    overflow-x: clip;
+}
+
 .post-view-content {
     padding-right: 38px;
 }

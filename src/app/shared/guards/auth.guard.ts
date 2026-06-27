@@ -11,7 +11,7 @@ export const AuthGuard: CanActivateFn = (
 
   const currentUser = securityService.getCurrentUser();
 
-  if (currentUser) {
+  if (currentUser?.usuario && currentUser?.token) {
     return true;
   }
 

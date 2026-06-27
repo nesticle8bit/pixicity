@@ -1,43 +1,57 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+interface Interval {
+  singular: string;
+  plural: string;
+  seconds: number;
+}
+
+const INTERVALS: Interval[] = [
+  { singular: 'año', plural: 'años', seconds: 31536000 },
+  { singular: 'mes', plural: 'meses', seconds: 2592000 },
+  { singular: 'semana', plural: 'semanas', seconds: 604800 },
+  { singular: 'día', plural: 'días', seconds: 86400 },
+  { singular: 'hora', plural: 'horas', seconds: 3600 },
+  { singular: 'minuto', plural: 'minutos', seconds: 60 },
+  { singular: 'segundo', plural: 'segundos', seconds: 1 },
+];
+
 @Pipe({
   standalone: false,
-    name: 'timeAgo',
-    pure: true
+  name: 'timeAgo',
+  pure: true,
 })
 export class TimeAgoPipe implements PipeTransform {
-    transform(value: any): any {
-        if (value) {
-            const seconds = Math.floor((+new Date() - +new Date(value)) / 1000);
-
-            if (seconds < 29) {
-                return 'Hace unos segundos';
-            }
-
-            const intervals: any = {
-                'año': 31536000,
-                'mes': 2592000,
-                'semana': 604800,
-                'día': 86400,
-                'hora': 3600,
-                'minuto': 60,
-                'segundo': 1
-            };
-
-            let counter;
-
-            for (const i in intervals) {
-                counter = Math.floor(seconds / intervals[i]);
-
-                if (counter > 0)
-                    if (counter === 1) {
-                        return `Hace ${counter} ${i}`;
-                    } else {
-                        return `Hace ${counter} ${i === 'mes' ? 'mese' : i}s`;
-                    }
-            }
-        }
-        return value;
+  transform(value: Date | string | number | null | undefined): string {
+    if (value === null || value === undefined || value === '') {
+      return '';
     }
 
+    const date = new Date(value);
+    const time = date.getTime();
+
+    // Fecha inválida: devolvemos el valor original como texto
+    if (isNaN(time)) {
+      return String(value);
+    }
+
+    const deltaSeconds = Math.round((Date.now() - time) / 1000);
+    const future = deltaSeconds < 0;
+    const seconds = Math.abs(deltaSeconds);
+
+    if (seconds < 30) {
+      return future ? 'En unos segundos' : 'Hace unos segundos';
+    }
+
+    for (const interval of INTERVALS) {
+      const counter = Math.floor(seconds / interval.seconds);
+
+      if (counter > 0) {
+        const unit = counter === 1 ? interval.singular : interval.plural;
+        return future ? `En ${counter} ${unit}` : `Hace ${counter} ${unit}`;
+      }
+    }
+
+    return '';
+  }
 }

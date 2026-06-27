@@ -137,9 +137,75 @@ export class HttpParametrosService implements IHttpParametrosService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getTopCategorias(count: number = 10): Observable<any[]> {
+    return this.http
+      .get<ApiResponse<any[]>>(`${environment.api}/api/categorias/getTopCategorias?count=${count}`)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) {
+            return response.data!;
+          } else {
+            this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
+          }
+        }),
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   saveCategoria(categoria: Partial<CategoriaViewModel>): Observable<number> {
     return this.http
       .post<ApiResponse<number>>(`${environment.api}/api/categorias/saveCategoria`, categoria)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) {
+            return response.data!;
+          } else {
+            this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
+          }
+        }),
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getCensuras(): Observable<PaginatedData<any>> {
+    return this.http
+      .get<ApiResponse<PaginatedData<any>>>(
+        `${environment.api}/api/censuras/getCensuras?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
+      )
+      .pipe(
+        map((response) => {
+          if (response.status === 200) {
+            return response.data!;
+          } else {
+            this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
+          }
+        }),
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  saveCensura(censura: any): Observable<number> {
+    return this.http
+      .post<ApiResponse<number>>(`${environment.api}/api/censuras/saveCensura`, censura)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) {
+            return response.data!;
+          } else {
+            this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
+          }
+        }),
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  deleteCensura(id: number): Observable<boolean> {
+    return this.http
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/censuras/deleteCensura?id=${id}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

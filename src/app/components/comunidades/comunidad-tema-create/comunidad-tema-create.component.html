@@ -1,0 +1,47 @@
+<div class="container container--home comunidad-create">
+  <div class="row">
+    <div class="col-12 col-md-8">
+      <form [formGroup]="formGroup" (ngSubmit)="crear()" class="add-com">
+        <h2>{{temaId ? 'Editar tema' : 'Nuevo tema'}} @if (comunidad) { <small>en {{comunidad.nombre}}</small> }</h2>
+
+        <div class="item-form">
+          <label>Título</label>
+          <input type="text" formControlName="titulo" maxlength="150" />
+          @if (formGroup.get('titulo')?.touched && formGroup.get('titulo')?.invalid) {
+            <small class="err">El título es obligatorio.</small>
+          }
+        </div>
+
+        <div class="item-form">
+          <label>Contenido</label>
+          <app-rich-editor formControlName="contenido"
+            [placeholder]="'Desarrolla tu tema…'"></app-rich-editor>
+          @if (formGroup.get('contenido')?.touched && formGroup.get('contenido')?.invalid) {
+            <small class="err">El contenido es obligatorio.</small>
+          }
+        </div>
+
+        <div class="item-form">
+          <button type="submit" class="boton azul" [disabled]="loading">
+            <i class="ti ti-send"></i> {{temaId ? 'Guardar cambios' : 'Publicar tema'}}
+          </button>
+          <a [routerLink]="['/comunidades', slug]" class="boton gris" style="margin-left:6px;">Cancelar</a>
+        </div>
+      </form>
+    </div>
+
+    <aside class="col-12 col-md-4">
+      <div class="tema-tips">
+        <div class="tema-tips__head">
+          <i class="ti ti-bulb"></i> Tips para publicar
+        </div>
+        <ul class="tema-tips__list">
+          <li>Usa un título claro y descriptivo.</li>
+          <li>Desarrolla tu idea para abrir el debate.</li>
+          <li>Sé respetuoso con los demás miembros.</li>
+          <li>Aporta fuentes o enlaces cuando sea posible.</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>

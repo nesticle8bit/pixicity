@@ -1,0 +1,60 @@
+.cat-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  overflow: hidden;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #f7f7f7;
+    border-bottom: 1px solid #eee;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+
+    .orden {
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      background: #006595;
+      border-radius: 10px;
+      padding: 1px 7px;
+    }
+  }
+
+  &__subs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 12px;
+  }
+}
+
+.sub-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  background: #eef1f3;
+  border-radius: 14px;
+  padding: 3px 10px;
+  color: #444;
+
+  a {
+    cursor: pointer;
+    color: #888;
+    line-height: 1;
+    &:hover { color: #006595; }
+    &.del:hover { color: #c0392b; }
+  }
+}
+
+.sin-subs { font-size: 12px; font-style: italic; }

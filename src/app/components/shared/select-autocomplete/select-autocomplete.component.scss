@@ -1,0 +1,133 @@
+.asel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 4px 10px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #333;
+  user-select: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover { border-color: #9aa6ad; }
+
+  &--open {
+    border-color: #0085c4;
+    box-shadow: 0 0 0 2px rgba(0, 133, 196, 0.15);
+  }
+
+  &--disabled {
+    background: #f2f2f2;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  &__value {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    img { vertical-align: middle; }
+  }
+
+  &__placeholder { color: #999; }
+
+  &__clear,
+  &__arrow {
+    flex-shrink: 0;
+    color: #888;
+    font-size: 15px;
+    line-height: 1;
+  }
+
+  &__clear {
+    border: none;
+    background: transparent;
+    padding: 2px;
+    cursor: pointer;
+    border-radius: 4px;
+
+    &:hover { color: #c0392b; background: #f3f3f3; }
+  }
+
+  &__arrow { transition: transform 0.15s ease; }
+  &--open &__arrow { transform: rotate(180deg); }
+}
+
+// Panel (renderizado vía CDK overlay, fuera del árbol del componente)
+.asel__panel {
+  background: #fff;
+  border: 1px solid #d4d4d4;
+  border-radius: 6px;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.16);
+  overflow: hidden;
+  margin-top: 4px;
+  z-index: 1200;
+}
+
+.asel__search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+  color: #888;
+
+  input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    color: #333;
+    background: transparent;
+  }
+}
+
+.asel__options {
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.asel__option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 5px;
+  font-size: 13px;
+  color: #333;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  img { vertical-align: middle; }
+
+  &:hover { background: #eef6fb; }
+
+  &--active {
+    background: #0085c4;
+    color: #fff;
+    font-weight: 600;
+  }
+}
+
+.asel__empty {
+  padding: 12px 10px;
+  text-align: center;
+  color: #999;
+  font-size: 12.5px;
+}

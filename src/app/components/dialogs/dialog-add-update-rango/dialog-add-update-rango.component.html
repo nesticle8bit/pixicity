@@ -18,12 +18,12 @@
                 <div class="mb-3">
                     <label class="form-label">Ícono</label>
 
-                    <ng-select [items]="iconos" formControlName="icono">
-                        <ng-template ng-option-tmp let-item="item" let-index="index">
+                    <app-select [items]="iconos" formControlName="icono">
+                        <ng-template appSelectOption let-item="item" let-index="index">
                             <img src="/assets/images/icons/rangos/{{item}}" class="image-middle me-1">
                             {{item}}
                         </ng-template>
-                    </ng-select>
+                    </app-select>
                 </div>
             </div>
         </div>

@@ -10,7 +10,7 @@
               <div class="perfil-avatar">
                 <a [routerLink]="['/perfil/' + currentUser.userName]">
                   <app-user-avatar [avatar]="currentUser.avatar" [userName]="currentUser.userName"
-                  [height]="120"></app-user-avatar>
+                    [height]="120"></app-user-avatar>
                 </a>
               </div>
             </div>
@@ -23,7 +23,8 @@
                       {{currentUser?.completeName}}
                     </h1>
 
-                    <div class="pani" [routerLink]="['/perfil/' + currentUser?.userName]" [appUserPopover]="currentUser?.userName">
+                    <div class="pani" [routerLink]="['/perfil/' + currentUser?.userName]"
+                      [appUserPopover]="currentUser?.userName">
                       {{'@'}}{{currentUser?.userName}}
                     </div>
                   </div>
@@ -32,22 +33,23 @@
                     <div class="text-end">
                       <app-genre-icon class="mx-2" [genre]="currentUser?.genero"></app-genre-icon>
                       <addon-country-flag [iso2]="currentUser?.pais?.isO2"
-                      [title]="currentUser?.pais?.nombre"></addon-country-flag>
+                        [title]="currentUser?.pais?.nombre"></addon-country-flag>
                       <!-- <i class="icon date"></i> -->
 
-                      <img class="mx-2" src="/assets/images/icons/date.png" matTooltip="Se unió a Taringas! el {{currentUser?.fechaRegistro | date:'dd'}} de {{currentUser?.fechaRegistro | date:'MMMM'}} del {{currentUser?.fechaRegistro | date: 'YYYY'}}"  />
+                      <img class="mx-2" src="/assets/images/icons/date.png"
+                        matTooltip="Se unió a Taringas! el {{currentUser?.fechaRegistro | date:'dd'}} de {{currentUser?.fechaRegistro | date:'MMMM'}} del {{currentUser?.fechaRegistro | date: 'YYYY'}}" />
                     </div>
                   </div>
                 </div>
 
                 @if (currentUser.mensajePersonal) {
-                  <div class="row mt-2">
-                    <div class="col-12">
-                      <div class="alert alert-secondary">
-                        {{currentUser.mensajePersonal}}
-                      </div>
+                <div class="row mt-2">
+                  <div class="col-12">
+                    <div class="alert alert-secondary">
+                      {{currentUser.mensajePersonal}}
                     </div>
                   </div>
+                </div>
                 }
 
                 <div class="row mt-2">
@@ -57,13 +59,13 @@
                       </app-genre-icon>
 
                       @if (currentUser.genero === 'Otros') {
-                        <span>Es un Otro</span>
+                      <span>Es un Otro</span>
                       }
                       @if (currentUser.genero === 'Masculino') {
-                        <span>Es un Hombre</span>
+                      <span>Es un Hombre</span>
                       }
                       @if (currentUser.genero === 'Femenino') {
-                        <span>Es una Mujer</span>
+                      <span>Es una Mujer</span>
                       }
                     </p>
                   </div>
@@ -90,190 +92,188 @@
                   {{currentUser?.fechaRegistro | date: 'YYYY'}}</b>
                 </p>
               </div> -->
-            </div>
-
-            <div class="row mt-2">
-              @if (loggedUser?.usuario?.userName !== currentUser.userName) {
-                <div class="col-12 col-sm-2">
-                  <app-follow-button [userName]="currentUser.userName" [icon]="true"></app-follow-button>
                 </div>
-              }
 
-              @if (loggedUser?.usuario?.userName !== currentUser.userName) {
-                <div class="col-12 col-sm-2">
-                  <app-send-message-button [userName]="currentUser.userName" [icon]="true"></app-send-message-button>
-                </div>
-              }
+                <div class="row mt-2">
+                  @if (loggedUser?.usuario && loggedUser?.usuario?.userName !== currentUser.userName) {
+                  <div class="col-12 col-sm-2">
+                    <app-follow-button [userName]="currentUser.userName" [icon]="true"></app-follow-button>
+                  </div>
+                  }
 
-              @if (loggedUser?.usuario?.userName !== currentUser.userName) {
-                <div class="col-12 col-sm-2">
-                  <main>
-                    @if (!bloqueoActivo) {
+                  @if (loggedUser?.usuario && loggedUser?.usuario?.userName !== currentUser.userName) {
+                  <div class="col-12 col-sm-2">
+                    <app-send-message-button [userName]="currentUser.userName" [icon]="true"></app-send-message-button>
+                  </div>
+                  }
+
+                  @if (loggedUser?.usuario && loggedUser?.usuario?.userName !== currentUser.userName) {
+                  <div class="col-12 col-sm-2">
+                    <main>
+                      @if (!bloqueoActivo) {
                       <a class="button-uppercase brojo" (click)="bloquearUsuario()">
                         <i class="ti ti-ban"></i> Bloquear
                       </a>
-                    } @else {
+                      } @else {
                       <a class="bgris" (click)="desbloquearUsuario()">
                         <i class="ti ti-lock-open"></i> Desbloquear
                       </a>
-                    }
-                  </main>
+                      }
+                    </main>
+                  </div>
+                  }
                 </div>
-              }
-            </div>
 
-            <div class="row mt-2">
-              @if (currentUser?.id) {
-                <div class="col-12 col-sm-3">
-                  <app-banear-usuario
-                    [data]="{ usuarioId: currentUser?.id, nombre: currentUser.rango?.nombre}">
-                  </app-banear-usuario>
-                </div>
-              }
+                <div class="row mt-2">
+                  @if (currentUser?.id) {
+                  <div class="col-12 col-sm-3">
+                    <app-banear-usuario [data]="{ usuarioId: currentUser?.id, nombre: currentUser.rango?.nombre}">
+                    </app-banear-usuario>
+                  </div>
+                  }
 
-              @if (currentUser?.rango) {
-                <div class="col-12 col-sm-3">
-                  <app-change-rango
-                    [data]="{ id: currentUser?.rango?.id, usuarioId: currentUser?.id, icono: currentUser.rango?.icono, color: currentUser.rango?.color, nombre: currentUser.rango?.nombre }">
-                  </app-change-rango>
-                </div>
-              }
+                  @if (currentUser?.rango) {
+                  <div class="col-12 col-sm-3">
+                    <app-change-rango
+                      [data]="{ id: currentUser?.rango?.id, usuarioId: currentUser?.id, icono: currentUser.rango?.icono, color: currentUser.rango?.color, nombre: currentUser.rango?.nombre }">
+                    </app-change-rango>
+                  </div>
+                  }
 
-              @if (loggedUser?.usuario?.userName !== currentUser.userName) {
-                <div class="col-12 col-sm-3">
-                  <app-change-avatar
-                    [data]="{ id: currentUser?.id, userName: currentUser?.userName }">
-                  </app-change-avatar>
+                  @if (loggedUser?.usuario && loggedUser?.usuario?.userName !== currentUser.userName) {
+                  <div class="col-12 col-sm-3">
+                    <app-change-avatar [data]="{ id: currentUser?.id, userName: currentUser?.userName }">
+                    </app-change-avatar>
+                  </div>
+                  }
                 </div>
-              }
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div id="headtop row">
-      </div>
+          <div id="headtop row">
+          </div>
 
-      <div class="row">
-        <div class="profile__summary col-12">
           <div class="row">
-            <div class="col-12 col-sm-2">
-              <p class="ranpe">
-                <b style="color:#171717">
+            <div class="profile__summary col-12">
+              <div class="row">
+                <div class="col-12 col-sm-2">
+                  <p class="ranpe">
+                    <b style="color:#171717">
 
-                  <span
-                  [ngStyle]="{'color': currentUser?.rango?.color}">{{currentUser?.rango?.nombre}}</span>
-                  <!-- <span class="status online"></span> -->
-                  <app-user-online-status [class]="'float-end m-0'" [userName]="currentUser?.userName"></app-user-online-status>
-                </b>
-                <span>Rango</span>
-              </p>
-            </div>
+                      <span [ngStyle]="{'color': currentUser?.rango?.color}">{{currentUser?.rango?.nombre}}</span>
+                      <!-- <span class="status online"></span> -->
+                      <app-user-online-status [class]="'float-end m-0'"
+                        [userName]="currentUser?.userName"></app-user-online-status>
+                    </b>
+                    <span>Rango</span>
+                  </p>
+                </div>
 
-            <div class="col-12 col-sm-2">
-              <p>
-                <b>
-                  {{currentUser?.puntos ? currentUser?.puntos : 0}}
-                </b>
+                <div class="col-12 col-sm-2">
+                  <p>
+                    <b>
+                      {{currentUser?.puntos ? currentUser?.puntos : 0}}
+                    </b>
 
-                <span>Puntos</span>
-              </p>
-            </div>
+                    <span>Puntos</span>
+                  </p>
+                </div>
 
-            <div class="col-12 col-sm-2">
-              <p>
-                <b>
-                  <a href="javascript:void(0)" (click)="currentSelection = 'posts'">
-                    {{currentUser.postsCount ? currentUser.postsCount : 0}}
-                  </a>
-                </b>
+                <div class="col-12 col-sm-2">
+                  <p>
+                    <b>
+                      <a href="javascript:void(0)" (click)="currentSelection = 'posts'">
+                        {{currentUser.postsCount ? currentUser.postsCount : 0}}
+                      </a>
+                    </b>
 
-                <span>Posts</span>
-              </p>
-            </div>
+                    <span>Posts</span>
+                  </p>
+                </div>
 
-            <div class="col-12 col-sm-2">
-              <p>
-                <b>
-                  <a href="javascript:void(0)" (click)="currentSelection = 'comments'">
-                    {{currentUser.comentariosCount ? currentUser.comentariosCount : 0}}
-                  </a>
-                </b>
+                <div class="col-12 col-sm-2">
+                  <p>
+                    <b>
+                      <a href="javascript:void(0)" (click)="currentSelection = 'comments'">
+                        {{currentUser.comentariosCount ? currentUser.comentariosCount : 0}}
+                      </a>
+                    </b>
 
-                <span>Comentarios</span>
-              </p>
-            </div>
+                    <span>Comentarios</span>
+                  </p>
+                </div>
 
-            <div class="col-12 col-sm-2">
-              <p>
-                <b>
-                  <a href="javascript:void(0)" (click)="currentSelection = 'followers'">
-                    {{currentUser.seguidoresCount ? currentUser.seguidoresCount : 0}}
-                  </a>
-                </b>
+                <div class="col-12 col-sm-2">
+                  <p>
+                    <b>
+                      <a href="javascript:void(0)" (click)="currentSelection = 'followers'">
+                        {{currentUser.seguidoresCount ? currentUser.seguidoresCount : 0}}
+                      </a>
+                    </b>
 
-                <span>Seguidores</span>
-              </p>
-            </div>
+                    <span>Seguidores</span>
+                  </p>
+                </div>
 
-            <div class="col-12 col-sm-2">
-              <p>
-                <b>
-                  <a href="javascript:void(0)" (click)="currentSelection = 'following'">
-                    {{currentUser.siguiendoCount ? currentUser.siguiendoCount : 0}}
-                  </a>
-                </b>
+                <div class="col-12 col-sm-2">
+                  <p>
+                    <b>
+                      <a href="javascript:void(0)" (click)="currentSelection = 'following'">
+                        {{currentUser.siguiendoCount ? currentUser.siguiendoCount : 0}}
+                      </a>
+                    </b>
 
-                <span>Siguiendo</span>
-              </p>
+                    <span>Siguiendo</span>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
+
+          @if (currentSelection === 'activity') {
+          <app-profile-activity [user]="currentUser">
+          </app-profile-activity>
+          }
+          @if (currentSelection === 'shouts') {
+          <app-profile-shouts [user]="currentUser"></app-profile-shouts>
+          }
+          @if (currentSelection === 'posts') {
+          <app-profile-posts [user]="currentUser"></app-profile-posts>
+          }
+          @if (currentSelection === 'comments') {
+          <app-profile-comments [user]="currentUser">
+          </app-profile-comments>
+          }
+          @if (currentSelection === 'followers') {
+          <app-profile-followers [user]="currentUser">
+          </app-profile-followers>
+          }
+          @if (currentSelection === 'following') {
+          <app-profile-following [user]="currentUser">
+          </app-profile-following>
+          }
+          @if (currentSelection === 'information') {
+          <app-profile-information [user]="currentUser">
+          </app-profile-information>
+          }
+          @if (currentSelection === 'medals') {
+          <section>
+            <div class="alert alert-warning mt-4">
+              ⚠️ <strong>En construcción...</strong>
+            </div>
+          </section>
+          }
         </div>
       </div>
+    </div>
 
-      @if (currentSelection === 'activity') {
-        <app-profile-activity [user]="currentUser">
-        </app-profile-activity>
-      }
-      @if (currentSelection === 'shouts') {
-        <app-profile-shouts [user]="currentUser"></app-profile-shouts>
-      }
-      @if (currentSelection === 'posts') {
-        <app-profile-posts [user]="currentUser"></app-profile-posts>
-      }
-      @if (currentSelection === 'comments') {
-        <app-profile-comments [user]="currentUser">
-        </app-profile-comments>
-      }
-      @if (currentSelection === 'followers') {
-        <app-profile-followers [user]="currentUser">
-        </app-profile-followers>
-      }
-      @if (currentSelection === 'following') {
-        <app-profile-following [user]="currentUser">
-        </app-profile-following>
-      }
-      @if (currentSelection === 'information') {
-        <app-profile-information [user]="currentUser">
-        </app-profile-information>
-      }
-      @if (currentSelection === 'medals') {
-        <section>
-          <div class="alert alert-warning mt-4">
-            ⚠️ <strong>En construcción...</strong>
-          </div>
-        </section>
-      }
+    <div class="dotted-border--left col-12 col-sm-3 text-center">
+      <app-perfil-social-media-buttons [usuarioId]="currentUser.id"></app-perfil-social-media-buttons>
+      <app-perfil-user-medals [usuarioId]="currentUser.id"></app-perfil-user-medals>
+      <app-perfil-user-followers [usuarioId]="currentUser.id"></app-perfil-user-followers>
+
+      <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
     </div>
   </div>
-</div>
-
-<div class="dotted-border--left col-12 col-sm-3 text-center">
-  <app-perfil-social-media-buttons [usuarioId]="currentUser.id"></app-perfil-social-media-buttons>
-  <app-perfil-user-medals [usuarioId]="currentUser.id"></app-perfil-user-medals>
-  <app-perfil-user-followers [usuarioId]="currentUser.id"></app-perfil-user-followers>
-
-  <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
-</div>
-</div>
 </div>

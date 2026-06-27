@@ -26,10 +26,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 
-// Third-party
-
-import { NgSelectModule } from '@ng-select/ng-select';
-
 // Admin components — control-de-comunidad
 import { DashboardAfiliadosComponent } from '../../components/admin/control-de-comunidad/afiliados/dashboard-afiliados/dashboard-afiliados.component';
 import { DialogUpdateAfiliadosComponent } from '../../components/admin/control-de-comunidad/afiliados/dialog-update-afiliados/dialog-update-afiliados.component';
@@ -66,6 +62,19 @@ import { DashboardPostsComponent } from '../../components/admin/control-de-conte
 import { TablePostsComponent } from '../../components/admin/control-de-contenido/posts/table-posts/table-posts.component';
 import { DashboardShoutsComponent } from '../../components/admin/control-de-contenido/shouts/dashboard-shouts/dashboard-shouts.component';
 import { TableShoutsComponent } from '../../components/admin/control-de-contenido/shouts/table-shouts/table-shouts.component';
+import { DashboardFotosComponent } from '../../components/admin/control-de-contenido/fotos/dashboard-fotos/dashboard-fotos.component';
+import { TableFotosComponent } from '../../components/admin/control-de-contenido/fotos/table-fotos/table-fotos.component';
+import { DashboardComunidadesComponent } from '../../components/admin/control-de-comunidad/comunidades/dashboard-comunidades/dashboard-comunidades.component';
+import { TableComunidadesCategoriasComponent } from '../../components/admin/control-de-comunidad/comunidades/table-comunidades-categorias/table-comunidades-categorias.component';
+import { DialogComunidadCategoriaComponent } from '../../components/admin/control-de-comunidad/comunidades/dialog-comunidad-categoria/dialog-comunidad-categoria.component';
+import { DialogComunidadSubcategoriaComponent } from '../../components/admin/control-de-comunidad/comunidades/dialog-comunidad-subcategoria/dialog-comunidad-subcategoria.component';
+import { DashboardDenunciasComunidadComponent } from '../../components/admin/control-de-comunidad/denuncias-comunidad/dashboard-denuncias-comunidad/dashboard-denuncias-comunidad.component';
+import { TableDenunciasComunidadComponent } from '../../components/admin/control-de-comunidad/denuncias-comunidad/table-denuncias-comunidad/table-denuncias-comunidad.component';
+import { DashboardDenunciasComentariosComponent } from '../../components/admin/control-de-contenido/denuncias-comentarios/dashboard-denuncias-comentarios/dashboard-denuncias-comentarios.component';
+import { TableDenunciasComentariosComponent } from '../../components/admin/control-de-contenido/denuncias-comentarios/table-denuncias-comentarios/table-denuncias-comentarios.component';
+import { DashboardCensurasComponent } from '../../components/admin/control-de-contenido/censuras/dashboard-censuras/dashboard-censuras.component';
+import { TableCensurasComponent } from '../../components/admin/control-de-contenido/censuras/table-censuras/table-censuras.component';
+import { DialogCreateUpdateCensurasComponent } from '../../components/admin/control-de-contenido/censuras/dialog-create-update-censuras/dialog-create-update-censuras.component';
 
 // Admin components — dashboard
 import { DashboardComponent } from '../../components/admin/dashboard/dashboard.component';
@@ -96,6 +105,14 @@ import { AdminRoutingModule } from './admin-routing.module';
     DashboardCategoriasComponent,
     DialogCreateUpdateCategoriasComponent,
     TableCategoriasComponent,
+    DashboardComunidadesComponent,
+    TableComunidadesCategoriasComponent,
+    DialogComunidadCategoriaComponent,
+    DialogComunidadSubcategoriaComponent,
+    DashboardDenunciasComunidadComponent,
+    TableDenunciasComunidadComponent,
+    DashboardDenunciasComentariosComponent,
+    TableDenunciasComentariosComponent,
     DashboardEstadisticasComponent,
     DashboardReportesComponent,
     DialogVerReporteComponent,
@@ -122,6 +139,11 @@ import { AdminRoutingModule } from './admin-routing.module';
     TablePaisesComponent,
     DashboardPostsComponent,
     TablePostsComponent,
+    DashboardFotosComponent,
+    TableFotosComponent,
+    DashboardCensurasComponent,
+    TableCensurasComponent,
+    DialogCreateUpdateCensurasComponent,
     DashboardShoutsComponent,
     TableShoutsComponent,
     // dashboard
@@ -166,8 +188,6 @@ import { AdminRoutingModule } from './admin-routing.module';
     MatInputModule,
     MatPaginatorModule,
     MatSelectModule,
-    // Third-party
-    NgSelectModule,
     // Shared
     SharedModule,
     // Routing

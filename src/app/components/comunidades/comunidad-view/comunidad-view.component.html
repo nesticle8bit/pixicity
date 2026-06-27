@@ -1,0 +1,200 @@
+@if (loading) {
+  <div class="text-center my-5"><img src="/assets/images/min-carga.gif" alt="Cargando..."></div>
+}
+
+@if (!loading && comunidad) {
+  <div class="container container--home comunidad-view">
+    <!-- Breadcrumb -->
+    <div class="com-breadcrumb">
+      <a [routerLink]="['/comunidades']">Comunidades</a>
+      @if (comunidad.categoria) { <span>›</span> <a [routerLink]="['/comunidades']">{{comunidad.categoria.nombre}}</a> }
+      <span>›</span> <span>{{comunidad.nombre}}</span>
+    </div>
+
+    <div class="row">
+      <!-- Columna principal -->
+      <div class="col-12 col-md-8">
+        <!-- Cabecera comunidad -->
+        <div class="com-info">
+          <div class="com-info__avatar">
+            @if (comunidad.imagen) {
+              <img [src]="comunidad.imagen" [alt]="comunidad.nombre" />
+            } @else {
+              <span class="ph"><i class="ti ti-users-group"></i></span>
+            }
+          </div>
+          <div class="com-info__main">
+            <h1>{{comunidad.nombre}}</h1>
+            <p class="com-info__desc">{{comunidad.descripcion}}</p>
+            <a class="ver-mas" (click)="verMas = !verMas">{{verMas ? 'Ver menos' : 'Ver más'}}</a>
+
+            @if (verMas) {
+              <ul class="com-info__detalles">
+                @if (comunidad.categoria) {
+                  <li><strong>Categoría:</strong> {{comunidad.categoria.nombre}}
+                    @if (comunidad.subCategoria) { » {{comunidad.subCategoria.nombre}} }
+                  </li>
+                }
+                <li><strong>Creado:</strong> por
+                  <a [routerLink]="['/perfil', comunidad.creador]">{{comunidad.creador}}</a>
+                  {{comunidad.fechaRegistro | timeAgo}}
+                </li>
+                <li><strong>Acceso:</strong> {{comunidad.acceso === 1 ? 'Todos pueden ver la comunidad' : 'Sólo usuarios registrados'}}</li>
+                <li><strong>Rango por defecto:</strong>
+                  {{comunidad.permisos === 3 ? 'Posteador' : comunidad.permisos === 2 ? 'Comentador' : 'Visitante'}}
+                </li>
+              </ul>
+            }
+
+            <div class="com-info__bottom">
+              <div class="com-actions">
+                @if (esStaff) {
+                  <a [routerLink]="['/comunidades', comunidad.nombreCorto, 'editar']" class="boton azul">
+                    <i class="ti ti-pencil"></i> Editar
+                  </a>
+                }
+                @if (logueado && !comunidad.soyMiembro) {
+                  <a class="boton verde" (click)="unirme()"><i class="ti ti-user-plus"></i> Unirme</a>
+                }
+                @if (logueado && comunidad.soyMiembro && comunidad.creador !== currentUser?.usuario?.userName) {
+                  <a class="boton gris" (click)="abandonar()"><i class="ti ti-user-minus"></i> Abandonar</a>
+                }
+                @if (logueado) {
+                  <a class="boton" [class.azul]="!comunidad.laSigo" [class.gris]="comunidad.laSigo" (click)="seguir()">
+                    <i class="ti ti-eye"></i> {{comunidad.laSigo ? 'Siguiendo' : 'Seguir'}}
+                  </a>
+                }
+                @if (esCreadorOAdmin) {
+                  <a class="boton rojo" (click)="eliminarComunidad()"><i class="ti ti-trash"></i> Eliminar</a>
+                }
+              </div>
+              <ul class="com-stats">
+                <li><span>{{comunidad.miembrosCount}}</span> Miembros</li>
+                <li><span>{{comunidad.temasCount}}</span> Temas</li>
+                <li><span>{{comunidad.seguidoresCount}}</span> Seguidores</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Temas -->
+        <div class="com-temas">
+          <div class="com-temas__head">
+            <h3>Temas</h3>
+            @if (logueado) {
+              <a [routerLink]="['/comunidades', comunidad.nombreCorto, 'nuevo-tema']" class="boton verde">
+                <i class="ti ti-plus"></i> Nuevo tema
+              </a>
+            }
+          </div>
+
+          <div class="com-temas__search">
+            <input type="text" [(ngModel)]="queryTemas" (keyup.enter)="buscarTemas()" placeholder="Buscar temas..." />
+            <button (click)="buscarTemas()"><i class="ti ti-search"></i></button>
+          </div>
+
+          @if (temas.length === 0) {
+            <div class="com-empty">
+              {{queryTemas ? 'No hay temas que coincidan con la búsqueda.' : 'No se han creado temas en esta comunidad.'}}
+            </div>
+          } @else {
+            <ul class="com-temas__list">
+              @for (tema of temas; track tema.id) {
+                <li [class.tema--sticky]="tema.sticky">
+                  <a [routerLink]="['/comunidades', comunidad.nombreCorto, 'tema', tema.id, tema.url]" class="tema-title">
+                    @if (tema.sticky) {
+                      <span class="tema-sticky-badge"><i class="ti ti-pin"></i> Fijado</span>
+                    }
+                    {{tema.titulo}}
+                  </a>
+                  <div class="tema-meta">
+                    por <a [routerLink]="['/perfil', tema.userName]">{{tema.userName}}</a>
+                    · {{tema.fechaRegistro | timeAgo}}
+                    · <i class="ti ti-eye"></i> {{tema.visitantes}}
+                  </div>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-12 col-md-4">
+        <div class="com-box">
+          <div class="com-box__title"><h2>Staff de la comunidad</h2></div>
+          <div class="com-box__avatars">
+            @for (m of miembros; track m.id) {
+              @if (m.esStaff) {
+                <a [routerLink]="['/perfil', m.userName]" [appUserPopover]="m.userName">
+                  <app-user-avatar [avatar]="m.avatar" [userName]="m.userName" [width]="42" [height]="42"></app-user-avatar>
+                </a>
+              }
+            }
+          </div>
+        </div>
+
+        <div class="com-box">
+          <div class="com-box__title"><h2>Últimos miembros</h2></div>
+          <div class="com-box__avatars">
+            @for (m of miembros; track m.id) {
+              <a [routerLink]="['/perfil', m.userName]" [appUserPopover]="m.userName">
+                <app-user-avatar [avatar]="m.avatar" [userName]="m.userName" [width]="34" [height]="34"></app-user-avatar>
+              </a>
+            }
+            @if (miembros.length === 0) { <span class="com-empty sm">Sin miembros aún.</span> }
+          </div>
+          <div class="com-box__more">
+            <a [routerLink]="['/comunidades', comunidad.nombreCorto, 'miembros']">Ver más »</a>
+          </div>
+        </div>
+
+        <!-- Comentarios recientes -->
+        <div class="com-box">
+          <div class="com-box__title"><h2>Comentarios recientes</h2></div>
+          <div class="com-box__list">
+            @if (comentariosRecientes.length === 0) {
+              <span class="com-empty sm">Sin comentarios recientes.</span>
+            } @else {
+              @for (c of comentariosRecientes; track c.id) {
+                <a class="com-coment-item"
+                  [routerLink]="['/comunidades', comunidad.nombreCorto, 'tema', c.temaId, c.temaUrl]">
+                  <app-user-avatar [avatar]="c.avatar" [userName]="c.userName" [width]="28" [height]="28"></app-user-avatar>
+                  <span class="cci-body">
+                    <strong>{{c.userName}}</strong>
+                    <span class="cci-text">{{c.contenido}}</span>
+                  </span>
+                </a>
+              }
+            }
+          </div>
+        </div>
+
+        <!-- Top temas -->
+        <div class="com-box">
+          <div class="com-box__title com-box__title--row">
+            <h2>Top temas</h2>
+            <div class="com-periodo">
+              <a [class.active]="periodoTop === 'Semana'" (click)="cambiarPeriodoTop('Semana')">Semana</a>
+              <a [class.active]="periodoTop === 'Mes'" (click)="cambiarPeriodoTop('Mes')">Mes</a>
+              <a [class.active]="periodoTop === 'Historico'" (click)="cambiarPeriodoTop('Historico')">Histórico</a>
+            </div>
+          </div>
+          <div class="com-box__list">
+            @if (topTemas.length === 0) {
+              <span class="com-empty sm">Nada por aquí.</span>
+            } @else {
+              @for (t of topTemas; track t.id; let i = $index) {
+                <a class="com-top-item" [routerLink]="['/comunidades', comunidad.nombreCorto, 'tema', t.id, t.url]">
+                  <span class="rank">{{i + 1}}</span>
+                  <span class="tt-title">{{t.titulo}}</span>
+                  <span class="tt-views"><i class="ti ti-eye"></i> {{t.visitantes}}</span>
+                </a>
+              }
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

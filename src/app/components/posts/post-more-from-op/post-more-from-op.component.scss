@@ -1,0 +1,128 @@
+.rank-widget {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 10px;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 12px;
+    background: linear-gradient(135deg, #006595 0%, #0085c4 100%);
+
+    i {
+      color: #fff;
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    h2 {
+      margin: 0;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+  }
+
+  &__empty {
+    padding: 18px 12px;
+    text-align: center;
+    color: #999;
+    font-size: 12px;
+    line-height: 1.4;
+
+    i {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 6px;
+      opacity: 0.5;
+    }
+  }
+
+  &__list {
+    padding: 3px 0;
+  }
+}
+
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  transition: background 0.12s ease;
+
+  & + & {
+    border-top: 1px dotted #eee;
+  }
+
+  &:hover {
+    background: #f4fafd;
+  }
+
+  &__rank {
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 50%;
+    background: #eef1f3;
+    color: #777;
+
+    &.gold {
+      background: #f6c343;
+      color: #5b4500;
+    }
+
+    &.silver {
+      background: #d3d8dd;
+      color: #3a3f44;
+    }
+
+    &.bronze {
+      background: #e7b486;
+      color: #5e3a1c;
+    }
+  }
+
+  &__body {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 12px;
+    line-height: 1.3;
+    overflow: hidden;
+
+    ::ng-deep a {
+      color: #2a2a2a;
+      text-decoration: none;
+
+      &:hover {
+        color: #006595;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__pts {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #006595;
+    background: #eaf6fc;
+    padding: 2px 8px;
+    border-radius: 10px;
+
+    i {
+      font-size: 12px;
+    }
+  }
+}

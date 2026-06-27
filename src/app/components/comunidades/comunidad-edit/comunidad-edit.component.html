@@ -1,0 +1,87 @@
+<div class="container container--home comunidad-create">
+  <div class="row">
+    <div class="col-12 col-md-8">
+      <form [formGroup]="formGroup" (ngSubmit)="guardar()" class="add-com">
+        <h2>Editar comunidad</h2>
+
+        <div class="item-form">
+          <label>Nombre corto (no editable)</label>
+          <input type="text" [value]="nombreCorto" disabled />
+        </div>
+
+        <div class="item-form">
+          <label>Nombre</label>
+          <input type="text" formControlName="nombre" maxlength="80" />
+        </div>
+
+        <div class="item-form">
+          <label>Categoría</label>
+          <select formControlName="comunidadCategoriaId" (change)="onCategoriaChange()">
+            <option [ngValue]="0">Selecciona una categoría</option>
+            @for (cat of categorias; track cat.id) {
+              <option [ngValue]="cat.id">{{cat.nombre}}</option>
+            }
+          </select>
+        </div>
+
+        <div class="item-form">
+          <label>Sub-categoría</label>
+          <select formControlName="comunidadSubCategoriaId" [disabled]="subCategorias.length === 0">
+            <option [ngValue]="null">Selecciona una sub-categoría</option>
+            @for (sub of subCategorias; track sub.id) {
+              <option [ngValue]="sub.id">{{sub.nombre}}</option>
+            }
+          </select>
+        </div>
+
+        <div class="item-form">
+          <label>País</label>
+          <select formControlName="paisId">
+            <option [ngValue]="null">Selecciona un país</option>
+            @for (pais of paises; track pais.id) {
+              <option [ngValue]="pais.id">{{pais.nombre}}</option>
+            }
+          </select>
+        </div>
+
+        <div class="item-form">
+          <label>Imagen de la comunidad</label>
+          @if (formGroup.get('imagen')?.value) {
+            <div class="com-img-preview">
+              <img [src]="formGroup.get('imagen')?.value" alt="Imagen comunidad" />
+            </div>
+          }
+          <input type="file" accept="image/*" (change)="onFileSelected($event)" [disabled]="uploading" />
+          @if (uploading) { <small class="hint">Subiendo imagen...</small> }
+          <input type="text" formControlName="imagen" placeholder="o pega una URL https://..." style="margin-top:6px;" />
+        </div>
+
+        <div class="item-form">
+          <label>Descripción</label>
+          <textarea formControlName="descripcion" maxlength="1000" rows="4"></textarea>
+        </div>
+
+        <div class="item-form">
+          <label>Acceso</label>
+          <label class="option">
+            <input type="radio" formControlName="acceso" [value]="1" /> <span><strong>Todos</strong></span>
+          </label>
+          <label class="option">
+            <input type="radio" formControlName="acceso" [value]="2" /> <span><strong>Sólo registrados</strong></span>
+          </label>
+        </div>
+
+        <div class="item-form">
+          <label>Permisos por defecto</label>
+          <label class="option"><input type="radio" formControlName="permisos" [value]="3" /> <span><strong>Posteador</strong></span></label>
+          <label class="option"><input type="radio" formControlName="permisos" [value]="2" /> <span><strong>Comentador</strong></span></label>
+          <label class="option"><input type="radio" formControlName="permisos" [value]="1" /> <span><strong>Visitante</strong></span></label>
+        </div>
+
+        <div class="item-form">
+          <button type="submit" class="boton azul" [disabled]="loading"><i class="ti ti-check"></i> Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

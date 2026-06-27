@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>
+  {{data ? 'Actualizar' : 'Agregar'}} palabra censurada
+</h2>
+
+<form [formGroup]="formGroup" (ngSubmit)="saveCensura()">
+  <mat-dialog-content>
+    <div class="row">
+      <div class="col-12">
+        <div class="mb-3">
+          <label class="form-label">Palabra o frase prohibida</label>
+          <input type="text" class="form-control" formControlName="palabra" cdkFocusInitial
+            placeholder="Ej. malapalabra" />
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="mb-3">
+          <label class="form-label">Reemplazo</label>
+          <input type="text" class="form-control" formControlName="reemplazo" placeholder="*** (por defecto)" />
+          <small class="text-muted">Si lo dejas vacío se usará <code>***</code>.</small>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button type="button" mat-button mat-dialog-close>
+      Cancelar
+    </button>
+
+    <button type="submit" mat-button [disabled]="formGroup.invalid">
+      Guardar
+    </button>
+  </mat-dialog-actions>
+</form>

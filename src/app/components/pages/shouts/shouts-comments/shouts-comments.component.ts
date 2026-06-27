@@ -82,7 +82,7 @@ export class ShoutsCommentsComponent implements OnInit {
   esMio(comentario: any): boolean {
     return (
       this.currentUser?.usuario?.userName === comentario.usuario ||
-      this.currentUser?.usuario?.isAdmin
+      this.currentUser?.usuario?.rango === 'Administrador'
     );
   }
 }

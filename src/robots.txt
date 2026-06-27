@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Evita indexar áreas privadas / de gestión
+Disallow: /admin
+Disallow: /perfil/configuracion
+Disallow: /crear/
+Disallow: /buscar?
+
+Sitemap: https://taringas.net/sitemap.xml

@@ -34,6 +34,21 @@ export class HttpFotosService implements IHttpFotosService {
       );
   }
 
+  getFotosAdmin(search: FotoSearchParams & { query?: string } = {}): Observable<PaginatedData<FotoViewModel>> {
+    const page = search?.page || 1;
+    const pageCount = search?.pageCount || 25;
+    const query = search?.query || '';
+    return this.http
+      .get<ApiResponse<PaginatedData<FotoViewModel>>>(`${environment.api}/api/fotos/GetFotosAdmin?page=${page}&pageCount=${pageCount}&query=${query}`)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) { return response.data!; }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
+        catchError(this.helper.errorHandler)
+      );
+  }
+
   getTopFotos(count: number = 5): Observable<FotoViewModel[]> {
     return this.http
       .get<ApiResponse<FotoViewModel[]>>(`${environment.api}/api/fotos/GetTopFotos?count=${count}`)

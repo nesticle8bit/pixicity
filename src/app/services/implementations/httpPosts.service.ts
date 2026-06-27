@@ -599,6 +599,49 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  private unwrapData<T>(obs: Observable<ApiResponse<T>>): Observable<T> {
+    return obs.pipe(
+      map((response) => {
+        if (response.status === 200) {
+          return response.data!;
+        }
+        this.notificationService.error(response.errors?.join(', ') ?? 'Error', 'Error');
+        throw new Error(response.errors?.join(', ') ?? 'Error');
+      }),
+      catchError(this.helper.errorHandler),
+    );
+  }
+
+  fijarComentario(comentarioId: number): Observable<any> {
+    return this.unwrapData(
+      this.http.post<ApiResponse<any>>(`${environment.api}/api/comentarios/fijarComentario?comentarioId=${comentarioId}`, {}),
+    );
+  }
+
+  denunciarComentario(comentarioId: number, motivo: string): Observable<any> {
+    return this.unwrapData(
+      this.http.post<ApiResponse<any>>(`${environment.api}/api/comentarios/denunciarComentario?comentarioId=${comentarioId}`, { motivo }),
+    );
+  }
+
+  getDenunciasComentarios(page: number, pageCount: number, soloPendientes: boolean = false): Observable<any> {
+    return this.unwrapData(
+      this.http.get<ApiResponse<any>>(`${environment.api}/api/comentarios/getDenunciasComentarios?page=${page}&pageCount=${pageCount}&soloPendientes=${soloPendientes}`),
+    );
+  }
+
+  resolverDenunciaComentario(denunciaId: number): Observable<any> {
+    return this.unwrapData(
+      this.http.post<ApiResponse<any>>(`${environment.api}/api/comentarios/resolverDenunciaComentario?denunciaId=${denunciaId}`, {}),
+    );
+  }
+
+  eliminarDenunciaComentario(denunciaId: number): Observable<any> {
+    return this.unwrapData(
+      this.http.delete<ApiResponse<any>>(`${environment.api}/api/comentarios/eliminarDenunciaComentario?denunciaId=${denunciaId}`),
+    );
+  }
+
   recomendarPost(postId: number): Observable<boolean> {
     return this.http
       .post<ApiResponse<boolean>>(`${environment.api}/api/posts/recomendarPost`, { id: postId })

@@ -1,0 +1,60 @@
+<button type="button" (click)="upsertCensura(undefined)" class="mb-3 float-end" mat-flat-button color="primary">
+  <mat-icon>add_circle</mat-icon> Agregar palabra
+</button>
+
+<div class="clearfix"></div>
+
+@if (censuras.length > 0) {
+  <main class="table-responsive">
+    <table class="table table-sm table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Creada</th>
+          <th>Palabra</th>
+          <th>Reemplazo</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (censura of censuras; track censura.id; let i = $index) {
+          <tr>
+            <td>
+              <span class="cursor--help" matTooltip="{{censura.fechaRegistro | date:'long'}}">
+                {{censura.fechaRegistro | timeAgo}}
+              </span>
+            </td>
+            <td>
+              <span class="badge bg-danger">{{censura.palabra}}</span>
+            </td>
+            <td>
+              <code>{{censura.reemplazo || '***'}}</code>
+            </td>
+            <td class="text-center" width="30px">
+              <button class="btn-menu" [matMenuTriggerFor]="menu">
+                <i class="ti ti-dots-vertical"></i>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button type="button" mat-menu-item (click)="upsertCensura(censura)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Actualizar</span>
+                </button>
+                <button type="button" class="text-danger" mat-menu-item (click)="deleteCensura(censura, i)">
+                  <mat-icon class="text-danger">delete_outline</mat-icon>
+                  <span>Eliminar</span>
+                </button>
+              </mat-menu>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </main>
+} @else {
+  <div class="nada-amarillo">No hay palabras censuradas todavía.</div>
+}
+
+@if (censuras.length > 0) {
+  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
+  </mat-paginator>
+}

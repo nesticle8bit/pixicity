@@ -11,5 +11,10 @@ export abstract class IHttpParametrosService {
 
   abstract getCategoriasAdmin(): Observable<any>;
   abstract getCategoriasDropdown(): Observable<any>;
+  abstract getTopCategorias(count?: number): Observable<any>;
   abstract saveCategoria(categoria: any): Observable<any>;
+
+  abstract getCensuras(): Observable<any>;
+  abstract saveCensura(censura: any): Observable<any>;
+  abstract deleteCensura(id: number): Observable<any>;
 }

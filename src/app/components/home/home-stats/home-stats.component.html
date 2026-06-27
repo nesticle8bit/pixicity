@@ -1,8 +1,17 @@
-<div class="boxposts separa mb-2">
-  <div class="box-crear-post">
-    <p>¡Súmate a la Inteligencia Colectiva!</p>
-    <a [routerLink]="['/crear/post']">¡Crea tu Post ahora!</a>
+<div class="cta-crear-post mb-2">
+  <div class="cta-crear-post__icon">
+    <i class="ti ti-bulb"></i>
   </div>
+  
+  <div class="cta-crear-post__body">
+    <p class="cta-crear-post__title">¡Súmate a la Inteligencia Colectiva!</p>
+    <span class="cta-crear-post__subtitle">Comparte lo que sabes con la comunidad</span>
+  </div>
+
+  <a [routerLink]="['/crear/post']" class="cta-crear-post__btn">
+    <i class="ti ti-pencil-plus"></i>
+    <span>Crear Post</span>
+  </a>
 </div>
 
 <div class="boxposts separa mb-2">

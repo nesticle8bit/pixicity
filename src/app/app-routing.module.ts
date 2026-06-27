@@ -150,6 +150,12 @@ const routes: Routes = [
       import('./modules/admin/admin.module').then((m) => m.AdminModule),
   },
 
+  {
+    path: 'comunidades',
+    loadChildren: () =>
+      import('./modules/comunidades/comunidades.module').then((m) => m.ComunidadesModule),
+  },
+
   { path: '*', redirectTo: '' },
 ];
 

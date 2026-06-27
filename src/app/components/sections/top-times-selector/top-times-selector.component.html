@@ -1,5 +1,5 @@
 <div class="mentop">
-  <div class="actualtop cursor--pointer" id="ucambi" (mouseenter)="displayMenu = true"> <!-- (mouseleave)="displayMenu = false" -->
+  <div class="actualtop cursor--pointer" id="ucambi" (click)="toggleMenu()">
     @if (selection === 'ayer') {
       <span>Ayer</span>
     }
@@ -17,7 +17,7 @@
     }
   </div>
 
-  <div class="listop" [style.display]="displayMenu ? 'block' : 'none'" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
+  <div class="listop" [style.display]="displayMenu ? 'block' : 'none'">
     <a href="javascript:void(0)" (click)="changeTop('ayer')" class="ttayer">
       Ayer
     </a>

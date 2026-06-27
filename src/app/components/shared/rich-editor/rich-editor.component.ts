@@ -73,6 +73,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     if (this.pendingValue) {
       this.editor.innerHTML = this.pendingValue;
     }
+    this.normalizeTrailing();
     this.resetHistory();
   }
 
@@ -85,6 +86,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     const html = value || '';
     if (this.initialized && this.editorEl) {
       this.editor.innerHTML = html;
+      this.normalizeTrailing();
       this.resetHistory();
     } else {
       this.pendingValue = html;
@@ -170,15 +172,25 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   insertImage(): void {
     const url = (prompt('URL de la imagen:') || '').trim();
     if (!url) return;
-    const range = this.currentRange();
     const img = document.createElement('img');
     img.src = url;
+
+    // Envoltura redimensionable (la imagen no es editable, el span lleva el handle)
+    const wrap = document.createElement('span');
+    wrap.className = 'img-resizable';
+    wrap.setAttribute('contenteditable', 'false');
+    wrap.appendChild(img);
+
+    const range = this.currentRange();
     if (range) {
       range.collapse(false);
-      range.insertNode(img);
+      range.insertNode(wrap);
     } else {
-      this.editor.appendChild(img);
+      this.editor.appendChild(wrap);
     }
+
+    // Garantiza un bloque editable después de la imagen y coloca ahí el caret
+    this.ensureBlockAfter(wrap);
     this.afterChange();
   }
 
@@ -198,6 +210,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     const hr = document.createElement('hr');
     range.collapse(false);
     range.insertNode(hr);
+    this.ensureBlockAfter(hr);
     this.afterChange();
   }
 
@@ -301,6 +314,12 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   }
 
   isActive(command: string): boolean {
+    // El template evalúa esto en la primera detección de cambios, antes de que
+    // @ViewChild('editorEl') esté resuelto. Sin esta guarda, closestAnyTag
+    // accede a this.editor (editorEl.nativeElement) y lanza:
+    // "Cannot read properties of undefined (reading 'nativeElement')".
+    if (!this.initialized || !this.editorEl) return false;
+
     const map: Record<string, string[]> = {
       bold: ['STRONG', 'B'],
       italic: ['EM', 'I'],
@@ -316,6 +335,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   //  Motor de edición (Range/Selection)
 
   private currentRange(): Range | null {
+    if (!this.editorEl) return null;
     const sel = window.getSelection();
     if (!sel || sel.rangeCount === 0) return null;
     const range = sel.getRangeAt(0);
@@ -339,6 +359,40 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.editor.focus();
     this.onChange(this.editor.innerHTML);
     this.recordHistory();
+  }
+
+  // Crea un párrafo editable inmediatamente después de `node` si no hay un
+  // bloque editable, y coloca el caret dentro. Evita que el editor quede
+  // "bloqueado" cuando una imagen/hr es el último elemento.
+  private ensureBlockAfter(node: Node): void {
+    let next = node.nextSibling;
+    const nextIsBlock =
+      next instanceof HTMLElement && RichEditorComponent.BLOCK_TAGS.includes(next.tagName);
+
+    if (!nextIsBlock) {
+      const p = document.createElement('p');
+      p.appendChild(document.createElement('br'));
+      node.parentNode?.insertBefore(p, node.nextSibling);
+      next = p;
+    }
+
+    const range = document.createRange();
+    range.setStart(next as Node, 0);
+    range.collapse(true);
+    this.selectRange(range);
+  }
+
+  // Asegura que el último hijo del editor sea un bloque editable, para poder
+  // escribir debajo de imágenes/líneas insertadas al final.
+  private normalizeTrailing(): void {
+    const last = this.editor.lastChild;
+    const lastIsBlock =
+      last instanceof HTMLElement && RichEditorComponent.BLOCK_TAGS.includes(last.tagName);
+    if (last && !lastIsBlock) {
+      const p = document.createElement('p');
+      p.appendChild(document.createElement('br'));
+      this.editor.appendChild(p);
+    }
   }
 
   // Toggle de formato inline envolviendo/desenvolviendo un tag
@@ -600,6 +654,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   }
 
   private closestAnyTag(node: Node | null, tags: string[]): HTMLElement | null {
+    if (!this.editorEl) return null;
     const upper = tags.map((t) => t.toUpperCase());
     let current: Node | null = node;
     while (current && current !== this.editor) {

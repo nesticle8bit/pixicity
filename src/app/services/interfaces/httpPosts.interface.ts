@@ -35,6 +35,11 @@ export abstract class IHttpPostsService {
   abstract getBorradores(search: string, categoriaId: number): Observable<any>;
   abstract deleteComentario(comentarioId: number): Observable<any>;
   abstract votarComentario(comentarioId: number, cantidad: number): Observable<any>;
+  abstract fijarComentario(comentarioId: number): Observable<any>;
+  abstract denunciarComentario(comentarioId: number, motivo: string): Observable<any>;
+  abstract getDenunciasComentarios(page: number, pageCount: number, soloPendientes?: boolean): Observable<any>;
+  abstract resolverDenunciaComentario(denunciaId: number): Observable<any>;
+  abstract eliminarDenunciaComentario(denunciaId: number): Observable<any>;
   abstract recomendarPost(postId: number): Observable<any>;
   abstract getVotos(): Observable<any>;
   abstract getPostsRelatedByTitle(title: string): Observable<any>;

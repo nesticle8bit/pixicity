@@ -1,0 +1,31 @@
+<h6 class="main-title">
+  <span>TOP Categorías</span>
+</h6>
+
+@if (categorias.length < 1) {
+  <section>
+    <div class="alert alert-warning">
+      📁 <strong>Aún no hay categorías con posts</strong>
+    </div>
+  </section>
+} @else {
+  <ng-container>
+    @for (categoria of categorias; track categoria.id; let i = $index) {
+      <article class="list-posts--zebra top-cat">
+        <strong class="float-start rank" [class.gold]="i === 0" [class.silver]="i === 1"
+          [class.bronze]="i === 2">{{i + 1}}</strong>
+        <small>
+          <a [routerLink]="['/posts/' + categoria.seo]" matTooltip="Ver posts de {{categoria.nombre}}"
+            matTooltipPosition="left">
+            <img src="/assets/images/categorias/{{categoria.icono}}" [alt]="categoria.nombre" class="cat-icon" />
+            {{categoria.nombre}}
+          </a>
+        </small>
+        <span class="float-end value" matTooltip="Posts publicados">
+          {{categoria.totalPosts}}
+        </span>
+      </article>
+    }
+    <br>
+  </ng-container>
+}

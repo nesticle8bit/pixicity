@@ -1,0 +1,36 @@
+<h6 class="main-title">
+  <span>Comentarios recientes</span>
+
+  <div class="float-end">
+    <img class="cursor--pointer" src="/assets/images/icons/arrow-circle-double.png"
+      style="background: #fff; padding-left: 5px" (click)="getUltimosComentarios()" #tooltip="matTooltip"
+      matTooltip="Actualizar comentarios" [matTooltipPosition]="'above'" />
+    </div>
+  </h6>
+
+  @if (comentarios.length < 1) {
+    <section>
+      <div class="alert alert-warning">
+        😴 <strong>Aún no se han realizado comentarios en las comunidades</strong>
+      </div>
+    </section>
+  }
+
+  @if (comentarios.length > 0) {
+    @for (comment of comentarios; track comment) {
+      <article class="list-posts--zebra" [ngClass]="{'opacity-50': refreshComments}">
+        <strong>
+          <a class="value" [routerLink]="['/perfil/' + comment.userName]" [appUserPopover]="comment.userName">
+            {{comment.userName}}
+          </a>
+        </strong>
+        <span class="text-muted">
+          <a [routerLink]="['/comunidades', comment.comunidadSlug, 'tema', comment.temaId, comment.temaUrl]"
+            matTooltip="{{comment.temaTitulo}}">
+            {{comment.temaTitulo | truncate:[28]}}
+          </a>
+        </span>
+      </article>
+    }
+    <div class="mb-3"></div>
+  }

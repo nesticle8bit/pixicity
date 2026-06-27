@@ -1,0 +1,46 @@
+<button type="button" (click)="upsertCategoria(undefined)" class="mb-3 float-end" mat-flat-button color="primary">
+  <mat-icon>add_circle</mat-icon> Agregar categoría
+</button>
+
+<div class="clearfix"></div>
+
+@if (categorias.length === 0) {
+  <div class="nada-amarillo">No hay categorías todavía.</div>
+}
+
+@for (cat of categorias; track cat.id) {
+  <div class="cat-card">
+    <div class="cat-card__head">
+      <div class="cat-card__title">
+        <span class="orden">#{{cat.orden}}</span>
+        <strong>{{cat.nombre}}</strong>
+        <small class="text-muted">/{{cat.seo}}/</small>
+      </div>
+      <div class="cat-card__actions">
+        <button mat-icon-button matTooltip="Agregar sub-categoría" (click)="upsertSubcategoria(cat)">
+          <mat-icon>playlist_add</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Editar" (click)="upsertCategoria(cat)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Eliminar" color="warn" (click)="deleteCategoria(cat)">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="cat-card__subs">
+      @if (cat.subCategorias?.length > 0) {
+        @for (sub of cat.subCategorias; track sub.id) {
+          <span class="sub-chip">
+            {{sub.nombre}}
+            <a matTooltip="Editar" (click)="upsertSubcategoria(cat, sub)"><i class="ti ti-pencil"></i></a>
+            <a matTooltip="Eliminar" class="del" (click)="deleteSubcategoria(sub)"><i class="ti ti-x"></i></a>
+          </span>
+        }
+      } @else {
+        <span class="text-muted sin-subs">Sin sub-categorías</span>
+      }
+    </div>
+  </div>
+}

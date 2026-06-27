@@ -3,7 +3,7 @@
 @use "assets/styles/icons";
 
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
-@import "@ng-select/ng-select/themes/default.theme.css";
+@import "material-icons/iconfont/material-icons.css";
 @import "animate.css";
 
 // CDK overlay: ensure user popover renders above everything
@@ -38,6 +38,9 @@ body {
   font-family: "Lato", "Helvetica Neue", "Helvetica", "Arial", "Lucida Grande", sans-serif;
   font-size: 12px;
   background: $background-color;
+  /* Evita scroll horizontal / efecto "zoom" en móvil sin romper position: sticky */
+  overflow-x: clip;
+  max-width: 100vw;
 }
 
 a {
@@ -99,16 +102,28 @@ header {
 
 .main-menu {
   background: $accent-color;
-  height: 43px;
+
+  // Flex row anchored to the bottom: tabs always align on the baseline of the
+  // bar regardless of zoom level. Replaces the fragile fixed-height + px hack.
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 4px;
+    min-height: 43px;
+  }
 
   &--item {
     // background: #003750;
     color: #fff;
-    padding: 8px 10px 8px 10px;
+    margin: 0;
+    padding: 8px 10px;
     border-radius: 4px 4px 0 0;
     background: #00354e;
     font-size: .8rem;
     font-weight: bold;
+    line-height: 1.2;
+    white-space: nowrap;
 
     &>a {
       color: #fff;
@@ -1232,6 +1247,7 @@ textarea:focus#msg_body {
 
 .boxpc h1 {
   word-wrap: break-word;
+  overflow-wrap: anywhere;
   font-size: 35px;
   margin: 0 0 20px;
   font-weight: 400;
@@ -1241,16 +1257,84 @@ textarea:focus#msg_body {
 
 .contenido {
   word-wrap: break-word;
+  overflow-wrap: anywhere;
   clear: both;
   min-height: 400px;
   margin-bottom: 20px;
   border-top: solid 1px #ebebeb;
   padding: 20px 0 0;
   margin-top: 20px;
+  max-width: 100%;
+  overflow-x: hidden;
 
+  /* Red de seguridad: ningún elemento del contenido (HTML de usuario,
+     divs con width fijo, <center>, figures, embeds, etc.) puede superar
+     el ancho del contenedor y provocar scroll horizontal / "zoom" en móvil. */
+  & * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Imágenes y media siempre centradas y proporcionales */
   & img {
     max-width: 100%;
     height: auto;
+  }
+
+  & img,
+  & video,
+  & iframe {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Todo iframe nunca desborda el ancho (mapas, audio, anuncios, etc.) */
+  & iframe {
+    display: block;
+    max-width: 100%;
+    border: 0;
+  }
+
+  /* Solo reproductores de video conocidos escalan en proporción 16:9.
+     Así no deformamos mapas, players de audio ni widgets que tienen su
+     propia altura. */
+  & iframe[src*="youtube"],
+  & iframe[src*="youtu.be"],
+  & iframe[src*="vimeo"],
+  & iframe[src*="dailymotion"],
+  & iframe[src*="filemoon"],
+  & iframe[src*="dood"],
+  & iframe[src*="streamtape"],
+  & iframe[src*="streamwish"],
+  & iframe[src*="ok.ru"],
+  & iframe[src*="mega.nz"],
+  & iframe[src*="/embed"] {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  & video,
+  & embed,
+  & object {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Tablas y bloques de código no deben romper el ancho en móvil */
+  & table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  & pre {
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
 
   & p {
@@ -3044,9 +3128,24 @@ span.ma_monitor_rango {
   .userInfoLogin {
     margin: 10px;
   }
+}
 
-  .main-menu--item {
-    padding-bottom: 7.3px;
+/* La barra de usuario flota a la derecha; en pantallas medianas/pequeñas
+   los desplegables (notificaciones, mensajes, favoritos, menú de usuario) se
+   anclan a la derecha y se limitan al ancho del viewport para que no se salgan
+   fuera de pantalla y queden inaccesibles al click. */
+@media (max-width: 1199.98px) {
+  .userInfoLogin .notificaciones-list,
+  .userInfoLogin .menuver {
+    left: auto !important;
+    right: 0;
+    max-width: calc(100vw - 24px);
+    z-index: 300 !important;
+  }
+
+  .userInfoLogin .notificaciones-list {
+    width: 300px;
+    max-width: calc(100vw - 24px);
   }
 }
 
@@ -3312,29 +3411,117 @@ span.ma_monitor_rango {
    V5 — HOME STATS BOX
    ============================================ */
 
-.box-crear-post {
-  background: linear-gradient(135deg, #006595 0%, #0085c4 100%);
-  padding: 10px;
-  text-align: center;
+.cta-crear-post {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #006595 0%, #0085c4 55%, #16a5cf 100%);
+  box-shadow: 0 6px 10px rgba(0, 101, 149, 0.28);
 
-  & p {
-    color: #fff;
-    font-size: 12px;
-    margin: 0 0 6px;
+  // Brillo decorativo
+  &::after {
+    content: '';
+    position: absolute;
+    top: -60%;
+    right: -20%;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, transparent 70%);
+    pointer-events: none;
   }
 
-  & a {
-    display: inline-block;
+  &__icon {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+
+    i {
+      font-size: 22px;
+      line-height: 1;
+    }
+  }
+
+  &__body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  &__title {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  &__subtitle {
+    display: block;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 11px;
+    line-height: 1.3;
+    margin-top: 2px;
+  }
+
+  &__btn {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     background: #fff;
     color: #006595;
     font-weight: 700;
     font-size: 12px;
-    padding: 4px 14px;
-    border-radius: 3px;
+    padding: 7px 14px;
+    border-radius: 6px;
     text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+
+    i {
+      font-size: 15px;
+    }
 
     &:hover {
-      background: #e8f4fb;
+      background: #eaf6fc;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // En columnas estrechas: apila y centra
+  @media (max-width: 400px) {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+
+    &__body {
+      flex-basis: 100%;
+      order: 2;
+    }
+
+    &__icon {
+      order: 1;
+    }
+
+    &__btn {
+      order: 3;
+      width: 100%;
+      justify-content: center;
     }
   }
 }

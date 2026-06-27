@@ -1,0 +1,51 @@
+.coment-cell {
+  max-width: 320px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.btn-menu {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #666;
+}
+
+.den-filtros {
+  margin-bottom: 12px;
+}
+
+.den-toggle {
+  display: inline-flex;
+  background: #eef2f4;
+  border-radius: 20px;
+  padding: 2px;
+
+  button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6a7882;
+    padding: 5px 14px;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    &.active {
+      background: #006595;
+      color: #fff;
+    }
+  }
+}
+
+.den-badge {
+  background: #c0392b;
+  color: #fff;
+  border-radius: 10px;
+  padding: 0 6px;
+  font-size: 11px;
+  line-height: 16px;
+}

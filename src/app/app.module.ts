@@ -26,7 +26,6 @@ import { PostsViewComponent } from './components/posts/posts-view/posts-view.com
 import { LoginComponent } from './components/pages/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { NgSelectConfig, NgSelectModule } from '@ng-select/ng-select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
@@ -47,7 +46,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DialogAfiliarseComponent } from './components/dialogs/dialog-afiliarse/dialog-afiliarse.component';
 import { IHttpGeneralService } from './services/interfaces/httpGeneral.interface';
 import { HttpGeneralService } from './services/implementations/httpGeneral.service';
-import { TopTimesSelectorComponent } from './components/sections/top-times-selector/top-times-selector.component';
 import {
   MatPaginatorIntl,
   MatPaginatorModule,
@@ -92,8 +90,6 @@ import { IHttpDenunciasService } from './services/interfaces/httpDenuncias.inter
 import { HttpDenunciasService } from './services/implementations/httpDenuncias.service';
 import { ProfileCommentsComponent } from './components/profile/profile-comments/profile-comments.component';
 import { ProfilePostsComponent } from './components/profile/profile-posts/profile-posts.component';
-import { PostOriginalPosterInfoComponent } from './components/posts/post-original-poster-info/post-original-poster-info.component';
-import { FollowButtonComponent } from './components/addons/follow-button/follow-button.component';
 import { IHttpWebService } from './services/interfaces/httpWeb.interface';
 import { HttpWebService } from './services/implementations/httpWeb.service';
 import { PostRelatedPostsComponent } from './components/posts/post-related-posts/post-related-posts.component';
@@ -118,7 +114,7 @@ import { BottomSheetsEmojisComponent } from './components/bottom-sheets/bottom-s
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { DialogChangeAvatarComponent } from './components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
 import { HomeLastRegisteredUsersComponent } from './components/home/home-last-registered-users/home-last-registered-users.component';
-import { GenreIconComponent } from './components/addons/genre-icon/genre-icon.component';
+import { HomeTopCategoriasComponent } from './components/home/home-top-categorias/home-top-categorias.component';
 import { ProfileActivityComponent } from './components/profile/profile-activity/profile-activity.component';
 import { TipoActividadIconComponent } from './components/addons/tipo-actividad-icon/tipo-actividad-icon.component';
 import { DialogAddUpdateRangoComponent } from './components/dialogs/dialog-add-update-rango/dialog-add-update-rango.component';
@@ -141,7 +137,6 @@ import { HttpBloqueosService } from './services/implementations/httpBloqueos.ser
 import { ShoutsViewComponent } from './components/pages/shouts/shouts-view/shouts-view.component';
 import { PostMoreFromOPComponent } from './components/posts/post-more-from-op/post-more-from-op.component';
 import { SectionHomeForumComponent } from './components/sections/section-home-forum/section-home-forum.component';
-import { UserOnlineStatusComponent } from './components/addons/user-online-status/user-online-status.component';
 import { PostsGeneratorComponent } from './components/posts/posts-generator/posts-generator.component';
 import { IHttpNoticiasService } from './services/interfaces/httpNoticias.interface';
 import { HttpNoticiasService } from './services/implementations/httpNoticias.service';
@@ -162,6 +157,8 @@ import { FotoDetailComponent } from './components/fotos/foto-detail/foto-detail.
 import { FotoCreateComponent } from './components/fotos/foto-create/foto-create.component';
 import { FotoComentariosComponent } from './components/fotos/foto-comentarios/foto-comentarios.component';
 import { IHttpFotosService } from './services/interfaces/httpFotos.interface';
+import { IHttpComunidadesService } from './services/interfaces/httpComunidades.interface';
+import { HttpComunidadesService } from './services/implementations/httpComunidades.service';
 import { HttpFotosService } from './services/implementations/httpFotos.service';
 
 @NgModule({
@@ -192,7 +189,6 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     FavoritosComponent,
     TopsComponent,
     DialogAfiliarseComponent,
-    TopTimesSelectorComponent,
     CategoriesSelectorComponent,
     DialogPrevisualizarPostComponent,
     PostNotFoundComponent,
@@ -210,8 +206,6 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     UppercaseDirective,
     ProfileCommentsComponent,
     ProfilePostsComponent,
-    PostOriginalPosterInfoComponent,
-    FollowButtonComponent,
     PostRelatedPostsComponent,
     ProfileShoutsComponent,
     ProfileFollowingComponent,
@@ -228,7 +222,7 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     BottomSheetsEmojisComponent,
     DialogChangeAvatarComponent,
     HomeLastRegisteredUsersComponent,
-    GenreIconComponent,
+    HomeTopCategoriasComponent,
     ProfileActivityComponent,
     TipoActividadIconComponent,
     DialogAddUpdateRangoComponent,
@@ -243,7 +237,6 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     ShoutsViewComponent,
     PostMoreFromOPComponent,
     SectionHomeForumComponent,
-    UserOnlineStatusComponent,
     PostsGeneratorComponent,
     MainUltimasNoticiasComponent,
     ClickOutsideDirective,
@@ -269,7 +262,6 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     FormsModule,
     ReactiveFormsModule,
     MatTooltipModule,
-    NgSelectModule,
     MatCheckboxModule,
     ToastrModule.forRoot({
       timeOut: 6000,
@@ -347,6 +339,7 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
         { provide: IHttpNoticiasService, useClass: HttpNoticiasService },
         { provide: IHttpMensajesService, useClass: HttpMensajesService },
         { provide: IHttpFotosService, useClass: HttpFotosService },
+        { provide: IHttpComunidadesService, useClass: HttpComunidadesService },
         { provide: IHttpBloqueosService, useClass: HttpBloqueosService },
         provideHttpClient(withInterceptorsFromDi()),
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
@@ -357,10 +350,7 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(private ngSelectConfig: NgSelectConfig) {
-    ngSelectConfig.notFoundText = 'No hay elementos';
-    ngSelectConfig.appendTo = 'body';
-
+  constructor() {
     registerLocaleData(localeEs, 'es');
   }
 }

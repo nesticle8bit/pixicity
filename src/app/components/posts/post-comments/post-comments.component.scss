@@ -31,3 +31,72 @@
     color: #f44336;
   }
 }
+
+/* Botón denunciar */
+.report {
+  cursor: pointer;
+  color: #b9a14a;
+
+  &:hover {
+    color: #c0392b;
+  }
+}
+
+/* Botón fijar */
+.pin {
+  cursor: pointer;
+  color: #999;
+
+  &:hover { color: #0085c4; }
+  &.pinned { color: #0085c4; }
+}
+
+/* Selector de orden Mejores/Recientes */
+.coment-orden {
+  display: inline-flex;
+  background: #eef2f4;
+  border-radius: 20px;
+  padding: 2px;
+  margin: 4px 0 10px;
+
+  button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6a7882;
+    padding: 4px 14px;
+    border-radius: 18px;
+
+    &.active {
+      background: #006595;
+      color: #fff;
+    }
+  }
+}
+
+/* Comentario colapsado por baja puntuación */
+.coment-collapsed {
+  font-size: 12px;
+  color: #999;
+  padding: 4px 0;
+  cursor: pointer;
+
+  a {
+    color: #006595;
+    font-weight: 700;
+  }
+}
+
+/* Comentario destacado (mejor puntuado) */
+.comentario-post.coment-destacado {
+  background: #fbfdf6;
+  border-left: 3px solid #5aa02c;
+}
+
+/* Enlaces autodetectados en el contenido */
+.comment-content span a {
+  color: #0085c4;
+  font-weight: 600;
+}

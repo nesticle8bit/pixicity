@@ -1,29 +1,31 @@
-<section>
-  <div class="titulaw">
-    <h2>Más posts de {{post?.usuario?.userName}}</h2>
+<div class="rank-widget">
+  <div class="rank-widget__head">
+    <i class="ti ti-user-star"></i>
+    <h2>Más de {{post?.usuario?.userName}}</h2>
   </div>
-</section>
 
-@if (posts.length < 1) {
-  <main class="alert alert-warning">
-    🌱 <strong>No se han encontrado más posts del autor</strong>
-  </main>
-}
-
-@if (post && posts.length > 0) {
-  <main class="esees mb-4">
-    @for (post of posts; track post; let i = $index) {
-      <article class="list-posts--zebra">
-        <strong class="float-start">{{i + 1}}</strong>
-        <small>
-          <app-post-url-link [post]="{ id: post.id, url: post.url, titulo: post.titulo, truncate: 35}"
-            [categoria]="{ icono: post.categoria.icono, nombre: post.categoria.nombre, seo: post.categoria.seo}">
-          </app-post-url-link>
-        </small>
-        <span class="float-end value">
-          {{post.puntos}}
-        </span>
-      </article>
-    }
-  </main>
-}
+  @if (posts.length < 1) {
+    <div class="rank-widget__empty">
+      <i class="ti ti-mood-empty"></i>
+      Este autor no tiene más posts
+    </div>
+  } @else {
+    <div class="rank-widget__list">
+      @for (item of posts; track item.id; let i = $index) {
+        <article class="rank-item">
+          <span class="rank-item__rank" [ngClass]="{'gold': i === 0, 'silver': i === 1, 'bronze': i === 2}">
+            {{i + 1}}
+          </span>
+          <span class="rank-item__body">
+            <app-post-url-link [post]="{ id: item.id, url: item.url, titulo: item.titulo, truncate: 38}"
+              [categoria]="{ icono: item.categoria.icono, nombre: item.categoria.nombre, seo: item.categoria.seo}">
+            </app-post-url-link>
+          </span>
+          <span class="rank-item__pts" matTooltip="Puntos">
+            <i class="ti ti-thumb-up"></i> {{item.puntos}}
+          </span>
+        </article>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,63 @@
+@if (loading && !comunidad) {
+  <div class="text-center my-5"><img src="/assets/images/min-carga.gif" alt="Cargando..."></div>
+}
+
+@if (comunidad) {
+  <div class="container container--home comunidad-miembros">
+    <div class="com-breadcrumb">
+      <a [routerLink]="['/comunidades']">Comunidades</a>
+      <span>›</span>
+      <a [routerLink]="['/comunidades', comunidad.nombreCorto]">{{comunidad.nombre}}</a>
+      <span>›</span> <span>Miembros</span>
+    </div>
+
+    <h1 class="mm-title">Miembros de {{comunidad.nombre}} <small>({{comunidad.miembrosCount}})</small></h1>
+
+    @if (miembros.length === 0) {
+      <div class="nada-amarillo">Esta comunidad aún no tiene miembros.</div>
+    } @else {
+      <div class="mm-grid">
+        @for (m of miembros; track m.id) {
+          <div class="mm-card">
+            <a [routerLink]="['/perfil', m.userName]" [appUserPopover]="m.userName">
+              <app-user-avatar [avatar]="m.avatar" [userName]="m.userName" [width]="56" [height]="56"></app-user-avatar>
+            </a>
+            <a class="mm-name" [routerLink]="['/perfil', m.userName]" [appUserPopover]="m.userName">{{m.userName}}</a>
+            <span class="mm-rango" [class.staff]="m.esStaff">
+              {{m.esStaff ? 'Staff' : rangoNombre(m.permiso)}}
+            </span>
+
+            @if (puedeGestionar && !esCreador(m)) {
+              <a class="mm-gestionar" (click)="toggleGestion(m)">
+                <i class="ti ti-settings"></i> Gestionar
+              </a>
+
+              @if (gestionandoId === m.id) {
+                <div class="mm-panel">
+                  <span class="mm-panel__lbl">Rango</span>
+                  <div class="mm-panel__rangos">
+                    <a [class.active]="m.permiso === 3" (click)="cambiarRango(m, 3, m.esStaff)">Posteador</a>
+                    <a [class.active]="m.permiso === 2" (click)="cambiarRango(m, 2, m.esStaff)">Comentador</a>
+                    <a [class.active]="m.permiso === 1" (click)="cambiarRango(m, 1, m.esStaff)">Visitante</a>
+                  </div>
+                  <label class="mm-panel__staff">
+                    <input type="checkbox" [checked]="m.esStaff" (change)="cambiarRango(m, m.permiso, !m.esStaff)" />
+                    Staff (moderador de la comunidad)
+                  </label>
+                </div>
+              }
+            }
+          </div>
+        }
+      </div>
+    }
+
+    @if (totalPages.length > 1) {
+      <div class="com-pagination">
+        @for (p of totalPages; track p) {
+          <a [class.active]="p === pagination.currentPage" (click)="goToPage(p)">{{p}}</a>
+        }
+      </div>
+    }
+  </div>
+}

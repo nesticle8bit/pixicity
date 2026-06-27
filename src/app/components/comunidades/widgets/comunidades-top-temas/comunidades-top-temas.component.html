@@ -1,0 +1,21 @@
+<h6 class="main-title">
+  <span>Top temas</span>
+  <app-top-times-selector [selection]="periodo" (selectedDate)="cambiarPeriodo($event)"></app-top-times-selector>
+</h6>
+
+<div class="boxposts separa">
+  @if (temas.length === 0) {
+    <div class="ctt-empty">Nada por aquí.</div>
+  } @else {
+    @for (t of temas; track t.id; let i = $index) {
+      <a class="ctt-item" [routerLink]="['/comunidades', t.comunidadSlug, 'tema', t.id, t.url]">
+        <span class="ctt-rank">{{i + 1}}</span>
+        <span class="ctt-body">
+          <strong>{{t.titulo}}</strong>
+          <span class="ctt-com">{{t.comunidadNombre}}</span>
+        </span>
+        <span class="ctt-views"><i class="ti ti-eye"></i> {{t.visitantes}}</span>
+      </a>
+    }
+  }
+</div>

@@ -1,0 +1,62 @@
+<div class="container container--home comunidades-page">
+  <div class="row">
+    <div class="col-12">
+      <div class="com-toolbar">
+        <div class="com-search">
+          <input type="text" [(ngModel)]="query" (keyup.enter)="buscar()" placeholder="Buscar comunidad..." />
+          <button (click)="buscar()"><i class="ti ti-search"></i></button>
+        </div>
+
+        <div class="com-cats">
+          <a class="com-cat-chip" [class.active]="categoriaId === 0" (click)="filtrarCategoria(0)">Todas</a>
+          @for (cat of categorias; track cat.id) {
+          <a class="com-cat-chip" [class.active]="categoriaId === cat.id" (click)="filtrarCategoria(cat.id)">
+            {{cat.nombre}}
+          </a>
+          }
+        </div>
+      </div>
+
+      @if (loading) {
+      <div class="text-center my-5"><img src="/assets/images/min-carga.gif" alt="Cargando..."></div>
+      }
+
+      @if (!loading && comunidades.length === 0) {
+      <div class="nada-amarillo">No se encontraron comunidades.</div>
+      }
+
+      @if (!loading && comunidades.length > 0) {
+      <div class="com-grid">
+        @for (com of comunidades; track com.id) {
+        <a class="com-card mb-2" [routerLink]="['/comunidades', com.nombreCorto]">
+          <div class="com-card__img">
+            @if (com.imagen) {
+            <img [src]="com.imagen" [alt]="com.nombre" />
+            } @else {
+            <span class="com-card__placeholder"><i class="ti ti-users-group"></i></span>
+            }
+          </div>
+          <div class="com-card__body">
+            <h3 class="com-card__name">{{com.nombre}}</h3>
+            @if (com.categoria) { <span class="com-card__cat">{{com.categoria}}</span> }
+            <p class="com-card__desc">{{com.descripcion}}</p>
+            <div class="com-card__stats">
+              <span><i class="ti ti-users"></i> {{com.miembrosCount}}</span>
+              <span><i class="ti ti-message-2"></i> {{com.temasCount}}</span>
+            </div>
+          </div>
+        </a>
+        }
+      </div>
+      }
+
+      @if (totalPages.length > 1) {
+      <div class="com-pagination">
+        @for (p of totalPages; track p) {
+        <a [class.active]="p === pagination.currentPage" (click)="goToPage(p)">{{p}}</a>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</div>

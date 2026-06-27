@@ -16,17 +16,17 @@
         <div class="mb-3">
           <label>Ícono <strong class="text-danger">*</strong></label>
 
-          <ng-select [items]="iconos" formControlName="icono">
-            <ng-template ng-label-tmp let-item="item">
+          <app-select [items]="iconos" formControlName="icono">
+            <ng-template appSelectLabel let-item="item">
               <img src="/assets/images/categorias/{{item}}" class="image-middle me-1">
               {{item}}
             </ng-template>
 
-            <ng-template ng-option-tmp let-item="item" let-index="index">
+            <ng-template appSelectOption let-item="item" let-index="index">
               <img src="/assets/images/categorias/{{item}}" class="image-middle me-1">
               {{item}}
             </ng-template>
-          </ng-select>
+          </app-select>
         </div>
       </div>
     </div>

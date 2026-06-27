@@ -1,0 +1,22 @@
+.top-cat {
+  .cat-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+    margin-right: 4px;
+  }
+
+  .rank {
+    &.gold {
+      color: #d4a017;
+    }
+
+    &.silver {
+      color: #9aa3ab;
+    }
+
+    &.bronze {
+      color: #c0794a;
+    }
+  }
+}

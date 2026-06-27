@@ -1,0 +1,36 @@
+<h6 class="main-title">
+  <span>Temas recientes</span>
+</h6>
+
+@if (loading) {
+  <div class="text-center my-4"><img src="/assets/images/min-carga.gif" alt="Cargando..."></div>
+}
+
+@if (!loading && temas.length === 0) {
+  <div class="nada-amarillo">Aún no se han creado temas en las comunidades.</div>
+}
+
+@if (!loading && temas.length > 0) {
+  <div class="ctr-list">
+    @for (tema of temas; track tema.id) {
+      <article class="ctr-item">
+        <a class="ctr-avatar" [routerLink]="['/perfil', tema.userName]" [appUserPopover]="tema.userName">
+          <app-user-avatar [avatar]="tema.avatar" [userName]="tema.userName" [width]="40" [height]="40"></app-user-avatar>
+        </a>
+        <div class="ctr-body">
+          <a class="ctr-title" [routerLink]="['/comunidades', tema.comunidadSlug, 'tema', tema.id, tema.url]">
+            {{tema.titulo}}
+          </a>
+          <div class="ctr-meta">
+            <a class="ctr-com" [routerLink]="['/comunidades', tema.comunidadSlug]">
+              <i class="ti ti-users-group"></i> {{tema.comunidadNombre}}
+            </a>
+            · por <a [routerLink]="['/perfil', tema.userName]">{{tema.userName}}</a>
+            · {{tema.fechaRegistro | timeAgo}}
+            · <i class="ti ti-eye"></i> {{tema.visitantes}}
+          </div>
+        </div>
+      </article>
+    }
+  </div>
+}

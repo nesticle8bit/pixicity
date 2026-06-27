@@ -21,11 +21,19 @@
       </h3>
       <img src="/assets/images/min-carga.gif" id="com_gif" style="display: none;">
     </div>
+
+    @if (comentarios?.length > 1) {
+      <div class="coment-orden">
+        <button type="button" [class.active]="orden === 'mejores'" (click)="cambiarOrden('mejores')">Mejores</button>
+        <button type="button" [class.active]="orden === 'recientes'" (click)="cambiarOrden('recientes')">Recientes</button>
+        <button type="button" [class.active]="orden === 'controvertido'" (click)="cambiarOrden('controvertido')">Controvertido</button>
+      </div>
+    }
     @for (comentario of comentarios; track comentario; let i = $index) {
       <div id="comentarios" style="opacity: 1;">
         <div id="respnuevas">
           <div class="comentario-post clearbeta"
-            [ngClass]="{'mi-comentario': comentario?.usuario === currentUser?.usuario?.userName, 'op': comentario?.usuario === post?.usuario?.userName}">
+            [ngClass]="{'mi-comentario': comentario?.usuario === currentUser?.usuario?.userName, 'op': comentario?.usuario === post?.usuario?.userName, 'coment-destacado': comentario?.destacado}">
             <div class="avatar-box" style="z-index: 99;">
               <a [routerLink]="['/perfil/' + comentario?.userName]" [appUserPopover]="comentario?.userName">
                 <app-user-avatar [class]="'avatar-48 lazy'" [avatar]="comentario?.avatar"
@@ -45,6 +53,14 @@
                       <b class="badge bg-primary mx-1 cursor--help" matTooltip="Original Poster"
                         [matTooltipPosition]="'right'"
                       >OP</b>
+                    }
+                    @if (comentario?.destacado) {
+                      <b class="badge bg-success mx-1 cursor--help" matTooltip="Comentario destacado"
+                        [matTooltipPosition]="'right'"><i class="ti ti-award"></i></b>
+                    }
+                    @if (comentario?.fijado) {
+                      <b class="badge bg-info mx-1 cursor--help" matTooltip="Comentario fijado"
+                        [matTooltipPosition]="'right'"><i class="ti ti-pin"></i> Fijado</b>
                     }
                     <span (click)="displayHistory(comentario)"
                       [ngClass]="{'cursor--pointer': comentario.historial?.length > 0}">
@@ -97,14 +113,32 @@
                         <i class="ti ti-x times"></i>
                       </a>
                     }
+                    @if (puedeFijar(comentario)) {
+                      <a #tooltip="matTooltip" [matTooltip]="comentario?.fijado ? 'Desfijar' : 'Fijar comentario'"
+                        (click)="fijar(comentario)">
+                        <i class="ti ti-pin pin" [class.pinned]="comentario?.fijado"></i>
+                      </a>
+                    }
+                    @if (currentUser?.usuario && !esComentarioPropio(comentario)) {
+                      <a #tooltip="matTooltip" matTooltip="Denunciar Comentario" (click)="denunciar(comentario)">
+                        <i class="ti ti-flag report"></i>
+                      </a>
+                    }
                   </div>
                 </div>
               </div>
               <div id="comment-body-{{comentario.id}}" class="comment-content">
+                @if (estaColapsado(comentario)) {
+                  <div class="coment-collapsed" (click)="mostrarColapsado(comentario)">
+                    @if ((comentario.denunciasPendientes || 0) >= UMBRAL_DENUNCIAS) {
+                      Comentario oculto por denuncias — <a>mostrar</a>
+                    } @else {
+                      Comentario con baja puntuación ({{comentario.votos}}) — <a>mostrar</a>
+                    }
+                  </div>
+                } @else {
                 @if (!comentario.update) {
-                  <span>
-                    {{comentario?.contenido}}
-                  </span>
+                  <span [innerHTML]="formatear(comentario?.contenido)"></span>
                 }
                 @if (comentario.update) {
                   <div class="Container" style="width: 98%">
@@ -120,6 +154,7 @@
                         </div>
                       </div>
                     }
+                  }
                   </div>
                 </div>
               </div>
@@ -217,14 +252,17 @@
                                   <i class="ti ti-x times"></i>
                                 </a>
                               }
+                              @if (currentUser?.usuario && !esComentarioPropio(respuesta)) {
+                                <a #tooltip="matTooltip" matTooltip="Denunciar Comentario" (click)="denunciar(respuesta)">
+                                  <i class="ti ti-flag report"></i>
+                                </a>
+                              }
                             </div>
                           </div>
                         </div>
                         <div id="comment-body-{{respuesta?.id}}" class="comment-content">
                           @if (!respuesta.update) {
-                            <span>
-                              {{respuesta?.contenido}}
-                            </span>
+                            <span [innerHTML]="formatear(respuesta?.contenido)"></span>
                           }
                           @if (respuesta.update) {
                             <div class="Container" style="width: 98%">

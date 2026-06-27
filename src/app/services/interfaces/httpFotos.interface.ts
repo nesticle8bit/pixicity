@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 export abstract class IHttpFotosService {
   abstract getFotos(search: any): Observable<any>;
   abstract getTopFotos(count?: number): Observable<any>;
+  abstract getFotosAdmin(search: any): Observable<any>;
   abstract getFotosByUsuario(userName: string, search: any): Observable<any>;
   abstract getFotoById(fotoId: number): Observable<any>;
   abstract saveFoto(foto: any): Observable<any>;

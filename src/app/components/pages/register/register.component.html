@@ -84,23 +84,23 @@
               <div class="row">
                 <div class="col-12 col-sm-4">
                   <label>Día</label>
-                  <ng-select formControlName="dia" [items]="dias"></ng-select>
+                  <app-select formControlName="dia" [items]="dias"></app-select>
                 </div>
                 <div class="col-12 col-sm-4">
                   <label>Mes</label>
-                  <ng-select formControlName="mes" [items]="meses" bindLabel="label" bindValue="value">
-                  </ng-select>
+                  <app-select formControlName="mes" [items]="meses" bindLabel="label" bindValue="value">
+                  </app-select>
                 </div>
                 <div class="col-12 col-sm-4">
                   <label>Año</label>
-                  <ng-select formControlName="año" [items]="years"></ng-select>
+                  <app-select formControlName="año" [items]="years"></app-select>
                 </div>
               </div>
             </div> -->
             <!-- <div class="mb-3 pos-relative">
             <label>Género</label>
-            <ng-select formControlName="genero" [items]="generos" bindLabel="label" bindValue="value"
-            (click)="onFocus('genero')" on-blur="removePopover()"></ng-select>
+            <app-select formControlName="genero" [items]="generos" bindLabel="label" bindValue="value"
+            (opened)="onFocus('genero')" (closed)="removePopover()"></app-select>
             <div class="pixicity-popover help info" *ngIf="currentFocus === 'genero'">
               <span id="puy"></span>
               <span>
@@ -112,23 +112,23 @@
             <label>
               Pais de Origen <strong class="text-danger">*</strong>
             </label>
-            <ng-select formControlName="paisId" [items]="paises" bindLabel="nombre" bindValue="id"
-              (change)="getEstadosByPais($event)" (click)="onFocus('pais')" on-blur="removePopover()">
-              <ng-template ng-option-tmp let-item="item" let-index="index">
+            <app-select formControlName="paisId" [items]="paises" bindLabel="nombre" bindValue="id"
+              (change)="getEstadosByPais($event)" (opened)="onFocus('pais')" (closed)="removePopover()">
+              <ng-template appSelectOption let-item="item" let-index="index">
                 @if (item?.iso2) {
                   <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1"
                     >
                 }
                 {{item.nombre}}
               </ng-template>
-              <ng-template ng-label-tmp let-item="item">
+              <ng-template appSelectLabel let-item="item">
                 @if (item?.iso2) {
                   <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1"
                     >
                 }
                 {{item.nombre}}
               </ng-template>
-            </ng-select>
+            </app-select>
             @if (currentFocus === 'pais') {
               <div class="pixicity-popover help info">
                 <span id="puy"></span>
@@ -142,9 +142,9 @@
             <label>
               Estado o Región <strong class="text-danger">*</strong>
             </label>
-            <ng-select formControlName="estadoId" [items]="estados" bindLabel="nombre" bindValue="id"
-              (click)="onFocus('estado')" on-blur="removePopover()">
-            </ng-select>
+            <app-select formControlName="estadoId" [items]="estados" bindLabel="nombre" bindValue="id"
+              (opened)="onFocus('estado')" (closed)="removePopover()">
+            </app-select>
             @if (currentFocus === 'estado') {
               <div class="pixicity-popover help info">
                 <span id="puy"></span>

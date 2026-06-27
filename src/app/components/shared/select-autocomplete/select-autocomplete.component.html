@@ -1,0 +1,48 @@
+<div class="asel" [class.asel--open]="isOpen" [class.asel--disabled]="disabled"
+  cdkOverlayOrigin #origin="cdkOverlayOrigin" (click)="toggle()">
+  <div class="asel__value">
+    @if (selectedItem !== null && selectedItem !== undefined && labelOf(selectedItem) !== '') {
+      @if (labelTpl) {
+        <ng-container *ngTemplateOutlet="labelTpl; context: { $implicit: selectedItem, item: selectedItem }"></ng-container>
+      } @else {
+        {{ labelOf(selectedItem) }}
+      }
+    } @else {
+      <span class="asel__placeholder">{{ placeholder }}</span>
+    }
+  </div>
+
+  @if (clearable && hasValue && !disabled) {
+    <button type="button" class="asel__clear" (click)="clear($event)" aria-label="Limpiar">
+      <i class="ti ti-x"></i>
+    </button>
+  }
+  <i class="ti ti-chevron-down asel__arrow"></i>
+</div>
+
+<ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="origin" [cdkConnectedOverlayOpen]="isOpen"
+  [cdkConnectedOverlayWidth]="origin.elementRef.nativeElement.offsetWidth"
+  [cdkConnectedOverlayHasBackdrop]="true" cdkConnectedOverlayBackdropClass="asel__backdrop"
+  (backdropClick)="close()" (detach)="close()">
+  <div class="asel__panel">
+    @if (searchable) {
+      <div class="asel__search">
+        <i class="ti ti-search"></i>
+        <input #searchInput type="text" [(ngModel)]="search" placeholder="Buscar..." autocomplete="off" />
+      </div>
+    }
+    <ul class="asel__options">
+      @for (item of filtered; track $index) {
+        <li class="asel__option" [class.asel__option--active]="isSelected(item)" (click)="select(item)">
+          @if (optionTpl) {
+            <ng-container *ngTemplateOutlet="optionTpl; context: { $implicit: item, item: item, index: $index }"></ng-container>
+          } @else {
+            {{ labelOf(item) }}
+          }
+        </li>
+      } @empty {
+        <li class="asel__empty">Sin resultados</li>
+      }
+    </ul>
+  </div>
+</ng-template>

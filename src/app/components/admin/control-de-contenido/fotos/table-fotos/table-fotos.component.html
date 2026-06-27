@@ -1,0 +1,72 @@
+@if (fotos.length > 0) {
+  <main class="table-responsive">
+    <table class="table table-sm table-striped table-hover">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Creada</th>
+          <th>Título</th>
+          <th>Categoría</th>
+          <th>Votos</th>
+          <th>Visitas</th>
+          <th>IP</th>
+          <th>Usuario</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (foto of fotos; track foto.id; let i = $index) {
+          <tr [ngClass]="{'row-deleted': foto.eliminado}">
+            <td>
+              <a [routerLink]="['/fotos/' + foto.userName + '/' + foto.id + '/' + foto.url]" title="{{foto.titulo}}">
+                <img [src]="foto.imageUrl" [alt]="foto.titulo" class="foto-thumb" />
+              </a>
+            </td>
+            <td>{{foto.fechaRegistro | timeAgo}}</td>
+            <td>
+              <a [routerLink]="['/fotos/' + foto.userName + '/' + foto.id + '/' + foto.url]" title="{{foto.titulo}}">
+                {{foto.titulo}}
+              </a>
+            </td>
+            <td>{{foto.categoria}}</td>
+            <td>
+              <span class="text-success">+{{foto.votosPositivos}}</span>
+              /
+              <span class="text-danger">-{{foto.votosNegativos}}</span>
+            </td>
+            <td>{{foto.visitantes}}</td>
+            <td>
+              <app-who-is-ip [IP]="foto.ip"></app-who-is-ip>
+            </td>
+            <td>
+              <a [routerLink]="['/perfil/' + foto.userName]" target="_blank" [appUserPopover]="foto.userName">
+                {{foto.userName}}
+              </a>
+            </td>
+            <td class="text-center" width="30px">
+              <button class="btn-menu" [matMenuTriggerFor]="menu">
+                <i class="ti ti-dots-vertical"></i>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button type="button" mat-menu-item [routerLink]="['/fotos/actualizar/' + foto.id]">
+                  <mat-icon>edit</mat-icon>
+                  <span>Actualizar</span>
+                </button>
+                <button type="button" mat-menu-item (click)="eliminarFoto(foto.id, i)">
+                  <mat-icon>delete_outline</mat-icon>
+                  <span>Eliminar</span>
+                </button>
+              </mat-menu>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </main>
+}
+
+@if (fotos.length > 0) {
+  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
+  </mat-paginator>
+}

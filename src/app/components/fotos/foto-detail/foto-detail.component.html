@@ -166,7 +166,7 @@
           </div>
 
           <!-- Acciones del dueño -->
-          @if (esMio || currentUser?.usuario?.isAdmin) {
+          @if (esMio || esAdmin) {
           <div class="foto-owner-actions">
             <a [routerLink]="['/fotos/actualizar', foto.id]" class="boton azul me-2">
               <i class="ti ti-pencil"></i> Editar

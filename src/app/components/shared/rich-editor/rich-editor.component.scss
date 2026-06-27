@@ -194,6 +194,29 @@
       height: auto;
       border-radius: 4px;
     }
+
+    // Imagen redimensionable: el span lleva el handle de resize nativo
+    .img-resizable {
+      display: inline-block;
+      position: relative;
+      resize: both;
+      overflow: hidden;
+      max-width: 100%;
+      line-height: 0;
+      border-radius: 4px;
+
+      &:hover {
+        outline: 1px dashed #1976d2;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        display: block;
+        pointer-events: none; // los clics van al span, no a la imagen
+      }
+    }
   }
 
   //  Bubble menu (estilo Notion)

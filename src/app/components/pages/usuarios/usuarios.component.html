@@ -119,8 +119,8 @@
                 País
               </h3>
 
-              <ng-select [items]="paises" bindLabel="nombre" bindValue="id" formControlName="pais">
-                <ng-template ng-option-tmp let-item="item" let-index="index">
+              <app-select [items]="paises" bindLabel="nombre" bindValue="id" formControlName="pais">
+                <ng-template appSelectOption let-item="item" let-index="index">
                   @if (item?.iso2) {
                     <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle"
                       >
@@ -128,14 +128,14 @@
                   {{item.nombre}}
                 </ng-template>
 
-                <ng-template ng-label-tmp let-item="item">
+                <ng-template appSelectLabel let-item="item">
                   @if (item?.iso2) {
                     <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle"
                       >
                   }
                   {{item.nombre}}
                 </ng-template>
-              </ng-select>
+              </app-select>
             </section>
 
             <section class="mt-3">
@@ -143,8 +143,8 @@
                 Rango
               </h3>
 
-              <ng-select [items]="rangos" bindLabel="nombre" bindValue="id" formControlName="rango">
-                <ng-template ng-option-tmp let-item="item" let-index="index">
+              <app-select [items]="rangos" bindLabel="nombre" bindValue="id" formControlName="rango">
+                <ng-template appSelectOption let-item="item" let-index="index">
                   @if (item.icono) {
                     <img src="/assets/images/icons/rangos/{{item.icono}}" class="image-middle me-2"
                       >
@@ -152,14 +152,14 @@
                   {{item.nombre}}
                 </ng-template>
 
-                <ng-template ng-label-tmp let-item="item">
+                <ng-template appSelectLabel let-item="item">
                   @if (item.icono) {
                     <img src="/assets/images/icons/rangos/{{item.icono}}" class="image-middle me-2"
                       >
                   }
                   {{item.nombre}}
                 </ng-template>
-              </ng-select>
+              </app-select>
             </section>
 
             <section class="d-grid gap-2 my-3">
