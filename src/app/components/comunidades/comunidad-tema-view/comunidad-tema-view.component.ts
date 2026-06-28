@@ -164,8 +164,8 @@ export class ComunidadTemaViewComponent implements OnInit {
   }
 
   puedeFijar(): boolean {
-    // Mods/admins (el backend también permite al dueño de la comunidad)
-    return this.esAdmin;
+    // Mods/admins o el dueño de la comunidad
+    return this.esAdmin || this.tema?.comunidad?.usuarioId === this.currentUser?.usuario?.id;
   }
 
   fijar(c: any): void {

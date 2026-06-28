@@ -291,7 +291,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   changeStickyPost(postId: number): Observable<boolean> {
     return this.http
-      .put<ApiResponse<boolean>>(`${environment.api}/api/posts/changeStickyPost`, { id: postId })
+      .put<ApiResponse<boolean>>(`${environment.api}/api/posts/changeStickyPost?postId=${postId}`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) {
