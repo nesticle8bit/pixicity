@@ -148,4 +148,53 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
+
+  votarShoutComentario(comentarioId: number, valor: number): Observable<any> {
+    return this.http
+      .post<ApiResponse<any>>(`${environment.api}/api/shouts/votarShoutComentario?comentarioId=${comentarioId}&valor=${valor}`, {})
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  editarShoutComentario(comentarioId: number, contenido: string): Observable<any> {
+    return this.http
+      .post<ApiResponse<any>>(`${environment.api}/api/shouts/editarShoutComentario?comentarioId=${comentarioId}`, { contenido })
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  fijarShoutComentario(comentarioId: number): Observable<any> {
+    return this.http
+      .post<ApiResponse<any>>(`${environment.api}/api/shouts/fijarShoutComentario?comentarioId=${comentarioId}`, {})
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  denunciarShoutComentario(comentarioId: number, motivo: string): Observable<any> {
+    return this.http
+      .post<ApiResponse<any>>(`${environment.api}/api/shouts/denunciarShoutComentario?comentarioId=${comentarioId}`, { motivo })
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getDenunciasShoutComentarios(page: number, pageCount: number, soloPendientes: boolean = false): Observable<any> {
+    return this.http
+      .get<ApiResponse<any>>(`${environment.api}/api/shouts/getDenunciasShoutComentarios?page=${page}&pageCount=${pageCount}&soloPendientes=${soloPendientes}`)
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  resolverDenunciaShoutComentario(denunciaId: number): Observable<any> {
+    return this.http
+      .post<ApiResponse<any>>(`${environment.api}/api/shouts/resolverDenunciaShoutComentario?denunciaId=${denunciaId}`, {})
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  eliminarDenunciaShoutComentario(denunciaId: number): Observable<any> {
+    return this.http
+      .delete<ApiResponse<any>>(`${environment.api}/api/shouts/eliminarDenunciaShoutComentario?denunciaId=${denunciaId}`)
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
 }

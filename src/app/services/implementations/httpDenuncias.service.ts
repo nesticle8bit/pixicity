@@ -47,6 +47,13 @@ export class HttpDenunciasService implements IHttpDenunciasService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getDenunciasCount(): Observable<number> {
+    return this.http
+      .get<ApiResponse<number>>(`${environment.api}/api/denuncias/getDenunciasCount`)
+      .pipe(map((r) => (r.status === 200 ? (r.data ?? 0) : 0)))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   deleteDenuncia(denunciaId: number): Observable<boolean> {
     return this.http
       .delete<ApiResponse<boolean>>(`${environment.api}/api/denuncias/deleteDenuncia`, {

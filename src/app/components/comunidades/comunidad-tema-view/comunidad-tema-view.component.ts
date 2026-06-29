@@ -5,6 +5,7 @@ import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunid
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { SEOService } from 'src/app/services/shared/seo.service';
 
 // Umbral de puntaje por debajo del cual un comentario se colapsa (estilo Reddit)
 const UMBRAL_COLAPSO = -5;
@@ -52,7 +53,8 @@ export class ComunidadTemaViewComponent implements OnInit {
     private securityService: IHttpSecurityService,
     private route: ActivatedRoute,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private seoService: SEOService
   ) {
     this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: true, submenu: true, background: '' });
   }
@@ -74,6 +76,15 @@ export class ComunidadTemaViewComponent implements OnInit {
         this.tema.comentarios = this.tema.comentarios ?? [];
         this.construirArbol();
         this.loading = false;
+
+        const limpio = (this.tema.contenido || '').replace(/<[^>]*>/g, '').trim();
+        this.seoService.setSEO({
+          title: this.tema.titulo || this.tema.nombre,
+          description: limpio ? limpio.substring(0, 200) : `${this.tema.titulo} - Tema en la comunidad ${this.tema.comunidad?.nombre ?? ''} de Taringas.`,
+          type: 'article',
+          imageURL: this.tema.imagen || '',
+          tags: [this.tema.titulo, this.tema.comunidad?.nombre, 'comunidad', 'taringas'].filter(Boolean),
+        });
       },
       error: () => { this.loading = false; this.router.navigate(['/comunidades', this.slug]); },
     });

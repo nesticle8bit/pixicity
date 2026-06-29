@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { SEOService } from 'src/app/services/shared/seo.service';
 
 @Component({
   standalone: false,
@@ -25,6 +26,7 @@ export class FotoDetailComponent implements OnInit {
     private fotosService: IHttpFotosService,
     private route: ActivatedRoute,
     private router: Router,
+    private seoService: SEOService,
   ) {
     this.displayService.setDisplay({
       mainMenu: true,
@@ -51,6 +53,15 @@ export class FotoDetailComponent implements OnInit {
       next: (response: any) => {
         this.foto = response;
         this.loading = false;
+        this.seoService.setSEO({
+          title: this.foto.titulo,
+          description: this.foto.descripcion
+            ? this.foto.descripcion.replace(/<[^>]*>/g, '').substring(0, 200)
+            : `Foto "${this.foto.titulo}" de ${this.foto.usuario} en Taringas.`,
+          type: 'article',
+          imageURL: this.foto.imageUrl || '',
+          tags: [this.foto.titulo, this.foto.categoria, this.foto.usuario, 'fotos', 'taringas'].filter(Boolean),
+        });
         // Increment visit count (fire and forget)
         this.fotosService.incrementVisitas(this.fotoId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
       },

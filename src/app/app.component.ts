@@ -1,6 +1,7 @@
 import { DisplayComponentService } from './services/shared/displayComponents.service';
 import { DisplayComponentModel } from './models/shared/displayComponent.model';
 import { Component, DestroyRef, EventEmitter, inject, Output } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { SEOService } from './services/shared/seo.service';
@@ -15,6 +16,7 @@ import { Meta, Title } from '@angular/platform-browser';
 })
 export class AppComponent {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly document = inject(DOCUMENT);
 
   public displayComponent: DisplayComponentModel = {
     mainMenu: true,
@@ -88,6 +90,11 @@ export class AppComponent {
       if (value.type) {
         this.meta.updateTag({ property: 'og:type', content: value.type });
       }
+
+      if (value.canonical) {
+        this.setCanonical(value.canonical);
+        this.meta.updateTag({ property: 'og:url', content: value.canonical });
+      }
     });
 
     this.router.events
@@ -97,6 +104,21 @@ export class AppComponent {
         return;
       }
       window.scrollTo(0, 0);
+      // Canonical por defecto = URL absoluta actual (sin query params).
+      // Si una página setea uno específico vía SEOService, lo sobrescribe.
+      const origin = this.document.location.origin;
+      this.setCanonical(`${origin}${evt.urlAfterRedirects.split('?')[0]}`);
     });
+  }
+
+  private setCanonical(url: string): void {
+    const head = this.document.head;
+    let link: HTMLLinkElement | null = head.querySelector('link[rel="canonical"]');
+    if (!link) {
+      link = this.document.createElement('link');
+      link.setAttribute('rel', 'canonical');
+      head.appendChild(link);
+    }
+    link.setAttribute('href', url);
   }
 }

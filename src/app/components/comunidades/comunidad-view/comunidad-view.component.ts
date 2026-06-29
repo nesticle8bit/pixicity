@@ -5,6 +5,7 @@ import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunid
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { SEOService } from 'src/app/services/shared/seo.service';
 
 @Component({
   standalone: false,
@@ -33,7 +34,8 @@ export class ComunidadViewComponent implements OnInit {
     private securityService: IHttpSecurityService,
     private route: ActivatedRoute,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private seoService: SEOService
   ) {
     this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: true, submenu: true, background: '' });
   }
@@ -52,6 +54,13 @@ export class ComunidadViewComponent implements OnInit {
       next: (value: any) => {
         this.comunidad = value;
         this.loading = false;
+        this.seoService.setSEO({
+          title: this.comunidad.nombre,
+          description: this.comunidad.descripcion || `Comunidad ${this.comunidad.nombre} en Taringas. Únete, participa en sus temas y comparte con la comunidad.`,
+          type: 'website',
+          imageURL: this.comunidad.imagen || this.comunidad.avatar || '',
+          tags: [this.comunidad.nombre, 'comunidad', 'taringas'],
+        });
         this.loadTemas();
         this.loadMiembros();
         this.loadTopTemas();

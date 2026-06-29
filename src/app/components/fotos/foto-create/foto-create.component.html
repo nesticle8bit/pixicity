@@ -1,56 +1,70 @@
-<div class="container container--home pb-3 foto-create-page mx-auto">
-  <div class="row">
-    <div class="col-12">
-      <h6 class="main-title mb-2">
-        <span>
-          {{isEdit ? 'Editar Foto' : 'Subir Foto'}}
-        </span>
-      </h6>
+<div class="container container--home foto-create-cc">
+  <form [formGroup]="formGroup" (ngSubmit)="submit()" class="cc-grid">
+    <main class="cc-main">
+      <section class="cc-card">
+        <div class="cc-card__head">
+          <span class="cc-card__title"><i class="ti ti-photo"></i> {{ isEdit ? 'Editar foto' : 'Detalles de la foto'
+            }}</span>
+        </div>
 
-      <form [formGroup]="formGroup" (ngSubmit)="submit()">
-        <div class="form-group">
-          <label>Título <span class="required">*</span></label>
-          <input type="text" formControlName="titulo" class="form-control" placeholder="Título de la foto"
-            maxlength="150">
-          @if (formGroup.get('titulo')?.invalid && formGroup.get('titulo')?.touched) {
-          <small class="text-danger">El título es requerido (máx. 150 caracteres)</small>
+        <div class="cc-field">
+          <div class="cc-field__head">
+            <label>Título <span class="cc-req">*</span></label>
+            <span class="cc-counter" [class.cc-counter--warn]="(formGroup.value?.titulo?.length || 0) >= 140">
+              {{ formGroup.value?.titulo?.length || 0 }}/150
+            </span>
+          </div>
+          <input type="text" formControlName="titulo" maxlength="150" placeholder="Ponle un buen título a tu foto" />
+          @if (formGroup.get('titulo')?.touched && formGroup.get('titulo')?.invalid) {
+          <small class="cc-err">El título es obligatorio (máx. 150 caracteres).</small>
           }
         </div>
 
-        <div class="form-group">
-          <label>Descripción</label>
-          <textarea formControlName="descripcion" class="form-control" placeholder="Descripción de la foto..." rows="3"
-            maxlength="1000"></textarea>
+        <div class="cc-field">
+          <div class="cc-field__head">
+            <label>Descripción</label>
+            <span class="cc-counter" [class.cc-counter--warn]="(formGroup.value?.descripcion?.length || 0) >= 900">
+              {{ formGroup.value?.descripcion?.length || 0 }}/1000
+            </span>
+          </div>
+          <textarea formControlName="descripcion" maxlength="1000" rows="4"
+            placeholder="Cuéntale a la gente de qué trata tu foto… (opcional)"></textarea>
+        </div>
+      </section>
+
+      <section class="cc-card">
+        <div class="cc-card__head">
+          <span class="cc-card__title"><i class="ti ti-camera"></i> Imagen</span>
         </div>
 
-        <div class="form-group">
-          <label>Imagen <span class="required">*</span></label>
-          <div class="image-source-tabs">
-            <button type="button" class="tab-btn" [ngClass]="{'active': imageSource === 'url'}"
+        <div class="cc-field">
+          <label>Origen de la imagen <span class="cc-req">*</span></label>
+
+          <div class="fc-tabs">
+            <button type="button" class="fc-tab" [class.fc-tab--on]="imageSource === 'url'"
               (click)="imageSource = 'url'">
               <i class="ti ti-link"></i> Por URL
             </button>
-            <button type="button" class="tab-btn" [ngClass]="{'active': imageSource === 'upload'}"
-              (click)="imageSource = 'upload'">
+            <!-- <button type="button" class="fc-tab" [class.fc-tab--on]="imageSource === 'upload'" (click)="imageSource = 'upload'">
               <i class="ti ti-upload"></i> Subir archivo
-            </button>
+            </button> -->
           </div>
 
           @if (imageSource === 'url') {
-          <input type="url" formControlName="imageUrl" class="form-control mt-2"
-            placeholder="https://ejemplo.com/imagen.jpg" (input)="onUrlChange($event)">
+          <input type="url" formControlName="imageUrl" class="fc-mt" placeholder="https://ejemplo.com/imagen.jpg"
+            (input)="onUrlChange($event)" />
           }
 
           @if (imageSource === 'upload') {
-          <div class="upload-area mt-2">
-            <input type="file" accept="image/*" (change)="onFileSelected($event)" class="file-input" #fileInput>
-            <button type="button" class="boton gris" (click)="fileInput.click()">
+          <div class="fc-upload fc-mt">
+            <input type="file" accept="image/*" (change)="onFileSelected($event)" class="fc-file" #fileInput>
+            <button type="button" class="cc-btn cc-btn--ghost" (click)="fileInput.click()">
               <i class="ti ti-photo"></i> Seleccionar imagen
             </button>
             @if (uploadedFile) {
-            <span class="file-name">{{uploadedFile.name}}</span>
+            <span class="fc-filename">{{uploadedFile.name}}</span>
             @if (!formGroup.value.imageUrl?.startsWith('/images/')) {
-            <button type="button" class="boton azul ms-2" (click)="uploadAndSetUrl()" [disabled]="uploading">
+            <button type="button" class="cc-btn cc-btn--primary" (click)="uploadAndSetUrl()" [disabled]="uploading">
               @if (uploading) {
               <img src="/assets/images/min-carga.gif" style="height:16px"> Subiendo...
               } @else {
@@ -58,44 +72,62 @@
               }
             </button>
             } @else {
-            <span class="text-success ms-2">
-              <i class="ti ti-check"></i> Subida correctamente
-            </span>
+            <span class="fc-ok"><i class="ti ti-check"></i> Subida correctamente</span>
             }
             }
           </div>
-          <!-- Hidden field so validation works -->
           <input type="hidden" formControlName="imageUrl">
           }
 
-          @if (formGroup.get('imageUrl')?.invalid && formGroup.get('imageUrl')?.touched) {
-          <small class="text-danger">La imagen es requerida</small>
+          @if (formGroup.get('imageUrl')?.touched && formGroup.get('imageUrl')?.invalid) {
+          <small class="cc-err">La imagen es obligatoria.</small>
           }
         </div>
 
         @if (previewUrl) {
-        <div class="form-group">
+        <div class="cc-field">
           <label>Vista previa</label>
-          <div class="image-preview">
+          <div class="fc-preview">
             <img [src]="previewUrl" alt="Vista previa">
           </div>
         </div>
         }
+      </section>
 
-        <div class="form-actions">
-          <button type="button" class="boton gris me-2" routerLink="/fotos">
-            Cancelar
-          </button>
-          <button type="submit" class="boton azul" [disabled]="loading || uploading">
-            @if (loading) {
-            <img src="/assets/images/min-carga.gif" style="height:16px"> Guardando...
-            } @else {
-            <i class="ti" [class.ti-device-floppy]="isEdit" [class.ti-plus]="!isEdit"></i>
-            {{isEdit ? 'Actualizar' : 'Publicar Foto'}}
-            }
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
+      <div class="cc-actions">
+        <a routerLink="/fotos" class="cc-btn cc-btn--ghost">Cancelar</a>
+        <button type="submit" class="cc-btn cc-btn--primary" [disabled]="loading || uploading">
+          @if (loading) {
+          <img src="/assets/images/min-carga.gif" style="height:16px"> Guardando...
+          } @else {
+          <i class="ti" [class.ti-device-floppy]="isEdit" [class.ti-check]="!isEdit"></i>
+          {{ isEdit ? 'Actualizar' : 'Publicar foto' }}
+          }
+        </button>
+      </div>
+    </main>
+
+    <aside class="cc-aside">
+      <div class="cc-rules">
+        <span class="cc-rules__title"><i class="ti ti-bulb"></i> Consejos para tu foto</span>
+        <p>Para que tu foto destaque y respete las reglas:</p>
+
+        <p class="cc-rules__si"><i class="ti ti-circle-check"></i> Recomendado:</p>
+        <ul class="cc-rules__list cc-rules__list--ok">
+          <li>Buena calidad y bien encuadrada.</li>
+          <li>Un título claro y descriptivo.</li>
+          <li>Que sea de tu autoría o con permiso.</li>
+          <li>Agrega una descripción con contexto.</li>
+        </ul>
+
+        <p class="cc-rules__no"><i class="ti ti-circle-x"></i> No permitido:</p>
+        <ul class="cc-rules__list cc-rules__list--no">
+          <li>Contenido sexual o violento explícito.</li>
+          <li>Imágenes de odio o discriminación.</li>
+          <li>Spam, marcas de agua o publicidad.</li>
+          <li>Material con derechos de terceros.</li>
+        </ul>
+      </div>
+    </aside>
+  </form>
 </div>

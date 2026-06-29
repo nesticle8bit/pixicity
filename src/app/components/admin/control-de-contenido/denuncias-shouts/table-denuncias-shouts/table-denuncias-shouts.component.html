@@ -1,0 +1,100 @@
+<div class="den-filtros">
+  <div class="den-toggle">
+    <button type="button" [class.active]="soloPendientes" (click)="cambiarFiltro(true)">
+      Pendientes
+      @if (pendientes > 0) { <span class="den-badge">{{pendientes}}</span> }
+    </button>
+    <button type="button" [class.active]="!soloPendientes" (click)="cambiarFiltro(false)">Todas</button>
+  </div>
+</div>
+
+@if (denuncias.length > 0) {
+  <main class="table-responsive">
+    <table class="table table-sm table-striped table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Creado</th>
+          <th>Shout</th>
+          <th>Comentario</th>
+          <th>Autor</th>
+          <th>Reporta</th>
+          <th>Motivo</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (denuncia of denuncias; track denuncia.id) {
+          <tr [ngClass]="{'opacity-50': denuncia.resuelto}">
+            <td>
+              <span class="cursor--help" matTooltip="{{denuncia.fechaRegistro}}">
+                {{denuncia.fechaRegistro | timeAgo}}
+              </span>
+            </td>
+            <td>
+              @if (denuncia.comentario?.shoutId) {
+                <a [routerLink]="['/shouts', denuncia.comentario.shoutOwner, denuncia.comentario.shoutId]" target="_blank">
+                  Shout #{{denuncia.comentario.shoutId}}
+                  <small class="text-muted d-block">de {{denuncia.comentario.shoutOwner}}</small>
+                </a>
+              } @else {
+                <span class="text-muted">—</span>
+              }
+            </td>
+            <td class="coment-cell">
+              <span [ngClass]="{'text-decoration-line-through text-muted': denuncia.comentario?.eliminado}">
+                {{denuncia.comentario?.comentario}}
+              </span>
+              @if (denuncia.comentario?.eliminado) {
+                <span class="badge bg-secondary ms-1">borrado</span>
+              }
+            </td>
+            <td>{{denuncia.comentario?.autor}}</td>
+            <td>{{denuncia.usuarioDenuncia}}</td>
+            <td>{{denuncia.motivo}}</td>
+            <td>
+              @if (denuncia.resuelto) {
+                <span class="badge bg-success">Resuelta</span>
+              } @else {
+                <span class="badge bg-warning text-dark">Pendiente</span>
+              }
+            </td>
+            <td class="text-center" width="30px">
+              <button class="btn-menu" [matMenuTriggerFor]="menu">
+                <i class="ti ti-dots-vertical"></i>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button type="button" mat-menu-item (click)="resolver(denuncia)">
+                  <mat-icon>{{denuncia.resuelto ? 'undo' : 'check'}}</mat-icon>
+                  <span>{{denuncia.resuelto ? 'Reabrir' : 'Marcar resuelta'}}</span>
+                </button>
+                @if (!denuncia.comentario?.eliminado) {
+                  <button type="button" mat-menu-item (click)="borrarComentario(denuncia)">
+                    <mat-icon>comments_disabled</mat-icon>
+                    <span>Borrar comentario</span>
+                  </button>
+                }
+                <button type="button" mat-menu-item (click)="eliminar(denuncia)">
+                  <mat-icon>delete_outline</mat-icon>
+                  <span>Eliminar denuncia</span>
+                </button>
+              </mat-menu>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </main>
+}
+
+@if (denuncias.length < 1) {
+  <div class="alert alert-warning">
+    🗃️ No hay denuncias de comentarios de shouts.
+  </div>
+}
+
+@if (denuncias.length > 0) {
+  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
+  </mat-paginator>
+}

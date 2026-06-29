@@ -1,90 +1,49 @@
 @if (shoutsList.length > 0) {
-  <div class="row wall__container">
-    <div class="col-12">
-      <article class="wall__story">
-        @for (shout of shoutsList; track shout; let i = $index) {
-          <div class="story mb-4">
-            <div class="row">
-              <div class="col-12 col-sm-1">
-                <div class="boxreshout">
-                  <!-- <a href="/perfil/nesticle8bit" class="story__profile-image">
-                  <img alt="nesticle8bit" src="https://i.imgur.com/2Rs9AVg.jpeg" />
-                </a> -->
-                <a [routerLink]="['/perfil/' + shout.avatar.userName]" class="story__profile-image" [appUserPopover]="shout.avatar.userName">
-                  <app-user-avatar [class]="''" [avatar]="shout?.avatar?.avatar" [userName]="shout?.avatar?.userName"></app-user-avatar>
-                </a>
-              </div>
-            </div>
-            <div class="col-12 col-sm-11">
-              <div class="story__content">
-                <span class="story__arrow"></span>
-                <div class="story__header">
-                  <div class="story__header--userName">
-                    {{'@'}}<a [routerLink]="['/perfil/' + shout.avatar.userName]" class="a_blue" [appUserPopover]="shout.avatar.userName">{{shout.avatar.userName}}</a> dijo:
-                  </div>
-                  <div class="shoutbody">
-                    {{shout.comentario}}
-                  </div>
-                </div>
-                <div class="story__footer">
-                  <div class="container-fluid pr-0">
-                    <div class="row g-0">
-                      <div class="col-12 col-sm-6">
-                        <div class="story__timeContainer">
-                          <i class="text-muted icon {{shout.tipo?.toLowerCase()}}-shout"></i>
-                          <span class="story__timeAgo cursor--help"
-                            matTooltip="{{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm:ss \', año\' y'}}">
-                            El {{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm'}}
-                          </span>
-                        </div>
-                      </div>
-                      <div class="col-12 col-sm-6 text-end">
-                        <ul class="list-inline">
-                          <li class="list__inline-item">
-                            <a matTooltip="Ver actividad">
-                              <i class="ti ti-clock pl-2 ml-2"></i>
-                              &nbsp;
-                            </a>
-                          </li>
-                          <li class="list__inline-item">
-                            <a class="abrir" [routerLink]="['/shouts/' + shout.avatar.userName + '/' + shout.id]">Abrir</a>
-                          </li>
-                          <li class="list__inline-item">
-                            <a href="#" title="Comentarios">
-                              <i class="ti ti-messages pl-2 ml-2"></i>
-                              <span class="counter">0</span>
-                            </a>
-                          </li>
-                          <li class="list__inline-item">
-                            <a title="Favoritos">
-                              <i class="ti ti-star"></i>
-                              <span class="counter">0</span>
-                            </a>
-                          </li>
-                          <li class="list__inline-item">
-                            <a title="Me gusta">
-                              <i class="ti ti-thumb-up"></i>
-                              <span class="counter">0</span>
-                            </a>
-                          </li>
-                          <!--
-                          <li class="list__inline-item">
-                            <a title="Compartir">
-                              <i class="ti ti-refresh"></i>
-                              <span class="counter">0</span>
-                            </a>
-                          </li> -->
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+  <div class="sh-wall">
+    @for (shout of shoutsList; track shout.id) {
+      <article class="sh-item">
+        <a [routerLink]="['/perfil/' + shout.avatar.userName]" class="sh-item__avatar"
+          [appUserPopover]="shout.avatar.userName">
+          <app-user-avatar [class]="'sh-avatar-img'" [avatar]="shout?.avatar?.avatar"
+            [userName]="shout?.avatar?.userName" [width]="48" [height]="48"></app-user-avatar>
+        </a>
+
+        <!-- La nube / globo de diálogo -->
+        <div class="sh-bubble">
+          <span class="sh-bubble__tail"></span>
+
+          <header class="sh-bubble__head">
+            <a [routerLink]="['/perfil/' + shout.avatar.userName]" class="sh-bubble__user"
+              [appUserPopover]="shout.avatar.userName">{{ '@' }}{{shout.avatar.userName}}</a>
+            <span class="sh-bubble__time cursor--help"
+              matTooltip="{{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm \', año\' y'}}">
+              {{shout.fechaRegistro | date:'d MMM, h:mm a'}}
+            </span>
+          </header>
+
+          <p class="sh-bubble__body">{{shout.comentario}}</p>
+
+          <footer class="sh-bubble__footer">
+            <a class="sh-action sh-action--open" [routerLink]="['/shouts/' + shout.avatar.userName + '/' + shout.id]">
+              <i class="ti ti-arrow-up-right"></i> Abrir
+            </a>
+            <span class="sh-action" matTooltip="Comentarios">
+              <i class="ti ti-messages"></i> {{shout.comentarios ?? 0}}
+            </span>
+            <span class="sh-action" matTooltip="Favoritos">
+              <i class="ti ti-star"></i> {{shout.favoritos ?? 0}}
+            </span>
+            <span class="sh-action" matTooltip="Me gusta">
+              <i class="ti ti-thumb-up"></i> {{shout.likes ?? 0}}
+            </span>
+          </footer>
         </div>
-      }
-    </article>
+      </article>
+    }
   </div>
-</div>
+} @else {
+  <div class="sh-empty">
+    <i class="ti ti-message-2-off"></i>
+    <p>Todavía no hay shouts por aquí.</p>
+  </div>
 }

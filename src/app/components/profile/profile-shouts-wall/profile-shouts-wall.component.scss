@@ -1,3 +1,176 @@
-.shoutbody {
-    font-size: .9rem;
+:host {
+  display: block;
+  margin-top: 18px;
+}
+
+.sh-wall {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sh-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+
+  &__avatar {
+    flex-shrink: 0;
+    line-height: 0;
+
+    ::ng-deep img {
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+      box-shadow: 0 1px 4px rgba(16, 24, 40, 0.12);
+    }
+  }
+}
+
+/* La nube / globo de diálogo (conservada, modernizada en CSS) */
+.sh-bubble {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #e9edf0;
+  border-radius: 14px;
+  padding: 12px 16px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    box-shadow: 0 6px 18px rgba(16, 24, 40, 0.08);
+  }
+
+  /* colita del globo apuntando al avatar */
+  &__tail {
+    position: absolute;
+    left: -7px;
+    top: 16px;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-left: 1px solid #e9edf0;
+    border-bottom: 1px solid #e9edf0;
+    transform: rotate(45deg);
+    border-radius: 0 0 0 4px;
+  }
+
+  &__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+  }
+
+  &__user {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #006595;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__time {
+    font-size: 0.72rem;
+    color: #9aa7b0;
+    white-space: nowrap;
+  }
+
+  &__body {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: #1f2a33;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 11px;
+    padding-top: 9px;
+    border-top: 1px solid #eef2f4;
+  }
+}
+
+.sh-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #8a97a0;
+  text-decoration: none;
+  padding: 5px 9px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+
+  i {
+    font-size: 0.95rem;
+  }
+
+  &:hover {
+    background: #eef5f9;
+    color: #006595;
+  }
+
+  /* "Abrir" como acción primaria a la izquierda, empuja el resto a la derecha */
+  &--open {
+    color: #0085c4;
+    margin-right: auto;
+
+    &:hover {
+      background: rgba(0, 133, 196, 0.1);
+    }
+  }
+}
+
+.sh-empty {
+  text-align: center;
+  color: #9aa7b0;
+  padding: 40px 16px;
+
+  i {
+    font-size: 34px;
+    opacity: 0.5;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .sh-item {
+    gap: 10px;
+
+    &__avatar ::ng-deep img {
+      width: 40px !important;
+      height: 40px !important;
+    }
+  }
+
+  .sh-bubble {
+    border-radius: 12px;
+    padding: 10px 12px;
+
+    &__tail {
+      top: 14px;
+    }
+  }
 }

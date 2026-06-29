@@ -7,6 +7,7 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { SEOService } from 'src/app/services/shared/seo.service';
 
 @Component({
   standalone: false,
@@ -29,6 +30,7 @@ export class PerfilComponent implements OnInit {
     private bloqueosService: IHttpBloqueosService,
     private notificationService: NotificationService,
     private displayService: DisplayComponentService,
+    private seoService: SEOService,
   ) {
     this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
       this.getUserByUserName(values.get('userName'));
@@ -46,6 +48,14 @@ export class PerfilComponent implements OnInit {
       this.currentUser = value;
       this.display.background = this.currentUser.profileBackground;
       this.displayService.setDisplay(this.display);
+
+      this.seoService.setSEO({
+        title: `${this.currentUser.userName} - Perfil`,
+        description: `Perfil de ${this.currentUser.userName} en Taringas. Mira sus posts, shouts, seguidores y actividad en la comunidad.`,
+        type: 'profile',
+        imageURL: this.currentUser.avatar || '',
+        tags: [this.currentUser.userName, 'perfil', 'usuario', 'taringas'],
+      });
 
       if (this.loggedUser && this.loggedUser.userName !== userName) {
         this.loadBloqueo(userName);

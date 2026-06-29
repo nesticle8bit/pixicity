@@ -1,43 +1,18 @@
-<form [formGroup]="formGroup" (ngSubmit)="createShout()">
-    <div class="row">
-        <div class="profile__postcomment col-12">
-            <div class="row">
-                <div class="col-12 col-sm-1">
-                    <app-user-avatar [class]="'mb-1 img-thumbnail'" [avatar]="currentUser?.usuario?.avatar" [userName]="currentUser?.usuario?.userName">
-                    </app-user-avatar>
-                </div>
+<form [formGroup]="formGroup" (ngSubmit)="createShout()" class="sh-composer">
+    <div class="sh-composer__avatar">
+        <app-user-avatar [class]="'sh-avatar-img'" [avatar]="currentUser?.usuario?.avatar"
+            [userName]="currentUser?.usuario?.userName" [width]="46" [height]="46"></app-user-avatar>
+    </div>
 
-                <div class="col-12 col-sm-11">
-                    <textarea class="form-control" rows="3" formControlName="comentario"
-                        placeholder="Comparte algo..."></textarea>
+    <div class="sh-composer__main">
+        <textarea class="sh-composer__input" rows="3" formControlName="comentario"
+            placeholder="¿Qué estás pensando?"></textarea>
 
-                    <div class="row my-3">
-                        <div class="col-12 col-sm-6">
-                            <!-- <span class="btn-pixicity btn-gris">
-                                <span class="shout image"></span>
-                            </span>
-
-                            &nbsp;
-
-                            <span class="btn-pixicity btn-gris">
-                                <span class="shout video"></span>
-                            </span>
-
-                            &nbsp;
-
-                            <span class="btn-pixicity btn-gris">
-                                <span class="shout link"></span>
-                            </span> -->
-                        </div>
-
-                        <div class="col-12 col-sm-6 text-end">
-                            <button type="submit" class="boton azul" [disabled]="!formGroup.value.comentario">
-                                <i class="ti ti-send"></i> Compartir
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="sh-composer__actions">
+            <span class="sh-composer__hint">Comparte algo con la comunidad</span>
+            <button type="submit" class="sh-btn" [disabled]="!formGroup.value.comentario">
+                <i class="ti ti-send"></i> Compartir
+            </button>
         </div>
     </div>
 </form>

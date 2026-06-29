@@ -1,94 +1,250 @@
-.foto-create-page {
-  // max-width: 700px;
-  padding-bottom: 20px;
+.foto-create-cc {
+  $blue: #006595;
+  $accent: #0085c4;
 
-  h2 {
-    margin-bottom: 20px;
+  .cc-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 18px;
+    align-items: start;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
   }
-}
 
-.form-group {
-  margin-bottom: 18px;
+  .cc-main { display: flex; flex-direction: column; gap: 16px; }
 
-  label {
+  .cc-card {
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    padding: 16px 18px;
+
+    &__head {
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    &__title {
+      font-size: 14px;
+      font-weight: 700;
+      color: $blue;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+  }
+
+  .cc-field {
+    margin-bottom: 14px;
+    flex: 1;
+
+    &:last-child { margin-bottom: 0; }
+
+    > label {
+      display: block;
+      font-weight: 700;
+      font-size: 12.5px;
+      color: #444;
+      margin-bottom: 6px;
+    }
+
+    &__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+
+      label { font-weight: 700; font-size: 12.5px; color: #444; margin: 0; }
+    }
+
+    input[type='text'],
+    input[type='url'],
+    textarea {
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 9px 11px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+      &::placeholder { color: #aaa; }
+      &:focus { border-color: $accent; box-shadow: 0 0 0 2px rgba(0, 133, 196, 0.13); }
+    }
+
+    textarea { resize: vertical; }
+  }
+
+  .cc-req { color: #c0392b; }
+
+  .cc-counter {
+    font-size: 11px;
+    color: #999;
+    &--warn { color: #e67e22; font-weight: 600; }
+  }
+
+  .cc-err {
     display: block;
+    color: #c0392b;
+    font-size: 11px;
+    margin-top: 5px;
+  }
+
+  .cc-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 2px;
+  }
+
+  .cc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    border-radius: 7px;
+    padding: 10px 18px;
+    font-size: 13px;
     font-weight: 600;
-    margin-bottom: 5px;
-    font-size: .9rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: filter 0.15s ease, background 0.15s ease;
+
+    &--primary {
+      background: $blue;
+      color: #fff;
+      &:hover { filter: brightness(1.08); }
+      &:disabled { opacity: 0.55; cursor: default; }
+    }
+
+    &--ghost {
+      background: #f1f3f4;
+      color: #555;
+      &:hover { background: #e7eaec; }
+    }
   }
 
-  .required { color: #e00; }
-}
+  .cc-aside {
+    position: sticky;
+    top: 16px;
 
-.form-control {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: .9rem;
-
-  &:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0,123,255,.15);
-  }
-}
-
-.image-source-tabs {
-  display: flex;
-  gap: 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  overflow: hidden;
-  width: fit-content;
-}
-
-.tab-btn {
-  padding: 7px 16px;
-  background: #f5f5f5;
-  border: none;
-  cursor: pointer;
-  font-size: .88rem;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: background .15s;
-
-  &.active {
-    background: #007bff;
-    color: #fff;
+    @media (max-width: 900px) { position: static; }
   }
 
-  &:hover:not(.active) { background: #e8e8e8; }
-}
+  .cc-rules {
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: 12.5px;
+    color: #555;
 
-.upload-area {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+    &__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 15px;
+      font-weight: 700;
+      color: $blue;
+      margin-bottom: 8px;
+    }
 
-  .file-input { display: none; }
-  .file-name { font-size: .85rem; color: #555; }
-}
+    p { margin: 0 0 8px; }
 
-.image-preview {
-  max-width: 500px;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid #ddd;
+    &__si {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 700;
+      color: #22b447;
+      margin-top: 12px;
+    }
 
-  img {
-    width: 100%;
-    display: block;
-    max-height: 350px;
-    object-fit: contain;
-    background: #f0f0f0;
+    &__no {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 700;
+      color: #c0392b;
+      margin-top: 12px;
+    }
+
+    &__list {
+      list-style: none;
+      padding-left: 4px;
+      margin-bottom: 4px;
+
+      li {
+        position: relative;
+        padding-left: 16px;
+        margin-bottom: 5px;
+        line-height: 1.4;
+      }
+
+      &--ok li::before { content: '✓'; position: absolute; left: 0; top: 0; color: #22b447; font-weight: 700; }
+      &--no li::before { content: '✕'; position: absolute; left: 0; top: 0; color: #c0392b; font-weight: 700; }
+    }
   }
-}
 
-.form-actions {
-  display: flex;
-  align-items: center;
-  margin-top: 24px;
+  /* ---------- Imagen: tabs / preview / upload ---------- */
+  .fc-mt { margin-top: 8px; }
+
+  .fc-tabs {
+    display: inline-flex;
+    background: #eef2f4;
+    border-radius: 20px;
+    padding: 2px;
+  }
+
+  .fc-tab {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6a7882;
+    padding: 5px 14px;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    &--on { background: $blue; color: #fff; }
+  }
+
+  .fc-upload {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .fc-file { display: none; }
+
+  .fc-filename {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .fc-ok {
+    font-size: 12px;
+    font-weight: 600;
+    color: #22b447;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .fc-preview {
+    img {
+      max-width: 100%;
+      max-height: 320px;
+      border-radius: 10px;
+      border: 1px solid #e0e0e0;
+      object-fit: contain;
+    }
+  }
 }

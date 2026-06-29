@@ -1,6 +1,6 @@
 <div class="container my-3 post-view-container">
   <div class="row">
-    <div class="col-12 col-sm-12 col-md-9 post-view-content">
+    <div class="col-12 col-sm-12 col-md-9">
       <div class="row post-header">
         <div class="col-12 col-sm-10">
           <app-posts-breadcrumb [post]="post"></app-posts-breadcrumb>
@@ -48,17 +48,17 @@
       </div>
     </div> -->
 
-    @if (post?.id) {
+      @if (post?.id) {
       <app-post-comments [post]="post"></app-post-comments>
-    }
-  </div>
+      }
+    </div>
 
-  <div class="col-12 col-sm-12 col-md-3">
-    <app-post-original-poster-info [userName]="post.usuario?.userName"></app-post-original-poster-info>
+    <div class="col-12 col-sm-12 col-md-3">
+      <app-post-original-poster-info [userName]="post.usuario?.userName"></app-post-original-poster-info>
 
-    @if (post?.usuario?.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador' || currentUser?.usuario?.rango === 'Moderador') {
-      <div class="boxposts separa"
-        >
+      @if (post?.usuario?.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador'
+      || currentUser?.usuario?.rango === 'Moderador') {
+      <div class="boxposts separa">
         <div class="titular">
           <h2>Herramientas</h2>
         </div>
@@ -76,23 +76,22 @@
             </div>
           </div>
           @if (currentUser?.usuario?.rango === 'Administrador' || currentUser?.usuario?.rango === 'Moderador') {
-            <div class="row mt-2"
-              >
-              <div class="col-12 d-grid">
-                <button mat-flat-button color="accent" (click)="quitarSticky()">
-                  <i class="ti ti-pin"></i>
-                  @if (post.sticky) {
-                    <span> Quitar</span>
-                  }
-                  @if (!post.sticky) {
-                    <span> Poner</span>
-                    } Sticky
-                  </button>
-                </div>
-              </div>
-            }
+          <div class="row mt-2">
+            <div class="col-12 d-grid">
+              <button mat-flat-button color="accent" (click)="quitarSticky()">
+                <i class="ti ti-pin"></i>
+                @if (post.sticky) {
+                <span> Quitar</span>
+                }
+                @if (!post.sticky) {
+                <span> Poner</span>
+                } Sticky
+              </button>
+            </div>
           </div>
+          }
         </div>
+      </div>
       }
 
       <div class="boxposts separa">
@@ -103,6 +102,7 @@
           <ads-by-type [hideTitle]="true" [type]="'300x250'"></ads-by-type>
         </div>
       </div>
+
       <app-post-more-from-op [post]="post"></app-post-more-from-op>
       <app-post-related-posts [post]="post"></app-post-related-posts>
     </div>

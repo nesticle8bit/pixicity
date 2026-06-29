@@ -1,54 +1,131 @@
-<h6 class="main-title mt-4 mb-2">
-  <span>Comentarios <span class="comment-count">({{comentarios.length}})</span></span>
-</h6>
-
-@if (comentarios.length === 0) {
-<div class="sc-empty">
-  <i class="ti ti-messages"></i>
-  <span>Sé el primero en comentar</span>
-</div>
-}
-
-@for (c of comentarios; track c.id) {
-<div class="sc-item">
-  <div class="sc-avatar">
-    <a [routerLink]="['/perfil', c.usuario]" [appUserPopover]="c.usuario">
-      <app-user-avatar [class]="'avatar-32'" [avatar]="c.avatar" [userName]="c.usuario" [width]="32">
-      </app-user-avatar>
-    </a>
+<section class="sc-coments">
+  <div class="sc-toolbar">
+    <h3>Comentarios ({{totalComentarios}})</h3>
+    @if (totalComentarios > 1) {
+      <div class="sc-orden">
+        <button type="button" [class.active]="orden === 'mejores'" (click)="cambiarOrden('mejores')">Mejores</button>
+        <button type="button" [class.active]="orden === 'recientes'" (click)="cambiarOrden('recientes')">Recientes</button>
+        <button type="button" [class.active]="orden === 'controvertido'" (click)="cambiarOrden('controvertido')">Controvertido</button>
+      </div>
+    }
   </div>
-  <div class="sc-body">
-    <div class="sc-header">
-      <a [routerLink]="['/perfil', c.usuario]" class="sc-username" [appUserPopover]="c.usuario">
-        {{c.usuario}}
-      </a>
-      <span class="sc-date">{{c.fechaRegistro | date:'dd/MM/yyyy HH:mm'}}</span>
-      @if (esMio(c)) {
-      <a class="sc-delete" (click)="eliminarComentario(c.id)" matTooltip="Eliminar comentario">
-        <i class="ti ti-x"></i>
-      </a>
-      }
+
+  @if (logueado) {
+    <div class="sc-form">
+      <textarea [(ngModel)]="nuevoComentario" rows="3" placeholder="Escribe un comentario..."></textarea>
+      <button class="sc-btn" (click)="enviarComentario()" [disabled]="enviando || !nuevoComentario.trim()">
+        <i class="ti ti-send"></i> Comentar
+      </button>
     </div>
-    <div class="sc-text">{{c.comentario}}</div>
-  </div>
-</div>
-}
+  } @else {
+    <div class="sc-empty">Inicia sesión para comentar.</div>
+  }
 
-@if (currentUser?.usuario) {
-<div class="sc-form mt-3">
-  <textarea class="sc-textarea" [(ngModel)]="nuevoComentario" placeholder="Escribe un comentario..." rows="3"
-    maxlength="500">
-    </textarea>
-  <div class="sc-form-footer">
-    <span class="sc-chars">{{nuevoComentario.length}}/500</span>
-    <button class="boton azul" (click)="enviarComentario()" [disabled]="enviando || !nuevoComentario.trim()">
-      <i class="ti ti-send"></i>
-      {{enviando ? 'Enviando...' : 'Comentar'}}
-    </button>
+  @if (totalComentarios === 0) {
+    <div class="sc-empty">Sé el primero en comentar.</div>
+  } @else {
+    <ul class="sc-list">
+      @for (c of arbol; track c.id) {
+        <li class="sc-thread" [class.destacado]="c.destacado">
+          <ng-container *ngTemplateOutlet="comentTpl; context: { $implicit: c, esRespuesta: false }"></ng-container>
+
+          @if (c.respuestas?.length) {
+            <ul class="sc-respuestas">
+              @for (r of c.respuestas; track r.id) {
+                <li>
+                  <ng-container *ngTemplateOutlet="comentTpl; context: { $implicit: r, esRespuesta: true }"></ng-container>
+                </li>
+              }
+            </ul>
+          }
+        </li>
+      }
+    </ul>
+  }
+</section>
+
+<!-- Plantilla reutilizable de comentario (raíz y respuesta) -->
+<ng-template #comentTpl let-c let-esRespuesta="esRespuesta">
+  <div class="sc-coment" [class.is-destacado]="c.destacado && !esRespuesta">
+    @if (c.destacado && !esRespuesta) {
+      <div class="sc-top-badge"><i class="ti ti-award"></i> Comentario destacado</div>
+    }
+
+    @if (estaColapsado(c)) {
+      <div class="sc-collapsed" (click)="mostrarColapsado(c)">
+        @if ((c.denunciasPendientes || 0) >= 3) {
+          Comentario oculto por denuncias — <a>mostrar</a>
+        } @else {
+          Comentario con baja puntuación ({{c.votos}}) — <a>mostrar</a>
+        }
+      </div>
+    } @else {
+      <div class="sc-row">
+        <div class="sc-vote">
+          <button type="button" class="sc-vote__btn up" [class.active]="c.miVoto === 1" [disabled]="c.votando"
+            (click)="votar(c, 1)" matTooltip="Me gusta" [matTooltipPosition]="'left'">
+            <i class="ti ti-arrow-big-up-filled"></i>
+          </button>
+          <span class="sc-vote__score" [class.pos]="(c.votos || 0) > 0"
+            [class.neg]="(c.votos || 0) < 0">{{c.votos || 0}}</span>
+          <button type="button" class="sc-vote__btn down" [class.active]="c.miVoto === -1" [disabled]="c.votando"
+            (click)="votar(c, -1)" matTooltip="No me gusta" [matTooltipPosition]="'left'">
+            <i class="ti ti-arrow-big-down-filled"></i>
+          </button>
+        </div>
+
+        <a [routerLink]="['/perfil/' + c.usuario]" class="sc-avatar" [appUserPopover]="c.usuario">
+          <app-user-avatar [avatar]="c.avatar" [userName]="c.usuario" [width]="38" [height]="38"></app-user-avatar>
+        </a>
+
+        <div class="sc-body">
+          <div class="sc-head">
+            <a [routerLink]="['/perfil/' + c.usuario]" class="sc-user" [appUserPopover]="c.usuario">{{c.usuario}}</a>
+            @if (c.fijado && !esRespuesta) {
+              <span class="sc-fijado"><i class="ti ti-pin"></i> Fijado</span>
+            }
+            <span class="sc-time">{{c.fechaRegistro | date:'d MMM, h:mm a'}}</span>
+          </div>
+
+          @if (editId === c.id) {
+            <div class="sc-reply">
+              <textarea [(ngModel)]="editText" rows="2"></textarea>
+              <div class="sc-mini-actions">
+                <button class="sc-btn" (click)="guardarEdicion(c)" [disabled]="editEnviando || !editText.trim()">Guardar</button>
+                <button class="sc-btn sc-btn--gris" (click)="cancelarEdicion()">Cancelar</button>
+              </div>
+            </div>
+          } @else {
+            <p [innerHTML]="formatear(c.comentario)"></p>
+
+            <div class="sc-actions">
+              @if (logueado) {
+                <button type="button" (click)="responder(c)"><i class="ti ti-arrow-back-up"></i> Responder</button>
+              }
+              @if (puedeFijar(c)) {
+                <button type="button" (click)="fijar(c)"><i class="ti ti-pin"></i> {{ c.fijado ? 'Desfijar' : 'Fijar' }}</button>
+              }
+              @if (logueado && !esComentarioPropio(c)) {
+                <button type="button" (click)="denunciar(c)"><i class="ti ti-flag"></i> Denunciar</button>
+              }
+              @if (puedeModerar(c)) {
+                <button type="button" (click)="editar(c)"><i class="ti ti-pencil"></i> Editar</button>
+                <button type="button" class="danger" (click)="eliminarComentario(c)"><i class="ti ti-trash"></i> Borrar</button>
+              }
+            </div>
+          }
+
+          @if (replyTo === c.id) {
+            <div class="sc-reply">
+              <textarea [(ngModel)]="replyText" rows="2" placeholder="Escribe una respuesta..."></textarea>
+              <div class="sc-mini-actions">
+                <button class="sc-btn" (click)="enviarRespuesta(c)" [disabled]="replyEnviando || !replyText.trim()">Responder</button>
+                <button class="sc-btn sc-btn--gris" (click)="cancelarRespuesta()">Cancelar</button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
   </div>
-</div>
-} @else {
-<div class="sc-login-prompt">
-  <a [routerLink]="['/seguridad/login']">Inicia sesión</a> para comentar.
-</div>
-}
+</ng-template>

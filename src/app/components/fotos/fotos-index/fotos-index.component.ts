@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { SEOService } from 'src/app/services/shared/seo.service';
 
 @Component({
   standalone: false,
@@ -27,7 +28,8 @@ export class FotosIndexComponent implements OnInit {
     private displayService: DisplayComponentService,
     private securityService: IHttpSecurityService,
     private fotosService: IHttpFotosService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private seoService: SEOService
   ) {
     this.displayService.setDisplay({
       mainMenu: true,
@@ -43,6 +45,23 @@ export class FotosIndexComponent implements OnInit {
     this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.userName = params['userName'] || '';
       this.page = 1;
+      this.seoService.setSEO(
+        this.userName
+          ? {
+              title: `Fotos de ${this.userName}`,
+              description: `Galería de fotos de ${this.userName} en Taringas.`,
+              type: 'website',
+              imageURL: '',
+              tags: [this.userName, 'fotos', 'galería', 'taringas'],
+            }
+          : {
+              title: 'Fotos',
+              description: 'Explora las fotos compartidas por la comunidad de Taringas.',
+              type: 'website',
+              imageURL: '',
+              tags: ['fotos', 'galería', 'imágenes', 'taringas'],
+            }
+      );
       this.loadFotos();
     });
   }

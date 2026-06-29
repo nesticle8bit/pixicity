@@ -1,17 +1,14 @@
 <div class="container container--home comunidad-create">
-  <!-- Hero -->
-  <header class="cc-hero">
+  <!-- <header class="cc-hero">
     <div class="cc-hero__icon"><i class="ti ti-users-group"></i></div>
     <div class="cc-hero__text">
       <h1>Crear una comunidad</h1>
       <p>Reúne a personas con tus mismos intereses y empieza a compartir temas.</p>
     </div>
-  </header>
+  </header> -->
 
   <form [formGroup]="formGroup" (ngSubmit)="crear()" class="cc-grid">
-    <!-- Columna principal -->
     <main class="cc-main">
-      <!-- Identidad -->
       <section class="cc-card">
         <div class="cc-card__head">
           <span class="cc-card__title"><i class="ti ti-id-badge-2"></i> Identidad</span>
@@ -27,7 +24,7 @@
           <input type="text" formControlName="nombre" (input)="onNombreChange()" maxlength="80"
             placeholder="Ej. Amantes del café" />
           @if (formGroup.get('nombre')?.touched && formGroup.get('nombre')?.invalid) {
-            <small class="cc-err">El nombre es obligatorio.</small>
+          <small class="cc-err">El nombre es obligatorio.</small>
           }
         </div>
 
@@ -41,7 +38,7 @@
             Sólo minúsculas, números y guiones medios (-). <strong>No se podrá modificar después.</strong>
           </small>
           @if (formGroup.get('nombreCorto')?.touched && formGroup.get('nombreCorto')?.invalid) {
-            <small class="cc-err">Formato inválido (solo a-z, 0-9 y guiones).</small>
+          <small class="cc-err">Formato inválido (solo a-z, 0-9 y guiones).</small>
           }
         </div>
 
@@ -55,12 +52,11 @@
           <textarea formControlName="descripcion" maxlength="1000" rows="4"
             placeholder="¿De qué trata tu comunidad? Cuéntale a la gente por qué debería unirse…"></textarea>
           @if (formGroup.get('descripcion')?.touched && formGroup.get('descripcion')?.invalid) {
-            <small class="cc-err">La descripción es obligatoria.</small>
+          <small class="cc-err">La descripción es obligatoria.</small>
           }
         </div>
       </section>
 
-      <!-- Clasificación -->
       <section class="cc-card">
         <div class="cc-card__head">
           <span class="cc-card__title"><i class="ti ti-category"></i> Clasificación</span>
@@ -69,16 +65,14 @@
         <div class="cc-row">
           <div class="cc-field">
             <label>Categoría <span class="cc-req">*</span></label>
-            <app-select [items]="categorias" bindLabel="nombre" bindValue="id"
-              formControlName="comunidadCategoriaId" placeholder="Selecciona una categoría"
-              (change)="onCategoriaChange()"></app-select>
+            <app-select [items]="categorias" bindLabel="nombre" bindValue="id" formControlName="comunidadCategoriaId"
+              placeholder="Selecciona una categoría" (change)="onCategoriaChange()"></app-select>
           </div>
 
           <div class="cc-field">
             <label>Sub-categoría</label>
             <app-select [items]="subCategorias" bindLabel="nombre" bindValue="id"
-              formControlName="comunidadSubCategoriaId"
-              [disabled]="subCategorias.length === 0"
+              formControlName="comunidadSubCategoriaId" [disabled]="subCategorias.length === 0"
               [placeholder]="subCategorias.length === 0 ? 'Elige una categoría primero' : 'Selecciona una sub-categoría'"></app-select>
           </div>
         </div>
@@ -89,13 +83,13 @@
             placeholder="Selecciona un país (opcional)">
             <ng-template appSelectOption let-item="item">
               @if (item?.iso2) {
-                <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1">
+              <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1">
               }
               {{ item.nombre }}
             </ng-template>
             <ng-template appSelectLabel let-item="item">
               @if (item?.iso2) {
-                <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1">
+              <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1">
               }
               {{ item.nombre }}
             </ng-template>
@@ -103,7 +97,6 @@
         </div>
       </section>
 
-      <!-- Acceso -->
       <section class="cc-card">
         <div class="cc-card__head">
           <span class="cc-card__title"><i class="ti ti-lock-access"></i> Acceso</span>
@@ -127,7 +120,6 @@
         </label>
       </section>
 
-      <!-- Permisos -->
       <section class="cc-card">
         <div class="cc-card__head">
           <span class="cc-card__title"><i class="ti ti-adjustments"></i> Permisos de los miembros</span>
@@ -163,7 +155,6 @@
       </div>
     </main>
 
-    <!-- Sidebar de reglas -->
     <aside class="cc-aside">
       <div class="cc-rules">
         <span class="cc-rules__title"><i class="ti ti-shield-check"></i> Reglas para tu comunidad</span>

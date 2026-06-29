@@ -10,80 +10,43 @@
               <h2>{{shout?.fechaRegistro | date:'long'}}</h2>
             </div>
 
-            <div class="story__content">
-              <div class="story__header">
-                <div class="story__header--userName">
-                  {{'@'}}<a [routerLink]="['/perfil/' + shout?.avatar.userName]" class="a_blue"
-                    [appUserPopover]="shout.avatar.userName">{{shout?.avatar.userName}}</a> dijo:
-                </div>
+            <div class="sv-shout">
+              <a [routerLink]="['/perfil/' + shout?.avatar.userName]" class="sv-shout__avatar"
+                [appUserPopover]="shout.avatar.userName">
+                <app-user-avatar [avatar]="shout?.avatar?.avatar" [userName]="shout?.avatar.userName"
+                  [width]="52" [height]="52"></app-user-avatar>
+              </a>
 
-                <div class="shoutbody">
-                  {{shout.comentario}}
-                </div>
-              </div>
+              <!-- La nube / globo de diálogo del shout -->
+              <div class="sv-bubble">
+                <span class="sv-bubble__tail"></span>
 
-              <div class="story__footer">
-                <div class="container-fluid pr-0">
-                  <div class="row g-0">
-                    <div class="col-12 col-sm-6">
-                      <div class="story__timeContainer">
-                        <i class="text-muted icon {{shout.tipo?.toLowerCase()}}-shout"></i>
-                        <span class="story__timeAgo cursor--help"
-                          matTooltip="{{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm:ss \', año\' y'}}">
-                          El {{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\'
-                          h:mm'}}
-                        </span>
-                      </div>
-                    </div>
+                <header class="sv-bubble__head">
+                  <a [routerLink]="['/perfil/' + shout?.avatar.userName]" class="sv-bubble__user"
+                    [appUserPopover]="shout.avatar.userName">{{'@'}}{{shout?.avatar.userName}}</a>
+                  <span class="sv-bubble__time cursor--help"
+                    matTooltip="{{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm \', año\' y'}}">
+                    {{shout.fechaRegistro | date:'d MMM y, h:mm a'}}
+                  </span>
+                </header>
 
-                    <div class="col-12 col-sm-6 text-end">
-                      <ul class="list-inline">
-                        <li class="list__inline-item">
-                          <a matTooltip="Ver actividad">
-                            <i class="ti ti-clock pl-2 ml-2"></i>
-                            &nbsp;
-                          </a>
-                        </li>
+                <p class="sv-bubble__body">{{shout.comentario}}</p>
 
-                        <li class="list__inline-item">
-                          <a class="abrir"
-                            (click)="clipboard('https://taringas.net' + '/shouts/' + shout.avatar.userName + '/' + shout.id)">
-                            URL
-                          </a>
-                        </li>
-
-                        <li class="list__inline-item">
-                          <a title="Comentarios">
-                            <i class="ti ti-messages pl-2 ml-2"></i>
-                            <span class="counter">{{shoutsComments?.comentarios?.length || 0}}</span>
-                          </a>
-                        </li>
-
-                        <li class="list__inline-item">
-                          <a title="Favoritos">
-                            <i class="ti ti-star"></i>
-                            <span class="counter">0</span>
-                          </a>
-                        </li>
-
-                        <li class="list__inline-item">
-                          <a title="Me gusta">
-                            <i class="ti ti-thumb-up"></i>
-                            <span class="counter">0</span>
-                          </a>
-                        </li>
-
-                        <!--
-                      <li class="list__inline-item">
-                        <a title="Compartir">
-                          <i class="ti ti-refresh"></i>
-                          <span class="counter">0</span>
-                        </a>
-                      </li> -->
-                      </ul>
-                    </div>
-                  </div>
-                </div>
+                <footer class="sv-bubble__footer">
+                  <a class="sv-action sv-action--open"
+                    (click)="clipboard('https://taringas.net/shouts/' + shout.avatar.userName + '/' + shout.id)">
+                    <i class="ti ti-link"></i> Copiar URL
+                  </a>
+                  <span class="sv-action" matTooltip="Comentarios">
+                    <i class="ti ti-messages"></i> {{shoutsComments?.totalComentarios || 0}}
+                  </span>
+                  <span class="sv-action" matTooltip="Favoritos">
+                    <i class="ti ti-star"></i> 0
+                  </span>
+                  <span class="sv-action" matTooltip="Me gusta">
+                    <i class="ti ti-thumb-up"></i> 0
+                  </span>
+                </footer>
               </div>
             </div>
 

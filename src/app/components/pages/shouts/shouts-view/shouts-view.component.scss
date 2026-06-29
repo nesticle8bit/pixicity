@@ -1,4 +1,128 @@
-.shoutbody {
+.sv-shout {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-top: 6px;
+
+  &__avatar {
+    flex-shrink: 0;
+    line-height: 0;
+
+    ::ng-deep img {
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+      box-shadow: 0 1px 4px rgba(16, 24, 40, 0.12);
+    }
+  }
+}
+
+/* La nube / globo de diálogo del shout */
+.sv-bubble {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #e9edf0;
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
+
+  &__tail {
+    position: absolute;
+    left: -7px;
+    top: 18px;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-left: 1px solid #e9edf0;
+    border-bottom: 1px solid #e9edf0;
+    transform: rotate(45deg);
+    border-radius: 0 0 0 4px;
+  }
+
+  &__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+
+  &__user {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #006595;
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  &__time {
+    font-size: 0.74rem;
+    color: #9aa7b0;
+    white-space: nowrap;
+  }
+
+  &__body {
+    margin: 0;
     font-size: 1rem;
-    margin-top: .5rem;
+    line-height: 1.6;
+    color: #1f2a33;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #eef2f4;
+  }
+}
+
+.sv-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #8a97a0;
+  text-decoration: none;
+  padding: 5px 9px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+
+  i { font-size: 0.95rem; }
+
+  &:hover { background: #eef5f9; color: #006595; }
+
+  &--open {
+    color: #0085c4;
+    margin-right: auto;
+
+    &:hover { background: rgba(0, 133, 196, 0.1); }
+  }
+}
+
+@media (max-width: 575.98px) {
+  .sv-shout {
+    gap: 10px;
+
+    &__avatar ::ng-deep img {
+      width: 42px !important;
+      height: 42px !important;
+    }
+  }
+
+  .sv-bubble {
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
 }

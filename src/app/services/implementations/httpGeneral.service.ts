@@ -222,6 +222,13 @@ export class HttpGeneralService implements IHttpGeneralService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getContactosPendientes(): Observable<number> {
+    return this.http
+      .get<ApiResponse<number>>(`${environment.api}/api/contacto/getContactosPendientes`)
+      .pipe(map((r) => (r.status === 200 ? (r.data ?? 0) : 0)))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   saveContacto(contacto: unknown): Observable<boolean> {
     return this.http
       .post<ApiResponse<boolean>>(`${environment.api}/api/contacto/saveContacto`, contacto)

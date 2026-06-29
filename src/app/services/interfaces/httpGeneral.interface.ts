@@ -19,6 +19,7 @@ export abstract class IHttpGeneralService {
   abstract setHitInByRefCode(refCode: string): Observable<any>;
   abstract deleteAfiliado(id: number): Observable<any>;
   abstract getContactos(): Observable<any>;
+  abstract getContactosPendientes(): Observable<any>;
   abstract saveContacto(contacto: any): Observable<any>;
   abstract gestionarContacto(contactoId: number): Observable<any>;
   abstract deleteContacto(contactoId: number): Observable<any>;
