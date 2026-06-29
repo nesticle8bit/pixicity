@@ -1,12 +1,13 @@
 @if (ads && !hideTitle) {
-  <h6 class="main-title mt-2 mb-3">
-    <span>Publicidad</span>
-    <strong class="float-end" style="background: #fff; margin-top: -2px; color: #8B8B8B; padding-left: 7px;">
-      <i class="ti ti-pig-money cursor--help" matTooltip="Con esta publicidad nos apoyas a mantener viva esta comunidad, de antemano muchas gracias ❤️ Att: nesticle8bit"></i>
-    </strong>
-  </h6>
+<h6 class="main-title mt-2 mb-3">
+  <span>Publicidad</span>
+  <strong class="float-end" style="background: #fff; margin-top: -2px; color: #8B8B8B; padding-left: 7px;">
+    <i class="ti ti-pig-money cursor--help"
+      matTooltip="Con esta publicidad nos apoyas a mantener viva esta comunidad, de antemano muchas gracias ❤️ Att: Gorgoroth"></i>
+  </strong>
+</h6>
 }
 
 @if (ads) {
-  <section class="{{class ? class : 'mb-4'}}" [innerHTML]="ads"></section>
+<section class="{{class ? class : 'mb-4'}}" [innerHTML]="ads"></section>
 }

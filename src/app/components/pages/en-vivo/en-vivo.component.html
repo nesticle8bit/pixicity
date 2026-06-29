@@ -14,19 +14,31 @@
               </thead>
 
               <tbody>
-                <tr class="post comentario-votar">
+                @for (accion of acciones; track $index) {
+                <tr [class]="accion.tipo">
                   <td class="usuario">
-                    <a href="#" target="_blank">nesticle8bit</a>
+                    <a [routerLink]="accion.usuarioUrl">
+                      <img [src]="accion.avatar" width="16" height="16" class="me-1" alt="" />{{ accion.usuario }}
+                    </a>
                   </td>
 
                   <td class="accion">
-                    Votó un comentario en el post
+                    {{ accion.accion }}
                   </td>
 
                   <td class="titulo">
-                    <a href="#" target="_blank">Metallica - Discografia Completa</a>
+                    <a [routerLink]="accion.tituloUrl">{{ accion.titulo }}</a>
                   </td>
                 </tr>
+                }
+
+                @if (acciones.length === 0) {
+                <tr>
+                  <td colspan="3" class="text-center text-muted py-4" style="color:#777 !important;">
+                    Esperando actividad en vivo…
+                  </td>
+                </tr>
+                }
               </tbody>
             </table>
           </div>
@@ -39,12 +51,10 @@
 
           <strong class="float-end" style="background: #fff; margin-top: -2px; padding-left: 7px;">
             @if (play) {
-              <img src="/assets/images/icons/icon_pause.png" class="cursor--pointer"
-                (click)="play = !play" />
+            <img src="/assets/images/icons/icon_pause.png" class="cursor--pointer" (click)="play = !play" />
             }
             @if (!play) {
-              <img src="/assets/images/icons/icon_play.png" class="cursor--pointer"
-                (click)="play = !play" />
+            <img src="/assets/images/icons/icon_play.png" class="cursor--pointer" (click)="play = !play" />
             }
           </strong>
         </h6>
@@ -70,7 +80,7 @@
 
               <span class="number float-end" [matTooltip]="'Medido en acciones por segundo'"
                 [matTooltipPosition]="'right'">
-                11,35 a/s
+                {{ velocidad }} a/s
               </span>
 
               <div class="clearfix"></div>
@@ -81,8 +91,8 @@
                 Acciones totales
               </strong>
 
-              <span class="number float-end" [matTooltip]="'Medido en acciones por segundo'">
-                {{acciones.length}}
+              <span class="number float-end">
+                {{ totalAcciones }}
               </span>
 
               <div class="clearfix"></div>

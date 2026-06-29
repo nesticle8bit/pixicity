@@ -1,5 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { SignalrService } from 'src/app/services/shared/signalr.service';
+
+interface AccionEnVivo {
+  usuario: string;
+  avatar: string;
+  usuarioUrl: string;
+  accion: string;
+  titulo: string;
+  tituloUrl: string;
+  tipo: string;
+  fecha: string | Date;
+}
 
 @Component({
   standalone: false,
@@ -7,69 +20,86 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
   templateUrl: './en-vivo.component.html',
   styleUrls: ['./en-vivo.component.scss'],
 })
-export class EnVivoComponent implements OnInit {
-  public acciones: any[] = [];
-  private startTime: Date = new Date();
-  public time: any;
+export class EnVivoComponent implements OnInit, OnDestroy {
+  public acciones: AccionEnVivo[] = [];
+  public totalAcciones: number = 0;
+  public velocidad: string = '0,00';
   public play: boolean = true;
+  public time: any;
 
-  constructor(private displayService: DisplayComponentService) {
+  private readonly MAX_FILAS = 60;
+  private startTime: Date = new Date();
+  private timer: any;
+  private actividadSub?: Subscription;
+  private timestamps: number[] = [];
+
+  constructor(
+    private displayService: DisplayComponentService,
+    private signalrService: SignalrService
+  ) {
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,
       searchFooter: false,
       submenu: true,
-      background: ''
+      background: '',
     });
   }
 
   ngOnInit(): void {
     this.displayTime();
+
+    this.actividadSub = this.signalrService.actividad$.subscribe((accion: AccionEnVivo) =>
+      this.onAccion(accion)
+    );
+
+    this.signalrService.startEnVivo();
+  }
+
+  ngOnDestroy(): void {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+    this.actividadSub?.unsubscribe();
+    this.signalrService.stopEnVivo();
+  }
+
+  private onAccion(accion: AccionEnVivo): void {
+    this.totalAcciones++;
+    this.timestamps.push(Date.now());
+
+    // En pausa seguimos contando estadísticas pero no movemos la tabla.
+    if (!this.play) {
+      return;
+    }
+
+    this.acciones.unshift(accion);
+
+    if (this.acciones.length > this.MAX_FILAS) {
+      this.acciones.length = this.MAX_FILAS;
+    }
   }
 
   displayTime(): void {
-    // later record end time
-    let endTime = new Date();
+    let timeDiff = (+new Date() - +this.startTime) / 1000;
 
-    // time difference in ms
-    var timeDiff = +endTime - +this.startTime;
-
-    // strip the miliseconds
-    timeDiff /= 1000;
-
-    // get seconds
-    var seconds = Math.round(timeDiff % 60);
-
-    // remove seconds from the date
+    const seconds = Math.round(timeDiff % 60);
     timeDiff = Math.floor(timeDiff / 60);
-
-    // get minutes
-    var minutes = Math.round(timeDiff % 60);
-
-    // remove minutes from the date
+    const minutes = Math.round(timeDiff % 60);
     timeDiff = Math.floor(timeDiff / 60);
-
-    // get hours
-    var hours = Math.round(timeDiff % 24);
-
-    // remove hours from the date
-    timeDiff = Math.floor(timeDiff / 24);
-
-    // the rest of timeDiff is number of days
-    var days = timeDiff;
+    const hours = Math.round(timeDiff % 24);
 
     this.time = `${this.displayZero(hours)}:${this.displayZero(minutes)}:${this.displayZero(seconds)}`;
 
-    setTimeout(() => {
-      this.displayTime();
-    }, 1000);
+    // Velocidad: acciones en los últimos 5 segundos, promediadas por segundo.
+    const ahora = Date.now();
+    this.timestamps = this.timestamps.filter((t) => ahora - t <= 5000);
+    this.velocidad = (this.timestamps.length / 5).toFixed(2).replace('.', ',');
+
+    this.timer = setTimeout(() => this.displayTime(), 1000);
   }
 
   displayZero(number: number): string {
-    if (number.toString().length === 1) {
-      return `0${number}`;
-    } else {
-      return number.toString();
-    }
+    return number.toString().length === 1 ? `0${number}` : number.toString();
   }
 }
