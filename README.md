@@ -2,11 +2,11 @@
 ![Maintainer](https://img.shields.io/badge/maintainer-NESTicle-blue)
 [![GitHub issues](https://img.shields.io/github/issues/NESTicle/pixicity.svg)](https://GitHub.com/NESTicle/pixicity/issues/)
 
-# pixicity
-Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de las cenizas a Taringa!
+# Taringa
+Trabajando en un futuro link sharing system, inspirado en Taringa!
 
 ### 📄 Index
-![taringas.net](https://user-images.githubusercontent.com/1715022/221032267-533c6ce5-f864-4df8-ae6a-53b19a7a0da5.png)
+<img width="1060" height="1060" alt="image" src="https://github.com/user-attachments/assets/4833ef08-ba0c-4f51-bb45-781907f34ac8" />
 
 <details>
   <summary>🖼️ Screenshots</summary>
