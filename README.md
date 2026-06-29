@@ -66,7 +66,7 @@ Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de la
   - Comentarios
     - [x] Comentar los posts
     - [x] Implementar las respuestas a los comentarios
-    - [ ] Implementar la votación de 👍🏼 y 👎🏼 en los comentarios de los posts
+    - [x] Implementar la votación de 👍🏼 y 👎🏼 en los comentarios de los posts
 
   - Login
     - [x] Crear la página de login y generar la sesión del usuario en el navegador
@@ -81,7 +81,7 @@ Trabajando en un futuro link sharing system, inspirado en Taringa! y traer de la
   - Perfil del usuario
     - [x] Crear componente para visualizar todos los perfiles de usuario
     - [x] Crear sección para listar los posts publicados por el usuario
-    - [ ] Crear sección para recibir comentarios de diferentes personas
+    - [x] Crear sección para recibir comentarios de diferentes personas
     - [x] Crear sección para visualizar los usuarios que sigue y seguidores
     - [x] Crear sección para visualizar los comentarios realizados por el usuario
     
