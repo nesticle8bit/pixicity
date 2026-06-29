@@ -51,7 +51,7 @@ export class PerfilComponent implements OnInit {
 
       this.seoService.setSEO({
         title: `${this.currentUser.userName} - Perfil`,
-        description: `Perfil de ${this.currentUser.userName} en Taringas. Mira sus posts, shouts, seguidores y actividad en la comunidad.`,
+        description: `Perfil de ${this.currentUser.userName} en Taringa. Mira sus posts, shouts, seguidores y actividad en la comunidad.`,
         type: 'profile',
         imageURL: this.currentUser.avatar || '',
         tags: [this.currentUser.userName, 'perfil', 'usuario', 'taringas'],

@@ -1,4 +1,4 @@
-<form [formGroup]="formGroup" (ngSubmit)="createShout()" class="sh-composer">
+<form [formGroup]="formGroup" (ngSubmit)="createShout()" class="sh-composer mt-3">
     <div class="sh-composer__avatar">
         <app-user-avatar [class]="'sh-avatar-img'" [avatar]="currentUser?.usuario?.avatar"
             [userName]="currentUser?.usuario?.userName" [width]="46" [height]="46"></app-user-avatar>
@@ -7,6 +7,18 @@
     <div class="sh-composer__main">
         <textarea class="sh-composer__input" rows="3" formControlName="comentario"
             placeholder="¿Qué estás pensando?"></textarea>
+
+        <div class="sh-composer__media">
+            <i class="ti ti-link"></i>
+            <input type="url" class="sh-composer__url" formControlName="url"
+                placeholder="Pega un enlace: YouTube, Spotify, imagen o web (opcional)">
+        </div>
+
+        @if (formGroup.value.url) {
+        <div class="sh-composer__preview">
+            <app-shout-media [url]="formGroup.value.url" [tipo]="detectarTipo(formGroup.value.url)"></app-shout-media>
+        </div>
+        }
 
         <div class="sh-composer__actions">
             <span class="sh-composer__hint">Comparte algo con la comunidad</span>

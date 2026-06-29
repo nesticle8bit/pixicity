@@ -42,12 +42,24 @@ export class ProfileShoutsComponent implements OnInit {
       comentario: ['', Validators.required],
       perfilId: [0, Validators.required],
       tipo: 1,
+      url: [''],
     });
 
     this.currentUser = this.securityService.getCurrentUser();
   }
 
   ngOnInit(): void {}
+
+  // Clasificación en cliente para la vista previa del composer (el backend la recalcula al guardar).
+  detectarTipo(url: string): string {
+    if (!url) return 'Texto';
+    const u = url.toLowerCase();
+    if (!/^https?:\/\//.test(u)) return 'Texto';
+    if (u.includes('youtube.com') || u.includes('youtu.be')) return 'Video';
+    if (u.includes('spotify.com')) return 'Spotify';
+    if (/\.(jpg|jpeg|png|gif|webp|bmp|avif)(\?.*)?$/.test(u)) return 'Foto';
+    return 'Enlace';
+  }
 
   createShout(): void {
     this.reloadShouts = false;
@@ -61,6 +73,7 @@ export class ProfileShoutsComponent implements OnInit {
       if (response) {
         this.formGroup.patchValue({
           comentario: '',
+          url: '',
         });
 
         this.reloadShouts = true;

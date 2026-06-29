@@ -30,6 +30,7 @@ import { UserOnlineStatusComponent } from '../../components/addons/user-online-s
 import { GenreIconComponent } from '../../components/addons/genre-icon/genre-icon.component';
 import { SelectAutocompleteComponent } from '../../components/shared/select-autocomplete/select-autocomplete.component';
 import { SelectOptionDirective, SelectLabelDirective } from '../../components/shared/select-autocomplete/select-template.directives';
+import { ShoutMediaComponent } from '../../components/addons/shout-media/shout-media.component';
 
 const SHARED = [
   // Rich editor
@@ -39,6 +40,7 @@ const SHARED = [
   PostUrlLinkComponent,
   UserAvatarComponent,
   WhoIsIpComponent,
+  ShoutMediaComponent,
   // Pipes
   TimeAgoPipe,
   TruncatePipe,

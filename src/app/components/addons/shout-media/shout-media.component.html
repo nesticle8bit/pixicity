@@ -1,0 +1,33 @@
+@if (tieneMedia) {
+<div class="shout-media">
+  @if (esVideo && youtubeEmbed) {
+    <div class="sm-embed sm-embed--video">
+      <iframe [src]="youtubeEmbed" frameborder="0" loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+  } @else if (esSpotify && spotifyEmbed) {
+    <div class="sm-embed sm-embed--spotify">
+      <iframe [src]="spotifyEmbed" frameborder="0" loading="lazy"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+    </div>
+  } @else if (esFoto) {
+    <a [href]="url" target="_blank" rel="noopener" class="sm-foto">
+      <img [src]="url" alt="Imagen del shout" loading="lazy">
+    </a>
+  } @else if (esEnlace) {
+    <a [href]="url" target="_blank" rel="noopener" class="sm-card">
+      @if (mediaImagen) {
+        <div class="sm-card__img" [style.background-image]="'url(' + mediaImagen + ')'"></div>
+      }
+      <div class="sm-card__body">
+        <span class="sm-card__host">{{hostname}}</span>
+        <span class="sm-card__title">{{mediaTitulo || url}}</span>
+        @if (mediaDescripcion) {
+          <span class="sm-card__desc">{{mediaDescripcion}}</span>
+        }
+      </div>
+    </a>
+  }
+</div>
+}

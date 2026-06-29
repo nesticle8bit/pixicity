@@ -13,6 +13,7 @@ import { DashboardComunidadesComponent } from '../../components/admin/control-de
 import { DashboardDenunciasComunidadComponent } from '../../components/admin/control-de-comunidad/denuncias-comunidad/dashboard-denuncias-comunidad/dashboard-denuncias-comunidad.component';
 import { DashboardDenunciasComentariosComponent } from '../../components/admin/control-de-contenido/denuncias-comentarios/dashboard-denuncias-comentarios/dashboard-denuncias-comentarios.component';
 import { DashboardDenunciasShoutsComponent } from '../../components/admin/control-de-contenido/denuncias-shouts/dashboard-denuncias-shouts/dashboard-denuncias-shouts.component';
+import { DashboardModeracionComponent } from '../../components/admin/control-de-contenido/moderacion/dashboard-moderacion/dashboard-moderacion.component';
 import { DashboardAdsComponent } from '../../components/admin/general/publicidad/dashboard-ads/dashboard-ads.component';
 import { DashboardCommentsComponent } from '../../components/admin/control-de-contenido/comentarios/dashboard-comments/dashboard-comments.component';
 import { DashboardPaisesComponent } from '../../components/admin/control-de-contenido/paises/dashboard-paises/dashboard-paises.component';
@@ -50,6 +51,7 @@ const routes: Routes = [
       { path: 'paises', component: DashboardPaisesComponent },
       { path: 'sesiones', component: DashboardSesionesComponent },
       { path: 'denuncias', component: DashboardReportesComponent },
+      { path: 'moderacion', component: DashboardModeracionComponent },
       { path: 'usuarios', component: DashboardUsuariosComponent },
       { path: 'rango-usuarios', component: DashboardRangosComponent },
       { path: 'shouts', component: DashboardShoutsComponent },

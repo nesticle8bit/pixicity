@@ -20,7 +20,7 @@ export class ModHistoryComponent implements OnInit {
     private webService: IHttpWebService,
     private title: Title
   ) {
-    this.title.setTitle(`Historial de moderación | Taringas - Inteligencia colectiva | Comunidad para Compartir Información`);
+    this.title.setTitle(`Historial de moderación | Taringa - Inteligencia colectiva | Comunidad para Compartir Información`);
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,

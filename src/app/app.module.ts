@@ -13,6 +13,7 @@ import { HomeLastPostsComponent } from './components/home/home-last-posts/home-l
 import { HomeStatsComponent } from './components/home/home-stats/home-stats.component';
 import { HomeLastCommentsComponent } from './components/home/home-last-comments/home-last-comments.component';
 import { HomeLastPhotosComponent } from './components/home/home-last-photos/home-last-photos.component';
+import { HomeLastShoutsComponent } from './components/home/home-last-shouts/home-last-shouts.component';
 import { HomeAfiliadosComponent } from './components/home/home-afiliados/home-afiliados.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
@@ -88,6 +89,8 @@ import { TipoIconMonitorComponent } from './components/addons/tipo-icon-monitor/
 import { UppercaseDirective } from './shared/directives/uppercase.directive';
 import { IHttpDenunciasService } from './services/interfaces/httpDenuncias.interface';
 import { HttpDenunciasService } from './services/implementations/httpDenuncias.service';
+import { IHttpModeracionService } from './services/interfaces/httpModeracion.interface';
+import { HttpModeracionService } from './services/implementations/httpModeracion.service';
 import { ProfileCommentsComponent } from './components/profile/profile-comments/profile-comments.component';
 import { ProfilePostsComponent } from './components/profile/profile-posts/profile-posts.component';
 import { IHttpWebService } from './services/interfaces/httpWeb.interface';
@@ -172,6 +175,7 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     HomeStatsComponent,
     HomeLastCommentsComponent,
     HomeLastPhotosComponent,
+    HomeLastShoutsComponent,
     HomeAfiliadosComponent,
     HomeTopPostsComponent,
     HomeTopUsersComponent,
@@ -334,6 +338,7 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
         { provide: IHttpFavoritosService, useClass: HttpFavoritosService },
         { provide: IHttpLogsService, useClass: HttpLogsService },
         { provide: IHttpDenunciasService, useClass: HttpDenunciasService },
+        { provide: IHttpModeracionService, useClass: HttpModeracionService },
         { provide: IHttpWebService, useClass: HttpWebService },
         { provide: IHttpPerfilService, useClass: HttpPerfilService },
         { provide: IHttpNoticiasService, useClass: HttpNoticiasService },

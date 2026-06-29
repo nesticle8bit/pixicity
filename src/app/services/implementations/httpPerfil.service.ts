@@ -37,6 +37,15 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getTopShouts(count: number = 6): Observable<any[]> {
+    return this.http
+      .get<ApiResponse<any[]>>(`${environment.api}/api/shouts/getTopShouts?count=${count}`)
+      .pipe(
+        map((response) => (response.status === 200 ? response.data! : [])),
+        catchError(this.helper.errorHandler)
+      );
+  }
+
   getShoutsAdmin(): Observable<PaginatedData<ShoutViewModel>> {
     return this.http
       .get<ApiResponse<PaginatedData<ShoutViewModel>>>(

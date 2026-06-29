@@ -13,7 +13,7 @@ export class DashboardComponent implements OnInit {
     private displayService: DisplayComponentService,
     private title: Title
   ) {
-    this.title.setTitle('Panel de Administración | Taringas - Inteligencia colectiva | Comunidad para Compartir Información');
+    this.title.setTitle('Panel de Administración | Taringa - Inteligencia colectiva | Comunidad para Compartir Información');
   }
 
   ngOnInit(): void {

@@ -49,14 +49,14 @@ export class FotosIndexComponent implements OnInit {
         this.userName
           ? {
               title: `Fotos de ${this.userName}`,
-              description: `Galería de fotos de ${this.userName} en Taringas.`,
+              description: `Galería de fotos de ${this.userName} en Taringa.`,
               type: 'website',
               imageURL: '',
               tags: [this.userName, 'fotos', 'galería', 'taringas'],
             }
           : {
               title: 'Fotos',
-              description: 'Explora las fotos compartidas por la comunidad de Taringas.',
+              description: 'Explora las fotos compartidas por la comunidad de Taringa.',
               type: 'website',
               imageURL: '',
               tags: ['fotos', 'galería', 'imágenes', 'taringas'],

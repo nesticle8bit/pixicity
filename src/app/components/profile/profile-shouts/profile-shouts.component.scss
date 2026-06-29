@@ -53,6 +53,48 @@
     }
   }
 
+  &__media {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    border: 1px solid #e3e8ec;
+    border-radius: 10px;
+    background: #f7f9fb;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+
+    > i {
+      color: #0085c4;
+      font-size: 1.05rem;
+      flex-shrink: 0;
+    }
+
+    &:focus-within {
+      border-color: #0085c4;
+      box-shadow: 0 0 0 3px rgba(0, 133, 196, 0.12);
+      background: #fff;
+    }
+  }
+
+  &__url {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.85rem;
+    color: #1f2a33;
+
+    &::placeholder {
+      color: #aab4bc;
+    }
+  }
+
+  &__preview {
+    margin-top: 10px;
+  }
+
   &__actions {
     display: flex;
     align-items: center;

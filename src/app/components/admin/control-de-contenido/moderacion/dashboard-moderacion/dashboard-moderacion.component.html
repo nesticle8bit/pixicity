@@ -1,0 +1,129 @@
+<h1 class="dashboard--title">Moderación — Reportes</h1>
+
+<p class="text-muted">
+  Cola unificada de reportes de todo el sitio (posts, comentarios de post, comunidad y shouts).
+  Resuelve, descarta o elimina el contenido directamente desde aquí.
+</p>
+
+<div class="mod-filtros">
+  <div class="mod-toggle">
+    <button type="button" [class.active]="soloPendientes" (click)="cambiarFiltro(true)">
+      Pendientes
+      @if (pendientes > 0) { <span class="mod-badge">{{pendientes}}</span> }
+    </button>
+    <button type="button" [class.active]="!soloPendientes" (click)="cambiarFiltro(false)">Todos</button>
+  </div>
+
+  <select class="form-select form-select-sm mod-select" [ngModel]="tipoContenido" (ngModelChange)="cambiarTipo($event)">
+    @for (t of tipos; track t.id) {
+      <option [ngValue]="t.id">{{t.nombre}}</option>
+    }
+  </select>
+
+  <button type="button" class="btn btn-sm btn-outline-secondary ms-auto" (click)="toggleBitacora()">
+    <i class="ti ti-history"></i> {{verBitacora ? 'Ocultar' : 'Ver'}} bitácora
+  </button>
+</div>
+
+@if (reportes.length > 0) {
+  <main class="table-responsive">
+    <table class="table table-sm table-striped table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Creado</th>
+          <th>Tipo</th>
+          <th>Contenido</th>
+          <th>Autor</th>
+          <th>Reporta</th>
+          <th>Motivo</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (reporte of reportes; track reporte.id) {
+          <tr [ngClass]="{'opacity-50': reporte.resuelto}">
+            <td>
+              <span class="cursor--help" matTooltip="{{reporte.fechaRegistro}}">
+                {{reporte.fechaRegistro | timeAgo}}
+              </span>
+            </td>
+            <td><span class="badge bg-light text-dark">{{tipoNombre(reporte.tipoContenido)}}</span></td>
+            <td class="coment-cell">
+              <span [ngClass]="{'text-decoration-line-through text-muted': reporte.contenidoEliminado}">
+                {{reporte.contenidoPreview || '—'}}
+              </span>
+              @if (reporte.contenidoEliminado) {
+                <span class="badge bg-secondary ms-1">borrado</span>
+              }
+            </td>
+            <td>{{reporte.autorUserName || '—'}}</td>
+            <td>{{reporte.reportanteUserName || '—'}}</td>
+            <td>{{reporte.motivo}}</td>
+            <td>
+              @if (reporte.resuelto) {
+                <span class="badge bg-success">Resuelto</span>
+              } @else {
+                <span class="badge bg-warning text-dark">Pendiente</span>
+              }
+            </td>
+            <td class="text-center" width="30px">
+              <button class="btn-menu" [matMenuTriggerFor]="menu">
+                <i class="ti ti-dots-vertical"></i>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button type="button" mat-menu-item (click)="resolver(reporte)">
+                  <mat-icon>{{reporte.resuelto ? 'undo' : 'check'}}</mat-icon>
+                  <span>{{reporte.resuelto ? 'Reabrir' : 'Marcar resuelto'}}</span>
+                </button>
+                @if (!reporte.contenidoEliminado) {
+                  <button type="button" mat-menu-item (click)="eliminarContenido(reporte)">
+                    <mat-icon>delete_forever</mat-icon>
+                    <span>Borrar contenido</span>
+                  </button>
+                }
+                <button type="button" mat-menu-item (click)="descartar(reporte)">
+                  <mat-icon>delete_outline</mat-icon>
+                  <span>Descartar reporte</span>
+                </button>
+              </mat-menu>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </main>
+
+  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
+  </mat-paginator>
+}
+
+@if (reportes.length < 1) {
+  <div class="alert alert-warning">🗃️ No hay reportes que mostrar.</div>
+}
+
+@if (verBitacora) {
+  <h2 class="mod-bitacora-title">Bitácora de acciones ({{logsTotal}})</h2>
+  @if (logs.length > 0) {
+    <main class="table-responsive">
+      <table class="table table-sm table-striped align-middle">
+        <thead>
+          <tr><th>Fecha</th><th>Staff</th><th>Acción</th><th>Detalle</th></tr>
+        </thead>
+        <tbody>
+          @for (log of logs; track log.id) {
+            <tr>
+              <td><span matTooltip="{{log.fechaRegistro}}">{{log.fechaRegistro | timeAgo}}</span></td>
+              <td>{{log.staffUserName}}</td>
+              <td><span class="badge bg-light text-dark">{{log.accionNombre}}</span></td>
+              <td>{{log.detalle}}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </main>
+  } @else {
+    <div class="alert alert-light">Sin acciones registradas.</div>
+  }
+}

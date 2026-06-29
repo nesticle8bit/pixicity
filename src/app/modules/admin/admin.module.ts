@@ -74,6 +74,7 @@ import { DashboardDenunciasComentariosComponent } from '../../components/admin/c
 import { TableDenunciasComentariosComponent } from '../../components/admin/control-de-contenido/denuncias-comentarios/table-denuncias-comentarios/table-denuncias-comentarios.component';
 import { DashboardDenunciasShoutsComponent } from '../../components/admin/control-de-contenido/denuncias-shouts/dashboard-denuncias-shouts/dashboard-denuncias-shouts.component';
 import { TableDenunciasShoutsComponent } from '../../components/admin/control-de-contenido/denuncias-shouts/table-denuncias-shouts/table-denuncias-shouts.component';
+import { DashboardModeracionComponent } from '../../components/admin/control-de-contenido/moderacion/dashboard-moderacion/dashboard-moderacion.component';
 import { DashboardCensurasComponent } from '../../components/admin/control-de-contenido/censuras/dashboard-censuras/dashboard-censuras.component';
 import { TableCensurasComponent } from '../../components/admin/control-de-contenido/censuras/table-censuras/table-censuras.component';
 import { DialogCreateUpdateCensurasComponent } from '../../components/admin/control-de-contenido/censuras/dialog-create-update-censuras/dialog-create-update-censuras.component';
@@ -117,6 +118,7 @@ import { AdminRoutingModule } from './admin-routing.module';
     TableDenunciasComentariosComponent,
     DashboardDenunciasShoutsComponent,
     TableDenunciasShoutsComponent,
+    DashboardModeracionComponent,
     DashboardEstadisticasComponent,
     DashboardReportesComponent,
     DialogVerReporteComponent,

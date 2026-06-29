@@ -13,7 +13,7 @@ export class ComunidadesIndexComponent {
     this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: true, submenu: true, background: '' });
     this.seoService.setSEO({
       title: 'Comunidades',
-      description: 'Explora las comunidades de Taringas. Únete a temas que te interesan, participa y conecta con otros usuarios.',
+      description: 'Explora las comunidades de Taringa. Únete a temas que te interesan, participa y conecta con otros usuarios.',
       type: 'website',
       imageURL: '',
       tags: ['comunidades', 'foros', 'temas', 'taringas'],

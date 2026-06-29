@@ -2,6 +2,7 @@
 
 <div class="container">
   <div class="row">
+    @if (shout) {
     <div class="col-12 col-sm-9">
       <div class="container container--home">
         <div class="row">
@@ -31,6 +32,9 @@
                 </header>
 
                 <p class="sv-bubble__body">{{shout.comentario}}</p>
+
+                <app-shout-media [url]="shout.url" [tipo]="shout.tipo" [mediaTitulo]="shout.mediaTitulo"
+                  [mediaImagen]="shout.mediaImagen" [mediaDescripcion]="shout.mediaDescripcion"></app-shout-media>
 
                 <footer class="sv-bubble__footer">
                   <a class="sv-action sv-action--open"
@@ -91,5 +95,6 @@
       </section>
       }
     </div>
+    }
   </div>
 </div>

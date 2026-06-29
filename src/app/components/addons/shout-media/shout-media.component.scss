@@ -1,0 +1,103 @@
+.shout-media {
+  margin-top: 8px;
+}
+
+//  Embeds (video / spotify) responsivos
+.sm-embed {
+  position: relative;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+
+  iframe {
+    width: 100%;
+    border: 0;
+    display: block;
+  }
+}
+
+.sm-embed--video {
+  aspect-ratio: 16 / 9;
+
+  iframe { height: 100%; position: absolute; inset: 0; }
+}
+
+.sm-embed--spotify {
+  background: transparent;
+
+  iframe { height: 152px; border-radius: 12px; }
+}
+
+//  Imagen
+.sm-foto {
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+//  Tarjeta de enlace (Open Graph)
+.sm-card {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fafafa;
+  transition: background .15s, border-color .15s;
+
+  &:hover {
+    background: #f2f2f2;
+    border-color: #d5d5d5;
+  }
+}
+
+.sm-card__img {
+  flex: 0 0 110px;
+  min-height: 90px;
+  background-size: cover;
+  background-position: center;
+  background-color: #e9e9e9;
+}
+
+.sm-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  min-width: 0;
+}
+
+.sm-card__host {
+  font-size: .7rem;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: #999;
+}
+
+.sm-card__title {
+  font-size: .88rem;
+  font-weight: 700;
+  color: #222;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sm-card__desc {
+  font-size: .78rem;
+  color: #666;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

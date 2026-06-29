@@ -42,7 +42,7 @@ export class SectionHomeComponent implements OnInit, OnDestroy {
 
     this.seoService.setSEO({
       title:
-        'Taringas - Inteligencia colectiva | Comunidad para Compartir Información',
+        'Taringa - Inteligencia colectiva | Comunidad para Compartir Información',
       description: '',
       tags: [],
       type: 'Red social',
@@ -50,7 +50,7 @@ export class SectionHomeComponent implements OnInit, OnDestroy {
     });
 
     this.title.setTitle(
-      'Taringas - Inteligencia colectiva | Comunidad para Compartir Información'
+      'Taringa - Inteligencia colectiva | Comunidad para Compartir Información'
     );
   }
 

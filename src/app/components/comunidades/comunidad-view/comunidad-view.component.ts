@@ -56,7 +56,7 @@ export class ComunidadViewComponent implements OnInit {
         this.loading = false;
         this.seoService.setSEO({
           title: this.comunidad.nombre,
-          description: this.comunidad.descripcion || `Comunidad ${this.comunidad.nombre} en Taringas. Únete, participa en sus temas y comparte con la comunidad.`,
+          description: this.comunidad.descripcion || `Comunidad ${this.comunidad.nombre} en Taringa. Únete, participa en sus temas y comparte con la comunidad.`,
           type: 'website',
           imageURL: this.comunidad.imagen || this.comunidad.avatar || '',
           tags: [this.comunidad.nombre, 'comunidad', 'taringas'],

@@ -1,0 +1,214 @@
+//  Skeleton
+.shout-skeleton {
+  width: 100%;
+  height: 150px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+//  Carousel container
+.shout-carousel {
+  position: relative;
+  width: 100%;
+  height: 330px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #ececec;
+
+  &:hover .shout-btn { opacity: 1; }
+}
+
+//  Slides
+.shout-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  opacity: 0;
+  transition: opacity .55s ease;
+  z-index: 0;
+  color: inherit;
+  overflow-y: auto;
+
+  &.active {
+    opacity: 1;
+    z-index: 1;
+  }
+}
+
+//  Progress bar
+.shout-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: #007bff;
+  z-index: 3;
+
+  &.running { animation: progress 4s linear forwards; }
+  &.paused  { animation-play-state: paused; }
+}
+
+@keyframes progress {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+.shout-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.shout-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.shout-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.shout-author {
+  font-size: .85rem;
+  font-weight: 700;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shout-time {
+  font-size: .72rem;
+  color: #999;
+}
+
+.shout-rank {
+  font-size: .72rem;
+  font-weight: 900;
+  color: #ccc;
+  flex-shrink: 0;
+}
+
+.shout-text {
+  margin: 0;
+  font-size: .86rem;
+  color: #333;
+  line-height: 1.35;
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  &:hover { color: #007bff; }
+}
+
+.shout-media-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .74rem;
+  color: #555;
+  min-width: 0;
+
+  i { color: #007bff; flex-shrink: 0; }
+}
+
+.shout-media-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+  background-size: cover;
+  background-position: center;
+  background-color: #e9e9e9;
+  flex-shrink: 0;
+}
+
+.shout-media-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shout-target {
+  font-size: .72rem;
+  color: #999;
+  margin-top: auto;
+}
+
+//  Arrows
+.shout-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  background: rgba(0,0,0,.35);
+  color: #fff;
+  border: none;
+  width: 26px;
+  height: 36px;
+  border-radius: 4px;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .2s, background .15s;
+
+  &:hover { background: rgba(0,0,0,.6); }
+}
+
+.shout-prev { left: 6px; }
+.shout-next { right: 6px; }
+
+//  Dots
+.shout-dots {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 4;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(0,0,0,.18);
+  cursor: pointer;
+  transition: background .2s, transform .2s;
+
+  &.active {
+    background: #007bff;
+    transform: scale(1.3);
+  }
+
+  &:hover:not(.active) { background: rgba(0,0,0,.35); }
+}
+
+.shout-empty {
+  font-size: .82rem;
+  color: #999;
+  padding: 12px 0;
+}

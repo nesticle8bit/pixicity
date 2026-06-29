@@ -1,0 +1,57 @@
+<h6 class="main-title mb-2">
+  <span>Shouts recientes</span>
+
+  <div class="float-end">
+    <img class="cursor--pointer"
+      [src]="paused ? '/assets/images/icons/icon_play.png' : '/assets/images/icons/icon_pause.png'"
+      [matTooltip]="paused ? 'Reanudar' : 'Pausar'" style="background: #fff; padding-left: 5px"
+      (click)="togglePause()" />
+  </div>
+</h6>
+
+@if (loading) {
+<div class="shout-skeleton"></div>
+}
+
+@if (!loading && shouts.length > 0) {
+<div class="shout-carousel" (mouseenter)="stopTimer()" (mouseleave)="startTimer()">
+  @for (shout of shouts; track shout.id; let i = $index) {
+  <div class="shout-slide" [class.active]="i === currentIndex">
+    <div class="shout-progress" [class.running]="i === currentIndex && !paused" [class.paused]="paused"></div>
+
+    <a [routerLink]="['/shouts', shout.perfil, shout.id]" class="shout-head">
+      <app-user-avatar [class]="'shout-avatar'" [height]="34" [width]="34" [avatar]="shout.autorAvatar" [userName]="shout.autor"></app-user-avatar>
+      <div class="shout-meta">
+        <span class="shout-author">{{shout.autor}}</span>
+        <span class="shout-time">{{shout.fechaRegistro | timeAgo}}</span>
+      </div>
+      <span class="shout-rank">#{{i + 1}}</span>
+    </a>
+
+    @if (shout.comentario) {
+    <a [routerLink]="['/shouts', shout.perfil, shout.id]" class="shout-text">{{shout.comentario}}</a>
+    }
+
+    <app-shout-media [url]="shout.url" [tipo]="shout.tipo" [mediaTitulo]="shout.mediaTitulo"
+      [mediaImagen]="shout.mediaImagen" [mediaDescripcion]="shout.mediaDescripcion"></app-shout-media>
+
+    @if (shout.perfil && shout.perfil !== shout.autor) {
+    <span class="shout-target">en el perfil de {{shout.perfil}}</span>
+    }
+  </div>
+  }
+
+  <button class="shout-btn shout-prev" (click)="prev(); startTimer()">&#8249;</button>
+  <button class="shout-btn shout-next" (click)="next(); startTimer()">&#8250;</button>
+
+  <div class="shout-dots">
+    @for (shout of shouts; track shout.id; let i = $index) {
+    <span class="dot" [class.active]="i === currentIndex" (click)="goTo(i)"></span>
+    }
+  </div>
+</div>
+}
+
+@if (!loading && shouts.length < 1) {
+<div class="shout-empty">No hay shouts recientes.</div>
+}

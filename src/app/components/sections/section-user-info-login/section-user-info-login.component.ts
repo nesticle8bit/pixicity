@@ -7,6 +7,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { SignalrService } from 'src/app/services/shared/signalr.service';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
   standalone: false,
@@ -38,6 +40,8 @@ export class SectionUserInfoLoginComponent implements OnInit {
     private favoritosService: IHttpFavoritosService,
     private mensajesService: IHttpMensajesService,
     private httpLogs: IHttpLogsService,
+    private signalrService: SignalrService,
+    private toast: NotificationService,
     private formBuilder: FormBuilder,
     private router: Router
   ) {
@@ -55,6 +59,25 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.getStats();
+    this.iniciarRealtime();
+  }
+
+  private iniciarRealtime(): void {
+    if (!this.currentUser?.usuario || !this.currentUser?.token) {
+      return;
+    }
+
+    this.signalrService.start(this.currentUser.token);
+
+    // Notificación en vivo: sube el contador y muestra un aviso discreto.
+    this.signalrService.notification$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((payload: any) => {
+        this.currentStats.notifications = (this.currentStats.notifications ?? 0) + 1;
+        if (payload?.mensaje) {
+          this.toast.info(payload.mensaje, 'Nueva notificación');
+        }
+      });
   }
 
   getStats(): void {
@@ -144,6 +167,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   cerrarSesion(): void {
+    this.signalrService.stop();
     this.securityService.logout();
     window.location.href = '';
   }

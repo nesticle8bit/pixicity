@@ -80,7 +80,7 @@ export class ComunidadTemaViewComponent implements OnInit {
         const limpio = (this.tema.contenido || '').replace(/<[^>]*>/g, '').trim();
         this.seoService.setSEO({
           title: this.tema.titulo || this.tema.nombre,
-          description: limpio ? limpio.substring(0, 200) : `${this.tema.titulo} - Tema en la comunidad ${this.tema.comunidad?.nombre ?? ''} de Taringas.`,
+          description: limpio ? limpio.substring(0, 200) : `${this.tema.titulo} - Tema en la comunidad ${this.tema.comunidad?.nombre ?? ''} de Taringa.`,
           type: 'article',
           imageURL: this.tema.imagen || '',
           tags: [this.tema.titulo, this.tema.comunidad?.nombre, 'comunidad', 'taringas'].filter(Boolean),

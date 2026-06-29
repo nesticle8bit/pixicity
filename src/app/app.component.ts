@@ -46,13 +46,13 @@ export class AppComponent {
       .subscribe((value: SEOModel) => {
       if (value.title) {
         this.title.setTitle(
-          `${value.title} - Taringas - Inteligencia colectiva`,
+          `${value.title} - Taringa - Inteligencia colectiva`,
         );
         this.meta.updateTag({ property: 'og:title', content: value.title });
         this.meta.updateTag({ name: 'twitter:title', content: value.title });
         this.meta.updateTag({
           property: 'og:site_name',
-          content: 'Taringas! - Inteligencia colectiva',
+          content: 'Taringa! - Inteligencia colectiva',
         });
       }
 

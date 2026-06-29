@@ -1,0 +1,51 @@
+.mod-filtros {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.mod-toggle {
+  display: inline-flex;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  overflow: hidden;
+
+  button {
+    border: 0;
+    background: #fff;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+
+    &.active {
+      background: #2b6cb0;
+      color: #fff;
+    }
+  }
+}
+
+.mod-select {
+  max-width: 240px;
+}
+
+.mod-badge {
+  display: inline-block;
+  margin-left: 0.35rem;
+  background: #e53e3e;
+  color: #fff;
+  border-radius: 10px;
+  padding: 0 0.45rem;
+  font-size: 0.72rem;
+}
+
+.coment-cell {
+  max-width: 360px;
+  white-space: normal;
+}
+
+.mod-bitacora-title {
+  margin-top: 1.75rem;
+  font-size: 1.1rem;
+}

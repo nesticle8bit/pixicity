@@ -57,7 +57,7 @@ export class FotoDetailComponent implements OnInit {
           title: this.foto.titulo,
           description: this.foto.descripcion
             ? this.foto.descripcion.replace(/<[^>]*>/g, '').substring(0, 200)
-            : `Foto "${this.foto.titulo}" de ${this.foto.usuario} en Taringas.`,
+            : `Foto "${this.foto.titulo}" de ${this.foto.usuario} en Taringa.`,
           type: 'article',
           imageURL: this.foto.imageUrl || '',
           tags: [this.foto.titulo, this.foto.categoria, this.foto.usuario, 'fotos', 'taringas'].filter(Boolean),

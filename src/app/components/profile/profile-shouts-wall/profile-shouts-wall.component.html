@@ -23,6 +23,9 @@
 
           <p class="sh-bubble__body">{{shout.comentario}}</p>
 
+          <app-shout-media [url]="shout.url" [tipo]="shout.tipo" [mediaTitulo]="shout.mediaTitulo"
+            [mediaImagen]="shout.mediaImagen" [mediaDescripcion]="shout.mediaDescripcion"></app-shout-media>
+
           <footer class="sh-bubble__footer">
             <a class="sh-action sh-action--open" [routerLink]="['/shouts/' + shout.avatar.userName + '/' + shout.id]">
               <i class="ti ti-arrow-up-right"></i> Abrir

@@ -36,7 +36,7 @@ export class SearchComponent implements OnInit {
     private title: Title
   ) {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
-    this.title.setTitle(`Buscador! | Taringas - Inteligencia colectiva | Comunidad para Compartir Información`);
+    this.title.setTitle(`Buscador! | Taringa - Inteligencia colectiva | Comunidad para Compartir Información`);
 
     this.displayService.setDisplay({
       mainMenu: true,

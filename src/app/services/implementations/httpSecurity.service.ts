@@ -4,7 +4,7 @@ import { PaginationService } from '../shared/pagination.service';
 import { UserModel } from 'src/app/models/security/user.model';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
@@ -73,6 +73,36 @@ export class HttpSecurityService implements IHttpSecurityService {
         })
       )
       .pipe(catchError(this.helper.errorHandler));
+  }
+
+  // Intercambia el refresh token por un nuevo access token (rotación) y actualiza el storage.
+  refreshAccessToken(): Observable<string> {
+    const currentUser = this.currentUserSubject.value;
+    const refreshToken = currentUser?.refreshToken;
+
+    if (!refreshToken) {
+      return throwError(() => new Error('No hay refresh token'));
+    }
+
+    return this.http
+      .post<ApiResponse<{ token: string; refreshToken: string }>>(
+        `${environment.api}/api/usuarios/refreshToken`,
+        { refreshToken }
+      )
+      .pipe(
+        map((response) => {
+          if (response.status === 200 && response.data?.token) {
+            const updated = new JwtUserModel(
+              currentUser.usuario,
+              response.data.token,
+              response.data.refreshToken
+            );
+            this.setUserToLocalStorage(updated);
+            return response.data.token;
+          }
+          throw new Error(response.errors?.join(', ') ?? 'No se pudo refrescar la sesión');
+        })
+      );
   }
 
   getCurrentUser(): JwtUserModel {

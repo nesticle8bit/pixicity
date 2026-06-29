@@ -84,13 +84,13 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
       if (!this.postId) {
         this.title.setTitle(
-          `Crear post | Taringas - Inteligencia colectiva | Comunidad para Compartir Información`
+          `Crear post | Taringa - Inteligencia colectiva | Comunidad para Compartir Información`
         );
         return;
       }
 
       this.title.setTitle(
-        `Actualizar post | Taringas - Inteligencia colectiva | Comunidad para Compartir Información`
+        `Actualizar post | Taringa - Inteligencia colectiva | Comunidad para Compartir Información`
       );
       this.postService.getPostById(this.postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
         if (

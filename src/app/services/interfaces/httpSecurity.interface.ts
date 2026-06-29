@@ -16,6 +16,7 @@ export abstract class IHttpSecurityService {
   abstract setUserToLocalStorage(obj: any): any;
   abstract registerUser(user: UserModel): Observable<any>;
   abstract loginUser(user: any): Observable<any>;
+  abstract refreshAccessToken(): Observable<string>;
   abstract logout(): any;
   abstract changePassword(obj: any): Observable<any>;
   abstract updateUsuario(usuario: any): Observable<any>;
