@@ -14,8 +14,9 @@
 
 <section class="meta">
   <div class="metacentro">
-    <div class="float-start" id="puntos-agregados" [style.display]="addedPuntos ? 'block' : 'none'">Puntos
-    agregados!</div>
+    <div class="float-start" id="puntos-agregados" [style.display]="addedPuntos ? 'block' : 'none'">
+      Puntos agregados!
+    </div>
 
     @if (currentUser?.usuario?.userName != post?.usuario?.userName) {
       <div class="float-start" [style.display]="!addedPuntos ? 'block' : 'none'"

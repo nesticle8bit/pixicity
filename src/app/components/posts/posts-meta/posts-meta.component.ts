@@ -71,7 +71,10 @@ export class PostsMetaComponent implements OnInit {
       this.availablePuntos = [];
 
       if (response > 0) {
-        for (let index = 1; index < response + 1; index++) {
+        // La barra muestra como máximo 10 opciones, aunque el rango permita repartir más puntos al día.
+        const maximo = Math.min(response, 10);
+
+        for (let index = 1; index <= maximo; index++) {
           this.availablePuntos.push(index);
         }
       }
