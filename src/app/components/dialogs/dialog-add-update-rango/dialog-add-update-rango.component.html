@@ -39,6 +39,14 @@
 
             <div class="col-12 col-sm-12">
                 <div class="mb-3">
+                    <label class="form-label">Puntos por día</label>
+                    <input type="number" min="0" max="10000" class="form-control" formControlName="puntosDiarios" />
+                    <small class="text-muted">Puntos que un usuario con este rango puede repartir en votos cada día</small>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-12">
+                <div class="mb-3">
                     <label class="form-label">Color</label>
                     <input type="text" class="form-control" formControlName="color" />
                 </div>

@@ -54,7 +54,8 @@ export class DialogAddUpdateRangoComponent implements OnInit {
       icono: ['', Validators.required],
       tipo: [undefined, Validators.required],
       color: ['', Validators.required],
-      puntos: [undefined]
+      puntos: [undefined],
+      puntosDiarios: [10, [Validators.required, Validators.min(0), Validators.max(10000)]]
     });
   }
 
@@ -66,7 +67,8 @@ export class DialogAddUpdateRangoComponent implements OnInit {
         icono: this.data.icono,
         tipo: this.data.tipo.toString(),
         color: this.data.color,
-        puntos: this.data.puntos
+        puntos: this.data.puntos,
+        puntosDiarios: this.data.puntosDiarios ?? 10
       });
     }
   }
