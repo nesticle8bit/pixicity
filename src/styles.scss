@@ -3138,6 +3138,7 @@ span.ma_monitor_rango {
    anclan a la derecha y se limitan al ancho del viewport para que no se salgan
    fuera de pantalla y queden inaccesibles al click. */
 @media (max-width: 1199.98px) {
+
   .userInfoLogin .notificaciones-list,
   .userInfoLogin .menuver {
     left: auto !important;
@@ -3634,4 +3635,85 @@ span.ma_monitor_rango {
 
 .fs-11 {
   font-size: 11px;
+}
+
+// Listas de mensajes privados (recibidos y enviados)
+.msg-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.msg-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 10px 10px 4px;
+  border-bottom: 1px solid #eee;
+  border-left: 3px solid transparent;
+  transition: background 0.15s;
+
+  // Zebra: filas pares en gris, impares sin fondo (hover / no leído / seleccionado la sobrescriben).
+  &--alt {
+    background: #f3f3f3;
+  }
+
+  &:hover {
+    background: #f5f8ff;
+  }
+
+  &__avatar {
+    flex: 0 0 40px;
+
+    img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0; // permite que el texto se corte con ellipsis
+    cursor: pointer;
+    outline-offset: 2px;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__from {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__date {
+    flex: 0 0 auto;
+    font-size: 12px;
+    font-style: italic;
+  }
+
+  &__subject,
+  &__preview {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__preview {
+    color: #777;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .msg-item__avatar {
+    display: none;
+  }
 }

@@ -16,50 +16,36 @@
       }
 
       @if (mensajes.length > 0) {
-        <main>
-          <section class="table-responsive">
-            <table class="table table-sm table-striped table-hover">
-              <tbody>
-                @for (mensaje of mensajes; track mensaje; let i = $index) {
-                  <tr>
-                    <td>
-                      <div class="row">
-                        <div class="col-12 col-sm-12">
-                          <div class="row">
-                            <div class="col-12 col-sm-1">
-                              <app-user-avatar [avatar]="mensaje.usuarioA?.avatar"
-                                [userName]="mensaje.usuarioA?.userName" [height]="40">
-                              </app-user-avatar>
-                            </div>
-                            <div class="col-12 col-sm-11 cursor--pointer"
-                              [routerLink]="['/mensajes/conversacion/' + mensaje.id]">
-                              <a [routerLink]="['/perfil/' + mensaje.usuarioA?.userName]" [appUserPopover]="mensaje.usuarioA?.userName">
-                                {{'@'}}{{mensaje.usuarioA?.userName}}
-                              </a>
-                              &#8226; <strong>{{mensaje.asunto}}</strong>
-                              <br>
-                                <span class="text-muted"
-                                [innerHTML]="mensaje.contenido | truncate:[120]"></span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="text-end" width="150px">
-                        <small class="text-muted cursor--help"
-                          matTooltip="{{mensaje.fechaRegistro | date:'medium'}}">
-                          <i>
-                            {{mensaje.fechaRegistro | timeAgo}}
-                          </i>
-                        </small>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </section>
-          </main>
-        }
+        <ul class="msg-list">
+          @for (mensaje of mensajes; track mensaje.id; let even = $even) {
+            <li class="msg-item" [class.msg-item--alt]="even">
+              <app-user-avatar class="msg-item__avatar" [avatar]="mensaje.usuarioA?.avatar"
+                [userName]="mensaje.usuarioA?.userName" [height]="40">
+              </app-user-avatar>
+
+              <div class="msg-item__body" role="link" tabindex="0"
+                (click)="abrir(mensaje)" (keydown.enter)="abrir(mensaje)">
+                <div class="msg-item__head">
+                  <span class="msg-item__to text-muted">Para</span>
+                  <a class="msg-item__from" [routerLink]="['/perfil/' + mensaje.usuarioA?.userName]"
+                    [appUserPopover]="mensaje.usuarioA?.userName" (click)="$event.stopPropagation()">
+                    {{'@'}}{{mensaje.usuarioA?.userName}}
+                  </a>
+                  <i class="ti msg-item__status" [class.ti-checks]="mensaje.leido" [class.ti-check]="!mensaje.leido"
+                    [class.msg-item__status--read]="mensaje.leido"
+                    [matTooltip]="mensaje.leido ? 'Leído por el destinatario' : 'Aún sin leer'"></i>
+                  <span class="msg-item__date text-muted cursor--help"
+                    matTooltip="{{mensaje.fechaRegistro | date:'medium'}}">
+                    {{mensaje.fechaRegistro | timeAgo}}
+                  </span>
+                </div>
+                <div class="msg-item__subject">{{mensaje.asunto || '(Sin asunto)'}}</div>
+                <div class="msg-item__preview">{{preview(mensaje.contenido)}}</div>
+              </div>
+            </li>
+          }
+        </ul>
+      }
 
         @if (mensajes.length > 0) {
           <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"

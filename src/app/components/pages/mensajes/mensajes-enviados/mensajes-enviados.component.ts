@@ -6,6 +6,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: false,
@@ -25,7 +26,8 @@ export class MensajesEnviadosComponent implements OnInit {
     private mensajesService: IHttpMensajesService,
     public paginationService: PaginationService,
     private formBuilder: FormBuilder,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private router: Router
   ) {
     this.displaySections();
 
@@ -36,6 +38,23 @@ export class MensajesEnviadosComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  abrir(mensaje: any): void {
+    this.router.navigate(['/mensajes/conversacion', mensaje.id]);
+  }
+
+  // Vista previa en texto plano: el contenido es HTML y truncarlo cortaría etiquetas a la mitad.
+  preview(html: string, max = 140): string {
+    if (!html) {
+      return '';
+    }
+
+    const texto = (new DOMParser().parseFromString(html, 'text/html').body.textContent || '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    return texto.length > max ? texto.substring(0, max).trimEnd() + '…' : texto;
+  }
 
   displaySections(): void {
     this.displayService.setDisplay({
@@ -49,15 +68,15 @@ export class MensajesEnviadosComponent implements OnInit {
 
   getMensajes(): void {
     this.mensajesService.getMensajesEnviados({}).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
-      this.mensajes = response?.mensajes;
-      this.totalCount = response?.pagination?.totalCount;
+      this.mensajes = response?.mensajes ?? [];
+      this.totalCount = response?.pagination?.totalCount ?? 0;
     });
   }
 
   getMensajesEnviados(): void {
     this.mensajesService.getMensajesEnviados({}).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
-      this.mensajes = response?.mensajes;
-      this.totalCount = response?.pagination?.totalCount;
+      this.mensajes = response?.mensajes ?? [];
+      this.totalCount = response?.pagination?.totalCount ?? 0;
     });
   }
 

@@ -16,79 +16,63 @@
       }
 
       @if (mensajes.length > 0) {
-        <main>
-          <section class="mb-2">
-            <div class="row">
-              <div class="col-12 col-sm-1 my-auto mx-auto">
-                <!-- <mat-checkbox color="primary" class="ms-4"></mat-checkbox> -->
+        <div class="msg-toolbar">
+          <mat-checkbox color="primary" class="msg-toolbar__all"
+            [checked]="allSelected" [indeterminate]="someSelected"
+            (change)="toggleAll($event.checked)" aria-label="Seleccionar todos los mensajes">
+          </mat-checkbox>
+
+          <span class="msg-toolbar__info">
+            @if (selectedCount > 0) {
+              {{selectedCount}} seleccionado{{selectedCount === 1 ? '' : 's'}}
+            } @else {
+              @if (unreadCount > 0) {
+                <strong>{{unreadCount}}</strong> sin leer
+              } @else {
+                Todo leído
+              }
+            }
+          </span>
+
+          <button type="button" mat-flat-button color="warn" class="msg-toolbar__delete"
+            [disabled]="selectedCount < 1" (click)="deleteMensajes()"
+            matTooltip="Eliminar seleccionados" aria-label="Eliminar mensajes seleccionados">
+            <i class="ti ti-trash"></i>
+          </button>
+        </div>
+
+        <ul class="msg-list">
+          @for (mensaje of mensajes; track mensaje.id; let even = $even) {
+            <li class="msg-item" [class.msg-item--alt]="even" [class.msg-item--unread]="!mensaje.leido" [class.msg-item--selected]="mensaje.selected">
+              <mat-checkbox color="primary" class="msg-item__check" [(ngModel)]="mensaje.selected"
+                [attr.aria-label]="'Seleccionar mensaje de ' + mensaje.usuarioDe?.userName">
+              </mat-checkbox>
+
+              <app-user-avatar class="msg-item__avatar" [avatar]="mensaje.usuarioDe?.avatar"
+                [userName]="mensaje.usuarioDe?.userName" [height]="40">
+              </app-user-avatar>
+
+              <div class="msg-item__body" role="link" tabindex="0"
+                (click)="abrir(mensaje)" (keydown.enter)="abrir(mensaje)">
+                <div class="msg-item__head">
+                  @if (!mensaje.leido) {
+                    <span class="msg-item__dot" title="Sin leer"></span>
+                  }
+                  <a class="msg-item__from" [routerLink]="['/perfil/' + mensaje.usuarioDe?.userName]"
+                    [appUserPopover]="mensaje.usuarioDe?.userName" (click)="$event.stopPropagation()">
+                    {{'@'}}{{mensaje.usuarioDe?.userName}}
+                  </a>
+                  <span class="msg-item__date text-muted cursor--help"
+                    matTooltip="{{mensaje.fechaRegistro | date:'medium'}}">
+                    {{mensaje.fechaRegistro | timeAgo}}
+                  </span>
+                </div>
+                <div class="msg-item__subject">{{mensaje.asunto || '(Sin asunto)'}}</div>
+                <div class="msg-item__preview">{{preview(mensaje.contenido)}}</div>
               </div>
-              <div class="col-12 col-sm-11">
-                <!-- <button type="button" class="me-1" mat-flat-button color="primary" [matMenuTriggerFor]="menu">
-                <i class="ti ti-folder-open"></i> <i class="ti ti-sort-descending ms-1"></i>
-              </button> -->
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item>
-                  <mat-icon>add_circle</mat-icon> Crear carpeta
-                </button>
-                <mat-divider></mat-divider>
-                <button mat-menu-item>Mover a Carpeta</button>
-                <button mat-menu-item>Mover a MEGA</button>
-                <button mat-menu-item>Mover a Importantes</button>
-              </mat-menu>
-              <button type="button" mat-flat-button color="warn" (click)="deleteMensajes()">
-                <i class="ti ti-trash"></i>
-              </button>
-            </div>
-          </div>
-        </section>
-        <section class="table-responsive">
-          <table class="table table-sm table-striped table-hover">
-            <tbody>
-              @for (mensaje of mensajes; track mensaje; let i = $index) {
-                <tr>
-                  <td>
-                    <div class="row">
-                      <div class="col-12 col-sm-1">
-                        <div class="my-auto text-center">
-                          <mat-checkbox color="primary"
-                          [(ngModel)]="mensaje.selected"></mat-checkbox>
-                        </div>
-                      </div>
-                      <div class="col-12 col-sm-11">
-                        <div class="row">
-                          <div class="col-12 col-sm-1">
-                            <app-user-avatar [avatar]="mensaje.usuarioDe?.avatar"
-                              [userName]="mensaje.usuarioDe?.userName" [height]="40">
-                            </app-user-avatar>
-                          </div>
-                          <div class="col-12 col-sm-11 cursor--pointer"
-                            [routerLink]="['/mensajes/conversacion/' + mensaje.id]">
-                            <a [routerLink]="['/perfil/' + mensaje.usuarioDe?.userName]" [appUserPopover]="mensaje.usuarioDe?.userName">
-                              {{'@'}}{{mensaje.usuarioDe?.userName}}
-                            </a>
-                            &#8226; <strong>{{mensaje.asunto}}</strong>
-                            <br>
-                              <span class="text-muted"
-                              [innerHTML]="mensaje.contenido | truncate:[120]"></span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-end" width="150px">
-                      <small class="text-muted cursor--help"
-                        matTooltip="{{mensaje.fechaRegistro | date:'medium'}}">
-                        <i>
-                          {{mensaje.fechaRegistro | timeAgo}}
-                        </i>
-                      </small>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </section>
-        </main>
+            </li>
+          }
+        </ul>
       }
 
       @if (mensajes.length > 0) {
