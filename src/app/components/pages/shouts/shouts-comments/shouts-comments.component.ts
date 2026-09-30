@@ -56,7 +56,7 @@ export class ShoutsCommentsComponent implements OnInit {
     this.currentUser = this.securityService.getCurrentUser();
   }
 
-  // ---------------------------------------------------------------- Carga / árbol
+  // - Carga / árbol
 
   loadComentarios(): void {
     this.perfilService.getComentariosByShoutId(this._shout.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data: any[]) => {
@@ -122,7 +122,7 @@ export class ShoutsCommentsComponent implements OnInit {
     return this.comentarios?.length ?? 0;
   }
 
-  // ---------------------------------------------------------------- Permisos / estado
+  // - Permisos / estado
 
   get logueado(): boolean {
     return !!this.currentUser?.usuario;
@@ -159,7 +159,7 @@ export class ShoutsCommentsComponent implements OnInit {
     c._mostrar = true;
   }
 
-  // ---------------------------------------------------------------- Acciones
+  // - Acciones
 
   enviarComentario(): void {
     if (!this.nuevoComentario?.trim() || this.enviando) return;
@@ -303,7 +303,7 @@ export class ShoutsCommentsComponent implements OnInit {
     });
   }
 
-  // ---------------------------------------------------------------- Helpers
+  // - Helpers
 
   private crearLocal(id: number, comentario: string, parentId: number | null): any {
     return {

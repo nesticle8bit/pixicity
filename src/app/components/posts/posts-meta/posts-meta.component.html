@@ -1,9 +1,8 @@
 @if (savedToFavorites.display) {
-  <div class="mb-3" [@enterAnimation]
-    [ngClass]="{'nada-verde': savedToFavorites.type, 'nada-rojo': !savedToFavorites.type}"
-    >
-    {{savedToFavorites.message}}
-  </div>
+<div class="mb-3" [@enterAnimation]
+  [ngClass]="{'nada-verde': savedToFavorites.type, 'nada-rojo': !savedToFavorites.type}">
+  {{savedToFavorites.message}}
+</div>
 }
 
 <section class="nels">
@@ -19,16 +18,15 @@
     </div>
 
     @if (currentUser?.usuario?.userName != post?.usuario?.userName) {
-      <div class="float-start" [style.display]="!addedPuntos ? 'block' : 'none'"
-        >
-        <div class="barpuntos">
-          @for (punto of availablePuntos; track punto) {
-            <a href="javascript:void(0)" (click)="votarPost(punto)">
-              {{punto}}
-            </a>
-          }
-        </div>
+    <div class="float-start" [style.display]="!addedPuntos ? 'block' : 'none'">
+      <div class="barpuntos">
+        @for (punto of availablePuntos; track punto) {
+        <a href="javascript:void(0)" (click)="votarPost(punto)">
+          {{punto}}
+        </a>
+        }
       </div>
+    </div>
     }
 
     <div class="float-end">
@@ -40,35 +38,35 @@
 
   <div class="metabottom">
     @if (currentUser?.usuario && currentUser?.usuario?.userName != post?.usuario?.userName) {
-      <div class="botones float-start py-2">
-        <li>
-          <a (click)="recomendarPost(post.id)" matTooltip="Recomendar post" class="tetese">P!</a>
-        </li>
-        <li>
-          <a href="javascript:void(0)" (click)="agregarFavorito(post.id)" matTooltip="Agregar favoritos">
-            <i class="ti ti-star favoritos"></i>
-          </a>
-        </li>
-        <li>
-          <a href="javascript:void(0)" (click)="denunciarPost()">
-            <i class="ti ti-ban denunciar"></i> Denunciar
-          </a>
-        </li>
-        @if (post?.seguirPost) {
-          <li>
-            <a href="javascript:void(0)" class="unfollow_post" (click)="seguirPost()">
-              <i class="ti ti-eye dejar-seguir"></i> Dejar de seguir
-            </a>
-          </li>
-        }
-        @if (!post?.seguirPost) {
-          <li>
-            <a href="javascript:void(0)" class="follow_post" (click)="seguirPost()">
-              <i class="ti ti-ban seguir"></i> Seguir Post
-            </a>
-          </li>
-        }
-      </div>
+    <div class="botones float-start py-2">
+      <li>
+        <a (click)="recomendarPost(post.id)" matTooltip="Recomendar post" class="tetese">P!</a>
+      </li>
+      <li>
+        <a href="javascript:void(0)" (click)="agregarFavorito(post.id)" matTooltip="Agregar favoritos">
+          <i class="ti ti-star favoritos"></i>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)" (click)="denunciarPost()">
+          <i class="ti ti-ban denunciar"></i> Denunciar
+        </a>
+      </li>
+      @if (post?.seguirPost) {
+      <li>
+        <a href="javascript:void(0)" class="unfollow_post" (click)="seguirPost()">
+          <i class="ti ti-eye dejar-seguir"></i> Dejar de seguir
+        </a>
+      </li>
+      }
+      @if (!post?.seguirPost) {
+      <li>
+        <a href="javascript:void(0)" class="follow_post" (click)="seguirPost()">
+          <i class="ti ti-ban seguir"></i> Seguir Post
+        </a>
+      </li>
+      }
+    </div>
     }
 
     <div class="float-end py-2">

@@ -9,7 +9,7 @@ $alert: #c0392b;
   display: block;
 }
 
-/* ---------- barra ---------- */
+/* - barra - */
 .adm-nav {
   position: sticky;
   top: 1rem;
@@ -21,7 +21,7 @@ $alert: #c0392b;
   &::-webkit-scrollbar { width: 6px; }
   &::-webkit-scrollbar-thumb { background: #dfe3e8; border-radius: 3px; }
 
-  /* ---------- buscador ---------- */
+  /* - buscador - */
   &__search {
     display: flex;
     align-items: center;
@@ -68,7 +68,7 @@ $alert: #c0392b;
     }
   }
 
-  /* ---------- grupos ---------- */
+  /* - grupos - */
   &__group + &__group {
     margin-top: .35rem;
   }
@@ -113,7 +113,7 @@ $alert: #c0392b;
     &--closed { transform: rotate(-90deg); }
   }
 
-  /* ---------- enlaces ---------- */
+  /* - enlaces - */
   &__list {
     list-style: none;
     margin: .15rem 0 .5rem;
@@ -185,7 +185,7 @@ $alert: #c0392b;
     color: $muted;
   }
 
-  /* ---------- botón móvil ---------- */
+  /* - botón móvil - */
   &__toggle {
     display: none;
   }

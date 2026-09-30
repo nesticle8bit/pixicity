@@ -1,7 +1,7 @@
 $accent: #1976d2;
 $accent-soft: rgba(25, 118, 210, 0.1);
 
-// ---------- Header con gradiente ----------
+// - Header con gradiente -
 .pg-header {
   display: flex;
   align-items: center;
@@ -42,7 +42,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
   }
 }
 
-// ---------- Cuerpo ----------
+// - Cuerpo -
 .pg-content {
   padding: 8px 28px 20px !important;
   max-height: 70vh;
@@ -61,7 +61,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
   }
 }
 
-// ---------- Grid de dos columnas ----------
+// - Grid de dos columnas -
 .pg-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -73,7 +73,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
   }
 }
 
-// ---------- Campo (icono + cuerpo) ----------
+// - Campo (icono + cuerpo) -
 .pg-field {
   display: flex;
   gap: 16px;
@@ -118,7 +118,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
   }
 }
 
-// ---------- Inputs modernos ----------
+// - Inputs modernos -
 .pg-input {
   width: 100%;
   border: 1px solid #e2e6ea;
@@ -157,7 +157,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
   gap: 10px;
 }
 
-// ---------- Selector de divisores ----------
+// - Selector de divisores -
 .divider-picker {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
@@ -215,7 +215,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
   }
 }
 
-// ---------- Footer ----------
+// - Footer -
 .pg-actions {
   padding: 14px 28px !important;
   border-top: 1px solid #eef0f2;

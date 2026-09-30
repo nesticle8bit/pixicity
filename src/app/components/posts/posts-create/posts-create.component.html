@@ -1,29 +1,33 @@
 <div class="cp container container--home">
   <form [formGroup]="formGroup" (ngSubmit)="publicarPost()">
+    <!-- Barra superior: estado + acciones -->
     <header class="cp-bar">
-      <div class="cp-bar__title">
-        <span class="cp-bar__icon"><i class="ti ti-pencil-plus"></i></span>
-        <div>
-          <h1>{{ postId ? 'Editar post' : 'Crear post' }}</h1>
-          <p>{{ postId ? 'Actualiza tu publicación' : 'Comparte algo con la comunidad' }}</p>
-        </div>
+      <div class="cp-bar__state">
+        <span class="cp-bar__badge" [class.cp-bar__badge--edit]="postId">
+          <i class="ti" [class.ti-pencil-plus]="!postId" [class.ti-edit]="postId"></i>
+          {{ postId ? 'Editando' : 'Nuevo post' }}
+        </span>
+
+        @if (esBorrador) {
+        <span class="cp-bar__saved">
+          <i class="ti ti-circle-check"></i> Borrador guardado · {{ today | date:'hh:mm a' }}
+        </span>
+        }
       </div>
 
       <div class="cp-bar__actions">
-        <button type="button" mat-stroked-button (click)="previsualizar()"
-          [disabled]="!formGroup.value?.contenido || formGroup.value?.contenido === '<p></p>'">
-          <i class="ti ti-eye"></i> Previsualizar
-        </button>
+        <!-- <button type="button" mat-stroked-button (click)="previsualizar()" [disabled]="!hasContenido">
+          <i class="ti ti-eye"></i> <span class="cp-hide-sm">Previsualizar</span>
+        </button> -->
 
         @if (formGroup.value?.esBorrador || !formGroup.value?.id) {
         <button type="button" mat-flat-button class="mat-gray" (click)="guardarBorrador()"
           [disabled]="formGroup.invalid">
-          <i class="ti ti-device-floppy"></i> Borrador
+          <i class="ti ti-device-floppy"></i> <span class="cp-hide-sm">Borrador</span>
         </button>
         }
 
-        <button type="submit" mat-flat-button class="mat-success" [disabled]="formGroup.invalid"
-          [title]="formGroup.invalid ? 'Completa título, contenido y categoría' : ''">
+        <button type="submit" mat-flat-button class="mat-success" [disabled]="formGroup.invalid">
           @if (!postId || formGroup.value.esBorrador) {
           <i class="ti ti-rocket"></i> Publicar
           } @else {
@@ -33,59 +37,67 @@
       </div>
     </header>
 
-    @if (esBorrador) {
-    <div class="cp-saved">
-      <i class="ti ti-circle-check"></i>
-      Borrador guardado a las {{ today | date:'hh:mm:ss a' }}
-    </div>
-    }
+    <div class="cp-layout">
+      <!-- Columna de escritura -->
+      <main class="cp-write">
+        <div class="cp-title">
+          <input type="text" class="cp-title__input" formControlName="titulo" maxlength="80"
+            placeholder="Escribe un título que atrape…" aria-label="Título del post" (blur)="onTituloBlur()"
+            (keydown.enter)="$event.preventDefault(); onTituloBlur()" />
+          <span class="cp-title__count" [class.cp-title__count--warn]="(formGroup.value?.titulo?.length || 0) >= 70">
+            {{ formGroup.value?.titulo?.length || 0 }}/80
+          </span>
+        </div>
 
-    <div class="cp-grid">
-      <main class="cp-main">
-        <section class="cp-card">
-          <div class="cp-field">
-            <div class="cp-field__head">
-              <label class="cp-label">Título <span class="cp-req">*</span></label>
-              <span class="cp-counter" [class.cp-counter--warn]="(formGroup.value?.titulo?.length || 0) >= 70">
-                {{ formGroup.value?.titulo?.length || 0 }}/80
-              </span>
-            </div>
-            <input type="text" class="cp-title-input" formControlName="titulo" maxlength="80"
-              placeholder="Escribe un título atractivo…" />
+        @if (relatedPosts.length > 0) {
+        <div class="cp-repost">
+          <div class="cp-repost__head">
+            <i class="ti ti-alert-triangle"></i>
+            Evita los re-posts: encontramos títulos similares
           </div>
-
-          @if (relatedPosts.length > 0) {
-          <div class="cp-repost">
-            <div class="cp-repost__head">
-              <i class="ti ti-alert-triangle"></i>
-              Evita los re-posts: encontramos títulos similares
-            </div>
-            @for (post of relatedPosts; track post.id) {
-            <article class="cp-repost__item">
-              <app-post-url-link [post]="{ id: post.id, url: post.url, titulo: post.titulo, truncate: 70 }"
-                [categoria]="{ icono: post.categoria.icono, nombre: post.categoria.nombre, seo: post.categoria.seo }"
-                [target]="'_blank'">
-              </app-post-url-link>
-            </article>
-            }
-          </div>
+          @for (post of relatedPosts; track post.id) {
+          <article class="cp-repost__item">
+            <app-post-url-link [post]="{ id: post.id, url: post.url, titulo: post.titulo, truncate: 70 }"
+              [categoria]="{ icono: post.categoria.icono, nombre: post.categoria.nombre, seo: post.categoria.seo }"
+              [target]="'_blank'">
+            </app-post-url-link>
+          </article>
           }
-        </section>
+        </div>
+        }
 
-        <section class="cp-card">
-          <div class="cp-card__head">
-            <span class="cp-card__head-title">
-              <i class="ti ti-article"></i> Contenido <span class="cp-req">*</span>
-            </span>
+        <div class="cp-quick">
+          <div class="cp-quick__cat">
+            <label class="cp-quick__label"><i class="ti ti-category"></i> Categoría <span
+                class="cp-req">*</span></label>
+            <app-select [items]="categorias" bindLabel="nombre" bindValue="id" formControlName="categoriaId"
+              placeholder="Elige una categoría">
+              <ng-template appSelectLabel let-item="item">
+                <img class="image-middle" style="margin-right: 4px;" height="15" width="15"
+                  [src]="'/assets/images/categorias/' + item.icono" alt="" aria-hidden="true" loading="lazy" />
+                {{ item.nombre }}
+              </ng-template>
+              <ng-template appSelectOption let-item="item">
+                <img class="image-middle" style="margin-right: 4px;" height="15" width="15"
+                  [src]="'/assets/images/categorias/' + item.icono" alt="" aria-hidden="true" loading="lazy" />
+                {{ item.nombre }}
+              </ng-template>
+            </app-select>
+          </div>
+        </div>
+
+        <section class="cp-editor">
+          <div class="cp-editor__head">
+            <span><i class="ti ti-article"></i> Contenido <span class="cp-req">*</span></span>
             <button type="button" class="cp-generator-btn" (click)="postGenerator()">
               <i class="ti ti-wand"></i> Usar Generador
             </button>
           </div>
 
           <app-rich-editor formControlName="contenido"
-            [placeholder]="'Ingresa el contenido de tu post…'"></app-rich-editor>
+            [placeholder]="'Cuenta tu historia, comparte tu aporte…'"></app-rich-editor>
 
-          @if (!formGroup.value?.contenido || formGroup.value?.contenido === '<p></p>') {
+          @if (!hasContenido) {
           <p class="cp-empty-hint">
             <i class="ti ti-bulb"></i>
             ¿Sin saber por dónde empezar? Prueba el <a (click)="postGenerator()">Generador de Posts</a> para armar la
@@ -95,39 +107,42 @@
         </section>
       </main>
 
-      <aside class="cp-side">
-        <section class="cp-card">
-          <div class="cp-card__head">
-            <span class="cp-card__head-title"><i class="ti ti-category"></i> Categoría <span
-                class="cp-req">*</span></span>
+      <!-- Panel lateral -->
+      <aside class="cp-rail">
+        <!-- Progreso -->
+        <section class="cp-card cp-progress">
+          <div class="cp-progress__top">
+            <span class="cp-card__title"><i class="ti ti-list-check"></i> Listo para publicar</span>
+            <strong class="cp-progress__pct" [class.cp-progress__pct--done]="progreso === 100">{{ progreso }}%</strong>
           </div>
-          <app-select [items]="categorias" bindLabel="nombre" bindValue="id" formControlName="categoriaId"
-            placeholder="Elige una categoría">
-            <ng-template appSelectLabel let-item="item">
-              <img class="image-middle" style="margin-right: 4px;" height="15" width="15"
-                [src]="'/assets/images/categorias/' + item.icono" alt="" aria-hidden="true"loading="lazy"/>
-              {{ item.nombre }}
-            </ng-template>
-            <ng-template appSelectOption let-item="item">
-              <img class="image-middle" style="margin-right: 4px;" height="15" width="15"
-                [src]="'/assets/images/categorias/' + item.icono" alt="" aria-hidden="true"loading="lazy"/>
-              {{ item.nombre }}
-            </ng-template>
-          </app-select>
+          <div class="cp-progress__bar" role="progressbar" [attr.aria-valuenow]="progreso" aria-valuemin="0"
+            aria-valuemax="100">
+            <span [style.width.%]="progreso" [class.cp-progress__bar--done]="progreso === 100"></span>
+          </div>
+          <ul class="cp-checks">
+            @for (paso of pasos; track paso.label) {
+            <li [class.cp-checks__ok]="paso.ok">
+              <i class="ti" [class.ti-circle-check]="paso.ok" [class.ti-circle]="!paso.ok"></i>
+              {{ paso.label }}
+            </li>
+            }
+          </ul>
         </section>
 
+        <!-- Etiquetas -->
         <section class="cp-card">
           <div class="cp-card__head">
-            <span class="cp-card__head-title"><i class="ti ti-tags"></i> Etiquetas</span>
-            <span class="cp-card__head-badge" [class.cp-card__head-badge--ok]="etiquetas.length >= 4">
-              {{ etiquetas.length }}/4
-            </span>
+            <span class="cp-card__title"><i class="ti ti-tags"></i> Etiquetas</span>
+            <span class="cp-badge" [class.cp-badge--ok]="etiquetas.length >= 4">{{ etiquetas.length }}/4</span>
           </div>
 
           <div class="tags-input-wrapper">
             <mat-chip-grid #chipList>
               @for (tag of etiquetas; track tag) {
-              <mat-chip-row (removed)="removeTag(tag)">
+              <mat-chip-row (removed)="removeTag(tag)" [class.cp-tag--auto]="autoTags.has(tag)">
+                @if (autoTags.has(tag)) {
+                <i class="ti ti-sparkles cp-tag__spark" title="Sugerida a partir del título"></i>
+                }
                 {{ tag }}
                 <button matChipRemove><mat-icon>cancel</mat-icon></button>
               </mat-chip-row>
@@ -137,18 +152,32 @@
                 (matChipInputTokenEnd)="addTag($event)" />
             </mat-chip-grid>
           </div>
-          <p class="cp-hint">Ingresa <b>al menos 4 etiquetas</b> distintas (Enter o coma) que describan tu post.</p>
+
+          <div class="cp-tags-foot">
+            <p class="cp-hint">
+              @if (autoTags.size > 0) {
+              <i class="ti ti-sparkles"></i> Sugeridas desde tu título. Quita o edita las que no apliquen.
+              } @else {
+              Ingresa <b>al menos 4 etiquetas</b> (Enter o coma) que describan tu post.
+              }
+            </p>
+            <button type="button" class="cp-link-btn" (click)="regenerarEtiquetas()"
+              [disabled]="!(formGroup.value?.titulo || '').trim()">
+              <i class="ti ti-refresh"></i> Sugerir del título
+            </button>
+          </div>
         </section>
 
+        <!-- Opciones -->
         <section class="cp-card">
           <div class="cp-card__head">
-            <span class="cp-card__head-title"><i class="ti ti-adjustments"></i> Opciones</span>
+            <span class="cp-card__title"><i class="ti ti-adjustments"></i> Opciones</span>
           </div>
 
           <div class="cp-opt">
             <label class="cp-label">¿Quiénes pueden comentar?</label>
-            <app-select [items]="quienPuedeComentar" bindLabel="label" bindValue="value" formControlName="sinComentarios"
-              [clearable]="false"></app-select>
+            <app-select [items]="quienPuedeComentar" bindLabel="label" bindValue="value"
+              formControlName="sinComentarios" [clearable]="false"></app-select>
           </div>
 
           <div class="cp-toggle">
@@ -157,17 +186,15 @@
           </div>
         </section>
 
-        <section class="cp-card cp-tips">
-          <div class="cp-card__head">
-            <span class="cp-card__head-title"><i class="ti ti-bulb"></i> Tips para un buen post</span>
-          </div>
+        <details class="cp-card cp-tips">
+          <summary><i class="ti ti-bulb"></i> Tips para un buen post</summary>
           <ul class="cp-tips__list">
             <li>Usa un título claro y descriptivo.</li>
             <li>Agrega imágenes para hacerlo más atractivo.</li>
             <li>Separa el contenido en secciones.</li>
             <li>Incluye etiquetas relevantes para que te encuentren.</li>
           </ul>
-        </section>
+        </details>
       </aside>
     </div>
   </form>

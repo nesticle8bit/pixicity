@@ -12,7 +12,7 @@ $alert: #c0392b;
   color: $ink;
 }
 
-/* ---------- cabecera ---------- */
+/* - cabecera - */
 .adm-head {
   display: flex;
   align-items: flex-start;
@@ -97,7 +97,7 @@ $alert: #c0392b;
   font-size: .85rem;
 }
 
-/* ---------- rejillas ---------- */
+/* - rejillas - */
 .adm-grid {
   display: grid;
   gap: 1rem;
@@ -125,7 +125,7 @@ $alert: #c0392b;
   .adm-grid--kpi { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* ---------- tarjeta base ---------- */
+/* - tarjeta base - */
 .adm-card {
   position: relative;
   padding: 1rem 1.1rem;
@@ -166,7 +166,7 @@ $alert: #c0392b;
   }
 }
 
-/* ---------- KPI ---------- */
+/* - KPI - */
 .adm-kpi {
   display: block;
   overflow: hidden;
@@ -260,7 +260,7 @@ $alert: #c0392b;
   &--down { color: $alert; }
 }
 
-/* ---------- cola de moderación ---------- */
+/* - cola de moderación - */
 .adm-queue {
   list-style: none;
   margin: 0;
@@ -334,7 +334,7 @@ $alert: #c0392b;
   }
 }
 
-/* ---------- gráfico de barras ---------- */
+/* - gráfico de barras - */
 .adm-legend {
   display: flex;
   align-items: center;
@@ -396,7 +396,7 @@ $alert: #c0392b;
   }
 }
 
-/* ---------- listas ---------- */
+/* - listas - */
 .adm-list {
   list-style: none;
   margin: 0;
@@ -461,7 +461,7 @@ $alert: #c0392b;
   object-fit: cover;
 }
 
-/* ---------- top semana ---------- */
+/* - top semana - */
 .adm-top {
   list-style: none;
   margin: 0;
@@ -509,7 +509,7 @@ $alert: #c0392b;
   }
 }
 
-/* ---------- online ---------- */
+/* - online - */
 .adm-online {
   &__value {
     display: flex;
@@ -554,7 +554,7 @@ $alert: #c0392b;
   }
 }
 
-/* ---------- bitácora ---------- */
+/* - bitácora - */
 .adm-feed {
   list-style: none;
   margin: 0;
@@ -596,7 +596,7 @@ $alert: #c0392b;
   }
 }
 
-/* ---------- varios ---------- */
+/* - varios - */
 .adm-pill {
   padding: .12rem .45rem;
   border-radius: 20px;
@@ -668,7 +668,7 @@ $alert: #c0392b;
   color: $muted;
 }
 
-/* ---------- esqueleto de carga ---------- */
+/* - esqueleto de carga - */
 .adm-skeleton {
   min-height: 118px;
   border-color: transparent;

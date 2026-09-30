@@ -16,6 +16,19 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Title } from '@angular/platform-browser';
 import { PostsGeneratorComponent } from '../posts-generator/posts-generator.component';
 
+// Palabras vacías (es/en) que no sirven como etiqueta.
+const STOP_WORDS = new Set([
+  'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'lo', 'al', 'del', 'de', 'y', 'e', 'o', 'u', 'ni', 'que',
+  'en', 'con', 'sin', 'por', 'para', 'pero', 'sino', 'como', 'cómo', 'cuando', 'cuándo', 'donde', 'dónde', 'qué',
+  'quién', 'cuál', 'este', 'esta', 'esto', 'estos', 'estas', 'ese', 'esa', 'eso', 'esos', 'esas', 'aquel', 'aquella',
+  'mi', 'tu', 'su', 'sus', 'mis', 'tus', 'nos', 'les', 'ser', 'son', 'era', 'fue', 'hay', 'han', 'has', 'hasta',
+  'desde', 'entre', 'sobre', 'tras', 'ante', 'bajo', 'muy', 'más', 'mas', 'menos', 'ya', 'sí', 'no', 'todo', 'todos',
+  'toda', 'todas', 'cada', 'otro', 'otra', 'otros', 'otras', 'algo', 'tan', 'tanto', 'así', 'aquí', 'allí', 'hoy',
+  'the', 'and', 'for', 'with', 'from', 'that', 'this', 'are', 'was', 'you', 'your', 'how', 'what', 'why',
+]);
+
+const MAX_AUTO_TAGS = 6;
+
 @Component({
   standalone: false,
   selector: 'app-posts-create',
@@ -44,6 +57,10 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   public today = new Date();
   public separatorKeysCodes = [ENTER, COMMA] as const;
   public relatedPosts: any[] = [];
+
+  // Etiquetas generadas a partir del título (se reemplazan si el título cambia; las manuales no se tocan).
+  public autoTags = new Set<string>();
+  private lastAutoTitulo = '';
 
   constructor(
     private parametrosService: IHttpParametrosService,
@@ -116,7 +133,89 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {}
 
+  // - Progreso -
+  get hasContenido(): boolean {
+    const html: string = this.formGroup.value?.contenido || '';
+    return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim().length > 0 || /<(img|iframe|video)/i.test(html);
+  }
+
+  get pasos(): { label: string; ok: boolean }[] {
+    return [
+      { label: 'Título', ok: (this.formGroup.value?.titulo || '').trim().length >= 3 },
+      { label: 'Categoría', ok: !!this.formGroup.value?.categoriaId },
+      { label: 'Contenido', ok: this.hasContenido },
+      { label: 'Al menos 4 etiquetas', ok: this.etiquetas.length >= 4 },
+    ];
+  }
+
+  get progreso(): number {
+    const pasos = this.pasos;
+    return Math.round((pasos.filter((p) => p.ok).length / pasos.length) * 100);
+  }
+
+  // - Etiquetas automáticas -
+  /** Al terminar de escribir el título, sugiere etiquetas a partir de sus palabras clave. */
+  onTituloBlur(): void {
+    const titulo = (this.formGroup.value?.titulo || '').trim();
+
+    // Un post ya publicado conserva sus etiquetas: sólo se sugiere en posts nuevos, borradores o sin etiquetas.
+    const puedeSugerir = !this.postId || this.formGroup.value?.esBorrador || this.etiquetas.length === 0;
+
+    if (!puedeSugerir || titulo.length < 3 || titulo === this.lastAutoTitulo) {
+      return;
+    }
+
+    this.aplicarEtiquetasAutomaticas(titulo);
+  }
+
+  /** Botón "Sugerir del título": fuerza la sugerencia aunque el título no haya cambiado. */
+  regenerarEtiquetas(): void {
+    const titulo = (this.formGroup.value?.titulo || '').trim();
+
+    if (titulo.length >= 3) {
+      this.aplicarEtiquetasAutomaticas(titulo);
+    }
+  }
+
+  private aplicarEtiquetasAutomaticas(titulo: string): void {
+    this.lastAutoTitulo = titulo;
+
+    // Quita las automáticas anteriores (si siguen ahí) y conserva las manuales.
+    this.etiquetas = this.etiquetas.filter((tag: string) => !this.autoTags.has(tag));
+    this.autoTags.clear();
+
+    const existentes = new Set(this.etiquetas.map((tag: string) => tag.toLowerCase()));
+
+    for (const tag of this.extraerPalabrasClave(titulo)) {
+      if (!existentes.has(tag)) {
+        this.etiquetas.push(tag);
+        this.autoTags.add(tag);
+      }
+    }
+
+    this.formGroup.patchValue({ etiquetas: this.etiquetas });
+  }
+
+  /** Palabras clave del título: sin stop-words, únicas, las más largas (más específicas) hasta el máximo. */
+  private extraerPalabrasClave(titulo: string): string[] {
+    const palabras = (titulo.toLowerCase().match(/[\p{L}\p{N}]+/gu) || []).filter(
+      (palabra) => palabra.length >= 3 && !STOP_WORDS.has(palabra)
+    );
+
+    const unicas = Array.from(new Set(palabras));
+
+    return unicas
+      .map((palabra, orden) => ({ palabra, orden }))
+      .sort((a, b) => b.palabra.length - a.palabra.length)
+      .slice(0, MAX_AUTO_TAGS)
+      .sort((a, b) => a.orden - b.orden)
+      .map((x) => x.palabra);
+  }
+
   setPostOnEdit(post: any): void {
+    // No pisar con sugerencias automáticas las etiquetas ya guardadas del post.
+    this.lastAutoTitulo = (post.titulo || '').trim();
+
     this.etiquetas = post.etiquetas
       .split(',')
       .map((tag: string) => tag.trim())
@@ -137,7 +236,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
   addTag(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-    if (value) {
+    if (value && !this.etiquetas.some((tag: string) => tag.toLowerCase() === value.toLowerCase())) {
       this.etiquetas.push(value);
       this.formGroup.patchValue({ etiquetas: this.etiquetas });
     }
@@ -148,6 +247,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     const index = this.etiquetas.indexOf(tag);
     if (index >= 0) {
       this.etiquetas.splice(index, 1);
+      this.autoTags.delete(tag);
       this.formGroup.patchValue({ etiquetas: this.etiquetas });
     }
   }

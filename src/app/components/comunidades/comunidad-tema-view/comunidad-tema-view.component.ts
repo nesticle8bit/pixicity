@@ -157,7 +157,7 @@ export class ComunidadTemaViewComponent implements OnInit {
     });
   }
 
-  // ---------------------------------------------------------------- Árbol
+  // - Árbol
 
   construirArbol(): void {
     const flat: any[] = this.tema?.comentarios ?? [];
@@ -218,7 +218,7 @@ export class ComunidadTemaViewComponent implements OnInit {
     return this.tema?.comentarios?.length ?? 0;
   }
 
-  // ---------------------------------------------------------------- Permisos
+  // - Permisos
 
   get logueado(): boolean {
     return !!this.currentUser?.usuario;
@@ -266,7 +266,7 @@ export class ComunidadTemaViewComponent implements OnInit {
     c._mostrar = true;
   }
 
-  // ---------------------------------------------------------------- Tema
+  // - Tema
 
   eliminar(): void {
     if (!confirm('¿Eliminar este tema? Esta acción no se puede deshacer.')) return;
@@ -308,7 +308,7 @@ export class ComunidadTemaViewComponent implements OnInit {
     });
   }
 
-  // ---------------------------------------------------------------- Comentarios
+  // - Comentarios
 
   comentar(): void {
     if (!this.nuevoComentario.trim() || this.enviando) return;
@@ -442,7 +442,7 @@ export class ComunidadTemaViewComponent implements OnInit {
     });
   }
 
-  // ---------------------------------------------------------------- Helpers
+  // - Helpers
 
   private crearComentarioLocal(id: number, contenido: string, parentId: number | null): any {
     return {
