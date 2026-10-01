@@ -19,6 +19,38 @@ img {
     }
 }
 
+.chat-wrap {
+    position: relative;
+}
+
+.chat-more {
+    align-self: center;
+    border: 0;
+    background: transparent;
+    color: #0d6efd;
+    font-size: .75rem;
+    cursor: pointer;
+
+    &:disabled {
+        color: #888;
+        cursor: default;
+    }
+}
+
+.chat-new {
+    position: absolute;
+    right: 1rem;
+    bottom: .8rem;
+    border: 0;
+    border-radius: 999px;
+    padding: .3rem .8rem;
+    background: #0d6efd;
+    color: #fff;
+    font-size: .75rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+    cursor: pointer;
+}
+
 .chat-body {
     height: 55vh;
     min-height: 300px;
@@ -62,18 +94,76 @@ img {
         border-radius: 14px 14px 4px 14px;
     }
 
+    position: relative;
+
     &__content {
         ::ng-deep p:last-child {
             margin-bottom: 0;
         }
+
+        ::ng-deep img {
+            max-width: 100%;
+            max-height: 320px;
+            border-radius: 8px;
+            display: block;
+        }
     }
 
-    &__time {
+    &__delete {
+        position: absolute;
+        top: 2px;
+        right: 4px;
+        border: 0;
+        background: transparent;
+        color: #999;
+        font-size: .8rem;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    &:hover &__delete,
+    &__delete:focus-visible {
+        opacity: 1;
+    }
+
+    &__meta {
         display: block;
         text-align: right;
         font-size: .68rem;
         color: #888;
         margin-top: 2px;
+    }
+
+    &__status {
+        margin-left: 2px;
+        font-size: .85rem;
+        vertical-align: middle;
+
+        &--read {
+            color: #0d6efd;
+        }
+    }
+}
+
+.chat-typing {
+    min-height: 1.2rem;
+    padding: .2rem .5rem 0;
+    font-size: .75rem;
+    font-style: italic;
+    color: #888;
+}
+
+.chat-attach {
+    flex: 0 0 auto;
+    border: 0;
+    background: transparent;
+    font-size: 1.4rem;
+    color: #666;
+    cursor: pointer;
+
+    &:disabled {
+        opacity: .4;
+        cursor: default;
     }
 }
 

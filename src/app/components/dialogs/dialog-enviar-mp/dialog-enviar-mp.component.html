@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>
-  Enviar Mensaje Personal
+  Mensaje Nuevo
 </h2>
 
 <form [formGroup]="formGroup" (ngSubmit)="enviarMP()">
@@ -19,17 +19,10 @@
           </mat-form-field>
         </div>
 
-        <div class="mb-3">
-          <mat-form-field class="col-12">
-            <mat-label>Asunto</mat-label>
-            <input matInput formControlName="asunto" />
-          </mat-form-field>
-        </div>
-
         <div class="mb-2">
-          <label>Contenido</label>
+          <label>Mensaje</label>
           <app-rich-editor formControlName="contenido"
-            [placeholder]="'Ingresa el Contenido'"></app-rich-editor>
+            [placeholder]="'Escribe tu mensaje'"></app-rich-editor>
         </div>
 
         <!-- <app-re-captcha (response)="captchaResponse($event)"></app-re-captcha> -->

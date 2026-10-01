@@ -30,7 +30,6 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { AuthLoggedUserGuard } from './shared/guards/auth.loggedUser.guard';
 import { PaginasComponent } from './components/pages/paginas/paginas.component';
 import { MensajesConversacionComponent } from './components/pages/mensajes/mensajes-conversacion/mensajes-conversacion.component';
-import { MensajesEnviadosComponent } from './components/pages/mensajes/mensajes-enviados/mensajes-enviados.component';
 
 const routes: Routes = [
   { path: '', component: SectionHomeForumComponent },
@@ -79,14 +78,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   { path: 'mensajes', component: MensajesComponent, canActivate: [AuthGuard] },
+  // El chat ya muestra ambos sentidos: las antiguas vistas "enviados" y "carpeta" redirigen a la bandeja.
+  { path: 'mensajes/enviados', redirectTo: 'mensajes', pathMatch: 'full' },
+  { path: 'mensajes/carpeta/:nombre', redirectTo: 'mensajes', pathMatch: 'full' },
   {
-    path: 'mensajes/enviados',
-    component: MensajesEnviadosComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'mensajes/carpeta/:nombre',
-    component: MensajesComponent,
+    path: 'mensajes/chat/:userName',
+    component: MensajesConversacionComponent,
     canActivate: [AuthGuard],
   },
   {

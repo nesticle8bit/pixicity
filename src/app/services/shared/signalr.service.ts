@@ -15,6 +15,9 @@ export class SignalrService {
   private notificationSubject = new Subject<any>();
   private newReportSubject = new Subject<any>();
   private actividadSubject = new Subject<any>();
+  private mensajeSubject = new Subject<any>();
+  private mensajesLeidosSubject = new Subject<any>();
+  private escribiendoSubject = new Subject<any>();
   private handlersBound = false;
 
   // Notificación personal en tiempo real (campana).
@@ -23,6 +26,12 @@ export class SignalrService {
   public newReport$: Observable<any> = this.newReportSubject.asObservable();
   // Actividad pública en tiempo real (página "En Vivo").
   public actividad$: Observable<any> = this.actividadSubject.asObservable();
+  // Mensaje privado nuevo (recibido o enviado desde otra pestaña). payload: { id, otroId, esMio }.
+  public mensaje$: Observable<any> = this.mensajeSubject.asObservable();
+  // El otro usuario leyó mis mensajes. payload: { porId }.
+  public mensajesLeidos$: Observable<any> = this.mensajesLeidosSubject.asObservable();
+  // El otro usuario está escribiéndome. payload: { porId }.
+  public escribiendo$: Observable<any> = this.escribiendoSubject.asObservable();
 
   // Inicia la conexión y se suscribe a los grupos del usuario. Idempotente.
   async start(token: string): Promise<void> {
@@ -56,6 +65,9 @@ export class SignalrService {
       this.connection.on('notification', (payload: any) => this.notificationSubject.next(payload));
       this.connection.on('newReport', (payload: any) => this.newReportSubject.next(payload));
       this.connection.on('actividad', (payload: any) => this.actividadSubject.next(payload));
+      this.connection.on('mensaje', (payload: any) => this.mensajeSubject.next(payload));
+      this.connection.on('mensajesLeidos', (payload: any) => this.mensajesLeidosSubject.next(payload));
+      this.connection.on('escribiendo', (payload: any) => this.escribiendoSubject.next(payload));
       this.handlersBound = true;
     }
 
@@ -102,6 +114,17 @@ export class SignalrService {
     if (this.connection?.state === HubConnectionState.Connected) {
       try {
         await this.connection.invoke('Subscribe', token);
+      } catch {
+        // ignorar
+      }
+    }
+  }
+
+  // Avisa al otro usuario que estoy escribiéndole. Efímero: si no hay conexión simplemente no hace nada.
+  async notifyTyping(otroId: number): Promise<void> {
+    if (this.connection?.state === HubConnectionState.Connected) {
+      try {
+        await this.connection.invoke('Escribiendo', otroId);
       } catch {
         // ignorar
       }

@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,7 +19,7 @@ export class MensajesComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
-  public mensajes: any[] = [];
+  public conversaciones: any[] = [];
   public totalCount: number = 0;
 
   constructor(
@@ -27,6 +28,7 @@ export class MensajesComponent implements OnInit {
     public paginationService: PaginationService,
     private formBuilder: FormBuilder,
     private notificationService: NotificationService,
+    private signalrService: SignalrService,
     private router: Router
   ) {
     this.displaySections();
@@ -34,21 +36,24 @@ export class MensajesComponent implements OnInit {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
     this.formGroup = this.formBuilder.group({});
 
-    this.getMensajes();
+    this.getConversaciones();
+
+    // Mensaje nuevo (o enviado desde otra pestaña): refresca la bandeja sin recargar la página.
+    this.signalrService.mensaje$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.getConversaciones());
   }
 
   ngOnInit(): void {}
 
   get selectedCount(): number {
-    return this.mensajes.filter((m: any) => m.selected).length;
+    return this.conversaciones.filter((c: any) => c.selected).length;
   }
 
   get unreadCount(): number {
-    return this.mensajes.filter((m: any) => !m.leido).length;
+    return this.conversaciones.reduce((total: number, c: any) => total + (c.noLeidos ?? 0), 0);
   }
 
   get allSelected(): boolean {
-    return this.mensajes.length > 0 && this.selectedCount === this.mensajes.length;
+    return this.conversaciones.length > 0 && this.selectedCount === this.conversaciones.length;
   }
 
   get someSelected(): boolean {
@@ -56,11 +61,11 @@ export class MensajesComponent implements OnInit {
   }
 
   toggleAll(checked: boolean): void {
-    this.mensajes.forEach((m: any) => (m.selected = checked));
+    this.conversaciones.forEach((c: any) => (c.selected = checked));
   }
 
-  abrir(mensaje: any): void {
-    this.router.navigate(['/mensajes/conversacion', mensaje.id]);
+  abrir(conversacion: any): void {
+    this.router.navigate(['/mensajes/chat', conversacion.otro.userName]);
   }
 
   // Vista previa en texto plano: el contenido es HTML y truncarlo cortaría etiquetas a la mitad.
@@ -86,39 +91,36 @@ export class MensajesComponent implements OnInit {
     });
   }
 
-  getMensajes(): void {
-    this.mensajesService.getMensajes({}).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
-      this.mensajes = response?.mensajes ?? [];
-      this.totalCount = response?.pagination?.totalCount ?? 0;
-    });
-  }
+  getConversaciones(): void {
+    // Conserva la selección al refrescar por tiempo real.
+    const seleccionados = new Set(this.conversaciones.filter((c: any) => c.selected).map((c: any) => c.otro.id));
 
-  getMensajesEnviados(): void {
-    this.mensajesService.getMensajesEnviados({}).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
-      this.mensajes = response?.mensajes;
-      this.totalCount = response?.pagination?.totalCount;
+    this.mensajesService.getConversaciones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.conversaciones = (response?.conversaciones ?? []).map((c: any) => ({
+        ...c,
+        selected: seleccionados.has(c.otro?.id),
+      }));
+      this.totalCount = response?.pagination?.totalCount ?? 0;
     });
   }
 
   pageChange(event: PageEvent): void {
     this.paginationService.change(event);
-    this.getMensajes();
+    this.getConversaciones();
   }
 
-  deleteMensajes(): void {
-    const ids = this.mensajes
-      .filter((mensaje: any) => mensaje.selected)
-      .map((mensaje: any) => mensaje.id);
+  deleteConversaciones(): void {
+    const ids = this.conversaciones.filter((c: any) => c.selected).map((c: any) => c.otro.id);
 
     if (!ids || ids.length < 1) {
       return;
     }
 
-    this.mensajesService.deleteMensajesById(ids).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.mensajesService.deleteConversaciones(ids).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response) {
-        this.notificationService.success('Los mensajes seleccionados han sido eliminados', 'Eliminados');
+        this.notificationService.success('Las conversaciones seleccionadas han sido eliminadas', 'Eliminadas');
 
-        this.getMensajes();
+        this.getConversaciones();
       }
     });
   }

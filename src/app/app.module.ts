@@ -147,7 +147,6 @@ import { HttpMensajesService } from './services/implementations/httpMensajes.ser
 import { DialogEnviarMPComponent } from './components/dialogs/dialog-enviar-mp/dialog-enviar-mp.component';
 import { MensajesConversacionComponent } from './components/pages/mensajes/mensajes-conversacion/mensajes-conversacion.component';
 import { MensajesSidebarComponent } from './components/pages/mensajes/mensajes-sidebar/mensajes-sidebar.component';
-import { MensajesEnviadosComponent } from './components/pages/mensajes/mensajes-enviados/mensajes-enviados.component';
 import { SendMessageButtonComponent } from './components/addons/send-message-button/send-message-button.component';
 import { ShoutsCommentsComponent } from './components/pages/shouts/shouts-comments/shouts-comments.component';
 import { DialogVerUsuariosComponent } from './components/dialogs/dialog-ver-usuarios/dialog-ver-usuarios.component';
@@ -242,7 +241,6 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     DialogEnviarMPComponent,
     MensajesConversacionComponent,
     MensajesSidebarComponent,
-    MensajesEnviadosComponent,
     SendMessageButtonComponent,
     ShoutsCommentsComponent,
     DialogVerUsuariosComponent,

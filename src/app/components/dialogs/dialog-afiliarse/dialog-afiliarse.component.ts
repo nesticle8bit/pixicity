@@ -25,7 +25,6 @@ export class DialogAfiliarseComponent implements OnInit {
       url: ['http://', Validators.required],
       banner: ['http://', Validators.required],
       descripcion: ['', Validators.required],
-      captcha: ['', Validators.required],
       codigo: [],
     });
   }
@@ -37,8 +36,8 @@ export class DialogAfiliarseComponent implements OnInit {
       return;
     }
 
-    const afiliacion = Object.assign({}, this.formGroupAfiliacion.value);
-    afiliacion.captcha = '';
+    // "codigo" es solo la respuesta que se muestra al usuario; no se envía.
+    const { codigo, ...afiliacion } = this.formGroupAfiliacion.value;
 
     this.httpGeneralService
       .saveAfiliacion(afiliacion)
@@ -50,11 +49,5 @@ export class DialogAfiliarseComponent implements OnInit {
           });
         }
       });
-  }
-
-  captchaResponse(value: string): void {
-    this.formGroupAfiliacion.patchValue({
-      captcha: value,
-    });
   }
 }

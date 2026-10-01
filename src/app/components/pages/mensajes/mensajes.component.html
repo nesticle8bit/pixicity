@@ -9,22 +9,22 @@
         </strong>
       </h6>
 
-      @if (mensajes.length < 1) {
+      @if (conversaciones.length < 1) {
         <div class="nada-gris my-3">
-          Aún no se han encontrado mensajes para tí.
+          Aún no tienes conversaciones.
         </div>
       }
 
-      @if (mensajes.length > 0) {
+      @if (conversaciones.length > 0) {
         <div class="msg-toolbar">
           <mat-checkbox color="primary" class="msg-toolbar__all"
             [checked]="allSelected" [indeterminate]="someSelected"
-            (change)="toggleAll($event.checked)" aria-label="Seleccionar todos los mensajes">
+            (change)="toggleAll($event.checked)" aria-label="Seleccionar todas las conversaciones">
           </mat-checkbox>
 
           <span class="msg-toolbar__info">
             @if (selectedCount > 0) {
-              {{selectedCount}} seleccionado{{selectedCount === 1 ? '' : 's'}}
+              {{selectedCount}} seleccionada{{selectedCount === 1 ? '' : 's'}}
             } @else {
               @if (unreadCount > 0) {
                 <strong>{{unreadCount}}</strong> sin leer
@@ -35,47 +35,57 @@
           </span>
 
           <button type="button" mat-flat-button color="warn" class="msg-toolbar__delete"
-            [disabled]="selectedCount < 1" (click)="deleteMensajes()"
-            matTooltip="Eliminar seleccionados" aria-label="Eliminar mensajes seleccionados">
+            [disabled]="selectedCount < 1" (click)="deleteConversaciones()"
+            matTooltip="Eliminar conversaciones seleccionadas" aria-label="Eliminar conversaciones seleccionadas">
             <i class="ti ti-trash"></i>
           </button>
         </div>
 
         <ul class="msg-list">
-          @for (mensaje of mensajes; track mensaje.id; let even = $even) {
-            <li class="msg-item" [class.msg-item--alt]="even" [class.msg-item--unread]="!mensaje.leido" [class.msg-item--selected]="mensaje.selected">
-              <mat-checkbox color="primary" class="msg-item__check" [(ngModel)]="mensaje.selected"
-                [attr.aria-label]="'Seleccionar mensaje de ' + mensaje.usuarioDe?.userName">
+          @for (c of conversaciones; track c.otro?.id; let even = $even) {
+            <li class="msg-item" [class.msg-item--alt]="even" [class.msg-item--unread]="c.noLeidos > 0" [class.msg-item--selected]="c.selected">
+              <mat-checkbox color="primary" class="msg-item__check" [(ngModel)]="c.selected"
+                [attr.aria-label]="'Seleccionar conversación con ' + c.otro?.userName">
               </mat-checkbox>
 
-              <app-user-avatar class="msg-item__avatar" [avatar]="mensaje.usuarioDe?.avatar"
-                [userName]="mensaje.usuarioDe?.userName" [height]="40">
+              <app-user-avatar class="msg-item__avatar" [avatar]="c.otro?.avatar"
+                [userName]="c.otro?.userName" [height]="40">
               </app-user-avatar>
 
               <div class="msg-item__body" role="link" tabindex="0"
-                (click)="abrir(mensaje)" (keydown.enter)="abrir(mensaje)">
+                (click)="abrir(c)" (keydown.enter)="abrir(c)">
                 <div class="msg-item__head">
-                  @if (!mensaje.leido) {
+                  @if (c.noLeidos > 0) {
                     <span class="msg-item__dot" title="Sin leer"></span>
                   }
-                  <a class="msg-item__from" [routerLink]="['/perfil/' + mensaje.usuarioDe?.userName]"
-                    [appUserPopover]="mensaje.usuarioDe?.userName" (click)="$event.stopPropagation()">
-                    {{'@'}}{{mensaje.usuarioDe?.userName}}
+                  <a class="msg-item__from" [routerLink]="['/perfil/' + c.otro?.userName]"
+                    [appUserPopover]="c.otro?.userName" (click)="$event.stopPropagation()">
+                    {{'@'}}{{c.otro?.userName}}
                   </a>
+                  @if (c.noLeidos > 0) {
+                    <span class="badge bg-primary" [attr.aria-label]="c.noLeidos + ' sin leer'">{{c.noLeidos}}</span>
+                  }
                   <span class="msg-item__date text-muted cursor--help"
-                    matTooltip="{{mensaje.fechaRegistro | date:'medium'}}">
-                    {{mensaje.fechaRegistro | timeAgo}}
+                    matTooltip="{{c.fechaRegistro | date:'medium'}}">
+                    {{c.fechaRegistro | timeAgo}}
                   </span>
                 </div>
-                <div class="msg-item__subject">{{mensaje.asunto || '(Sin asunto)'}}</div>
-                <div class="msg-item__preview">{{preview(mensaje.contenido)}}</div>
+                <div class="msg-item__preview">
+                  @if (c.esMio) {
+                    <i class="ti msg-item__status" [class.ti-checks]="c.leido" [class.ti-check]="!c.leido"
+                      [class.msg-item__status--read]="c.leido"
+                      [matTooltip]="c.leido ? 'Leído por el destinatario' : 'Aún sin leer'"></i>
+                    Tú:
+                  }
+                  {{preview(c.contenido)}}
+                </div>
               </div>
             </li>
           }
         </ul>
       }
 
-      @if (mensajes.length > 0) {
+      @if (conversaciones.length > 0) {
         <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
           [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)"
           >

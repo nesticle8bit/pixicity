@@ -3,6 +3,7 @@ import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
@@ -22,11 +23,11 @@ export class DialogEnviarMPComponent implements OnInit {
     private mensajeService: IHttpMensajesService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private router: Router
   ) {
     this.formGroup = this.formBuilder.group({
       aUserName: ['', Validators.required],
-      asunto: ['', Validators.required],
       contenido: ['', Validators.required],
       // captcha: ['', Validators.required],
     });
@@ -46,7 +47,7 @@ export class DialogEnviarMPComponent implements OnInit {
     }
 
     this.userName = '';
-    const mp = Object.assign({}, this.formGroup.value);
+    const mp = { ...this.formGroup.value, asunto: '' };
 
     this.mensajeService.sendMensajePrivado(mp).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response?.type === 'username') {
@@ -58,9 +59,17 @@ export class DialogEnviarMPComponent implements OnInit {
         return;
       }
 
+      if (response?.type === 'error') {
+        this.notificationService.error(response.message, 'Error');
+
+        return;
+      }
+
       this.notificationService.success(`El mensaje privado enviado a ${mp.aUserName} se ha entregado correctamente`, 'Enviado');
 
       this.dialogRef.close(true);
+      // Abre el chat con el destinatario para seguir la conversación.
+      this.router.navigate(['/mensajes/chat', mp.aUserName]);
     });
   }
 

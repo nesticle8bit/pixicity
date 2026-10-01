@@ -8,7 +8,14 @@ import { NotificationService } from '../shared/notification.service';
 import { PaginationService } from '../shared/pagination.service';
 import { IHttpMensajesService } from '../interfaces/httpMensajes.interface';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { MensajeViewModel, SendMPViewModel, ResponseMPViewModel } from 'src/app/models/mensajes/mensaje-vm.model';
+import {
+  MensajeViewModel,
+  SendMPViewModel,
+  ResponseMPViewModel,
+  ConversacionViewModel,
+  ConversacionPage,
+  ConversacionParams,
+} from 'src/app/models/mensajes/mensaje-vm.model';
 
 @Injectable()
 export class HttpMensajesService implements IHttpMensajesService {
@@ -41,24 +48,6 @@ export class HttpMensajesService implements IHttpMensajesService {
     return this.http
       .get<ApiResponse<PaginatedData<MensajeViewModel>>>(
         `${environment.api}/api/mensajes/getMensajesAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
-      )
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        }),
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  getMensajesEnviados(): Observable<PaginatedData<MensajeViewModel>> {
-    return this.http
-      .get<ApiResponse<PaginatedData<MensajeViewModel>>>(
-        `${environment.api}/api/mensajes/getMensajesEnviados?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
         map((response) => {
@@ -123,9 +112,54 @@ export class HttpMensajesService implements IHttpMensajesService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getConversacion(id: number): Observable<MensajeViewModel[]> {
+  getConversaciones(): Observable<{ conversaciones: ConversacionViewModel[]; pagination: any }> {
     return this.http
-      .get<ApiResponse<MensajeViewModel[]>>(`${environment.api}/api/mensajes/getConversacion?id=${id}`)
+      .get<ApiResponse<{ conversaciones: ConversacionViewModel[]; pagination: any }>>(
+        `${environment.api}/api/mensajes/getConversaciones?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
+      )
+      .pipe(
+        map((response) => {
+          if (response.status === 200) {
+            return response.data!;
+          } else {
+            this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
+          }
+        }),
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  deleteConversaciones(otroIds: number[]): Observable<boolean> {
+    return this.http
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/mensajes/deleteConversaciones`, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+        body: otroIds,
+      })
+      .pipe(
+        map((response) => {
+          if (response.status === 200) {
+            return response.data!;
+          } else {
+            this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
+          }
+        }),
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getConversacion(params: ConversacionParams): Observable<ConversacionPage> {
+    const query = new URLSearchParams();
+    if (params.id) query.set('id', String(params.id));
+    if (params.userName) query.set('userName', params.userName);
+    if (params.antesDeId) query.set('antesDeId', String(params.antesDeId));
+    if (params.take) query.set('take', String(params.take));
+
+    return this.http
+      .get<ApiResponse<ConversacionPage>>(`${environment.api}/api/mensajes/getConversacion?${query.toString()}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

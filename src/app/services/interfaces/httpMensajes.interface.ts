@@ -5,11 +5,12 @@ import { Observable } from 'rxjs';
 export abstract class IHttpMensajesService {
   abstract getMensajes(search: any): Observable<any>;
   abstract getMensajesAdmin(search: any): Observable<any>;
-  abstract getMensajesEnviados(search: any): Observable<any>;
   abstract getLastMensajes(): Observable<any>;
   abstract sendMensajePrivado(mp: any): Observable<any>;
   abstract getMensajePrivadoById(id: number): Observable<any>;
-  abstract getConversacion(id: number): Observable<any>;
+  abstract getConversaciones(): Observable<any>;
+  abstract getConversacion(params: any): Observable<any>;
+  abstract deleteConversaciones(otroIds: number[]): Observable<any>;
   abstract setMensajesAsReaded(): Observable<any>;
   abstract deleteMensajesById(ids: number[]): Observable<any>;
   abstract changeRemitente(obj: any): Observable<any>;

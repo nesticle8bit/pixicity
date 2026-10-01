@@ -8,40 +8,88 @@
           <app-user-avatar [avatar]="otro.avatar" [userName]="otro.userName" [height]="40"></app-user-avatar>
           <div class="chat-header__info">
             <a [routerLink]="'/perfil/' + otro.userName" [appUserPopover]="otro.userName">{{'@'}}{{otro.userName}}</a>
-            <small class="text-muted d-block cursor--help" matTooltip="{{asunto}}" matTooltipPosition="above">
-              {{asunto | truncate:[80]}}
-            </small>
+            @if (asunto) {
+              <small class="text-muted d-block cursor--help" matTooltip="{{asunto}}" matTooltipPosition="above">
+                {{asunto | truncate:[80]}}
+              </small>
+            }
           </div>
         }
       </div>
 
-      <div class="chat-body" #chatBody>
-        @for (m of mensajes; track m.id; let i = $index) {
-          @if (esNuevoDia(i)) {
-            <div class="chat-day"><span>{{m.fechaRegistro | date:'fullDate'}}</span></div>
+      <div class="chat-wrap">
+        <div class="chat-body" #chatBody role="log" aria-live="polite" aria-relevant="additions"
+          aria-label="Mensajes de la conversación" (scroll)="onScroll()">
+          @if (hayMas) {
+            <button type="button" class="chat-more" (click)="cargarAnteriores()" [disabled]="cargandoMas">
+              {{cargandoMas ? 'Cargando…' : 'Cargar mensajes anteriores'}}
+            </button>
           }
 
-          <div class="chat-row" [class.chat-row--mine]="m.esMio">
-            @if (!m.esMio) {
-              <app-user-avatar [avatar]="m.usuarioDe?.avatar" [userName]="m.usuarioDe?.userName" [height]="32"></app-user-avatar>
+          @for (m of mensajes; track m.id; let i = $index) {
+            @if (esNuevoDia(i)) {
+              <div class="chat-day"><span>{{m.fechaRegistro | date:'fullDate'}}</span></div>
             }
 
-            <div class="chat-bubble" [class.chat-bubble--mine]="m.esMio">
-              <div class="chat-bubble__content" [innerHTML]="m.contenido"></div>
-              <small class="chat-bubble__time">{{m.fechaRegistro | date:'shortTime'}}</small>
+            <div class="chat-row" [class.chat-row--mine]="m.esMio">
+              @if (!m.esMio) {
+                <app-user-avatar [avatar]="m.usuarioDe?.avatar" [userName]="m.usuarioDe?.userName" [height]="32"></app-user-avatar>
+              }
+
+              <div class="chat-bubble" [class.chat-bubble--mine]="m.esMio">
+                <button type="button" class="chat-bubble__delete" (click)="eliminarMensaje(m)"
+                  matTooltip="Eliminar (solo para ti)" aria-label="Eliminar mensaje solo para mí">
+                  <i class="ti ti-trash"></i>
+                </button>
+                <div class="chat-bubble__content" [innerHTML]="m.contenido"></div>
+                <small class="chat-bubble__meta">
+                  {{m.fechaRegistro | date:'shortTime'}}
+                  @if (m.esMio) {
+                    <i class="ti chat-bubble__status" [class.ti-checks]="m.leido" [class.ti-check]="!m.leido"
+                      [class.chat-bubble__status--read]="m.leido"
+                      [attr.aria-label]="m.leido ? 'Leído' : 'Enviado'"
+                      [matTooltip]="m.leido ? 'Leído' : 'Enviado'"></i>
+                  }
+                </small>
+              </div>
             </div>
-          </div>
-        } @empty {
-          <p class="text-muted text-center my-4">No hay mensajes en esta conversación.</p>
+          } @empty {
+            <p class="text-muted text-center my-4">
+              Aún no hay mensajes{{otro ? ' con @' + otro.userName : ''}}. ¡Escribe el primero!
+            </p>
+          }
+        </div>
+
+        @if (nuevosSinLeer > 0) {
+          <button type="button" class="chat-new" (click)="irAlFinal()">
+            <i class="ti ti-arrow-down"></i> {{nuevosSinLeer}} nuevo{{nuevosSinLeer === 1 ? '' : 's'}}
+          </button>
         }
       </div>
 
+      <div class="chat-typing" aria-live="polite">
+        @if (escribiendo) {
+          {{'@'}}{{otro?.userName}} está escribiendo…
+        }
+      </div>
+
+      @if (bloqueado) {
+        <div class="alert alert-warning py-2 mb-3" role="alert">
+          No puedes enviar mensajes a este usuario.
+        </div>
+      }
+
       <div class="chat-reply">
-        <textarea class="form-control" rows="2" title="Escribir una respuesta..." [(ngModel)]="respuesta"
+        <input type="file" accept="image/*" hidden #fileInput (change)="adjuntarImagen($event)" />
+        <button type="button" class="chat-attach" (click)="fileInput.click()"
+          [disabled]="!otro || bloqueado || subiendo" matTooltip="Adjuntar imagen" aria-label="Adjuntar imagen">
+          <i class="ti" [class.ti-photo]="!subiendo" [class.ti-loader-2]="subiendo"></i>
+        </button>
+        <textarea class="form-control" rows="2" aria-label="Escribir un mensaje" [(ngModel)]="respuesta"
           placeholder="Escribir una respuesta... (Enter para enviar, Shift+Enter nueva línea)"
-          (keydown.enter)="onEnter($event)"></textarea>
+          [disabled]="!otro || bloqueado" (ngModelChange)="onTyping()" (keydown.enter)="onEnter($event)"></textarea>
         <input type="button" class="boton azul" (click)="responderMensaje()" value="Enviar"
-          [disabled]="!respuesta.trim() || enviando" />
+          [disabled]="!otro || bloqueado || !respuesta.trim() || enviando" />
       </div>
     </div>
 

@@ -45,6 +45,20 @@ i.ti {
     margin-top: -6px;
   }
 
+  // Con no leídos el preview (en vez del asunto, que ya no existe en el chat) va en negrita.
+  &--unread &__preview {
+    font-weight: 600;
+  }
+
+  &__status {
+    color: #aaa;
+    font-size: 13px;
+
+    &--read {
+      color: #3c8dbc;
+    }
+  }
+
   &__dot {
     width: 8px;
     height: 8px;

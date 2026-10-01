@@ -8,6 +8,8 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
+import { MensajesBadgeService } from 'src/app/services/shared/mensajes-badge.service';
+import { debounceTime, merge } from 'rxjs';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
@@ -41,6 +43,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
     private mensajesService: IHttpMensajesService,
     private httpLogs: IHttpLogsService,
     private signalrService: SignalrService,
+    private badgeService: MensajesBadgeService,
     private toast: NotificationService,
     private formBuilder: FormBuilder,
     private router: Router
@@ -78,6 +81,12 @@ export class SectionUserInfoLoginComponent implements OnInit {
           this.toast.info(payload.mensaje, 'Nueva notificación');
         }
       });
+
+    // Contador de mensajes en vivo: un mensaje recibido o un chat abierto (que marca como leído) lo recalculan.
+    // El debounce deja que el chat termine de marcar como leído antes de consultar el total.
+    merge(this.signalrService.mensaje$, this.signalrService.mensajesLeidos$, this.badgeService.refresh$)
+      .pipe(debounceTime(500), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.getStats());
   }
 
   getStats(): void {
