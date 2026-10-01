@@ -1,6 +1,6 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
@@ -14,23 +14,26 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
 export class MensajesConversacionComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  public mensaje: any;
+  @ViewChild('chatBody') chatBody?: ElementRef<HTMLElement>;
+
+  public mensajes: any[] = [];
+  public otro: any;
+  public asunto: string = '';
   public id: number = 0;
-  public responder = false;
   public respuesta: string = '';
+  public enviando = false;
 
   constructor(
     private displayService: DisplayComponentService,
     private mensajesService: IHttpMensajesService,
     private activatedRoute: ActivatedRoute,
-    private router: Router,
     private notificationService: NotificationService
   ) {
     this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
       this.id = value.get('id');
     });
 
-    this.getMensajePrivadoById();
+    this.getConversacion();
   }
 
   ngOnInit(): void {
@@ -47,32 +50,82 @@ export class MensajesConversacionComponent implements OnInit {
     });
   }
 
-  getMensajePrivadoById(): void {
+  getConversacion(): void {
     this.mensajesService
-      .getMensajePrivadoById(this.id)
+      .getConversacion(this.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value: any) => {
-        this.mensaje = value;
+      .subscribe((value: any[]) => {
+        this.mensajes = value ?? [];
+
+        const ajeno = this.mensajes.find((m) => !m.esMio);
+        const propio = this.mensajes.find((m) => m.esMio);
+        this.otro = ajeno ? ajeno.usuarioDe : propio?.usuarioA;
+
+        const ultimo = this.mensajes[this.mensajes.length - 1];
+        this.asunto = ultimo?.asunto ?? '';
+
+        setTimeout(() => this.scrollToBottom());
       });
   }
 
+  esNuevoDia(index: number): boolean {
+    if (index === 0) {
+      return true;
+    }
+
+    const actual = new Date(this.mensajes[index].fechaRegistro).toDateString();
+    const previo = new Date(this.mensajes[index - 1].fechaRegistro).toDateString();
+
+    return actual !== previo;
+  }
+
   responderMensaje(): void {
-    if (!this.respuesta) {
+    const contenido = this.respuesta.trim();
+
+    if (!contenido || !this.otro || this.enviando) {
       return;
     }
 
     const mp = {
-      aUserName: this.mensaje.usuarioDe.userName,
-      asunto: `RE: ${this.mensaje.asunto}`,
-      contenido: this.respuesta.trim(),
+      aUserName: this.otro.userName,
+      asunto: this.asunto.startsWith('RE: ') ? this.asunto : `RE: ${this.asunto}`,
+      contenido,
     };
 
-    this.mensajesService.sendMensajePrivado(mp).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
-      if (response) {
-        this.notificationService.success('La respuesta ha sido enviada correctamente', 'Respuesta Enviada');
+    this.enviando = true;
 
-        this.router.navigate(['/mensajes']);
-      }
-    });
+    this.mensajesService
+      .sendMensajePrivado(mp)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: any) => {
+          this.enviando = false;
+
+          if (response?.type === 'id') {
+            this.respuesta = '';
+            this.getConversacion();
+          } else if (response?.message) {
+            this.notificationService.error(response.message, 'Error');
+          }
+        },
+        error: () => (this.enviando = false),
+      });
+  }
+
+  onEnter(event: Event): void {
+    const e = event as KeyboardEvent;
+
+    if (!e.shiftKey) {
+      e.preventDefault();
+      this.responderMensaje();
+    }
+  }
+
+  private scrollToBottom(): void {
+    const el = this.chatBody?.nativeElement;
+
+    if (el) {
+      el.scrollTop = el.scrollHeight;
+    }
   }
 }

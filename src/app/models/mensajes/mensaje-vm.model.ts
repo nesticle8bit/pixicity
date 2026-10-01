@@ -7,6 +7,7 @@ export interface MensajeViewModel {
   contenido: string;
   leido: boolean;
   eliminado: boolean;
+  esMio?: boolean;
   usuarioDe: UsuarioAvatarViewModel;
   usuarioA: UsuarioAvatarViewModel;
 }

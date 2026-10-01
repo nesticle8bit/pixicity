@@ -1,110 +1,52 @@
 <div class="container container--home">
   <div class="row">
     <div class="col-12 col-sm-6 col-md-9">
-      <!-- <h6 class="main-title">
-      <span>
-        <span class="text-primary cursor--pointer" [routerLink]="['/mensajes']"><i class="ti ti-circle-chevron-left"></i> Volver</span> <span class="cursor--help"
-        matTooltip="{{mensaje?.asunto}}" matTooltipPosition="above">
-        {{mensaje?.asunto | truncate:[100]}}
-      </span>
-    </span>
+      <div class="chat-header mt-2">
+        <a class="back" [routerLink]="['/mensajes']"><i class="ti ti-circle-chevron-left"></i> Volver</a>
 
-    <strong class="float-end text-info" style="background: #fff; padding-left: 7px;">
-
-    </strong>
-  </h6> -->
-
-  <div class="alert alert-warning mt-2">
-    <div class="row">
-      <div class="col-12 col-sm-12 col-md-10">
-        <div class="row">
-          <div class="col-12 col-sm-12 col-md-1">
-            <app-user-avatar matTooltip="{{mensaje?.usuarioDe?.userName}}"
-              [matTooltipPosition]="'before'" [avatar]="mensaje?.usuarioDe?.avatar"
-            [userName]="mensaje?.usuarioDe?.userName" [height]="40"></app-user-avatar>
+        @if (otro) {
+          <app-user-avatar [avatar]="otro.avatar" [userName]="otro.userName" [height]="40"></app-user-avatar>
+          <div class="chat-header__info">
+            <a [routerLink]="'/perfil/' + otro.userName" [appUserPopover]="otro.userName">{{'@'}}{{otro.userName}}</a>
+            <small class="text-muted d-block cursor--help" matTooltip="{{asunto}}" matTooltipPosition="above">
+              {{asunto | truncate:[80]}}
+            </small>
           </div>
-
-          <div class="col-12 col-sm-12 col-md-11">
-            <h6 class="cursor--help mb-1" matTooltip="{{mensaje?.asunto}}" matTooltipPosition="above">
-              {{mensaje?.asunto | truncate:[80]}}
-            </h6>
-
-            <p class="userName">
-              <a [routerLink]="'/perfil/' + mensaje?.usuarioDe?.userName" [appUserPopover]="mensaje?.usuarioDe?.userName">
-                {{'@'}}{{mensaje?.usuarioDe?.userName}}
-              </a>
-            </p>
-          </div>
-        </div>
+        }
       </div>
 
-      <div class="col-12 col-sm-12 col-md-2">
-        <span class="text-muted">{{mensaje?.fechaRegistro | date:'medium'}}</span>
+      <div class="chat-body" #chatBody>
+        @for (m of mensajes; track m.id; let i = $index) {
+          @if (esNuevoDia(i)) {
+            <div class="chat-day"><span>{{m.fechaRegistro | date:'fullDate'}}</span></div>
+          }
+
+          <div class="chat-row" [class.chat-row--mine]="m.esMio">
+            @if (!m.esMio) {
+              <app-user-avatar [avatar]="m.usuarioDe?.avatar" [userName]="m.usuarioDe?.userName" [height]="32"></app-user-avatar>
+            }
+
+            <div class="chat-bubble" [class.chat-bubble--mine]="m.esMio">
+              <div class="chat-bubble__content" [innerHTML]="m.contenido"></div>
+              <small class="chat-bubble__time">{{m.fechaRegistro | date:'shortTime'}}</small>
+            </div>
+          </div>
+        } @empty {
+          <p class="text-muted text-center my-4">No hay mensajes en esta conversación.</p>
+        }
+      </div>
+
+      <div class="chat-reply">
+        <textarea class="form-control" rows="2" title="Escribir una respuesta..." [(ngModel)]="respuesta"
+          placeholder="Escribir una respuesta... (Enter para enviar, Shift+Enter nueva línea)"
+          (keydown.enter)="onEnter($event)"></textarea>
+        <input type="button" class="boton azul" (click)="responderMensaje()" value="Enviar"
+          [disabled]="!respuesta.trim() || enviando" />
       </div>
     </div>
+
+    <section class="col-12 col-sm-6 col-md-3 dotted-border--left">
+      <app-mensajes-sidebar></app-mensajes-sidebar>
+    </section>
   </div>
-
-  <article class="alert-body mt-3 mb-4">
-    <span [innerHTML]="mensaje?.contenido"></span>
-  </article>
-
-  @if (responder) {
-    <div class="mb-3">
-      <hr class="my-4">
-      <textarea class="form-control" title="Escribir una respuesta..." [(ngModel)]="respuesta"
-      placeholder="Escribir una respuesta..."></textarea>
-      <div class="buttons mt-3">
-        <div class="float-end">
-          <input type="button" class="boton azul" (click)="responderMensaje()" value="Responder" [disabled]="!respuesta" />
-        </div>
-        <div class="clearfix"></div>
-      </div>
-    </div>
-  }
-
-  <section class="footer-btns mt-2">
-    <div class="row">
-      <div class="col-12 col-sm-12 col-md-6">
-        <div class="row">
-          <div class="col-12 col-sm-4">
-            <a href="javascript:void(0)" (click)="responder = !responder">
-              <i class="ti ti-arrow-back-up"></i> Responder
-            </a>
-          </div>
-
-          <div class="col-12 col-sm-4">
-
-          </div>
-
-          <div class="col-12 col-sm-4">
-
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-sm-12 col-md-6">
-        <div class="row">
-          <div class="col-12 col-sm-4">
-
-          </div>
-
-          <div class="col-12 col-sm-4">
-
-          </div>
-
-          <div class="col-12 col-sm-4 text-md-end">
-            <a href="javascript:void(0)">
-              <i class="ti ti-trash"></i> Eliminar
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-
-<section class="col-12 col-sm-6 col-md-3 dotted-border--left">
-  <app-mensajes-sidebar></app-mensajes-sidebar>
-</section>
-</div>
 </div>

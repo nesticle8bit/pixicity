@@ -9,6 +9,7 @@ export abstract class IHttpMensajesService {
   abstract getLastMensajes(): Observable<any>;
   abstract sendMensajePrivado(mp: any): Observable<any>;
   abstract getMensajePrivadoById(id: number): Observable<any>;
+  abstract getConversacion(id: number): Observable<any>;
   abstract setMensajesAsReaded(): Observable<any>;
   abstract deleteMensajesById(ids: number[]): Observable<any>;
   abstract changeRemitente(obj: any): Observable<any>;

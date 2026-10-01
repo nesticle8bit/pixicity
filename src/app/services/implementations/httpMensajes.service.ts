@@ -123,6 +123,22 @@ export class HttpMensajesService implements IHttpMensajesService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getConversacion(id: number): Observable<MensajeViewModel[]> {
+    return this.http
+      .get<ApiResponse<MensajeViewModel[]>>(`${environment.api}/api/mensajes/getConversacion?id=${id}`)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) {
+            return response.data!;
+          } else {
+            this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
+          }
+        }),
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   setMensajesAsReaded(): Observable<boolean> {
     return this.http
       .get<ApiResponse<boolean>>(`${environment.api}/api/mensajes/setMensajesAsReaded`)
