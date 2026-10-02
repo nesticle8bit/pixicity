@@ -52,7 +52,7 @@
                         9
                       </td>
                       <td class="text-center" width="30px">
-                        <a href="javascript:void(0)" (click)="deleteFavorito(favorito)">
+                        <a (click)="deleteFavorito(favorito)" role="button" tabindex="0" (keydown.enter)="deleteFavorito(favorito)" (keydown.space)="deleteFavorito(favorito); $event.preventDefault()">
                           @if (!favorito.deleted) {
                             <img src="/assets/images/icons/cross.png" alt="Eliminar" #tooltip="matTooltip"
                               matTooltip="Eliminar" [matTooltipPosition]="'above'"
@@ -89,8 +89,8 @@
               @for (categoria of categorias; track categoria) {
                 <tr>
                   <td>
-                    <a href="javascript:void(0)" (click)="filterByCategory(categoria)"
-                      title="{{categoria.categoria.nombre}}">
+                    <a (click)="filterByCategory(categoria)"
+                      title="{{categoria.categoria.nombre}}" role="button" tabindex="0" (keydown.enter)="filterByCategory(categoria)" (keydown.space)="filterByCategory(categoria); $event.preventDefault()">
                       <img src="/assets/images/categorias/{{categoria.categoria.icono}}"
                         alt="{{categoria.categoria.nombre}}" loading="lazy"/>
                         {{categoria.categoria.nombre}} <span
@@ -102,7 +102,7 @@
 
               <tr>
                 <td>
-                  <a href="javascript:void(0)" (click)="getFavoritos(0)">
+                  <a (click)="getFavoritos(0)" role="button" tabindex="0" (keydown.enter)="getFavoritos(0)" (keydown.space)="getFavoritos(0); $event.preventDefault()">
                     Todos
                   </a>
                 </td>

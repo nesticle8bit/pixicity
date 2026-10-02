@@ -27,6 +27,12 @@ export class MainSubmenuComponent implements OnInit {
     private router: Router
   ) {
     this.currentUser = this.securityService.getCurrentUser();
+
+    // Reactivo: "Crear Post" / "Moderación" aparecen o desaparecen al iniciar o cerrar sesión.
+    this.securityService
+      .getCurrentUserAsObservable()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => (this.currentUser = value));
   }
 
   ngOnInit(): void {

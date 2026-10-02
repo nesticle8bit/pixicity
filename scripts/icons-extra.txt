@@ -1,0 +1,3 @@
+# Íconos que se arman dinámicamente y el escáner no puede ver (uno por línea, con o sin prefijo ti-).
+# Ejemplo:
+# ti-star

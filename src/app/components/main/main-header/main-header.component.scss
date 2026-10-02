@@ -1,0 +1,95 @@
+// Móvil: header pegado arriba; se esconde al bajar y vuelve al subir (ver MainHeaderComponent).
+:host {
+  @media (max-width: 767.98px) {
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    transition: transform .2s ease;
+
+    &.header--hidden {
+      transform: translateY(-100%);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+}
+
+// Logo: en pantallas muy angostas se encoge en vez de empujar los botones fuera de la vista.
+.main-logo {
+  max-width: 100%;
+  background-size: contain;
+}
+
+.mobile-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .5rem;
+  height: 65px;
+
+  &__login {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .3rem;
+    min-height: 36px;
+    padding: 0 .7rem;
+    border: 1px solid rgb(255 255 255 / 70%);
+    border-radius: 999px;
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 700;
+    white-space: nowrap;
+
+    // Pantallas muy angostas: solo ícono, para no pelear el espacio con el logo.
+    @media (max-width: 399.98px) {
+      width: 44px;
+      min-height: 44px;
+      padding: 0;
+      border-radius: 8px;
+      border-color: transparent;
+      font-size: 1.5rem;
+    }
+  }
+
+  &__login-label {
+    @media (max-width: 399.98px) {
+      display: none;
+    }
+  }
+
+  &__toggle {
+    position: relative;
+    flex: 0 0 auto;
+    width: 44px; // objetivo táctil mínimo
+    height: 44px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #fff;
+    font-size: 1.7rem;
+    line-height: 1;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    min-width: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: #d9534f;
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    line-height: 18px;
+  }
+}

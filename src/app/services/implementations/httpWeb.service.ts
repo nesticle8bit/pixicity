@@ -1,3 +1,4 @@
+import { PaginaViewModel } from 'src/app/models/shared/service-types.model';
 import { IHttpWebService } from '../interfaces/httpWeb.interface';
 import { PaginationService } from '../shared/pagination.service';
 import { environment } from 'src/environments/environment';
@@ -13,13 +14,6 @@ import { TopPostModel } from 'src/app/models/web/topPost.model';
 import { AfiliacionModel } from 'src/app/models/general/afiliacion.model';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
 
-interface PaginaViewModel {
-  id: number;
-  titulo: string;
-  slug: string;
-  contenido: string;
-  eliminado: boolean;
-}
 
 @Injectable()
 export class HttpWebService implements IHttpWebService {

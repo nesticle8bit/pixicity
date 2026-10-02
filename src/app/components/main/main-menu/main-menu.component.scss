@@ -1,0 +1,39 @@
+// Toda la pestaña es el enlace (antes solo el texto era enlace real y la <li> llevaba el clic):
+// así se llega con teclado y el área táctil es la pestaña completa.
+.main-menu--item {
+  padding: 0;
+
+  > a {
+    display: block;
+    padding: 8px 10px;
+  }
+
+  &--register {
+    background: #95c317 !important;
+    text-transform: uppercase;
+  }
+}
+
+// Móvil: las pestañas se deslizan en una sola fila en vez de partirse en varias líneas.
+@media (max-width: 575.98px) {
+  .main-menu ul {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .main-menu--item {
+    flex: 0 0 auto;
+    min-width: 48px; // objetivo táctil cómodo
+    text-align: center;
+
+    i {
+      font-size: 1.15rem;
+    }
+  }
+}

@@ -111,11 +111,11 @@
                   <div class="col-12 col-sm-2">
                     <main>
                       @if (!bloqueoActivo) {
-                      <a class="button-uppercase brojo" (click)="bloquearUsuario()">
+                      <a class="button-uppercase brojo" (click)="bloquearUsuario()" role="button" tabindex="0" (keydown.enter)="bloquearUsuario()" (keydown.space)="bloquearUsuario(); $event.preventDefault()">
                         <i class="ti ti-ban"></i> Bloquear
                       </a>
                       } @else {
-                      <a class="bgris" (click)="desbloquearUsuario()">
+                      <a class="bgris" (click)="desbloquearUsuario()" role="button" tabindex="0" (keydown.enter)="desbloquearUsuario()" (keydown.space)="desbloquearUsuario(); $event.preventDefault()">
                         <i class="ti ti-lock-open"></i> Desbloquear
                       </a>
                       }
@@ -183,7 +183,7 @@
                 <div class="col-12 col-sm-2">
                   <p>
                     <b>
-                      <a href="javascript:void(0)" (click)="currentSelection = 'posts'">
+                      <a (click)="currentSelection = 'posts'" role="button" tabindex="0" (keydown.enter)="currentSelection = 'posts'" (keydown.space)="currentSelection = 'posts'; $event.preventDefault()">
                         {{currentUser.postsCount ? currentUser.postsCount : 0}}
                       </a>
                     </b>
@@ -195,7 +195,7 @@
                 <div class="col-12 col-sm-2">
                   <p>
                     <b>
-                      <a href="javascript:void(0)" (click)="currentSelection = 'comments'">
+                      <a (click)="currentSelection = 'comments'" role="button" tabindex="0" (keydown.enter)="currentSelection = 'comments'" (keydown.space)="currentSelection = 'comments'; $event.preventDefault()">
                         {{currentUser.comentariosCount ? currentUser.comentariosCount : 0}}
                       </a>
                     </b>
@@ -207,7 +207,7 @@
                 <div class="col-12 col-sm-2">
                   <p>
                     <b>
-                      <a href="javascript:void(0)" (click)="currentSelection = 'followers'">
+                      <a (click)="currentSelection = 'followers'" role="button" tabindex="0" (keydown.enter)="currentSelection = 'followers'" (keydown.space)="currentSelection = 'followers'; $event.preventDefault()">
                         {{currentUser.seguidoresCount ? currentUser.seguidoresCount : 0}}
                       </a>
                     </b>
@@ -219,7 +219,7 @@
                 <div class="col-12 col-sm-2">
                   <p>
                     <b>
-                      <a href="javascript:void(0)" (click)="currentSelection = 'following'">
+                      <a (click)="currentSelection = 'following'" role="button" tabindex="0" (keydown.enter)="currentSelection = 'following'" (keydown.space)="currentSelection = 'following'; $event.preventDefault()">
                         {{currentUser.siguiendoCount ? currentUser.siguiendoCount : 0}}
                       </a>
                     </b>

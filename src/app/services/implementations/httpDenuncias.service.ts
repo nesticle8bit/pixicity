@@ -1,3 +1,4 @@
+import { DenunciaViewModel } from 'src/app/models/shared/service-types.model';
 import { IHttpDenunciasService } from '../interfaces/httpDenuncias.interface';
 import { PaginationService } from '../shared/pagination.service';
 import { environment } from 'src/environments/environment';
@@ -9,16 +10,6 @@ import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
 
-interface DenunciaViewModel {
-  id: number;
-  fechaRegistro: string;
-  razon: string;
-  postId: number;
-  usuarioId: number;
-  gestionada: boolean;
-  postTitulo?: string;
-  userName?: string;
-}
 
 @Injectable()
 export class HttpDenunciasService implements IHttpDenunciasService {

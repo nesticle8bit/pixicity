@@ -8,9 +8,9 @@
         </div>
 
         <div class="com-cats">
-          <a class="com-cat-chip" [class.active]="categoriaId === 0" (click)="filtrarCategoria(0)">Todas</a>
+          <a class="com-cat-chip" [class.active]="categoriaId === 0" (click)="filtrarCategoria(0)" role="button" tabindex="0" (keydown.enter)="filtrarCategoria(0)" (keydown.space)="filtrarCategoria(0); $event.preventDefault()">Todas</a>
           @for (cat of categorias; track cat.id) {
-          <a class="com-cat-chip" [class.active]="categoriaId === cat.id" (click)="filtrarCategoria(cat.id)">
+          <a class="com-cat-chip" [class.active]="categoriaId === cat.id" (click)="filtrarCategoria(cat.id)" role="button" tabindex="0" (keydown.enter)="filtrarCategoria(cat.id)" (keydown.space)="filtrarCategoria(cat.id); $event.preventDefault()">
             {{cat.nombre}}
           </a>
           }
@@ -31,7 +31,7 @@
         <a class="com-card mb-2" [routerLink]="['/comunidades', com.nombreCorto]">
           <div class="com-card__img">
             @if (com.imagen) {
-            <img [src]="com.imagen" [alt]="com.nombre" />
+            <img [src]="com.imagen" [alt]="com.nombre" loading="lazy" decoding="async"/>
             } @else {
             <span class="com-card__placeholder"><i class="ti ti-users-group"></i></span>
             }

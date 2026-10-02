@@ -27,8 +27,8 @@
                             formControlName="email" />
                             <strong>
                               @if (!changeEmailStatus) {
-                                <a href="javascript:void(0)" (click)="changeEmail()"
-                                  >
+                                <a (click)="changeEmail()"
+                                   role="button" tabindex="0" (keydown.enter)="changeEmail()" (keydown.space)="changeEmail(); $event.preventDefault()">
                                   (Cambiar)
                                 </a>
                               }
@@ -756,8 +756,7 @@
                       [src]="b.avatar ? '/assets/avatars/' + b.avatar : '/assets/images/default-avatar.png'"
                       width="40" height="40"
                       class="rounded-circle"
-                      [alt]="b.userName"
-                    />
+                      [alt]="b.userName" loading="lazy" decoding="async"/>
                     <a [routerLink]="['/u', b.userName]" class="fw-bold text-decoration-none">{{ b.userName }}</a>
                   </div>
                   <button mat-stroked-button color="warn" (click)="desbloquearUsuario(b)">

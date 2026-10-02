@@ -6,7 +6,11 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:ci": "ng test --watch=false --browsers=ChromeHeadlessCI",
+    "icons": "node scripts/build-icon-subset.js",
+    "icons:check": "node scripts/build-icon-subset.js --check",
+    "check:responsive": "ng build --configuration development --output-path dist/check && node scripts/responsive-check.js"
   },
   "private": true,
   "dependencies": {
@@ -47,6 +51,7 @@
     "karma-coverage": "^2.2.1",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "^2.2.0",
+    "subset-font": "^2.9.0",
     "typescript": "~5.9.3"
   }
 }

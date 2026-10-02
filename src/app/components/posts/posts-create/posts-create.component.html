@@ -100,7 +100,7 @@
           @if (!hasContenido) {
           <p class="cp-empty-hint">
             <i class="ti ti-bulb"></i>
-            ¿Sin saber por dónde empezar? Prueba el <a (click)="postGenerator()">Generador de Posts</a> para armar la
+            ¿Sin saber por dónde empezar? Prueba el <a (click)="postGenerator()" role="button" tabindex="0" (keydown.enter)="postGenerator()" (keydown.space)="postGenerator(); $event.preventDefault()">Generador de Posts</a> para armar la
             estructura en segundos.
           </p>
           }

@@ -2,101 +2,35 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <ul class="list-unstyled list-inline mb-0 pt-2">
-          <!-- <li class="list-inline-item main-menu--item" [routerLink]="['/mi']">
-          <a>
-            <i class="ti ti-home"></i>
-          </a>
-        </li> -->
+        <ul class="list-unstyled list-inline mb-0 pt-2" role="list">
+          @for (link of tabs; track link.route) {
+            <li class="list-inline-item main-menu--item" [ngClass]="{'main-menu--item--active': isActive(link)}">
+              <a [routerLink]="link.route" [title]="link.label" [attr.aria-label]="link.label"
+                [attr.aria-current]="isActive(link) ? 'page' : null">
+                <i class="ti {{link.icon}} d-sm-none" aria-hidden="true"></i>
+                <span class="d-none d-sm-inline">{{link.label}}</span>
+              </a>
+            </li>
+          }
 
-        <li class="list-inline-item main-menu--item" [routerLink]="['/']"
-          [ngClass]="{'main-menu--item--active': active == '/' || active == ''}">
-          <a class="d-none d-sm-block" [routerLink]="['/']" title="Posts">
-            <span class="">Posts</span>
-          </a>
+          <!-- Login y registro: en móvil viven en el botón "Entrar" del header y en el menú hamburguesa. -->
+          @if (!currentUser.usuario) {
+            <li class="list-inline-item main-menu--item d-none d-md-block"
+              [ngClass]="{'main-menu--item--active': isRouteActive('/login')}">
+              <a routerLink="/login" title="Iniciar sesión">
+                <span>Iniciar sesión</span>
+              </a>
+            </li>
 
-          <a class="d-block d-sm-none" [routerLink]="['/']" title="Posts">
-            <span>
-              <i class="ti ti-smart-home"></i>
-            </span>
-          </a>
-        </li>
-
-        <li class="list-inline-item main-menu--item" [routerLink]="['/tops']"
-          [ngClass]="{'main-menu--item--active': active == '/tops' || active == 'tops'}">
-          <a class="d-none d-sm-block" title="TOPs">
-            <span class="">TOPs</span>
-          </a>
-
-          <a class="d-block d-sm-none" title="TOPs">
-            <span>
-              <i class="ti ti-trophy"></i>
-            </span>
-          </a>
-        </li>
-
-        <li class="list-inline-item main-menu--item" [routerLink]="['/comunidades']"
-          [ngClass]="{'main-menu--item--active': active == '/comunidades' || active == 'comunidades'}">
-          <a class="d-none d-sm-block" title="Comunidades">
-            <span class="">Comunidades</span>
-          </a>
-
-          <a class="d-block d-sm-none" title="Comunidades">
-            <span>
-              <i class="ti ti-users"></i>
-            </span>
-          </a>
-        </li>
-
-        <li class="list-inline-item main-menu--item" [routerLink]="['/fotos']"
-          [ngClass]="{'main-menu--item--active': active == '/fotos' || active == 'fotos'}">
-          <a class="d-none d-sm-block" title="Fotos">
-            <span class="">Fotos</span>
-          </a>
-
-          <a class="d-block d-sm-none" title="Fotos">
-            <span>
-              <i class="ti ti-camera"></i>
-            </span>
-          </a>
-        </li>
-
-        @if (currentUser?.usuario?.rango === 'Administrador') {
-          <li class="list-inline-item main-menu--item" [routerLink]="['/administracion/dashboard']"
-            [ngClass]="{'main-menu--item--active': active.startsWith('/administracion')}"
-            >
-            <a class="d-none d-sm-block" title="Administración">
-              <span>Administración</span>
-            </a>
-            <a class="d-block d-sm-none" title="Administración">
-              <span>
-                <i class="ti ti-adjustments"></i>
-              </span>
-            </a>
-          </li>
-        }
-
-        @if (!currentUser?.usuario) {
-          <li class="list-inline-item main-menu--item" [routerLink]="['/login']"
-            [ngClass]="{'main-menu--item--active': active == '/login' || active == 'login'}">
-            <a [routerLink]="['/']" title="Iniciar sesión">
-              <span class="">Iniciar sesión</span>
-            </a>
-          </li>
-        }
-
-        @if (!currentUser?.usuario) {
-          <li class="list-inline-item main-menu--item"
-            [routerLink]="['/registro']"
-            [ngClass]="{'main-menu--item--active': active == '/registro' || active == 'registro'}"
-            style="background: #95c317; text-transform: uppercase;">
-            <a [routerLink]="['/']" title="Registrate Ya!">
-              <span class="">Registrate Ya!</span>
-            </a>
-          </li>
-        }
-      </ul>
+            <li class="list-inline-item main-menu--item main-menu--item--register d-none d-md-block"
+              [ngClass]="{'main-menu--item--active': isRouteActive('/registro')}">
+              <a routerLink="/registro" title="Registrate Ya!">
+                <span>Registrate Ya!</span>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
     </div>
   </div>
-</div>
 </section>

@@ -2,43 +2,43 @@
     <div class="row">
         <div class="col-12">
             <ul class="list-unstyled list-inline mb-0 py-2">
-                <li (click)="select('activity')" class="list-inline-item sub-menu--item">
-                    <a [ngClass]="{'selected': selected === 'activity'}" href="javascript:void(0)">
+                <li (click)="select('activity')" class="list-inline-item sub-menu--item" role="button" tabindex="0" (keydown.enter)="select('activity')" (keydown.space)="select('activity'); $event.preventDefault()">
+                    <a [ngClass]="{'selected': selected === 'activity'}">
                         <i class="ti ti-antenna"></i>
                         <span style="margin-left: 2px;">Actividad</span>
                     </a>
                 </li>
 
-                <li (click)="select('information')" class="list-inline-item sub-menu--item">
-                    <a href="javascript:void(0)" [ngClass]="{'selected': selected === 'information'}">
+                <li (click)="select('information')" class="list-inline-item sub-menu--item" role="button" tabindex="0" (keydown.enter)="select('information')" (keydown.space)="select('information'); $event.preventDefault()">
+                    <a [ngClass]="{'selected': selected === 'information'}">
                         <i class="ti ti-info-circle"></i>
                         <span style="margin-left: 2px;">Información</span>
                     </a>
                 </li>
 
-                <li (click)="select('shouts')" class="list-inline-item sub-menu--item">
-                    <a href="javascript:void(0)" [ngClass]="{'selected': selected === 'shouts'}">
+                <li (click)="select('shouts')" class="list-inline-item sub-menu--item" role="button" tabindex="0" (keydown.enter)="select('shouts')" (keydown.space)="select('shouts'); $event.preventDefault()">
+                    <a [ngClass]="{'selected': selected === 'shouts'}">
                         <i class="ti ti-id-badge"></i>
                         <span style="margin-left: 2px;">Mi</span>
                     </a>
                 </li>
 
-                <li (click)="select('posts')" class="list-inline-item sub-menu--item">
-                    <a href="javascript:void(0)" [ngClass]="{'selected': selected === 'posts'}">
+                <li (click)="select('posts')" class="list-inline-item sub-menu--item" role="button" tabindex="0" (keydown.enter)="select('posts')" (keydown.space)="select('posts'); $event.preventDefault()">
+                    <a [ngClass]="{'selected': selected === 'posts'}">
                         <i class="ti ti-file-text"></i>
                         <span style="margin-left: 2px;">Posts</span>
                     </a>
                 </li>
 
-                <li (click)="select('followers')" class="list-inline-item sub-menu--item">
-                    <a href="javascript:void(0)" [ngClass]="{'selected': selected === 'followers'}">
+                <li (click)="select('followers')" class="list-inline-item sub-menu--item" role="button" tabindex="0" (keydown.enter)="select('followers')" (keydown.space)="select('followers'); $event.preventDefault()">
+                    <a [ngClass]="{'selected': selected === 'followers'}">
                         <i class="ti ti-users"></i>
                         <span style="margin-left: 2px;">Seguidores</span>
                     </a>
                 </li>
 
-                <li (click)="select('medals')" class="list-inline-item sub-menu--item">
-                    <a href="javascript:void(0)" [ngClass]="{'selected': selected === 'medals'}">
+                <li (click)="select('medals')" class="list-inline-item sub-menu--item" role="button" tabindex="0" (keydown.enter)="select('medals')" (keydown.space)="select('medals'); $event.preventDefault()">
+                    <a [ngClass]="{'selected': selected === 'medals'}">
                         <i class="ti ti-medal"></i>
                         <span style="margin-left: 2px;">Medallas</span>
                     </a>

@@ -9,9 +9,9 @@
       <div class="userInfoLogin">
         <ul>
           <li class="monitor" style="position: relative">
-            <a class="menu" href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Monitor"
+            <a class="menu" #tooltip="matTooltip" matTooltip="Monitor"
               [matTooltipPosition]="'above'" (click)="verNotificaciones();"
-              (clickOutside)="display.monitor = false">
+              (clickOutside)="display.monitor = false" aria-haspopup="true" [attr.aria-expanded]="display.monitor" aria-label="Notificaciones" role="button" tabindex="0" (keydown.enter)="verNotificaciones()" (keydown.space)="verNotificaciones(); $event.preventDefault()">
               <i class="ti ti-eye"></i>
             </a>
             <div class="notificaciones-list" id="mon_list" [style.display]="display.monitor ? 'block' : 'none'">
@@ -65,8 +65,8 @@
               }
             </li>
             <li class="mensajes" style="position:relative">
-              <a class="menu" href="javascript:void(0)" #tooltip="matTooltip" matTooltip="Mensajes"
-                [matTooltipPosition]="'above'" (click)="verMensajes()" (clickOutside)="display.mensajes = false">
+              <a class="menu" #tooltip="matTooltip" matTooltip="Mensajes"
+                [matTooltipPosition]="'above'" (click)="verMensajes()" (clickOutside)="display.mensajes = false" aria-haspopup="true" [attr.aria-expanded]="display.mensajes" aria-label="Mensajes" role="button" tabindex="0" (keydown.enter)="verMensajes()" (keydown.space)="verMensajes(); $event.preventDefault()">
                 <i class="ti ti-mail"></i>
               </a>
               <div class="notificaciones-list" id="mon_list" [style.display]="display.mensajes ? 'block' : 'none'">
@@ -117,8 +117,8 @@
                 }
               </li>
               <li class="favoritos" style="position:relative">
-                <a class="menu" href="javascript:void(0)" title="Posts favoritos" (click)="verFavoritos()"
-                  (clickOutside)="display.favoritos = false">
+                <a class="menu" title="Posts favoritos" (click)="verFavoritos()"
+                  (clickOutside)="display.favoritos = false" aria-haspopup="true" [attr.aria-expanded]="display.favoritos" aria-label="Posts favoritos" role="button" tabindex="0" (keydown.enter)="verFavoritos()" (keydown.space)="verFavoritos(); $event.preventDefault()">
                   <i class="ti ti-star"></i>
                 </a>
                 <div class="notificaciones-list" id="mon_list" [style.display]="display.favoritos ? 'block' : 'none'">
@@ -139,11 +139,11 @@
                         </li>
                       }
                     </ul>
-                    <a href="javascript:void(0)" [routerLink]="['/favoritos']" class="vemas">Más</a>
+                    <a [routerLink]="['/favoritos']" class="vemas">Más</a>
                   </div>
                 </li>
                 <li class="usernameMenu" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
-                  <a class="nick menu" href="javascript:void(0)"
+                  <a class="nick menu"
                     [routerLink]="['/perfil/' + currentUser.usuario?.userName]">
                     <app-user-avatar [class]="'avamu'" [avatar]="currentUser.usuario?.avatar"
                     [userName]="currentUser.usuario?.userName" [height]="20"></app-user-avatar>
@@ -158,7 +158,7 @@
                     <a class="menu" [routerLink]="['/borradores']">
                       Borradores
                     </a>
-                    <a class="menu" href="javascript:void(0)" (click)="cerrarSesion()">
+                    <a class="menu" (click)="cerrarSesion()" role="button" tabindex="0" (keydown.enter)="cerrarSesion()" (keydown.space)="cerrarSesion(); $event.preventDefault()">
                       Salir
                     </a>
                   </div>

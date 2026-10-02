@@ -18,7 +18,7 @@
                 <tr [class]="accion.tipo">
                   <td class="usuario">
                     <a [routerLink]="accion.usuarioUrl">
-                      <img [src]="accion.avatar" width="16" height="16" class="me-1" alt="" />{{ accion.usuario }}
+                      <img [src]="accion.avatar" width="16" height="16" class="me-1" alt="" loading="lazy" decoding="async"/>{{ accion.usuario }}
                     </a>
                   </td>
 
@@ -51,10 +51,10 @@
 
           <strong class="float-end" style="background: #fff; margin-top: -2px; padding-left: 7px;">
             @if (play) {
-            <img src="/assets/images/icons/icon_pause.png" class="cursor--pointer" (click)="play = !play" alt="" aria-hidden="true"/>
+            <button type="button" class="en-vivo-toggle" (click)="play = !play" aria-label="Pausar actualizaciones en vivo"><img src="/assets/images/icons/icon_pause.png" alt="" aria-hidden="true"/></button>
             }
             @if (!play) {
-            <img src="/assets/images/icons/icon_play.png" class="cursor--pointer" (click)="play = !play" alt="" aria-hidden="true"/>
+            <button type="button" class="en-vivo-toggle" (click)="play = !play" aria-label="Reanudar actualizaciones en vivo"><img src="/assets/images/icons/icon_play.png" alt="" aria-hidden="true"/></button>
             }
           </strong>
         </h6>

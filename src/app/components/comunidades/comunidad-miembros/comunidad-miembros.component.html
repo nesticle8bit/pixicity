@@ -28,7 +28,7 @@
             </span>
 
             @if (puedeGestionar && !esCreador(m)) {
-              <a class="mm-gestionar" (click)="toggleGestion(m)">
+              <a class="mm-gestionar" (click)="toggleGestion(m)" role="button" tabindex="0" (keydown.enter)="toggleGestion(m)" (keydown.space)="toggleGestion(m); $event.preventDefault()">
                 <i class="ti ti-settings"></i> Gestionar
               </a>
 
@@ -36,9 +36,9 @@
                 <div class="mm-panel">
                   <span class="mm-panel__lbl">Rango</span>
                   <div class="mm-panel__rangos">
-                    <a [class.active]="m.permiso === 3" (click)="cambiarRango(m, 3, m.esStaff)">Posteador</a>
-                    <a [class.active]="m.permiso === 2" (click)="cambiarRango(m, 2, m.esStaff)">Comentador</a>
-                    <a [class.active]="m.permiso === 1" (click)="cambiarRango(m, 1, m.esStaff)">Visitante</a>
+                    <a [class.active]="m.permiso === 3" (click)="cambiarRango(m, 3, m.esStaff)" role="button" tabindex="0" (keydown.enter)="cambiarRango(m, 3, m.esStaff)" (keydown.space)="cambiarRango(m, 3, m.esStaff); $event.preventDefault()">Posteador</a>
+                    <a [class.active]="m.permiso === 2" (click)="cambiarRango(m, 2, m.esStaff)" role="button" tabindex="0" (keydown.enter)="cambiarRango(m, 2, m.esStaff)" (keydown.space)="cambiarRango(m, 2, m.esStaff); $event.preventDefault()">Comentador</a>
+                    <a [class.active]="m.permiso === 1" (click)="cambiarRango(m, 1, m.esStaff)" role="button" tabindex="0" (keydown.enter)="cambiarRango(m, 1, m.esStaff)" (keydown.space)="cambiarRango(m, 1, m.esStaff); $event.preventDefault()">Visitante</a>
                   </div>
                   <label class="mm-panel__staff">
                     <input type="checkbox" [checked]="m.esStaff" (change)="cambiarRango(m, m.permiso, !m.esStaff)" />
@@ -55,7 +55,7 @@
     @if (totalPages.length > 1) {
       <div class="com-pagination">
         @for (p of totalPages; track p) {
-          <a [class.active]="p === pagination.currentPage" (click)="goToPage(p)">{{p}}</a>
+          <a [class.active]="p === pagination.currentPage" (click)="goToPage(p)" role="button" tabindex="0" (keydown.enter)="goToPage(p)" (keydown.space)="goToPage(p); $event.preventDefault()">{{p}}</a>
         }
       </div>
     }

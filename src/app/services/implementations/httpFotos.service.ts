@@ -1,3 +1,4 @@
+import { FotoSearchParams } from 'src/app/models/shared/service-types.model';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
@@ -8,10 +9,6 @@ import { IHttpFotosService } from '../interfaces/httpFotos.interface';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
 import { FotoViewModel, FotoComentarioViewModel } from 'src/app/models/fotos/foto-vm.model';
 
-interface FotoSearchParams {
-  page?: number;
-  pageCount?: number;
-}
 
 @Injectable()
 export class HttpFotosService implements IHttpFotosService {

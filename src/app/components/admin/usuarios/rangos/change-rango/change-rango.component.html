@@ -1,6 +1,6 @@
 @if (currentUser.usuario && currentUser.usuario.rango === 'Administrador' && data.nombre !== 'Administrador') {
   <a class="button-uppercase bazul follow_user_post" (click)="changeRango()"
-    >
+     role="button" tabindex="0" (keydown.enter)="changeRango()" (keydown.space)="changeRango(); $event.preventDefault()">
     <i class="ti ti-rotate-clockwise"></i> Cambiar de rango
   </a>
 }

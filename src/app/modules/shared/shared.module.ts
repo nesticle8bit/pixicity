@@ -32,11 +32,13 @@ import { GenreIconComponent } from '../../components/addons/genre-icon/genre-ico
 import { SelectAutocompleteComponent } from '../../components/shared/select-autocomplete/select-autocomplete.component';
 import { SelectOptionDirective, SelectLabelDirective } from '../../components/shared/select-autocomplete/select-template.directives';
 import { ShoutMediaComponent } from '../../components/addons/shout-media/shout-media.component';
+import { AdsByTypeComponent } from '../../components/ads/ads-by-type/ads-by-type.component';
 
 const SHARED = [
   // Rich editor
   RichEditorComponent,
   // Addons
+  AdsByTypeComponent,
   CountryFlagComponent,
   PostUrlLinkComponent,
   UserAvatarComponent,

@@ -2,6 +2,8 @@
 </ngx-ui-loader>
 
 <main-header></main-header>
+<!-- Fuera del header: el header móvil se desplaza con transform y eso rompería el position: fixed del cajón. -->
+<app-mobile-drawer></app-mobile-drawer>
 @if (displayComponent.mainMenu) {
   <main-menu></main-menu>
 }

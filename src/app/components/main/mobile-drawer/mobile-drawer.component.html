@@ -1,0 +1,80 @@
+@if (nav.isOpen()) {
+  <!-- Decorativo para lectores de pantalla y teclado: se cierra con Esc o con el botón de cerrar. -->
+  <div class="drawer-backdrop" (click)="nav.close()" aria-hidden="true"></div>
+}
+
+<aside id="mobile-drawer" class="drawer" [class.drawer--open]="nav.isOpen()" [class.drawer--dragging]="dragX() > 0"
+  role="dialog" aria-modal="true" aria-label="Menú principal" [attr.inert]="nav.isOpen() ? null : ''"
+  [style.transform]="dragX() > 0 ? 'translateX(' + dragX() + 'px)' : null"
+  (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd()" (touchcancel)="onTouchEnd()">
+  <div class="drawer__head">
+    @if (currentUser.usuario) {
+      <a class="drawer__user" [routerLink]="['/perfil/' + currentUser.usuario.userName]" (click)="nav.close()">
+        <app-user-avatar [avatar]="currentUser.usuario.avatar" [userName]="currentUser.usuario.userName"
+          [height]="36"></app-user-avatar>
+        <span class="drawer__username">{{'@'}}{{currentUser.usuario.userName}}</span>
+      </a>
+    } @else {
+      <span class="drawer__title">Menú</span>
+    }
+
+    <button type="button" class="drawer__close" #closeBtn (click)="nav.close()" aria-label="Cerrar menú">
+      <i class="ti ti-x"></i>
+    </button>
+  </div>
+
+  <div class="drawer__body">
+    @if (currentUser.usuario) {
+      <form class="drawer__search" [formGroup]="formGroup" (ngSubmit)="buscar()" role="search">
+        <input type="search" formControlName="search" placeholder="Buscar..." aria-label="Buscar posts" />
+        <button type="submit" aria-label="Buscar"><i class="ti ti-search"></i></button>
+      </form>
+
+      <nav class="drawer__quick" aria-label="Accesos rápidos">
+        <a [routerLink]="['/monitor']" (click)="nav.close()">
+          <i class="ti ti-eye"></i>
+          <span>Monitor</span>
+          @if (nav.stats().notifications > 0) {
+            <b class="drawer__badge" [attr.aria-label]="nav.stats().notifications + ' notificaciones sin leer'">{{nav.stats().notifications}}</b>
+          }
+        </a>
+        <a [routerLink]="['/mensajes']" (click)="nav.close()">
+          <i class="ti ti-mail"></i>
+          <span>Mensajes</span>
+          @if (nav.stats().messages > 0) {
+            <b class="drawer__badge" [attr.aria-label]="nav.stats().messages + ' mensajes sin leer'">{{nav.stats().messages}}</b>
+          }
+        </a>
+        <a [routerLink]="['/favoritos']" (click)="nav.close()">
+          <i class="ti ti-star"></i>
+          <span>Favoritos</span>
+        </a>
+      </nav>
+    }
+
+    <nav class="drawer__section" aria-label="Navegación">
+      <h2>Explorar</h2>
+      @for (link of links; track link.route) {
+        <a [routerLink]="link.route" [class.active]="isActive(link)" [attr.aria-current]="isActive(link) ? 'page' : null"
+          (click)="nav.close()">
+          <i class="ti {{link.icon}}" aria-hidden="true"></i> {{link.label}}
+        </a>
+      }
+    </nav>
+
+    @if (currentUser.usuario) {
+      <nav class="drawer__section" aria-label="Mi cuenta">
+        <h2>Mi cuenta</h2>
+        <a routerLink="/crear/post" class="drawer__cta" (click)="nav.close()"><i class="ti ti-plus"></i> Crear Post</a>
+        <a routerLink="/borradores" routerLinkActive="active" (click)="nav.close()"><i class="ti ti-notes"></i> Borradores</a>
+        <a routerLink="/cuenta" routerLinkActive="active" (click)="nav.close()"><i class="ti ti-settings"></i> Cuenta</a>
+        <button type="button" class="drawer__logout" (click)="cerrarSesion()"><i class="ti ti-logout"></i> Salir</button>
+      </nav>
+    } @else {
+      <div class="drawer__auth">
+        <a routerLink="/login" class="drawer__login" (click)="nav.close()">Iniciar sesión</a>
+        <a routerLink="/registro" class="drawer__register" (click)="nav.close()">Regístrate ya</a>
+      </div>
+    }
+  </div>
+</aside>

@@ -41,7 +41,7 @@
                       {{usuario.genero === 1 ? 'Hombre' : usuario.genero === 2 ? 'Mujer' : 'Otro'}}
                     </p>
                   </div>
-                  <a class="float-end" href="javascript:void(0)">
+                  <a class="float-end">
                     <app-user-avatar [routerLink]="['/perfil/' + usuario.userName]" [appUserPopover]="usuario.userName" [class]="'img-fluid img-thumbnail'" [avatar]="usuario.avatar"
                       [userName]="usuario.userName" [width]="80" matTooltip="{{usuario.userName}}"
                     [matTooltipPosition]="'left'"></app-user-avatar>

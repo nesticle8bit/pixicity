@@ -34,8 +34,8 @@
         @for (sub of cat.subCategorias; track sub.id) {
           <span class="sub-chip">
             {{sub.nombre}}
-            <a matTooltip="Editar" (click)="upsertSubcategoria(cat, sub)"><i class="ti ti-pencil"></i></a>
-            <a matTooltip="Eliminar" class="del" (click)="deleteSubcategoria(sub)"><i class="ti ti-x"></i></a>
+            <a matTooltip="Editar" (click)="upsertSubcategoria(cat, sub)" role="button" tabindex="0" (keydown.enter)="upsertSubcategoria(cat, sub)" (keydown.space)="upsertSubcategoria(cat, sub); $event.preventDefault()"><i class="ti ti-pencil"></i></a>
+            <a matTooltip="Eliminar" class="del" (click)="deleteSubcategoria(sub)" role="button" tabindex="0" (keydown.enter)="deleteSubcategoria(sub)" (keydown.space)="deleteSubcategoria(sub); $event.preventDefault()"><i class="ti ti-x"></i></a>
           </span>
         }
       } @else {

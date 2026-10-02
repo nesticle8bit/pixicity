@@ -556,7 +556,7 @@ export class AccountComponent implements OnInit {
   saveFormGroupPersonalizacion(): void {
     const personalization = Object.assign({}, this.formGroupPersonalizacion.value);
 
-    this.securityService.changeBackgroundProfile(personalization).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: string) => {
+    this.securityService.changeBackgroundProfile(personalization).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.notificationService.success('El background de tu perfil ha sido actualizado correctamente', 'Actualizado');
     });
   }

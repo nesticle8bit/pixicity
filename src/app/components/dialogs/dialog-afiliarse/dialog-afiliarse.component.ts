@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -45,7 +46,7 @@ export class DialogAfiliarseComponent implements OnInit {
       .subscribe((response: any) => {
         if (response) {
           this.formGroupAfiliacion.patchValue({
-            codigo: `<a href="https://taringas.net/?ref=${response}" target="_blank" title="Taringa!"><img src="https://taringas.net/assets/images/logo_ref.png"></a>`,
+            codigo: `<a href="${environment.publicUrl}/?ref=${response}" target="_blank" title="Taringa!"><img src="${environment.publicUrl}/assets/images/logo_ref.png"></a>`,
           });
         }
       });

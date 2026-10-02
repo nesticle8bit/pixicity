@@ -41,7 +41,7 @@
                         {{borrador.fechaActualiza | timeAgo}}
                       </td>
                       <td class="text-center" width="30px">
-                        <a href="javascript:void(0)" (click)="deleteBorrador(borrador)">
+                        <a (click)="deleteBorrador(borrador)" role="button" tabindex="0" (keydown.enter)="deleteBorrador(borrador)" (keydown.space)="deleteBorrador(borrador); $event.preventDefault()">
                           @if (!borrador.eliminado) {
                             <img src="/assets/images/icons/cross.png" alt="Eliminar" #tooltip="matTooltip"
                               matTooltip="Eliminar" [matTooltipPosition]="'above'"
@@ -75,8 +75,8 @@
               @for (categoria of categorias; track categoria) {
                 <tr>
                   <td>
-                    <a href="javascript:void(0)" (click)="filterByCategory(categoria)"
-                      title="{{categoria.categoria.nombre}}">
+                    <a (click)="filterByCategory(categoria)"
+                      title="{{categoria.categoria.nombre}}" role="button" tabindex="0" (keydown.enter)="filterByCategory(categoria)" (keydown.space)="filterByCategory(categoria); $event.preventDefault()">
                       <img src="/assets/images/categorias/{{categoria.categoria.icono}}"
                         alt="{{categoria.categoria.nombre}}" loading="lazy"/>
                         {{categoria.categoria.nombre}} <span
@@ -88,7 +88,7 @@
 
               <tr>
                 <td>
-                  <a href="javascript:void(0)" (click)="getBorradores(0)">
+                  <a (click)="getBorradores(0)" role="button" tabindex="0" (keydown.enter)="getBorradores(0)" (keydown.space)="getBorradores(0); $event.preventDefault()">
                     Todos
                   </a>
                 </td>

@@ -30,7 +30,7 @@ export class TableMonitorComponent implements OnInit {
   }
 
   getMonitors(): void {
-    this.logsService.getMonitorsAdmin({}).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.logsService.getMonitorsAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       if (response?.data) {
         response.data = response.data.map((notificacion: any) => {
           if (notificacion.mensaje) {

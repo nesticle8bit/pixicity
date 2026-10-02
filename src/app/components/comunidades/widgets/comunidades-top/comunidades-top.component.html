@@ -5,7 +5,7 @@
     <img class="cursor--pointer"
       [src]="paused ? '/assets/images/icons/icon_play.png' : '/assets/images/icons/icon_pause.png'"
       [matTooltip]="paused ? 'Reanudar' : 'Pausar'" style="background: #fff; padding-left: 5px"
-      (click)="togglePause()" alt="" aria-hidden="true"/>
+      (click)="togglePause()" alt="" role="button" tabindex="0" [attr.aria-label]="paused ? 'Reanudar' : 'Pausar'" (keydown.enter)="togglePause()" (keydown.space)="togglePause(); $event.preventDefault()">
   </div>
 </h6>
 
@@ -50,7 +50,7 @@
 
   <div class="carousel-dots">
     @for (com of comunidades; track com.id; let i = $index) {
-    <span class="dot" [class.active]="i === currentIndex" (click)="goTo(i)"></span>
+    <span class="dot" [class.active]="i === currentIndex" (click)="goTo(i)" role="button" tabindex="0" (keydown.enter)="goTo(i)" (keydown.space)="goTo(i); $event.preventDefault()"></span>
     }
   </div>
 </div>

@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -14,6 +15,9 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./comunidad-create.component.scss'],
 })
 export class ComunidadCreateComponent implements OnInit {
+  // Solo el host (sin protocolo) para mostrar el prefijo de la URL de la comunidad.
+  public readonly publicHost = new URL(environment.publicUrl).host;
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;

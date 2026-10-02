@@ -1,0 +1,136 @@
+// GENERADO por scripts/build-icon-subset.js — no editar a mano.
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (114).
+@font-face {
+  font-family: "tabler-icons";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/tabler-icons-subset.woff2") format("woff2");
+}
+
+.ti {
+  font-family: "tabler-icons" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ti-adjustments:before { content: "\ea03"; }
+.ti-alert-circle:before { content: "\ea05"; }
+.ti-alert-triangle:before { content: "\ea06"; }
+.ti-antenna:before { content: "\f094"; }
+.ti-arrow-back-up:before { content: "\eb77"; }
+.ti-arrow-down:before { content: "\ea16"; }
+.ti-arrow-up:before { content: "\ea25"; }
+.ti-arrow-up-right:before { content: "\ea24"; }
+.ti-arrows-shuffle:before { content: "\f000"; }
+.ti-article:before { content: "\f1e2"; }
+.ti-award:before { content: "\ea2c"; }
+.ti-ban:before { content: "\ea2e"; }
+.ti-bold:before { content: "\eb7b"; }
+.ti-brand-facebook:before { content: "\ec1a"; }
+.ti-brand-instagram:before { content: "\ec20"; }
+.ti-brand-tiktok:before { content: "\ec73"; }
+.ti-brand-twitter:before { content: "\ec27"; }
+.ti-brand-youtube:before { content: "\ec90"; }
+.ti-bulb:before { content: "\ea51"; }
+.ti-calendar:before { content: "\ea53"; }
+.ti-camera:before { content: "\ea54"; }
+.ti-caret-left:before { content: "\eb5e"; }
+.ti-caret-right:before { content: "\eb5f"; }
+.ti-category:before { content: "\f1f6"; }
+.ti-chart-bar:before { content: "\ea59"; }
+.ti-chart-line:before { content: "\ea5c"; }
+.ti-check:before { content: "\ea5e"; }
+.ti-checks:before { content: "\ebaa"; }
+.ti-chevron-down:before { content: "\ea5f"; }
+.ti-chevron-right:before { content: "\ea61"; }
+.ti-circle:before { content: "\ea6b"; }
+.ti-circle-check:before { content: "\ea67"; }
+.ti-circle-chevron-left:before { content: "\f623"; }
+.ti-circle-dot:before { content: "\efb1"; }
+.ti-circle-x:before { content: "\ea6a"; }
+.ti-clock:before { content: "\ea70"; }
+.ti-cloud-upload:before { content: "\ea75"; }
+.ti-coin:before { content: "\eb82"; }
+.ti-copy:before { content: "\ea7a"; }
+.ti-device-floppy:before { content: "\eb62"; }
+.ti-dots-vertical:before { content: "\ea94"; }
+.ti-edit:before { content: "\ea98"; }
+.ti-external-link:before { content: "\ea99"; }
+.ti-eye:before { content: "\ea9a"; }
+.ti-file-text:before { content: "\eaa2"; }
+.ti-flag:before { content: "\eaa6"; }
+.ti-flame:before { content: "\ec2c"; }
+.ti-gender-female:before { content: "\f0e7"; }
+.ti-gender-male:before { content: "\f0ee"; }
+.ti-gender-neutrois:before { content: "\f0ef"; }
+.ti-history:before { content: "\ebea"; }
+.ti-id-badge:before { content: "\eff7"; }
+.ti-id-badge-2:before { content: "\f076"; }
+.ti-info-circle:before { content: "\eac5"; }
+.ti-italic:before { content: "\eb93"; }
+.ti-layout-dashboard:before { content: "\f02c"; }
+.ti-layout-distribute-horizontal:before { content: "\ead5"; }
+.ti-link:before { content: "\eade"; }
+.ti-list-check:before { content: "\eb6a"; }
+.ti-list-search:before { content: "\eea9"; }
+.ti-loader-2:before { content: "\f226"; }
+.ti-lock-access:before { content: "\eeaa"; }
+.ti-lock-open:before { content: "\eae1"; }
+.ti-login-2:before { content: "\fc76"; }
+.ti-logout:before { content: "\eba8"; }
+.ti-mail:before { content: "\eae5"; }
+.ti-map-pin:before { content: "\eae8"; }
+.ti-medal:before { content: "\ec78"; }
+.ti-menu-2:before { content: "\ec42"; }
+.ti-message:before { content: "\eaef"; }
+.ti-message-2:before { content: "\eaec"; }
+.ti-message-2-off:before { content: "\f40b"; }
+.ti-message-circle:before { content: "\eaed"; }
+.ti-messages:before { content: "\eb6c"; }
+.ti-mood-empty:before { content: "\eeb5"; }
+.ti-mood-happy:before { content: "\eaf4"; }
+.ti-notes:before { content: "\eb6e"; }
+.ti-pencil:before { content: "\eb04"; }
+.ti-pencil-plus:before { content: "\f1ec"; }
+.ti-photo:before { content: "\eb0a"; }
+.ti-pig-money:before { content: "\f38c"; }
+.ti-pin:before { content: "\ec9c"; }
+.ti-plus:before { content: "\eb0b"; }
+.ti-quote:before { content: "\efbe"; }
+.ti-refresh:before { content: "\eb13"; }
+.ti-rocket:before { content: "\ec45"; }
+.ti-rotate-clockwise:before { content: "\eb15"; }
+.ti-search:before { content: "\eb1c"; }
+.ti-send:before { content: "\eb1e"; }
+.ti-settings:before { content: "\eb20"; }
+.ti-shield-check:before { content: "\eb22"; }
+.ti-smart-home:before { content: "\ecde"; }
+.ti-sparkles:before { content: "\f6d7"; }
+.ti-stack-2:before { content: "\eef7"; }
+.ti-star:before { content: "\eb2e"; }
+.ti-tags:before { content: "\ef86"; }
+.ti-target-off:before { content: "\f1ad"; }
+.ti-thumb-down:before { content: "\eb3b"; }
+.ti-thumb-up:before { content: "\eb3c"; }
+.ti-tool:before { content: "\eb40"; }
+.ti-trash:before { content: "\eb41"; }
+.ti-trophy:before { content: "\eb45"; }
+.ti-underline:before { content: "\eba2"; }
+.ti-upload:before { content: "\eb47"; }
+.ti-user-minus:before { content: "\eb4a"; }
+.ti-user-plus:before { content: "\eb4b"; }
+.ti-user-shield:before { content: "\f7d0"; }
+.ti-user-star:before { content: "\f7d1"; }
+.ti-users:before { content: "\ebf2"; }
+.ti-users-group:before { content: "\fa21"; }
+.ti-wand:before { content: "\ebcb"; }
+.ti-wifi:before { content: "\eb52"; }
+.ti-world:before { content: "\eb54"; }
+.ti-x:before { content: "\eb55"; }

@@ -63,7 +63,7 @@
                         [matTooltipPosition]="'right'"><i class="ti ti-pin"></i> Fijado</b>
                     }
                     <span (click)="displayHistory(comentario)"
-                      [ngClass]="{'cursor--pointer': comentario.historial?.length > 0}">
+                      [ngClass]="{'cursor--pointer': comentario.historial?.length > 0}" role="button" tabindex="0" (keydown.enter)="displayHistory(comentario)" (keydown.space)="displayHistory(comentario); $event.preventDefault()">
                     {{comentario?.fechaComentario | timeAgo}}</span>
                   </div>
                   <div class="numbersvotes">
@@ -76,7 +76,7 @@
                         <a class="voto-btn"
                           [ngClass]="{'active-like': comentario?.miVoto === 1}"
                           (click)="voteComentario(comentario, 1)"
-                          matTooltip="Me gusta">
+                          matTooltip="Me gusta" role="button" tabindex="0" (keydown.enter)="voteComentario(comentario, 1)" (keydown.space)="voteComentario(comentario, 1); $event.preventDefault()">
                           <i class="ti ti-thumb-up"></i>
                         </a>
                       }
@@ -85,7 +85,7 @@
                         <a class="voto-btn"
                           [ngClass]="{'active-dislike': comentario?.miVoto === -1}"
                           (click)="voteComentario(comentario, -1)"
-                          matTooltip="No me gusta">
+                          matTooltip="No me gusta" role="button" tabindex="0" (keydown.enter)="voteComentario(comentario, -1)" (keydown.space)="voteComentario(comentario, -1); $event.preventDefault()">
                           <i class="ti ti-thumb-down"></i>
                         </a>
                       }
@@ -95,32 +95,32 @@
                 <div class="float-end answerOptions">
                   <div class="botonear">
                     @if (currentUser?.usuario) {
-                      <a #tooltip="matTooltip" matTooltip="Responder" (click)="comentario.responder = true">
+                      <a #tooltip="matTooltip" matTooltip="Responder" (click)="comentario.responder = true" role="button" tabindex="0" (keydown.enter)="comentario.responder = true" (keydown.space)="comentario.responder = true; $event.preventDefault()">
                         <i class="ti ti-arrow-back-up reply"></i>
                       </a>
                     }
                     @if (currentUser?.usuario?.userName === comentario?.usuario) {
                       <a #tooltip="matTooltip" matTooltip="Actualizar Comentario"
                         (click)="comentario.update = true; lastComment = comentario.contenido"
-                        >
+                         role="button" tabindex="0" (keydown.enter)="comentario.update = true; lastComment = comentario.contenido" (keydown.space)="comentario.update = true; lastComment = comentario.contenido; $event.preventDefault()">
                         <i class="ti ti-pencil edit"></i>
                       </a>
                     }
                     @if (currentUser?.usuario?.userName === comentario?.usuario) {
                       <a #tooltip="matTooltip" matTooltip="Eliminar Comentario"
                         (click)="eliminarComentario(comentario.id, i)"
-                        >
+                         role="button" tabindex="0" (keydown.enter)="eliminarComentario(comentario.id, i)" (keydown.space)="eliminarComentario(comentario.id, i); $event.preventDefault()">
                         <i class="ti ti-x times"></i>
                       </a>
                     }
                     @if (puedeFijar(comentario)) {
                       <a #tooltip="matTooltip" [matTooltip]="comentario?.fijado ? 'Desfijar' : 'Fijar comentario'"
-                        (click)="fijar(comentario)">
+                        (click)="fijar(comentario)" role="button" tabindex="0" (keydown.enter)="fijar(comentario)" (keydown.space)="fijar(comentario); $event.preventDefault()">
                         <i class="ti ti-pin pin" [class.pinned]="comentario?.fijado"></i>
                       </a>
                     }
                     @if (currentUser?.usuario && !esComentarioPropio(comentario)) {
-                      <a #tooltip="matTooltip" matTooltip="Denunciar Comentario" (click)="denunciar(comentario)">
+                      <a #tooltip="matTooltip" matTooltip="Denunciar Comentario" (click)="denunciar(comentario)" role="button" tabindex="0" (keydown.enter)="denunciar(comentario)" (keydown.space)="denunciar(comentario); $event.preventDefault()">
                         <i class="ti ti-flag report"></i>
                       </a>
                     }
@@ -129,7 +129,7 @@
               </div>
               <div id="comment-body-{{comentario.id}}" class="comment-content">
                 @if (estaColapsado(comentario)) {
-                  <div class="coment-collapsed" (click)="mostrarColapsado(comentario)">
+                  <div class="coment-collapsed" (click)="mostrarColapsado(comentario)" role="button" tabindex="0" (keydown.enter)="mostrarColapsado(comentario)" (keydown.space)="mostrarColapsado(comentario); $event.preventDefault()">
                     @if ((comentario.denunciasPendientes || 0) >= UMBRAL_DENUNCIAS) {
                       Comentario oculto por denuncias — <a>mostrar</a>
                     } @else {
@@ -206,7 +206,7 @@
                                   >OP</b>
                                 }
                                 <span (click)="displayHistory(respuesta)"
-                                  [ngClass]="{'cursor--pointer': respuesta.historial?.length > 0}">
+                                  [ngClass]="{'cursor--pointer': respuesta.historial?.length > 0}" role="button" tabindex="0" (keydown.enter)="displayHistory(respuesta)" (keydown.space)="displayHistory(respuesta); $event.preventDefault()">
                                 {{respuesta?.fechaComentario | timeAgo}}</span>
                               </div>
                               <div class="numbersvotes">
@@ -215,7 +215,7 @@
                                     <a class="voto-btn"
                                       [ngClass]="{'active-like': respuesta?.miVoto === 1}"
                                       (click)="voteComentario(respuesta, 1)"
-                                      matTooltip="Me gusta">
+                                      matTooltip="Me gusta" role="button" tabindex="0" (keydown.enter)="voteComentario(respuesta, 1)" (keydown.space)="voteComentario(respuesta, 1); $event.preventDefault()">
                                       <i class="ti ti-thumb-up"></i>
                                     </a>
                                   }
@@ -226,7 +226,7 @@
                                     <a class="voto-btn"
                                       [ngClass]="{'active-dislike': respuesta?.miVoto === -1}"
                                       (click)="voteComentario(respuesta, -1)"
-                                      matTooltip="No me gusta">
+                                      matTooltip="No me gusta" role="button" tabindex="0" (keydown.enter)="voteComentario(respuesta, -1)" (keydown.space)="voteComentario(respuesta, -1); $event.preventDefault()">
                                       <i class="ti ti-thumb-down"></i>
                                     </a>
                                   }
@@ -235,25 +235,25 @@
                             </div>
                             <div class="float-end answerOptions">
                               <div class="botonear">
-                                <!-- <a #tooltip="matTooltip" matTooltip="Responder" (click)="comentario.responder = true">
+                                <!-- <a #tooltip="matTooltip" matTooltip="Responder" (click)="comentario.responder = true" role="button" tabindex="0" (keydown.enter)="comentario.responder = true" (keydown.space)="comentario.responder = true; $event.preventDefault()">
                                 <i class="ti ti-arrow-back-up reply"></i>
                               </a> -->
                               @if (currentUser?.usuario?.userName === respuesta?.usuario) {
                                 <a #tooltip="matTooltip" matTooltip="Actualizar Comentario"
                                   (click)="respuesta.update = true; lastComment = respuesta.contenido"
-                                  >
+                                   role="button" tabindex="0" (keydown.enter)="respuesta.update = true; lastComment = respuesta.contenido" (keydown.space)="respuesta.update = true; lastComment = respuesta.contenido; $event.preventDefault()">
                                   <i class="ti ti-pencil edit"></i>
                                 </a>
                               }
                               @if (currentUser?.usuario?.userName === respuesta?.usuario) {
                                 <a #tooltip="matTooltip" matTooltip="Eliminar Comentario"
                                   (click)="eliminarRespuesta(respuesta.id, i, respuestaIndex)"
-                                  >
+                                   role="button" tabindex="0" (keydown.enter)="eliminarRespuesta(respuesta.id, i, respuestaIndex)" (keydown.space)="eliminarRespuesta(respuesta.id, i, respuestaIndex); $event.preventDefault()">
                                   <i class="ti ti-x times"></i>
                                 </a>
                               }
                               @if (currentUser?.usuario && !esComentarioPropio(respuesta)) {
-                                <a #tooltip="matTooltip" matTooltip="Denunciar Comentario" (click)="denunciar(respuesta)">
+                                <a #tooltip="matTooltip" matTooltip="Denunciar Comentario" (click)="denunciar(respuesta)" role="button" tabindex="0" (keydown.enter)="denunciar(respuesta)" (keydown.space)="denunciar(respuesta); $event.preventDefault()">
                                   <i class="ti ti-flag report"></i>
                                 </a>
                               }
@@ -311,7 +311,7 @@
               <div class="error"></div>
               <!-- <section class="comments-menu">
               <ul class="list-inline mb-0">
-                <li class="list-inline-item" (click)="emojiBottomSheet()">
+                <li class="list-inline-item" (click)="emojiBottomSheet()" role="button" tabindex="0" (keydown.enter)="emojiBottomSheet()" (keydown.space)="emojiBottomSheet(); $event.preventDefault()">
                   <i class="ti ti-mood-happy"></i>
                 </li>
                 <li class="list-inline-item">
@@ -332,7 +332,7 @@
             formControlName="contenido"></textarea>
             <div class="buttons">
               <div class="float-end">
-                <a class="boton azul" (click)="enviarComentario()">
+                <a class="boton azul" (click)="enviarComentario()" role="button" tabindex="0" (keydown.enter)="enviarComentario()" (keydown.space)="enviarComentario(); $event.preventDefault()">
                   Comentar
                 </a>
               </div>

@@ -1,13 +1,12 @@
 @use 'ngx-toastr/toastr';
 @use "@ctrl/ngx-emoji-mart/picker";
 @use "assets/styles/icons";
+// Subconjunto de Tabler con solo los íconos usados (~15 KB en vez de ~500 KB de fuente + 210 KB de CSS).
+// Se regenera con: npm run icons   (y `npm run icons:check` lo valida en CI).
+@use "assets/styles/tabler-icons-subset";
 
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 @import "material-icons/iconfont/material-icons.css";
-// Tabler local y con version fija: antes venia de jsdelivr con @latest, que
-// bloqueaba el render y podia romperse solo en cualquier release.
-@import "@tabler/icons-webfont/dist/tabler-icons.min.css";
-@import "animate.css";
 
 // CDK overlay: ensure user popover renders above everything
 .user-popover-panel {
@@ -79,6 +78,16 @@ header {
     background: url('/assets/images/header-bg-3.png') top center repeat-x $main-color;
     height: 65px;
   }
+}
+
+// Elementos que se comportan como botón (role="button") deben verse clicables aunque no sean <button> ni <a href>.
+[role="button"] {
+  cursor: pointer;
+}
+
+[role="button"]:focus-visible {
+  outline: 2px solid #0b6ea5;
+  outline-offset: 2px;
 }
 
 .cursor {
@@ -2228,12 +2237,28 @@ span.positivo {
   padding: 5px 10px;
   display: inline-block;
   border: 0;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color .15s ease;
 
   &.block {
     display: block !important;
   }
+
+  &:focus-visible {
+    outline: 2px solid #0b6ea5;
+    outline-offset: 2px;
+  }
+
+  &:disabled,
+  &.disabled {
+    opacity: .5;
+    cursor: default;
+    pointer-events: none;
+  }
 }
 
+// Variantes de color. Todas fijan el color del texto: sin esto un <a class="boton rojo"> se veía como enlace azul sin fondo.
 .boton.azul {
   background: #2594ef;
   color: #fff;
@@ -2241,6 +2266,42 @@ span.positivo {
 
 .boton.azul:hover {
   background: #46acff;
+}
+
+.boton.rojo {
+  background: #c0392b;
+  color: #fff;
+
+  &:hover {
+    background: #d9503f;
+  }
+}
+
+.boton.verde {
+  background: #22b447;
+  color: #fff;
+
+  &:hover {
+    background: #2fcb55;
+  }
+}
+
+.boton.gris {
+  background: #8a9299;
+  color: #fff;
+
+  &:hover {
+    background: #9ba2a8;
+  }
+}
+
+.boton.accent {
+  background: #e67e22;
+  color: #fff;
+
+  &:hover {
+    background: #f08c33;
+  }
 }
 
 .boton.link {

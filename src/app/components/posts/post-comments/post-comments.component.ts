@@ -81,7 +81,7 @@ export class PostCommentsComponent implements OnInit {
           usuario: this.currentUser.usuario.userName,
           avatar: this.currentUser.usuario.avatar,
           contenido: comentario.contenido,
-          fechaComentario: new Date(),
+          fechaComentario: new Date().toISOString(),
           votos: 0,
           miVoto: 0,
           respuestas: [],
@@ -229,7 +229,7 @@ export class PostCommentsComponent implements OnInit {
       contenido: respuesta.respuesta,
       usuario: undefined,
       avatar: undefined,
-      fechaComentario: new Date(),
+      fechaComentario: new Date().toISOString(),
     };
 
     this.postService.addComentario(comentario).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {

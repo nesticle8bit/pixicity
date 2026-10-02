@@ -82,3 +82,16 @@ strong.text-muted {
 .vivo-filter strong {
     color: #FF6600!important;
 }
+// Pausar/reanudar es un <button> real (antes un <img> con clic): accesible por teclado y sin estilos de botón.
+.en-vivo-toggle {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  line-height: 0;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid #0b6ea5;
+    outline-offset: 2px;
+  }
+}

@@ -377,6 +377,20 @@
 
 .foto-owner-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 4px;
+
+  // <a> y <button> con la misma apariencia, ícono alineado y objetivo táctil cómodo.
+  .boton {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 34px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+  }
 }

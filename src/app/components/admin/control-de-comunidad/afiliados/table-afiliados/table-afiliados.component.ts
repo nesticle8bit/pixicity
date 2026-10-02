@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
@@ -94,7 +95,7 @@ export class TableAfiliadosComponent implements OnInit {
     selBox.style.left = '0';
     selBox.style.top = '0';
     selBox.style.opacity = '0';
-    selBox.value = `https://taringas.net/?ref=${codigo}`;
+    selBox.value = `${environment.publicUrl}/?ref=${codigo}`;
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();

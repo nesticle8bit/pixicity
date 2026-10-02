@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { PaginatedData } from 'src/app/models/api/api-response.model';
+import { NoticiaModel } from 'src/app/models/web/noticia.model';
 
 @Injectable()
 export abstract class IHttpNoticiasService {
-  abstract getNoticias(search: string): Observable<any>;
-  abstract saveNoticias(noticia: any): Observable<any>;
-  abstract updateNoticias(noticia: any): Observable<any>;
-  abstract deleteNoticias(id: number): Observable<any>;
-  abstract getAllNoticias(): Observable<any>;
+  abstract getNoticias(search: string): Observable<PaginatedData<NoticiaModel>>;
+  abstract saveNoticias(noticia: Partial<NoticiaModel>): Observable<number>;
+  abstract updateNoticias(noticia: Partial<NoticiaModel>): Observable<boolean>;
+  abstract deleteNoticias(id: number): Observable<boolean>;
+  abstract getAllNoticias(): Observable<NoticiaModel[]>;
 }

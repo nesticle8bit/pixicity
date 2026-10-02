@@ -52,7 +52,7 @@
     }
 
     @if (estaColapsado(c)) {
-      <div class="sc-collapsed" (click)="mostrarColapsado(c)">
+      <div class="sc-collapsed" (click)="mostrarColapsado(c)" role="button" tabindex="0" (keydown.enter)="mostrarColapsado(c)" (keydown.space)="mostrarColapsado(c); $event.preventDefault()">
         @if ((c.denunciasPendientes || 0) >= 3) {
           Comentario oculto por denuncias — <a>mostrar</a>
         } @else {

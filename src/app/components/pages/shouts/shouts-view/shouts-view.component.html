@@ -38,7 +38,7 @@
 
                 <footer class="sv-bubble__footer">
                   <a class="sv-action sv-action--open"
-                    (click)="clipboard('https://taringas.net/shouts/' + shout.avatar.userName + '/' + shout.id)">
+                    (click)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id)" role="button" tabindex="0" (keydown.enter)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id)" (keydown.space)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id); $event.preventDefault()">
                     <i class="ti ti-link"></i> Copiar URL
                   </a>
                   <span class="sv-action" matTooltip="Comentarios">
@@ -70,7 +70,7 @@
           <h2>Herramientas</h2>
         </div>
         <div class="row">
-          <div class="col-12 col-sm-12 d-grid gap-2 text-end" (click)="eliminarShout()">
+          <div class="col-12 col-sm-12 d-grid gap-2 text-end" (click)="eliminarShout()" role="button" tabindex="0" (keydown.enter)="eliminarShout()" (keydown.space)="eliminarShout(); $event.preventDefault()">
             <button mat-flat-button color="danger">
               <i class="ti ti-trash"></i> Eliminar Shout
             </button>

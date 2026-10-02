@@ -10,7 +10,7 @@
               <input class="bbboton" vspace="2" hspace="10" type="submit" value="" />
             </form>
           </div>
-          <a class="ircielo float-end" (click)="goToHeaven()">
+          <a class="ircielo float-end" (click)="goToHeaven()" role="button" tabindex="0" (keydown.enter)="goToHeaven()" (keydown.space)="goToHeaven(); $event.preventDefault()">
             Ir al cielo
           </a>
         </div>

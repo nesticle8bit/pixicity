@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: CI + Docker Image
 
 on:
   push:
@@ -8,22 +8,56 @@ on:
 
 jobs:
 
-  build:
+  test:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+
+    # --legacy-peer-deps: el árbol de dependencias tiene conflictos de peer que npm ci rechaza por defecto.
+    - name: Install
+      run: npm ci --legacy-peer-deps
+
+    - name: Icon subset is up to date
+      run: npm run icons:check
+
+    - name: Unit tests
+      run: npm run test:ci
+
+    # Falla si una dependencia de producción tiene una vulnerabilidad alta o crítica.
+    - name: Audit production dependencies
+      run: npm audit --omit=dev --audit-level=high --legacy-peer-deps
+
+    - name: Build
+      run: npx ng build
+
+  docker:
+
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag pixicity
-      
+
+    # Solo se publica al hacer push a main; las pull requests construyen la imagen pero no la suben.
     - name: login-registry
+      if: github.event_name == 'push'
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-      
+      run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
+
     - name: push-image
+      if: github.event_name == 'push'
       run: |
         docker tag pixicity nesticle8bit/pixicity:latest
         docker push nesticle8bit/pixicity:latest

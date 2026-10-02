@@ -1,0 +1,19 @@
+// Móvil: las opciones del submenú se deslizan en una sola fila en vez de partirse en varias líneas.
+@media (max-width: 575.98px) {
+  .sub-menu ul {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .sub-menu--item {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}

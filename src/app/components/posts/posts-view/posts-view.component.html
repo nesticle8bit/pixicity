@@ -20,12 +20,12 @@
           </div>
           <div id="socialr">
             <div class="recosr">
-              <a class="fosrf" (click)="openShare('facebook')" title="Compartir en Facebook">
+              <a class="fosrf" (click)="openShare('facebook')" title="Compartir en Facebook" role="button" tabindex="0" (keydown.enter)="openShare('facebook')" (keydown.space)="openShare('facebook'); $event.preventDefault()">
                 <i class="ti ti-brand-facebook"></i>
               </a>
             </div>
             <div class="recosr">
-              <a class="fosrt" (click)="openShare('twitter')" title="Compartir en Twitter">
+              <a class="fosrt" (click)="openShare('twitter')" title="Compartir en Twitter" role="button" tabindex="0" (keydown.enter)="openShare('twitter')" (keydown.space)="openShare('twitter'); $event.preventDefault()">
                 <i class="ti ti-brand-twitter"></i>
               </a>
             </div>

@@ -4,7 +4,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, HostListener, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
@@ -58,6 +58,14 @@ export class SectionUserInfoLoginComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       search: '',
     });
+  }
+
+  // Esc cierra cualquier desplegable abierto (monitor, mensajes, favoritos).
+  @HostListener('document:keydown.escape')
+  cerrarDesplegables(): void {
+    this.display.monitor = false;
+    this.display.mensajes = false;
+    this.display.favoritos = false;
   }
 
   ngOnInit(): void {

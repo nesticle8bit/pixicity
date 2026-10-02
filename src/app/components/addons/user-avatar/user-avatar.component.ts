@@ -1,8 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Component({
   standalone: false,
+  // Solo depende de sus @Input: se vuelve a evaluar únicamente cuando cambian (se usa en cada lista de la app).
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-user-avatar',
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss'],

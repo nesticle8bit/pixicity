@@ -140,11 +140,11 @@
               <span class="voto-label">Calificar:</span>
               @if (currentUser?.usuario && !esMio) {
               <a class="voto-btn positivo" [ngClass]="{'voted': foto.miVoto === 1}" (click)="votar(1)"
-                matTooltip="Votar positivo">
+                matTooltip="Votar positivo" role="button" tabindex="0" (keydown.enter)="votar(1)" (keydown.space)="votar(1); $event.preventDefault()">
                 <i class="ti ti-thumb-up"></i>
               </a>
               <a class="voto-btn negativo" [ngClass]="{'voted': foto.miVoto === -1}" (click)="votar(-1)"
-                matTooltip="Votar negativo">
+                matTooltip="Votar negativo" role="button" tabindex="0" (keydown.enter)="votar(-1)" (keydown.space)="votar(-1); $event.preventDefault()">
                 <i class="ti ti-thumb-down"></i>
               </a>
               }
@@ -168,12 +168,12 @@
           <!-- Acciones del dueño -->
           @if (esMio || esAdmin) {
           <div class="foto-owner-actions">
-            <a [routerLink]="['/fotos/actualizar', foto.id]" class="boton azul me-2">
-              <i class="ti ti-pencil"></i> Editar
+            <a [routerLink]="['/fotos/actualizar', foto.id]" class="boton azul">
+              <i class="ti ti-pencil" aria-hidden="true"></i> Editar
             </a>
-            <a class="boton rojo" (click)="eliminar()">
-              <i class="ti ti-x"></i> Eliminar
-            </a>
+            <button type="button" class="boton rojo" (click)="eliminar()">
+              <i class="ti ti-trash" aria-hidden="true"></i> Eliminar
+            </button>
           </div>
           }
 

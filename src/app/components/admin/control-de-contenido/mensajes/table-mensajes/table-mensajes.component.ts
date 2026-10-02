@@ -30,7 +30,7 @@ export class TableMensajesComponent implements OnInit {
   }
 
   getMensajes(): void {
-    this.mensajesService.getMensajesAdmin({}).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.mensajesService.getMensajesAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
       this.mensajes = response?.mensajes;
       this.totalCount = response?.pagination?.totalCount;
     });

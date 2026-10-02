@@ -1,13 +1,13 @@
 <div class="post-nav d-none d-md-none d-lg-block">
-    <a class="float-end" (click)="nextPost(post.id)" matTooltip="Post siguiente (más nuevo)">
+    <a class="float-end" (click)="nextPost(post.id)" matTooltip="Post siguiente (más nuevo)" role="button" tabindex="0" (keydown.enter)="nextPost(post.id)" (keydown.space)="nextPost(post.id); $event.preventDefault()">
         <i class="ti ti-caret-right"></i>
     </a>
 
-    <a class="float-end" (click)="randomPost(post.id)" matTooltip="Post aleatorio">
+    <a class="float-end" (click)="randomPost(post.id)" matTooltip="Post aleatorio" role="button" tabindex="0" (keydown.enter)="randomPost(post.id)" (keydown.space)="randomPost(post.id); $event.preventDefault()">
         <i class="ti ti-arrows-shuffle"></i>
     </a>
 
-    <a class="float-end" (click)="prevPost(post.id)" matTooltip="Post anterior (más viejo)">
+    <a class="float-end" (click)="prevPost(post.id)" matTooltip="Post anterior (más viejo)" role="button" tabindex="0" (keydown.enter)="prevPost(post.id)" (keydown.space)="prevPost(post.id); $event.preventDefault()">
         <i class="ti ti-caret-left"></i>
     </a>
 </div>

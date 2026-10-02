@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   api: 'http://localhost:58882',
+  // URL pública del sitio: se usa en enlaces que el usuario copia o comparte (afiliación, shouts).
+  publicUrl: 'http://localhost:4200',
   captchaKey: '6LeemV0rAAAAAPdYJIZI9zcYpSn-mzt-3U9MShOG'
 };
 

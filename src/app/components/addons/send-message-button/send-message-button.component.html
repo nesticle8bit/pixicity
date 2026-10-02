@@ -1,6 +1,6 @@
 @if (currentUser?.usuario && currentUser?.usuario?.userName !== userName) {
   <main>
-    <a class="button-uppercase bazul" (click)="enviarMP()">
+    <a class="button-uppercase bazul" (click)="enviarMP()" role="button" tabindex="0" (keydown.enter)="enviarMP()" (keydown.space)="enviarMP(); $event.preventDefault()">
       @if (icon) {
         <i class="ti ti-mail"></i>
         } Enviar MP

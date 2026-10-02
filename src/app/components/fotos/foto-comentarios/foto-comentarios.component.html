@@ -38,13 +38,13 @@
                   <a class="voto-btn"
                     [ngClass]="{'active-like': comentario?.miVoto === 1}"
                     (click)="voteComentario(comentario, 1)"
-                    matTooltip="Me gusta">
+                    matTooltip="Me gusta" role="button" tabindex="0" (keydown.enter)="voteComentario(comentario, 1)" (keydown.space)="voteComentario(comentario, 1); $event.preventDefault()">
                     <i class="ti ti-thumb-up"></i>
                   </a>
                   <a class="voto-btn"
                     [ngClass]="{'active-dislike': comentario?.miVoto === -1}"
                     (click)="voteComentario(comentario, -1)"
-                    matTooltip="No me gusta">
+                    matTooltip="No me gusta" role="button" tabindex="0" (keydown.enter)="voteComentario(comentario, -1)" (keydown.space)="voteComentario(comentario, -1); $event.preventDefault()">
                     <i class="ti ti-thumb-down"></i>
                   </a>
                 }
@@ -55,7 +55,7 @@
           <div class="float-end answerOptions">
             @if (currentUser?.usuario?.userName === comentario?.usuario) {
               <div class="botonear">
-                <a matTooltip="Eliminar Comentario" (click)="eliminarComentario(comentario, i)">
+                <a matTooltip="Eliminar Comentario" (click)="eliminarComentario(comentario, i)" role="button" tabindex="0" (keydown.enter)="eliminarComentario(comentario, i)" (keydown.space)="eliminarComentario(comentario, i); $event.preventDefault()">
                   <i class="ti ti-x times"></i>
                 </a>
               </div>
@@ -88,7 +88,7 @@
           formControlName="contenido"></textarea>
         <div class="buttons">
           <div class="float-end">
-            <a class="boton azul" (click)="enviarComentario()">Comentar</a>
+            <a class="boton azul" (click)="enviarComentario()" role="button" tabindex="0" (keydown.enter)="enviarComentario()" (keydown.space)="enviarComentario(); $event.preventDefault()">Comentar</a>
           </div>
         </div>
       </div>

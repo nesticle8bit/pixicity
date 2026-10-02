@@ -1,3 +1,4 @@
+import { UsuarioAdminSearchFilter, UsuarioSearchFilter } from 'src/app/models/shared/service-types.model';
 import { IHttpSecurityService } from '../interfaces/httpSecurity.interface';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { PaginationService } from '../shared/pagination.service';
@@ -15,15 +16,7 @@ import { PerfilUsuarioViewModel, UsuarioViewModel, UsuarioAvatarViewModel } from
 import { ActividadViewModel } from 'src/app/models/logs/logs-vm.model';
 import { DropdownViewModel } from 'src/app/models/parametros/parametros-vm.model';
 
-interface UsuarioSearchFilter {
-  genero?: string;
-  pais?: string;
-  rango?: string;
-}
 
-interface UsuarioAdminSearchFilter {
-  rangoId?: number;
-}
 
 @Injectable()
 export class HttpSecurityService implements IHttpSecurityService {

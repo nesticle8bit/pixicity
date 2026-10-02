@@ -8,8 +8,8 @@
       <strong class="float-start">
         {{i + 1}}
       </strong>
-      <a href="javascript:void(0)" (click)="hit(afiliado)" matTooltip="{{afiliado.descripcion}}" [matTooltipPosition]="'left'">
-        <img class="me-1" src="{{afiliado.banner}}" alt="Favicon" style="width: 16px; height: 16px;" />
+      <a (click)="hit(afiliado)" matTooltip="{{afiliado.descripcion}}" [matTooltipPosition]="'left'" role="button" tabindex="0" (keydown.enter)="hit(afiliado)" (keydown.space)="hit(afiliado); $event.preventDefault()">
+        <img class="me-1" src="{{afiliado.banner}}" alt="Favicon" style="width: 16px; height: 16px;" loading="lazy" decoding="async"/>
         {{afiliado.titulo}}
       </a>
     </article>

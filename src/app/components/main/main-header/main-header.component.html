@@ -1,12 +1,31 @@
 <header class="main-header">
     <div class="container">
         <div class="row">
-            <div class="col-12 col-sm-12 col-md-6">
+            <div class="col-8 col-sm-9 col-md-6">
                 <div class="logo cursor--pointer">
                     <a class="main-logo" [routerLink]="['/']" matTooltip="Volver al inicio" [matTooltipPosition]="'right'">
                         <img border="0" align="top" src="assets/images/blank.png" alt="" aria-hidden="true"/>
                     </a>
                 </div>
+            </div>
+
+            <!-- Móvil: acceso a login (invitado) + botón hamburguesa. En escritorio se muestra el menú de usuario. -->
+            <div class="col-4 col-sm-3 d-md-none mobile-actions">
+                @if (!currentUser.usuario) {
+                    <a class="mobile-actions__login" [routerLink]="['/login']" aria-label="Iniciar sesión">
+                        <i class="ti ti-login-2" aria-hidden="true"></i>
+                        <span class="mobile-actions__login-label">Entrar</span>
+                    </a>
+                }
+
+                <button type="button" id="mobile-nav-toggle" class="mobile-actions__toggle" (click)="nav.toggle()"
+                    [attr.aria-expanded]="nav.isOpen()" aria-controls="mobile-drawer"
+                    [attr.aria-label]="totalNoLeidos > 0 ? 'Abrir menú, ' + totalNoLeidos + ' sin leer' : 'Abrir menú'">
+                    <i class="ti ti-menu-2" aria-hidden="true"></i>
+                    @if (totalNoLeidos > 0) {
+                        <span class="mobile-actions__badge" aria-hidden="true">{{totalNoLeidos > 99 ? '99+' : totalNoLeidos}}</span>
+                    }
+                </button>
             </div>
 
             <div class="col-12 col-sm-12 col-md-6 d-none d-md-block">

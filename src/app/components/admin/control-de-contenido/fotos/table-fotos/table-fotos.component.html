@@ -19,7 +19,7 @@
           <tr [ngClass]="{'row-deleted': foto.eliminado}">
             <td>
               <a [routerLink]="['/fotos/' + foto.userName + '/' + foto.id + '/' + foto.url]" title="{{foto.titulo}}">
-                <img [src]="foto.imageUrl" [alt]="foto.titulo" class="foto-thumb" />
+                <img [src]="foto.imageUrl" [alt]="foto.titulo" class="foto-thumb" loading="lazy" decoding="async"/>
               </a>
             </td>
             <td>{{foto.fechaRegistro | timeAgo}}</td>

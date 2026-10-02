@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 
 import { MainHeaderComponent } from './components/main/main-header/main-header.component';
 import { MainMenuComponent } from './components/main/main-menu/main-menu.component';
+import { MobileDrawerComponent } from './components/main/mobile-drawer/mobile-drawer.component';
 import { MainSubmenuComponent } from './components/main/main-submenu/main-submenu.component';
 import { SectionHomeComponent } from './components/sections/section-home/section-home.component';
 import { HomeLastPostsComponent } from './components/home/home-last-posts/home-last-posts.component';
@@ -40,7 +41,6 @@ import { PostsCreateComponent } from './components/posts/posts-create/posts-crea
 import { ModHistoryComponent } from './components/pages/mod-history/mod-history.component';
 import { UsuariosComponent } from './components/pages/usuarios/usuarios.component';
 import { MonitorComponent } from './components/pages/monitor/monitor.component';
-import { MensajesComponent } from './components/pages/mensajes/mensajes.component';
 import { FavoritosComponent } from './components/pages/favoritos/favoritos.component';
 import { TopsComponent } from './components/pages/tops/tops.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -74,7 +74,6 @@ import { IHttpFavoritosService } from './services/interfaces/httpFavoritos.inter
 import { HttpFavoritosService } from './services/implementations/httpFavoritos.service';
 import { environment } from 'src/environments/environment';
 import { MatTableModule } from '@angular/material/table';
-import { AccountComponent } from './components/pages/account/account.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { PerfilComponent } from './components/pages/perfil/perfil.component';
 import { CommonModule, registerLocaleData } from '@angular/common';
@@ -104,7 +103,6 @@ import { ProfileFollowersComponent } from './components/profile/profile-follower
 import { MainProfileMenuComponent } from './components/main/main-profile-menu/main-profile-menu.component';
 import { ProfileInformationComponent } from './components/profile/profile-information/profile-information.component';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { AdsByTypeComponent } from './components/ads/ads-by-type/ads-by-type.component';
 import { PerfilSocialMediaButtonsComponent } from './components/pages/perfil/perfil-social-media-buttons/perfil-social-media-buttons.component';
 import { PerfilUserMedalsComponent } from './components/pages/perfil/perfil-user-medals/perfil-user-medals.component';
 import { PerfilUserFollowersComponent } from './components/pages/perfil/perfil-user-followers/perfil-user-followers.component';
@@ -145,15 +143,9 @@ import { PaginasComponent } from './components/pages/paginas/paginas.component';
 import { IHttpMensajesService } from './services/interfaces/httpMensajes.interface';
 import { HttpMensajesService } from './services/implementations/httpMensajes.service';
 import { DialogEnviarMPComponent } from './components/dialogs/dialog-enviar-mp/dialog-enviar-mp.component';
-import { MensajesConversacionComponent } from './components/pages/mensajes/mensajes-conversacion/mensajes-conversacion.component';
-import { MensajesSidebarComponent } from './components/pages/mensajes/mensajes-sidebar/mensajes-sidebar.component';
 import { SendMessageButtonComponent } from './components/addons/send-message-button/send-message-button.component';
 import { ShoutsCommentsComponent } from './components/pages/shouts/shouts-comments/shouts-comments.component';
 import { DialogVerUsuariosComponent } from './components/dialogs/dialog-ver-usuarios/dialog-ver-usuarios.component';
-import { FotosIndexComponent } from './components/fotos/fotos-index/fotos-index.component';
-import { FotoDetailComponent } from './components/fotos/foto-detail/foto-detail.component';
-import { FotoCreateComponent } from './components/fotos/foto-create/foto-create.component';
-import { FotoComentariosComponent } from './components/fotos/foto-comentarios/foto-comentarios.component';
 import { IHttpFotosService } from './services/interfaces/httpFotos.interface';
 import { IHttpComunidadesService } from './services/interfaces/httpComunidades.interface';
 import { HttpComunidadesService } from './services/implementations/httpComunidades.service';
@@ -164,6 +156,7 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     AppComponent,
     MainHeaderComponent,
     MainMenuComponent,
+    MobileDrawerComponent,
     MainSubmenuComponent,
     SectionHomeComponent,
     HomeLastPostsComponent,
@@ -184,7 +177,6 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     ModHistoryComponent,
     UsuariosComponent,
     MonitorComponent,
-    MensajesComponent,
     FavoritosComponent,
     TopsComponent,
     DialogAfiliarseComponent,
@@ -198,7 +190,6 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     PostsTagsComponent,
     PostsMetaComponent,
     DialogDenunciarPostComponent,
-    AccountComponent,
     PerfilComponent,
     EnVivoComponent,
     TipoIconMonitorComponent,
@@ -211,7 +202,6 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     ProfileFollowersComponent,
     MainProfileMenuComponent,
     ProfileInformationComponent,
-    AdsByTypeComponent,
     PerfilSocialMediaButtonsComponent,
     PerfilUserMedalsComponent,
     PerfilUserFollowersComponent,
@@ -239,15 +229,9 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     ClickOutsideDirective,
     PaginasComponent,
     DialogEnviarMPComponent,
-    MensajesConversacionComponent,
-    MensajesSidebarComponent,
     SendMessageButtonComponent,
     ShoutsCommentsComponent,
     DialogVerUsuariosComponent,
-    FotosIndexComponent,
-    FotoDetailComponent,
-    FotoCreateComponent,
-    FotoComentariosComponent,
   ],
   imports: [
     BrowserModule,

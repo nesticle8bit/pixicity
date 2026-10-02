@@ -1,5 +1,5 @@
 <div class="mentop">
-  <div class="actualtop cursor--pointer" id="ucambi" (click)="toggleMenu()">
+  <div class="actualtop cursor--pointer" id="ucambi" (click)="toggleMenu()" role="button" tabindex="0" (keydown.enter)="toggleMenu()" (keydown.space)="toggleMenu(); $event.preventDefault()">
     @if (selection === 'ayer') {
       <span>Ayer</span>
     }
@@ -18,23 +18,23 @@
   </div>
 
   <div class="listop" [style.display]="displayMenu ? 'block' : 'none'">
-    <a href="javascript:void(0)" (click)="changeTop('ayer')" class="ttayer">
+    <a (click)="changeTop('ayer')" class="ttayer" role="button" tabindex="0" (keydown.enter)="changeTop('ayer')" (keydown.space)="changeTop('ayer'); $event.preventDefault()">
       Ayer
     </a>
 
-    <a href="javascript:void(0)" (click)="changeTop('hoy')" class="tthoy">
+    <a (click)="changeTop('hoy')" class="tthoy" role="button" tabindex="0" (keydown.enter)="changeTop('hoy')" (keydown.space)="changeTop('hoy'); $event.preventDefault()">
       Hoy
     </a>
 
-    <a href="javascript:void(0)" (click)="changeTop('ultimos7dias')" class="ttsemana">
+    <a (click)="changeTop('ultimos7dias')" class="ttsemana" role="button" tabindex="0" (keydown.enter)="changeTop('ultimos7dias')" (keydown.space)="changeTop('ultimos7dias'); $event.preventDefault()">
       Semana
     </a>
 
-    <a href="javascript:void(0)" (click)="changeTop('mes')" class="ttmes">
+    <a (click)="changeTop('mes')" class="ttmes" role="button" tabindex="0" (keydown.enter)="changeTop('mes')" (keydown.space)="changeTop('mes'); $event.preventDefault()">
       Mes
     </a>
 
-    <a href="javascript:void(0)" (click)="changeTop('all')" class="tttodos listo">
+    <a (click)="changeTop('all')" class="tttodos listo" role="button" tabindex="0" (keydown.enter)="changeTop('all')" (keydown.space)="changeTop('all'); $event.preventDefault()">
       Todos
     </a>
   </div>

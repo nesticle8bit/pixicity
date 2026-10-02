@@ -76,7 +76,7 @@
       <div class="rich-editor__menu rich-editor__palette">
         @for (color of colors; track color) {
         <span class="swatch" [style.background]="color" (mousedown)="preventLoseSelection($event)"
-          (click)="setColor(color)" [title]="color"></span>
+          (click)="setColor(color)" [title]="color" role="button" tabindex="0" (keydown.enter)="setColor(color)" (keydown.space)="setColor(color); $event.preventDefault()"></span>
         }
       </div>
       }
@@ -170,7 +170,7 @@
     <div class="rich-editor__bubble-palette">
       @for (color of colors; track color) {
       <span class="swatch" [style.background]="color" [title]="color" (mousedown)="preventLoseSelection($event)"
-        (click)="applyColor(color)"></span>
+        (click)="applyColor(color)" role="button" tabindex="0" (keydown.enter)="applyColor(color)" (keydown.space)="applyColor(color); $event.preventDefault()"></span>
       }
     </div>
     }

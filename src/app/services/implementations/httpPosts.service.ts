@@ -1,3 +1,4 @@
+import { PostSearchFilter } from 'src/app/models/shared/service-types.model';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -10,12 +11,6 @@ import { PaginationService } from '../shared/pagination.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
 import { PostViewModel, ComentarioViewModel, PostSimpleViewModel, CloudTagViewModel, FavoritosViewModel } from 'src/app/models/posts/post-vm.model';
 
-interface PostSearchFilter {
-  search?: string;
-  searchType?: string;
-  categoriaId?: number;
-  autor?: string;
-}
 
 @Injectable()
 export class HttpPostsService implements IHttpPostsService {
@@ -321,7 +316,7 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  setVotos(voto: { postId: number; cantidad: number }): Observable<boolean> {
+  setVotos(voto: { typeId: number; cantidad: number; votosType: number }): Observable<boolean> {
     return this.http
       .post<ApiResponse<boolean>>(`${environment.api}/api/votos/setVoto`, voto)
       .pipe(

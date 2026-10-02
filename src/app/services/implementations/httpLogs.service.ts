@@ -85,7 +85,7 @@ export class HttpLogsService implements IHttpLogsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getMonitorsAdmin(search: string): Observable<PaginatedData<MonitorViewModel>> {
+  getMonitorsAdmin(): Observable<PaginatedData<MonitorViewModel>> {
     return this.http
       .get<ApiResponse<PaginatedData<MonitorViewModel>>>(
         `${environment.api}/api/monitors/getMonitorAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,

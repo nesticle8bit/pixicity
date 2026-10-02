@@ -142,7 +142,7 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  addShoutComentario(model: Partial<ShoutComentarioViewModel>): Observable<ShoutComentarioViewModel> {
+  addShoutComentario(model: { shoutId: number; comentario: string }): Observable<ShoutComentarioViewModel> {
     return this.http
       .post<ApiResponse<ShoutComentarioViewModel>>(`${environment.api}/api/shouts/addShoutComentario`, model)
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))

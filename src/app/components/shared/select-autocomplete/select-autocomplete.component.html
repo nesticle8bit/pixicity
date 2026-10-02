@@ -1,5 +1,5 @@
 <div class="asel" [class.asel--open]="isOpen" [class.asel--disabled]="disabled"
-  cdkOverlayOrigin #origin="cdkOverlayOrigin" (click)="toggle()">
+  cdkOverlayOrigin #origin="cdkOverlayOrigin" (click)="toggle()" role="button" tabindex="0" (keydown.enter)="toggle()" (keydown.space)="toggle(); $event.preventDefault()">
   <div class="asel__value">
     @if (selectedItem !== null && selectedItem !== undefined && labelOf(selectedItem) !== '') {
       @if (labelTpl) {
@@ -33,7 +33,7 @@
     }
     <ul class="asel__options">
       @for (item of filtered; track $index) {
-        <li class="asel__option" [class.asel__option--active]="isSelected(item)" (click)="select(item)">
+        <li class="asel__option" [class.asel__option--active]="isSelected(item)" (click)="select(item)" role="button" tabindex="0" (keydown.enter)="select(item)" (keydown.space)="select(item); $event.preventDefault()">
           @if (optionTpl) {
             <ng-container *ngTemplateOutlet="optionTpl; context: { $implicit: item, item: item, index: $index }"></ng-container>
           } @else {

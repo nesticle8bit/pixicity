@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -15,6 +16,8 @@ import { SEOService } from 'src/app/services/shared/seo.service';
   styleUrls: ['./shouts-view.component.scss'],
 })
 export class ShoutsViewComponent implements OnInit {
+  public readonly publicUrl = environment.publicUrl;
+
   private readonly destroyRef = inject(DestroyRef);
 
   public currentUser: any;

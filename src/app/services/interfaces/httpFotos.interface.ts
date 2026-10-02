@@ -1,23 +1,26 @@
+import { FotoSearchParams } from 'src/app/models/shared/service-types.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { PaginatedData } from 'src/app/models/api/api-response.model';
+import { FotoComentarioViewModel, FotoViewModel } from 'src/app/models/fotos/foto-vm.model';
 
 @Injectable()
 export abstract class IHttpFotosService {
-  abstract getFotos(search: any): Observable<any>;
-  abstract getTopFotos(count?: number): Observable<any>;
-  abstract getFotosAdmin(search: any): Observable<any>;
-  abstract getFotosByUsuario(userName: string, search: any): Observable<any>;
-  abstract getFotoById(fotoId: number): Observable<any>;
-  abstract saveFoto(foto: any): Observable<any>;
-  abstract updateFoto(foto: any): Observable<any>;
-  abstract deleteFoto(fotoId: number): Observable<any>;
-  abstract votarFoto(fotoId: number, cantidad: number): Observable<any>;
-  abstract incrementVisitas(fotoId: number): Observable<any>;
-  abstract uploadImage(file: File): Observable<any>;
+  abstract getFotos(search?: FotoSearchParams): Observable<PaginatedData<FotoViewModel>>;
+  abstract getTopFotos(count?: number): Observable<FotoViewModel[]>;
+  abstract getFotosAdmin(search?: FotoSearchParams & { query?: string }): Observable<PaginatedData<FotoViewModel>>;
+  abstract getFotosByUsuario(userName: string, search?: FotoSearchParams): Observable<PaginatedData<FotoViewModel>>;
+  abstract getFotoById(fotoId: number): Observable<FotoViewModel>;
+  abstract saveFoto(foto: Partial<FotoViewModel>): Observable<number>;
+  abstract updateFoto(foto: Partial<FotoViewModel>): Observable<number>;
+  abstract deleteFoto(fotoId: number): Observable<boolean>;
+  abstract votarFoto(fotoId: number, cantidad: number): Observable<FotoViewModel>;
+  abstract incrementVisitas(fotoId: number): Observable<boolean>;
+  abstract uploadImage(file: File): Observable<string>;
 
   // Comentarios
-  abstract getComentariosByFotoId(fotoId: number): Observable<any>;
-  abstract addComentario(comentario: any): Observable<any>;
-  abstract deleteComentario(id: number): Observable<any>;
-  abstract votarComentario(comentarioId: number, cantidad: number): Observable<any>;
+  abstract getComentariosByFotoId(fotoId: number): Observable<FotoComentarioViewModel[]>;
+  abstract addComentario(comentario: Partial<FotoComentarioViewModel>): Observable<FotoComentarioViewModel>;
+  abstract deleteComentario(id: number): Observable<boolean>;
+  abstract votarComentario(comentarioId: number, cantidad: number): Observable<FotoComentarioViewModel>;
 }

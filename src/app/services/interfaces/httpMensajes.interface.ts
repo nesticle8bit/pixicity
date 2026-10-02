@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { PaginatedData } from 'src/app/models/api/api-response.model';
+import { ConversacionPage, ConversacionParams, ConversacionViewModel, MensajeViewModel, ResponseMPViewModel, SendMPViewModel } from 'src/app/models/mensajes/mensaje-vm.model';
 
 @Injectable()
 export abstract class IHttpMensajesService {
-  abstract getMensajes(search: any): Observable<any>;
-  abstract getMensajesAdmin(search: any): Observable<any>;
-  abstract getLastMensajes(): Observable<any>;
-  abstract sendMensajePrivado(mp: any): Observable<any>;
-  abstract getMensajePrivadoById(id: number): Observable<any>;
-  abstract getConversaciones(): Observable<any>;
-  abstract getConversacion(params: any): Observable<any>;
-  abstract deleteConversaciones(otroIds: number[]): Observable<any>;
-  abstract setMensajesAsReaded(): Observable<any>;
-  abstract deleteMensajesById(ids: number[]): Observable<any>;
-  abstract changeRemitente(obj: any): Observable<any>;
+  abstract getMensajes(): Observable<PaginatedData<MensajeViewModel>>;
+  abstract getMensajesAdmin(): Observable<PaginatedData<MensajeViewModel>>;
+  abstract getLastMensajes(): Observable<MensajeViewModel[]>;
+  abstract sendMensajePrivado(mp: SendMPViewModel): Observable<ResponseMPViewModel>;
+  abstract getMensajePrivadoById(id: number): Observable<MensajeViewModel>;
+  abstract getConversaciones(): Observable<{ conversaciones: ConversacionViewModel[]; pagination: any }>;
+  abstract getConversacion(params: ConversacionParams): Observable<ConversacionPage>;
+  abstract deleteConversaciones(otroIds: number[]): Observable<boolean>;
+  abstract setMensajesAsReaded(): Observable<boolean>;
+  abstract deleteMensajesById(ids: number[]): Observable<boolean>;
+  abstract changeRemitente(obj: { mensajeId: number; userName: string }): Observable<boolean>;
 }

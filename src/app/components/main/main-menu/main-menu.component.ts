@@ -1,7 +1,9 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { isLinkActive, linksFor, NavLink } from '../main-nav.config';
 
 @Component({
   standalone: false,
@@ -12,23 +14,35 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 export class MainMenuComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  public active: string = '';
-  public currentUser: any;
+  public currentUser: JwtUserModel = { usuario: undefined, token: '' };
 
   constructor(
     private securityService: IHttpSecurityService,
     private router: Router
   ) {
-    this.currentUser = this.securityService.getCurrentUser();
-
-    this.router.events
+    // Reactivo: el menú se actualiza al iniciar o cerrar sesión sin depender de recargar la página.
+    this.securityService
+      .getCurrentUserAsObservable()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((val: any) => {
-        if (val?.url) {
-          this.active = val?.url;
-        }
-      });
+      .subscribe((value: JwtUserModel) => (this.currentUser = value));
   }
 
   ngOnInit(): void {}
+
+  get tabs(): NavLink[] {
+    return linksFor(this.currentUser?.usuario?.rango, true);
+  }
+
+  isActive(link: NavLink): boolean {
+    return isLinkActive(this.router, link);
+  }
+
+  isRouteActive(route: string): boolean {
+    return this.router.isActive(route, {
+      paths: 'exact',
+      queryParams: 'ignored',
+      fragment: 'ignored',
+      matrixParams: 'ignored',
+    });
+  }
 }

@@ -21,7 +21,7 @@
     <div class="float-start" [style.display]="!addedPuntos ? 'block' : 'none'">
       <div class="barpuntos">
         @for (punto of availablePuntos; track punto) {
-        <a href="javascript:void(0)" (click)="votarPost(punto)">
+        <a (click)="votarPost(punto)" role="button" tabindex="0" (keydown.enter)="votarPost(punto)" (keydown.space)="votarPost(punto); $event.preventDefault()">
           {{punto}}
         </a>
         }
@@ -40,28 +40,28 @@
     @if (currentUser?.usuario && currentUser?.usuario?.userName != post?.usuario?.userName) {
     <div class="botones float-start py-2">
       <li>
-        <a (click)="recomendarPost(post.id)" matTooltip="Recomendar post" class="tetese">P!</a>
+        <a (click)="recomendarPost(post.id)" matTooltip="Recomendar post" class="tetese" role="button" tabindex="0" (keydown.enter)="recomendarPost(post.id)" (keydown.space)="recomendarPost(post.id); $event.preventDefault()">P!</a>
       </li>
       <li>
-        <a href="javascript:void(0)" (click)="agregarFavorito(post.id)" matTooltip="Agregar favoritos">
+        <a (click)="agregarFavorito(post.id)" matTooltip="Agregar favoritos" role="button" tabindex="0" (keydown.enter)="agregarFavorito(post.id)" (keydown.space)="agregarFavorito(post.id); $event.preventDefault()">
           <i class="ti ti-star favoritos"></i>
         </a>
       </li>
       <li>
-        <a href="javascript:void(0)" (click)="denunciarPost()">
+        <a (click)="denunciarPost()" role="button" tabindex="0" (keydown.enter)="denunciarPost()" (keydown.space)="denunciarPost(); $event.preventDefault()">
           <i class="ti ti-ban denunciar"></i> Denunciar
         </a>
       </li>
       @if (post?.seguirPost) {
       <li>
-        <a href="javascript:void(0)" class="unfollow_post" (click)="seguirPost()">
+        <a class="unfollow_post" (click)="seguirPost()" role="button" tabindex="0" (keydown.enter)="seguirPost()" (keydown.space)="seguirPost(); $event.preventDefault()">
           <i class="ti ti-eye dejar-seguir"></i> Dejar de seguir
         </a>
       </li>
       }
       @if (!post?.seguirPost) {
       <li>
-        <a href="javascript:void(0)" class="follow_post" (click)="seguirPost()">
+        <a class="follow_post" (click)="seguirPost()" role="button" tabindex="0" (keydown.enter)="seguirPost()" (keydown.space)="seguirPost(); $event.preventDefault()">
           <i class="ti ti-ban seguir"></i> Seguir Post
         </a>
       </li>
