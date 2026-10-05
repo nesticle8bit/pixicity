@@ -27,7 +27,7 @@ export class DialogRecomendarPostComponent implements OnInit {
       return;
     }
 
-    this.postService.recomendarPost(this.data).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.postService.recomendarPost(this.data).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if ((response !== undefined || response !== null) && response === 0) {
         this.notificationService.info('Debes tener al menos un seguidor para poder recomendar posts', 'Recomendar Posts');
       }

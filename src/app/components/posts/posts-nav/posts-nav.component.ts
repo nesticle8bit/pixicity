@@ -19,7 +19,7 @@ export class PostsNavComponent implements OnInit {
   ngOnInit(): void {}
 
   nextPost(postId: number): void {
-    this.postService.nextPost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.postService.nextPost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value) {
         this.router.navigate([
           '/posts/' + value.categoria.seo + '/' + value.id + '/' + value.url,
@@ -29,7 +29,7 @@ export class PostsNavComponent implements OnInit {
   }
 
   prevPost(postId: number): void {
-    this.postService.previousPost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.postService.previousPost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value) {
         this.router.navigate([
           '/posts/' + value.categoria.seo + '/' + value.id + '/' + value.url,
@@ -39,7 +39,7 @@ export class PostsNavComponent implements OnInit {
   }
 
   randomPost(postId: number): void {
-    this.postService.randomPost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.postService.randomPost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value) {
         this.router.navigate([
           '/posts/' + value.categoria.seo + '/' + value.id + '/' + value.url,

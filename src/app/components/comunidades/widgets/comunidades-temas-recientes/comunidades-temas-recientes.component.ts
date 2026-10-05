@@ -18,7 +18,7 @@ export class ComunidadesTemasRecientesComponent implements OnInit {
 
   ngOnInit(): void {
     this.comunidadesService.getTemasRecientes(15).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (v: any) => { this.temas = v ?? []; this.loading = false; },
+      next: (v) => { this.temas = v ?? []; this.loading = false; },
       error: () => { this.loading = false; },
     });
   }

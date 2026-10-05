@@ -53,7 +53,7 @@ export class DialogCreateUpdatePaginasComponent implements OnInit {
 
   savePagina(): void {
     const value = Object.assign({}, this.formGroup.value);
-    this.webService.savePagina(value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.webService.savePagina(value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         if (value.id) {
           this.notificationService.success('La página se ha actualizado correctamente', 'Actualizar');

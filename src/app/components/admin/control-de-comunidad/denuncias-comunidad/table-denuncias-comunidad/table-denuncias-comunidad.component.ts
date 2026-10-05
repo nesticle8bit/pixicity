@@ -35,7 +35,7 @@ export class TableDenunciasComunidadComponent implements OnInit {
     this.comunidadesService
       .getDenunciasComentarios(this.paginationService.page, this.paginationService.pageCount, this.soloPendientes)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         this.denuncias = response?.data ?? [];
         this.totalCount = response?.pagination?.totalCount ?? 0;
         this.pendientes = response?.pendientes ?? 0;
@@ -67,7 +67,7 @@ export class TableDenunciasComunidadComponent implements OnInit {
 
   resolver(denuncia: any): void {
     this.comunidadesService.resolverDenunciaComentario(denuncia.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (resuelto: any) => {
+      next: (resuelto) => {
         denuncia.resuelto = resuelto;
         this.notificationService.success(resuelto ? 'Denuncia marcada como resuelta' : 'Denuncia reabierta', 'Denuncias');
       },

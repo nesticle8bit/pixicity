@@ -69,7 +69,7 @@ export class ProfileShoutsComponent implements OnInit {
       return;
     }
 
-    this.perfilService.createShout(shout).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.perfilService.createShout(shout).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.formGroup.patchValue({
           comentario: '',

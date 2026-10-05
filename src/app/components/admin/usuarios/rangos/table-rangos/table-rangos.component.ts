@@ -33,7 +33,7 @@ export class TableRangosComponent implements OnInit {
   }
 
   getRangos(): void {
-    this.securityService.getRangosUsuarios().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.securityService.getRangosUsuarios().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.rangos = response?.rangos;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -77,8 +77,8 @@ export class TableRangosComponent implements OnInit {
     this.securityService
       .changeUsuariosRangosByPuntos()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
-        if (response?.length > 0) {
+      .subscribe((response) => {
+        if ((response?.length ?? 0) > 0) {
           this.dialog.open(DialogRangosChangesReportComponent, {
             width: '980px',
             data: response,

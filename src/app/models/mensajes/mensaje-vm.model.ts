@@ -26,6 +26,7 @@ export interface ConversacionViewModel {
 export interface ConversacionPage {
   mensajes: MensajeViewModel[];
   hayMas: boolean;
+  bloqueado: boolean;
   otro: UsuarioAvatarViewModel;
 }
 

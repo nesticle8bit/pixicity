@@ -52,7 +52,7 @@ export class MonitorComponent implements OnInit {
   }
 
   getNotificaciones(search: string = ''): void {
-    this.logsService.getNotificaciones(search).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.logsService.getNotificaciones(search).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.notificaciones = response.data;
       this.totalCount = response.pagination.totalCount;
     });

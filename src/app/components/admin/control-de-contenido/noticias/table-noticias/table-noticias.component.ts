@@ -33,7 +33,7 @@ export class TableNoticiasComponent implements OnInit {
   }
 
   getNoticias(): void {
-    this.noticiasService.getNoticias('').pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.noticiasService.getNoticias('').pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.noticias = response?.noticias;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -46,7 +46,7 @@ export class TableNoticiasComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value) {
         this.getNoticias();
       }
@@ -56,7 +56,7 @@ export class TableNoticiasComponent implements OnInit {
   deleteNoticia(noticia: any): void {
     const accion = noticia.eliminado ? 'recuperar' : 'eliminar';
     if (this.notificationService.confirm(`¿Está seguro de ${accion} esta noticia?`)) {
-      this.noticiasService.deleteNoticias(noticia.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.noticiasService.deleteNoticias(noticia.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success(
             `La noticia ha sido ${noticia.eliminado ? 'recuperada' : 'eliminada'} correctamente`,

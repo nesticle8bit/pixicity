@@ -50,7 +50,7 @@ export class ProfileShoutsWallComponent implements OnInit {
   }
 
   getShouts(): void {
-    this.perfilService.getShouts(this.user.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.perfilService.getShouts(this.user.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.shoutsList = response.shouts;
       this.totalCount = response.pagination.totalCount;
     });

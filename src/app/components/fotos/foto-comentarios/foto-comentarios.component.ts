@@ -41,7 +41,7 @@ export class FotoComentariosComponent implements OnInit {
   }
 
   loadComentarios(): void {
-    this.fotosService.getComentariosByFotoId(this._fotoId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data: any) => {
+    this.fotosService.getComentariosByFotoId(this._fotoId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
       this.comentarios = data || [];
     });
   }
@@ -49,7 +49,7 @@ export class FotoComentariosComponent implements OnInit {
   enviarComentario(): void {
     if (this.formGroup.invalid) return;
     const payload = { fotoId: this._fotoId, contenido: this.formGroup.value.contenido };
-    this.fotosService.addComentario(payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((id: any) => {
+    this.fotosService.addComentario(payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((id) => {
       if (id) {
         this.comentarios.push({
           id,
@@ -74,7 +74,7 @@ export class FotoComentariosComponent implements OnInit {
   }
 
   voteComentario(comentario: any, cantidad: number): void {
-    this.fotosService.votarComentario(comentario.id, cantidad).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((res: any) => {
+    this.fotosService.votarComentario(comentario.id, cantidad).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((res) => {
       if (res) {
         comentario.votos = res.votos;
         comentario.miVoto = res.miVoto;

@@ -48,12 +48,12 @@ export class DialogCreateUpdateNoticiasComponent implements OnInit {
     const value = Object.assign({}, this.formGroup.value);
 
     if (value.id) {
-      this.noticiasService.updateNoticias(value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.noticiasService.updateNoticias(value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         this.notificationService.success('La noticia se ha actualizado correctamente', 'Actualizar');
         this.dialogRef.close(true);
       });
     } else {
-      this.noticiasService.saveNoticias(value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.noticiasService.saveNoticias(value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         this.notificationService.success('La noticia se ha guardado correctamente', 'Guardar');
         this.dialogRef.close(true);
       });

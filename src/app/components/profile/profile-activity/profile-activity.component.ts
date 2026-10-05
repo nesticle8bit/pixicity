@@ -90,7 +90,7 @@ export class ProfileActivityComponent implements OnInit {
     this.securityService
       .getActividadUsuario(this.user.id, this.formGroup.value.tipoActividad)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         this.actividad = response;
       });
   }

@@ -26,7 +26,7 @@ export class CategoriesSelectorComponent implements OnInit {
     this.httpParametrosService
       .getCategoriasDropdown()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((values: any) => {
+      .subscribe((values) => {
         this.categorias = values;
       });
   }

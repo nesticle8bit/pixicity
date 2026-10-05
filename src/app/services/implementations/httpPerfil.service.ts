@@ -19,9 +19,9 @@ export class HttpPerfilService implements IHttpPerfilService {
     private http: HttpClient,
   ) {}
 
-  getShouts(userId: number): Observable<PaginatedData<ShoutViewModel>> {
+  getShouts(userId: number): Observable<PaginatedData<ShoutViewModel, 'shouts'>> {
     return this.http
-      .get<ApiResponse<PaginatedData<ShoutViewModel>>>(
+      .get<ApiResponse<PaginatedData<ShoutViewModel, 'shouts'>>>(
         `${environment.api}/api/shouts/getShouts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&userId=${userId}`,
       )
       .pipe(
@@ -46,9 +46,9 @@ export class HttpPerfilService implements IHttpPerfilService {
       );
   }
 
-  getShoutsAdmin(): Observable<PaginatedData<ShoutViewModel>> {
+  getShoutsAdmin(): Observable<PaginatedData<ShoutViewModel, 'shouts'>> {
     return this.http
-      .get<ApiResponse<PaginatedData<ShoutViewModel>>>(
+      .get<ApiResponse<PaginatedData<ShoutViewModel, 'shouts'>>>(
         `${environment.api}/api/shouts/getShoutsAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
@@ -142,9 +142,9 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  addShoutComentario(model: { shoutId: number; comentario: string }): Observable<ShoutComentarioViewModel> {
+  addShoutComentario(model: { shoutId: number; comentario: string }): Observable<number> {
     return this.http
-      .post<ApiResponse<ShoutComentarioViewModel>>(`${environment.api}/api/shouts/addShoutComentario`, model)
+      .post<ApiResponse<number>>(`${environment.api}/api/shouts/addShoutComentario`, model)
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }

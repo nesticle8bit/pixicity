@@ -76,7 +76,7 @@ export class DialogDenunciarPostComponent implements OnInit {
   enviarDenuncia(): void {
     const form = Object.assign({}, this.formGroup.value);
 
-    this.postService.reportPost(form).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.postService.reportPost(form).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if(response) {
         this.notificationService.success(`El post ${this.data?.titulo} ha sido denunciado correctamente, el equipo de modaración revisará en la brevedad`, 'Denunciado');
         this.dialogRef.close(response);

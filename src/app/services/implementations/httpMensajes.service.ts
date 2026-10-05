@@ -26,9 +26,9 @@ export class HttpMensajesService implements IHttpMensajesService {
     private http: HttpClient,
   ) {}
 
-  getMensajes(): Observable<PaginatedData<MensajeViewModel>> {
+  getMensajes(): Observable<PaginatedData<MensajeViewModel, 'mensajes'>> {
     return this.http
-      .get<ApiResponse<PaginatedData<MensajeViewModel>>>(
+      .get<ApiResponse<PaginatedData<MensajeViewModel, 'mensajes'>>>(
         `${environment.api}/api/mensajes/getMensajes?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
@@ -44,9 +44,9 @@ export class HttpMensajesService implements IHttpMensajesService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getMensajesAdmin(): Observable<PaginatedData<MensajeViewModel>> {
+  getMensajesAdmin(): Observable<PaginatedData<MensajeViewModel, 'mensajes'>> {
     return this.http
-      .get<ApiResponse<PaginatedData<MensajeViewModel>>>(
+      .get<ApiResponse<PaginatedData<MensajeViewModel, 'mensajes'>>>(
         `${environment.api}/api/mensajes/getMensajesAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(

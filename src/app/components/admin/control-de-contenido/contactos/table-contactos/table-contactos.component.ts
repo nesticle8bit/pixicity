@@ -30,7 +30,7 @@ export class TableContactosComponent implements OnInit {
   }
 
   getContactos(): void {
-    this.generalService.getContactos().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.generalService.getContactos().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.contactos = response?.contactos;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -43,7 +43,7 @@ export class TableContactosComponent implements OnInit {
 
   gestionarContacto(contacto: any): void {
     if (this.notificationService.confirm('¿Está seguro de gestionar este contacto?')) {
-      this.generalService.gestionarContacto(contacto.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.generalService.gestionarContacto(contacto.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success('El contacto ha sido gestionado correctamente', 'Gestionado');
           this.getContactos();
@@ -54,7 +54,7 @@ export class TableContactosComponent implements OnInit {
 
   deleteContacto(contacto: any): void {
     if (this.notificationService.confirm('¿Está seguro de eliminar este contacto?')) {
-      this.generalService.deleteContacto(contacto.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.generalService.deleteContacto(contacto.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success('El contacto ha sido eliminado correctamente', 'Eliminado');
           this.getContactos();

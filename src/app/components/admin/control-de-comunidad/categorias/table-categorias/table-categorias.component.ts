@@ -31,7 +31,7 @@ export class TableCategoriasComponent implements OnInit {
   }
 
   getCategorias(): void {
-    this.parametrosService.getCategoriasAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.parametrosService.getCategoriasAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.categorias = response.categorias;
       this.totalCount = response.pagination.totalCount;
     });
@@ -49,7 +49,7 @@ export class TableCategoriasComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value) {
         this.getCategorias();
       }

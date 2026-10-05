@@ -48,13 +48,13 @@ export class MainFooterComponent implements OnInit {
   }
 
   getPaginas(): void {
-    this.webService.getAllPaginas().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.webService.getAllPaginas().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.paginas = response;
     });
   }
 
   getFooter(): void {
-    this.webService.getConfiguracionFooter().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.webService.getConfiguracionFooter().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.configuracion.footer = response;
     });
   }

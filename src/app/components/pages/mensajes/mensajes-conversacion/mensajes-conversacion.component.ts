@@ -54,25 +54,25 @@ export class MensajesConversacionComponent implements OnInit {
     private badgeService: MensajesBadgeService
   ) {
     // La ruta es /conversacion/:id (mensaje base) o /chat/:userName (chat nuevo / sin historial).
-    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.id = value.get('id') ? Number(value.get('id')) : undefined;
       this.userName = value.get('userName') ?? undefined;
       this.cargarInicial();
     });
 
-    this.signalrService.mensaje$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((p: any) => {
+    this.signalrService.mensaje$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((p) => {
       if (this.otro && p?.otroId === this.otro.id) {
         this.mergeLatest(!!p.esMio);
       }
     });
 
-    this.signalrService.mensajesLeidos$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((p: any) => {
+    this.signalrService.mensajesLeidos$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((p) => {
       if (this.otro && p?.porId === this.otro.id) {
         this.mensajes.forEach((m) => m.esMio && (m.leido = true));
       }
     });
 
-    this.signalrService.escribiendo$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((p: any) => {
+    this.signalrService.escribiendo$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((p) => {
       if (this.otro && p?.porId === this.otro.id) {
         this.escribiendo = true;
         clearTimeout(this.typingTimer);
@@ -101,7 +101,7 @@ export class MensajesConversacionComponent implements OnInit {
     this.mensajesService
       .getConversacion({ id: this.id, userName: this.userName, take: PAGE_SIZE })
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((page: any) => {
+      .subscribe((page) => {
         this.mensajes = page?.mensajes ?? [];
         this.otro = page?.otro;
         this.hayMas = !!page?.hayMas;
@@ -132,7 +132,7 @@ export class MensajesConversacionComponent implements OnInit {
       .getConversacion({ userName: this.otro?.userName, antesDeId: this.mensajes[0].id, take: PAGE_SIZE })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (page: any) => {
+        next: (page) => {
           this.mensajes = [...(page?.mensajes ?? []), ...this.mensajes];
           this.hayMas = !!page?.hayMas;
           this.cargandoMas = false;
@@ -158,7 +158,7 @@ export class MensajesConversacionComponent implements OnInit {
     this.mensajesService
       .getConversacion({ userName: this.otro.userName, take: PAGE_SIZE })
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((page: any) => {
+      .subscribe((page) => {
         const porId = new Map<number, any>(this.mensajes.map((m) => [m.id, m]));
         let nuevosAjenos = 0;
 
@@ -248,7 +248,7 @@ export class MensajesConversacionComponent implements OnInit {
       .sendMensajePrivado({ aUserName: this.otro.userName, asunto: '', contenido })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (response: any) => {
+        next: (response) => {
           this.enviando = false;
 
           if (response?.type === 'id') {

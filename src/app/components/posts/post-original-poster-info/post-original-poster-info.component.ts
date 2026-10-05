@@ -39,7 +39,7 @@ export class PostOriginalPosterInfoComponent implements OnInit {
       return;
     }
 
-    this.securityService.getUsuarioInfo(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.securityService.getUsuarioInfo(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.info = response;
       }

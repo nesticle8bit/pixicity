@@ -96,8 +96,8 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       esBorrador: false,
     });
 
-    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
-      this.postId = +value.get('id');
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
+      this.postId = +(value.get('id') ?? 0);
 
       if (!this.postId) {
         this.title.setTitle(
@@ -109,7 +109,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       this.title.setTitle(
         `Actualizar post | Taringa - Inteligencia colectiva | Comunidad para Compartir Información`
       );
-      this.postService.getPostById(this.postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.postService.getPostById(this.postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (
           this.currentUser.usuario.rango !== 'Administrador' &&
           this.currentUser.usuario.rango !== 'Moderador' &&
@@ -253,7 +253,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   }
 
   getCategorias(): void {
-    this.parametrosService.getCategoriasDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.parametrosService.getCategoriasDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.categorias = value;
     });
   }
@@ -276,14 +276,14 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     )[0];
 
     if (!this.postId) {
-      this.postService.savePost(post).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.postService.savePost(post).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success('Se ha creado recientemente tu post 👋🏼', 'Creado');
           this.router.navigate(['']);
         }
       });
     } else {
-      this.postService.updatePost(post).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.postService.updatePost(post).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success('Se ha actualizado recientemente tu post 👋🏼, ahora lo podrás visualizar con los cambios realizados', 'Actualizado');
           this.router.navigate([
@@ -304,7 +304,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     post.esBorrador = this.esBorrador = true;
 
     if (!this.postId) {
-      this.postService.savePost(post).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.postService.savePost(post).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.postId = response;
           this.today = new Date();
@@ -316,7 +316,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      this.postService.updatePost(post).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.postService.updatePost(post).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.today = new Date();
 
@@ -338,7 +338,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       autoFocus: false,
     });
 
-    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.formGroup.patchValue({
           contenido: response,
@@ -361,7 +361,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
         ),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         this.relatedPosts = response || [];
       });
   }

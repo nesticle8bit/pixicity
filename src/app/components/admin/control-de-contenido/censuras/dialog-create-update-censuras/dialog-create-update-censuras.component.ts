@@ -37,7 +37,7 @@ export class DialogCreateUpdateCensurasComponent {
 
     const censura = Object.assign({}, this.formGroup.value);
 
-    this.parametrosService.saveCensura(censura).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.parametrosService.saveCensura(censura).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.notificationService.success('La palabra censurada se ha guardado correctamente', 'Guardado');
         this.dialogRef.close(true);

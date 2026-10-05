@@ -30,7 +30,7 @@ export class TableMensajesComponent implements OnInit {
   }
 
   getMensajes(): void {
-    this.mensajesService.getMensajesAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.mensajesService.getMensajesAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.mensajes = response?.mensajes;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -45,7 +45,7 @@ export class TableMensajesComponent implements OnInit {
     this.mensajesService
       .deleteMensajesById([mensaje.id])
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         if (response) {
           mensaje.eliminado = true;
         }
@@ -55,7 +55,7 @@ export class TableMensajesComponent implements OnInit {
   changeRemitente(mensaje: any): void {
     const userName = this.notificationService.prompt('Ingresa el nombre de usuario del nuevo remitente de este mensaje, si no existe no se podrá cambiar');
     if (userName) {
-      this.mensajesService.changeRemitente({ mensajeId: mensaje.id, userName }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.mensajesService.changeRemitente({ mensajeId: mensaje.id, userName }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success(`El remitente del mensaje ha sido cambiado a ${userName}`, 'Cambiado');
           this.getMensajes();

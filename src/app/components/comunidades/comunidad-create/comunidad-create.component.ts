@@ -49,8 +49,8 @@ export class ComunidadCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.comunidadesService.getCategorias().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v: any) => (this.categorias = v ?? []));
-    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v: any) => (this.paises = v ?? []));
+    this.comunidadesService.getCategorias().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => (this.categorias = v ?? []));
+    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => (this.paises = v ?? []));
   }
 
   onNombreChange(): void {
@@ -72,7 +72,7 @@ export class ComunidadCreateComponent implements OnInit {
     this.formGroup.get('comunidadSubCategoriaId')?.setValue(null);
     this.subCategorias = [];
     if (categoriaId > 0) {
-      this.comunidadesService.getSubCategorias(categoriaId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v: any) => (this.subCategorias = v ?? []));
+      this.comunidadesService.getSubCategorias(categoriaId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => (this.subCategorias = v ?? []));
     }
   }
 

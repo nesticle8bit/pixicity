@@ -138,13 +138,13 @@ export class RegisterComponent implements OnInit {
   }
 
   getConfiguracion(): void {
-    this.generalService.getConfiguracion().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.generalService.getConfiguracion().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.configuracion = value;
     });
   }
 
   getPaises(): void {
-    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
+    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
       this.paises = values;
     });
   }
@@ -154,7 +154,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    this.parametrosService.getEstadosByPais(pais.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
+    this.parametrosService.getEstadosByPais(pais.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
       this.estados = values;
     });
   }
@@ -163,7 +163,7 @@ export class RegisterComponent implements OnInit {
     const user: UserModel = Object.assign({}, this.formGroup.value);
     // user.fechaNacimiento = `${user.dia}/${user.mes}/${user.año}`;
 
-    this.securityService.registerUser(user).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.securityService.registerUser(user).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.notificationService.success('Se ha creado un usuario correctamente', 'Guardado');
         this.router.navigate(['/login']);

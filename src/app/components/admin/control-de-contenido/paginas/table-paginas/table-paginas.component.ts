@@ -43,7 +43,7 @@ export class TablePaginasComponent implements OnInit {
     this.webService
       .getPaginas(this.formGroup.value.search)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         this.paginas = response?.paginas;
         this.totalCount = response?.pagination?.totalCount;
       });
@@ -56,7 +56,7 @@ export class TablePaginasComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value) {
         this.getPaginas();
       }
@@ -66,7 +66,7 @@ export class TablePaginasComponent implements OnInit {
   deletePagina(pagina: any): void {
     const accion = pagina.eliminado ? 'recuperar' : 'eliminar';
     if (this.notificationService.confirm(`¿Está seguro de ${accion} esta página?`)) {
-      this.webService.deletePagina(pagina.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.webService.deletePagina(pagina.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success(
             `La página ha sido ${pagina.eliminado ? 'recuperada' : 'eliminada'} correctamente`,

@@ -1,3 +1,4 @@
+import { HistorialViewModel } from 'src/app/models/web/historial.model';
 import { PaginaViewModel } from 'src/app/models/shared/service-types.model';
 import { IHttpWebService } from '../interfaces/httpWeb.interface';
 import { PaginationService } from '../shared/pagination.service';
@@ -105,9 +106,9 @@ export class HttpWebService implements IHttpWebService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  hitAfiliado(codigo: string): Observable<boolean> {
+  hitAfiliado(codigo: string): Observable<string> {
     return this.http
-      .get<ApiResponse<boolean>>(`${environment.api}/api/web/hitAfiliado?codigo=${codigo}`)
+      .get<ApiResponse<string>>(`${environment.api}/api/web/hitAfiliado?codigo=${codigo}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -121,9 +122,9 @@ export class HttpWebService implements IHttpWebService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getHistorialModeracion(): Observable<unknown> {
+  getHistorialModeracion(): Observable<HistorialViewModel[]> {
     return this.http
-      .get<ApiResponse<unknown>>(`${environment.api}/api/web/getHistorialModeracion`)
+      .get<ApiResponse<HistorialViewModel[]>>(`${environment.api}/api/web/getHistorialModeracion`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -137,9 +138,9 @@ export class HttpWebService implements IHttpWebService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getPaginas(search: string): Observable<PaginatedData<PaginaViewModel>> {
+  getPaginas(search: string): Observable<PaginatedData<PaginaViewModel, 'paginas'>> {
     return this.http
-      .get<ApiResponse<PaginatedData<PaginaViewModel>>>(
+      .get<ApiResponse<PaginatedData<PaginaViewModel, 'paginas'>>>(
         `${environment.api}/api/paginas/getPaginas?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&searchValue=${search}`,
       )
       .pipe(
@@ -224,9 +225,9 @@ export class HttpWebService implements IHttpWebService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getConfiguracionFooter(): Observable<unknown> {
+  getConfiguracionFooter(): Observable<string> {
     return this.http
-      .get<ApiResponse<unknown>>(`${environment.api}/api/configuracion/getFooter`)
+      .get<ApiResponse<string>>(`${environment.api}/api/configuracion/getFooter`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

@@ -13,6 +13,7 @@ export interface FotoViewModel {
   usuario: string;
   avatar: string;
   categoria: string;
+  miVoto?: number;
 }
 
 export interface FotoComentarioViewModel {

@@ -60,7 +60,7 @@ export class FotoCreateComponent implements OnInit {
   }
 
   loadFotoForEdit(): void {
-    this.fotosService.getFotoById(this.editId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((res: any) => {
+    this.fotosService.getFotoById(this.editId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((res) => {
       if (res) {
         this.formGroup.patchValue({
           titulo: res.titulo,

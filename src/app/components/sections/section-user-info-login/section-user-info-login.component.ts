@@ -83,7 +83,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
     // Notificación en vivo: sube el contador y muestra un aviso discreto.
     this.signalrService.notification$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((payload: any) => {
+      .subscribe((payload) => {
         this.currentStats.notifications = (this.currentStats.notifications ?? 0) + 1;
         if (payload?.mensaje) {
           this.toast.info(payload.mensaje, 'Nueva notificación');
@@ -102,14 +102,14 @@ export class SectionUserInfoLoginComponent implements OnInit {
       return;
     }
 
-    this.httpLogs.getStats().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.httpLogs.getStats().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.currentStats.notifications = value.notifications;
       this.currentStats.messages = value.messages;
     });
   }
 
   verNotificaciones(): void {
-    this.httpLogs.getLastNotificaciones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.httpLogs.getLastNotificaciones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         response = response.map((notificacion: any) => {
           if (notificacion.mensaje) {
@@ -158,7 +158,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
     this.display.favoritos = false;
     this.display.monitor = false;
 
-    this.mensajesService.getLastMensajes().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.mensajesService.getLastMensajes().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.mensajes = response;
 
       this.setMensajesAsReaded();
@@ -174,7 +174,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   verFavoritos(): void {
-    this.favoritosService.getLastFavoritos(5).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.favoritosService.getLastFavoritos(5).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.favoritos = response;
     });
 
@@ -200,7 +200,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   setNotificacionesAsReaded(): void {
-    this.httpLogs.setNotificacionesAsReaded().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.httpLogs.setNotificacionesAsReaded().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       console.log(
         '🔔 Se ha cambiado el estado de las últimas notificaciones a leído'
       );
@@ -208,7 +208,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   setMensajesAsReaded(): void {
-    this.mensajesService.setMensajesAsReaded().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.mensajesService.setMensajesAsReaded().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       console.log(
         '🔔 Se ha cambiado el estado de los últimos mensajes a leído'
       );

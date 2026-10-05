@@ -41,8 +41,8 @@ export class PostsViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
-      this.getPostById(+values.get('id'));
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
+      this.getPostById(+(values.get('id') ?? 0));
       this.post = {
         titulo: values.get('nombre-post'),
       };
@@ -58,7 +58,7 @@ export class PostsViewComponent implements OnInit {
   }
 
   getPostById(postId: number): void {
-    this.postService.getPostById(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.postService.getPostById(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (!value) {
         this.router.navigate([`/posts/404/${this.post.titulo}`]);
         return;
@@ -98,7 +98,7 @@ export class PostsViewComponent implements OnInit {
       this.seoService.setSEO({
         title: value.post.titulo,
         description,
-        tags: value.post.tags,
+        tags: value.post.tags ?? [],
         // og:type solo acepta valores del vocabulario Open Graph, no la categoria.
         type: 'article',
         imageURL: imagen,
@@ -224,7 +224,7 @@ export class PostsViewComponent implements OnInit {
     this.postService
       .changeStickyPost(this.post.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         if (response) {
           this.notificationService.success('Se ha cambiado el sticky para este post correctamente', 'Sticky');
           this.post.sticky = !this.post.sticky;

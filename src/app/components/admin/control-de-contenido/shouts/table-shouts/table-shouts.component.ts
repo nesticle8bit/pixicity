@@ -30,14 +30,14 @@ export class TableShoutsComponent implements OnInit {
   }
 
   getShouts(): void {
-    this.perfilService.getShoutsAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.perfilService.getShoutsAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.shouts = response.shouts;
       this.totalCount = response.pagination.totalCount;
     });
   }
 
   deleteShout(id: number, index: number): void {
-    this.perfilService.deleteShout(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.perfilService.deleteShout(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.notificationService.success('El shout ha sido eliminado exitosamente', 'Eliminado');
 
@@ -49,7 +49,7 @@ export class TableShoutsComponent implements OnInit {
   }
 
   recoveryShout(id: number, index: number): void {
-    this.perfilService.recoveryShout(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.perfilService.recoveryShout(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.notificationService.success('El shout ha sido recuperado exitosamente', 'Recuperado');
 

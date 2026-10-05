@@ -16,7 +16,7 @@ export class ComunidadesStatsComponent implements OnInit {
   constructor(private comunidadesService: IHttpComunidadesService) {}
 
   ngOnInit(): void {
-    this.comunidadesService.getEstadisticas().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v: any) => {
+    this.comunidadesService.getEstadisticas().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => {
       this.stats = v ?? {};
     });
   }

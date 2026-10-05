@@ -21,8 +21,8 @@ export class DashboardAdsComponent implements OnInit {
     private notificationService: NotificationService
   ) {
     this.formGroup = this.formBuilder.group({
-      scriptHeader: [''],
-      scriptFooter: [''],
+      headerScript: [''],
+      footerScript: [''],
       banner300x250: [''],
       banner468x60: [''],
       banner160x600: [''],
@@ -35,11 +35,11 @@ export class DashboardAdsComponent implements OnInit {
   }
 
   getConfiguracion(): void {
-    this.generalService.getConfiguracion().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((configuracion: any) => {
+    this.generalService.getConfiguracion().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((configuracion) => {
       if (configuracion) {
         this.formGroup.patchValue({
-          scriptHeader: configuracion.scriptHeader,
-          scriptFooter: configuracion.scriptFooter,
+          headerScript: configuracion.headerScript,
+          footerScript: configuracion.footerScript,
           banner300x250: configuracion.banner300x250,
           banner468x60: configuracion.banner468x60,
           banner160x600: configuracion.banner160x600,
@@ -52,7 +52,7 @@ export class DashboardAdsComponent implements OnInit {
   updateAds(): void {
     const formValue = Object.assign({}, this.formGroup.value);
 
-    this.generalService.updateAds(formValue).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.generalService.updateAds(formValue).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if(response) {
         this.notificationService.success('La información de la configuración del sitio ha sido actualizado correctamente', 'Actualizado');
       }

@@ -60,7 +60,7 @@ export class ComunidadesExplorarComponent implements OnInit {
   }
 
   loadCategorias(): void {
-    this.comunidadesService.getCategorias().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.comunidadesService.getCategorias().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.categorias = value ?? [];
     });
   }
@@ -69,7 +69,7 @@ export class ComunidadesExplorarComponent implements OnInit {
     this.loading = true;
     const search = { page: this.page, pageCount: this.pageCount, query: this.query, categoriaId: this.categoriaId };
     this.comunidadesService.getComunidades(search).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (response: any) => {
+      next: (response) => {
         this.comunidades = response?.data ?? [];
         this.pagination = response?.pagination ?? {};
         this.loading = false;

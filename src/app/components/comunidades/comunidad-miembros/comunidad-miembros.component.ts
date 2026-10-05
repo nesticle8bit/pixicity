@@ -40,7 +40,7 @@ export class ComunidadMiembrosComponent implements OnInit {
     this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.slug = params['slug'];
       this.comunidadesService.getComunidad(this.slug).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-        next: (c: any) => { this.comunidad = c; this.loadMiembros(); },
+        next: (c) => { this.comunidad = c; this.loadMiembros(); },
         error: () => this.router.navigate(['/comunidades']),
       });
     });
@@ -76,7 +76,7 @@ export class ComunidadMiembrosComponent implements OnInit {
     this.loading = true;
     this.comunidadesService.getMiembros(this.comunidad.id, { page: this.page, pageCount: 24 })
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-        next: (r: any) => {
+        next: (r) => {
           this.miembros = r?.data ?? [];
           this.pagination = r?.pagination ?? {};
           this.loading = false;

@@ -50,7 +50,7 @@ export class FotoDetailComponent implements OnInit {
   loadFoto(): void {
     this.loading = true;
     this.fotosService.getFotoById(this.fotoId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (response: any) => {
+      next: (response) => {
         this.foto = response;
         this.loading = false;
         const rutaCanonica = this.router
@@ -119,7 +119,7 @@ export class FotoDetailComponent implements OnInit {
     if (!this.currentUser?.usuario) return;
 
     this.fotosService.votarFoto(this.fotoId, cantidad).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (response: any) => {
+      next: (response) => {
         if (response) {
           this.foto.votosPositivos = response.votosPositivos;
           this.foto.votosNegativos = response.votosNegativos;

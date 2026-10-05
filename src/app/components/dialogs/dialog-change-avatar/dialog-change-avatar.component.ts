@@ -53,14 +53,14 @@ export class DialogChangeAvatarComponent implements OnInit {
     });
 
     if(this.data?.isAdmin) {
-      this.securityService.changeAvatarAdmin(imageFile, this.data?.usuario?.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.securityService.changeAvatarAdmin(imageFile, this.data?.usuario?.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.dialogRef.close(response);
           this.notificationService.success(`El avatar del usuario ${this.data?.usuario?.userName} ha sido actualizado correctamente`, 'Actualizado');
         }
       });
     } else {
-      this.securityService.changeAvatar(imageFile).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.securityService.changeAvatar(imageFile).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           let currentUser = this.securityService.getCurrentUser();
           currentUser.usuario.avatar = 'avatar.jpeg';

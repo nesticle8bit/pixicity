@@ -44,7 +44,7 @@ export class TableUsuariosComponent implements OnInit {
       parameters.rangoId = this.searchParameters?.rangoId;
     }
 
-    this.securityService.getUsuariosAdmin(parameters).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.securityService.getUsuariosAdmin(parameters).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.usuarios = response.usuarios;
       this.totalCount = response.pagination.totalCount;
     });
@@ -57,7 +57,7 @@ export class TableUsuariosComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value) {
         this.getUsuarios();
       }
@@ -67,7 +67,7 @@ export class TableUsuariosComponent implements OnInit {
   deleteUser(usuario: any): void {
     const accion = usuario.eliminado ? 'recuperar' : 'eliminar';
     if (this.notificationService.confirm(`¿Está seguro de ${accion} el usuario?`)) {
-      this.securityService.removeUsuario(usuario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.securityService.removeUsuario(usuario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success(
             `El usuario ha sido ${usuario.eliminado ? 'recuperado' : 'eliminado'} correctamente`,
@@ -101,7 +101,7 @@ export class TableUsuariosComponent implements OnInit {
 
   removeAvatar(usuario: any): void {
     if (this.notificationService.confirm('¿Está seguro de eliminar el avatar del usuario?')) {
-      this.securityService.removeAvatar(usuario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.securityService.removeAvatar(usuario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success('El avatar del usuario ha sido eliminado correctamente', 'Eliminado');
           this.getUsuarios();

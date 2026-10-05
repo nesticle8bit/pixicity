@@ -28,7 +28,7 @@ export class TableVotosComponent implements OnInit {
   }
 
   getVotos(): void {
-    this.postService.getVotos().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.postService.getVotos().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.votos = response.data;
       this.totalCount = response.pagination.totalCount;
     });

@@ -49,7 +49,7 @@ export class PageContactoComponent implements OnInit {
 
     const form = Object.assign({}, this.formGroup.value);
 
-    this.generalService.saveContacto(form).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.generalService.saveContacto(form).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.notificationService.success('Se ha enviado correctamente los datos de contacto, pronto nos pondremos en contacto contigo, muchas gracias! 💖', 'Enviado');
         this.router.navigate(['']);

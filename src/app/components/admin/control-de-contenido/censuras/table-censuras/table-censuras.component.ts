@@ -33,7 +33,7 @@ export class TableCensurasComponent implements OnInit {
   }
 
   getCensuras(): void {
-    this.parametrosService.getCensuras().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.parametrosService.getCensuras().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.censuras = response?.data;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -46,7 +46,7 @@ export class TableCensurasComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value) {
         this.getCensuras();
       }

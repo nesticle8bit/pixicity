@@ -100,7 +100,7 @@ export class HomeLastPostsComponent implements OnInit {
     this.postService
       .getPosts(categoria)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         this.lastPosts = response.data;
         this.totalCount = response.pagination.totalCount;
       });
@@ -110,7 +110,7 @@ export class HomeLastPostsComponent implements OnInit {
     this.postService
       .getStickyPosts()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((posts: any) => {
+      .subscribe((posts) => {
         this.stickyPosts = posts;
       });
   }

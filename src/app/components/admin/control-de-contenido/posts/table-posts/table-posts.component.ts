@@ -30,7 +30,7 @@ export class TablePostsComponent implements OnInit {
   }
 
   getPosts(): void {
-    this.postsService.getPostsAdmin('').pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.postsService.getPostsAdmin('').pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.posts = response.data;
       this.totalCount = response.pagination.totalCount;
     });
@@ -42,7 +42,7 @@ export class TablePostsComponent implements OnInit {
   }
 
   cambiarSticky(postId: number, index: number): void {
-    this.postsService.changeStickyPost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.postsService.changeStickyPost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.notificationService.success('Se ha cambiado el sticky para este post correctamente', 'Sticky');
         this.posts[index].sticky = !this.posts[index].sticky;

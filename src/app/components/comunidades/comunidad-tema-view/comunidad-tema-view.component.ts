@@ -71,7 +71,7 @@ export class ComunidadTemaViewComponent implements OnInit {
   cargar(id: number): void {
     this.loading = true;
     this.comunidadesService.getTema(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (value: any) => {
+      next: (value) => {
         this.tema = value;
         this.tema.comentarios = this.tema.comentarios ?? [];
         this.construirArbol();
@@ -248,7 +248,7 @@ export class ComunidadTemaViewComponent implements OnInit {
 
   fijar(c: any): void {
     this.comunidadesService.fijarComentario(c.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (fijado: any) => {
+      next: (fijado) => {
         c.fijado = fijado;
         this.notificationService.success(fijado ? 'Comentario fijado' : 'Comentario desfijado', 'Comentarios');
         this.construirArbol();
@@ -282,7 +282,7 @@ export class ComunidadTemaViewComponent implements OnInit {
 
   cambiarSticky(): void {
     this.comunidadesService.changeStickyTema(this.tema.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (value: any) => {
+      next: (value) => {
         this.tema.sticky = value;
         this.notificationService.success('Se ha cambiado el sticky de este tema correctamente', 'Sticky');
       },
@@ -299,7 +299,7 @@ export class ComunidadTemaViewComponent implements OnInit {
 
     this.tema._votando = true;
     this.comunidadesService.votarTema(this.tema.id, valor).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (res: any) => {
+      next: (res) => {
         this.tema.votos = res?.total ?? this.tema.votos ?? 0;
         this.tema.miVoto = res?.miVoto ?? 0;
         this.tema._votando = false;
@@ -318,7 +318,7 @@ export class ComunidadTemaViewComponent implements OnInit {
     const model = { comunidadTemaId: this.tema.id, contenido };
 
     this.comunidadesService.addTemaComentario(model).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (nuevoId: any) => {
+      next: (nuevoId) => {
         this.tema.comentarios.push(this.crearComentarioLocal(nuevoId, contenido, null));
         this.nuevoComentario = '';
         this.enviando = false;
@@ -351,7 +351,7 @@ export class ComunidadTemaViewComponent implements OnInit {
     const model = { comunidadTemaId: this.tema.id, parentId: c.id, contenido };
 
     this.comunidadesService.addTemaComentario(model).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (nuevoId: any) => {
+      next: (nuevoId) => {
         // El backend aplana al raíz: el padre real es la raíz de 'c'
         const parentRoot = c.parentId ?? c.id;
         this.tema.comentarios.push(this.crearComentarioLocal(nuevoId, contenido, parentRoot));
@@ -433,7 +433,7 @@ export class ComunidadTemaViewComponent implements OnInit {
 
     c.votando = true;
     this.comunidadesService.votarComentario(c.id, valor).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (res: any) => {
+      next: (res) => {
         c.votos = res?.total ?? c.votos ?? 0;
         c.miVoto = res?.miVoto ?? 0;
         c.votando = false;

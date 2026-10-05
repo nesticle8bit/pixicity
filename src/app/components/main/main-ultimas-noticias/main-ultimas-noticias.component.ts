@@ -31,7 +31,7 @@ export class MainUltimasNoticiasComponent implements OnInit {
     this.noticiasService
       .getAllNoticias()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         this.noticias = response;
         this.showNext();
       });

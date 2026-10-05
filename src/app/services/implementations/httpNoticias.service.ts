@@ -19,9 +19,9 @@ export class HttpNoticiasService implements IHttpNoticiasService {
     private http: HttpClient,
   ) {}
 
-  getNoticias(search: string): Observable<PaginatedData<NoticiaModel>> {
+  getNoticias(search: string): Observable<PaginatedData<NoticiaModel, 'noticias'>> {
     return this.http
-      .get<ApiResponse<PaginatedData<NoticiaModel>>>(
+      .get<ApiResponse<PaginatedData<NoticiaModel, 'noticias'>>>(
         `${environment.api}/api/noticias/getNoticias?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${search}`,
       )
       .pipe(

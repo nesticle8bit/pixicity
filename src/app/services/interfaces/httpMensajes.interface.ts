@@ -5,8 +5,8 @@ import { ConversacionPage, ConversacionParams, ConversacionViewModel, MensajeVie
 
 @Injectable()
 export abstract class IHttpMensajesService {
-  abstract getMensajes(): Observable<PaginatedData<MensajeViewModel>>;
-  abstract getMensajesAdmin(): Observable<PaginatedData<MensajeViewModel>>;
+  abstract getMensajes(): Observable<PaginatedData<MensajeViewModel, 'mensajes'>>;
+  abstract getMensajesAdmin(): Observable<PaginatedData<MensajeViewModel, 'mensajes'>>;
   abstract getLastMensajes(): Observable<MensajeViewModel[]>;
   abstract sendMensajePrivado(mp: SendMPViewModel): Observable<ResponseMPViewModel>;
   abstract getMensajePrivadoById(id: number): Observable<MensajeViewModel>;

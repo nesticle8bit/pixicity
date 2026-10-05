@@ -36,7 +36,7 @@ export class DialogComunidadCategoriaComponent {
     const model = Object.assign({}, this.formGroup.value);
     model.orden = +model.orden;
 
-    this.comunidadesService.saveCategoria(model).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok: any) => {
+    this.comunidadesService.saveCategoria(model).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok) => {
       if (ok) {
         this.notificationService.success('Categoría guardada', 'Guardado');
         this.dialogRef.close(true);

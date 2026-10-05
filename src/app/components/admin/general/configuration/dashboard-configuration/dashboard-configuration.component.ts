@@ -45,7 +45,7 @@ export class DashboardConfigurationComponent implements OnInit {
   }
 
   getConfiguracion(): void {
-    this.generalService.getConfiguracion().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((configuracion: any) => {
+    this.generalService.getConfiguracion().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((configuracion) => {
       if (configuracion) {
         this.formGroup.patchValue({
           siteName: configuracion.siteName,
@@ -75,7 +75,7 @@ export class DashboardConfigurationComponent implements OnInit {
     this.generalService
       .updateConfiguracion(formValue)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         if (response) {
           this.notificationService.success('La información de la configuración del sitio ha sido actualizado correctamente', 'Actualizado');
         }
@@ -83,7 +83,7 @@ export class DashboardConfigurationComponent implements OnInit {
   }
 
   getAdmins(): void {
-    this.securityService.getAdminsList().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.securityService.getAdminsList().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.administradores = value;
     });
   }

@@ -20,7 +20,7 @@ export abstract class IHttpFotosService {
 
   // Comentarios
   abstract getComentariosByFotoId(fotoId: number): Observable<FotoComentarioViewModel[]>;
-  abstract addComentario(comentario: Partial<FotoComentarioViewModel>): Observable<FotoComentarioViewModel>;
+  abstract addComentario(comentario: Partial<FotoComentarioViewModel>): Observable<number>;
   abstract deleteComentario(id: number): Observable<boolean>;
   abstract votarComentario(comentarioId: number, cantidad: number): Observable<FotoComentarioViewModel>;
 }

@@ -33,7 +33,7 @@ export class TableFotosComponent implements OnInit {
     this.fotosService
       .getFotosAdmin({ page: this.paginationService.page, pageCount: this.paginationService.pageCount })
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         this.fotos = response.data;
         this.totalCount = response.pagination.totalCount;
       });

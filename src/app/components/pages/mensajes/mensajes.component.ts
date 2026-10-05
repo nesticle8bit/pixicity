@@ -95,7 +95,7 @@ export class MensajesComponent implements OnInit {
     // Conserva la selección al refrescar por tiempo real.
     const seleccionados = new Set(this.conversaciones.filter((c: any) => c.selected).map((c: any) => c.otro.id));
 
-    this.mensajesService.getConversaciones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.mensajesService.getConversaciones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.conversaciones = (response?.conversaciones ?? []).map((c: any) => ({
         ...c,
         selected: seleccionados.has(c.otro?.id),
@@ -116,7 +116,7 @@ export class MensajesComponent implements OnInit {
       return;
     }
 
-    this.mensajesService.deleteConversaciones(ids).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.mensajesService.deleteConversaciones(ids).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.notificationService.success('Las conversaciones seleccionadas han sido eliminadas', 'Eliminadas');
 

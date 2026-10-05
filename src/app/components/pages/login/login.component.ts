@@ -55,29 +55,33 @@ export class LoginComponent implements OnInit {
     login.captcha = '';
     this.error = '';
 
-    this.securityService.loginUser(login).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.securityService.loginUser(login).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value === 'error') {
         this.error = 'Las credenciales son incorrectas, por favor corrige y vuelve a iniciar sesión';
         return;
       }
 
-      if (value?.error === 'baneado') {
+      if ('error' in value && value.error === 'baneado') {
         this.error = 'baneado';
         this.baneo = {
           title: 'La cuenta se encuentra deshabilitada',
           causa: value.razonBaneo,
-          hasta: value.tiempoBaneado,
+          hasta: value.tiempoBaneado ?? null,
         };
         return;
       }
 
-      if (value?.error === 'baneado_permanente') {
+      if ('error' in value && value.error === 'baneado_permanente') {
         this.error = 'baneado';
         this.baneo = {
           title: 'La cuenta se encuentra deshabilitada permanentemente',
           causa: value.razonBaneo,
           hasta: null,
         };
+        return;
+      }
+
+      if ('error' in value) {
         return;
       }
 

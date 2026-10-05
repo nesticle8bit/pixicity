@@ -1,8 +1,8 @@
 import { PostSearchFilter } from 'src/app/models/shared/service-types.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PaginatedData } from 'src/app/models/api/api-response.model';
-import { CloudTagViewModel, ComentarioViewModel, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
+import { PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
+import { CloudTagViewModel, ComentarioViewModel, ComentarioVotoResponse, PostDetailResponse, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
 
 @Injectable()
 export abstract class IHttpPostsService {
@@ -11,13 +11,13 @@ export abstract class IHttpPostsService {
   abstract getPostsByUserId(userId: number): Observable<PaginatedData<PostViewModel>>;
   abstract getPostsByLoggedUser(search: string): Observable<PaginatedData<PostViewModel>>;
   abstract getStickyPosts(): Observable<PostViewModel[]>;
-  abstract getPostById(postId: number): Observable<PostViewModel>;
+  abstract getPostById(postId: number): Observable<PostDetailResponse>;
   abstract savePost(post: Partial<PostViewModel>): Observable<number>;
   abstract updatePost(post: Partial<PostViewModel>): Observable<number>;
   abstract getComentarios(): Observable<PaginatedData<ComentarioViewModel>>;
   abstract getComentariosByUserId(userId: number): Observable<PaginatedData<ComentarioViewModel>>;
   abstract getUltimosComentarios(): Observable<ComentarioViewModel[]>;
-  abstract addComentario(comentario: Partial<ComentarioViewModel>): Observable<ComentarioViewModel>;
+  abstract addComentario(comentario: Partial<ComentarioViewModel>): Observable<number>;
   abstract updateComentario(comentario: Partial<ComentarioViewModel>): Observable<ComentarioViewModel>;
   abstract getComentariosByPostId(postId: number): Observable<ComentarioViewModel[]>;
   abstract deletePost(postId: number, razon: string): Observable<boolean>;
@@ -35,15 +35,15 @@ export abstract class IHttpPostsService {
   abstract getTopPosts(date: string, categoriaId?: number): Observable<PostViewModel[]>;
   abstract seguirPost(postId: number): Observable<boolean>;
   abstract getCloudTags(): Observable<CloudTagViewModel[]>;
-  abstract getBorradores(search: string, categoriaId: number): Observable<PaginatedData<PostViewModel>>;
+  abstract getBorradores(search: string, categoriaId: number): Observable<PaginatedWithCategorias<PostViewModel>>;
   abstract deleteComentario(comentarioId: number): Observable<boolean>;
-  abstract votarComentario(comentarioId: number, cantidad: number): Observable<ComentarioViewModel>;
+  abstract votarComentario(comentarioId: number, cantidad: number): Observable<ComentarioVotoResponse>;
   abstract fijarComentario(comentarioId: number): Observable<any>;
   abstract denunciarComentario(comentarioId: number, motivo: string): Observable<any>;
   abstract getDenunciasComentarios(page: number, pageCount: number, soloPendientes?: boolean): Observable<any>;
   abstract resolverDenunciaComentario(denunciaId: number): Observable<any>;
   abstract eliminarDenunciaComentario(denunciaId: number): Observable<any>;
-  abstract recomendarPost(postId: number): Observable<boolean>;
+  abstract recomendarPost(postId: number): Observable<number>;
   abstract getVotos(): Observable<PaginatedData<unknown>>;
   abstract getPostsRelatedByTitle(title: string): Observable<PostSimpleViewModel[]>;
 }

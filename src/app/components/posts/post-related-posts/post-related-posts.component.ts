@@ -31,7 +31,7 @@ export class PostRelatedPostsComponent implements OnInit {
   ngOnInit(): void {}
 
   getRelatedPosts(postId: number): void {
-    this.postService.getRelatedPosts(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.postService.getRelatedPosts(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.relatedPosts = value;
     });
   }

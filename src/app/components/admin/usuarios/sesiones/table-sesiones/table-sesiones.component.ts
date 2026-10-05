@@ -32,7 +32,7 @@ export class TableSesionesComponent implements OnInit {
   }
 
   getSesiones(): void {
-    this.securityService.getSesiones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.securityService.getSesiones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.sesiones = response?.data;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -58,7 +58,7 @@ export class TableSesionesComponent implements OnInit {
 
   deleteSession(id: number): void {
     if (this.notificationService.confirm('¿Está seguro de eliminar esta sesión del usuario?')) {
-      this.securityService.deleteSessionById(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.securityService.deleteSessionById(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if(response) {
           this.notificationService.success('La sesión ha sido eliminado correctamente', 'Eliminado');
           this.getSesiones();

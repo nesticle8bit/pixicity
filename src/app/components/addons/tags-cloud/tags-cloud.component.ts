@@ -20,7 +20,7 @@ export class TagsCloudComponent implements OnInit {
   }
 
   getCloudTags(): void {
-    this.postService.getCloudTags().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.postService.getCloudTags().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.cloudTags = value;
 
       if (this.cloudTags?.length > 0) {

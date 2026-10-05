@@ -49,7 +49,7 @@ export class DialogEnviarMPComponent implements OnInit {
     this.userName = '';
     const mp = { ...this.formGroup.value, asunto: '' };
 
-    this.mensajeService.sendMensajePrivado(mp).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.mensajeService.sendMensajePrivado(mp).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response?.type === 'username') {
         this.userName = response.message;
         this.formGroup.patchValue({

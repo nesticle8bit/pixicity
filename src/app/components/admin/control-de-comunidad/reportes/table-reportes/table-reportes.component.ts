@@ -33,7 +33,7 @@ export class TableReportesComponent implements OnInit {
   }
 
   getDenuncias(): void {
-    this.denunciaService.getDenuncias().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.denunciaService.getDenuncias().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.denuncias = response.data;
       this.totalCount = response.pagination.totalCount;
     });
@@ -46,7 +46,7 @@ export class TableReportesComponent implements OnInit {
 
   deleteReporte(denuncia: any): void {
     if (this.notificationService.confirm('¿Está seguro de eliminar esta denuncia?')) {
-      this.denunciaService.deleteDenuncia(denuncia.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.denunciaService.deleteDenuncia(denuncia.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success('La denuncia ha sido eliminada correctamente', 'Eliminado');
           denuncia.eliminado = !denuncia.eliminado;

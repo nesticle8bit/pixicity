@@ -9,3 +9,14 @@ export class JwtUserModel {
         this.refreshToken = refreshToken;
     }
 }
+
+/** Cuenta suspendida: el login responde 200 pero con este objeto en vez de la sesión. */
+export interface LoginBaneado {
+  error: 'baneado' | 'baneado_permanente';
+  razonBaneo: string;
+  tiempoBaneado?: string;
+  baneadoPermanente?: boolean;
+}
+
+/** Resultado de /usuarios/login: la sesión, el texto 'error' (credenciales incorrectas) o una suspensión. */
+export type LoginResponse = JwtUserModel | 'error' | LoginBaneado;

@@ -39,7 +39,7 @@ export class PerfilUserFollowersComponent implements OnInit {
     this.securityService
       .getLastFollowersByUserId(this._usuarioId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         this.followers = response.followers;
         this.totalCount = response.totalCount;
       });

@@ -62,7 +62,7 @@ export class TopsComponent implements OnInit {
     this.postService
       .getTopPosts(date, categoriaId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         this.topPosts = response;
       });
   }
@@ -71,7 +71,7 @@ export class TopsComponent implements OnInit {
     this.httpParametrosService
       .getCategoriasDropdown()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((values: any) => {
+      .subscribe((values) => {
         this.categorias = values;
       });
   }

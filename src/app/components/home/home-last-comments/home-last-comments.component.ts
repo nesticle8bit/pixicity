@@ -26,7 +26,7 @@ export class HomeLastCommentsComponent implements OnInit {
     this.postService
       .getUltimosComentarios()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((comentarios: any) => {
+      .subscribe((comentarios) => {
         this.lastComments = comentarios;
         this.refreshComments = false;
       });

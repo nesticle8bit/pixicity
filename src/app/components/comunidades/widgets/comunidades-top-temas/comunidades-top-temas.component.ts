@@ -21,7 +21,7 @@ export class ComunidadesTopTemasComponent implements OnInit {
   }
 
   cargar(): void {
-    this.comunidadesService.getTopTemasGlobal(this.periodo, 5).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v: any) => {
+    this.comunidadesService.getTopTemasGlobal(this.periodo, 5).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => {
       this.temas = v ?? [];
     });
   }

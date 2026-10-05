@@ -103,9 +103,9 @@ export class HttpParametrosService implements IHttpParametrosService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getCategoriasAdmin(): Observable<PaginatedData<CategoriaViewModel>> {
+  getCategoriasAdmin(): Observable<PaginatedData<CategoriaViewModel, 'categorias'>> {
     return this.http
-      .get<ApiResponse<PaginatedData<CategoriaViewModel>>>(
+      .get<ApiResponse<PaginatedData<CategoriaViewModel, 'categorias'>>>(
         `${environment.api}/api/categorias/getCategoriasAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(

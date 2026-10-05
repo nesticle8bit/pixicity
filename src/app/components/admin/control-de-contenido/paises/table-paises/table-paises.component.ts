@@ -31,7 +31,7 @@ export class TablePaisesComponent implements OnInit {
   }
 
   getPaises(): void {
-    this.parametrosService.getPaises().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.parametrosService.getPaises().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if(response.data) {
         response.data = response.data.map((pais: any) => {
           pais.isO2 = pais.isO2?.toLowerCase();
@@ -53,7 +53,7 @@ export class TablePaisesComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value) {
         this.getPaises();
       }

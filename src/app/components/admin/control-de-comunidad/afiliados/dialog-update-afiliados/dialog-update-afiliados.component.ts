@@ -45,7 +45,7 @@ export class DialogUpdateAfiliadosComponent implements OnInit {
 
     const afiliacion = Object.assign({}, this.formGroupAfiliacion.value);
 
-    this.generalService.updateAfiliacion(afiliacion).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.generalService.updateAfiliacion(afiliacion).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.notificationService.success('La información de la afiliación ha sido actualizada correctamente', 'Actualizado');
 

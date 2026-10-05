@@ -38,7 +38,7 @@ export class TableAfiliadosComponent implements OnInit {
   }
 
   getAfiliados(): void {
-    this.generalService.getAfiliados().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.generalService.getAfiliados().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.afiliados = response.data;
       this.totalCount = response.pagination.totalCount;
     });
@@ -57,7 +57,7 @@ export class TableAfiliadosComponent implements OnInit {
     this.webService
       .changeAfiliadoActive({ id: afiliado.id, activo: afiliado.activo })
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         if (response) {
           this.notificationService.success(
             afiliado.activo
@@ -78,7 +78,7 @@ export class TableAfiliadosComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value) {
         afiliado.activo = value.activo;
         afiliado.banner = value.banner;
@@ -109,7 +109,7 @@ export class TableAfiliadosComponent implements OnInit {
 
   deleteAfiliado(afiliado: any, index: number): void {
     if (this.notificationService.confirm('¿Está seguro de eliminar esta afiliación?')) {
-      this.generalService.deleteAfiliado(afiliado.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.generalService.deleteAfiliado(afiliado.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success('La afiliación ha sido eliminada correctamente', 'Eliminado');
           this.afiliados.splice(index, 1);

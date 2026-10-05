@@ -67,7 +67,7 @@ export class PostsMetaComponent implements OnInit {
       return;
     }
 
-    this.postService.getAvailableVotos(1).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.postService.getAvailableVotos(1).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.availablePuntos = [];
 
       if (response > 0) {
@@ -85,7 +85,7 @@ export class PostsMetaComponent implements OnInit {
     this.postService
       .setVotos({ typeId: this.post.id, cantidad: puntos, votosType: 1 })
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         if (response) {
           this.addedPuntos = true;
           this.post.puntos += puntos;
@@ -102,7 +102,7 @@ export class PostsMetaComponent implements OnInit {
   }
 
   agregarFavorito(postId: number): void {
-    this.postService.addFavoritePost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.postService.addFavoritePost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.savedToFavorites = {
           message: 'Bien! Este post fue agregado a tus favoritos.',
@@ -138,7 +138,7 @@ export class PostsMetaComponent implements OnInit {
       return;
     }
 
-    this.postService.seguirPost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.postService.seguirPost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value) {
         this.post.seguirPost = !this.post.seguirPost;
       }

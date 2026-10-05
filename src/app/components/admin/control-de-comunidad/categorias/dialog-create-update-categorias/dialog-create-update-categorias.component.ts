@@ -129,7 +129,7 @@ export class DialogCreateUpdateCategoriasComponent implements OnInit {
     this.parametrosService
       .saveCategoria(categoria)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         if (response) {
           this.notificationService.success('La categoría se ha guardado correctamente', 'Guardado');
 

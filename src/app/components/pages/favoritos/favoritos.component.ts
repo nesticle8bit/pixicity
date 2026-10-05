@@ -48,7 +48,7 @@ export class FavoritosComponent implements OnInit {
   }
 
   getFavoritos(categoriaId: number): void {
-    this.httpGeneral.getFavoritosByUser(this.formGroup?.value?.search, categoriaId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.httpGeneral.getFavoritosByUser(this.formGroup?.value?.search, categoriaId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.favoritos = response.favoritos;
 
       if (this.categorias?.length <= 0) {
@@ -60,7 +60,7 @@ export class FavoritosComponent implements OnInit {
   }
 
   deleteFavorito(favorito: any): void {
-    this.favoritosService.deleteFavorito(favorito.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.favoritosService.deleteFavorito(favorito.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         favorito.deleted = response.eliminado;
       }

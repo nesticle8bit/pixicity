@@ -74,7 +74,7 @@ export class ProfilePostsComponent implements OnInit {
     this.postService
       .getPostsByUserId(this.user.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         this.posts = response.data;
         this.totalCount = response.pagination.totalCount;
       });

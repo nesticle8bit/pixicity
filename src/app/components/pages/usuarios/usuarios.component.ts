@@ -67,20 +67,20 @@ export class UsuariosComponent implements OnInit {
   getUsuarios(): void {
     const search = Object.assign({}, this.formGroup.value);
 
-    this.securityService.getUsuarios(search).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.securityService.getUsuarios(search).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.usuarios = response.usuarios;
       this.totalCount = response.pagination.totalCount;
     });
   }
 
   getPaises(): void {
-    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
+    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
       this.paises = values;
     });
   }
 
   getRangos(): void {
-    this.securityService.getRangosDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
+    this.securityService.getRangosDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
       this.rangos = values;
     });
   }

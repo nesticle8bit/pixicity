@@ -30,7 +30,7 @@ export class TableCommentsComponent implements OnInit {
   }
 
   getComentarios(): void {
-    this.postsService.getComentarios().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.postsService.getComentarios().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.comments = response?.data;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -44,7 +44,7 @@ export class TableCommentsComponent implements OnInit {
   deleteComentario(comentario: any): void {
     const accion = comentario.eliminado ? 'recuperar' : 'eliminar';
     if (this.notificationService.confirm(`¿Está seguro de ${accion} este comentario?`)) {
-      this.postsService.deleteComentario(comentario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.postsService.deleteComentario(comentario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success(
             `El comentario ha sido ${comentario.eliminado ? 'recuperado' : 'eliminado'} correctamente`,

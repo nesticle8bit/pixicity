@@ -86,7 +86,7 @@ export class FotosIndexComponent implements OnInit {
       : this.fotosService.getFotos(search);
 
     obs.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (response: any) => {
+      next: (response) => {
         this.fotos = response?.data || [];
         this.pagination = response?.pagination || {};
         this.loading = false;

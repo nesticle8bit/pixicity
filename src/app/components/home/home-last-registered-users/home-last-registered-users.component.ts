@@ -25,7 +25,7 @@ export class HomeLastRegisteredUsersComponent implements OnInit {
     this.securityService
       .getLastRegisteredUsers()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         this.users = response;
       });
   }

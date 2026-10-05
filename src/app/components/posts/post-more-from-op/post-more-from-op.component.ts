@@ -31,7 +31,7 @@ export class PostMoreFromOPComponent implements OnInit {
   ngOnInit(): void {}
 
   getPostsFromOP(postId: number): void {
-    this.postService.getPostsFromOP(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.postService.getPostsFromOP(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.posts = value;
     });
   }

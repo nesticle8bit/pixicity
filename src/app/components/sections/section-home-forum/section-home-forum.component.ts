@@ -59,20 +59,20 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.displayService.setDisplay(this.displayComponent);
 
-    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: any) => {
-      this.categoria = params.get('categoria');
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      this.categoria = params.get('categoria') ?? '';
       // /posts/:categoria usa este mismo componente: sin esto todas las
       // categorias compartian title y description con la portada y Google
       // las colapsaba como duplicados.
       this.setSeoCategoria(this.categoria);
     });
 
-    this.activatedRoute.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: any) => {
+    this.activatedRoute.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       if (params?.ref) {
         this.generalService
           .setHitInByRefCode(params.ref)
           .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe((response: any) => {
+          .subscribe((response) => {
             if (response) {
               console.log(
                 '💖 Que bueno tener un referido como tú, bienvenido a nuestra comunidad'

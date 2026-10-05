@@ -52,14 +52,14 @@ export class DialogUpdatePaisesComponent implements OnInit {
     pais.iso3 = pais.iso3?.toUpperCase();
 
     if(pais.id) {
-      this.httpParametros.updatePais(pais).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.httpParametros.updatePais(pais).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success('El pais se ha actualizado correctamente', 'Actualizar');
           this.dialogRef.close(pais);
         }
       });
     } else {
-      this.httpParametros.savePais(pais).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.httpParametros.savePais(pais).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success('El pais se ha guardado correctamente', 'Guardar');
           this.dialogRef.close(pais);

@@ -23,8 +23,8 @@ export class PaginasComponent implements OnInit {
     private webService: IHttpWebService,
     private seoService: SEOService
   ) {
-    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: any) => {
-      this.slug = params.params.slug;
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      this.slug = params.get('slug') ?? '';
       this.getPaginaBySlug();
     });
 
@@ -43,7 +43,7 @@ export class PaginasComponent implements OnInit {
     this.webService
       .getPaginaBySlug(`/paginas/${this.slug}`)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         if (response) {
           response.fechaActualiza = response.fechaActualiza
             ? response.fechaActualiza

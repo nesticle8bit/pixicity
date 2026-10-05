@@ -28,7 +28,7 @@ export class TableComunidadesCategoriasComponent implements OnInit {
   }
 
   getCategorias(): void {
-    this.comunidadesService.getCategorias().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.comunidadesService.getCategorias().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.categorias = value ?? [];
     });
   }
@@ -39,7 +39,7 @@ export class TableComunidadesCategoriasComponent implements OnInit {
       data: categoria,
       disableClose: true,
     });
-    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok) => {
       if (ok) this.getCategorias();
     });
   }
@@ -60,7 +60,7 @@ export class TableComunidadesCategoriasComponent implements OnInit {
       data: { categoria, sub },
       disableClose: true,
     });
-    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok) => {
       if (ok) this.getCategorias();
     });
   }

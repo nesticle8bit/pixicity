@@ -5,7 +5,7 @@ import { NoticiaModel } from 'src/app/models/web/noticia.model';
 
 @Injectable()
 export abstract class IHttpNoticiasService {
-  abstract getNoticias(search: string): Observable<PaginatedData<NoticiaModel>>;
+  abstract getNoticias(search: string): Observable<PaginatedData<NoticiaModel, 'noticias'>>;
   abstract saveNoticias(noticia: Partial<NoticiaModel>): Observable<number>;
   abstract updateNoticias(noticia: Partial<NoticiaModel>): Observable<boolean>;
   abstract deleteNoticias(id: number): Observable<boolean>;

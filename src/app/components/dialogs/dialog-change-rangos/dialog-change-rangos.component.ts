@@ -42,7 +42,7 @@ export class DialogChangeRangosComponent implements OnInit {
       });
     }
 
-    this.securityService.getRangosDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.securityService.getRangosDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.rangos = response;
     });
   }
@@ -54,7 +54,7 @@ export class DialogChangeRangosComponent implements OnInit {
 
     const obj = Object.assign({}, this.formGroup.value);
 
-    this.securityService.changeRango(obj).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.securityService.changeRango(obj).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.notificationService.success('El rango del usuario ha sido actualizado correctamente', 'Actualizado');
 

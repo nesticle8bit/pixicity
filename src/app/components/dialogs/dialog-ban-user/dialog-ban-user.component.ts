@@ -38,7 +38,7 @@ export class DialogBanUserComponent implements OnInit {
     const usuario = Object.assign({}, this.formGroup.value);
     usuario.baneadoPermanente = usuario.baneadoPermanente === 'true';
 
-    this.securityService.banUser(usuario).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.securityService.banUser(usuario).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.notificationService.success('El usuario ha sido baneado correctamente y se le ha notificado', 'Baneado');
 

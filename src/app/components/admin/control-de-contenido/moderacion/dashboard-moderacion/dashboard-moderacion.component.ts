@@ -49,7 +49,7 @@ export class DashboardModeracionComponent implements OnInit {
     // Reportes nuevos en vivo (grupo staff).
     this.signalrService.newReport$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((payload: any) => {
+      .subscribe((payload) => {
         this.pendientes += 1;
         this.notificationService.warning(
           `${payload?.tipoContenidoNombre ?? 'Contenido'} reportado por ${payload?.reporta ?? 'un usuario'}`,
@@ -69,7 +69,7 @@ export class DashboardModeracionComponent implements OnInit {
     this.moderacionService
       .getReportes(this.paginationService.page, this.paginationService.pageCount, this.tipoContenido, this.soloPendientes)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         this.reportes = response?.data ?? [];
         this.totalCount = response?.pagination?.totalCount ?? 0;
         this.pendientes = response?.pendientes ?? 0;
@@ -139,7 +139,7 @@ export class DashboardModeracionComponent implements OnInit {
     this.moderacionService
       .getModeracionLogs(1, 50)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         this.logs = response?.data ?? [];
         this.logsTotal = response?.pagination?.totalCount ?? 0;
       });

@@ -34,8 +34,8 @@ export class UserOnlineStatusComponent implements OnInit {
   ngOnInit(): void {}
 
   getUserStatus(userName: string): void {
-    this.securityService.getUserStatus(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
-      this.activo = response;
+    this.securityService.getUserStatus(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+      this.activo = response ?? 0;
     });
   }
 }

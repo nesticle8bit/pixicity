@@ -1,3 +1,4 @@
+import { ConfiguracionModel, ContactoModel } from 'src/app/models/general/configuracion.model';
 import { IHttpGeneralService } from '../interfaces/httpGeneral.interface';
 import { AfiliacionModel } from 'src/app/models/general/afiliacion.model';
 import { environment } from 'src/environments/environment';
@@ -8,7 +9,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { PaginationService } from '../shared/pagination.service';
-import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
+import { ApiResponse, PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
 import { EstadisticasViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { FavoritosViewModel } from 'src/app/models/posts/post-vm.model';
 import { DashboardResumen } from 'src/app/models/admin/dashboard.model';
@@ -63,9 +64,9 @@ export class HttpGeneralService implements IHttpGeneralService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getAfiliados(): Observable<AfiliacionModel[]> {
+  getAfiliados(): Observable<PaginatedData<AfiliacionModel>> {
     return this.http
-      .get<ApiResponse<AfiliacionModel[]>>(`${environment.api}/api/afiliados/getAfiliados`)
+      .get<ApiResponse<PaginatedData<AfiliacionModel>>>(`${environment.api}/api/afiliados/getAfiliados`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -95,9 +96,9 @@ export class HttpGeneralService implements IHttpGeneralService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getFavoritosByUser(search: string, categoriaId: number): Observable<PaginatedData<FavoritosViewModel>> {
+  getFavoritosByUser(search: string, categoriaId: number): Observable<PaginatedWithCategorias<FavoritosViewModel, 'favoritos'>> {
     return this.http
-      .get<ApiResponse<PaginatedData<FavoritosViewModel>>>(
+      .get<ApiResponse<PaginatedWithCategorias<FavoritosViewModel, 'favoritos'>>>(
         `${environment.api}/api/favoritos/getFavoritos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}&categoriaId=${categoriaId}`,
       )
       .pipe(
@@ -113,9 +114,9 @@ export class HttpGeneralService implements IHttpGeneralService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getConfiguracion(): Observable<unknown> {
+  getConfiguracion(): Observable<ConfiguracionModel> {
     return this.http
-      .get<ApiResponse<unknown>>(`${environment.api}/api/configuracion/getConfiguracion`)
+      .get<ApiResponse<ConfiguracionModel>>(`${environment.api}/api/configuracion/getConfiguracion`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -129,7 +130,7 @@ export class HttpGeneralService implements IHttpGeneralService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  updateConfiguracion(configuracion: unknown): Observable<boolean> {
+  updateConfiguracion(configuracion: Partial<ConfiguracionModel>): Observable<boolean> {
     return this.http
       .put<ApiResponse<boolean>>(
         `${environment.api}/api/configuracion/updateConfiguracion`,
@@ -148,7 +149,7 @@ export class HttpGeneralService implements IHttpGeneralService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  updateAds(configuration: unknown): Observable<boolean> {
+  updateAds(configuration: Partial<ConfiguracionModel>): Observable<boolean> {
     return this.http
       .put<ApiResponse<boolean>>(`${environment.api}/api/configuracion/updateAds`, configuration)
       .pipe(
@@ -219,9 +220,9 @@ export class HttpGeneralService implements IHttpGeneralService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getContactos(): Observable<unknown> {
+  getContactos(): Observable<PaginatedData<ContactoModel, 'contactos'>> {
     return this.http
-      .get<ApiResponse<unknown>>(
+      .get<ApiResponse<PaginatedData<ContactoModel, 'contactos'>>>(
         `${environment.api}/api/contacto/getContactos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(

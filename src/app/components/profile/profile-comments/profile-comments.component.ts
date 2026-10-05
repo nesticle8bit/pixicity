@@ -40,7 +40,7 @@ export class ProfileCommentsComponent implements OnInit {
   ngOnInit(): void {}
 
   getCommentsByUserId(): void {
-    this.postService.getComentariosByUserId(this.user.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.postService.getComentariosByUserId(this.user.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.comments = response?.data;
       this.totalCount = response?.pagination?.totalCount;
     });

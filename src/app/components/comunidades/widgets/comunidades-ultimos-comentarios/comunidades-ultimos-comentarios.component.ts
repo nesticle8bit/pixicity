@@ -23,7 +23,7 @@ export class ComunidadesUltimosComentariosComponent implements OnInit {
   getUltimosComentarios(): void {
     this.refreshComments = true;
 
-    this.comunidadesService.getComentariosRecientesGlobal(8).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v: any) => {
+    this.comunidadesService.getComentariosRecientesGlobal(8).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => {
       this.comentarios = v ?? [];
       this.refreshComments = false;
     });

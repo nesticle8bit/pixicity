@@ -1,26 +1,26 @@
 import { UsuarioAdminSearchFilter, UsuarioSearchFilter } from 'src/app/models/shared/service-types.model';
-import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
+import { JwtUserModel, LoginResponse } from 'src/app/models/security/jwtUser.model';
 import { UserModel } from 'src/app/models/security/user.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
 import { ActividadViewModel } from 'src/app/models/logs/logs-vm.model';
 import { DropdownViewModel } from 'src/app/models/parametros/parametros-vm.model';
-import { PerfilUsuarioViewModel, UsuarioAvatarViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { PerfilInfoResponse, PerfilUsuarioViewModel, RangoUsuarioReportViewModel, SeguidoresResponse, UsuarioAvatarViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 
 @Injectable()
 export abstract class IHttpSecurityService {
   abstract getCurrentUser(): JwtUserModel;
   abstract getCurrentUserAsObservable(): Observable<JwtUserModel>;
-  abstract getUsuarios(search: UsuarioSearchFilter): Observable<PaginatedData<UsuarioViewModel>>;
-  abstract getUsuariosAdmin(search: UsuarioAdminSearchFilter): Observable<PaginatedData<UsuarioViewModel>>;
-  abstract getLoggedUserByJwt(): Observable<PerfilUsuarioViewModel>;
+  abstract getUsuarios(search: UsuarioSearchFilter): Observable<PaginatedData<UsuarioViewModel, 'usuarios'>>;
+  abstract getUsuariosAdmin(search: UsuarioAdminSearchFilter): Observable<PaginatedData<UsuarioViewModel, 'usuarios'>>;
+  abstract getLoggedUserByJwt(): Observable<UsuarioViewModel>;
   abstract getUserByUserName(userName: string): Observable<PerfilUsuarioViewModel>;
   abstract getSesiones(): Observable<PaginatedData<unknown>>;
   abstract deleteSessionById(sessionId: number): Observable<boolean>;
   abstract setUserToLocalStorage(obj: any): any;
   abstract registerUser(user: UserModel): Observable<number>;
-  abstract loginUser(user: { userName: string; password: string }): Observable<JwtUserModel>;
+  abstract loginUser(user: { userName: string; password: string }): Observable<LoginResponse>;
   abstract refreshAccessToken(): Observable<string>;
   abstract logout(): any;
   abstract changePassword(obj: { currentPassword: string; newPassword: string }): Observable<boolean>;
@@ -30,16 +30,16 @@ export abstract class IHttpSecurityService {
   abstract isFollowingTheUser(userName: string): Observable<boolean>;
   abstract getFollowingUsersByUserId(id: number): Observable<PaginatedData<UsuarioAvatarViewModel>>;
   abstract getFollowersByUserId(userId: number): Observable<PaginatedData<UsuarioAvatarViewModel>>;
-  abstract getLastFollowersByUserId(userId: number): Observable<UsuarioAvatarViewModel[]>;
+  abstract getLastFollowersByUserId(userId: number): Observable<SeguidoresResponse>;
   abstract savePerfilInfo(perfil: Partial<PerfilUsuarioViewModel>): Observable<boolean>;
-  abstract getCurrentPerfilInfo(): Observable<PerfilUsuarioViewModel>;
+  abstract getCurrentPerfilInfo(): Observable<PerfilInfoResponse>;
   abstract getPerfilInfoByUserId(userId: number): Observable<PerfilUsuarioViewModel>;
   abstract getSocialMediaByUsuarioId(usuarioId: number): Observable<unknown>;
   abstract banUser(usuario: { userName: string; razon?: string }): Observable<boolean>;
   abstract changeAvatar(file: Blob): Observable<string>;
   abstract changeAvatarAdmin(file: Blob, usuarioId: number): Observable<string>;
   abstract getLastRegisteredUsers(): Observable<UsuarioViewModel[]>;
-  abstract getRangosUsuarios(): Observable<PaginatedData<unknown>>;
+  abstract getRangosUsuarios(): Observable<PaginatedData<unknown, 'rangos'>>;
   abstract getRangosDropdown(): Observable<DropdownViewModel[]>;
   abstract getActividadUsuario(usuarioId: number, tipoActividad: number): Observable<ActividadViewModel[]>;
   abstract addUpdateRango(rango: unknown): Observable<number>;
@@ -47,8 +47,8 @@ export abstract class IHttpSecurityService {
   abstract sessionOnlineUser(): Observable<boolean>;
   abstract changeBackgroundProfile(obj: { imageUrl: string }): Observable<boolean>;
   abstract getAdminsList(): Observable<UsuarioViewModel[]>;
-  abstract changeUsuariosRangosByPuntos(): Observable<boolean>;
-  abstract getUserStatus(userName: string): Observable<unknown>;
+  abstract changeUsuariosRangosByPuntos(): Observable<RangoUsuarioReportViewModel[]>;
+  abstract getUserStatus(userName: string): Observable<number | null>;
   abstract removeAvatar(usuarioId: number): Observable<boolean>;
   abstract removeUsuario(usuarioId: number): Observable<boolean>;
 }

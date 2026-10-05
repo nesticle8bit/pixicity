@@ -54,7 +54,7 @@ export class FollowButtonComponent implements OnInit {
     this.securityService
       .isFollowingTheUser(userName)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value: any) => {
+      .subscribe((value) => {
         this.isFollowing = value;
       });
   }
@@ -64,7 +64,7 @@ export class FollowButtonComponent implements OnInit {
       userName: this.userName,
     };
 
-    this.securityService.seguirUsuario(follow).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.securityService.seguirUsuario(follow).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.isFollowing = !this.isFollowing;
         this.followingChange.emit(this.isFollowing);

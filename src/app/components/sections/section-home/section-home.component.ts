@@ -57,16 +57,16 @@ export class SectionHomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.displayService.setDisplay(this.displayComponent);
 
-    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: any) => {
-      this.categoria = params.get('categoria');
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      this.categoria = params.get('categoria') ?? '';
     });
 
-    this.activatedRoute.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: any) => {
+    this.activatedRoute.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       if (params?.ref) {
         this.generalService
           .setHitInByRefCode(params.ref)
           .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe((response: any) => {
+          .subscribe((response) => {
             if (response) {
               console.log(
                 '💖 Que bueno tener un referido como tú, bienvenido a nuestra comunidad'

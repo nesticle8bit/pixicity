@@ -23,7 +23,7 @@ export class DashboardEstadisticasComponent implements OnInit {
   load(): void {
     this.loading = true;
     this.generalService.getAdminEstadisticas().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (data: any) => {
+      next: (data) => {
         this.stats = data;
         this.loading = false;
       },

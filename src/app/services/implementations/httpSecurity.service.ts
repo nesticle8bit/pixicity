@@ -1,6 +1,6 @@
 import { UsuarioAdminSearchFilter, UsuarioSearchFilter } from 'src/app/models/shared/service-types.model';
 import { IHttpSecurityService } from '../interfaces/httpSecurity.interface';
-import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
+import { JwtUserModel, LoginResponse } from 'src/app/models/security/jwtUser.model';
 import { PaginationService } from '../shared/pagination.service';
 import { UserModel } from 'src/app/models/security/user.model';
 import { environment } from 'src/environments/environment';
@@ -12,7 +12,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { PerfilUsuarioViewModel, UsuarioViewModel, UsuarioAvatarViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { PerfilInfoResponse, PerfilUsuarioViewModel, RangoUsuarioReportViewModel, SeguidoresResponse, UsuarioAvatarViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { ActividadViewModel } from 'src/app/models/logs/logs-vm.model';
 import { DropdownViewModel } from 'src/app/models/parametros/parametros-vm.model';
 
@@ -52,9 +52,9 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  loginUser(user: { userName: string; password: string }): Observable<JwtUserModel> {
+  loginUser(user: { userName: string; password: string }): Observable<LoginResponse> {
     return this.http
-      .post<ApiResponse<JwtUserModel>>(`${environment.api}/api/usuarios/login`, user)
+      .post<ApiResponse<LoginResponse>>(`${environment.api}/api/usuarios/login`, user)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -106,7 +106,7 @@ export class HttpSecurityService implements IHttpSecurityService {
     return this.currentUserSubject.asObservable();
   }
 
-  getUsuarios(search: UsuarioSearchFilter): Observable<PaginatedData<UsuarioViewModel>> {
+  getUsuarios(search: UsuarioSearchFilter): Observable<PaginatedData<UsuarioViewModel, 'usuarios'>> {
     let searchParams = ``;
 
     if (search?.genero) {
@@ -122,7 +122,7 @@ export class HttpSecurityService implements IHttpSecurityService {
     }
 
     return this.http
-      .get<ApiResponse<PaginatedData<UsuarioViewModel>>>(
+      .get<ApiResponse<PaginatedData<UsuarioViewModel, 'usuarios'>>>(
         `${environment.api}/api/usuarios/getUsuarios?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${searchParams}`
       )
       .pipe(
@@ -138,7 +138,7 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getUsuariosAdmin(search: UsuarioAdminSearchFilter): Observable<PaginatedData<UsuarioViewModel>> {
+  getUsuariosAdmin(search: UsuarioAdminSearchFilter): Observable<PaginatedData<UsuarioViewModel, 'usuarios'>> {
     let searchParams = ``;
 
     if (search?.rangoId) {
@@ -146,7 +146,7 @@ export class HttpSecurityService implements IHttpSecurityService {
     }
 
     return this.http
-      .get<ApiResponse<PaginatedData<UsuarioViewModel>>>(
+      .get<ApiResponse<PaginatedData<UsuarioViewModel, 'usuarios'>>>(
         `${environment.api}/api/usuarios/getUsuariosAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${searchParams}`
       )
       .pipe(
@@ -162,9 +162,9 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getLoggedUserByJwt(): Observable<PerfilUsuarioViewModel> {
+  getLoggedUserByJwt(): Observable<UsuarioViewModel> {
     return this.http
-      .get<ApiResponse<PerfilUsuarioViewModel>>(`${environment.api}/api/usuarios/getLoggedUserByJwt`)
+      .get<ApiResponse<UsuarioViewModel>>(`${environment.api}/api/usuarios/getLoggedUserByJwt`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -364,9 +364,9 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getLastFollowersByUserId(userId: number): Observable<UsuarioAvatarViewModel[]> {
+  getLastFollowersByUserId(userId: number): Observable<SeguidoresResponse> {
     return this.http
-      .get<ApiResponse<UsuarioAvatarViewModel[]>>(
+      .get<ApiResponse<SeguidoresResponse>>(
         `${environment.api}/api/usuarios/getLastFollowersByUserId?userId=${userId}`
       )
       .pipe(
@@ -398,9 +398,9 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getCurrentPerfilInfo(): Observable<PerfilUsuarioViewModel> {
+  getCurrentPerfilInfo(): Observable<PerfilInfoResponse> {
     return this.http
-      .get<ApiResponse<PerfilUsuarioViewModel>>(`${environment.api}/api/usuarios/getCurrentPerfilInfo`)
+      .get<ApiResponse<PerfilInfoResponse>>(`${environment.api}/api/usuarios/getCurrentPerfilInfo`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -521,9 +521,9 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getRangosUsuarios(): Observable<PaginatedData<unknown>> {
+  getRangosUsuarios(): Observable<PaginatedData<unknown, 'rangos'>> {
     return this.http
-      .get<ApiResponse<PaginatedData<unknown>>>(`${environment.api}/api/rangos/getRangosUsuarios`)
+      .get<ApiResponse<PaginatedData<unknown, 'rangos'>>>(`${environment.api}/api/rangos/getRangosUsuarios`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -654,9 +654,9 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  changeUsuariosRangosByPuntos(): Observable<boolean> {
+  changeUsuariosRangosByPuntos(): Observable<RangoUsuarioReportViewModel[]> {
     return this.http
-      .get<ApiResponse<boolean>>(`${environment.api}/api/rangos/changeUsuariosRangosByPuntos`)
+      .get<ApiResponse<RangoUsuarioReportViewModel[]>>(`${environment.api}/api/rangos/changeUsuariosRangosByPuntos`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -670,9 +670,9 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getUserStatus(userName: string): Observable<unknown> {
+  getUserStatus(userName: string): Observable<number | null> {
     return this.http
-      .get<ApiResponse<unknown>>(
+      .get<ApiResponse<number | null>>(
         `${environment.api}/api/usuarios/getUserStatus?userName=${userName}`
       )
       .pipe(

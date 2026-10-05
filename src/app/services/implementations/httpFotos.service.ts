@@ -164,9 +164,9 @@ export class HttpFotosService implements IHttpFotosService {
       );
   }
 
-  addComentario(comentario: Partial<FotoComentarioViewModel>): Observable<FotoComentarioViewModel> {
+  addComentario(comentario: Partial<FotoComentarioViewModel>): Observable<number> {
     return this.http
-      .post<ApiResponse<FotoComentarioViewModel>>(`${environment.api}/api/fotos/AddComentario`, comentario)
+      .post<ApiResponse<number>>(`${environment.api}/api/fotos/AddComentario`, comentario)
       .pipe(
         map((response) => {
           if (response.status === 200) { return response.data!; }

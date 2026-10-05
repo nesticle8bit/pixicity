@@ -51,7 +51,7 @@ export class BorradoresComponent implements OnInit {
     this.postService
       .getBorradores(this.formGroup?.value?.search, categoriaId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         if (this.categorias?.length <= 0) {
           this.categorias = response.categorias;
         }

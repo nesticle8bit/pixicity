@@ -35,7 +35,7 @@ export class ModHistoryComponent implements OnInit {
   }
 
   getHistorialModeracion(): void {
-    this.webService.getHistorialModeracion().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.webService.getHistorialModeracion().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.posts = response;
     });
   }

@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { IHttpPostsService } from '../interfaces/httpPosts.interface';
 import { PaginationService } from '../shared/pagination.service';
-import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { PostViewModel, ComentarioViewModel, PostSimpleViewModel, CloudTagViewModel, FavoritosViewModel } from 'src/app/models/posts/post-vm.model';
+import { ApiResponse, PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
+import { CloudTagViewModel, ComentarioViewModel, ComentarioVotoResponse, FavoritosViewModel, PostDetailResponse, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
 
 
 @Injectable()
@@ -113,9 +113,9 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getPostById(postId: number): Observable<PostViewModel> {
+  getPostById(postId: number): Observable<PostDetailResponse> {
     return this.http
-      .get<ApiResponse<PostViewModel>>(`${environment.api}/api/posts/getPostById?postId=${postId}`)
+      .get<ApiResponse<PostDetailResponse>>(`${environment.api}/api/posts/getPostById?postId=${postId}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -213,9 +213,9 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  addComentario(comentario: Partial<ComentarioViewModel>): Observable<ComentarioViewModel> {
+  addComentario(comentario: Partial<ComentarioViewModel>): Observable<number> {
     return this.http
-      .post<ApiResponse<ComentarioViewModel>>(`${environment.api}/api/comentarios/addComentario`, comentario)
+      .post<ApiResponse<number>>(`${environment.api}/api/comentarios/addComentario`, comentario)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -536,9 +536,9 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getBorradores(search: string, categoriaId: number): Observable<PaginatedData<PostViewModel>> {
+  getBorradores(search: string, categoriaId: number): Observable<PaginatedWithCategorias<PostViewModel>> {
     return this.http
-      .get<ApiResponse<PaginatedData<PostViewModel>>>(
+      .get<ApiResponse<PaginatedWithCategorias<PostViewModel>>>(
         `${environment.api}/api/posts/getBorradores?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}&categoriaId=${categoriaId}`,
       )
       .pipe(
@@ -575,9 +575,9 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  votarComentario(comentarioId: number, cantidad: number): Observable<ComentarioViewModel> {
+  votarComentario(comentarioId: number, cantidad: number): Observable<ComentarioVotoResponse> {
     return this.http
-      .post<ApiResponse<ComentarioViewModel>>(`${environment.api}/api/comentarios/votarComentario`, {
+      .post<ApiResponse<ComentarioVotoResponse>>(`${environment.api}/api/comentarios/votarComentario`, {
         comentarioId,
         cantidad,
       })
@@ -637,9 +637,9 @@ export class HttpPostsService implements IHttpPostsService {
     );
   }
 
-  recomendarPost(postId: number): Observable<boolean> {
+  recomendarPost(postId: number): Observable<number> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/posts/recomendarPost`, { id: postId })
+      .post<ApiResponse<number>>(`${environment.api}/api/posts/recomendarPost`, { id: postId })
       .pipe(
         map((response) => {
           if (response.status === 200) {

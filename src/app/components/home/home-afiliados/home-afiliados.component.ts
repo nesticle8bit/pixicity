@@ -28,13 +28,13 @@ export class HomeAfiliadosComponent implements OnInit {
   }
 
   getAfiliados(): void {
-    this.webService.getAfiliados().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.webService.getAfiliados().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.afiliados = response;
     });
   }
 
   hit(afiliado: any): void {
-    this.webService.hitAfiliado(afiliado.codigo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((url: any) => {
+    this.webService.hitAfiliado(afiliado.codigo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((url) => {
       window.open(url, '_blank');
     });
   }

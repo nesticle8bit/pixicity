@@ -52,8 +52,8 @@ export class ComunidadEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.comunidadesService.getCategorias().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v: any) => (this.categorias = v ?? []));
-    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v: any) => (this.paises = v ?? []));
+    this.comunidadesService.getCategorias().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => (this.categorias = v ?? []));
+    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => (this.paises = v ?? []));
 
     this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.nombreCorto = params['slug'];
@@ -62,7 +62,7 @@ export class ComunidadEditComponent implements OnInit {
   }
 
   cargar(): void {
-    this.comunidadesService.getComunidad(this.nombreCorto).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((c: any) => {
+    this.comunidadesService.getComunidad(this.nombreCorto).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((c) => {
       this.comunidadId = c.id;
       this.formGroup.patchValue({
         id: c.id,
@@ -84,7 +84,7 @@ export class ComunidadEditComponent implements OnInit {
     if (keepSub === null) this.formGroup.get('comunidadSubCategoriaId')?.setValue(null);
     this.subCategorias = [];
     if (categoriaId > 0) {
-      this.comunidadesService.getSubCategorias(categoriaId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v: any) => (this.subCategorias = v ?? []));
+      this.comunidadesService.getSubCategorias(categoriaId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => (this.subCategorias = v ?? []));
     }
   }
 

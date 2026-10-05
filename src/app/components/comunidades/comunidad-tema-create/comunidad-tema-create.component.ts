@@ -43,7 +43,7 @@ export class ComunidadTemaCreateComponent implements OnInit {
       this.temaId = +params['id'] || 0;
 
       this.comunidadesService.getComunidad(this.slug).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-        next: (c: any) => (this.comunidad = c),
+        next: (c) => (this.comunidad = c),
         error: () => this.router.navigate(['/comunidades']),
       });
 
@@ -55,7 +55,7 @@ export class ComunidadTemaCreateComponent implements OnInit {
 
   cargarTema(id: number): void {
     this.comunidadesService.getTema(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (tema: any) => {
+      next: (tema) => {
         this.formGroup.patchValue({
           titulo: tema.titulo,
           contenido: tema.contenido,
@@ -80,7 +80,7 @@ export class ComunidadTemaCreateComponent implements OnInit {
     };
 
     this.comunidadesService.saveTema(model).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (id: any) => {
+      next: (id) => {
         if (this.temaId) {
           this.notificationService.success('Tu tema ha sido actualizado', 'Tema actualizado');
           this.router.navigate(['/comunidades', this.slug, 'tema', this.temaId, this.urlSeo(model.titulo)]);

@@ -39,4 +39,8 @@ export interface PaginaViewModel {
   slug: string;
   contenido: string;
   eliminado: boolean;
+  tipo?: string;
+  target?: string;
+  fechaRegistro: string;
+  fechaActualiza?: string | null;
 }

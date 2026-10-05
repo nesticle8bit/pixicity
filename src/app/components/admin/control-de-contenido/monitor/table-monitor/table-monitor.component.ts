@@ -30,7 +30,7 @@ export class TableMonitorComponent implements OnInit {
   }
 
   getMonitors(): void {
-    this.logsService.getMonitorsAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.logsService.getMonitorsAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response?.data) {
         response.data = response.data.map((notificacion: any) => {
           if (notificacion.mensaje) {
@@ -85,7 +85,7 @@ export class TableMonitorComponent implements OnInit {
   deleteNotificacion(notificacion: any): void {
     const accion = notificacion.eliminado ? 'recuperar' : 'eliminar';
     if (this.notificationService.confirm(`¿Está seguro de ${accion} esta notificación?`)) {
-      this.logsService.deleteNotificacion(notificacion.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+      this.logsService.deleteNotificacion(notificacion.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success(
             `La notificación ha sido ${notificacion.eliminado ? 'recuperada' : 'eliminada'} correctamente`,

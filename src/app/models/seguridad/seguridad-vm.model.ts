@@ -72,3 +72,74 @@ export interface EstadisticasViewModel {
   totalPosts: number;
   totalComentarios: number;
 }
+
+export interface UsuarioPerfilViewModel {
+  usuarioId: number;
+  completeName: string;
+  personalMessage: string;
+  website: string;
+  instagram: string;
+  facebook: string;
+  twitter: string;
+  tiktok: string;
+  youtube: string;
+  like1: boolean;
+  like2: boolean;
+  like3: boolean;
+  like4: boolean;
+  like_All: boolean;
+  estadoCivil: string;
+  hijos: string;
+  vivoCon: string;
+  altura: string;
+  peso: string;
+  colorCabello: string;
+  colorOjos: string;
+  complexion: string;
+  dieta: string;
+  tatuajes: boolean;
+  piercings: boolean;
+  fumo: string;
+  alcohol: string;
+  estudios: string;
+  profesion: string;
+  empresa: string;
+  sector: string;
+  interesesProfesionales: string;
+  habilidadesProfesionales: string;
+  misIntereses: string;
+  hobbies: string;
+  seriesTV: string;
+  musicaFavorita: string;
+  deportesFavoritos: string;
+  librosFavoritos: string;
+  peliculasFavoritas: string;
+  comidaFavorita: string;
+  misHeroesSon: string;
+}
+
+/** Respuesta de getCurrentPerfilInfo: el perfil viene envuelto en { perfil } junto al fondo del perfil del usuario. */
+export interface PerfilInfoResponse {
+  perfil: UsuarioPerfilViewModel | null;
+  background?: string | null;
+}
+
+export interface RangoUsuarioReportViewModel {
+  usuarioId: number;
+  userName: string;
+  rango: RangoUsuarioViewModel;
+}
+
+export interface UsuarioFollowerViewModel {
+  avatar: string;
+  userName: string;
+  genero: string;
+  pais: { nombre: string; iso2: string };
+  puntos: number;
+}
+
+/** Respuesta de getLastFollowersByUserId. */
+export interface SeguidoresResponse {
+  followers: UsuarioFollowerViewModel[];
+  totalCount: number;
+}

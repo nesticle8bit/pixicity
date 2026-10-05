@@ -2,6 +2,9 @@ import { CategoriaViewModel } from '../parametros/parametros-vm.model';
 import { UsuarioViewModel } from '../seguridad/seguridad-vm.model';
 
 export interface PostViewModel {
+  fechaActualiza?: string | null;
+  // Calculado en el cliente a partir de etiquetas (posts-view).
+  tags?: string[];
   id: number;
   url: string;
   titulo: string;
@@ -66,4 +69,18 @@ export interface PostSimpleViewModel {
 export interface CloudTagViewModel {
   tag: string;
   count: number;
+}
+
+/**
+ * Respuesta de getPostById: el post viene envuelto en { post }. El API devuelve null si no existe (o es un borrador ajeno)
+ * y, para un post privado sin sesión iniciada, solo { post: { esPrivado: true } }.
+ */
+export interface PostDetailResponse {
+  post: PostViewModel;
+}
+
+/** Respuesta de votar un comentario: el nuevo total y el voto del usuario actual. */
+export interface ComentarioVotoResponse {
+  total: number;
+  miVoto: number;
 }

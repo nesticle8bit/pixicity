@@ -43,7 +43,7 @@ export class DialogAfiliarseComponent implements OnInit {
     this.httpGeneralService
       .saveAfiliacion(afiliacion)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         if (response) {
           this.formGroupAfiliacion.patchValue({
             codigo: `<a href="${environment.publicUrl}/?ref=${response}" target="_blank" title="Taringa!"><img src="${environment.publicUrl}/assets/images/logo_ref.png"></a>`,

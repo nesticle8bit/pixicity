@@ -32,8 +32,8 @@ export class PerfilComponent implements OnInit {
     private displayService: DisplayComponentService,
     private seoService: SEOService,
   ) {
-    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
-      this.getUserByUserName(values.get('userName'));
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
+      this.getUserByUserName(values.get('userName') ?? '');
     });
 
     this.loggedUser = this.securityService.getCurrentUser();
@@ -44,7 +44,7 @@ export class PerfilComponent implements OnInit {
   }
 
   getUserByUserName(userName: string): void {
-    this.securityService.getUserByUserName(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.securityService.getUserByUserName(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (!value) {
         // Perfil inexistente: 404 real para que Google no lo tome como soft 404.
         this.seoService.setSEO({

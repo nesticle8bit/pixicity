@@ -170,7 +170,7 @@ export class ShoutsCommentsComponent implements OnInit {
     this.perfilService.addShoutComentario({ shoutId: this._shout.id, comentario: texto })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (nuevoId: any) => {
+        next: (nuevoId) => {
           this.comentarios.push(this.crearLocal(nuevoId, texto, null));
           this.nuevoComentario = '';
           this.enviando = false;
@@ -203,7 +203,7 @@ export class ShoutsCommentsComponent implements OnInit {
     this.perfilService.addShoutComentario({ shoutId: this._shout.id, parentId: c.id, comentario: texto } as any)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (nuevoId: any) => {
+        next: (nuevoId) => {
           const parentRoot = c.parentId ?? c.id;
           this.comentarios.push(this.crearLocal(nuevoId, texto, parentRoot));
           this.replyEnviando = false;
@@ -251,7 +251,7 @@ export class ShoutsCommentsComponent implements OnInit {
 
   fijar(c: any): void {
     this.perfilService.fijarShoutComentario(c.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (fijado: any) => {
+      next: (fijado) => {
         c.fijado = fijado;
         this.notificationService.success(fijado ? 'Comentario fijado' : 'Comentario desfijado', 'Shouts');
         this.construirArbol();
@@ -294,7 +294,7 @@ export class ShoutsCommentsComponent implements OnInit {
 
     c.votando = true;
     this.perfilService.votarShoutComentario(c.id, valor).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (res: any) => {
+      next: (res) => {
         c.votos = res?.total ?? c.votos ?? 0;
         c.miVoto = res?.miVoto ?? 0;
         c.votando = false;

@@ -351,7 +351,7 @@ export class AccountComponent implements OnInit {
   }
 
   getCurrentPerfilInfo(): void {
-    this.securityService.getCurrentPerfilInfo().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.securityService.getCurrentPerfilInfo().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.formGroupPerfil.patchValue({
           completeName: response.perfil?.completeName,
@@ -442,7 +442,7 @@ export class AccountComponent implements OnInit {
   }
 
   getCurrentUser(): void {
-    this.securityService.getLoggedUserByJwt().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    this.securityService.getLoggedUserByJwt().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value) {
         const fechaNacimiento = value.fechaNacimiento?.split('/') ?? [];
 
@@ -458,7 +458,9 @@ export class AccountComponent implements OnInit {
           año: fechaNacimiento[2],
         });
 
-        this.getEstadosByPais(value?.paisId);
+        if (value?.paisId) {
+          this.getEstadosByPais(value.paisId);
+        }
       }
     });
   }
@@ -474,7 +476,7 @@ export class AccountComponent implements OnInit {
   }
 
   getPaises(): void {
-    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
+    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
       this.paises = values;
     });
   }
@@ -484,7 +486,7 @@ export class AccountComponent implements OnInit {
       return;
     }
 
-    this.parametrosService.getEstadosByPais(paisId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
+    this.parametrosService.getEstadosByPais(paisId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
       this.estados = values;
     });
   }
@@ -497,7 +499,7 @@ export class AccountComponent implements OnInit {
     const cuenta = Object.assign({}, this.formGroupCuenta.value);
     cuenta.fechaNacimiento = `${cuenta.dia}/${cuenta.mes}/${cuenta.año}`;
 
-    this.securityService.updateUsuario(cuenta).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.securityService.updateUsuario(cuenta).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.notificationService.success('La información de la cuenta ha sido actualizado correctamente', 'Actualizado');
       }
@@ -510,7 +512,7 @@ export class AccountComponent implements OnInit {
     this.securityService
       .changePassword(passwords)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         if (response) {
           this.formGroupCambiarContrasena.patchValue({
             currentPassword: '',
@@ -526,7 +528,7 @@ export class AccountComponent implements OnInit {
   savePerfilInfo(): void {
     const perfil = Object.assign({}, this.formGroupPerfil.value);
 
-    this.securityService.savePerfilInfo(perfil).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.securityService.savePerfilInfo(perfil).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.notificationService.success('Los cambios fueron aceptados y serán aplicados', 'Actualizado');
       }
@@ -539,7 +541,7 @@ export class AccountComponent implements OnInit {
       disableClose: true,
     });
 
-    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: any) => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value) {
         this.formGroupCuenta.patchValue({
           avatar: value,

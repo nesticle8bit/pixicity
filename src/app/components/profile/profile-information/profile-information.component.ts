@@ -42,7 +42,7 @@ export class ProfileInformationComponent implements OnInit {
     this.securityService
       .getPerfilInfoByUserId(this.user.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         if (response) {
           this.perfil = response;
         }

@@ -43,7 +43,7 @@ export class ProfileFollowingComponent implements OnInit {
     this.securityService
       .getFollowingUsersByUserId(this.user.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response: any) => {
+      .subscribe((response) => {
         this.followingUsers = response?.data;
         this.totalCount = response?.pagination?.totalCount;
       });

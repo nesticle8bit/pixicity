@@ -11,7 +11,7 @@ export abstract class IHttpParametrosService {
   abstract updatePais(pais: PaisViewModel): Observable<number>;
   abstract getEstadosByPais(idPais: number): Observable<EstadoViewModel[]>;
 
-  abstract getCategoriasAdmin(): Observable<PaginatedData<CategoriaViewModel>>;
+  abstract getCategoriasAdmin(): Observable<PaginatedData<CategoriaViewModel, 'categorias'>>;
   abstract getCategoriasDropdown(): Observable<CategoriaViewModel[]>;
   abstract getTopCategorias(count?: number): Observable<any[]>;
   abstract saveCategoria(categoria: Partial<CategoriaViewModel>): Observable<number>;

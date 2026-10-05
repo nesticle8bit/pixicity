@@ -35,7 +35,7 @@ export class PerfilSocialMediaButtonsComponent implements OnInit {
     this.securityService
       .getSocialMediaByUsuarioId(this.usuarioId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value: any) => {
+      .subscribe((value) => {
         this.socialMedia = value;
       });
   }

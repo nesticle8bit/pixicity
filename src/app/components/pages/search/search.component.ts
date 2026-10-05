@@ -65,18 +65,18 @@ export class SearchComponent implements OnInit {
       autor: '',
     });
 
-    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((route: any) => {
-      if (route?.params?.query) {
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((route) => {
+      if (route?.get('query')) {
         this.isSearch = true;
         this.searchFormGroup.patchValue({
-          search: route?.params?.query,
+          search: route?.get('query'),
           searchType: 'titulo',
         });
       }
 
-      if (route?.params?.categoria) {
+      if (route?.get('categoria')) {
         this.searchFormGroup.patchValue({
-          categoria: route?.params?.categoria,
+          categoria: route?.get('categoria'),
         });
       }
     });
@@ -84,7 +84,7 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
     forkJoin([this.parametrosService.getCategoriasDropdown()]).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(
-      (response: any) => {
+      (response) => {
         this.categorias = response[0];
         this.searchPosts();
       }
@@ -122,7 +122,7 @@ export class SearchComponent implements OnInit {
       }
     }
 
-    this.postService.searchPosts(search).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: any) => {
+    this.postService.searchPosts(search).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.posts = response.data;
       this.totalCount = response.pagination.totalCount;
     });

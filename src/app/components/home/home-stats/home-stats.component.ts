@@ -33,7 +33,7 @@ export class HomeStatsComponent implements OnInit, OnDestroy {
   }
 
   private loadStats(): void {
-    this.generalService.getEstadisticas().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values: any) => {
+    this.generalService.getEstadisticas().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
       this.estadisticas = values;
     });
   }

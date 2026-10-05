@@ -67,7 +67,7 @@ export class ComunidadViewComponent implements OnInit {
   loadComunidad(): void {
     this.loading = true;
     this.comunidadesService.getComunidad(this.slug).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (value: any) => {
+      next: (value) => {
         this.comunidad = value;
         this.loading = false;
         this.seoService.setSEO({
@@ -124,7 +124,7 @@ export class ComunidadViewComponent implements OnInit {
 
   loadTemas(): void {
     this.comunidadesService.getTemas(this.comunidad.id, { page: this.pageTemas, pageCount: 20, query: this.queryTemas })
-      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((r: any) => {
+      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((r) => {
         this.temas = r?.data ?? [];
         this.paginationTemas = r?.pagination ?? {};
       });
@@ -146,17 +146,17 @@ export class ComunidadViewComponent implements OnInit {
 
   loadMiembros(): void {
     this.comunidadesService.getMiembros(this.comunidad.id, { page: 1, pageCount: 12 })
-      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((r: any) => (this.miembros = r?.data ?? []));
+      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((r) => (this.miembros = r?.data ?? []));
   }
 
   loadTopTemas(): void {
     this.comunidadesService.getTopTemas(this.comunidad.id, this.periodoTop)
-      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((r: any) => (this.topTemas = r ?? []));
+      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((r) => (this.topTemas = r ?? []));
   }
 
   loadComentariosRecientes(): void {
     this.comunidadesService.getComentariosRecientes(this.comunidad.id, 5)
-      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((r: any) => (this.comentariosRecientes = r ?? []));
+      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((r) => (this.comentariosRecientes = r ?? []));
   }
 
   cambiarPeriodoTop(periodo: string): void {
