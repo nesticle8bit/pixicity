@@ -5,8 +5,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   standalone: false,
   selector: 'app-post-related-posts',
-  templateUrl: './post-related-posts.component.html',
-  styleUrls: ['./post-related-posts.component.scss'],
+  template: `
+    <app-post-rank-list titulo="Posts Relacionados" icono="ti-stack-2"
+      mensajeVacio="Sin posts relacionados" iconoVacio="ti-target-off" [posts]="relatedPosts">
+    </app-post-rank-list>
+  `,
 })
 export class PostRelatedPostsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);

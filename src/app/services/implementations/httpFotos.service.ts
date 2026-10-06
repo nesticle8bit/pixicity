@@ -2,20 +2,35 @@ import { FotoSearchParams } from 'src/app/models/shared/service-types.model';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HelperService } from '../shared/helper.service';
 import { IHttpFotosService } from '../interfaces/httpFotos.interface';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { FotoViewModel, FotoComentarioViewModel } from 'src/app/models/fotos/foto-vm.model';
+import { FotoViewModel, FotoComentarioViewModel, FotoComentarioVoto } from 'src/app/models/fotos/foto-vm.model';
+import { NotificationService } from '../shared/notification.service';
 
 
 @Injectable()
 export class HttpFotosService implements IHttpFotosService {
+  private readonly notificationService = inject(NotificationService);
+
   constructor(
     private http: HttpClient,
     private helper: HelperService
   ) {}
+
+  /** Devuelve data si el API respondió bien; si no, muestra el error al usuario y falla. */
+  private datos<T>() {
+    return map((response: ApiResponse<T>) => {
+      if (response.status === 200) {
+        return response.data;
+      }
+      const mensaje = response.errors?.join(', ') || 'Error';
+      this.notificationService.error(mensaje, 'Error');
+      throw new Error(mensaje);
+    });
+  }
 
   getFotos(search: FotoSearchParams = {}): Observable<PaginatedData<FotoViewModel>> {
     const page = search?.page || 1;
@@ -164,39 +179,39 @@ export class HttpFotosService implements IHttpFotosService {
       );
   }
 
-  addComentario(comentario: Partial<FotoComentarioViewModel>): Observable<number> {
+  addComentario(comentario: { fotoId: number; contenido: string; parentId?: number | null }): Observable<number> {
     return this.http
       .post<ApiResponse<number>>(`${environment.api}/api/fotos/AddComentario`, comentario)
-      .pipe(
-        map((response) => {
-          if (response.status === 200) { return response.data!; }
-          throw new Error(response.errors?.join(', ') ?? 'Error');
-        }),
-        catchError(this.helper.errorHandler)
-      );
+      .pipe(this.datos<number>(), catchError(this.helper.errorHandler));
+  }
+
+  editarComentario(comentarioId: number, contenido: string): Observable<boolean> {
+    return this.http
+      .post<ApiResponse<boolean>>(`${environment.api}/api/fotos/EditarComentario?comentarioId=${comentarioId}`, { contenido })
+      .pipe(this.datos<boolean>(), catchError(this.helper.errorHandler));
   }
 
   deleteComentario(id: number): Observable<boolean> {
     return this.http
       .delete<ApiResponse<boolean>>(`${environment.api}/api/fotos/DeleteComentario?id=${id}`)
-      .pipe(
-        map((response) => {
-          if (response.status === 200) { return response.data!; }
-          throw new Error(response.errors?.join(', ') ?? 'Error');
-        }),
-        catchError(this.helper.errorHandler)
-      );
+      .pipe(this.datos<boolean>(), catchError(this.helper.errorHandler));
   }
 
-  votarComentario(comentarioId: number, cantidad: number): Observable<FotoComentarioViewModel> {
+  votarComentario(comentarioId: number, cantidad: number): Observable<FotoComentarioVoto> {
     return this.http
-      .post<ApiResponse<FotoComentarioViewModel>>(`${environment.api}/api/fotos/VotarComentario`, { comentarioId, cantidad })
-      .pipe(
-        map((response) => {
-          if (response.status === 200) { return response.data!; }
-          throw new Error(response.errors?.join(', ') ?? 'Error');
-        }),
-        catchError(this.helper.errorHandler)
-      );
+      .post<ApiResponse<FotoComentarioVoto>>(`${environment.api}/api/fotos/VotarComentario`, { comentarioId, cantidad })
+      .pipe(this.datos<FotoComentarioVoto>(), catchError(this.helper.errorHandler));
+  }
+
+  fijarComentario(comentarioId: number): Observable<boolean> {
+    return this.http
+      .post<ApiResponse<boolean>>(`${environment.api}/api/fotos/FijarComentario?comentarioId=${comentarioId}`, {})
+      .pipe(this.datos<boolean>(), catchError(this.helper.errorHandler));
+  }
+
+  denunciarComentario(comentarioId: number, motivo: string): Observable<boolean> {
+    return this.http
+      .post<ApiResponse<boolean>>(`${environment.api}/api/fotos/DenunciarComentario?comentarioId=${comentarioId}`, { motivo })
+      .pipe(this.datos<boolean>(), catchError(this.helper.errorHandler));
   }
 }

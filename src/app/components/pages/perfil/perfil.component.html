@@ -246,12 +246,10 @@
           </app-profile-comments>
           }
           @if (currentSelection === 'followers') {
-          <app-profile-followers [user]="currentUser">
-          </app-profile-followers>
+          <app-profile-follows tipo="seguidores" [user]="currentUser"></app-profile-follows>
           }
           @if (currentSelection === 'following') {
-          <app-profile-following [user]="currentUser">
-          </app-profile-following>
+          <app-profile-follows tipo="siguiendo" [user]="currentUser"></app-profile-follows>
           }
           @if (currentSelection === 'information') {
           <app-profile-information [user]="currentUser">

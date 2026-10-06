@@ -7,6 +7,9 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
+import { PostDetalle } from 'src/app/models/posts/post-vm.model';
+import { PerfilUsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 
 @Component({
   standalone: false,
@@ -24,9 +27,22 @@ export class PostsViewComponent implements OnInit {
     imageURL: '',
     tags: [],
   };
-  public currentUser: any;
-  public post: any;
+  public currentUser: JwtUserModel;
+  public post: PostDetalle | null = null;
+  public autor: PerfilUsuarioViewModel | null = null;
   public show: boolean = false;
+
+  /** Slug del título en la URL: se usa para redirigir a /posts/404 o /posts/privado antes de tener el post. */
+  private tituloRuta = '';
+
+  get esAutor(): boolean {
+    return !!this.currentUser?.usuario && this.post?.usuario?.userName === this.currentUser.usuario?.userName;
+  }
+
+  get esStaff(): boolean {
+    const rango = this.currentUser?.usuario?.rango;
+    return rango === 'Administrador' || rango === 'Moderador';
+  }
 
   constructor(
     private securityService: IHttpSecurityService,
@@ -42,10 +58,8 @@ export class PostsViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
+      this.tituloRuta = values.get('nombre-post') ?? '';
       this.getPostById(+(values.get('id') ?? 0));
-      this.post = {
-        titulo: values.get('nombre-post'),
-      };
     });
 
     this.displayService.setDisplay({
@@ -60,21 +74,22 @@ export class PostsViewComponent implements OnInit {
   getPostById(postId: number): void {
     this.postService.getPostById(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (!value) {
-        this.router.navigate([`/posts/404/${this.post.titulo}`]);
+        this.router.navigate([`/posts/404/${this.tituloRuta}`], { replaceUrl: true });
         return;
       }
 
       if (value.post.esPrivado && !value.post.id) {
-        this.router.navigate([`/posts/privado/${this.post.titulo}`]);
+        this.router.navigate([`/posts/privado/${this.tituloRuta}`], {
+          replaceUrl: true,
+          queryParams: { volver: location.pathname },
+        });
         return;
       }
 
-      if (value.post) {
-        value.post.tags = value.post.etiquetas.split(',');
-      }
+      value.post.tags = value.post.etiquetas ? value.post.etiquetas.split(',') : [];
 
-      this.post = value.post;
-      this.post.id = postId;
+      this.post = { ...value.post, id: postId };
+      this.getAutor(value.post.usuario?.userName);
 
       const description = value.post.contenido
         ? value.post.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 160)
@@ -127,11 +142,20 @@ export class PostsViewComponent implements OnInit {
           },
           publisher: { '@id': `${location.origin}/#organization` },
           mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-          commentCount: value.post.cantidadComentarios ?? undefined,
-          comment: this.comentariosJsonLd(value.post),
+          commentCount: value.post.cantidadComentarios,
         }, this.breadcrumb(value.post, canonical)],
         },
       });
+    });
+  }
+
+  private getAutor(userName: string): void {
+    if (!userName || this.autor?.userName === userName) {
+      return;
+    }
+
+    this.securityService.getUsuarioInfo(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((info) => {
+      this.autor = info;
     });
   }
 
@@ -143,26 +167,8 @@ export class PostsViewComponent implements OnInit {
     return actual !== esperada;
   }
 
-  /**
-   * Los comentarios son el contenido diferencial del post; sin esto Google
-   * no ve que la pagina tiene debate. Se acotan para no inflar el HTML.
-   */
-  private comentariosJsonLd(post: any): any[] | undefined {
-    const comentarios: any[] = post.comentarios ?? [];
-    if (!comentarios.length) {
-      return undefined;
-    }
-
-    return comentarios.slice(0, 10).map((c) => ({
-      '@type': 'Comment',
-      text: (c.contenido || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 500),
-      dateCreated: c.fechaComentario ?? c.fechaRegistro,
-      author: { '@type': 'Person', name: c.usuario?.userName ?? 'Anónimo' },
-    }));
-  }
-
   /** Migas Inicio > Categoria > Post: Google las muestra en lugar de la URL cruda. */
-  private breadcrumb(post: any, canonical: string): any {
+  private breadcrumb(post: PostDetalle, canonical: string): object {
     return {
       '@type': 'BreadcrumbList',
       itemListElement: [
@@ -190,11 +196,13 @@ export class PostsViewComponent implements OnInit {
   }
 
   actualizarPost(): void {
-    this.router.navigate([`posts/actualizar/${this.post.id}`]);
+    if (this.post) {
+      this.router.navigate([`posts/actualizar/${this.post.id}`]);
+    }
   }
 
   eliminarPost(): void {
-    if (!this.notificationService.confirm('¿Seguro que deseas borrar este post?')) {
+    if (!this.post || !this.notificationService.confirm('¿Seguro que deseas borrar este post?')) {
       return;
     }
 
@@ -209,25 +217,19 @@ export class PostsViewComponent implements OnInit {
       });
   }
 
-  openShare(network: string): void {
-    const url = encodeURIComponent(window.location.href);
-    const urls: { [key: string]: string } = {
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-      twitter: `https://twitter.com/intent/tweet?url=${url}&text=${encodeURIComponent(this.post?.titulo || '')}`,
-    };
-    if (urls[network]) {
-      window.open(urls[network], '_blank', 'width=640,height=480,scrollbars=yes');
-    }
-  }
-
   quitarSticky(): void {
+    const post = this.post;
+    if (!post) {
+      return;
+    }
+
     this.postService
-      .changeStickyPost(this.post.id)
+      .changeStickyPost(post.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         if (response) {
           this.notificationService.success('Se ha cambiado el sticky para este post correctamente', 'Sticky');
-          this.post.sticky = !this.post.sticky;
+          post.sticky = !post.sticky;
         }
       });
   }

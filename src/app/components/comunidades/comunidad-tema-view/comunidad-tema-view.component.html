@@ -3,234 +3,177 @@
 }
 
 @if (!loading && tema) {
-<div class="container container--home comunidad-tema">
-  <div class="com-breadcrumb">
-    <a [routerLink]="['/comunidades']">Comunidades</a>
-    <span>›</span>
-    <a [routerLink]="['/comunidades', tema.comunidad?.nombreCorto]">{{tema.comunidad?.nombre}}</a>
-    <span>›</span> <span>{{tema.titulo}}</span>
-  </div>
+<div class="container container--home detail-page mx-auto">
+  <div class="row">
+    <div class="col-12">
+      <div class="detail-layout">
 
-  <div class="tema-layout">
-    <!-- Sidebar autor -->
-    <aside class="tema-sidebar">
-      <app-post-original-poster-info [userName]="tema.userName"></app-post-original-poster-info>
+        <!-- Sidebar izquierdo -->
+        <aside class="detail-sidebar">
 
-      @if (puedeGestionar) {
-      <div class="tema-side-card tema-tools">
-        <div class="tema-side-title">
-          <i class="ti ti-tool"></i> Herramientas
-        </div>
-        <div class="tema-tools__grid">
-          <a [routerLink]="['/comunidades', tema.comunidad?.nombreCorto, 'tema', tema.id, 'editar']"
-            class="boton azul">
-            <i class="ti ti-pencil"></i> Editar
-          </a>
-          <button type="button" class="boton rojo" (click)="eliminar()">
-            <i class="ti ti-trash"></i> Borrar
-          </button>
-        </div>
-        @if (esAdmin) {
-        <button type="button" class="boton accent tema-tools__sticky" (click)="cambiarSticky()">
-          <i class="ti ti-pin"></i>
-          {{ tema.sticky ? 'Quitar' : 'Poner' }} Sticky
-        </button>
-        }
-      </div>
-      }
-
-      <div class="tema-side-card">
-        <div class="tema-side-title">
-          <i class="ti ti-messages"></i> Temas de {{tema.userName}}
-        </div>
-        @if (tema.temasUsuario?.length > 0) {
-        <ul class="tema-side-list">
-          @for (t of tema.temasUsuario; track t.id) {
-          <li>
-            <a [routerLink]="['/comunidades', t.comunidadSlug, 'tema', t.id, t.url]" [title]="t.titulo">
-              <span class="tema-side-list__title">{{t.titulo}}</span>
-              <span class="tema-side-list__meta"><i class="ti ti-eye"></i> {{t.visitantes}}</span>
+          @if (tema.userName) {
+          <!-- Autor -->
+          <div class="sidebar-user-card">
+            <a [routerLink]="['/perfil', tema.userName]" [appUserPopover]="tema.userName" class="sidebar-avatar-link">
+              <app-user-avatar [class]="'avatar-56'" [avatar]="autor?.avatar ?? tema.avatar" [userName]="tema.userName"
+                [width]="56">
+              </app-user-avatar>
             </a>
-          </li>
-          }
-        </ul>
-        } @else {
-        <div class="tema-side-empty">Aún no tiene otros temas.</div>
-        }
-      </div>
-    </aside>
-
-    <!-- Contenido principal -->
-    <main class="tema-main">
-      <article class="tema-box">
-        <h1>{{tema.titulo}}</h1>
-        <div class="tema-author">
-          <app-user-avatar [avatar]="tema.avatar" [userName]="tema.userName" [width]="36"
-            [height]="36"></app-user-avatar>
-          <div>
-            <a [routerLink]="['/perfil', tema.userName]" [appUserPopover]="tema.userName">{{tema.userName}}</a>
-            <span class="meta">{{tema.fechaRegistro | timeAgo}} · <i class="ti ti-eye"></i> {{tema.visitantes}}</span>
+            <div class="sidebar-user-info">
+              <a [routerLink]="['/perfil', tema.userName]" class="sidebar-username" [appUserPopover]="tema.userName">
+                {{tema.userName}}
+              </a>
+              @if (autor && autor.rango && autor.rango.nombre) {
+              <span class="sidebar-rango" [ngStyle]="{'color': autor.rango.color}">
+                <img src="/assets/images/icons/rangos/{{autor.rango.icono}}" alt="" aria-hidden="true" loading="lazy">
+                {{autor.rango.nombre}}
+              </span>
+              }
+              <a [routerLink]="['/perfil', tema.userName]" class="sidebar-ver-perfil">Ver perfil →</a>
+            </div>
           </div>
-        </div>
-        <div class="tema-content" [innerHTML]="tema.contenido | contenidoSeo:tema.titulo"></div>
 
-        <div class="tema-vote">
-          <button type="button" class="tema-vote__btn up" [class.active]="tema.miVoto === 1"
-            [disabled]="tema._votando" (click)="votarTema(1)" matTooltip="Me gusta">
-            <i class="ti ti-arrow-big-up-filled"></i>
-          </button>
-          <span class="tema-vote__score" [class.pos]="(tema.votos || 0) > 0" [class.neg]="(tema.votos || 0) < 0">
-            {{tema.votos || 0}}
-          </span>
-          <button type="button" class="tema-vote__btn down" [class.active]="tema.miVoto === -1"
-            [disabled]="tema._votando" (click)="votarTema(-1)" matTooltip="No me gusta">
-            <i class="ti ti-arrow-big-down-filled"></i>
-          </button>
-        </div>
-      </article>
-
-      <section class="tema-coments mb-3">
-        <div class="coment-toolbar">
-          <h3>Comentarios ({{totalComentarios}})</h3>
-          @if (totalComentarios > 0) {
-          <div class="coment-orden">
-            <button type="button" [class.active]="orden === 'mejores'" (click)="cambiarOrden('mejores')">Mejores</button>
-            <button type="button" [class.active]="orden === 'recientes'" (click)="cambiarOrden('recientes')">Recientes</button>
-            <button type="button" [class.active]="orden === 'controvertido'" (click)="cambiarOrden('controvertido')">Controvertido</button>
+          <!-- Actividad del autor -->
+          <div class="sidebar-card">
+            <div class="sidebar-section-title">Actividad del autor</div>
+            <div class="sidebar-stats-grid">
+              <div class="sidebar-stat">
+                <span class="stat-val">{{(autor?.puntos ?? 0) | number}}</span>
+                <span class="stat-lbl">Puntos</span>
+              </div>
+              <div class="sidebar-stat">
+                <span class="stat-val">{{(autor?.postsCount ?? 0) | number}}</span>
+                <span class="stat-lbl">Posts</span>
+              </div>
+              <div class="sidebar-stat">
+                <span class="stat-val">{{(autor?.seguidoresCount ?? 0) | number}}</span>
+                <span class="stat-lbl">Seguidores</span>
+              </div>
+            </div>
+            <div class="sidebar-user-links">
+              <a [routerLink]="['/fotos', tema.userName]" class="sidebar-link-chip">
+                <i class="ti ti-photo"></i> Ver fotos
+              </a>
+              @if (!esMio) {
+              <app-follow-button [userName]="tema.userName" [icon]="true"></app-follow-button>
+              }
+            </div>
           </div>
           }
-        </div>
 
-        @if (logueado) {
-        <div class="coment-form">
-          <textarea [(ngModel)]="nuevoComentario" rows="3" placeholder="Escribe un comentario..."></textarea>
-          <button class="boton azul" (click)="comentar()" [disabled]="enviando || !nuevoComentario.trim()">
-            <i class="ti ti-send"></i> Comentar
-          </button>
-        </div>
-        } @else {
-        <div class="com-empty">Inicia sesión para comentar.</div>
-        }
-
-        @if (totalComentarios === 0) {
-        <div class="com-empty">Sé el primero en comentar.</div>
-        } @else {
-        <ul class="coment-list">
-          @for (c of arbol; track c.id) {
-          <li class="coment-thread" [class.destacado]="c.destacado">
-            <ng-container *ngTemplateOutlet="comentarioTpl; context: { $implicit: c, esRespuesta: false }"></ng-container>
-
-            @if (c.respuestas?.length) {
-            <ul class="coment-respuestas">
-              @for (r of c.respuestas; track r.id) {
+          <!-- Este tema -->
+          <div class="sidebar-card">
+            <div class="sidebar-section-title">Este tema</div>
+            <ul class="sidebar-item-stats">
               <li>
-                <ng-container *ngTemplateOutlet="comentarioTpl; context: { $implicit: r, esRespuesta: true }"></ng-container>
+                <i class="ti ti-calendar"></i>
+                <span>{{tema.fechaRegistro | date:'dd MMM yyyy'}}</span>
+              </li>
+              <li>
+                <i class="ti ti-eye"></i>
+                <span>{{tema.visitantes | number}} visitas</span>
+              </li>
+              <li class="stat-pos">
+                <i class="ti ti-award"></i>
+                <span>{{tema.votos || 0}} votos</span>
+              </li>
+              <li>
+                <i class="ti ti-message"></i>
+                <span>{{totalComentarios}} comentarios</span>
+              </li>
+              @if (tema.comunidad) {
+              <li>
+                <i class="ti ti-users-group"></i>
+                <a [routerLink]="['/comunidades', tema.comunidad.nombreCorto]">{{tema.comunidad.nombre}}</a>
               </li>
               }
             </ul>
+          </div>
+
+          <!-- Otros temas del autor -->
+          <div class="sidebar-card">
+            <div class="sidebar-section-title">Más temas de {{tema.userName}}</div>
+            @if (tema.temasUsuario.length > 0) {
+            <ul class="tema-side-list">
+              @for (t of tema.temasUsuario; track t.id) {
+              <li>
+                <a [routerLink]="['/comunidades', t.comunidadSlug, 'tema', t.id, t.url]" [title]="t.titulo">
+                  <span class="tema-side-list__title">{{t.titulo}}</span>
+                  <span class="tema-side-list__meta"><i class="ti ti-eye"></i> {{t.visitantes}}</span>
+                </a>
+              </li>
+              }
+            </ul>
+            } @else {
+            <div class="tema-side-empty">Aún no tiene otros temas.</div>
             }
-          </li>
+          </div>
+
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="detail-main">
+          <nav class="com-breadcrumb" aria-label="Ruta">
+            <a [routerLink]="['/comunidades']">Comunidades</a>
+            <span>›</span>
+            <a [routerLink]="['/comunidades', tema.comunidad?.nombreCorto]">{{tema.comunidad?.nombre}}</a>
+          </nav>
+
+          <h1 class="detail-main-title">{{tema.titulo}}</h1>
+
+          <div class="detail-main-meta">
+            <span>{{tema.fechaRegistro | timeAgo}}</span>
+            @if (tema.comunidad) {
+            <a class="detail-cat" [routerLink]="['/comunidades', tema.comunidad.nombreCorto]">{{tema.comunidad.nombre}}</a>
+            }
+            @if (tema.sticky) {
+            <span class="tema-sticky"><i class="ti ti-pin"></i> Sticky</span>
+            }
+            <app-share-buttons class="detail-share" [titulo]="tema.titulo"></app-share-buttons>
+          </div>
+
+          <div class="tema-body">
+            <div class="tema-content" [innerHTML]="tema.contenido | contenidoSeo:tema.titulo"></div>
+
+            <div class="tema-vote">
+              <button type="button" class="tema-vote__btn up" [class.active]="tema.miVoto === 1"
+                [disabled]="tema._votando" (click)="votarTema(1)" matTooltip="Me gusta" aria-label="Me gusta">
+                <i class="ti ti-arrow-big-up-filled"></i>
+              </button>
+              <span class="tema-vote__score" [class.pos]="(tema.votos || 0) > 0" [class.neg]="(tema.votos || 0) < 0">
+                {{tema.votos || 0}}
+              </span>
+              <button type="button" class="tema-vote__btn down" [class.active]="tema.miVoto === -1"
+                [disabled]="tema._votando" (click)="votarTema(-1)" matTooltip="No me gusta" aria-label="No me gusta">
+                <i class="ti ti-arrow-big-down-filled"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Acciones del autor / staff -->
+          @if (puedeGestionar) {
+          <div class="detail-owner-actions tema-owner-actions">
+            <a [routerLink]="['/comunidades', tema.comunidad?.nombreCorto, 'tema', tema.id, 'editar']" class="boton azul">
+              <i class="ti ti-pencil" aria-hidden="true"></i> Editar
+            </a>
+            <button type="button" class="boton rojo" (click)="eliminar()">
+              <i class="ti ti-trash" aria-hidden="true"></i> Borrar
+            </button>
+            @if (esAdmin) {
+            <button type="button" class="boton" (click)="cambiarSticky()">
+              <i class="ti ti-pin" aria-hidden="true"></i> {{ tema.sticky ? 'Quitar' : 'Poner' }} Sticky
+            </button>
+            }
+          </div>
           }
-        </ul>
-        }
-      </section>
-    </main>
+
+          <app-comentarios [comentarios]="comentarios" [acciones]="accionesComentarios"
+            [puedeFijar]="esAdmin || esDuenoComunidad" [puedeBorrarTodos]="esDuenoComunidad"
+            [autorContenido]="tema.userName" (totalCambio)="totalComentarios = $event">
+          </app-comentarios>
+        </main>
+      </div>
+    </div>
   </div>
 </div>
-
-<!-- Plantilla reutilizable de comentario (raíz y respuesta) -->
-<ng-template #comentarioTpl let-c let-esRespuesta="esRespuesta">
-  <div class="coment" [class.is-destacado]="c.destacado && !esRespuesta">
-    @if (c.destacado && !esRespuesta) {
-    <div class="coment-top-badge"><i class="ti ti-award"></i> Comentario destacado</div>
-    }
-
-    @if (estaColapsado(c)) {
-    <div class="coment-collapsed" (click)="mostrarColapsado(c)" role="button" tabindex="0" (keydown.enter)="mostrarColapsado(c)" (keydown.space)="mostrarColapsado(c); $event.preventDefault()">
-      @if ((c.denunciasPendientes || 0) >= 3) {
-        Comentario oculto por denuncias — <a>mostrar</a>
-      } @else {
-        Comentario con baja puntuación ({{c.votos}}) — <a>mostrar</a>
-      }
-    </div>
-    } @else {
-    <div class="coment-row">
-      <div class="coment-vote">
-        <button type="button" class="coment-vote__btn up" [class.active]="c.miVoto === 1" [disabled]="c.votando"
-          (click)="votar(c, 1)" matTooltip="Me gusta" [matTooltipPosition]="'left'">
-          <i class="ti ti-arrow-big-up-filled"></i>
-        </button>
-        <span class="coment-vote__score" [class.pos]="(c.votos || 0) > 0"
-          [class.neg]="(c.votos || 0) < 0">{{c.votos || 0}}</span>
-        <button type="button" class="coment-vote__btn down" [class.active]="c.miVoto === -1" [disabled]="c.votando"
-          (click)="votar(c, -1)" matTooltip="No me gusta" [matTooltipPosition]="'left'">
-          <i class="ti ti-arrow-big-down-filled"></i>
-        </button>
-      </div>
-
-      <app-user-avatar [avatar]="c.avatar" [userName]="c.userName" [width]="38" [height]="38"></app-user-avatar>
-
-      <div class="coment-body">
-        <div class="coment-head">
-          <a [routerLink]="['/perfil', c.userName]" [appUserPopover]="c.userName">{{c.userName}}</a>
-          @if (c.fijado) {
-            <span class="coment-fijado" matTooltip="Comentario fijado"><i class="ti ti-pin"></i> Fijado</span>
-          }
-          @if (c.rango?.nombre) {
-          <span class="coment-rango" [ngStyle]="{ color: c.rango.color }">
-            @if (c.rango.icono) {
-            <img src="/assets/images/icons/rangos/{{c.rango.icono}}" [matTooltip]="c.rango.nombre" alt="" aria-hidden="true" loading="lazy">
-            }
-            {{c.rango.nombre}}
-          </span>
-          }
-          <span class="meta">
-            {{c.fechaComentario | timeAgo}}@if (c.fechaActualiza) {<span class="meta-edit"> · editado</span>}
-          </span>
-        </div>
-
-        @if (editId === c.id) {
-        <div class="coment-edit">
-          <textarea [(ngModel)]="editText" rows="2"></textarea>
-          <div class="coment-mini-actions">
-            <button class="boton azul" (click)="guardarEdicion(c)"
-              [disabled]="editEnviando || !editText.trim()">Guardar</button>
-            <button class="boton gris" (click)="cancelarEdicion()">Cancelar</button>
-          </div>
-        </div>
-        } @else {
-        <p [innerHTML]="formatear(c.contenido)"></p>
-
-        <div class="coment-actions">
-          @if (logueado) {
-          <button type="button" (click)="responder(c)"><i class="ti ti-arrow-back-up"></i> Responder</button>
-          }
-          @if (puedeFijar() && !esRespuesta) {
-          <button type="button" (click)="fijar(c)"><i class="ti ti-pin"></i> {{ c.fijado ? 'Desfijar' : 'Fijar' }}</button>
-          }
-          @if (logueado && !esComentarioPropio(c)) {
-          <button type="button" (click)="denunciar(c)"><i class="ti ti-flag"></i> Denunciar</button>
-          }
-          @if (puedeModerarComentario(c)) {
-          <button type="button" (click)="editar(c)"><i class="ti ti-pencil"></i> Editar</button>
-          <button type="button" class="danger" (click)="eliminarComentario(c)"><i class="ti ti-trash"></i> Borrar</button>
-          }
-        </div>
-        }
-
-        @if (replyTo === c.id) {
-        <div class="coment-reply">
-          <textarea [(ngModel)]="replyText" rows="2" placeholder="Escribe una respuesta..."></textarea>
-          <div class="coment-mini-actions">
-            <button class="boton azul" (click)="enviarRespuesta(c)"
-              [disabled]="replyEnviando || !replyText.trim()">Responder</button>
-            <button class="boton gris" (click)="cancelarRespuesta()">Cancelar</button>
-          </div>
-        </div>
-        }
-      </div>
-    </div>
-    }
-  </div>
-</ng-template>
 }

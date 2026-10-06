@@ -1,0 +1,206 @@
+.logs-resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.logs-stat {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  background: #fff;
+
+  &__valor {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  &__label {
+    font-size: 0.8rem;
+    color: #6c757d;
+  }
+
+  &--alerta {
+    border-color: #f5c2c7;
+    background: #fff5f5;
+
+    .logs-stat__valor {
+      color: #c53030;
+    }
+  }
+}
+
+.logs-subtitulo {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 1rem;
+}
+
+.logs-grupos {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  overflow: hidden;
+
+  li + li {
+    border-top: 1px solid #eee;
+  }
+}
+
+.logs-grupo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 0;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background: #f7fafc;
+  }
+
+  &__mensaje {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__cantidad {
+    font-weight: 700;
+  }
+
+  &__fecha {
+    color: #6c757d;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+}
+
+.logs-filtros {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.logs-toggle {
+  display: inline-flex;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  overflow: hidden;
+
+  button {
+    border: 0;
+    background: #fff;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+
+    &.active {
+      background: #2b6cb0;
+      color: #fff;
+    }
+  }
+}
+
+.logs-select {
+  max-width: 190px;
+}
+
+.logs-buscar {
+  max-width: 280px;
+}
+
+.logs-fila {
+  cursor: pointer;
+
+  &--activa {
+    background: #ebf4ff;
+  }
+}
+
+.logs-mensaje {
+  max-width: 420px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.logs-ruta {
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.logs-detalle-fila > td {
+  background: #f8fafc;
+}
+
+.logs-detalle {
+  padding: 0.75rem;
+
+  &__datos {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.25rem 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+
+    dt {
+      color: #6c757d;
+      font-weight: 600;
+    }
+
+    dd {
+      margin: 0;
+      word-break: break-word;
+    }
+  }
+
+  &__ua {
+    font-size: 0.78rem;
+  }
+
+  &__mensaje {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  &__excepcion {
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: #c53030;
+  }
+
+  &__stack {
+    max-height: 320px;
+    overflow: auto;
+    padding: 0.75rem;
+    background: #1a202c;
+    color: #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  &__acciones {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+  }
+}

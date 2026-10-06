@@ -46,7 +46,15 @@ export interface ComentarioViewModel {
   avatar: string;
   respuestas?: ComentarioViewModel[];
   historial?: ComentarioHistorialViewModel[];
-  miVoto?: number;
+  miVoto?: number | null;
+  votosArriba?: number;
+  votosAbajo?: number;
+  denunciasPendientes?: number;
+  fijado?: boolean;
+  /** Solo al enviar una respuesta: id del comentario raíz al que responde. */
+  comentarioId?: number;
+  /** Rango del autor. */
+  rango?: { id: number; nombre: string; icono: string | null; color: string | null } | null;
 }
 
 export interface FavoritosViewModel {
@@ -71,12 +79,49 @@ export interface CloudTagViewModel {
   count: number;
 }
 
+/** Autor tal como viene en el detalle de un post (UsuarioPostViewModel). */
+export interface UsuarioPost {
+  avatar: string | null;
+  userName: string;
+  paisId: number | null;
+  estadoId: number;
+  genero: number;
+  generoString: string | null;
+  rango: { id: number; nombre: string; icono: string; color: string } | null;
+  estado: { nombre: string; pais: { nombre: string; iso2: string } | null } | null;
+}
+
+/** Post completo de getPostById (ViewPostViewModel). */
+export interface PostDetalle {
+  id: number;
+  url: string;
+  titulo: string;
+  contenido: string;
+  etiquetas: string;
+  fechaRegistro: string;
+  fechaActualiza: string | null;
+  puntos: number;
+  favoritos: number;
+  visitantes: number;
+  seguidores: number;
+  cantidadComentarios: number;
+  sticky: boolean;
+  smileys: boolean;
+  esPrivado: boolean;
+  seguirPost: boolean;
+  sinComentarios: boolean;
+  categoria: { id: number; nombre: string; seo: string; icono: string };
+  usuario: UsuarioPost;
+  /** Calculado en el cliente a partir de etiquetas. */
+  tags?: string[];
+}
+
 /**
  * Respuesta de getPostById: el post viene envuelto en { post }. El API devuelve null si no existe (o es un borrador ajeno)
- * y, para un post privado sin sesión iniciada, solo { post: { esPrivado: true } }.
+ * y, para un post privado sin sesión válida, solo { post: { esPrivado: true } } (sin id).
  */
 export interface PostDetailResponse {
-  post: PostViewModel;
+  post: PostDetalle;
 }
 
 /** Respuesta de votar un comentario: el nuevo total y el voto del usuario actual. */

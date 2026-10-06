@@ -110,10 +110,12 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
         `Actualizar post | Taringa - Inteligencia colectiva | Comunidad para Compartir Información`
       );
       this.postService.getPostById(this.postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+        const usuario = this.currentUser.usuario;
         if (
-          this.currentUser.usuario.rango !== 'Administrador' &&
-          this.currentUser.usuario.rango !== 'Moderador' &&
-          this.currentUser.usuario.userName != response.post.usuario.userName
+          !usuario ||
+          (usuario.rango !== 'Administrador' &&
+            usuario.rango !== 'Moderador' &&
+            usuario.userName != response.post.usuario.userName)
         ) {
           this.router.navigate(['']);
 

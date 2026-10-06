@@ -19,8 +19,12 @@ const path = require('path');
 const root = path.join(__dirname, '..');
 const tablerCss = path.join(root, 'node_modules/@tabler/icons-webfont/dist/tabler-icons.css');
 const tablerTtf = path.join(root, 'node_modules/@tabler/icons-webfont/dist/fonts/tabler-icons.ttf');
+// Los íconos rellenos ("ti-algo-filled") viven en otra fuente; en su CSS se llaman sin el sufijo.
+const tablerFilledCss = path.join(root, 'node_modules/@tabler/icons-webfont/dist/tabler-icons-filled.css');
+const tablerFilledTtf = path.join(root, 'node_modules/@tabler/icons-webfont/dist/fonts/tabler-icons-filled.ttf');
 const extraFile = path.join(__dirname, 'icons-extra.txt');
 const outFont = path.join(root, 'src/assets/fonts/tabler-icons-subset.woff2');
+const outFilledFont = path.join(root, 'src/assets/fonts/tabler-icons-filled-subset.woff2');
 const outScss = path.join(root, 'src/assets/styles/tabler-icons-subset.scss');
 const checkOnly = process.argv.includes('--check');
 
@@ -52,15 +56,33 @@ function usedIcons() {
 }
 
 // nombre -> codepoint, leído del CSS oficial de Tabler
-function knownIcons() {
-  const css = fs.readFileSync(tablerCss, 'utf8');
+function readIconMap(cssFile, suffix = '') {
+  const css = fs.readFileSync(cssFile, 'utf8');
   const map = new Map();
-  for (const m of css.matchAll(/\.ti-([a-z0-9-]+):before\s*\{\s*content:\s*"\\([0-9a-f]+)"/g)) map.set(m[1], m[2]);
+  for (const m of css.matchAll(/\.ti-([a-z0-9-]+):before\s*\{\s*content:\s*"\\([0-9a-f]+)"/g)) map.set(m[1] + suffix, m[2]);
   return map;
 }
 
+function knownIcons() {
+  const map = readIconMap(tablerCss);
+  for (const [name, code] of readIconMap(tablerFilledCss, '-filled')) if (!map.has(name)) map.set(name, code);
+  return map;
+}
+
+const isFilled = (name, outline) => name.endsWith('-filled') && !outline.has(name);
+
+async function buildFont(subsetFont, ttf, names, known) {
+  const text = names.map((n) => String.fromCodePoint(parseInt(known.get(n), 16))).join('');
+  return subsetFont(fs.readFileSync(ttf), text, { targetFormat: 'woff2' });
+}
+
+// nginx/Cloudflare cachean /assets/*.woff2 un año como inmutable y estos archivos no llevan hash en el nombre:
+// sin la versión en la URL, los navegadores seguirían usando la fuente vieja sin los íconos nuevos.
+const fontVersion = (font) => require('crypto').createHash('sha256').update(font).digest('hex').slice(0, 10);
+
 (async () => {
   const known = knownIcons();
+  const outline = readIconMap(tablerCss);
   const used = usedIcons();
 
   // Clases "ti-*" que no son íconos (utilidades de la fuente o de la app) se ignoran, pero se informan.
@@ -83,13 +105,35 @@ function knownIcons() {
   }
 
   const subsetFont = (await import('subset-font')).default;
-  const text = icons.map((n) => String.fromCodePoint(parseInt(known.get(n), 16))).join('');
-  const font = await subsetFont(fs.readFileSync(tablerTtf), text, { targetFormat: 'woff2' });
+  const filled = icons.filter((n) => isFilled(n, outline));
+  const regular = icons.filter((n) => !isFilled(n, outline));
+
+  const font = await buildFont(subsetFont, tablerTtf, regular, known);
+  const filledFont = filled.length ? await buildFont(subsetFont, tablerFilledTtf, filled, known) : null;
 
   fs.mkdirSync(path.dirname(outFont), { recursive: true });
   fs.writeFileSync(outFont, font);
+  if (filledFont) fs.writeFileSync(outFilledFont, filledFont);
+  else if (fs.existsSync(outFilledFont)) fs.unlinkSync(outFilledFont);
 
-  const rules = icons.map((n) => `.ti-${n}:before { content: "\\${known.get(n)}"; }`).join('\n');
+  const filledFace = filledFont
+    ? `
+@font-face {
+  font-family: "tabler-icons-filled";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/tabler-icons-filled-subset.woff2?v=${fontVersion(filledFont)}") format("woff2");
+}
+`
+    : '';
+  const rules = icons
+    .map((n) =>
+      isFilled(n, outline)
+        ? `.ti-${n}:before { font-family: "tabler-icons-filled" !important; content: "\\${known.get(n)}"; }`
+        : `.ti-${n}:before { content: "\\${known.get(n)}"; }`
+    )
+    .join('\n');
   fs.writeFileSync(
     outScss,
     `// GENERADO por scripts/build-icon-subset.js — no editar a mano.
@@ -99,9 +143,9 @@ function knownIcons() {
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=${fontVersion(font)}") format("woff2");
 }
-
+${filledFace}
 .ti {
   font-family: "tabler-icons" !important;
   speak: none;

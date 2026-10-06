@@ -47,6 +47,7 @@ export class DashboardSidebarComponent implements OnInit {
         { titulo: 'Configuración', icono: 'settings', ruta: '/administracion/configuracion' },
         { titulo: 'Publicidad', icono: 'payments', ruta: '/administracion/publicidad' },
         { titulo: 'Estadísticas', icono: 'analytics', ruta: '/administracion/estadisticas' },
+        { titulo: 'Logs del sistema', icono: 'bug_report', ruta: '/administracion/logs' },
       ],
     },
     {

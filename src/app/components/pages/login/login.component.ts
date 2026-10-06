@@ -15,6 +15,8 @@ export class LoginComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   @Input() hide: any;
+  /** Ruta interna a la que volver tras iniciar sesión (p. ej. el post privado que se quería ver). */
+  @Input() volverA?: string | null;
 
   public loginForm: FormGroup;
   public error: string = '';
@@ -86,7 +88,12 @@ export class LoginComponent implements OnInit {
       }
 
       this.securityService.setUserToLocalStorage(value);
-      window.location.href = '';
+      window.location.href = esRutaInterna(this.volverA) ? this.volverA! : '';
     });
   }
+}
+
+// Solo rutas del propio sitio: "//otro.com" o "https://..." permitirían usar el login para redirigir a un sitio ajeno.
+function esRutaInterna(ruta: string | null | undefined): boolean {
+  return !!ruta && ruta.startsWith('/') && !ruta.startsWith('//') && !ruta.startsWith('/\\');
 }

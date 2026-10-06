@@ -1,4 +1,5 @@
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
+import { ClientErrorHandler } from './shared/errors/client-error-handler';
 import { BrowserModule, Title } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -90,6 +91,8 @@ import { IHttpDenunciasService } from './services/interfaces/httpDenuncias.inter
 import { HttpDenunciasService } from './services/implementations/httpDenuncias.service';
 import { IHttpModeracionService } from './services/interfaces/httpModeracion.interface';
 import { HttpModeracionService } from './services/implementations/httpModeracion.service';
+import { IHttpAppLogsService } from './services/interfaces/httpAppLogs.interface';
+import { HttpAppLogsService } from './services/implementations/httpAppLogs.service';
 import { ProfileCommentsComponent } from './components/profile/profile-comments/profile-comments.component';
 import { ProfilePostsComponent } from './components/profile/profile-posts/profile-posts.component';
 import { IHttpWebService } from './services/interfaces/httpWeb.interface';
@@ -98,8 +101,8 @@ import { PostRelatedPostsComponent } from './components/posts/post-related-posts
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { ProfileShoutsComponent } from './components/profile/profile-shouts/profile-shouts.component';
-import { ProfileFollowingComponent } from './components/profile/profile-following/profile-following.component';
-import { ProfileFollowersComponent } from './components/profile/profile-followers/profile-followers.component';
+import { ProfileFollowsComponent } from './components/profile/profile-follows/profile-follows.component';
+import { PostRankListComponent } from './components/posts/post-rank-list/post-rank-list.component';
 import { MainProfileMenuComponent } from './components/main/main-profile-menu/main-profile-menu.component';
 import { ProfileInformationComponent } from './components/profile/profile-information/profile-information.component';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -198,8 +201,8 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
     ProfilePostsComponent,
     PostRelatedPostsComponent,
     ProfileShoutsComponent,
-    ProfileFollowingComponent,
-    ProfileFollowersComponent,
+    ProfileFollowsComponent,
+    PostRankListComponent,
     MainProfileMenuComponent,
     ProfileInformationComponent,
     PerfilSocialMediaButtonsComponent,
@@ -313,6 +316,7 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
         { provide: IHttpLogsService, useClass: HttpLogsService },
         { provide: IHttpDenunciasService, useClass: HttpDenunciasService },
         { provide: IHttpModeracionService, useClass: HttpModeracionService },
+        { provide: IHttpAppLogsService, useClass: HttpAppLogsService },
         { provide: IHttpWebService, useClass: HttpWebService },
         { provide: IHttpPerfilService, useClass: HttpPerfilService },
         { provide: IHttpNoticiasService, useClass: HttpNoticiasService },
@@ -323,6 +327,7 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
         provideHttpClient(withInterceptorsFromDi()),
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        { provide: ErrorHandler, useClass: ClientErrorHandler },
         { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
         { provide: LOCALE_ID, useValue: 'es' },
     ],

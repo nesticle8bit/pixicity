@@ -1,11 +1,19 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (114).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (120).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=0af647e633") format("woff2");
+}
+
+@font-face {
+  font-family: "tabler-icons-filled";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/tabler-icons-filled-subset.woff2?v=cf0050fb1f") format("woff2");
 }
 
 .ti {
@@ -25,6 +33,8 @@
 .ti-alert-triangle:before { content: "\ea06"; }
 .ti-antenna:before { content: "\f094"; }
 .ti-arrow-back-up:before { content: "\eb77"; }
+.ti-arrow-big-down-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6c6"; }
+.ti-arrow-big-up-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6cf"; }
 .ti-arrow-down:before { content: "\ea16"; }
 .ti-arrow-up:before { content: "\ea25"; }
 .ti-arrow-up-right:before { content: "\ea24"; }
@@ -32,14 +42,16 @@
 .ti-article:before { content: "\f1e2"; }
 .ti-award:before { content: "\ea2c"; }
 .ti-ban:before { content: "\ea2e"; }
-.ti-bold:before { content: "\eb7b"; }
 .ti-brand-facebook:before { content: "\ec1a"; }
 .ti-brand-instagram:before { content: "\ec20"; }
 .ti-brand-tiktok:before { content: "\ec73"; }
 .ti-brand-twitter:before { content: "\ec27"; }
+.ti-brand-whatsapp:before { content: "\ec74"; }
+.ti-brand-x:before { content: "\fc0f"; }
 .ti-brand-youtube:before { content: "\ec90"; }
 .ti-bulb:before { content: "\ea51"; }
 .ti-calendar:before { content: "\ea53"; }
+.ti-calendar-user:before { content: "\fd1f"; }
 .ti-camera:before { content: "\ea54"; }
 .ti-caret-left:before { content: "\eb5e"; }
 .ti-caret-right:before { content: "\eb5f"; }
@@ -74,13 +86,14 @@
 .ti-id-badge:before { content: "\eff7"; }
 .ti-id-badge-2:before { content: "\f076"; }
 .ti-info-circle:before { content: "\eac5"; }
-.ti-italic:before { content: "\eb93"; }
 .ti-layout-dashboard:before { content: "\f02c"; }
 .ti-layout-distribute-horizontal:before { content: "\ead5"; }
 .ti-link:before { content: "\eade"; }
 .ti-list-check:before { content: "\eb6a"; }
+.ti-list-numbers:before { content: "\ef11"; }
 .ti-list-search:before { content: "\eea9"; }
 .ti-loader-2:before { content: "\f226"; }
+.ti-lock:before { content: "\eae2"; }
 .ti-lock-access:before { content: "\eeaa"; }
 .ti-lock-open:before { content: "\eae1"; }
 .ti-login-2:before { content: "\fc76"; }
@@ -95,7 +108,7 @@
 .ti-message-circle:before { content: "\eaed"; }
 .ti-messages:before { content: "\eb6c"; }
 .ti-mood-empty:before { content: "\eeb5"; }
-.ti-mood-happy:before { content: "\eaf4"; }
+.ti-mood-smile:before { content: "\eaf7"; }
 .ti-notes:before { content: "\eb6e"; }
 .ti-pencil:before { content: "\eb04"; }
 .ti-pencil-plus:before { content: "\f1ec"; }
@@ -110,6 +123,7 @@
 .ti-search:before { content: "\eb1c"; }
 .ti-send:before { content: "\eb1e"; }
 .ti-settings:before { content: "\eb20"; }
+.ti-share:before { content: "\eb21"; }
 .ti-shield-check:before { content: "\eb22"; }
 .ti-smart-home:before { content: "\ecde"; }
 .ti-sparkles:before { content: "\f6d7"; }
@@ -122,8 +136,8 @@
 .ti-tool:before { content: "\eb40"; }
 .ti-trash:before { content: "\eb41"; }
 .ti-trophy:before { content: "\eb45"; }
-.ti-underline:before { content: "\eba2"; }
 .ti-upload:before { content: "\eb47"; }
+.ti-user-check:before { content: "\eb49"; }
 .ti-user-minus:before { content: "\eb4a"; }
 .ti-user-plus:before { content: "\eb4b"; }
 .ti-user-shield:before { content: "\f7d0"; }

@@ -87,6 +87,7 @@ import { DashboardSidebarComponent } from '../../components/admin/dashboard-side
 // Admin components — general
 import { DashboardConfigurationComponent } from '../../components/admin/general/configuration/dashboard-configuration/dashboard-configuration.component';
 import { DashboardAdsComponent } from '../../components/admin/general/publicidad/dashboard-ads/dashboard-ads.component';
+import { DashboardLogsComponent } from '../../components/admin/general/logs/dashboard-logs/dashboard-logs.component';
 
 // Admin components — usuarios
 import { DashboardRangosComponent } from '../../components/admin/usuarios/rangos/dashboard-rangos/dashboard-rangos.component';
@@ -97,6 +98,7 @@ import { TableSesionesComponent } from '../../components/admin/usuarios/sesiones
 import { DashboardUsuariosComponent } from '../../components/admin/usuarios/usuarios/dashboard-usuarios/dashboard-usuarios.component';
 
 import { AdminSparklineComponent } from '../../components/admin/shared/admin-sparkline/admin-sparkline.component';
+import { TableDenunciasComponent } from '../../components/admin/shared/table-denuncias/table-denuncias.component';
 import { SharedModule } from '../shared/shared.module';
 import { AdminRoutingModule } from './admin-routing.module';
 
@@ -158,9 +160,11 @@ import { AdminRoutingModule } from './admin-routing.module';
     DashboardAdminComponent,
     DashboardSidebarComponent,
     AdminSparklineComponent,
+    TableDenunciasComponent,
     // general
     DashboardConfigurationComponent,
     DashboardAdsComponent,
+    DashboardLogsComponent,
     // usuarios (BanearUsuario, ChangeAvatar, ChangeRango, TableUsuarios → SharedModule)
     DashboardRangosComponent,
     DialogRangosChangesReportComponent,

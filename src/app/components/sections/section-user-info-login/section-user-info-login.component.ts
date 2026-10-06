@@ -170,7 +170,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   setProfile(text: string): string {
-    return `<a href='/perfil/${this.currentUser.usuario.userName}'>${text}</a>`;
+    return `<a href='/perfil/${this.currentUser.usuario?.userName ?? ''}'>${text}</a>`;
   }
 
   verFavoritos(): void {

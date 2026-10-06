@@ -27,6 +27,10 @@ jobs:
     - name: Icon subset is up to date
       run: npm run icons:check
 
+    # El número de "any" solo puede bajar (ver scripts/check-any.js).
+    - name: No new any
+      run: npm run any:check
+
     - name: Unit tests
       run: npm run test:ci
 

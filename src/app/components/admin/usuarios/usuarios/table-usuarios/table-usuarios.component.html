@@ -27,7 +27,7 @@
               <strong>{{usuario.id}}</strong>
             </td>
             <td>
-              <app-user-avatar [height]="20" [avatar]="usuario.avatar" [userName]="usuario.userName"></app-user-avatar> <i class="ti ti-calendar-day ms-2 text-success" matTooltip="{{usuario.fechaRegistro | timeAgo}}" matTooltipPosition="right"></i>
+              <app-user-avatar [height]="20" [avatar]="usuario.avatar" [userName]="usuario.userName"></app-user-avatar> <i class="ti ti-calendar-user ms-2 text-success" matTooltip="{{usuario.fechaRegistro | timeAgo}}" matTooltipPosition="right"></i>
           </td>
           <td>
             <a href="/perfil/{{usuario.userName}}" target="_blank" [appUserPopover]="usuario.userName">

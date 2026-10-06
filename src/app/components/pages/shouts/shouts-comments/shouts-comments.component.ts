@@ -3,6 +3,16 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { ShoutComentarioViewModel, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
+
+/** Comentario con el estado que solo existe en pantalla (árbol, destacado, colapso, voto en curso). */
+type ComentarioVista = ShoutComentarioViewModel & {
+  respuestas?: ComentarioVista[];
+  destacado?: boolean;
+  _mostrar?: boolean;
+  votando?: boolean;
+};
 
 const UMBRAL_COLAPSO = -5;
 const UMBRAL_DENUNCIAS = 3;
@@ -17,13 +27,13 @@ const MOTIVOS_DENUNCIA = ['Spam o publicidad', 'Contenido ofensivo', 'Acoso', 'I
 export class ShoutsCommentsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  private _shout: any;
+  private _shout: ShoutViewModel | null = null;
 
-  public comentarios: any[] = [];
-  public arbol: any[] = [];
+  public comentarios: ComentarioVista[] = [];
+  public arbol: ComentarioVista[] = [];
   public nuevoComentario: string = '';
   public enviando: boolean = false;
-  public currentUser: any;
+  public currentUser: JwtUserModel | null = null;
 
   public orden: 'mejores' | 'recientes' | 'controvertido' = 'mejores';
 
@@ -35,14 +45,14 @@ export class ShoutsCommentsComponent implements OnInit {
   public editText: string = '';
   public editEnviando: boolean = false;
 
-  @Input() set shout(value: any) {
+  @Input() set shout(value: ShoutViewModel | null) {
     this._shout = value;
     if (value?.id) {
       this.loadComentarios();
     }
   }
 
-  get shout(): any {
+  get shout(): ShoutViewModel | null {
     return this._shout;
   }
 
@@ -59,16 +69,20 @@ export class ShoutsCommentsComponent implements OnInit {
   // - Carga / árbol
 
   loadComentarios(): void {
-    this.perfilService.getComentariosByShoutId(this._shout.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data: any[]) => {
+    if (!this._shout) {
+      return;
+    }
+
+    this.perfilService.getComentariosByShoutId(this._shout.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
       this.comentarios = data || [];
       this.construirArbol();
     });
   }
 
   construirArbol(): void {
-    const flat: any[] = this.comentarios ?? [];
+    const flat: ComentarioVista[] = this.comentarios ?? [];
     const roots = flat.filter((c) => !c.parentId);
-    const hijos = new Map<number, any[]>();
+    const hijos = new Map<number, ComentarioVista[]>();
 
     for (const c of flat) {
       if (c.parentId) {
@@ -98,7 +112,7 @@ export class ShoutsCommentsComponent implements OnInit {
     }
 
     roots.forEach((r) => (r.destacado = false));
-    const top = roots.reduce((best, r) => ((r.votos || 0) > (best?.votos || 0) ? r : best), null as any);
+    const top = roots.reduce<ComentarioVista | null>((best, r) => ((r.votos || 0) > (best?.votos || 0) ? r : best), null);
     if (top && (top.votos || 0) >= 3) top.destacado = true;
 
     this.arbol = roots;
@@ -110,11 +124,11 @@ export class ShoutsCommentsComponent implements OnInit {
     this.construirArbol();
   }
 
-  private controversia(c: any): number {
+  private controversia(c: ComentarioVista): number {
     return Math.min(c.votosArriba || 0, c.votosAbajo || 0);
   }
 
-  private totalVotos(c: any): number {
+  private totalVotos(c: ComentarioVista): number {
     return (c.votosArriba || 0) + (c.votosAbajo || 0);
   }
 
@@ -133,41 +147,42 @@ export class ShoutsCommentsComponent implements OnInit {
     return rango === 'Administrador' || rango === 'Moderador';
   }
 
-  esComentarioPropio(c: any): boolean {
+  esComentarioPropio(c: ComentarioVista): boolean {
     return c?.usuario === this.currentUser?.usuario?.userName;
   }
 
-  puedeModerar(c: any): boolean {
+  puedeModerar(c: ComentarioVista): boolean {
     return this.logueado && (this.esComentarioPropio(c) || this.esAdmin);
   }
 
-  estaColapsado(c: any): boolean {
+  estaColapsado(c: ComentarioVista): boolean {
     if (c._mostrar) return false;
     return (c.votos || 0) <= UMBRAL_COLAPSO || (c.denunciasPendientes || 0) >= UMBRAL_DENUNCIAS;
   }
 
   get esDueñoShout(): boolean {
-    return this._shout?.avatar?.userName === this.currentUser?.usuario?.userName;
+    return !!this.currentUser?.usuario?.userName && this._shout?.avatar?.userName === this.currentUser.usuario.userName;
   }
 
-  puedeFijar(c: any): boolean {
+  puedeFijar(c: ComentarioVista): boolean {
     if (c?.parentId) return false;
     return this.esDueñoShout || this.esAdmin;
   }
 
-  mostrarColapsado(c: any): void {
+  mostrarColapsado(c: ComentarioVista): void {
     c._mostrar = true;
   }
 
   // - Acciones
 
   enviarComentario(): void {
-    if (!this.nuevoComentario?.trim() || this.enviando) return;
+    const shout = this._shout;
+    if (!shout || !this.nuevoComentario?.trim() || this.enviando) return;
 
     this.enviando = true;
     const texto = this.nuevoComentario.trim();
 
-    this.perfilService.addShoutComentario({ shoutId: this._shout.id, comentario: texto })
+    this.perfilService.addShoutComentario({ shoutId: shout.id, comentario: texto })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (nuevoId) => {
@@ -180,7 +195,7 @@ export class ShoutsCommentsComponent implements OnInit {
       });
   }
 
-  responder(c: any): void {
+  responder(c: ComentarioVista): void {
     if (!this.logueado) {
       this.notificationService.warning('Inicia sesión para responder', 'Shouts');
       return;
@@ -194,13 +209,14 @@ export class ShoutsCommentsComponent implements OnInit {
     this.replyText = '';
   }
 
-  enviarRespuesta(c: any): void {
-    if (!this.replyText?.trim() || this.replyEnviando) return;
+  enviarRespuesta(c: ComentarioVista): void {
+    const shout = this._shout;
+    if (!shout || !this.replyText?.trim() || this.replyEnviando) return;
 
     this.replyEnviando = true;
     const texto = this.replyText.trim();
 
-    this.perfilService.addShoutComentario({ shoutId: this._shout.id, parentId: c.id, comentario: texto } as any)
+    this.perfilService.addShoutComentario({ shoutId: shout.id, parentId: c.id, comentario: texto })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (nuevoId) => {
@@ -214,7 +230,7 @@ export class ShoutsCommentsComponent implements OnInit {
       });
   }
 
-  eliminarComentario(c: any): void {
+  eliminarComentario(c: ComentarioVista): void {
     if (!this.notificationService.confirm('¿Seguro que deseas eliminar este comentario?')) return;
 
     this.perfilService.deleteShoutComentario(c.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
@@ -223,7 +239,7 @@ export class ShoutsCommentsComponent implements OnInit {
     });
   }
 
-  editar(c: any): void {
+  editar(c: ComentarioVista): void {
     this.editId = c.id;
     this.editText = c.comentario;
     this.replyTo = null;
@@ -234,7 +250,7 @@ export class ShoutsCommentsComponent implements OnInit {
     this.editText = '';
   }
 
-  guardarEdicion(c: any): void {
+  guardarEdicion(c: ComentarioVista): void {
     if (!this.editText?.trim() || this.editEnviando) return;
 
     this.editEnviando = true;
@@ -249,7 +265,7 @@ export class ShoutsCommentsComponent implements OnInit {
     });
   }
 
-  fijar(c: any): void {
+  fijar(c: ComentarioVista): void {
     this.perfilService.fijarShoutComentario(c.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (fijado) => {
         c.fijado = fijado;
@@ -260,7 +276,7 @@ export class ShoutsCommentsComponent implements OnInit {
     });
   }
 
-  denunciar(c: any): void {
+  denunciar(c: ComentarioVista): void {
     if (!this.logueado) {
       this.notificationService.warning('Inicia sesión para denunciar', 'Shouts');
       return;
@@ -305,18 +321,22 @@ export class ShoutsCommentsComponent implements OnInit {
 
   // - Helpers
 
-  private crearLocal(id: number, comentario: string, parentId: number | null): any {
+  private crearLocal(id: number, comentario: string, parentId: number | null): ComentarioVista {
     return {
       id,
+      shoutId: this._shout?.id ?? 0,
+      usuarioId: 0,
       parentId,
       comentario,
       fechaRegistro: new Date().toISOString(),
-      usuario: this.currentUser.usuario.userName,
-      avatar: this.currentUser.usuario.avatar,
+      usuario: this.currentUser?.usuario?.userName ?? '',
+      avatar: this.currentUser?.usuario?.avatar ?? null,
       votos: 0,
       miVoto: 0,
       votosArriba: 0,
       votosAbajo: 0,
+      fijado: false,
+      denunciasPendientes: 0,
     };
   }
 

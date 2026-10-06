@@ -5,13 +5,13 @@
 }
 
 @if (!loading && foto) {
-<div class="container container--home foto-detail-page mx-auto">
+<div class="container container--home detail-page mx-auto">
   <div class="row">
     <div class="col-12">
-      <div class="foto-detail-layout">
+      <div class="detail-layout">
 
         <!-- Sidebar izquierdo -->
-        <aside class="foto-sidebar">
+        <aside class="detail-sidebar">
 
           <!-- User card -->
           <div class="sidebar-user-card">
@@ -63,7 +63,7 @@
           <!-- Stats de esta foto -->
           <div class="sidebar-card">
             <div class="sidebar-section-title">Esta foto</div>
-            <ul class="sidebar-foto-stats">
+            <ul class="sidebar-item-stats">
               <li>
                 <i class="ti ti-calendar"></i>
                 <span>{{foto.fechaRegistro | date:'dd MMM yyyy'}}</span>
@@ -116,18 +116,19 @@
         </aside>
 
         <!-- Contenido principal -->
-        <main class="foto-main">
+        <main class="detail-main">
           <div class="foto-image-container">
             <img [src]="foto.imageUrl" [alt]="foto.titulo" class="foto-main-img" fetchpriority="high" decoding="async">
           </div>
 
-          <h1 class="foto-main-title">{{foto.titulo}}</h1>
+          <h1 class="detail-main-title">{{foto.titulo}}</h1>
 
-          <div class="foto-main-meta">
+          <div class="detail-main-meta">
             <span>{{foto.fechaRegistro | date:'dd/MM/yyyy'}}</span>
             @if (foto.categoria) {
-            <span class="foto-cat">{{foto.categoria}}</span>
+            <span class="detail-cat">{{foto.categoria}}</span>
             }
+            <app-share-buttons class="detail-share" [titulo]="foto.titulo"></app-share-buttons>
           </div>
 
           @if (foto.descripcion) {
@@ -167,7 +168,7 @@
 
           <!-- Acciones del dueño -->
           @if (esMio || esAdmin) {
-          <div class="foto-owner-actions">
+          <div class="detail-owner-actions">
             <a [routerLink]="['/fotos/actualizar', foto.id]" class="boton azul">
               <i class="ti ti-pencil" aria-hidden="true"></i> Editar
             </a>
@@ -178,7 +179,8 @@
           }
 
           <!-- Comentarios -->
-          <app-foto-comentarios [fotoId]="foto.id"></app-foto-comentarios>
+          <app-foto-comentarios [fotoId]="foto.id" [autor]="foto.usuario"
+            (totalCambio)="foto.totalComentarios = $event"></app-foto-comentarios>
         </main>
       </div>
     </div>

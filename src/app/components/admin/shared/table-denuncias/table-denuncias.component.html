@@ -14,7 +14,7 @@
       <thead>
         <tr>
           <th>Creado</th>
-          <th>Comunidad / Tema</th>
+          <th>{{columnaOrigen}}</th>
           <th>Comentario</th>
           <th>Autor</th>
           <th>Reporta</th>
@@ -32,19 +32,15 @@
               </span>
             </td>
             <td>
-              @if (denuncia.comentario?.temaId) {
-                <a [routerLink]="['/comunidades', denuncia.comentario.comunidad?.nombreCorto, 'tema', denuncia.comentario.temaId, denuncia.comentario.temaUrl]"
-                  target="_blank" [title]="denuncia.comentario.temaTitulo">
-                  <small class="text-muted d-block">{{denuncia.comentario.comunidad?.nombre}}</small>
-                  {{denuncia.comentario.temaTitulo}}
-                </a>
+              @if (origenTpl && denuncia.comentario) {
+                <ng-container *ngTemplateOutlet="origenTpl; context: { $implicit: denuncia.comentario }"></ng-container>
               } @else {
                 <span class="text-muted">—</span>
               }
             </td>
             <td class="coment-cell">
               <span [ngClass]="{'text-decoration-line-through text-muted': denuncia.comentario?.eliminado}">
-                {{denuncia.comentario?.contenido}}
+                {{denuncia.comentario?.[campoTexto]}}
               </span>
               @if (denuncia.comentario?.eliminado) {
                 <span class="badge bg-secondary ms-1">borrado</span>
@@ -61,7 +57,7 @@
               }
             </td>
             <td class="text-center" width="30px">
-              <button class="btn-menu" [matMenuTriggerFor]="menu">
+              <button class="btn-menu" [matMenuTriggerFor]="menu" aria-label="Acciones">
                 <i class="ti ti-dots-vertical"></i>
               </button>
               <mat-menu #menu="matMenu">
@@ -86,16 +82,12 @@
       </tbody>
     </table>
   </main>
-}
 
-@if (denuncias.length < 1) {
-  <div class="alert alert-warning">
-    🗃️ No hay denuncias de comentarios.
-  </div>
-}
-
-@if (denuncias.length > 0) {
   <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
     [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
   </mat-paginator>
+} @else {
+  <div class="alert alert-warning">
+    🗃️ {{mensajeVacio}}
+  </div>
 }

@@ -29,6 +29,7 @@ import { DashboardContactosComponent } from '../../components/admin/control-de-c
 import { DashboardVotosComponent } from '../../components/admin/control-de-comunidad/votos/dashboard-votos/dashboard-votos.component';
 import { DashboardPaginasComponent } from '../../components/admin/control-de-contenido/paginas/dashboard-paginas/dashboard-paginas.component';
 import { DashboardMensajesComponent } from '../../components/admin/control-de-contenido/mensajes/dashboard-mensajes/dashboard-mensajes.component';
+import { DashboardLogsComponent } from '../../components/admin/general/logs/dashboard-logs/dashboard-logs.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,7 @@ const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', component: DashboardAdminComponent },
       { path: 'configuracion', component: DashboardConfigurationComponent },
+      { path: 'logs', component: DashboardLogsComponent },
       { path: 'posts', component: DashboardPostsComponent },
       { path: 'fotos', component: DashboardFotosComponent },
       { path: 'censuras', component: DashboardCensurasComponent },

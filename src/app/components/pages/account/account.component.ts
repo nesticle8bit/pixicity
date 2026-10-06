@@ -548,9 +548,10 @@ export class AccountComponent implements OnInit {
         });
 
         const currentUser = this.securityService.getCurrentUser();
-        currentUser.usuario.avatar = value;
-
-        this.securityService.setUserToLocalStorage(currentUser);
+        if (currentUser.usuario) {
+          currentUser.usuario.avatar = value;
+          this.securityService.setUserToLocalStorage(currentUser);
+        }
       }
     });
   }

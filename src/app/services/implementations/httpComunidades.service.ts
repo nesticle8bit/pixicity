@@ -5,8 +5,31 @@ import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
 import { NotificationService } from '../shared/notification.service';
-import { ApiResponse } from 'src/app/models/api/api-response.model';
+import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
 import { IHttpComunidadesService } from '../interfaces/httpComunidades.interface';
+import {
+  BusquedaComunidades,
+  BusquedaPaginada,
+  ComentarioReciente,
+  ComunidadCard,
+  ComunidadCategoria,
+  ComunidadCategoriaGuardar,
+  ComunidadDetalle,
+  ComunidadesEstadisticas,
+  ComunidadGuardar,
+  ComunidadMiembro,
+  ComunidadSubCategoria,
+  ComunidadSubCategoriaGuardar,
+  DenunciaComentarioComunidad,
+  ResultadoVoto,
+  TemaComentarioGuardar,
+  TemaDetalle,
+  TemaGuardar,
+  TemaListado,
+  TemaReciente,
+  TemaTop,
+  TemaTopGlobal,
+} from 'src/app/models/comunidades/comunidad.model';
 
 @Injectable()
 export class HttpComunidadesService implements IHttpComunidadesService {
@@ -31,179 +54,186 @@ export class HttpComunidadesService implements IHttpComunidadesService {
     );
   }
 
+  private get<T>(ruta: string): Observable<T> {
+    return this.unwrap(this.http.get<ApiResponse<T>>(`${this.base}/${ruta}`));
+  }
+
+  private post<T>(ruta: string, body: unknown = {}): Observable<T> {
+    return this.unwrap(this.http.post<ApiResponse<T>>(`${this.base}/${ruta}`, body));
+  }
+
+  private delete<T>(ruta: string): Observable<T> {
+    return this.unwrap(this.http.delete<ApiResponse<T>>(`${this.base}/${ruta}`));
+  }
+
   // Taxonomía
-  getCategorias(): Observable<any> {
-    return this.unwrap(this.http.get<ApiResponse<any>>(`${this.base}/getCategorias`));
+  getCategorias(): Observable<ComunidadCategoria[]> {
+    return this.get('getCategorias');
   }
 
-  getSubCategorias(categoriaId: number): Observable<any> {
-    return this.unwrap(this.http.get<ApiResponse<any>>(`${this.base}/getSubCategorias?categoriaId=${categoriaId}`));
+  getSubCategorias(categoriaId: number): Observable<ComunidadSubCategoria[]> {
+    return this.get(`getSubCategorias?categoriaId=${categoriaId}`);
   }
 
-  saveCategoria(model: any): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/saveCategoria`, model));
+  saveCategoria(model: ComunidadCategoriaGuardar): Observable<number> {
+    return this.post('saveCategoria', model);
   }
 
-  deleteCategoria(id: number): Observable<any> {
-    return this.unwrap(this.http.delete<ApiResponse<any>>(`${this.base}/deleteCategoria?id=${id}`));
+  deleteCategoria(id: number): Observable<boolean> {
+    return this.delete(`deleteCategoria?id=${id}`);
   }
 
-  saveSubCategoria(model: any): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/saveSubCategoria`, model));
+  saveSubCategoria(model: ComunidadSubCategoriaGuardar): Observable<number> {
+    return this.post('saveSubCategoria', model);
   }
 
-  deleteSubCategoria(id: number): Observable<any> {
-    return this.unwrap(this.http.delete<ApiResponse<any>>(`${this.base}/deleteSubCategoria?id=${id}`));
+  deleteSubCategoria(id: number): Observable<boolean> {
+    return this.delete(`deleteSubCategoria?id=${id}`);
   }
 
   // Comunidades
-  getComunidades(search: any = {}): Observable<any> {
-    const page = search?.page || 1;
-    const pageCount = search?.pageCount || 12;
-    const query = search?.query || '';
-    const categoriaId = search?.categoriaId || '';
-    return this.unwrap(
-      this.http.get<ApiResponse<any>>(
-        `${this.base}/getComunidades?page=${page}&pageCount=${pageCount}&query=${query}&categoriaId=${categoriaId}`
-      )
-    );
+  getComunidades(search: BusquedaComunidades = {}): Observable<PaginatedData<ComunidadCard>> {
+    const page = search.page || 1;
+    const pageCount = search.pageCount || 12;
+    const query = encodeURIComponent(search.query || '');
+    const categoriaId = search.categoriaId || '';
+    return this.get(`getComunidades?page=${page}&pageCount=${pageCount}&query=${query}&categoriaId=${categoriaId}`);
   }
 
-  getComunidad(nombreCorto: string): Observable<any> {
-    return this.unwrap(this.http.get<ApiResponse<any>>(`${this.base}/getComunidad?nombreCorto=${encodeURIComponent(nombreCorto)}`));
+  getComunidad(nombreCorto: string): Observable<ComunidadDetalle> {
+    return this.get(`getComunidad?nombreCorto=${encodeURIComponent(nombreCorto)}`);
   }
 
-  saveComunidad(model: any): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/saveComunidad`, model));
+  saveComunidad(model: ComunidadGuardar): Observable<number> {
+    return this.post('saveComunidad', model);
   }
 
-  updateComunidad(model: any): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/updateComunidad`, model));
+  updateComunidad(model: ComunidadGuardar): Observable<number> {
+    return this.post('updateComunidad', model);
   }
 
-  deleteComunidad(id: number): Observable<any> {
-    return this.unwrap(this.http.delete<ApiResponse<any>>(`${this.base}/deleteComunidad?id=${id}`));
+  deleteComunidad(id: number): Observable<boolean> {
+    return this.delete(`deleteComunidad?id=${id}`);
   }
 
   // Membresía / seguir
-  unirme(comunidadId: number): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/unirme?comunidadId=${comunidadId}`, {}));
+  unirme(comunidadId: number): Observable<boolean> {
+    return this.post(`unirme?comunidadId=${comunidadId}`);
   }
 
-  abandonar(comunidadId: number): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/abandonar?comunidadId=${comunidadId}`, {}));
+  abandonar(comunidadId: number): Observable<boolean> {
+    return this.post(`abandonar?comunidadId=${comunidadId}`);
   }
 
-  seguir(comunidadId: number): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/seguir?comunidadId=${comunidadId}`, {}));
+  seguir(comunidadId: number): Observable<boolean> {
+    return this.post(`seguir?comunidadId=${comunidadId}`);
   }
 
-  getMiembros(comunidadId: number, search: any = {}): Observable<any> {
-    const page = search?.page || 1;
-    const pageCount = search?.pageCount || 24;
-    return this.unwrap(this.http.get<ApiResponse<any>>(`${this.base}/getMiembros?comunidadId=${comunidadId}&page=${page}&pageCount=${pageCount}`));
+  getMiembros(comunidadId: number, search: BusquedaPaginada = {}): Observable<PaginatedData<ComunidadMiembro>> {
+    const page = search.page || 1;
+    const pageCount = search.pageCount || 24;
+    return this.get(`getMiembros?comunidadId=${comunidadId}&page=${page}&pageCount=${pageCount}`);
   }
 
-  cambiarRangoMiembro(comunidadId: number, usuarioId: number, permiso: number, esStaff: boolean): Observable<any> {
-    return this.unwrap(
-      this.http.post<ApiResponse<any>>(
-        `${this.base}/cambiarRangoMiembro?comunidadId=${comunidadId}&usuarioId=${usuarioId}&permiso=${permiso}&esStaff=${esStaff}`,
-        {}
-      )
-    );
+  cambiarRangoMiembro(comunidadId: number, usuarioId: number, permiso: number, esStaff: boolean): Observable<boolean> {
+    return this.post(`cambiarRangoMiembro?comunidadId=${comunidadId}&usuarioId=${usuarioId}&permiso=${permiso}&esStaff=${esStaff}`);
   }
 
   // Temas
-  getTemas(comunidadId: number, search: any = {}): Observable<any> {
-    const page = search?.page || 1;
-    const pageCount = search?.pageCount || 20;
-    const query = search?.query || '';
-    return this.unwrap(this.http.get<ApiResponse<any>>(`${this.base}/getTemas?comunidadId=${comunidadId}&page=${page}&pageCount=${pageCount}&query=${query}`));
+  getTemas(comunidadId: number, search: BusquedaPaginada = {}): Observable<PaginatedData<TemaListado>> {
+    const page = search.page || 1;
+    const pageCount = search.pageCount || 20;
+    const query = encodeURIComponent(search.query || '');
+    return this.get(`getTemas?comunidadId=${comunidadId}&page=${page}&pageCount=${pageCount}&query=${query}`);
   }
 
-  getTema(id: number): Observable<any> {
-    return this.unwrap(this.http.get<ApiResponse<any>>(`${this.base}/getTema?id=${id}`));
+  getTema(id: number): Observable<TemaDetalle> {
+    return this.get(`getTema?id=${id}`);
   }
 
-  saveTema(model: any): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/saveTema`, model));
+  saveTema(model: TemaGuardar): Observable<number> {
+    return this.post('saveTema', model);
   }
 
-  deleteTema(id: number): Observable<any> {
-    return this.unwrap(this.http.delete<ApiResponse<any>>(`${this.base}/deleteTema?id=${id}`));
+  deleteTema(id: number): Observable<boolean> {
+    return this.delete(`deleteTema?id=${id}`);
   }
 
-  changeStickyTema(id: number): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/changeStickyTema?id=${id}`, {}));
+  changeStickyTema(id: number): Observable<boolean> {
+    return this.post(`changeStickyTema?id=${id}`);
   }
 
-  addTemaComentario(model: any): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/addTemaComentario`, model));
+  addTemaComentario(model: TemaComentarioGuardar): Observable<number> {
+    return this.post('addTemaComentario', model);
   }
 
-  editarComentario(comentarioId: number, contenido: string): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/editarComentario?comentarioId=${comentarioId}`, { contenido }));
+  editarComentario(comentarioId: number, contenido: string): Observable<boolean> {
+    return this.post(`editarComentario?comentarioId=${comentarioId}`, { contenido });
   }
 
-  eliminarComentario(comentarioId: number): Observable<any> {
-    return this.unwrap(this.http.delete<ApiResponse<any>>(`${this.base}/eliminarComentario?comentarioId=${comentarioId}`));
+  eliminarComentario(comentarioId: number): Observable<boolean> {
+    return this.delete(`eliminarComentario?comentarioId=${comentarioId}`);
   }
 
-  votarComentario(comentarioId: number, valor: number): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/votarTemaComentario?comentarioId=${comentarioId}&valor=${valor}`, {}));
+  votarComentario(comentarioId: number, valor: number): Observable<ResultadoVoto> {
+    return this.post(`votarTemaComentario?comentarioId=${comentarioId}&valor=${valor}`);
   }
 
-  votarTema(temaId: number, valor: number): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/votarTema?temaId=${temaId}&valor=${valor}`, {}));
+  votarTema(temaId: number, valor: number): Observable<ResultadoVoto> {
+    return this.post(`votarTema?temaId=${temaId}&valor=${valor}`);
   }
 
-  fijarComentario(comentarioId: number): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/fijarComentario?comentarioId=${comentarioId}`, {}));
+  fijarComentario(comentarioId: number): Observable<boolean> {
+    return this.post(`fijarComentario?comentarioId=${comentarioId}`);
   }
 
-  denunciarComentario(comentarioId: number, motivo: string): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/denunciarComentario?comentarioId=${comentarioId}`, { motivo }));
+  denunciarComentario(comentarioId: number, motivo: string): Observable<boolean> {
+    return this.post(`denunciarComentario?comentarioId=${comentarioId}`, { motivo });
   }
 
-  getDenunciasComentarios(page: number, pageCount: number, soloPendientes: boolean = false): Observable<any> {
-    return this.unwrap(this.http.get<ApiResponse<any>>(`${this.base}/getDenunciasComentarios?page=${page}&pageCount=${pageCount}&soloPendientes=${soloPendientes}`));
+  getDenunciasComentarios(
+    page: number,
+    pageCount: number,
+    soloPendientes: boolean = false
+  ): Observable<PaginatedData<DenunciaComentarioComunidad> & { pendientes: number }> {
+    return this.get(`getDenunciasComentarios?page=${page}&pageCount=${pageCount}&soloPendientes=${soloPendientes}`);
   }
 
-  resolverDenunciaComentario(denunciaId: number): Observable<any> {
-    return this.unwrap(this.http.post<ApiResponse<any>>(`${this.base}/resolverDenunciaComentario?denunciaId=${denunciaId}`, {}));
+  resolverDenunciaComentario(denunciaId: number): Observable<boolean> {
+    return this.post(`resolverDenunciaComentario?denunciaId=${denunciaId}`);
   }
 
-  eliminarDenunciaComentario(denunciaId: number): Observable<any> {
-    return this.unwrap(this.http.delete<ApiResponse<any>>(`${this.base}/eliminarDenunciaComentario?denunciaId=${denunciaId}`));
+  eliminarDenunciaComentario(denunciaId: number): Observable<boolean> {
+    return this.delete(`eliminarDenunciaComentario?denunciaId=${denunciaId}`);
   }
 
   // Widgets
-  getTopTemas(comunidadId: number, periodo: string = 'Semana'): Observable<any> {
-    return this.unwrap(this.http.get<ApiResponse<any>>(`${this.base}/getTopTemas?comunidadId=${comunidadId}&periodo=${periodo}`));
+  getTopTemas(comunidadId: number, periodo: string = 'Semana'): Observable<TemaTop[]> {
+    return this.get(`getTopTemas?comunidadId=${comunidadId}&periodo=${periodo}`);
   }
 
-  getComentariosRecientes(comunidadId: number, count: number = 5): Observable<any> {
-    return this.unwrap(this.http.get<ApiResponse<any>>(`${this.base}/getComentariosRecientes?comunidadId=${comunidadId}&count=${count}`));
+  getComentariosRecientes(comunidadId: number, count: number = 5): Observable<ComentarioReciente[]> {
+    return this.get(`getComentariosRecientes?comunidadId=${comunidadId}&count=${count}`);
   }
 
   // Widgets globales (portada)
-  getTemasRecientes(count: number = 10): Observable<any> {
-    return this.unwrap(this.http.get<ApiResponse<any>>(`${this.base}/getTemasRecientes?count=${count}`));
+  getTemasRecientes(count: number = 10): Observable<TemaReciente[]> {
+    return this.get(`getTemasRecientes?count=${count}`);
   }
 
-  getComentariosRecientesGlobal(count: number = 8): Observable<any> {
-    return this.unwrap(this.http.get<ApiResponse<any>>(`${this.base}/getComentariosRecientesGlobal?count=${count}`));
+  getComentariosRecientesGlobal(count: number = 8): Observable<ComentarioReciente[]> {
+    return this.get(`getComentariosRecientesGlobal?count=${count}`);
   }
 
-  getTopComunidades(count: number = 5): Observable<any> {
-    return this.unwrap(this.http.get<ApiResponse<any>>(`${this.base}/getTopComunidades?count=${count}`));
+  getTopComunidades(count: number = 5): Observable<ComunidadCard[]> {
+    return this.get(`getTopComunidades?count=${count}`);
   }
 
-  getTopTemasGlobal(periodo: string = 'Semana', count: number = 5): Observable<any> {
-    return this.unwrap(this.http.get<ApiResponse<any>>(`${this.base}/getTopTemasGlobal?periodo=${periodo}&count=${count}`));
+  getTopTemasGlobal(periodo: string = 'Semana', count: number = 5): Observable<TemaTopGlobal[]> {
+    return this.get(`getTopTemasGlobal?periodo=${periodo}&count=${count}`);
   }
 
-  getEstadisticas(): Observable<any> {
-    return this.unwrap(this.http.get<ApiResponse<any>>(`${this.base}/getEstadisticas`));
+  getEstadisticas(): Observable<ComunidadesEstadisticas> {
+    return this.get('getEstadisticas');
   }
 }

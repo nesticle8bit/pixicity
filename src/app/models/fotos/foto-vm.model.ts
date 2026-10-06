@@ -20,10 +20,23 @@ export interface FotoComentarioViewModel {
   id: number;
   fotoId: number;
   usuarioId: number;
+  /** null en comentarios raíz; las respuestas cuelgan del raíz. */
+  parentId: number | null;
   contenido: string;
   fechaComentario: string;
+  fechaActualiza: string | null;
   votos: number;
-  miVoto?: number;
+  miVoto?: number | null;
+  votosArriba: number;
+  votosAbajo: number;
+  fijado: boolean;
+  denunciasPendientes: number;
   usuario: string;
-  avatar: string;
+  avatar: string | null;
+  rango: { id: number; nombre: string; icono: string | null; color: string | null } | null;
+}
+
+export interface FotoComentarioVoto {
+  total: number;
+  miVoto: number;
 }

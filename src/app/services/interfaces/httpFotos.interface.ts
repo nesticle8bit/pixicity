@@ -2,7 +2,7 @@ import { FotoSearchParams } from 'src/app/models/shared/service-types.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
-import { FotoComentarioViewModel, FotoViewModel } from 'src/app/models/fotos/foto-vm.model';
+import { FotoComentarioViewModel, FotoComentarioVoto, FotoViewModel } from 'src/app/models/fotos/foto-vm.model';
 
 @Injectable()
 export abstract class IHttpFotosService {
@@ -20,7 +20,10 @@ export abstract class IHttpFotosService {
 
   // Comentarios
   abstract getComentariosByFotoId(fotoId: number): Observable<FotoComentarioViewModel[]>;
-  abstract addComentario(comentario: Partial<FotoComentarioViewModel>): Observable<number>;
+  abstract addComentario(comentario: { fotoId: number; contenido: string; parentId?: number | null }): Observable<number>;
+  abstract editarComentario(comentarioId: number, contenido: string): Observable<boolean>;
   abstract deleteComentario(id: number): Observable<boolean>;
-  abstract votarComentario(comentarioId: number, cantidad: number): Observable<FotoComentarioViewModel>;
+  abstract votarComentario(comentarioId: number, cantidad: number): Observable<FotoComentarioVoto>;
+  abstract fijarComentario(comentarioId: number): Observable<boolean>;
+  abstract denunciarComentario(comentarioId: number, motivo: string): Observable<boolean>;
 }

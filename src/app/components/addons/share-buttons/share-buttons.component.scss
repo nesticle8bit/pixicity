@@ -1,0 +1,46 @@
+:host {
+  display: inline-flex;
+}
+
+.share-buttons {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity .15s;
+
+  &:hover {
+    opacity: .85;
+  }
+
+  &.facebook {
+    background: #1877f2;
+  }
+
+  &.twitter {
+    background: #000;
+  }
+
+  &.whatsapp {
+    background: #25d366;
+  }
+
+  &.enlace {
+    background: #6c757d;
+  }
+
+  &.nativo {
+    background: #2b6cb0;
+  }
+}

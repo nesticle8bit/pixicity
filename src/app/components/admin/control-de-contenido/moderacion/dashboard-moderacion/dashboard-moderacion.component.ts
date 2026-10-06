@@ -32,6 +32,7 @@ export class DashboardModeracionComponent implements OnInit {
     { id: 2, nombre: 'Comentarios de post' },
     { id: 3, nombre: 'Comentarios de comunidad' },
     { id: 4, nombre: 'Comentarios de shout' },
+    { id: 5, nombre: 'Comentarios de foto' },
   ];
 
   constructor(

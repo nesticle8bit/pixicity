@@ -1,18 +1,54 @@
-/* El contenedor del post no debe generar scroll horizontal ni descentrarse.
-   Sin el padding:0 que tenía antes, Bootstrap centra el .container y sus
-   gutters compensan los márgenes negativos del .row. */
+@use '../../../shared/styles/detail-layout';
+
+/* El contenedor del post no debe generar scroll horizontal ni descentrarse. */
 .post-view-container {
-    // max-width: 100%;
-    overflow-x: clip;
+  overflow-x: clip;
 }
 
-.post-view-content {
-    padding-right: 38px;
+.post-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
-@media (max-width: 767.98px) {
-    .post-view-content {
-        padding-right: 0;
-        padding-left: 0;
-    }
+.sidebar-rango {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: .72rem;
+  font-weight: 600;
+
+  img {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.post-sticky {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #e67e22;
+}
+
+.post-body {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+  overflow-wrap: anywhere;
+}
+
+.post-owner-actions {
+  margin: 12px 0 16px;
+}
+
+.post-ad {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
 }

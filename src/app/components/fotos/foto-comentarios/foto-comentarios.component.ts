@@ -1,90 +1,89 @@
-import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, inject, Input, Output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FotoComentarioViewModel } from 'src/app/models/fotos/foto-vm.model';
+import { ComentarioHilo, ComentariosAcciones } from 'src/app/models/shared/comentario-hilo.model';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { NotificationService } from 'src/app/services/shared/notification.service';
 
+/** Convierte un comentario de foto al formato común de <app-comentarios>. */
+function aHilo(c: FotoComentarioViewModel): ComentarioHilo {
+  return {
+    id: c.id,
+    parentId: c.parentId ?? null,
+    contenido: c.contenido,
+    fecha: c.fechaComentario,
+    fechaEdicion: c.fechaActualiza ?? null,
+    userName: c.usuario,
+    avatar: c.avatar,
+    rango: c.rango ? { nombre: c.rango.nombre, color: c.rango.color, icono: c.rango.icono } : null,
+    votos: c.votos ?? 0,
+    miVoto: c.miVoto ?? 0,
+    votosArriba: c.votosArriba ?? 0,
+    votosAbajo: c.votosAbajo ?? 0,
+    fijado: !!c.fijado,
+    denunciasPendientes: c.denunciasPendientes ?? 0,
+  };
+}
+
+/** Comentarios de una foto: carga los datos del API de fotos y los muestra con <app-comentarios>. */
 @Component({
   standalone: false,
   selector: 'app-foto-comentarios',
   templateUrl: './foto-comentarios.component.html',
-  styleUrls: ['./foto-comentarios.component.scss'],
 })
-export class FotoComentariosComponent implements OnInit {
+export class FotoComentariosComponent {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly fotosService = inject(IHttpFotosService);
+  private readonly securityService = inject(IHttpSecurityService);
 
-  private _fotoId: number = 0;
+  private _fotoId = 0;
+
+  public comentarios: ComentarioHilo[] = [];
 
   @Input() set fotoId(value: number) {
+    if (value === this._fotoId) return;
     this._fotoId = value;
-    if (value) this.loadComentarios();
-  }
-  get fotoId(): number { return this._fotoId; }
-
-  public comentarios: any[] = [];
-  public currentUser: any;
-  public formGroup: FormGroup;
-  public lastComment: string = '';
-
-  constructor(
-    private fotosService: IHttpFotosService,
-    private securityService: IHttpSecurityService,
-    private fb: FormBuilder,
-    private notificationService: NotificationService
-  ) {
-    this.formGroup = this.fb.group({ contenido: ['', Validators.required] });
+    this.cargar();
   }
 
-  ngOnInit(): void {
-    this.currentUser = this.securityService.getCurrentUser();
+  get fotoId(): number {
+    return this._fotoId;
   }
 
-  loadComentarios(): void {
-    this.fotosService.getComentariosByFotoId(this._fotoId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
-      this.comentarios = data || [];
-    });
+  /** Autor de la foto: puede fijar y borrar comentarios, y los suyos llevan la marca "OP". */
+  @Input() autor: string | null = null;
+
+  /** Cambió la cantidad de comentarios. */
+  @Output() totalCambio = new EventEmitter<number>();
+
+  public readonly acciones: ComentariosAcciones = {
+    comentar: (contenido, parentId) => this.fotosService.addComentario({ fotoId: this._fotoId, contenido, parentId }),
+    editar: (id, contenido) => this.fotosService.editarComentario(id, contenido),
+    eliminar: (id) => this.fotosService.deleteComentario(id),
+    votar: (id, valor) => this.fotosService.votarComentario(id, valor),
+    fijar: (id) => this.fotosService.fijarComentario(id),
+    denunciar: (id, motivo) => this.fotosService.denunciarComentario(id, motivo),
+  };
+
+  get esAutorFoto(): boolean {
+    const yo = this.securityService.getCurrentUser()?.usuario?.userName;
+    return !!yo && yo === this.autor;
   }
 
-  enviarComentario(): void {
-    if (this.formGroup.invalid) return;
-    const payload = { fotoId: this._fotoId, contenido: this.formGroup.value.contenido };
-    this.fotosService.addComentario(payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((id) => {
-      if (id) {
-        this.comentarios.push({
-          id,
-          fotoId: this._fotoId,
-          usuario: this.currentUser.usuario.userName,
-          avatar: this.currentUser.usuario.avatar,
-          contenido: payload.contenido,
-          fechaComentario: new Date(),
-          votos: 0,
-        });
-        this.formGroup.reset();
-      }
-    });
+  get puedeFijar(): boolean {
+    const rango = this.securityService.getCurrentUser()?.usuario?.rango;
+    return this.esAutorFoto || rango === 'Administrador' || rango === 'Moderador';
   }
 
-  eliminarComentario(comentario: any, index: number): void {
-    if (this.notificationService.confirm('¿Eliminar este comentario?')) {
-      this.fotosService.deleteComentario(comentario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-        this.comentarios.splice(index, 1);
-      });
+  private cargar(): void {
+    if (!this._fotoId) {
+      this.comentarios = [];
+      return;
     }
-  }
 
-  voteComentario(comentario: any, cantidad: number): void {
-    this.fotosService.votarComentario(comentario.id, cantidad).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((res) => {
-      if (res) {
-        comentario.votos = res.votos;
-        comentario.miVoto = res.miVoto;
-      }
-    });
-  }
-
-  updateComentario(comentario: any): void {
-    if (!comentario.contenido) return;
-    // Simple optimistic update — no dedicated endpoint needed for now
-    comentario.update = false;
+    this.fotosService
+      .getComentariosByFotoId(this._fotoId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((lista) => (this.comentarios = (lista ?? []).map(aHilo)));
   }
 }

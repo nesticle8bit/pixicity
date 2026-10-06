@@ -1,86 +1,32 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { PageEvent } from '@angular/material/paginator';
+import { Component, inject } from '@angular/core';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
-import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { NotificationService } from 'src/app/services/shared/notification.service';
+import { FuenteDenuncias } from '../../../shared/table-denuncias/table-denuncias.component';
 
 @Component({
   standalone: false,
   selector: 'app-table-denuncias-comentarios',
-  templateUrl: './table-denuncias-comentarios.component.html',
-  styleUrls: ['./table-denuncias-comentarios.component.scss'],
+  template: `
+    <app-table-denuncias [fuente]="fuente" columnaOrigen="Post">
+      <ng-template #origen let-comentario>
+        @if (comentario.postId) {
+          <app-post-url-link
+            [post]="{ id: comentario.postId, url: comentario.postUrl, titulo: comentario.postTitulo, truncate: 60 }"
+            [categoria]="{ icono: comentario.categoria?.icono, nombre: comentario.categoria?.nombre, seo: comentario.categoria?.seo }">
+          </app-post-url-link>
+        } @else {
+          <span class="text-muted">—</span>
+        }
+      </ng-template>
+    </app-table-denuncias>
+  `,
 })
-export class TableDenunciasComentariosComponent implements OnInit {
-  private readonly destroyRef = inject(DestroyRef);
+export class TableDenunciasComentariosComponent {
+  private readonly postService = inject(IHttpPostsService);
 
-  public denuncias: any[] = [];
-  public totalCount: number = 0;
-  public pendientes: number = 0;
-  public soloPendientes: boolean = true;
-
-  constructor(
-    public paginationService: PaginationService,
-    private postService: IHttpPostsService,
-    private notificationService: NotificationService
-  ) {
-    this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
-  }
-
-  ngOnInit(): void {
-    this.getDenuncias();
-  }
-
-  getDenuncias(): void {
-    this.postService
-      .getDenunciasComentarios(this.paginationService.page, this.paginationService.pageCount, this.soloPendientes)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response) => {
-        this.denuncias = response?.data ?? [];
-        this.totalCount = response?.pagination?.totalCount ?? 0;
-        this.pendientes = response?.pendientes ?? 0;
-      });
-  }
-
-  cambiarFiltro(soloPendientes: boolean): void {
-    if (this.soloPendientes === soloPendientes) return;
-    this.soloPendientes = soloPendientes;
-    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
-    this.getDenuncias();
-  }
-
-  pageChange(event: PageEvent): void {
-    this.paginationService.change(event);
-    this.getDenuncias();
-  }
-
-  borrarComentario(denuncia: any): void {
-    if (!denuncia.comentario?.id) return;
-    if (!this.notificationService.confirm('¿Borrar el comentario denunciado? Esta acción no se puede deshacer.')) return;
-    this.postService.deleteComentario(denuncia.comentario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
-        denuncia.comentario.eliminado = true;
-        this.notificationService.success('Comentario borrado', 'Moderación');
-      },
-    });
-  }
-
-  resolver(denuncia: any): void {
-    this.postService.resolverDenunciaComentario(denuncia.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (resuelto) => {
-        denuncia.resuelto = resuelto;
-        this.notificationService.success(resuelto ? 'Denuncia marcada como resuelta' : 'Denuncia reabierta', 'Denuncias');
-      },
-    });
-  }
-
-  eliminar(denuncia: any): void {
-    if (!this.notificationService.confirm('¿Eliminar esta denuncia del listado?')) return;
-    this.postService.eliminarDenunciaComentario(denuncia.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
-        this.notificationService.success('Denuncia eliminada', 'Denuncias');
-        this.getDenuncias();
-      },
-    });
-  }
+  readonly fuente: FuenteDenuncias = {
+    listar: (page, pageCount, soloPendientes) => this.postService.getDenunciasComentarios(page, pageCount, soloPendientes),
+    resolver: (id) => this.postService.resolverDenunciaComentario(id),
+    eliminar: (id) => this.postService.eliminarDenunciaComentario(id),
+    borrarComentario: (id) => this.postService.deleteComentario(id),
+  };
 }

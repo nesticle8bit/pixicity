@@ -5,8 +5,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   standalone: false,
   selector: 'app-post-more-from-op',
-  templateUrl: './post-more-from-op.component.html',
-  styleUrls: ['./post-more-from-op.component.scss'],
+  template: `
+    <app-post-rank-list [titulo]="'Más de ' + (post?.usuario?.userName ?? '')" icono="ti-user-star"
+      mensajeVacio="Este autor no tiene más posts" iconoVacio="ti-mood-empty" [posts]="posts">
+    </app-post-rank-list>
+  `,
 })
 export class PostMoreFromOPComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);

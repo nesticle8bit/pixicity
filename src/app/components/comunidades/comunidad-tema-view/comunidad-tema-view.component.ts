@@ -6,13 +6,32 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { TemaComentario, TemaDetalle } from 'src/app/models/comunidades/comunidad.model';
+import { idUsuarioSesion, JwtUserModel } from 'src/app/models/security/jwtUser.model';
+import { ComentarioHilo, ComentariosAcciones } from 'src/app/models/shared/comentario-hilo.model';
+import { PerfilUsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 
-// Umbral de puntaje por debajo del cual un comentario se colapsa (estilo Reddit)
-const UMBRAL_COLAPSO = -5;
-// Denuncias pendientes a partir de las cuales el comentario se auto-oculta
-const UMBRAL_DENUNCIAS = 3;
-// Motivos de denuncia predefinidos (el usuario puede elegir número o escribir el suyo)
-const MOTIVOS_DENUNCIA = ['Spam o publicidad', 'Contenido ofensivo', 'Acoso', 'Información falsa', 'Contenido sexual', 'Otro'];
+type TemaVista = TemaDetalle & { _votando?: boolean };
+
+/** Convierte un comentario de tema al formato común de <app-comentarios>. */
+function aHilo(c: TemaComentario): ComentarioHilo {
+  return {
+    id: c.id,
+    parentId: c.parentId,
+    contenido: c.contenido,
+    fecha: c.fechaComentario,
+    fechaEdicion: c.fechaActualiza,
+    userName: c.userName ?? '',
+    avatar: c.avatar,
+    rango: c.rango,
+    votos: c.votos,
+    miVoto: c.miVoto,
+    votosArriba: c.votosArriba,
+    votosAbajo: c.votosAbajo,
+    fijado: c.fijado,
+    denunciasPendientes: c.denunciasPendientes,
+  };
+}
 
 @Component({
   standalone: false,
@@ -23,29 +42,24 @@ const MOTIVOS_DENUNCIA = ['Spam o publicidad', 'Contenido ofensivo', 'Acoso', 'I
 export class ComunidadTemaViewComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  public tema: any = null;
-  public currentUser: any;
+  public tema: TemaVista | null = null;
+  public autor: PerfilUsuarioViewModel | null = null;
+  public comentarios: ComentarioHilo[] = [];
+  public totalComentarios = 0;
+  public currentUser: JwtUserModel | null = null;
   public loading: boolean = true;
   public slug: string = '';
 
-  // Comentario raíz
-  public nuevoComentario: string = '';
-  public enviando: boolean = false;
-
-  // Orden de los comentarios raíz
-  public orden: 'mejores' | 'recientes' | 'controvertido' = 'mejores';
-
-  // Árbol de comentarios (raíz con sus .respuestas)
-  public arbol: any[] = [];
-
-  // Estado de respuesta / edición
-  public replyTo: number | null = null;
-  public replyText: string = '';
-  public replyEnviando: boolean = false;
-
-  public editId: number | null = null;
-  public editText: string = '';
-  public editEnviando: boolean = false;
+  /** Llamadas al API de comunidades que usa la sección de comentarios. */
+  public readonly accionesComentarios: ComentariosAcciones = {
+    comentar: (contenido, parentId) =>
+      this.comunidadesService.addTemaComentario({ comunidadTemaId: this.tema!.id, contenido, parentId }),
+    editar: (id, contenido) => this.comunidadesService.editarComentario(id, contenido),
+    eliminar: (id) => this.comunidadesService.eliminarComentario(id),
+    votar: (id, valor) => this.comunidadesService.votarComentario(id, valor),
+    fijar: (id) => this.comunidadesService.fijarComentario(id),
+    denunciar: (id, motivo) => this.comunidadesService.denunciarComentario(id, motivo),
+  };
 
   constructor(
     private displayService: DisplayComponentService,
@@ -72,13 +86,15 @@ export class ComunidadTemaViewComponent implements OnInit {
     this.loading = true;
     this.comunidadesService.getTema(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (value) => {
-        this.tema = value;
-        this.tema.comentarios = this.tema.comentarios ?? [];
-        this.construirArbol();
+        const tema: TemaVista = { ...value, comentarios: value.comentarios ?? [] };
+        this.tema = tema;
+        this.comentarios = tema.comentarios.map(aHilo);
+        this.totalComentarios = this.comentarios.length;
         this.loading = false;
+        this.cargarAutor(tema.userName);
 
         const rutaCanonica = this.router
-          .createUrlTree(['/comunidades', this.tema.comunidad?.nombreCorto, 'tema', this.tema.id, this.tema.url])
+          .createUrlTree(['/comunidades', tema.comunidad?.nombreCorto, 'tema', tema.id, tema.url])
           .toString();
 
         if (decodeURIComponent(location.pathname) !== decodeURIComponent(rutaCanonica.split('?')[0])) {
@@ -87,38 +103,38 @@ export class ComunidadTemaViewComponent implements OnInit {
           return;
         }
 
-        const limpio = (this.tema.contenido || '').replace(/<[^>]*>/g, '').trim();
+        const limpio = (tema.contenido || '').replace(/<[^>]*>/g, '').trim();
+        const imagen = /<img[^>]+src=["']([^"']+)["']/i.exec(tema.contenido ?? '')?.[1] ?? '';
         this.seoService.setSEO({
-          title: this.tema.titulo || this.tema.nombre,
-          description: limpio ? limpio.substring(0, 200) : `${this.tema.titulo} - Tema en la comunidad ${this.tema.comunidad?.nombre ?? ''} de Taringa.`,
+          title: tema.titulo,
+          description: limpio ? limpio.substring(0, 200) : `${tema.titulo} - Tema en la comunidad ${tema.comunidad?.nombre ?? ''} de Taringa.`,
           type: 'article',
-          imageURL: this.tema.imagen || '',
-          tags: [this.tema.titulo, this.tema.comunidad?.nombre, 'comunidad', 'taringas'].filter(Boolean),
+          imageURL: imagen,
+          tags: [tema.titulo, tema.comunidad?.nombre, 'comunidad', 'taringas'].filter((t): t is string => !!t),
           canonical: `${location.origin}${rutaCanonica}`,
-          publishedTime: this.tema.fechaRegistro,
-          modifiedTime: this.tema.fechaActualiza ?? this.tema.fechaRegistro,
-          author: this.tema.usuario?.userName,
-          section: this.tema.comunidad?.nombre,
+          publishedTime: tema.fechaRegistro,
+          modifiedTime: tema.fechaRegistro,
+          author: tema.userName ?? undefined,
+          section: tema.comunidad?.nombre,
           jsonLd: {
             '@context': 'https://schema.org',
             '@graph': [{
             '@type': 'DiscussionForumPosting',
-            headline: this.tema.titulo,
+            headline: tema.titulo,
             text: limpio ? limpio.substring(0, 500) : undefined,
-            datePublished: this.tema.fechaRegistro,
-            dateModified: this.tema.fechaActualiza ?? this.tema.fechaRegistro,
-            image: this.tema.imagen || undefined,
+            datePublished: tema.fechaRegistro,
+            image: imagen || undefined,
             author: {
               '@type': 'Person',
-              name: this.tema.usuario?.userName ?? 'Taringa!',
+              name: tema.userName ?? 'Taringa!',
             },
             publisher: { '@id': `${location.origin}/#organization` },
             mainEntityOfPage: { '@type': 'WebPage', '@id': `${location.origin}${location.pathname}` },
-            commentCount: (this.tema.comentarios ?? []).length,
+            commentCount: tema.comentarios.length,
             isPartOf: {
               '@type': 'WebSite',
               '@id': `${location.origin}/#website`,
-              name: this.tema.comunidad?.nombre,
+              name: tema.comunidad?.nombre,
             },
           }, {
             '@type': 'BreadcrumbList',
@@ -128,13 +144,13 @@ export class ComunidadTemaViewComponent implements OnInit {
               {
                 '@type': 'ListItem',
                 position: 3,
-                name: this.tema.comunidad?.nombre,
-                item: `${location.origin}/comunidades/${this.tema.comunidad?.nombreCorto ?? ''}`,
+                name: tema.comunidad?.nombre,
+                item: `${location.origin}/comunidades/${tema.comunidad?.nombreCorto ?? ''}`,
               },
               {
                 '@type': 'ListItem',
                 position: 4,
-                name: this.tema.titulo,
+                name: tema.titulo,
                 item: `${location.origin}${location.pathname}`,
               },
             ],
@@ -157,75 +173,22 @@ export class ComunidadTemaViewComponent implements OnInit {
     });
   }
 
-  // - Árbol
-
-  construirArbol(): void {
-    const flat: any[] = this.tema?.comentarios ?? [];
-    const roots = flat.filter((c) => !c.parentId);
-    const hijosPorPadre = new Map<number, any[]>();
-
-    for (const c of flat) {
-      if (c.parentId) {
-        const arr = hijosPorPadre.get(c.parentId) ?? [];
-        arr.push(c);
-        hijosPorPadre.set(c.parentId, arr);
-      }
+  /** Puntos, posts, seguidores y rango del autor para la tarjeta lateral (igual que en posts). */
+  private cargarAutor(userName: string | null): void {
+    if (!userName || this.autor?.userName === userName) {
+      return;
     }
 
-    for (const r of roots) {
-      r.respuestas = (hijosPorPadre.get(r.id) ?? [])
-        .sort((a, b) => new Date(a.fechaComentario).getTime() - new Date(b.fechaComentario).getTime());
-    }
-
-    if (this.orden === 'mejores') {
-      roots.sort((a, b) => (b.fijado ? 1 : 0) - (a.fijado ? 1 : 0)
-        || (b.votos || 0) - (a.votos || 0)
-        || new Date(b.fechaComentario).getTime() - new Date(a.fechaComentario).getTime());
-    } else if (this.orden === 'controvertido') {
-      roots.sort((a, b) => (b.fijado ? 1 : 0) - (a.fijado ? 1 : 0)
-        || this.controversia(b) - this.controversia(a)
-        || (this.totalVotos(b) - this.totalVotos(a))
-        || new Date(b.fechaComentario).getTime() - new Date(a.fechaComentario).getTime());
-    } else {
-      roots.sort((a, b) => (b.fijado ? 1 : 0) - (a.fijado ? 1 : 0)
-        || new Date(b.fechaComentario).getTime() - new Date(a.fechaComentario).getTime());
-    }
-
-    // Destaca el mejor comentario (estilo "comentario destacado")
-    roots.forEach((r) => (r.destacado = false));
-    const top = roots.reduce((best, r) => ((r.votos || 0) > (best?.votos || 0) ? r : best), null as any);
-    if (top && (top.votos || 0) >= 3) top.destacado = true;
-
-    this.arbol = roots;
-  }
-
-  cambiarOrden(o: 'mejores' | 'recientes' | 'controvertido'): void {
-    if (this.orden === o) return;
-    this.orden = o;
-    this.construirArbol();
-  }
-
-  // "Controvertido" = engagement equilibrado: cuanto mayor es el menor lado, más polémico
-  private controversia(c: any): number {
-    return Math.min(c.votosArriba || 0, c.votosAbajo || 0);
-  }
-
-  private totalVotos(c: any): number {
-    return (c.votosArriba || 0) + (c.votosAbajo || 0);
-  }
-
-  get totalComentarios(): number {
-    return this.tema?.comentarios?.length ?? 0;
+    this.securityService
+      .getUsuarioInfo(userName)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((info) => (this.autor = info ?? null));
   }
 
   // - Permisos
 
-  get logueado(): boolean {
-    return !!this.currentUser?.usuario;
-  }
-
   get esMio(): boolean {
-    return this.currentUser?.usuario?.userName === this.tema?.userName;
+    return !!this.currentUser?.usuario?.userName && this.currentUser.usuario.userName === this.tema?.userName;
   }
 
   get esAdmin(): boolean {
@@ -237,41 +200,19 @@ export class ComunidadTemaViewComponent implements OnInit {
     return this.esMio || this.esAdmin;
   }
 
-  puedeModerarComentario(c: any): boolean {
-    return this.logueado && (c.userName === this.currentUser?.usuario?.userName || this.esAdmin);
-  }
-
-  puedeFijar(): boolean {
-    // Mods/admins o el dueño de la comunidad
-    return this.esAdmin || this.tema?.comunidad?.usuarioId === this.currentUser?.usuario?.id;
-  }
-
-  fijar(c: any): void {
-    this.comunidadesService.fijarComentario(c.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (fijado) => {
-        c.fijado = fijado;
-        this.notificationService.success(fijado ? 'Comentario fijado' : 'Comentario desfijado', 'Comentarios');
-        this.construirArbol();
-      },
-      error: () => {},
-    });
-  }
-
-  estaColapsado(c: any): boolean {
-    if (c._mostrar) return false;
-    return (c.votos || 0) <= UMBRAL_COLAPSO || (c.denunciasPendientes || 0) >= UMBRAL_DENUNCIAS;
-  }
-
-  mostrarColapsado(c: any): void {
-    c._mostrar = true;
+  /** Mods/admins o el dueño de la comunidad (el id de la sesión viene en base64). */
+  get esDuenoComunidad(): boolean {
+    const miId = idUsuarioSesion(this.currentUser?.usuario);
+    return miId !== null && this.tema?.comunidad?.usuarioId === miId;
   }
 
   // - Tema
 
   eliminar(): void {
-    if (!confirm('¿Eliminar este tema? Esta acción no se puede deshacer.')) return;
+    const tema = this.tema;
+    if (!tema || !confirm('¿Eliminar este tema? Esta acción no se puede deshacer.')) return;
 
-    this.comunidadesService.deleteTema(this.tema.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    this.comunidadesService.deleteTema(tema.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.notificationService.success('El tema ha sido eliminado', 'Tema eliminado');
         this.router.navigate(['/comunidades', this.slug]);
@@ -281,9 +222,12 @@ export class ComunidadTemaViewComponent implements OnInit {
   }
 
   cambiarSticky(): void {
-    this.comunidadesService.changeStickyTema(this.tema.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    const tema = this.tema;
+    if (!tema) return;
+
+    this.comunidadesService.changeStickyTema(tema.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (value) => {
-        this.tema.sticky = value;
+        tema.sticky = value;
         this.notificationService.success('Se ha cambiado el sticky de este tema correctamente', 'Sticky');
       },
       error: () => {},
@@ -291,196 +235,21 @@ export class ComunidadTemaViewComponent implements OnInit {
   }
 
   votarTema(valor: number): void {
-    if (!this.logueado) {
+    if (!this.currentUser?.usuario) {
       this.notificationService.warning('Inicia sesión para votar', 'Comunidades');
       return;
     }
-    if (this.tema._votando) return;
+    const tema = this.tema;
+    if (!tema || tema._votando) return;
 
-    this.tema._votando = true;
-    this.comunidadesService.votarTema(this.tema.id, valor).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    tema._votando = true;
+    this.comunidadesService.votarTema(tema.id, valor).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
-        this.tema.votos = res?.total ?? this.tema.votos ?? 0;
-        this.tema.miVoto = res?.miVoto ?? 0;
-        this.tema._votando = false;
+        tema.votos = res?.total ?? tema.votos ?? 0;
+        tema.miVoto = res?.miVoto ?? 0;
+        tema._votando = false;
       },
-      error: () => { this.tema._votando = false; },
+      error: () => { tema._votando = false; },
     });
-  }
-
-  // - Comentarios
-
-  comentar(): void {
-    if (!this.nuevoComentario.trim() || this.enviando) return;
-
-    this.enviando = true;
-    const contenido = this.nuevoComentario.trim();
-    const model = { comunidadTemaId: this.tema.id, contenido };
-
-    this.comunidadesService.addTemaComentario(model).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (nuevoId) => {
-        this.tema.comentarios.push(this.crearComentarioLocal(nuevoId, contenido, null));
-        this.nuevoComentario = '';
-        this.enviando = false;
-        this.construirArbol();
-      },
-      error: () => { this.enviando = false; },
-    });
-  }
-
-  responder(c: any): void {
-    if (!this.logueado) {
-      this.notificationService.warning('Inicia sesión para responder', 'Comentarios');
-      return;
-    }
-    this.replyTo = c.id;
-    this.replyText = '';
-    this.editId = null;
-  }
-
-  cancelarRespuesta(): void {
-    this.replyTo = null;
-    this.replyText = '';
-  }
-
-  enviarRespuesta(c: any): void {
-    if (!this.replyText.trim() || this.replyEnviando) return;
-
-    this.replyEnviando = true;
-    const contenido = this.replyText.trim();
-    const model = { comunidadTemaId: this.tema.id, parentId: c.id, contenido };
-
-    this.comunidadesService.addTemaComentario(model).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (nuevoId) => {
-        // El backend aplana al raíz: el padre real es la raíz de 'c'
-        const parentRoot = c.parentId ?? c.id;
-        this.tema.comentarios.push(this.crearComentarioLocal(nuevoId, contenido, parentRoot));
-        this.replyEnviando = false;
-        this.cancelarRespuesta();
-        this.construirArbol();
-      },
-      error: () => { this.replyEnviando = false; },
-    });
-  }
-
-  editar(c: any): void {
-    this.editId = c.id;
-    this.editText = c.contenido;
-    this.replyTo = null;
-  }
-
-  cancelarEdicion(): void {
-    this.editId = null;
-    this.editText = '';
-  }
-
-  guardarEdicion(c: any): void {
-    if (!this.editText.trim() || this.editEnviando) return;
-
-    this.editEnviando = true;
-    const contenido = this.editText.trim();
-
-    this.comunidadesService.editarComentario(c.id, contenido).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
-        c.contenido = contenido;
-        c.fechaActualiza = new Date().toISOString();
-        this.editEnviando = false;
-        this.cancelarEdicion();
-      },
-      error: () => { this.editEnviando = false; },
-    });
-  }
-
-  eliminarComentario(c: any): void {
-    if (!confirm('¿Eliminar este comentario?')) return;
-
-    this.comunidadesService.eliminarComentario(c.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
-        // Quita el comentario y sus respuestas del listado local
-        this.tema.comentarios = this.tema.comentarios.filter(
-          (x: any) => x.id !== c.id && x.parentId !== c.id
-        );
-        this.construirArbol();
-      },
-      error: () => {},
-    });
-  }
-
-  esComentarioPropio(c: any): boolean {
-    return c.userName === this.currentUser?.usuario?.userName;
-  }
-
-  denunciar(c: any): void {
-    if (!this.logueado) {
-      this.notificationService.warning('Inicia sesión para denunciar', 'Comentarios');
-      return;
-    }
-    const motivo = this.pedirMotivoDenuncia();
-    if (!motivo) return;
-
-    this.comunidadesService.denunciarComentario(c.id, motivo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => this.notificationService.success('Denuncia enviada. Gracias por reportar.', 'Denuncia'),
-      error: () => {},
-    });
-  }
-
-  votar(c: any, valor: number): void {
-    if (!this.logueado) {
-      this.notificationService.warning('Inicia sesión para votar', 'Comentarios');
-      return;
-    }
-    if (c.votando) return;
-
-    c.votando = true;
-    this.comunidadesService.votarComentario(c.id, valor).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (res) => {
-        c.votos = res?.total ?? c.votos ?? 0;
-        c.miVoto = res?.miVoto ?? 0;
-        c.votando = false;
-      },
-      error: () => { c.votando = false; },
-    });
-  }
-
-  // - Helpers
-
-  private crearComentarioLocal(id: number, contenido: string, parentId: number | null): any {
-    return {
-      id,
-      parentId,
-      contenido,
-      fechaComentario: new Date().toISOString(),
-      userName: this.currentUser.usuario.userName,
-      avatar: this.currentUser.usuario.avatar,
-      rango: this.currentUser.usuario.rango ? { nombre: this.currentUser.usuario.rango } : null,
-      votos: 0,
-      miVoto: 0,
-    };
-  }
-
-  /** Pide un motivo de denuncia mostrando opciones predefinidas; permite número o texto libre. */
-  private pedirMotivoDenuncia(): string | null {
-    const msg = 'Motivo de la denuncia:\n' +
-      MOTIVOS_DENUNCIA.map((r, i) => `${i + 1}. ${r}`).join('\n') +
-      '\n\nEscribe el número de una opción (o tu propio motivo):';
-    const input = (window.prompt(msg) || '').trim();
-    if (!input) return null;
-    const n = parseInt(input, 10);
-    if (n >= 1 && n <= MOTIVOS_DENUNCIA.length) return MOTIVOS_DENUNCIA[n - 1];
-    return input;
-  }
-
-  /** Escapa HTML y convierte URLs y @menciones en enlaces. */
-  formatear(texto: string): string {
-    if (!texto) return '';
-    const escapado = texto
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-
-    return escapado
-      .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="nofollow noopener">$1</a>')
-      .replace(/(^|\s)@([a-zA-Z0-9_]+)/g, '$1<a href="/perfil/$2">@$2</a>')
-      .replace(/\n/g, '<br>');
   }
 }

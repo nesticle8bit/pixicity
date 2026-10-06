@@ -1,110 +1,156 @@
-<div class="container my-3 post-view-container">
+<div class="container container--home detail-page post-view-container mx-auto">
   <div class="row">
-    <div class="col-12 col-sm-12 col-md-9">
-      <div class="row post-header">
-        <div class="col-12 col-sm-10">
-          <app-posts-breadcrumb [post]="post"></app-posts-breadcrumb>
-        </div>
+    <div class="col-12">
+      <div class="detail-layout">
 
-        <div class="col-12 col-sm-2 text-end">
-          <app-posts-nav [post]="post"></app-posts-nav>
-        </div>
-      </div>
+        <!-- Sidebar izquierdo -->
+        <aside class="detail-sidebar">
 
-      <main class="boxpc mt-2">
-        <div class="femas">
-          <div class="panero">
-            <h1>{{post?.titulo}}</h1>
-            <a [routerLink]="['/posts/' + post?.categoria?.seo]">{{post?.categoria?.nombre}}</a>
-            <span> | {{post?.fechaRegistro | timeAgo}}</span>
-          </div>
-          <div id="socialr">
-            <div class="recosr">
-              <a class="fosrf" (click)="openShare('facebook')" title="Compartir en Facebook" role="button" tabindex="0" (keydown.enter)="openShare('facebook')" (keydown.space)="openShare('facebook'); $event.preventDefault()">
-                <i class="ti ti-brand-facebook"></i>
+          @if (post && post.usuario.userName) {
+          <!-- User card -->
+          <div class="sidebar-user-card">
+            <a [routerLink]="['/perfil', post.usuario.userName]" [appUserPopover]="post.usuario.userName"
+              class="sidebar-avatar-link">
+              <app-user-avatar [class]="'avatar-56'" [avatar]="autor?.avatar ?? post.usuario.avatar"
+                [userName]="post.usuario.userName" [width]="56">
+              </app-user-avatar>
+            </a>
+            <div class="sidebar-user-info">
+              <a [routerLink]="['/perfil', post.usuario.userName]" class="sidebar-username"
+                [appUserPopover]="post.usuario.userName">
+                {{post.usuario.userName}}
               </a>
+              @if (autor && autor.rango && autor.rango.nombre) {
+              <span class="sidebar-rango" [ngStyle]="{'color': autor.rango.color}">
+                <img src="/assets/images/icons/rangos/{{autor.rango.icono}}" alt="" aria-hidden="true" loading="lazy">
+                {{autor.rango.nombre}}
+              </span>
+              }
+              <a [routerLink]="['/perfil', post.usuario.userName]" class="sidebar-ver-perfil">Ver perfil →</a>
             </div>
-            <div class="recosr">
-              <a class="fosrt" (click)="openShare('twitter')" title="Compartir en Twitter" role="button" tabindex="0" (keydown.enter)="openShare('twitter')" (keydown.space)="openShare('twitter'); $event.preventDefault()">
-                <i class="ti ti-brand-twitter"></i>
+          </div>
+
+          <!-- Stats del autor -->
+          <div class="sidebar-card">
+            <div class="sidebar-section-title">Actividad del autor</div>
+            <div class="sidebar-stats-grid">
+              <div class="sidebar-stat">
+                <span class="stat-val">{{(autor?.puntos ?? 0) | number}}</span>
+                <span class="stat-lbl">Puntos</span>
+              </div>
+              <div class="sidebar-stat">
+                <span class="stat-val">{{(autor?.postsCount ?? 0) | number}}</span>
+                <span class="stat-lbl">Posts</span>
+              </div>
+              <div class="sidebar-stat">
+                <span class="stat-val">{{(autor?.seguidoresCount ?? 0) | number}}</span>
+                <span class="stat-lbl">Seguidores</span>
+              </div>
+            </div>
+            <div class="sidebar-user-links">
+              <a [routerLink]="['/fotos', post.usuario.userName]" class="sidebar-link-chip">
+                <i class="ti ti-photo"></i> Ver fotos
               </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="contenido">
-          <span [innerHTML]="post?.contenido | contenidoSeo:post?.titulo"></span>
-        </div>
-      </main>
-
-      <app-posts-tags [post]="post"></app-posts-tags>
-      <app-posts-meta [post]="post"></app-posts-meta>
-
-      <!-- <div class="interes">
-      <h3>También te puede interesar...</h3>
-
-      <div class="nada-gris">
-        No hay posts relacionados que te puedan interesar
-      </div>
-    </div> -->
-
-      @if (post?.id) {
-      <app-post-comments [post]="post"></app-post-comments>
-      }
-    </div>
-
-    <div class="col-12 col-sm-12 col-md-3">
-      <app-post-original-poster-info [userName]="post.usuario?.userName"></app-post-original-poster-info>
-
-      @if (post?.usuario?.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador'
-      || currentUser?.usuario?.rango === 'Moderador') {
-      <div class="boxposts separa">
-        <div class="titular">
-          <h2>Herramientas</h2>
-        </div>
-        <div class="normab">
-          <div class="row">
-            <div class="col-6 d-grid">
-              <button mat-flat-button color="primary" (click)="actualizarPost()">
-                <i class="ti ti-pencil"></i> Editar
-              </button>
-            </div>
-            <div class="col-6 d-grid">
-              <button mat-flat-button color="warn" (click)="eliminarPost()">
-                <i class="ti ti-trash"></i> Borrar
-              </button>
-            </div>
-          </div>
-          @if (currentUser?.usuario?.rango === 'Administrador' || currentUser?.usuario?.rango === 'Moderador') {
-          <div class="row mt-2">
-            <div class="col-12 d-grid">
-              <button mat-flat-button color="accent" (click)="quitarSticky()">
-                <i class="ti ti-pin"></i>
-                @if (post.sticky) {
-                <span> Quitar</span>
-                }
-                @if (!post.sticky) {
-                <span> Poner</span>
-                } Sticky
-              </button>
+              @if (!esAutor) {
+              <app-follow-button [userName]="post.usuario.userName" [icon]="true"></app-follow-button>
+              }
             </div>
           </div>
           }
-        </div>
-      </div>
-      }
 
-      <div class="boxposts separa">
-        <div class="titular">
-          <h2>Publicidad</h2>
-        </div>
-        <div class="normab">
-          <ads-by-type [hideTitle]="true" [type]="'300x250'"></ads-by-type>
-        </div>
-      </div>
+          <!-- Stats de este post -->
+          <div class="sidebar-card">
+            <div class="sidebar-section-title">Este post</div>
+            <ul class="sidebar-item-stats">
+              @if (post) {
+              <li>
+                <i class="ti ti-calendar"></i>
+                <span>{{post.fechaRegistro | date:'dd MMM yyyy'}}</span>
+              </li>
+              }
+              <li>
+                <i class="ti ti-eye"></i>
+                <span>{{(post?.visitantes ?? 0) | number}} visitas</span>
+              </li>
+              <li class="stat-pos">
+                <i class="ti ti-award"></i>
+                <span>{{post?.puntos ?? 0}} puntos</span>
+              </li>
+              <li>
+                <i class="ti ti-star"></i>
+                <span>{{post?.favoritos ?? 0}} favoritos</span>
+              </li>
+              <li>
+                <i class="ti ti-users"></i>
+                <span>{{post?.seguidores ?? 0}} seguidores</span>
+              </li>
+            </ul>
+          </div>
 
-      <app-post-more-from-op [post]="post"></app-post-more-from-op>
-      <app-post-related-posts [post]="post"></app-post-related-posts>
+          @if (post?.id) {
+          <app-post-more-from-op [post]="post"></app-post-more-from-op>
+          <app-post-related-posts [post]="post"></app-post-related-posts>
+          }
+
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="detail-main">
+          <div class="post-header">
+            <app-posts-breadcrumb [post]="post"></app-posts-breadcrumb>
+            <app-posts-nav [post]="post"></app-posts-nav>
+          </div>
+
+          <h1 class="detail-main-title">{{post?.titulo}}</h1>
+
+          <div class="detail-main-meta">
+            @if (post) {
+            <span>{{post.fechaRegistro | timeAgo}}</span>
+            }
+            @if (post && post.categoria.seo) {
+            <a class="detail-cat" [routerLink]="['/posts', post.categoria.seo]">{{post.categoria.nombre}}</a>
+            }
+            @if (post?.sticky) {
+            <span class="post-sticky"><i class="ti ti-pin"></i> Sticky</span>
+            }
+            <app-share-buttons class="detail-share" [titulo]="post?.titulo ?? ''"></app-share-buttons>
+          </div>
+
+          <div class="post-body">
+            <div class="contenido">
+              <span [innerHTML]="(post?.contenido ?? '') | contenidoSeo:(post?.titulo ?? '')"></span>
+            </div>
+          </div>
+
+          <app-posts-tags [post]="post"></app-posts-tags>
+          <app-posts-meta [post]="post"></app-posts-meta>
+
+          <!-- Acciones del dueño / staff -->
+          @if (post && (esAutor || esStaff)) {
+          <div class="detail-owner-actions post-owner-actions">
+            <button type="button" class="boton azul" (click)="actualizarPost()">
+              <i class="ti ti-pencil" aria-hidden="true"></i> Editar
+            </button>
+            <button type="button" class="boton rojo" (click)="eliminarPost()">
+              <i class="ti ti-trash" aria-hidden="true"></i> Borrar
+            </button>
+            @if (esStaff) {
+            <button type="button" class="boton" (click)="quitarSticky()">
+              <i class="ti ti-pin" aria-hidden="true"></i> {{post.sticky ? 'Quitar' : 'Poner'}} Sticky
+            </button>
+            }
+          </div>
+          }
+
+          <div class="post-ad">
+            <ads-by-type [hideTitle]="true" [type]="'300x250'"></ads-by-type>
+          </div>
+
+          @if (post?.id) {
+          <app-post-comments [post]="post"></app-post-comments>
+          }
+        </main>
+      </div>
     </div>
   </div>
 </div>

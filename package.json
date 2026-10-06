@@ -10,6 +10,7 @@
     "test:ci": "ng test --watch=false --browsers=ChromeHeadlessCI",
     "icons": "node scripts/build-icon-subset.js",
     "icons:check": "node scripts/build-icon-subset.js --check",
+    "any:check": "node scripts/check-any.js",
     "check:responsive": "ng build --configuration development --output-path dist/check && node scripts/responsive-check.js"
   },
   "private": true,

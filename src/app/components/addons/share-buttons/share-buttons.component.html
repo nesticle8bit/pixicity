@@ -1,0 +1,24 @@
+<span class="share-buttons">
+  <button type="button" class="share-btn facebook" (click)="compartir('facebook')"
+    title="Compartir en Facebook" aria-label="Compartir en Facebook">
+    <i class="ti ti-brand-facebook"></i>
+  </button>
+  <button type="button" class="share-btn twitter" (click)="compartir('twitter')"
+    title="Compartir en X" aria-label="Compartir en X">
+    <i class="ti ti-brand-x"></i>
+  </button>
+  <button type="button" class="share-btn whatsapp" (click)="compartir('whatsapp')"
+    title="Compartir en WhatsApp" aria-label="Compartir en WhatsApp">
+    <i class="ti ti-brand-whatsapp"></i>
+  </button>
+  <button type="button" class="share-btn enlace" (click)="copiarEnlace()"
+    title="Copiar enlace" aria-label="Copiar enlace">
+    <i class="ti ti-link"></i>
+  </button>
+  @if (puedeCompartirNativo) {
+    <button type="button" class="share-btn nativo" (click)="compartirNativo()"
+      title="Más opciones para compartir" aria-label="Más opciones para compartir">
+      <i class="ti ti-share"></i>
+    </button>
+  }
+</span>

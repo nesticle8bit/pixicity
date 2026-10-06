@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { ShoutViewModel, ShoutComentarioViewModel } from 'src/app/models/perfil/shout-vm.model';
+import { ShoutAdmin, ShoutComentarioViewModel, ShoutComentarioVoto, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
 
 @Injectable()
 export class HttpPerfilService implements IHttpPerfilService {
@@ -46,9 +46,9 @@ export class HttpPerfilService implements IHttpPerfilService {
       );
   }
 
-  getShoutsAdmin(): Observable<PaginatedData<ShoutViewModel, 'shouts'>> {
+  getShoutsAdmin(): Observable<PaginatedData<ShoutAdmin, 'shouts'>> {
     return this.http
-      .get<ApiResponse<PaginatedData<ShoutViewModel, 'shouts'>>>(
+      .get<ApiResponse<PaginatedData<ShoutAdmin, 'shouts'>>>(
         `${environment.api}/api/shouts/getShoutsAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
@@ -142,7 +142,7 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  addShoutComentario(model: { shoutId: number; comentario: string }): Observable<number> {
+  addShoutComentario(model: { shoutId: number; comentario: string; parentId?: number }): Observable<number> {
     return this.http
       .post<ApiResponse<number>>(`${environment.api}/api/shouts/addShoutComentario`, model)
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
@@ -158,30 +158,30 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  votarShoutComentario(comentarioId: number, valor: number): Observable<any> {
+  votarShoutComentario(comentarioId: number, valor: number): Observable<ShoutComentarioVoto> {
     return this.http
-      .post<ApiResponse<any>>(`${environment.api}/api/shouts/votarShoutComentario?comentarioId=${comentarioId}&valor=${valor}`, {})
+      .post<ApiResponse<ShoutComentarioVoto>>(`${environment.api}/api/shouts/votarShoutComentario?comentarioId=${comentarioId}&valor=${valor}`, {})
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  editarShoutComentario(comentarioId: number, contenido: string): Observable<any> {
+  editarShoutComentario(comentarioId: number, contenido: string): Observable<boolean> {
     return this.http
-      .post<ApiResponse<any>>(`${environment.api}/api/shouts/editarShoutComentario?comentarioId=${comentarioId}`, { contenido })
+      .post<ApiResponse<boolean>>(`${environment.api}/api/shouts/editarShoutComentario?comentarioId=${comentarioId}`, { contenido })
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  fijarShoutComentario(comentarioId: number): Observable<any> {
+  fijarShoutComentario(comentarioId: number): Observable<boolean> {
     return this.http
-      .post<ApiResponse<any>>(`${environment.api}/api/shouts/fijarShoutComentario?comentarioId=${comentarioId}`, {})
+      .post<ApiResponse<boolean>>(`${environment.api}/api/shouts/fijarShoutComentario?comentarioId=${comentarioId}`, {})
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  denunciarShoutComentario(comentarioId: number, motivo: string): Observable<any> {
+  denunciarShoutComentario(comentarioId: number, motivo: string): Observable<boolean> {
     return this.http
-      .post<ApiResponse<any>>(`${environment.api}/api/shouts/denunciarShoutComentario?comentarioId=${comentarioId}`, { motivo })
+      .post<ApiResponse<boolean>>(`${environment.api}/api/shouts/denunciarShoutComentario?comentarioId=${comentarioId}`, { motivo })
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }

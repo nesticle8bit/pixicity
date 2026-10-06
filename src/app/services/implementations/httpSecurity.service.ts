@@ -5,9 +5,9 @@ import { PaginationService } from '../shared/pagination.service';
 import { UserModel } from 'src/app/models/security/user.model';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, finalize, map, shareReplay } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from '../shared/notification.service';
@@ -34,6 +34,22 @@ export class HttpSecurityService implements IHttpSecurityService {
       JSON.parse(localStorage.getItem('taringas') || '{}')
     );
     this.currentUser = this.currentUserSubject.asObservable();
+
+    // Otra pestaña que renueva el token rota el refresh token: sin sincronizar, esta pestaña
+    // intentaría renovar con uno ya invalidado y cerraría la sesión.
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'taringas') {
+        this.currentUserSubject.next(this.readStoredUser());
+      }
+    });
+  }
+
+  private readStoredUser(): JwtUserModel {
+    try {
+      return JSON.parse(localStorage.getItem('taringas') || '{}');
+    } catch {
+      return new JwtUserModel(undefined, '');
+    }
   }
 
   registerUser(user: UserModel): Observable<number> {
@@ -68,7 +84,10 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  private refreshEnCurso: Observable<string> | null = null;
+
   // Intercambia el refresh token por un nuevo access token (rotación) y actualiza el storage.
+  // Una sola renovación a la vez: el refresh token se rota y un segundo intento con el mismo fallaría.
   refreshAccessToken(): Observable<string> {
     const currentUser = this.currentUserSubject.value;
     const refreshToken = currentUser?.refreshToken;
@@ -77,7 +96,11 @@ export class HttpSecurityService implements IHttpSecurityService {
       return throwError(() => new Error('No hay refresh token'));
     }
 
-    return this.http
+    if (this.refreshEnCurso) {
+      return this.refreshEnCurso;
+    }
+
+    this.refreshEnCurso = this.http
       .post<ApiResponse<{ token: string; refreshToken: string }>>(
         `${environment.api}/api/usuarios/refreshToken`,
         { refreshToken }
@@ -94,8 +117,24 @@ export class HttpSecurityService implements IHttpSecurityService {
             return response.data.token;
           }
           throw new Error(response.errors?.join(', ') ?? 'No se pudo refrescar la sesión');
-        })
+        }),
+        catchError((err) => {
+          // Dos pestañas pueden renovar a la vez con el mismo refresh token: la que pierde
+          // toma el token que ya guardó la otra en vez de cerrar la sesión.
+          const stored = this.readStoredUser();
+          if (stored?.token && stored.refreshToken && stored.refreshToken !== refreshToken) {
+            this.currentUserSubject.next(stored);
+            return of(stored.token);
+          }
+          return throwError(() => err);
+        }),
+        finalize(() => {
+          this.refreshEnCurso = null;
+        }),
+        shareReplay({ bufferSize: 1, refCount: false })
       );
+
+    return this.refreshEnCurso;
   }
 
   getCurrentUser(): JwtUserModel {
@@ -241,7 +280,7 @@ export class HttpSecurityService implements IHttpSecurityService {
     localStorage.removeItem('taringas');
 
     this.router.navigateByUrl('');
-    this.currentUserSubject.next(new JwtUserModel({}, ''));
+    this.currentUserSubject.next(new JwtUserModel(undefined, ''));
   }
 
   changePassword(obj: { currentPassword: string; newPassword: string }): Observable<boolean> {

@@ -1,18 +1,22 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
+import { ComentarioReciente } from '../../../addons/recent-comments-list/recent-comments-list.component';
 
 @Component({
   standalone: false,
   selector: 'app-comunidades-ultimos-comentarios',
-  templateUrl: './comunidades-ultimos-comentarios.component.html',
-  styleUrls: ['./comunidades-ultimos-comentarios.component.scss'],
+  template: `
+    <app-recent-comments-list [comentarios]="comentarios" [cargando]="cargando"
+      mensajeVacio="Aún no se han realizado comentarios en las comunidades" (actualizar)="getUltimosComentarios()">
+    </app-recent-comments-list>
+  `,
 })
 export class ComunidadesUltimosComentariosComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  public comentarios: any[] = [];
-  public refreshComments: boolean = false;
+  public comentarios: ComentarioReciente[] = [];
+  public cargando: boolean = false;
 
   constructor(private comunidadesService: IHttpComunidadesService) {}
 
@@ -21,11 +25,15 @@ export class ComunidadesUltimosComentariosComponent implements OnInit {
   }
 
   getUltimosComentarios(): void {
-    this.refreshComments = true;
+    this.cargando = true;
 
     this.comunidadesService.getComentariosRecientesGlobal(8).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => {
-      this.comentarios = v ?? [];
-      this.refreshComments = false;
+      this.comentarios = (v ?? []).map((c: any) => ({
+        usuario: c.userName,
+        titulo: c.temaTitulo,
+        link: ['/comunidades', c.comunidadSlug, 'tema', c.temaId, c.temaUrl],
+      }));
+      this.cargando = false;
     });
   }
 }

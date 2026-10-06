@@ -607,15 +607,15 @@ export class HttpPostsService implements IHttpPostsService {
     );
   }
 
-  fijarComentario(comentarioId: number): Observable<any> {
+  fijarComentario(comentarioId: number): Observable<boolean> {
     return this.unwrapData(
-      this.http.post<ApiResponse<any>>(`${environment.api}/api/comentarios/fijarComentario?comentarioId=${comentarioId}`, {}),
+      this.http.post<ApiResponse<boolean>>(`${environment.api}/api/comentarios/fijarComentario?comentarioId=${comentarioId}`, {}),
     );
   }
 
-  denunciarComentario(comentarioId: number, motivo: string): Observable<any> {
+  denunciarComentario(comentarioId: number, motivo: string): Observable<boolean> {
     return this.unwrapData(
-      this.http.post<ApiResponse<any>>(`${environment.api}/api/comentarios/denunciarComentario?comentarioId=${comentarioId}`, { motivo }),
+      this.http.post<ApiResponse<boolean>>(`${environment.api}/api/comentarios/denunciarComentario?comentarioId=${comentarioId}`, { motivo }),
     );
   }
 

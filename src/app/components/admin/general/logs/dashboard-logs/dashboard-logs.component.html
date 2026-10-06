@@ -1,0 +1,158 @@
+<h1 class="dashboard--title">Logs del sistema</h1>
+
+<p class="text-muted">
+  Errores y advertencias del API y del navegador de los usuarios. Se guardan 30 días.
+  Marca como resuelto lo que ya revisaste para que la lista de pendientes solo muestre lo nuevo.
+</p>
+
+@if (resumen) {
+  <section class="logs-resumen">
+    <div class="logs-stat">
+      <span class="logs-stat__valor">{{resumen.pendientes}}</span>
+      <span class="logs-stat__label">Pendientes</span>
+    </div>
+    <div class="logs-stat">
+      <span class="logs-stat__valor">{{resumen.ultimas24h}}</span>
+      <span class="logs-stat__label">Últimas 24 h</span>
+    </div>
+    <div class="logs-stat" [class.logs-stat--alerta]="resumen.errores24h > 0">
+      <span class="logs-stat__valor">{{resumen.errores24h}}</span>
+      <span class="logs-stat__label">Errores en 24 h</span>
+    </div>
+    <div class="logs-stat">
+      <span class="logs-stat__valor">{{resumen.frontend24h}}</span>
+      <span class="logs-stat__label">Del navegador en 24 h</span>
+    </div>
+  </section>
+
+  @if (resumen.masFrecuentes.length > 0) {
+    <h2 class="logs-subtitulo">Más frecuentes sin resolver</h2>
+    <ul class="logs-grupos">
+      @for (grupo of resumen.masFrecuentes; track grupo.huella) {
+        <li>
+          <button type="button" class="logs-grupo" (click)="verGrupo(grupo)">
+            <span class="badge" [ngClass]="claseNivel(grupo.nivel)">{{nombreNivel(grupo.nivel)}}</span>
+            <span class="logs-grupo__mensaje">{{grupo.mensaje}}</span>
+            <span class="logs-grupo__cantidad">{{grupo.cantidad}}×</span>
+            <span class="logs-grupo__fecha" matTooltip="{{grupo.ultima}}">{{grupo.ultima | timeAgo}}</span>
+          </button>
+        </li>
+      }
+    </ul>
+  }
+}
+
+<div class="logs-filtros">
+  <div class="logs-toggle">
+    <button type="button" [class.active]="filtro.soloPendientes" (click)="cambiarPendientes(true)">Pendientes</button>
+    <button type="button" [class.active]="!filtro.soloPendientes" (click)="cambiarPendientes(false)">Todos</button>
+  </div>
+
+  <select class="form-select form-select-sm logs-select" aria-label="Nivel" [(ngModel)]="filtro.nivel" (ngModelChange)="recargarDesdeInicio()">
+    @for (n of niveles; track n.valor) {
+      <option [ngValue]="n.valor">{{n.nombre}}</option>
+    }
+  </select>
+
+  <select class="form-select form-select-sm logs-select" aria-label="Origen" [(ngModel)]="filtro.origen" (ngModelChange)="recargarDesdeInicio()">
+    @for (o of origenes; track o.valor) {
+      <option [ngValue]="o.valor">{{o.nombre}}</option>
+    }
+  </select>
+
+  <input type="search" class="form-control form-control-sm logs-buscar" placeholder="Buscar mensaje, ruta o usuario"
+    aria-label="Buscar en los logs" [ngModel]="filtro.texto" (ngModelChange)="buscar($event)">
+
+  @if (filtro.soloPendientes && totalCount > 0) {
+    <button type="button" class="btn btn-sm btn-outline-success ms-auto" (click)="resolverTodos()">
+      <i class="ti ti-checks"></i> Resolver todos ({{totalCount}})
+    </button>
+  }
+</div>
+
+@if (logs.length > 0) {
+  <main class="table-responsive">
+    <table class="table table-sm table-hover align-middle logs-tabla">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Nivel</th>
+          <th>Origen</th>
+          <th>Mensaje</th>
+          <th>Ruta</th>
+          <th>Usuario</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (log of logs; track log.id) {
+          <tr class="logs-fila" [class.logs-fila--activa]="seleccionado?.id === log.id" [class.opacity-50]="log.resuelto"
+            (click)="ver(log)">
+            <td class="text-nowrap"><span matTooltip="{{log.fecha}}">{{log.fecha | timeAgo}}</span></td>
+            <td><span class="badge" [ngClass]="claseNivel(log.nivel)">{{nombreNivel(log.nivel)}}</span></td>
+            <td>{{log.origen === 'frontend' ? 'Navegador' : 'API'}}</td>
+            <td class="logs-mensaje">{{log.mensaje}}</td>
+            <td class="logs-ruta">{{log.metodo}} {{log.ruta}}</td>
+            <td>{{log.userName || '—'}}</td>
+          </tr>
+
+          @if (seleccionado?.id === log.id) {
+            <tr class="logs-detalle-fila">
+              <td colspan="6">
+                <ng-container *ngTemplateOutlet="detalle; context: { $implicit: log }"></ng-container>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </main>
+
+  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
+  </mat-paginator>
+} @else if (!cargando) {
+  <div class="alert alert-success">✅ No hay registros {{filtro.soloPendientes ? 'pendientes' : ''}} con este filtro.</div>
+}
+
+@if (seleccionado && !esVisibleEnTabla()) {
+  <h2 class="logs-subtitulo">Detalle</h2>
+  <ng-container *ngTemplateOutlet="detalle; context: { $implicit: seleccionado }"></ng-container>
+}
+
+<ng-template #detalle let-log>
+  <div class="logs-detalle">
+    <dl class="logs-detalle__datos">
+      <dt>Fecha</dt><dd>{{log.fecha | date:'medium'}}</dd>
+      @if (log.categoria) { <dt>Origen</dt><dd>{{log.categoria}}</dd> }
+      @if (log.ruta) { <dt>Petición</dt><dd>{{log.metodo}} {{log.ruta}}</dd> }
+      @if (log.statusCode !== null) { <dt>HTTP</dt><dd>{{log.statusCode}}</dd> }
+      @if (log.userName) { <dt>Usuario</dt><dd>{{log.userName}}</dd> }
+      @if (log.ip) { <dt>IP</dt><dd>{{log.ip}}</dd> }
+      @if (log.userAgent) { <dt>Navegador</dt><dd class="logs-detalle__ua">{{log.userAgent}}</dd> }
+      @if (log.traceId) { <dt>Trace</dt><dd><code>{{log.traceId}}</code></dd> }
+      @if (log.resuelto) { <dt>Resuelto</dt><dd>{{log.usuarioResuelve}} · {{log.fechaResuelto | timeAgo}}</dd> }
+    </dl>
+
+    <p class="logs-detalle__mensaje">{{log.mensaje}}</p>
+    @if (log.excepcion && log.excepcion !== log.mensaje) {
+      <p class="logs-detalle__excepcion">{{log.excepcion}}</p>
+    }
+    @if (log.stackTrace) {
+      <pre class="logs-detalle__stack">{{log.stackTrace}}</pre>
+    }
+
+    <div class="logs-detalle__acciones">
+      @if (!log.resuelto) {
+        <button type="button" class="btn btn-sm btn-success" (click)="resolver(log, false)">
+          <i class="ti ti-check"></i> Marcar resuelto
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-success" (click)="resolver(log, true)">
+          <i class="ti ti-checks"></i> Resolver todos los iguales
+        </button>
+      }
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="copiar(log)">
+        <i class="ti ti-copy"></i> Copiar
+      </button>
+    </div>
+  </div>
+</ng-template>

@@ -4,82 +4,86 @@ import {
   HttpEvent,
   HttpInterceptor,
   HttpErrorResponse,
+  HttpResponse,
 } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, filter, finalize, switchMap, take } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { NotificationService } from 'src/app/services/shared/notification.service';
+
+// Cabecera con la que el API marca un 401 por JWT vencido aunque traiga cuerpo JSON.
+export const TOKEN_EXPIRADO_HEADER = 'Token-Expired';
+
+/** El cuerpo estándar del API: { status, errors, data }. */
+export function esRespuestaApi(body: unknown): body is { status: number; errors: string[] } {
+  return !!body && typeof body === 'object' && typeof (body as any).status === 'number' && Array.isArray((body as any).errors);
+}
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  private isRefreshing = false;
-  private refreshSubject = new BehaviorSubject<string | null>(null);
-
   // 401 = access JWT vencido; 423 (Locked) = sesión vencida. Ambos se intentan refrescar.
   private readonly refreshableStatuses = [401, 423];
 
-  constructor(private securityService: IHttpSecurityService) {}
+  constructor(
+    private securityService: IHttpSecurityService,
+    private notificationService: NotificationService
+  ) {}
 
-  intercept(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((err) => {
-        const currentUser = this.securityService.getCurrentUser();
-        const hasSession = !!(currentUser && currentUser.token);
-
-        if (
-          err instanceof HttpErrorResponse &&
-          this.refreshableStatuses.includes(err.status) &&
-          hasSession &&
-          !request.url.includes('/refreshToken')
-        ) {
-          return this.handleRefresh(request, next);
+        if (!(err instanceof HttpErrorResponse)) {
+          return throwError(() => err);
         }
 
-        const error = err.error || err.statusText;
-        return throwError(error);
+        if (this.debeRenovar(err, request)) {
+          return this.renovarYReintentar(request, next);
+        }
+
+        return this.entregar(err);
       })
     );
   }
 
-  private addToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
-    return request.clone({
-      setHeaders: { Authorization: `Bearer ${token}` },
-    });
-  }
-
-  private handleRefresh(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    // Si ya hay un refresh en curso, las demás requests esperan el nuevo token.
-    if (this.isRefreshing) {
-      return this.refreshSubject.pipe(
-        filter((t) => t !== null),
-        take(1),
-        switchMap((t) => next.handle(this.addToken(request, t as string)))
+  // El API responde con el código HTTP real pero el mismo cuerpo de siempre: los servicios lo leen
+  // (response.status / response.errors) y deciden. Por eso se entrega como respuesta normal.
+  private entregar(err: unknown): Observable<HttpEvent<any>> {
+    if (err instanceof HttpErrorResponse && esRespuestaApi(err.error)) {
+      return of(
+        new HttpResponse({ body: err.error, headers: err.headers, status: err.status, statusText: err.statusText, url: err.url ?? undefined })
       );
     }
 
-    this.isRefreshing = true;
-    this.refreshSubject.next(null);
+    const error = err instanceof HttpErrorResponse ? err.error || err.statusText : err;
+    return throwError(() => error);
+  }
 
+  private debeRenovar(err: HttpErrorResponse, request: HttpRequest<any>): boolean {
+    const currentUser = this.securityService.getCurrentUser();
+    const hasSession = !!(currentUser && currentUser.token);
+
+    if (!hasSession || !this.refreshableStatuses.includes(err.status) || request.url.includes('/refreshToken')) {
+      return false;
+    }
+
+    // Un 401 con cuerpo JSON es de negocio (p. ej. "no tienes permiso"), salvo que el API lo marque como token vencido.
+    return !esRespuestaApi(err.error) || err.headers?.get(TOKEN_EXPIRADO_HEADER) === 'true';
+  }
+
+  private renovarYReintentar(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return this.securityService.refreshAccessToken().pipe(
-      switchMap((newToken) => {
-        this.refreshSubject.next(newToken);
-        return next.handle(this.addToken(request, newToken));
-      }),
       catchError((refreshErr) => {
-        // Refresh falló: sesión muerta, cerrar y volver al inicio.
+        // Refresh falló: sesión muerta. Se avisa antes de volver al inicio para que no parezca un error de la página.
+        this.notificationService.warning('Tu sesión expiró. Vuelve a iniciar sesión para continuar.', 'Sesión');
         this.securityService.logout();
-        window.location.href = '';
-        return throwError(refreshErr);
+        return throwError(() => refreshErr);
       }),
-      finalize(() => {
-        this.isRefreshing = false;
-      })
+      switchMap((newToken) =>
+        next
+          .handle(request.clone({ setHeaders: { Authorization: `Bearer ${newToken}` } }))
+          .pipe(catchError((err) => this.entregar(err)))
+      )
     );
   }
 }

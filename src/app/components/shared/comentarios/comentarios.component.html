@@ -1,0 +1,159 @@
+<section class="tema-coments mb-3">
+  <div class="coment-toolbar">
+    <h3>Comentarios ({{total}})</h3>
+    @if (total > 0) {
+    <div class="coment-orden">
+      <button type="button" [class.active]="orden === 'mejores'" (click)="cambiarOrden('mejores')">Mejores</button>
+      <button type="button" [class.active]="orden === 'recientes'" (click)="cambiarOrden('recientes')">Recientes</button>
+      <button type="button" [class.active]="orden === 'controvertido'" (click)="cambiarOrden('controvertido')">Controvertido</button>
+    </div>
+    }
+  </div>
+
+  @if (cerrados) {
+  <div class="com-empty"><i class="ti ti-lock"></i> El autor cerró los comentarios.</div>
+  } @else if (logueado) {
+  <div class="coment-form">
+    <app-user-avatar class="coment-form__avatar" [avatar]="miAvatar" [userName]="''" [width]="38" [height]="38"></app-user-avatar>
+    <div class="coment-form__campo">
+      <textarea [(ngModel)]="nuevoComentario" rows="3" placeholder="Escribe un comentario..." aria-label="Escribe un comentario"></textarea>
+      <div class="coment-form__acciones">
+        <button type="button" class="coment-emoji" (click)="abrirEmojis()" matTooltip="Emojis" aria-label="Agregar emoji">
+          <i class="ti ti-mood-smile"></i>
+        </button>
+        <button type="button" class="boton azul" (click)="comentar()" [disabled]="enviando || !nuevoComentario.trim()">
+          <i class="ti ti-send"></i> Comentar
+        </button>
+      </div>
+    </div>
+  </div>
+  } @else {
+  <div class="com-empty">Inicia sesión para comentar.</div>
+  }
+
+  @if (total === 0) {
+  @if (!cerrados) {
+  <div class="com-empty">Sé el primero en comentar.</div>
+  }
+  } @else {
+  <ul class="coment-list">
+    @for (c of arbol; track c.id) {
+    <li class="coment-thread" [class.destacado]="c.destacado">
+      <ng-container *ngTemplateOutlet="comentarioTpl; context: { $implicit: c, esRespuesta: false }"></ng-container>
+
+      @if (c.respuestas?.length) {
+      <ul class="coment-respuestas">
+        @for (r of c.respuestas; track r.id) {
+        <li>
+          <ng-container *ngTemplateOutlet="comentarioTpl; context: { $implicit: r, esRespuesta: true }"></ng-container>
+        </li>
+        }
+      </ul>
+      }
+    </li>
+    }
+  </ul>
+  }
+</section>
+
+<!-- Comentario (raíz y respuesta) -->
+<ng-template #comentarioTpl let-c let-esRespuesta="esRespuesta">
+  <div class="coment" [class.is-destacado]="c.destacado && !esRespuesta">
+    @if (c.destacado && !esRespuesta) {
+    <div class="coment-top-badge"><i class="ti ti-award"></i> Comentario destacado</div>
+    }
+
+    @if (estaColapsado(c)) {
+    <div class="coment-collapsed" (click)="mostrarColapsado(c)" role="button" tabindex="0"
+      (keydown.enter)="mostrarColapsado(c)" (keydown.space)="mostrarColapsado(c); $event.preventDefault()">
+      @if (ocultoPorDenuncias(c)) {
+        Comentario oculto por denuncias — <a>mostrar</a>
+      } @else {
+        Comentario con baja puntuación ({{c.votos}}) — <a>mostrar</a>
+      }
+    </div>
+    } @else {
+    <div class="coment-row">
+      <div class="coment-vote">
+        <button type="button" class="coment-vote__btn up" [class.active]="c.miVoto === 1" [disabled]="c.votando"
+          (click)="votar(c, 1)" matTooltip="Me gusta" [matTooltipPosition]="'left'" aria-label="Me gusta">
+          <i class="ti ti-arrow-big-up-filled"></i>
+        </button>
+        <span class="coment-vote__score" [class.pos]="(c.votos || 0) > 0"
+          [class.neg]="(c.votos || 0) < 0">{{c.votos || 0}}</span>
+        <button type="button" class="coment-vote__btn down" [class.active]="c.miVoto === -1" [disabled]="c.votando"
+          (click)="votar(c, -1)" matTooltip="No me gusta" [matTooltipPosition]="'left'" aria-label="No me gusta">
+          <i class="ti ti-arrow-big-down-filled"></i>
+        </button>
+      </div>
+
+      <app-user-avatar [avatar]="c.avatar" [userName]="c.userName" [width]="38" [height]="38"></app-user-avatar>
+
+      <div class="coment-body">
+        <div class="coment-head">
+          <a [routerLink]="['/perfil', c.userName]" [appUserPopover]="c.userName">{{c.userName}}</a>
+          @if (esOP(c)) {
+            <span class="coment-op" matTooltip="Autor de la publicación">OP</span>
+          }
+          @if (c.fijado) {
+            <span class="coment-fijado" matTooltip="Comentario fijado"><i class="ti ti-pin"></i> Fijado</span>
+          }
+          @if (c.rango?.nombre) {
+          <span class="coment-rango" [ngStyle]="{ color: c.rango.color }">
+            @if (c.rango.icono) {
+            <img src="/assets/images/icons/rangos/{{c.rango.icono}}" [matTooltip]="c.rango.nombre" alt="" aria-hidden="true" loading="lazy">
+            }
+            {{c.rango.nombre}}
+          </span>
+          }
+          <span class="meta">
+            {{c.fecha | timeAgo}}@if (c.fechaEdicion || c.historial?.length) {@if (c.historial?.length) {<button type="button" class="meta-edit meta-edit--link" (click)="verHistorial.emit(c)"> · editado</button>} @else {<span class="meta-edit"> · editado</span>}}
+          </span>
+        </div>
+
+        @if (editId === c.id) {
+        <div class="coment-edit">
+          <textarea [(ngModel)]="editText" rows="2" aria-label="Editar comentario"></textarea>
+          <div class="coment-mini-actions">
+            <button class="boton azul" (click)="guardarEdicion(c)"
+              [disabled]="editEnviando || !editText.trim()">Guardar</button>
+            <button class="boton gris" (click)="cancelarEdicion()">Cancelar</button>
+          </div>
+        </div>
+        } @else {
+        <p [innerHTML]="formatear(c.contenido)"></p>
+
+        <div class="coment-actions">
+          @if (logueado && !cerrados) {
+          <button type="button" (click)="responder(c)"><i class="ti ti-arrow-back-up"></i> Responder</button>
+          }
+          @if (puedeFijarComentario(c)) {
+          <button type="button" (click)="fijar(c)"><i class="ti ti-pin"></i> {{ c.fijado ? 'Desfijar' : 'Fijar' }}</button>
+          }
+          @if (puedeDenunciar(c)) {
+          <button type="button" (click)="denunciar(c)"><i class="ti ti-flag"></i> Denunciar</button>
+          }
+          @if (puedeEditar(c)) {
+          <button type="button" (click)="editar(c)"><i class="ti ti-pencil"></i> Editar</button>
+          }
+          @if (puedeBorrar(c)) {
+          <button type="button" class="danger" (click)="eliminar(c)"><i class="ti ti-trash"></i> Borrar</button>
+          }
+        </div>
+        }
+
+        @if (replyTo === c.id) {
+        <div class="coment-reply">
+          <textarea [(ngModel)]="replyText" rows="2" placeholder="Escribe una respuesta..." aria-label="Escribe una respuesta"></textarea>
+          <div class="coment-mini-actions">
+            <button class="boton azul" (click)="enviarRespuesta(c)"
+              [disabled]="replyEnviando || !replyText.trim()">Responder</button>
+            <button class="boton gris" (click)="cancelarRespuesta()">Cancelar</button>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    }
+  </div>
+</ng-template>

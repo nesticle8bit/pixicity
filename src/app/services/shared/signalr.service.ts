@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import {
   HubConnection,
@@ -7,31 +7,47 @@ import {
   LogLevel,
 } from '@microsoft/signalr';
 import { environment } from 'src/environments/environment';
+import {
+  ActividadEnVivo,
+  EventoDeUsuario,
+  MensajeEnVivo,
+  NotificacionEnVivo,
+  ReporteEnVivo,
+} from 'src/app/models/shared/realtime.model';
+import { IHttpSecurityService } from '../interfaces/httpSecurity.interface';
 
 @Injectable({ providedIn: 'root' })
 export class SignalrService {
   private connection?: HubConnection;
 
-  private notificationSubject = new Subject<any>();
-  private newReportSubject = new Subject<any>();
-  private actividadSubject = new Subject<any>();
-  private mensajeSubject = new Subject<any>();
-  private mensajesLeidosSubject = new Subject<any>();
-  private escribiendoSubject = new Subject<any>();
+  private notificationSubject = new Subject<NotificacionEnVivo>();
+  private newReportSubject = new Subject<ReporteEnVivo>();
+  private actividadSubject = new Subject<ActividadEnVivo>();
+  private mensajeSubject = new Subject<MensajeEnVivo>();
+  private mensajesLeidosSubject = new Subject<EventoDeUsuario>();
+  private escribiendoSubject = new Subject<EventoDeUsuario>();
   private handlersBound = false;
 
+  /** Qué grupos volver a pedir al reconectar. */
+  private suscritoUsuario = false;
+  private suscritoEnVivo = false;
+
   // Notificación personal en tiempo real (campana).
-  public notification$: Observable<any> = this.notificationSubject.asObservable();
+  public notification$: Observable<NotificacionEnVivo> = this.notificationSubject.asObservable();
   // Nuevo reporte para staff.
-  public newReport$: Observable<any> = this.newReportSubject.asObservable();
+  public newReport$: Observable<ReporteEnVivo> = this.newReportSubject.asObservable();
   // Actividad pública en tiempo real (página "En Vivo").
-  public actividad$: Observable<any> = this.actividadSubject.asObservable();
-  // Mensaje privado nuevo (recibido o enviado desde otra pestaña). payload: { id, otroId, esMio }.
-  public mensaje$: Observable<any> = this.mensajeSubject.asObservable();
-  // El otro usuario leyó mis mensajes. payload: { porId }.
-  public mensajesLeidos$: Observable<any> = this.mensajesLeidosSubject.asObservable();
-  // El otro usuario está escribiéndome. payload: { porId }.
-  public escribiendo$: Observable<any> = this.escribiendoSubject.asObservable();
+  public actividad$: Observable<ActividadEnVivo> = this.actividadSubject.asObservable();
+  // Mensaje privado nuevo (recibido o enviado desde otra pestaña).
+  public mensaje$: Observable<MensajeEnVivo> = this.mensajeSubject.asObservable();
+  // El otro usuario leyó mis mensajes.
+  public mensajesLeidos$: Observable<EventoDeUsuario> = this.mensajesLeidosSubject.asObservable();
+  // El otro usuario está escribiéndome.
+  public escribiendo$: Observable<EventoDeUsuario> = this.escribiendoSubject.asObservable();
+
+  // El servicio de seguridad se pide al usarlo: inyectarlo en el constructor de un servicio "root" lo crearía antes que
+  // los proveedores del AppModule.
+  constructor(private injector: Injector) {}
 
   // Inicia la conexión y se suscribe a los grupos del usuario. Idempotente.
   async start(token: string): Promise<void> {
@@ -40,14 +56,34 @@ export class SignalrService {
     }
 
     await this.ensureStarted();
-
-    // Tras reconectar hay que volver a suscribirse a los grupos.
-    this.connection!.onreconnected(() => this.subscribe(token));
+    this.suscritoUsuario = true;
 
     try {
       await this.subscribe(token);
     } catch {
       // Silencioso: la app funciona sin realtime (degradación elegante).
+    }
+  }
+
+  /**
+   * Token vigente al reconectar. El JWT se renueva cada hora y la sesión pasa a validar el token nuevo: reusar el que se
+   * tenía al conectar dejaba al usuario sin notificaciones en vivo después de la primera reconexión.
+   */
+  private tokenActual(): string | undefined {
+    try {
+      return this.injector.get(IHttpSecurityService).getCurrentUser()?.token || undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
+  private async alReconectar(): Promise<void> {
+    const token = this.tokenActual();
+    if (this.suscritoUsuario && token) {
+      await this.subscribe(token);
+    }
+    if (this.suscritoEnVivo) {
+      await this.invokeEnVivo();
     }
   }
 
@@ -62,12 +98,14 @@ export class SignalrService {
     }
 
     if (!this.handlersBound) {
-      this.connection.on('notification', (payload: any) => this.notificationSubject.next(payload));
-      this.connection.on('newReport', (payload: any) => this.newReportSubject.next(payload));
-      this.connection.on('actividad', (payload: any) => this.actividadSubject.next(payload));
-      this.connection.on('mensaje', (payload: any) => this.mensajeSubject.next(payload));
-      this.connection.on('mensajesLeidos', (payload: any) => this.mensajesLeidosSubject.next(payload));
-      this.connection.on('escribiendo', (payload: any) => this.escribiendoSubject.next(payload));
+      this.connection.on('notification', (payload: NotificacionEnVivo) => this.notificationSubject.next(payload));
+      this.connection.on('newReport', (payload: ReporteEnVivo) => this.newReportSubject.next(payload));
+      this.connection.on('actividad', (payload: ActividadEnVivo) => this.actividadSubject.next(payload));
+      this.connection.on('mensaje', (payload: MensajeEnVivo) => this.mensajeSubject.next(payload));
+      this.connection.on('mensajesLeidos', (payload: EventoDeUsuario) => this.mensajesLeidosSubject.next(payload));
+      this.connection.on('escribiendo', (payload: EventoDeUsuario) => this.escribiendoSubject.next(payload));
+      // Un solo manejador de reconexión: antes cada start()/startEnVivo() agregaba uno más.
+      this.connection.onreconnected(() => this.alReconectar());
       this.handlersBound = true;
     }
 
@@ -83,9 +121,7 @@ export class SignalrService {
   // Suscripción pública al feed "En Vivo" (no requiere token; sirve para anónimos).
   async startEnVivo(): Promise<void> {
     await this.ensureStarted();
-
-    // Reengancha la suscripción tras reconectar.
-    this.connection!.onreconnected(() => this.invokeEnVivo());
+    this.suscritoEnVivo = true;
     await this.invokeEnVivo();
   }
 
@@ -101,6 +137,7 @@ export class SignalrService {
 
   // Sale del grupo "En Vivo" sin cerrar la conexión (puede seguir usándose para notificaciones).
   async stopEnVivo(): Promise<void> {
+    this.suscritoEnVivo = false;
     if (this.connection?.state === HubConnectionState.Connected) {
       try {
         await this.connection.invoke('UnsubscribeEnVivo');
@@ -140,6 +177,8 @@ export class SignalrService {
       }
       this.connection = undefined;
       this.handlersBound = false;
+      this.suscritoUsuario = false;
+      this.suscritoEnVivo = false;
     }
   }
 }

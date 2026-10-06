@@ -3,17 +3,7 @@ import { Subscription } from 'rxjs';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
-
-interface AccionEnVivo {
-  usuario: string;
-  avatar: string;
-  usuarioUrl: string;
-  accion: string;
-  titulo: string;
-  tituloUrl: string;
-  tipo: string;
-  fecha: string | Date;
-}
+import { ActividadEnVivo as AccionEnVivo } from 'src/app/models/shared/realtime.model';
 
 @Component({
   standalone: false,
@@ -26,11 +16,11 @@ export class EnVivoComponent implements OnInit, OnDestroy {
   public totalAcciones: number = 0;
   public velocidad: string = '0,00';
   public play: boolean = true;
-  public time: any;
+  public time = '00:00:00';
 
   private readonly MAX_FILAS = 60;
   private startTime: Date = new Date();
-  private timer: any;
+  private timer?: ReturnType<typeof setTimeout>;
   private actividadSub?: Subscription;
   private timestamps: number[] = [];
 
