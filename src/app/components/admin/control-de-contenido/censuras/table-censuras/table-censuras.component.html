@@ -1,3 +1,8 @@
+<app-admin-filtros [config]="filtrosConfig" [total]="totalCount" [cargando]="cargando" (cambio)="aplicarFiltro($event)"></app-admin-filtros>
+@if (cargando) {
+<div class="adm-cargando" role="progressbar" aria-label="Cargando"></div>
+}
+
 <button type="button" (click)="upsertCensura(undefined)" class="mb-3 float-end" mat-flat-button color="primary">
   <mat-icon>add_circle</mat-icon> Agregar palabra
 </button>
@@ -49,12 +54,12 @@
       </tbody>
     </table>
   </main>
-} @else {
-  <div class="nada-amarillo">No hay palabras censuradas todavía.</div>
+} @else if (!cargando) {
+  <div class="adm-vacio"><i class="ti ti-database-search" aria-hidden="true"></i>{{ filtro.q || filtro.estado || filtro.usuario || filtro.desde || filtro.hasta ? 'No hay resultados con estos filtros.' : 'No hay palabras censuradas todavía.' }}</div>
 }
 
 @if (censuras.length > 0) {
-  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+  <mat-paginator [pageIndex]="paginationService.page - 1" [length]="totalCount" [pageSize]="paginationService.pageCount"
     [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
   </mat-paginator>
 }

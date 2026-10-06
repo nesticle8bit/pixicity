@@ -70,6 +70,6 @@ export class MainFooterComponent implements OnInit {
       return;
     }
 
-    this.router.navigate([`/buscar/posts/${obj.search}`]);
+    this.router.navigate(['/buscar', 'posts', obj.search]);
   }
 }

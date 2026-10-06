@@ -106,7 +106,8 @@ export class PostsViewComponent implements OnInit {
       const canonical = `${location.origin}${rutaCanonica}`;
 
       if (this.rutaDistinta(rutaCanonica)) {
-        this.router.navigateByUrl(rutaCanonica, { replaceUrl: true });
+        // Conserva el #comentario-{id} de las notificaciones al corregir la URL.
+        this.router.navigateByUrl(rutaCanonica + location.hash, { replaceUrl: true });
         return;
       }
 

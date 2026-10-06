@@ -1,3 +1,4 @@
+import { AdminFiltro } from 'src/app/models/admin/admin-filtro.model';
 import { FotoSearchParams } from 'src/app/models/shared/service-types.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -8,7 +9,7 @@ import { FotoComentarioViewModel, FotoComentarioVoto, FotoViewModel } from 'src/
 export abstract class IHttpFotosService {
   abstract getFotos(search?: FotoSearchParams): Observable<PaginatedData<FotoViewModel>>;
   abstract getTopFotos(count?: number): Observable<FotoViewModel[]>;
-  abstract getFotosAdmin(search?: FotoSearchParams & { query?: string }): Observable<PaginatedData<FotoViewModel>>;
+  abstract getFotosAdmin(search?: FotoSearchParams & { query?: string }, filtro?: AdminFiltro): Observable<PaginatedData<FotoViewModel>>;
   abstract getFotosByUsuario(userName: string, search?: FotoSearchParams): Observable<PaginatedData<FotoViewModel>>;
   abstract getFotoById(fotoId: number): Observable<FotoViewModel>;
   abstract saveFoto(foto: Partial<FotoViewModel>): Observable<number>;

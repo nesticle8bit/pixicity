@@ -133,9 +133,10 @@ export class SectionUserInfoLoginComponent implements OnInit {
               'nuevo Post',
               `nuevo ${this.setURL(notificacion, 'Post')}`
             );
+            // Con comentarioId el enlace baja hasta el comentario y lo resalta (#comentario-{id}).
             notificacion.mensaje = notificacion.mensaje.replace(
               'tu comentario',
-              `tu ${this.setURL(notificacion, 'comentario')}`
+              `tu ${this.setURL(notificacion, 'comentario', notificacion.comentarioId)}`
             );
           }
 
@@ -165,8 +166,9 @@ export class SectionUserInfoLoginComponent implements OnInit {
     });
   }
 
-  setURL(notificacion: any, text: string): string {
-    return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}" title="${notificacion?.post?.titulo}">${text}</a>`;
+  setURL(notificacion: any, text: string, comentarioId?: number | null): string {
+    const ancla = comentarioId ? `#comentario-${comentarioId}` : '';
+    return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}${ancla}" title="${notificacion?.post?.titulo}">${text}</a>`;
   }
 
   setProfile(text: string): string {
@@ -196,7 +198,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
       return;
     }
 
-    this.router.navigate([`/buscar/posts/${obj.search}`]);
+    this.router.navigate(['/buscar', 'posts', obj.search]);
   }
 
   setNotificacionesAsReaded(): void {

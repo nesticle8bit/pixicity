@@ -1,0 +1,190 @@
+$accent: #006595;
+$accent-soft: rgba(0, 101, 149, 0.08);
+$borde: #dcdcdc;
+
+:host {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.adm-filtros {
+  &__barra {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  // El estilo global de .busb fija 240px: aquí crece hasta un máximo razonable.
+  &__buscador {
+    flex: 0 1 340px;
+    min-width: 0;
+
+    ::ng-deep form {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      background: #fff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+
+      &:focus-within {
+        border-color: $accent;
+        box-shadow: 0 0 0 3px $accent-soft;
+      }
+    }
+
+    ::ng-deep .bbcuerpo {
+      flex: 1;
+      min-width: 0;
+      width: auto;
+      outline: none;
+    }
+  }
+
+  &__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 31px;
+    padding: 0 12px;
+    border: 1px solid $borde;
+    border-radius: 30px;
+    background: #fff;
+    color: #444;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover {
+      border-color: $accent;
+      color: $accent;
+    }
+
+    &.is-abierto {
+      background: $accent-soft;
+      border-color: rgba(0, 101, 149, 0.35);
+      color: $accent;
+    }
+  }
+
+  &__badge {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: $accent;
+    color: #fff;
+    font-size: 11px;
+    line-height: 18px;
+    text-align: center;
+  }
+
+  &__chevron {
+    font-size: 14px;
+    opacity: 0.7;
+  }
+
+  &__limpiar {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #c0392b;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__total {
+    margin-left: auto;
+    font-size: 12.5px;
+    color: #777;
+    white-space: nowrap;
+  }
+
+  &__spin {
+    display: inline-block;
+    animation: adm-girar 0.9s linear infinite;
+  }
+
+  &__panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 10px 12px;
+    margin-top: 10px;
+    padding: 12px 14px;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    background: #fafbfc;
+    animation: adm-aparecer 0.15s ease-out;
+  }
+}
+
+.adm-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+
+  span {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #888;
+  }
+
+  input,
+  select {
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid $borde;
+    border-radius: 7px;
+    background: #fff;
+    font-size: 13px;
+    color: #333;
+    outline: none;
+
+    &:focus {
+      border-color: $accent;
+      box-shadow: 0 0 0 3px $accent-soft;
+    }
+  }
+}
+
+@keyframes adm-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes adm-aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adm-filtros__spin,
+  .adm-filtros__panel {
+    animation: none;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .adm-filtros__buscador {
+    flex-basis: 100%;
+  }
+
+  .adm-filtros__total {
+    margin-left: 0;
+  }
+}

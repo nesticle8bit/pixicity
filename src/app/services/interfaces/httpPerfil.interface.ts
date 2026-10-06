@@ -1,3 +1,4 @@
+import { AdminFiltro } from 'src/app/models/admin/admin-filtro.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
@@ -7,7 +8,7 @@ import { ShoutAdmin, ShoutComentarioViewModel, ShoutComentarioVoto, ShoutViewMod
 export abstract class IHttpPerfilService {
   abstract getShouts(userId: number): Observable<PaginatedData<ShoutViewModel, 'shouts'>>;
   abstract getTopShouts(count?: number): Observable<any[]>;
-  abstract getShoutsAdmin(): Observable<PaginatedData<ShoutAdmin, 'shouts'>>;
+  abstract getShoutsAdmin(filtro?: AdminFiltro): Observable<PaginatedData<ShoutAdmin, 'shouts'>>;
   abstract createShout(shout: Partial<ShoutViewModel>): Observable<ShoutViewModel>;
   abstract deleteShout(shoutId: number): Observable<boolean>;
   abstract recoveryShout(shoutId: number): Observable<boolean>;
@@ -19,7 +20,4 @@ export abstract class IHttpPerfilService {
   abstract editarShoutComentario(comentarioId: number, contenido: string): Observable<boolean>;
   abstract fijarShoutComentario(comentarioId: number): Observable<boolean>;
   abstract denunciarShoutComentario(comentarioId: number, motivo: string): Observable<boolean>;
-  abstract getDenunciasShoutComentarios(page: number, pageCount: number, soloPendientes?: boolean): Observable<any>;
-  abstract resolverDenunciaShoutComentario(denunciaId: number): Observable<any>;
-  abstract eliminarDenunciaShoutComentario(denunciaId: number): Observable<any>;
 }

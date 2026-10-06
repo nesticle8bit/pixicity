@@ -228,26 +228,6 @@ export interface ComentarioReciente {
   comunidadSlug?: string | null;
 }
 
-// ---------------------------------------------------------------- moderación
-
-export interface DenunciaComentarioComunidad {
-  id: number;
-  motivo: string;
-  resuelto: boolean;
-  fechaRegistro: string;
-  usuarioDenuncia: string | null;
-  comentario: {
-    id: number;
-    contenido: string;
-    eliminado: boolean;
-    autor: string | null;
-    temaId: number | null;
-    temaTitulo: string | null;
-    temaUrl: string | null;
-    comunidad: { nombre: string; nombreCorto: string } | null;
-  } | null;
-}
-
 // ---------------------------------------------------------------- filtros
 
 export interface BusquedaPaginada {

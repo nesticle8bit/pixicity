@@ -1,3 +1,4 @@
+import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
 import { ConfiguracionModel, ContactoModel } from 'src/app/models/general/configuracion.model';
 import { IHttpGeneralService } from '../interfaces/httpGeneral.interface';
 import { AfiliacionModel } from 'src/app/models/general/afiliacion.model';
@@ -64,9 +65,9 @@ export class HttpGeneralService implements IHttpGeneralService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getAfiliados(): Observable<PaginatedData<AfiliacionModel>> {
+  getAfiliados(filtro: AdminFiltro = {}): Observable<PaginatedData<AfiliacionModel>> {
     return this.http
-      .get<ApiResponse<PaginatedData<AfiliacionModel>>>(`${environment.api}/api/afiliados/getAfiliados`)
+      .get<ApiResponse<PaginatedData<AfiliacionModel>>>(`${environment.api}/api/afiliados/getAfiliados`, { params: adminParams(filtro, this.paginationService) })
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -220,10 +221,10 @@ export class HttpGeneralService implements IHttpGeneralService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getContactos(): Observable<PaginatedData<ContactoModel, 'contactos'>> {
+  getContactos(filtro: AdminFiltro = {}): Observable<PaginatedData<ContactoModel, 'contactos'>> {
     return this.http
       .get<ApiResponse<PaginatedData<ContactoModel, 'contactos'>>>(
-        `${environment.api}/api/contacto/getContactos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
+        `${environment.api}/api/contacto/getContactos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {

@@ -34,9 +34,6 @@ import { DashboardCategoriasComponent } from '../../components/admin/control-de-
 import { DialogCreateUpdateCategoriasComponent } from '../../components/admin/control-de-comunidad/categorias/dialog-create-update-categorias/dialog-create-update-categorias.component';
 import { TableCategoriasComponent } from '../../components/admin/control-de-comunidad/categorias/table-categorias/table-categorias.component';
 import { DashboardEstadisticasComponent } from '../../components/admin/control-de-comunidad/estadisticas/dashboard-estadisticas/dashboard-estadisticas.component';
-import { DashboardReportesComponent } from '../../components/admin/control-de-comunidad/reportes/dashboard-reportes/dashboard-reportes.component';
-import { DialogVerReporteComponent } from '../../components/admin/control-de-comunidad/reportes/dialog-ver-reporte/dialog-ver-reporte.component';
-import { TableReportesComponent } from '../../components/admin/control-de-comunidad/reportes/table-reportes/table-reportes.component';
 import { DashboardVotosComponent } from '../../components/admin/control-de-comunidad/votos/dashboard-votos/dashboard-votos.component';
 import { TableVotosComponent } from '../../components/admin/control-de-comunidad/votos/table-votos/table-votos.component';
 
@@ -68,12 +65,6 @@ import { DashboardComunidadesComponent } from '../../components/admin/control-de
 import { TableComunidadesCategoriasComponent } from '../../components/admin/control-de-comunidad/comunidades/table-comunidades-categorias/table-comunidades-categorias.component';
 import { DialogComunidadCategoriaComponent } from '../../components/admin/control-de-comunidad/comunidades/dialog-comunidad-categoria/dialog-comunidad-categoria.component';
 import { DialogComunidadSubcategoriaComponent } from '../../components/admin/control-de-comunidad/comunidades/dialog-comunidad-subcategoria/dialog-comunidad-subcategoria.component';
-import { DashboardDenunciasComunidadComponent } from '../../components/admin/control-de-comunidad/denuncias-comunidad/dashboard-denuncias-comunidad/dashboard-denuncias-comunidad.component';
-import { TableDenunciasComunidadComponent } from '../../components/admin/control-de-comunidad/denuncias-comunidad/table-denuncias-comunidad/table-denuncias-comunidad.component';
-import { DashboardDenunciasComentariosComponent } from '../../components/admin/control-de-contenido/denuncias-comentarios/dashboard-denuncias-comentarios/dashboard-denuncias-comentarios.component';
-import { TableDenunciasComentariosComponent } from '../../components/admin/control-de-contenido/denuncias-comentarios/table-denuncias-comentarios/table-denuncias-comentarios.component';
-import { DashboardDenunciasShoutsComponent } from '../../components/admin/control-de-contenido/denuncias-shouts/dashboard-denuncias-shouts/dashboard-denuncias-shouts.component';
-import { TableDenunciasShoutsComponent } from '../../components/admin/control-de-contenido/denuncias-shouts/table-denuncias-shouts/table-denuncias-shouts.component';
 import { DashboardModeracionComponent } from '../../components/admin/control-de-contenido/moderacion/dashboard-moderacion/dashboard-moderacion.component';
 import { DashboardCensurasComponent } from '../../components/admin/control-de-contenido/censuras/dashboard-censuras/dashboard-censuras.component';
 import { TableCensurasComponent } from '../../components/admin/control-de-contenido/censuras/table-censuras/table-censuras.component';
@@ -98,7 +89,6 @@ import { TableSesionesComponent } from '../../components/admin/usuarios/sesiones
 import { DashboardUsuariosComponent } from '../../components/admin/usuarios/usuarios/dashboard-usuarios/dashboard-usuarios.component';
 
 import { AdminSparklineComponent } from '../../components/admin/shared/admin-sparkline/admin-sparkline.component';
-import { TableDenunciasComponent } from '../../components/admin/shared/table-denuncias/table-denuncias.component';
 import { SharedModule } from '../shared/shared.module';
 import { AdminRoutingModule } from './admin-routing.module';
 
@@ -115,17 +105,8 @@ import { AdminRoutingModule } from './admin-routing.module';
     TableComunidadesCategoriasComponent,
     DialogComunidadCategoriaComponent,
     DialogComunidadSubcategoriaComponent,
-    DashboardDenunciasComunidadComponent,
-    TableDenunciasComunidadComponent,
-    DashboardDenunciasComentariosComponent,
-    TableDenunciasComentariosComponent,
-    DashboardDenunciasShoutsComponent,
-    TableDenunciasShoutsComponent,
     DashboardModeracionComponent,
     DashboardEstadisticasComponent,
-    DashboardReportesComponent,
-    DialogVerReporteComponent,
-    TableReportesComponent,
     DashboardVotosComponent,
     TableVotosComponent,
     // control-de-contenido
@@ -160,7 +141,6 @@ import { AdminRoutingModule } from './admin-routing.module';
     DashboardAdminComponent,
     DashboardSidebarComponent,
     AdminSparklineComponent,
-    TableDenunciasComponent,
     // general
     DashboardConfigurationComponent,
     DashboardAdsComponent,

@@ -30,7 +30,10 @@ describe('MensajesComponent (bandeja de conversaciones)', () => {
   let router: jasmine.SpyObj<Router>;
   let mensaje$: Subject<any>;
 
-  const pagina = (...items: any[]) => ({ conversaciones: items, pagination: { totalCount: items.length } });
+  const pagina = (...items: any[]) => ({
+    conversaciones: items,
+    pagination: { totalCount: items.length, pageSize: 10, currentPage: 1, totalPages: 1 },
+  });
 
   beforeEach(async () => {
     mensajes = jasmine.createSpyObj('IHttpMensajesService', ['getConversaciones', 'deleteConversaciones']);

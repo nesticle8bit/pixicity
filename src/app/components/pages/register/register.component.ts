@@ -2,6 +2,8 @@ import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ConfiguracionModel } from 'src/app/models/general/configuracion.model';
+import { EstadoViewModel, PaisViewModel } from 'src/app/models/parametros/parametros-vm.model';
 import { UserModel } from 'src/app/models/security/user.model';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
@@ -19,12 +21,12 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
 export class RegisterComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  @Input() hide: any;
-  public configuracion: any;
+  @Input() hide?: { sidebar?: boolean; welcome?: boolean };
+  public configuracion?: ConfiguracionModel;
   public formGroup: FormGroup;
 
-  public dias: any[] = [];
-  public meses: any[] = [
+  public dias: number[] = [];
+  public meses: { label: string; value: string }[] = [
     {
       label: 'Enero',
       value: '01'
@@ -75,8 +77,8 @@ export class RegisterComponent implements OnInit {
     }
   ];
 
-  public years: any[] = [];
-  public generos: any[] = [{
+  public years: number[] = [];
+  public generos: { value: number; label: string }[] = [{
     value: 1,
     label: 'Masculino'
   },
@@ -88,8 +90,8 @@ export class RegisterComponent implements OnInit {
     value: 3,
     label: 'Otro'
   }];
-  public paises: any[] = [];
-  public estados: any[] = [];
+  public paises: PaisViewModel[] = [];
+  public estados: EstadoViewModel[] = [];
   public currentFocus: string = '';
 
   constructor(
@@ -149,7 +151,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  getEstadosByPais(pais: any): void {
+  getEstadosByPais(pais: PaisViewModel | null): void {
     if (!pais) {
       return;
     }
@@ -171,7 +173,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  onFocus(target: any): void {
+  onFocus(target: string): void {
     this.currentFocus = target;
   }
 

@@ -1,3 +1,4 @@
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -9,7 +10,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./change-avatar.component.scss'],
 })
 export class ChangeAvatarComponent implements OnInit {
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
   @Input() data: any;
 
   constructor(

@@ -20,7 +20,6 @@ import {
   ComunidadMiembro,
   ComunidadSubCategoria,
   ComunidadSubCategoriaGuardar,
-  DenunciaComentarioComunidad,
   ResultadoVoto,
   TemaComentarioGuardar,
   TemaDetalle,
@@ -189,22 +188,6 @@ export class HttpComunidadesService implements IHttpComunidadesService {
 
   denunciarComentario(comentarioId: number, motivo: string): Observable<boolean> {
     return this.post(`denunciarComentario?comentarioId=${comentarioId}`, { motivo });
-  }
-
-  getDenunciasComentarios(
-    page: number,
-    pageCount: number,
-    soloPendientes: boolean = false
-  ): Observable<PaginatedData<DenunciaComentarioComunidad> & { pendientes: number }> {
-    return this.get(`getDenunciasComentarios?page=${page}&pageCount=${pageCount}&soloPendientes=${soloPendientes}`);
-  }
-
-  resolverDenunciaComentario(denunciaId: number): Observable<boolean> {
-    return this.post(`resolverDenunciaComentario?denunciaId=${denunciaId}`);
-  }
-
-  eliminarDenunciaComentario(denunciaId: number): Observable<boolean> {
-    return this.delete(`eliminarDenunciaComentario?denunciaId=${denunciaId}`);
   }
 
   // Widgets

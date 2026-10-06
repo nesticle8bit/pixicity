@@ -10,15 +10,11 @@ import { DashboardCensurasComponent } from '../../components/admin/control-de-co
 import { DashboardAfiliadosComponent } from '../../components/admin/control-de-comunidad/afiliados/dashboard-afiliados/dashboard-afiliados.component';
 import { DashboardCategoriasComponent } from '../../components/admin/control-de-comunidad/categorias/dashboard-categorias/dashboard-categorias.component';
 import { DashboardComunidadesComponent } from '../../components/admin/control-de-comunidad/comunidades/dashboard-comunidades/dashboard-comunidades.component';
-import { DashboardDenunciasComunidadComponent } from '../../components/admin/control-de-comunidad/denuncias-comunidad/dashboard-denuncias-comunidad/dashboard-denuncias-comunidad.component';
-import { DashboardDenunciasComentariosComponent } from '../../components/admin/control-de-contenido/denuncias-comentarios/dashboard-denuncias-comentarios/dashboard-denuncias-comentarios.component';
-import { DashboardDenunciasShoutsComponent } from '../../components/admin/control-de-contenido/denuncias-shouts/dashboard-denuncias-shouts/dashboard-denuncias-shouts.component';
 import { DashboardModeracionComponent } from '../../components/admin/control-de-contenido/moderacion/dashboard-moderacion/dashboard-moderacion.component';
 import { DashboardAdsComponent } from '../../components/admin/general/publicidad/dashboard-ads/dashboard-ads.component';
 import { DashboardCommentsComponent } from '../../components/admin/control-de-contenido/comentarios/dashboard-comments/dashboard-comments.component';
 import { DashboardPaisesComponent } from '../../components/admin/control-de-contenido/paises/dashboard-paises/dashboard-paises.component';
 import { DashboardSesionesComponent } from '../../components/admin/usuarios/sesiones/dashboard-sesiones/dashboard-sesiones.component';
-import { DashboardReportesComponent } from '../../components/admin/control-de-comunidad/reportes/dashboard-reportes/dashboard-reportes.component';
 import { DashboardUsuariosComponent } from '../../components/admin/usuarios/usuarios/dashboard-usuarios/dashboard-usuarios.component';
 import { DashboardRangosComponent } from '../../components/admin/usuarios/rangos/dashboard-rangos/dashboard-rangos.component';
 import { DashboardShoutsComponent } from '../../components/admin/control-de-contenido/shouts/dashboard-shouts/dashboard-shouts.component';
@@ -46,15 +42,16 @@ const routes: Routes = [
       { path: 'afiliados', component: DashboardAfiliadosComponent },
       { path: 'categorias', component: DashboardCategoriasComponent },
       { path: 'comunidades-categorias', component: DashboardComunidadesComponent },
-      { path: 'comunidades-denuncias', component: DashboardDenunciasComunidadComponent },
-      { path: 'comentarios-denuncias', component: DashboardDenunciasComentariosComponent },
-      { path: 'shouts-denuncias', component: DashboardDenunciasShoutsComponent },
       { path: 'publicidad', component: DashboardAdsComponent },
       { path: 'comentarios', component: DashboardCommentsComponent },
       { path: 'paises', component: DashboardPaisesComponent },
       { path: 'sesiones', component: DashboardSesionesComponent },
-      { path: 'denuncias', component: DashboardReportesComponent },
       { path: 'moderacion', component: DashboardModeracionComponent },
+      // Las páginas de denuncias por tipo leían tablas que ya no reciben denuncias: todo está en el panel de moderación.
+      { path: 'denuncias', redirectTo: 'moderacion' },
+      { path: 'comentarios-denuncias', redirectTo: 'moderacion' },
+      { path: 'comunidades-denuncias', redirectTo: 'moderacion' },
+      { path: 'shouts-denuncias', redirectTo: 'moderacion' },
       { path: 'usuarios', component: DashboardUsuariosComponent },
       { path: 'rango-usuarios', component: DashboardRangosComponent },
       { path: 'shouts', component: DashboardShoutsComponent },

@@ -1,20 +1,21 @@
-import { PostSearchFilter } from 'src/app/models/shared/service-types.model';
+import { AdminFiltro } from 'src/app/models/admin/admin-filtro.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { BusquedaPostsFiltro, BusquedaPostsResultado } from 'src/app/models/posts/busqueda.model';
 import { PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
 import { CloudTagViewModel, ComentarioViewModel, ComentarioVotoResponse, PostDetailResponse, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
 
 @Injectable()
 export abstract class IHttpPostsService {
   abstract getPosts(categoria?: string): Observable<PaginatedData<PostViewModel>>;
-  abstract getPostsAdmin(search: string): Observable<PaginatedData<PostViewModel>>;
+  abstract getPostsAdmin(search: string, filtro?: AdminFiltro): Observable<PaginatedData<PostViewModel>>;
   abstract getPostsByUserId(userId: number): Observable<PaginatedData<PostViewModel>>;
   abstract getPostsByLoggedUser(search: string): Observable<PaginatedData<PostViewModel>>;
   abstract getStickyPosts(): Observable<PostViewModel[]>;
   abstract getPostById(postId: number): Observable<PostDetailResponse>;
   abstract savePost(post: Partial<PostViewModel>): Observable<number>;
   abstract updatePost(post: Partial<PostViewModel>): Observable<number>;
-  abstract getComentarios(): Observable<PaginatedData<ComentarioViewModel>>;
+  abstract getComentarios(filtro?: AdminFiltro): Observable<PaginatedData<ComentarioViewModel>>;
   abstract getComentariosByUserId(userId: number): Observable<PaginatedData<ComentarioViewModel>>;
   abstract getUltimosComentarios(): Observable<ComentarioViewModel[]>;
   abstract addComentario(comentario: Partial<ComentarioViewModel>): Observable<number>;
@@ -31,19 +32,17 @@ export abstract class IHttpPostsService {
   abstract reportPost(report: { postId: number; razon: string }): Observable<boolean>;
   abstract getRelatedPosts(postId: number): Observable<PostSimpleViewModel[]>;
   abstract getPostsFromOP(postId: number): Observable<PostSimpleViewModel[]>;
-  abstract searchPosts(value: PostSearchFilter): Observable<PaginatedData<PostViewModel>>;
+  abstract buscarPosts(filtro: BusquedaPostsFiltro): Observable<BusquedaPostsResultado>;
   abstract getTopPosts(date: string, categoriaId?: number): Observable<PostViewModel[]>;
   abstract seguirPost(postId: number): Observable<boolean>;
   abstract getCloudTags(): Observable<CloudTagViewModel[]>;
   abstract getBorradores(search: string, categoriaId: number): Observable<PaginatedWithCategorias<PostViewModel>>;
   abstract deleteComentario(comentarioId: number): Observable<boolean>;
+  abstract recuperarComentario(comentarioId: number): Observable<boolean>;
   abstract votarComentario(comentarioId: number, cantidad: number): Observable<ComentarioVotoResponse>;
   abstract fijarComentario(comentarioId: number): Observable<boolean>;
   abstract denunciarComentario(comentarioId: number, motivo: string): Observable<boolean>;
-  abstract getDenunciasComentarios(page: number, pageCount: number, soloPendientes?: boolean): Observable<any>;
-  abstract resolverDenunciaComentario(denunciaId: number): Observable<any>;
-  abstract eliminarDenunciaComentario(denunciaId: number): Observable<any>;
   abstract recomendarPost(postId: number): Observable<number>;
-  abstract getVotos(): Observable<PaginatedData<unknown>>;
+  abstract getVotos(filtro?: AdminFiltro): Observable<PaginatedData<unknown>>;
   abstract getPostsRelatedByTitle(title: string): Observable<PostSimpleViewModel[]>;
 }

@@ -1,3 +1,4 @@
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -31,7 +32,7 @@ export class ProfileShoutsComponent implements OnInit {
   }
 
   public formGroup: FormGroup;
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
 
   constructor(
     private formBuilder: FormBuilder,

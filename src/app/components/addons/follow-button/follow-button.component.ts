@@ -1,3 +1,4 @@
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import {
   AfterViewInit,
@@ -39,7 +40,7 @@ export class FollowButtonComponent implements OnInit {
   @Output() followingChange = new EventEmitter<boolean>();
 
   public isFollowing: boolean = false;
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
   constructor(private securityService: IHttpSecurityService) {
     this.currentUser = this.securityService.getCurrentUser();
   }

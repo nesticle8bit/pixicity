@@ -8,6 +8,7 @@ export interface RangoUsuarioViewModel {
 }
 
 export interface UsuarioAvatarViewModel {
+  id: number;
   userName: string;
   avatar: string;
 }
@@ -24,6 +25,30 @@ export interface UsuarioViewModel {
   rango: RangoUsuarioViewModel;
   generoString: string;
   estado: EstadoViewModel;
+}
+
+/** Fila del listado de usuarios del panel admin (UsuarioAdminViewModel del API). */
+export interface UsuarioAdminViewModel {
+  id: number;
+  fechaRegistro: string;
+  userName: string;
+  email: string;
+  genero: string | null;
+  puntos: number;
+  ultimaConexion: string | null;
+  ultimaIP: string | null;
+  baneado: boolean;
+  tiempoBaneado: string | null;
+  razonBaneo: string | null;
+  baneadoPermanente: boolean;
+  usuarioElimina: string | null;
+  fechaElimina: string | null;
+  avatar: string | null;
+  cantidadPosts: number;
+  cantidadComentarios: number;
+  /** El API serializa ISO2 como 'isO2'. */
+  estado: { nombre: string; pais: { nombre: string; isO2: string } | null } | null;
+  eliminado: boolean;
 }
 
 export interface PerfilUsuarioViewModel {

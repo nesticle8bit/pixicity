@@ -55,10 +55,6 @@ export class DashboardSidebarComponent implements OnInit {
       icono: 'shield',
       items: [
         { titulo: 'Panel de moderación', icono: 'shield', ruta: '/administracion/moderacion', badgeTotal: true },
-        { titulo: 'Denuncias', icono: 'report', ruta: '/administracion/denuncias', badge: 'reporte-1' },
-        { titulo: 'Denuncias comentarios', icono: 'flag', ruta: '/administracion/comentarios-denuncias', badge: 'reporte-2' },
-        { titulo: 'Denuncias comunidad', icono: 'flag', ruta: '/administracion/comunidades-denuncias', badge: 'reporte-3' },
-        { titulo: 'Denuncias shouts', icono: 'flag', ruta: '/administracion/shouts-denuncias', badge: 'reporte-4' },
         { titulo: 'Censuras', icono: 'warning', ruta: '/administracion/censuras' },
       ],
     },

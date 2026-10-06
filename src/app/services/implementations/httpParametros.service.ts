@@ -1,3 +1,4 @@
+import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpParametrosService } from '../interfaces/httpParametros.interface';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { PaginationService } from '../shared/pagination.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { CategoriaViewModel, PaisViewModel, EstadoViewModel } from 'src/app/models/parametros/parametros-vm.model';
+import { CategoriaViewModel, CensuraViewModel, PaisViewModel, EstadoViewModel, TopCategoriaViewModel } from 'src/app/models/parametros/parametros-vm.model';
 
 @Injectable()
 export class HttpParametrosService implements IHttpParametrosService {
@@ -19,10 +20,10 @@ export class HttpParametrosService implements IHttpParametrosService {
     private http: HttpClient,
   ) {}
 
-  getPaises(): Observable<PaginatedData<PaisViewModel>> {
+  getPaises(filtro: AdminFiltro = {}): Observable<PaginatedData<PaisViewModel>> {
     return this.http
       .get<ApiResponse<PaginatedData<PaisViewModel>>>(
-        `${environment.api}/api/paises/getPaises?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
+        `${environment.api}/api/paises/getPaises?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -103,10 +104,10 @@ export class HttpParametrosService implements IHttpParametrosService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getCategoriasAdmin(): Observable<PaginatedData<CategoriaViewModel, 'categorias'>> {
+  getCategoriasAdmin(filtro: AdminFiltro = {}): Observable<PaginatedData<CategoriaViewModel, 'categorias'>> {
     return this.http
       .get<ApiResponse<PaginatedData<CategoriaViewModel, 'categorias'>>>(
-        `${environment.api}/api/categorias/getCategoriasAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
+        `${environment.api}/api/categorias/getCategoriasAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -137,9 +138,9 @@ export class HttpParametrosService implements IHttpParametrosService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getTopCategorias(count: number = 10): Observable<any[]> {
+  getTopCategorias(count: number = 10): Observable<TopCategoriaViewModel[]> {
     return this.http
-      .get<ApiResponse<any[]>>(`${environment.api}/api/categorias/getTopCategorias?count=${count}`)
+      .get<ApiResponse<TopCategoriaViewModel[]>>(`${environment.api}/api/categorias/getTopCategorias?count=${count}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -169,10 +170,10 @@ export class HttpParametrosService implements IHttpParametrosService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getCensuras(): Observable<PaginatedData<any>> {
+  getCensuras(filtro: AdminFiltro = {}): Observable<PaginatedData<CensuraViewModel>> {
     return this.http
-      .get<ApiResponse<PaginatedData<any>>>(
-        `${environment.api}/api/censuras/getCensuras?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
+      .get<ApiResponse<PaginatedData<CensuraViewModel>>>(
+        `${environment.api}/api/censuras/getCensuras?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -187,7 +188,7 @@ export class HttpParametrosService implements IHttpParametrosService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  saveCensura(censura: any): Observable<number> {
+  saveCensura(censura: CensuraViewModel): Observable<number> {
     return this.http
       .post<ApiResponse<number>>(`${environment.api}/api/censuras/saveCensura`, censura)
       .pipe(

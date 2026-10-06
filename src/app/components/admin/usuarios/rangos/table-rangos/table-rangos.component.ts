@@ -1,3 +1,5 @@
+import { finalize } from 'rxjs';
+import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { DialogAddUpdateRangoComponent } from 'src/app/components/dialogs/dialog-add-update-rango/dialog-add-update-rango.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
@@ -20,6 +22,10 @@ export class TableRangosComponent implements OnInit {
   public rangos: any[] = [];
   public totalCount: number = 0;
 
+  public filtro: AdminFiltro = {};
+  public cargando = false;
+  public readonly filtrosConfig: AdminFiltrosConfig = { placeholder: 'Buscar rangos...' };
+
   constructor(
     public paginationService: PaginationService,
     private securityService: IHttpSecurityService,
@@ -33,10 +39,18 @@ export class TableRangosComponent implements OnInit {
   }
 
   getRangos(): void {
-    this.securityService.getRangosUsuarios().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.cargando = true;
+    this.securityService.getRangosUsuarios(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.rangos = response?.rangos;
       this.totalCount = response?.pagination?.totalCount;
     });
+  }
+
+  /** Nuevo filtro desde <app-admin-filtros>: vuelve a la primera página. */
+  aplicarFiltro(filtro: AdminFiltro): void {
+    this.filtro = filtro;
+    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
+    this.getRangos();
   }
 
   pageChange(event: PageEvent): void {

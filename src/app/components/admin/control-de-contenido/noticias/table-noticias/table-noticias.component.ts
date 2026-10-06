@@ -1,3 +1,5 @@
+import { finalize } from 'rxjs';
+import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { DialogCreateUpdateNoticiasComponent } from '../dialog-create-update-noticias/dialog-create-update-noticias.component';
 import { IHttpNoticiasService } from 'src/app/services/interfaces/httpNoticias.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
@@ -19,6 +21,16 @@ export class TableNoticiasComponent implements OnInit {
   public noticias: any[] = [];
   public totalCount: number = 0;
 
+  public filtro: AdminFiltro = {};
+  public cargando = false;
+  public readonly filtrosConfig: AdminFiltrosConfig = {
+    placeholder: 'Buscar noticias...',
+    fechas: true,
+    estado: true,
+    orden: true,
+    usuario: 'Autor',
+  };
+
   constructor(
     public paginationService: PaginationService,
     private noticiasService: IHttpNoticiasService,
@@ -33,7 +45,8 @@ export class TableNoticiasComponent implements OnInit {
   }
 
   getNoticias(): void {
-    this.noticiasService.getNoticias('').pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.cargando = true;
+    this.noticiasService.getNoticias('', this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.noticias = response?.noticias;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -66,6 +79,13 @@ export class TableNoticiasComponent implements OnInit {
         }
       });
     }
+  }
+
+  /** Nuevo filtro desde <app-admin-filtros>: vuelve a la primera página. */
+  aplicarFiltro(filtro: AdminFiltro): void {
+    this.filtro = filtro;
+    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
+    this.getNoticias();
   }
 
   pageChange(event: PageEvent): void {

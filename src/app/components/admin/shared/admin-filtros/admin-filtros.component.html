@@ -1,0 +1,109 @@
+<div class="adm-filtros">
+  <div class="adm-filtros__barra">
+    <!-- Mismo buscador que el del pie del sitio (estilos globales .busb / .bbcuerpo / .bbboton). -->
+    <div class="busb adm-filtros__buscador">
+      <form role="search" (submit)="$event.preventDefault(); buscarYa(busqueda.value)">
+        <input #busqueda type="text" name="q" class="bbcuerpo" [value]="filtro.q ?? ''" autocomplete="off"
+          [placeholder]="config.placeholder ?? 'Buscar...'" [attr.aria-label]="config.placeholder ?? 'Buscar'"
+          (input)="onTexto(busqueda.value)" />
+        <input type="submit" value="" class="bbboton" aria-label="Buscar" />
+      </form>
+    </div>
+
+    @if (tieneAvanzados) {
+    <button type="button" class="adm-filtros__toggle" [class.is-abierto]="abierto" (click)="abierto = !abierto"
+      [attr.aria-expanded]="abierto" aria-controls="adm-filtros-panel">
+      <i class="ti ti-adjustments-horizontal" aria-hidden="true"></i>
+      Filtros
+      @if (avanzadosActivos > 0) {
+      <span class="adm-filtros__badge" [attr.aria-label]="avanzadosActivos + ' activos'">{{avanzadosActivos}}</span>
+      }
+      <i class="ti adm-filtros__chevron" [class.ti-chevron-down]="!abierto" [class.ti-chevron-up]="abierto" aria-hidden="true"></i>
+    </button>
+    }
+
+    @if (hayFiltros) {
+    <button type="button" class="adm-filtros__limpiar" (click)="limpiar()">
+      <i class="ti ti-x" aria-hidden="true"></i> Limpiar
+    </button>
+    }
+
+    <span class="adm-filtros__total" aria-live="polite">
+      @if (cargando) {
+      <i class="ti ti-loader-2 adm-filtros__spin" aria-hidden="true"></i> Buscando…
+      } @else if (total !== null) {
+      <strong>{{total | number}}</strong> {{total === 1 ? 'resultado' : 'resultados'}}
+      }
+    </span>
+  </div>
+
+  @if (tieneAvanzados && abierto) {
+  <div class="adm-filtros__panel" id="adm-filtros-panel">
+    @if (config.fechas) {
+    <label class="adm-campo">
+      <span>Desde</span>
+      <input type="date" [value]="filtro.desde ?? ''" [max]="filtro.hasta ?? null"
+        (change)="set('desde', $any($event.target).value || undefined)" />
+    </label>
+    <label class="adm-campo">
+      <span>Hasta</span>
+      <input type="date" [value]="filtro.hasta ?? ''" [min]="filtro.desde ?? null"
+        (change)="set('hasta', $any($event.target).value || undefined)" />
+    </label>
+    }
+
+    @if (config.usuario) {
+    <label class="adm-campo">
+      <span>{{config.usuario}}</span>
+      <input type="text" [value]="filtro.usuario ?? ''" placeholder="Nombre de usuario" autocomplete="off"
+        (input)="onUsuario($any($event.target).value)" />
+    </label>
+    }
+
+    @if (config.categorias?.length) {
+    <label class="adm-campo">
+      <span>Categoría</span>
+      <select [value]="filtro.categoriaId ?? ''" (change)="set('categoriaId', +$any($event.target).value || null)">
+        <option value="">Todas</option>
+        @for (c of config.categorias; track c.id) {
+        <option [value]="c.id">{{c.nombre}}</option>
+        }
+      </select>
+    </label>
+    }
+
+    @if (config.tipos?.length) {
+    <label class="adm-campo">
+      <span>{{config.tipoLabel ?? 'Tipo'}}</span>
+      <select [value]="filtro.tipo ?? ''" (change)="set('tipo', $any($event.target).value || undefined)">
+        <option value="">Todos</option>
+        @for (t of config.tipos; track t.valor) {
+        <option [value]="t.valor">{{t.label}}</option>
+        }
+      </select>
+    </label>
+    }
+
+    @if (config.estado) {
+    <label class="adm-campo">
+      <span>Estado</span>
+      <select [value]="filtro.estado ?? ''" (change)="set('estado', $any($event.target).value)">
+        <option value="">Todos</option>
+        <option value="activos">Activos</option>
+        <option value="eliminados">Eliminados</option>
+      </select>
+    </label>
+    }
+
+    @if (config.orden) {
+    <label class="adm-campo">
+      <span>Orden</span>
+      <select [value]="filtro.orden ?? ''" (change)="set('orden', $any($event.target).value)">
+        <option value="">Más recientes</option>
+        <option value="antiguos">Más antiguos</option>
+      </select>
+    </label>
+    }
+  </div>
+  }
+</div>

@@ -1,3 +1,4 @@
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { DialogBanUserComponent } from 'src/app/components/dialogs/dialog-ban-user/dialog-ban-user.component';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,7 +11,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
   styleUrls: ['./banear-usuario.component.scss'],
 })
 export class BanearUsuarioComponent implements OnInit {
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
   @Input() data: any;
   
   constructor(

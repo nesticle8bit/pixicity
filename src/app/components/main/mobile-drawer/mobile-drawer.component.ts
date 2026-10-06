@@ -149,7 +149,7 @@ export class MobileDrawerComponent implements OnInit {
     }
 
     this.nav.close();
-    this.router.navigate([`/buscar/posts/${q}`]);
+    this.router.navigate(['/buscar', 'posts', q]);
   }
 
   cerrarSesion(): void {

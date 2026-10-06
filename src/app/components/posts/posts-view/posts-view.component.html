@@ -123,7 +123,10 @@
           </div>
 
           <app-posts-tags [post]="post"></app-posts-tags>
+          <!-- Puntos/favoritos/visitas: solo con el post cargado (antes leía post.visitantes con post = null). -->
+          @if (post) {
           <app-posts-meta [post]="post"></app-posts-meta>
+          }
 
           <!-- Acciones del dueño / staff -->
           @if (post && (esAutor || esStaff)) {

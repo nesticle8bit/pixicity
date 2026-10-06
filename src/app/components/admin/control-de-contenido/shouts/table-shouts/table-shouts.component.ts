@@ -1,3 +1,5 @@
+import { finalize } from 'rxjs';
+import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
@@ -17,6 +19,23 @@ export class TableShoutsComponent implements OnInit {
   public shouts: any[] = [];
   public totalCount: number = 0;
 
+  public filtro: AdminFiltro = {};
+  public cargando = false;
+  public readonly filtrosConfig: AdminFiltrosConfig = {
+    placeholder: 'Buscar en shouts o autores...',
+    fechas: true,
+    estado: true,
+    orden: true,
+    usuario: 'Autor',
+    tipos: [
+      { valor: 'Texto', label: 'Texto' },
+      { valor: 'Foto', label: 'Foto' },
+      { valor: 'Video', label: 'Video' },
+      { valor: 'Enlace', label: 'Enlace' },
+      { valor: 'Spotify', label: 'Spotify' },
+    ],
+  };
+
   constructor(
     public paginationService: PaginationService,
     private perfilService: IHttpPerfilService,
@@ -30,7 +49,8 @@ export class TableShoutsComponent implements OnInit {
   }
 
   getShouts(): void {
-    this.perfilService.getShoutsAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.cargando = true;
+    this.perfilService.getShoutsAdmin(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.shouts = response.shouts;
       this.totalCount = response.pagination.totalCount;
     });
@@ -58,6 +78,13 @@ export class TableShoutsComponent implements OnInit {
         }
       }
     });
+  }
+
+  /** Nuevo filtro desde <app-admin-filtros>: vuelve a la primera página. */
+  aplicarFiltro(filtro: AdminFiltro): void {
+    this.filtro = filtro;
+    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
+    this.getShouts();
   }
 
   pageChange(event: PageEvent): void {

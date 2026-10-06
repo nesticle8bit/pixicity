@@ -1,3 +1,4 @@
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, Input, OnInit } from '@angular/core';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DialogEnviarMPComponent } from '../../dialogs/dialog-enviar-mp/dialog-enviar-mp.component';
@@ -22,7 +23,7 @@ export class SendMessageButtonComponent implements OnInit {
     return this._userName;
   }
 
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
   constructor(
     private securityService: IHttpSecurityService,
     private dialog: MatDialog

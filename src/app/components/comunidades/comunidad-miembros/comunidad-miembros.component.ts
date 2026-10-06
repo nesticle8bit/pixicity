@@ -1,6 +1,9 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Pagination } from 'src/app/models/api/api-response.model';
+import { ComunidadDetalle, ComunidadMiembro } from 'src/app/models/comunidades/comunidad.model';
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -15,12 +18,12 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
 export class ComunidadMiembrosComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  public comunidad: any = null;
-  public miembros: any[] = [];
-  public pagination: any = {};
+  public comunidad: ComunidadDetalle | null = null;
+  public miembros: ComunidadMiembro[] = [];
+  public pagination: Partial<Pagination> = {};
   public loading: boolean = true;
   public slug: string = '';
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
   public gestionandoId: number | null = null;
   private page: number = 1;
 
@@ -52,15 +55,16 @@ export class ComunidadMiembrosComponent implements OnInit {
       || this.currentUser?.usuario?.rango === 'Moderador';
   }
 
-  esCreador(m: any): boolean {
+  esCreador(m: ComunidadMiembro): boolean {
     return m?.userName === this.comunidad?.creador;
   }
 
-  toggleGestion(m: any): void {
+  toggleGestion(m: ComunidadMiembro): void {
     this.gestionandoId = this.gestionandoId === m.id ? null : m.id;
   }
 
-  cambiarRango(m: any, permiso: number, esStaff: boolean): void {
+  cambiarRango(m: ComunidadMiembro, permiso: number, esStaff: boolean): void {
+    if (!this.comunidad) return;
     this.comunidadesService.cambiarRangoMiembro(this.comunidad.id, m.usuarioId, permiso, esStaff)
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: () => {
@@ -73,6 +77,7 @@ export class ComunidadMiembrosComponent implements OnInit {
   }
 
   loadMiembros(): void {
+    if (!this.comunidad) return;
     this.loading = true;
     this.comunidadesService.getMiembros(this.comunidad.id, { page: this.page, pageCount: 24 })
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({

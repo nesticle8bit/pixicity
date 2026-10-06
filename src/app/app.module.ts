@@ -87,8 +87,6 @@ import { IHttpLogsService } from './services/interfaces/httpLogs.interface';
 import { HttpLogsService } from './services/implementations/httpLogs.service';
 import { TipoIconMonitorComponent } from './components/addons/tipo-icon-monitor/tipo-icon-monitor.component';
 import { UppercaseDirective } from './shared/directives/uppercase.directive';
-import { IHttpDenunciasService } from './services/interfaces/httpDenuncias.interface';
-import { HttpDenunciasService } from './services/implementations/httpDenuncias.service';
 import { IHttpModeracionService } from './services/interfaces/httpModeracion.interface';
 import { HttpModeracionService } from './services/implementations/httpModeracion.service';
 import { IHttpAppLogsService } from './services/interfaces/httpAppLogs.interface';
@@ -314,7 +312,6 @@ import { HttpFotosService } from './services/implementations/httpFotos.service';
         { provide: IHttpPostsService, useClass: HttpPostsService },
         { provide: IHttpFavoritosService, useClass: HttpFavoritosService },
         { provide: IHttpLogsService, useClass: HttpLogsService },
-        { provide: IHttpDenunciasService, useClass: HttpDenunciasService },
         { provide: IHttpModeracionService, useClass: HttpModeracionService },
         { provide: IHttpAppLogsService, useClass: HttpAppLogsService },
         { provide: IHttpWebService, useClass: HttpWebService },

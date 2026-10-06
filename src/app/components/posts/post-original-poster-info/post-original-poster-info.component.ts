@@ -1,3 +1,4 @@
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -26,7 +27,7 @@ export class PostOriginalPosterInfoComponent implements OnInit {
   }
 
   public info: any;
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
 
   constructor(private securityService: IHttpSecurityService) {}
 

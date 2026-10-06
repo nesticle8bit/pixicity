@@ -1,3 +1,4 @@
+import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpPerfilService } from '../interfaces/httpPerfil.interface';
 import { PaginationService } from '../shared/pagination.service';
 import { environment } from 'src/environments/environment';
@@ -46,10 +47,10 @@ export class HttpPerfilService implements IHttpPerfilService {
       );
   }
 
-  getShoutsAdmin(): Observable<PaginatedData<ShoutAdmin, 'shouts'>> {
+  getShoutsAdmin(filtro: AdminFiltro = {}): Observable<PaginatedData<ShoutAdmin, 'shouts'>> {
     return this.http
       .get<ApiResponse<PaginatedData<ShoutAdmin, 'shouts'>>>(
-        `${environment.api}/api/shouts/getShoutsAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
+        `${environment.api}/api/shouts/getShoutsAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -182,27 +183,6 @@ export class HttpPerfilService implements IHttpPerfilService {
   denunciarShoutComentario(comentarioId: number, motivo: string): Observable<boolean> {
     return this.http
       .post<ApiResponse<boolean>>(`${environment.api}/api/shouts/denunciarShoutComentario?comentarioId=${comentarioId}`, { motivo })
-      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  getDenunciasShoutComentarios(page: number, pageCount: number, soloPendientes: boolean = false): Observable<any> {
-    return this.http
-      .get<ApiResponse<any>>(`${environment.api}/api/shouts/getDenunciasShoutComentarios?page=${page}&pageCount=${pageCount}&soloPendientes=${soloPendientes}`)
-      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  resolverDenunciaShoutComentario(denunciaId: number): Observable<any> {
-    return this.http
-      .post<ApiResponse<any>>(`${environment.api}/api/shouts/resolverDenunciaShoutComentario?denunciaId=${denunciaId}`, {})
-      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  eliminarDenunciaShoutComentario(denunciaId: number): Observable<any> {
-    return this.http
-      .delete<ApiResponse<any>>(`${environment.api}/api/shouts/eliminarDenunciaShoutComentario?denunciaId=${denunciaId}`)
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }

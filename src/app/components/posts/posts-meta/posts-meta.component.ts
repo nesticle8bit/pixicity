@@ -1,3 +1,4 @@
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
@@ -50,7 +51,7 @@ export class PostsMetaComponent implements OnInit {
 
   public addedPuntos: boolean = false;
   public availablePuntos: number[] = [];
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
 
   constructor(
     private securityService: IHttpSecurityService,

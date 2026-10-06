@@ -1,3 +1,5 @@
+import { finalize } from 'rxjs';
+import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent } from '@angular/material/paginator';
@@ -17,6 +19,20 @@ export class TableContactosComponent implements OnInit {
   public contactos: any[] = [];
   public totalCount: number = 0;
 
+  public filtro: AdminFiltro = {};
+  public cargando = false;
+  public readonly filtrosConfig: AdminFiltrosConfig = {
+    placeholder: 'Buscar por nombre, email o mensaje...',
+    fechas: true,
+    estado: true,
+    orden: true,
+    tipoLabel: 'Gestión',
+    tipos: [
+      { valor: 'pendientes', label: 'Pendientes' },
+      { valor: 'gestionados', label: 'Gestionados' },
+    ],
+  };
+
   constructor(
     public paginationService: PaginationService,
     private generalService: IHttpGeneralService,
@@ -30,10 +46,18 @@ export class TableContactosComponent implements OnInit {
   }
 
   getContactos(): void {
-    this.generalService.getContactos().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.cargando = true;
+    this.generalService.getContactos(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.contactos = response?.contactos;
       this.totalCount = response?.pagination?.totalCount;
     });
+  }
+
+  /** Nuevo filtro desde <app-admin-filtros>: vuelve a la primera página. */
+  aplicarFiltro(filtro: AdminFiltro): void {
+    this.filtro = filtro;
+    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
+    this.getContactos();
   }
 
   pageChange(event: PageEvent): void {

@@ -1,3 +1,4 @@
+import { AdminFiltro } from 'src/app/models/admin/admin-filtro.model';
 import { HistorialViewModel } from 'src/app/models/web/historial.model';
 import { PaginaViewModel } from 'src/app/models/shared/service-types.model';
 import { TopUserModel } from 'src/app/models/web/topUser.model';
@@ -16,7 +17,7 @@ export abstract class IHttpWebService {
   abstract changeAfiliadoActive(obj: { id: number; activo: boolean }): Observable<boolean>;
   abstract hitAfiliado(codigo: string): Observable<string>;
   abstract getHistorialModeracion(): Observable<HistorialViewModel[]>;
-  abstract getPaginas(search: string): Observable<PaginatedData<PaginaViewModel, 'paginas'>>;
+  abstract getPaginas(search: string, filtro?: AdminFiltro): Observable<PaginatedData<PaginaViewModel, 'paginas'>>;
   abstract getAllPaginas(): Observable<PaginaViewModel[]>;
   abstract savePagina(pagina: Partial<PaginaViewModel>): Observable<number>;
   abstract deletePagina(paginaId: number): Observable<boolean>;

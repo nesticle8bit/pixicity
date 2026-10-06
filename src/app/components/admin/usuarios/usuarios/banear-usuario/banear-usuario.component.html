@@ -1,4 +1,4 @@
-@if (currentUser?.usuario && (currentUser.usuario.rango === 'Moderador' || currentUser.usuario.rango === 'Administrador') && data.nombre !== 'Administrador') {
+@if (currentUser?.usuario && (currentUser?.usuario?.rango === 'Moderador' || currentUser?.usuario?.rango === 'Administrador') && data.nombre !== 'Administrador') {
   <a class="button-uppercase brojo follow_user_post" (click)="banearUsuario()"
      role="button" tabindex="0" (keydown.enter)="banearUsuario()" (keydown.space)="banearUsuario(); $event.preventDefault()">
     <i class="ti ti-ban"></i> Banear usuario

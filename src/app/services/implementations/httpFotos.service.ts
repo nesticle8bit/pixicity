@@ -1,3 +1,4 @@
+import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
 import { FotoSearchParams } from 'src/app/models/shared/service-types.model';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -46,12 +47,12 @@ export class HttpFotosService implements IHttpFotosService {
       );
   }
 
-  getFotosAdmin(search: FotoSearchParams & { query?: string } = {}): Observable<PaginatedData<FotoViewModel>> {
+  getFotosAdmin(search: FotoSearchParams & { query?: string } = {}, filtro: AdminFiltro = {}): Observable<PaginatedData<FotoViewModel>> {
     const page = search?.page || 1;
     const pageCount = search?.pageCount || 25;
     const query = search?.query || '';
     return this.http
-      .get<ApiResponse<PaginatedData<FotoViewModel>>>(`${environment.api}/api/fotos/GetFotosAdmin?page=${page}&pageCount=${pageCount}&query=${query}`)
+      .get<ApiResponse<PaginatedData<FotoViewModel>>>(`${environment.api}/api/fotos/GetFotosAdmin?page=${page}&pageCount=${pageCount}&query=${query}`, { params: adminParams(filtro) })
       .pipe(
         map((response) => {
           if (response.status === 200) { return response.data!; }

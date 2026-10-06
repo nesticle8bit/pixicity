@@ -1,3 +1,4 @@
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,7 +17,7 @@ export class FotoDetailComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public foto: any = null;
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
   public loading: boolean = true;
   public fotoId: number = 0;
 

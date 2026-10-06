@@ -1,0 +1,197 @@
+// Tablas del panel admin. Se aplican a toda tabla dentro del contenido del panel (.adm-shell__content), así las
+// ~18 tablas existentes mejoran sin reescribir su marcado. Las clases .adm-* son extras opcionales para cada tabla.
+
+$adm-accent: #006595;
+$adm-borde: #e8e8e8;
+
+.adm-shell__content {
+  .dashboard--title {
+    margin-bottom: 12px;
+  }
+
+  // Contenedor: borde redondeado y scroll horizontal propio (la página no se desborda en móvil).
+  .table-responsive {
+    border: 1px solid $adm-borde;
+    border-radius: 10px;
+    background: #fff;
+    overflow-x: auto;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .table-responsive > .table {
+    margin: 0;
+  }
+
+  .table {
+    --bs-table-striped-bg: #fafbfc;
+    --bs-table-hover-bg: #f0f6fa;
+    font-size: 13px;
+    color: #333;
+    vertical-align: middle;
+
+    > thead > tr > th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      padding: 9px 10px;
+      border-bottom: 1px solid $adm-borde;
+      background: #f6f8fa;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #6b7280;
+      white-space: nowrap;
+    }
+
+    > tbody > tr > td {
+      padding: 8px 10px;
+      border-color: #f0f0f0;
+    }
+
+    > tbody > tr:last-child > td {
+      border-bottom: none;
+    }
+
+    a {
+      color: $adm-accent;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    img {
+      vertical-align: middle;
+    }
+  }
+
+  // Filas eliminadas: atenuadas pero legibles, con marca a la izquierda.
+  .row-deleted > td {
+    opacity: 0.6;
+  }
+
+  .row-deleted > td:first-child {
+    box-shadow: inset 3px 0 0 #e57373;
+  }
+
+  // Menú de acciones (⋮)
+  .btn-menu {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: #666;
+    transition: background 0.15s;
+
+    &:hover {
+      background: #eef2f5;
+      color: #222;
+    }
+  }
+
+  .mat-mdc-paginator {
+    margin-top: 6px;
+    background: transparent;
+  }
+}
+
+// - Extras opcionales -
+
+/** Celda de texto largo recortada a una línea. */
+.adm-recorte {
+  display: inline-block;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/** Etiqueta de estado: <span class="adm-pill adm-pill--ok">Activo</span> */
+.adm-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #eef0f2;
+  color: #555;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+
+  &--ok {
+    background: #e3f6ec;
+    color: #1c7c4a;
+  }
+
+  &--alerta {
+    background: #fff4e0;
+    color: #b26a00;
+  }
+
+  &--peligro {
+    background: #fdecea;
+    color: #c0392b;
+  }
+
+  &--info {
+    background: rgba(0, 101, 149, 0.1);
+    color: $adm-accent;
+  }
+}
+
+/** Estado vacío de una tabla (sin datos o sin resultados para el filtro). */
+.adm-vacio {
+  padding: 34px 16px;
+  border: 1px dashed #dcdcdc;
+  border-radius: 10px;
+  text-align: center;
+  color: #777;
+  font-size: 13.5px;
+
+  > i {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 34px;
+    color: #c8c8c8;
+  }
+}
+
+/** Barra fina de carga sobre la tabla. */
+.adm-cargando {
+  position: relative;
+  height: 3px;
+  margin-bottom: 4px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: rgba(0, 101, 149, 0.1);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 35%;
+    background: $adm-accent;
+    animation: adm-cargando 1s ease-in-out infinite;
+  }
+}
+
+@keyframes adm-cargando {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adm-cargando::after {
+    animation: none;
+    width: 100%;
+    opacity: 0.4;
+  }
+}

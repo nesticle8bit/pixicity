@@ -8,6 +8,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { Router } from '@angular/router';
+import { ConversacionFila } from 'src/app/models/mensajes/mensaje-vm.model';
 
 @Component({
   standalone: false,
@@ -19,7 +20,7 @@ export class MensajesComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
-  public conversaciones: any[] = [];
+  public conversaciones: ConversacionFila[] = [];
   public totalCount: number = 0;
 
   constructor(
@@ -45,11 +46,11 @@ export class MensajesComponent implements OnInit {
   ngOnInit(): void {}
 
   get selectedCount(): number {
-    return this.conversaciones.filter((c: any) => c.selected).length;
+    return this.conversaciones.filter((c) => c.selected).length;
   }
 
   get unreadCount(): number {
-    return this.conversaciones.reduce((total: number, c: any) => total + (c.noLeidos ?? 0), 0);
+    return this.conversaciones.reduce((total: number, c) => total + (c.noLeidos ?? 0), 0);
   }
 
   get allSelected(): boolean {
@@ -61,10 +62,10 @@ export class MensajesComponent implements OnInit {
   }
 
   toggleAll(checked: boolean): void {
-    this.conversaciones.forEach((c: any) => (c.selected = checked));
+    this.conversaciones.forEach((c) => (c.selected = checked));
   }
 
-  abrir(conversacion: any): void {
+  abrir(conversacion: ConversacionFila): void {
     this.router.navigate(['/mensajes/chat', conversacion.otro.userName]);
   }
 
@@ -93,10 +94,10 @@ export class MensajesComponent implements OnInit {
 
   getConversaciones(): void {
     // Conserva la selección al refrescar por tiempo real.
-    const seleccionados = new Set(this.conversaciones.filter((c: any) => c.selected).map((c: any) => c.otro.id));
+    const seleccionados = new Set(this.conversaciones.filter((c) => c.selected).map((c) => c.otro.id));
 
     this.mensajesService.getConversaciones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      this.conversaciones = (response?.conversaciones ?? []).map((c: any) => ({
+      this.conversaciones = (response?.conversaciones ?? []).map((c) => ({
         ...c,
         selected: seleccionados.has(c.otro?.id),
       }));
@@ -110,7 +111,7 @@ export class MensajesComponent implements OnInit {
   }
 
   deleteConversaciones(): void {
-    const ids = this.conversaciones.filter((c: any) => c.selected).map((c: any) => c.otro.id);
+    const ids = this.conversaciones.filter((c) => c.selected).map((c) => c.otro.id);
 
     if (!ids || ids.length < 1) {
       return;

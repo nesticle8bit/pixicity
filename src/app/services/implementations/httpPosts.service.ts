@@ -1,7 +1,8 @@
-import { PostSearchFilter } from 'src/app/models/shared/service-types.model';
+import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { BusquedaPostsFiltro, BusquedaPostsResultado } from 'src/app/models/posts/busqueda.model';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -43,10 +44,10 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getPostsAdmin(search: string): Observable<PaginatedData<PostViewModel>> {
+  getPostsAdmin(search: string, filtro: AdminFiltro = {}): Observable<PaginatedData<PostViewModel>> {
     return this.http
       .get<ApiResponse<PaginatedData<PostViewModel>>>(
-        `${environment.api}/api/posts/getPostsAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}`,
+        `${environment.api}/api/posts/getPostsAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -161,10 +162,10 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getComentarios(): Observable<PaginatedData<ComentarioViewModel>> {
+  getComentarios(filtro: AdminFiltro = {}): Observable<PaginatedData<ComentarioViewModel>> {
     return this.http
       .get<ApiResponse<PaginatedData<ComentarioViewModel>>>(
-        `${environment.api}/api/comentarios/getComentarios?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
+        `${environment.api}/api/comentarios/getComentarios?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -444,37 +445,24 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  searchPosts(value: PostSearchFilter): Observable<PaginatedData<PostViewModel>> {
-    let searchValues = '';
-
-    if (value.search) {
-      searchValues += `&search=${value.search}`;
-    }
-
-    if (value.searchType) {
-      searchValues += `&searchType=${value.searchType}`;
-    }
-
-    if (value.categoriaId) {
-      searchValues += `&categoriaId=${value.categoriaId}`;
-    }
-
-    if (value.autor) {
-      searchValues += `&autor=${value.autor}`;
-    }
+  buscarPosts(filtro: BusquedaPostsFiltro): Observable<BusquedaPostsResultado> {
+    // HttpParams codifica el texto: "&", "#" o "+" ya no rompen la búsqueda.
+    let params = new HttpParams().set('q', filtro.q).set('page', filtro.page).set('pageCount', filtro.pageCount);
+    if (filtro.tipo && filtro.tipo !== 'todo') params = params.set('tipo', filtro.tipo);
+    if (filtro.categoria) params = params.set('categoria', filtro.categoria);
+    if (filtro.autor?.trim()) params = params.set('autor', filtro.autor.trim());
+    if (filtro.orden && filtro.orden !== 'relevancia') params = params.set('orden', filtro.orden);
+    if (filtro.periodo) params = params.set('periodo', filtro.periodo);
 
     return this.http
-      .get<ApiResponse<PaginatedData<PostViewModel>>>(
-        `${environment.api}/api/posts/searchPosts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${searchValues}`,
-      )
+      .get<ApiResponse<BusquedaPostsResultado>>(`${environment.api}/api/busqueda/posts`, { params })
       .pipe(
         map((response) => {
           if (response.status === 200) {
             return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
           }
+          this.notificationService.error(response.errors.join(', '), 'Error');
+          throw new Error(response.errors?.join(', ') ?? 'Error');
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
@@ -554,6 +542,21 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  recuperarComentario(comentarioId: number): Observable<boolean> {
+    return this.http
+      .post<ApiResponse<boolean>>(`${environment.api}/api/comentarios/recuperarComentario`, { id: comentarioId })
+      .pipe(
+        map((response) => {
+          if (response.status === 200) {
+            return response.data;
+          }
+          this.notificationService.error(response.errors.join(', '), 'Error');
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
+        catchError(this.helper.errorHandler)
+      );
+  }
+
   deleteComentario(comentarioId: number): Observable<boolean> {
     return this.http
       .delete<ApiResponse<boolean>>(`${environment.api}/api/comentarios/deleteComentario`, {
@@ -619,24 +622,6 @@ export class HttpPostsService implements IHttpPostsService {
     );
   }
 
-  getDenunciasComentarios(page: number, pageCount: number, soloPendientes: boolean = false): Observable<any> {
-    return this.unwrapData(
-      this.http.get<ApiResponse<any>>(`${environment.api}/api/comentarios/getDenunciasComentarios?page=${page}&pageCount=${pageCount}&soloPendientes=${soloPendientes}`),
-    );
-  }
-
-  resolverDenunciaComentario(denunciaId: number): Observable<any> {
-    return this.unwrapData(
-      this.http.post<ApiResponse<any>>(`${environment.api}/api/comentarios/resolverDenunciaComentario?denunciaId=${denunciaId}`, {}),
-    );
-  }
-
-  eliminarDenunciaComentario(denunciaId: number): Observable<any> {
-    return this.unwrapData(
-      this.http.delete<ApiResponse<any>>(`${environment.api}/api/comentarios/eliminarDenunciaComentario?denunciaId=${denunciaId}`),
-    );
-  }
-
   recomendarPost(postId: number): Observable<number> {
     return this.http
       .post<ApiResponse<number>>(`${environment.api}/api/posts/recomendarPost`, { id: postId })
@@ -653,10 +638,10 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getVotos(): Observable<PaginatedData<unknown>> {
+  getVotos(filtro: AdminFiltro = {}): Observable<PaginatedData<unknown>> {
     return this.http
       .get<ApiResponse<PaginatedData<unknown>>>(
-        `${environment.api}/api/votos/getVotosAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
+        `${environment.api}/api/votos/getVotosAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {

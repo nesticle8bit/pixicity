@@ -1,47 +1,102 @@
-<div class="container container--home comunidad-create">
-  <div class="row">
-    <div class="col-12 col-md-8">
-      <form [formGroup]="formGroup" (ngSubmit)="crear()" class="add-com">
-        <h2>{{temaId ? 'Editar tema' : 'Nuevo tema'}} @if (comunidad) { <small>en {{comunidad.nombre}}</small> }</h2>
-
-        <div class="item-form">
-          <label>Título</label>
-          <input type="text" formControlName="titulo" maxlength="150" />
-          @if (formGroup.get('titulo')?.touched && formGroup.get('titulo')?.invalid) {
-            <small class="err">El título es obligatorio.</small>
-          }
-        </div>
-
-        <div class="item-form">
-          <label>Contenido</label>
-          <app-rich-editor formControlName="contenido"
-            [placeholder]="'Desarrolla tu tema…'"></app-rich-editor>
-          @if (formGroup.get('contenido')?.touched && formGroup.get('contenido')?.invalid) {
-            <small class="err">El contenido es obligatorio.</small>
-          }
-        </div>
-
-        <div class="item-form">
-          <button type="submit" class="boton azul" [disabled]="loading">
-            <i class="ti ti-send"></i> {{temaId ? 'Guardar cambios' : 'Publicar tema'}}
-          </button>
-          <a [routerLink]="['/comunidades', slug]" class="boton gris" style="margin-left:6px;">Cancelar</a>
-        </div>
-      </form>
-    </div>
-
-    <aside class="col-12 col-md-4">
-      <div class="tema-tips">
-        <div class="tema-tips__head">
-          <i class="ti ti-bulb"></i> Tips para publicar
-        </div>
-        <ul class="tema-tips__list">
-          <li>Usa un título claro y descriptivo.</li>
-          <li>Desarrolla tu idea para abrir el debate.</li>
-          <li>Sé respetuoso con los demás miembros.</li>
-          <li>Aporta fuentes o enlaces cuando sea posible.</li>
-        </ul>
+<!-- Mismo diseño que crear post (estilos cp-* de posts-create). -->
+<div class="cp container container--home">
+  <form [formGroup]="formGroup" (ngSubmit)="crear()">
+    <!-- Barra superior: estado + acciones -->
+    <header class="cp-bar">
+      <div class="cp-bar__state">
+        <span class="cp-bar__badge" [class.cp-bar__badge--edit]="temaId">
+          <i class="ti" [class.ti-pencil-plus]="!temaId" [class.ti-edit]="temaId"></i>
+          {{ temaId ? 'Editando tema' : 'Nuevo tema' }}
+        </span>
+        @if (comunidad) {
+        <span class="cp-bar__comunidad">
+          en <a [routerLink]="['/comunidades', slug]">{{ comunidad.nombre }}</a>
+        </span>
+        }
       </div>
-    </aside>
-  </div>
+
+      <div class="cp-bar__actions">
+        <a [routerLink]="volverA" class="boton gris">
+          <i class="ti ti-x"></i> <span class="cp-hide-sm">Cancelar</span>
+        </a>
+        <button type="submit" class="boton azul" [disabled]="loading || formGroup.invalid || !comunidad">
+          @if (temaId) {
+          <i class="ti ti-check"></i> Guardar cambios
+          } @else {
+          <i class="ti ti-rocket"></i> Publicar
+          }
+        </button>
+      </div>
+    </header>
+
+    <div class="cp-layout">
+      <!-- Columna de escritura -->
+      <main class="cp-write">
+        <div class="cp-title">
+          <input type="text" class="cp-title__input" formControlName="titulo" maxlength="150"
+            placeholder="Escribe un título que abra el debate…" aria-label="Título del tema"
+            (keydown.enter)="$event.preventDefault()" />
+          <span class="cp-title__count" [class.cp-title__count--warn]="largoTitulo >= 135">
+            {{ largoTitulo }}/150
+          </span>
+        </div>
+
+        <section class="cp-editor">
+          <div class="cp-editor__head">
+            <span><i class="ti ti-article"></i> Contenido <span class="cp-req">*</span></span>
+          </div>
+
+          <app-rich-editor formControlName="contenido" [placeholder]="'Desarrolla tu tema…'"></app-rich-editor>
+
+          @if (formGroup.get('contenido')?.touched && formGroup.get('contenido')?.invalid) {
+          <p class="cp-empty-hint"><i class="ti ti-alert-circle"></i> El contenido es obligatorio.</p>
+          }
+        </section>
+      </main>
+
+      <!-- Panel lateral -->
+      <aside class="cp-rail">
+        <section class="cp-card cp-progress">
+          <div class="cp-progress__top">
+            <span class="cp-card__title"><i class="ti ti-list-check"></i> Listo para publicar</span>
+            <strong class="cp-progress__pct" [class.cp-progress__pct--done]="progreso === 100">{{ progreso }}%</strong>
+          </div>
+          <div class="cp-progress__bar" role="progressbar" [attr.aria-valuenow]="progreso" aria-valuemin="0"
+            aria-valuemax="100">
+            <span [style.width.%]="progreso" [class.cp-progress__bar--done]="progreso === 100"></span>
+          </div>
+          <ul class="cp-checks">
+            @for (paso of pasos; track paso.label) {
+            <li [class.cp-checks__ok]="paso.ok">
+              <i class="ti" [class.ti-circle-check]="paso.ok" [class.ti-circle]="!paso.ok"></i>
+              {{ paso.label }}
+            </li>
+            }
+          </ul>
+        </section>
+
+        @if (comunidad) {
+        <section class="cp-card">
+          <div class="cp-card__head">
+            <span class="cp-card__title"><i class="ti ti-users-group"></i> Comunidad</span>
+          </div>
+          <a class="cp-comunidad" [routerLink]="['/comunidades', slug]">
+            <strong>{{ comunidad.nombre }}</strong>
+            <small>{{ comunidad.miembrosCount | number }} miembros · {{ comunidad.temasCount | number }} temas</small>
+          </a>
+        </section>
+        }
+
+        <details class="cp-card cp-tips" open>
+          <summary><i class="ti ti-bulb"></i> Tips para un buen tema</summary>
+          <ul class="cp-tips__list">
+            <li>Usa un título claro y descriptivo.</li>
+            <li>Desarrolla tu idea para abrir el debate.</li>
+            <li>Sé respetuoso con los demás miembros.</li>
+            <li>Aporta fuentes o enlaces cuando sea posible.</li>
+          </ul>
+        </details>
+      </aside>
+    </div>
+  </form>
 </div>

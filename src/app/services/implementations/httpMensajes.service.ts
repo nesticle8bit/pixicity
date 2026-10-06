@@ -1,3 +1,4 @@
+import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -7,7 +8,7 @@ import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { PaginationService } from '../shared/pagination.service';
 import { IHttpMensajesService } from '../interfaces/httpMensajes.interface';
-import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
+import { ApiResponse, PaginatedData, Pagination } from 'src/app/models/api/api-response.model';
 import {
   MensajeViewModel,
   SendMPViewModel,
@@ -44,10 +45,10 @@ export class HttpMensajesService implements IHttpMensajesService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getMensajesAdmin(): Observable<PaginatedData<MensajeViewModel, 'mensajes'>> {
+  getMensajesAdmin(filtro: AdminFiltro = {}): Observable<PaginatedData<MensajeViewModel, 'mensajes'>> {
     return this.http
       .get<ApiResponse<PaginatedData<MensajeViewModel, 'mensajes'>>>(
-        `${environment.api}/api/mensajes/getMensajesAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
+        `${environment.api}/api/mensajes/getMensajesAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -112,9 +113,9 @@ export class HttpMensajesService implements IHttpMensajesService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getConversaciones(): Observable<{ conversaciones: ConversacionViewModel[]; pagination: any }> {
+  getConversaciones(): Observable<{ conversaciones: ConversacionViewModel[]; pagination: Pagination }> {
     return this.http
-      .get<ApiResponse<{ conversaciones: ConversacionViewModel[]; pagination: any }>>(
+      .get<ApiResponse<{ conversaciones: ConversacionViewModel[]; pagination: Pagination }>>(
         `${environment.api}/api/mensajes/getConversaciones?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(

@@ -1,3 +1,4 @@
+import { AdminFiltro } from 'src/app/models/admin/admin-filtro.model';
 import { UsuarioAdminSearchFilter, UsuarioSearchFilter } from 'src/app/models/shared/service-types.model';
 import { JwtUserModel, LoginResponse } from 'src/app/models/security/jwtUser.model';
 import { UserModel } from 'src/app/models/security/user.model';
@@ -6,17 +7,17 @@ import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
 import { ActividadViewModel } from 'src/app/models/logs/logs-vm.model';
 import { DropdownViewModel } from 'src/app/models/parametros/parametros-vm.model';
-import { PerfilInfoResponse, PerfilUsuarioViewModel, RangoUsuarioReportViewModel, SeguidoresResponse, UsuarioAvatarViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { PerfilInfoResponse, PerfilUsuarioViewModel, RangoUsuarioReportViewModel, SeguidoresResponse, UsuarioAdminViewModel, UsuarioAvatarViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 
 @Injectable()
 export abstract class IHttpSecurityService {
   abstract getCurrentUser(): JwtUserModel;
   abstract getCurrentUserAsObservable(): Observable<JwtUserModel>;
   abstract getUsuarios(search: UsuarioSearchFilter): Observable<PaginatedData<UsuarioViewModel, 'usuarios'>>;
-  abstract getUsuariosAdmin(search: UsuarioAdminSearchFilter): Observable<PaginatedData<UsuarioViewModel, 'usuarios'>>;
+  abstract getUsuariosAdmin(search: UsuarioAdminSearchFilter, filtro?: AdminFiltro): Observable<PaginatedData<UsuarioAdminViewModel, 'usuarios'>>;
   abstract getLoggedUserByJwt(): Observable<UsuarioViewModel>;
   abstract getUserByUserName(userName: string): Observable<PerfilUsuarioViewModel>;
-  abstract getSesiones(): Observable<PaginatedData<unknown>>;
+  abstract getSesiones(filtro?: AdminFiltro): Observable<PaginatedData<unknown>>;
   abstract deleteSessionById(sessionId: number): Observable<boolean>;
   abstract setUserToLocalStorage(obj: any): any;
   abstract registerUser(user: UserModel): Observable<number>;
@@ -39,7 +40,7 @@ export abstract class IHttpSecurityService {
   abstract changeAvatar(file: Blob): Observable<string>;
   abstract changeAvatarAdmin(file: Blob, usuarioId: number): Observable<string>;
   abstract getLastRegisteredUsers(): Observable<UsuarioViewModel[]>;
-  abstract getRangosUsuarios(): Observable<PaginatedData<unknown, 'rangos'>>;
+  abstract getRangosUsuarios(filtro?: AdminFiltro): Observable<PaginatedData<unknown, 'rangos'>>;
   abstract getRangosDropdown(): Observable<DropdownViewModel[]>;
   abstract getActividadUsuario(usuarioId: number, tipoActividad: number): Observable<ActividadViewModel[]>;
   abstract addUpdateRango(rango: unknown): Observable<number>;

@@ -5,13 +5,6 @@ export interface FotoSearchParams {
   pageCount?: number;
 }
 
-export interface PostSearchFilter {
-  search?: string;
-  searchType?: string;
-  categoriaId?: number;
-  autor?: string;
-}
-
 export interface UsuarioSearchFilter {
   genero?: string;
   pais?: string;
@@ -20,17 +13,6 @@ export interface UsuarioSearchFilter {
 
 export interface UsuarioAdminSearchFilter {
   rangoId?: number;
-}
-
-export interface DenunciaViewModel {
-  id: number;
-  fechaRegistro: string;
-  razon: string;
-  postId: number;
-  usuarioId: number;
-  gestionada: boolean;
-  postTitulo?: string;
-  userName?: string;
 }
 
 export interface PaginaViewModel {

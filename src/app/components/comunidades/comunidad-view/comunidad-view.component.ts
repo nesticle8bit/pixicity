@@ -1,6 +1,9 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Pagination } from 'src/app/models/api/api-response.model';
+import { ComentarioReciente, ComunidadDetalle, ComunidadMiembro, TemaListado, TemaTop } from 'src/app/models/comunidades/comunidad.model';
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -16,19 +19,19 @@ import { SEOService } from 'src/app/services/shared/seo.service';
 export class ComunidadViewComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  public comunidad: any = null;
-  public temas: any[] = [];
-  public miembros: any[] = [];
-  public topTemas: any[] = [];
-  public comentariosRecientes: any[] = [];
+  public comunidad: ComunidadDetalle | null = null;
+  public temas: TemaListado[] = [];
+  public miembros: ComunidadMiembro[] = [];
+  public topTemas: TemaTop[] = [];
+  public comentariosRecientes: ComentarioReciente[] = [];
   public periodoTop: string = 'Semana';
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
   public loading: boolean = true;
   public verMas: boolean = false;
   public slug: string = '';
   public queryTemas: string = '';
   public pageTemas: number = 1;
-  public paginationTemas: any = {};
+  public paginationTemas: Partial<Pagination> = {};
 
   constructor(
     private displayService: DisplayComponentService,
@@ -67,26 +70,26 @@ export class ComunidadViewComponent implements OnInit {
   loadComunidad(): void {
     this.loading = true;
     this.comunidadesService.getComunidad(this.slug).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (value) => {
-        this.comunidad = value;
+      next: (comunidad) => {
+        this.comunidad = comunidad;
         this.loading = false;
         this.seoService.setSEO({
-          title: this.comunidad.nombre,
-          description: this.comunidad.descripcion || `Comunidad ${this.comunidad.nombre} en Taringa. Únete, participa en sus temas y comparte con la comunidad.`,
+          title: comunidad.nombre,
+          description: comunidad.descripcion || `Comunidad ${comunidad.nombre} en Taringa. Únete, participa en sus temas y comparte con la comunidad.`,
           type: 'website',
-          imageURL: this.comunidad.imagen || this.comunidad.avatar || '',
-          tags: [this.comunidad.nombre, 'comunidad', 'taringas'],
+          imageURL: comunidad.imagen || '',
+          tags: [comunidad.nombre, 'comunidad', 'taringas'],
           canonical: `${location.origin}${location.pathname}`,
           jsonLd: {
             '@context': 'https://schema.org',
             '@graph': [{
               '@type': 'CollectionPage',
-              name: this.comunidad.nombre,
-              description: this.comunidad.descripcion || undefined,
+              name: comunidad.nombre,
+              description: comunidad.descripcion || undefined,
               url: `${location.origin}${location.pathname}`,
-              image: this.comunidad.imagen || this.comunidad.avatar || undefined,
+              image: comunidad.imagen || undefined,
               isPartOf: { '@id': `${location.origin}/#website` },
-              dateCreated: this.comunidad.fechaRegistro,
+              dateCreated: comunidad.fechaRegistro,
             }, {
               '@type': 'BreadcrumbList',
               itemListElement: [
@@ -95,7 +98,7 @@ export class ComunidadViewComponent implements OnInit {
                 {
                   '@type': 'ListItem',
                   position: 3,
-                  name: this.comunidad.nombre,
+                  name: comunidad.nombre,
                   item: `${location.origin}${location.pathname}`,
                 },
               ],
@@ -123,7 +126,9 @@ export class ComunidadViewComponent implements OnInit {
   }
 
   loadTemas(): void {
-    this.comunidadesService.getTemas(this.comunidad.id, { page: this.pageTemas, pageCount: 20, query: this.queryTemas })
+    const comunidad = this.comunidad;
+    if (!comunidad) return;
+    this.comunidadesService.getTemas(comunidad.id, { page: this.pageTemas, pageCount: 20, query: this.queryTemas })
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((r) => {
         this.temas = r?.data ?? [];
         this.paginationTemas = r?.pagination ?? {};
@@ -135,7 +140,7 @@ export class ComunidadViewComponent implements OnInit {
     this.loadTemas();
   }
 
-  queryParamsPara(pagina: number): any {
+  queryParamsPara(pagina: number): Params {
     return pagina <= 1 ? { page: null } : { page: pagina };
   }
 
@@ -145,17 +150,23 @@ export class ComunidadViewComponent implements OnInit {
   }
 
   loadMiembros(): void {
-    this.comunidadesService.getMiembros(this.comunidad.id, { page: 1, pageCount: 12 })
+    const comunidad = this.comunidad;
+    if (!comunidad) return;
+    this.comunidadesService.getMiembros(comunidad.id, { page: 1, pageCount: 12 })
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((r) => (this.miembros = r?.data ?? []));
   }
 
   loadTopTemas(): void {
-    this.comunidadesService.getTopTemas(this.comunidad.id, this.periodoTop)
+    const comunidad = this.comunidad;
+    if (!comunidad) return;
+    this.comunidadesService.getTopTemas(comunidad.id, this.periodoTop)
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((r) => (this.topTemas = r ?? []));
   }
 
   loadComentariosRecientes(): void {
-    this.comunidadesService.getComentariosRecientes(this.comunidad.id, 5)
+    const comunidad = this.comunidad;
+    if (!comunidad) return;
+    this.comunidadesService.getComentariosRecientes(comunidad.id, 5)
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe((r) => (this.comentariosRecientes = r ?? []));
   }
 
@@ -175,28 +186,34 @@ export class ComunidadViewComponent implements OnInit {
   }
 
   unirme(): void {
-    this.comunidadesService.unirme(this.comunidad.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.comunidad.soyMiembro = true;
-      this.comunidad.miembrosCount++;
+    const comunidad = this.comunidad;
+    if (!comunidad) return;
+    this.comunidadesService.unirme(comunidad.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      comunidad.soyMiembro = true;
+      comunidad.miembrosCount++;
       this.notificationService.success('Te has unido a la comunidad', 'Bienvenido');
       this.loadMiembros();
     });
   }
 
   abandonar(): void {
+    const comunidad = this.comunidad;
+    if (!comunidad) return;
     if (!this.notificationService.confirm('¿Abandonar esta comunidad?')) return;
-    this.comunidadesService.abandonar(this.comunidad.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.comunidad.soyMiembro = false;
-      this.comunidad.miembrosCount = Math.max(0, this.comunidad.miembrosCount - 1);
+    this.comunidadesService.abandonar(comunidad.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      comunidad.soyMiembro = false;
+      comunidad.miembrosCount = Math.max(0, comunidad.miembrosCount - 1);
       this.notificationService.success('Has abandonado la comunidad', 'Listo');
       this.loadMiembros();
     });
   }
 
   seguir(): void {
-    this.comunidadesService.seguir(this.comunidad.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((sigue: boolean) => {
-      this.comunidad.laSigo = sigue;
-      this.comunidad.seguidoresCount += sigue ? 1 : -1;
+    const comunidad = this.comunidad;
+    if (!comunidad) return;
+    this.comunidadesService.seguir(comunidad.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((sigue: boolean) => {
+      comunidad.laSigo = sigue;
+      comunidad.seguidoresCount += sigue ? 1 : -1;
     });
   }
 
@@ -206,8 +223,10 @@ export class ComunidadViewComponent implements OnInit {
   }
 
   eliminarComunidad(): void {
-    if (!this.notificationService.confirm(`¿Eliminar la comunidad "${this.comunidad.nombre}"? Esta acción no se puede deshacer.`)) return;
-    this.comunidadesService.deleteComunidad(this.comunidad.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+    const comunidad = this.comunidad;
+    if (!comunidad) return;
+    if (!this.notificationService.confirm(`¿Eliminar la comunidad "${comunidad.nombre}"? Esta acción no se puede deshacer.`)) return;
+    this.comunidadesService.deleteComunidad(comunidad.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.notificationService.success('Comunidad eliminada', 'Listo');
       this.router.navigate(['/comunidades']);
     });

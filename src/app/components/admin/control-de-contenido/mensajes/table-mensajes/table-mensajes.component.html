@@ -1,3 +1,11 @@
+<app-admin-filtros [config]="filtrosConfig" [total]="totalCount" [cargando]="cargando" (cambio)="aplicarFiltro($event)"></app-admin-filtros>
+@if (cargando) {
+<div class="adm-cargando" role="progressbar" aria-label="Cargando"></div>
+}
+@if (!cargando && !mensajes?.length) {
+<div class="adm-vacio"><i class="ti ti-database-search" aria-hidden="true"></i>No hay resultados{{ filtro.q || filtro.tipo || filtro.estado || filtro.usuario || filtro.desde || filtro.hasta ? ' con estos filtros' : '' }}.</div>
+}
+
 @if (mensajes?.length > 0) {
   <main class="table-responsive">
     <table class="table table-sm table-striped table-hover">
@@ -93,7 +101,7 @@
 }
 
 @if (mensajes?.length > 0) {
-  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+  <mat-paginator [pageIndex]="paginationService.page - 1" [length]="totalCount" [pageSize]="paginationService.pageCount"
     [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
   </mat-paginator>
 }

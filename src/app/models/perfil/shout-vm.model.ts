@@ -32,8 +32,10 @@ export interface ShoutComentarioViewModel {
   parentId: number | null;
   comentario: string;
   fechaRegistro: string;
+  fechaActualiza: string | null;
   usuario: string;
   avatar: string | null;
+  rango: { id: number; nombre: string; icono: string | null; color: string | null } | null;
   votos: number;
   miVoto: number;
   votosArriba: number;

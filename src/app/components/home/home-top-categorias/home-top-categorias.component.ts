@@ -1,3 +1,4 @@
+import { TopCategoriaViewModel } from 'src/app/models/parametros/parametros-vm.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
@@ -11,7 +12,7 @@ import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametr
 export class HomeTopCategoriasComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  public categorias: any[] = [];
+  public categorias: TopCategoriaViewModel[] = [];
 
   constructor(private parametrosService: IHttpParametrosService) {}
 
@@ -23,7 +24,7 @@ export class HomeTopCategoriasComponent implements OnInit {
     this.parametrosService
       .getTopCategorias(10)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value: any[]) => {
+      .subscribe((value) => {
         this.categorias = value ?? [];
       });
   }

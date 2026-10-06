@@ -1,16 +1,17 @@
+import { AdminFiltro } from 'src/app/models/admin/admin-filtro.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PaginatedData } from 'src/app/models/api/api-response.model';
+import { PaginatedData, Pagination } from 'src/app/models/api/api-response.model';
 import { ConversacionPage, ConversacionParams, ConversacionViewModel, MensajeViewModel, ResponseMPViewModel, SendMPViewModel } from 'src/app/models/mensajes/mensaje-vm.model';
 
 @Injectable()
 export abstract class IHttpMensajesService {
   abstract getMensajes(): Observable<PaginatedData<MensajeViewModel, 'mensajes'>>;
-  abstract getMensajesAdmin(): Observable<PaginatedData<MensajeViewModel, 'mensajes'>>;
+  abstract getMensajesAdmin(filtro?: AdminFiltro): Observable<PaginatedData<MensajeViewModel, 'mensajes'>>;
   abstract getLastMensajes(): Observable<MensajeViewModel[]>;
   abstract sendMensajePrivado(mp: SendMPViewModel): Observable<ResponseMPViewModel>;
   abstract getMensajePrivadoById(id: number): Observable<MensajeViewModel>;
-  abstract getConversaciones(): Observable<{ conversaciones: ConversacionViewModel[]; pagination: any }>;
+  abstract getConversaciones(): Observable<{ conversaciones: ConversacionViewModel[]; pagination: Pagination }>;
   abstract getConversacion(params: ConversacionParams): Observable<ConversacionPage>;
   abstract deleteConversaciones(otroIds: number[]): Observable<boolean>;
   abstract setMensajesAsReaded(): Observable<boolean>;

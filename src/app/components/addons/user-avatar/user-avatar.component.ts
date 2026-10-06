@@ -12,27 +12,27 @@ import { environment } from 'src/environments/environment';
 export class UserAvatarComponent implements OnInit {
   public backendURL: string = `${environment.api}/images/avatars`;
 
-  @Input() height: any = null;
-  @Input() width: any = null;
+  @Input() height: number | string | null = null;
+  @Input() width: number | string | null = null;
   @Input() class: string = '';
 
-  private _avatar: any;
+  private _avatar: string | null | undefined;
 
-  @Input() set avatar(value: any) {
+  @Input() set avatar(value: string | null | undefined) {
     this._avatar = value;
   }
 
-  get avatar(): any {
+  get avatar(): string {
     return this._avatar ? this._avatar : '';
   }
 
-  private _userName: any;
+  private _userName: string | null | undefined;
 
-  @Input() set userName(value: any) {
+  @Input() set userName(value: string | null | undefined) {
     this._userName = value;
   }
 
-  get userName(): any {
+  get userName(): string {
     return this._userName ? this._userName : '';
   }
 

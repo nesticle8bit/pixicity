@@ -1,258 +1,134 @@
 <div class="container container--home">
   <div class="row">
+    <!-- Columna izquierda: búsqueda, filtros rápidos y lista -->
     <div class="col-12 col-sm-6 col-md-9">
       <h6 class="main-title">
         <span>Últimas notificaciones</span>
-
         <strong class="float-end text-info" style="background: #fff; padding-left: 7px;">
           {{totalCount}}
         </strong>
       </h6>
 
-      @if (notificaciones.length < 1) {
-        <div class="nada-gris my-3">
-          Aún no se han encontrado notificaciones para tí.
+      <div class="mon-toolbar">
+        <div class="mon-search">
+          <i class="ti ti-search" aria-hidden="true"></i>
+          <input type="search" [value]="busqueda" (input)="onBuscar($any($event.target).value)"
+            placeholder="Buscar por usuario, post o mensaje…" aria-label="Buscar notificaciones" />
+          @if (busqueda) {
+          <button type="button" class="mon-search__clear" (click)="limpiarBusqueda()" aria-label="Limpiar búsqueda">
+            <i class="ti ti-x"></i>
+          </button>
+          }
         </div>
+
+        <div class="mon-chips" role="group" aria-label="Estado">
+          <button type="button" [class.active]="!soloNoLeidas" (click)="cambiarNoLeidas(false)">Todas</button>
+          <button type="button" [class.active]="soloNoLeidas" (click)="cambiarNoLeidas(true)">No leídas</button>
+        </div>
+
+        <div class="mon-chips" role="group" aria-label="Periodo">
+          @for (p of periodos; track p.valor) {
+          <button type="button" [class.active]="periodo === p.valor" (click)="cambiarPeriodo(p.valor)">{{p.label}}</button>
+          }
+        </div>
+      </div>
+
+      @if (hayFiltros) {
+      <div class="mon-activos">
+        <span><i class="ti ti-filter"></i> Filtros activos</span>
+        <button type="button" class="mon-link" (click)="limpiarFiltros()">Quitar filtros</button>
+      </div>
+      }
+
+      @if (ningunoMarcado) {
+      <div class="nada-gris my-3">Marca al menos un tipo de actividad en el panel de la derecha.</div>
+      } @else if (notificaciones.length < 1 && !cargando) {
+      <div class="nada-gris my-3">
+        @if (hayFiltros) {
+        No hay notificaciones que coincidan con los filtros.
+        } @else {
+        Aún no se han encontrado notificaciones para tí.
+        }
+      </div>
       }
 
       @if (notificaciones.length > 0) {
-        <main class="table-responsive">
-          <table class="table table-sm table-striped table-hover">
-            <tbody>
-              @for (notificacion of notificaciones; track notificacion; let i = $index) {
-                <tr>
-                  <td>
-                    <div class="row">
-                      <div class="col-12 col-sm-1">
-                        <app-user-avatar [avatar]="notificacion.usuarioQueHaceAccion.avatar"
-                          [userName]="notificacion.usuarioQueHaceAccion.userName" [height]="40">
-                        </app-user-avatar>
-                      </div>
-                      <div class="col-12 col-sm-11">
-                        <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion?.userName]" [appUserPopover]="notificacion.usuarioQueHaceAccion?.userName">
-                          {{'@'}}{{notificacion.usuarioQueHaceAccion?.userName}}
-                        </a>
-                        <br>
-                          <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
-                          <span [innerHTML]="notificacion.mensaje"></span> <a
-                          [routerLink]="['/posts/' + notificacion.post?.categoria?.seo + '/' + notificacion.post?.id + '/' + notificacion.post?.url]"
-                          title="{{notificacion?.post?.titulo}}">
-                          {{notificacion.post?.titulo}}
-                        </a>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="text-end" width="150px">
-                    <small class="text-muted cursor--help"
-                      matTooltip="{{notificacion.fechaRegistro | date:'medium'}}">
-                      <i>
-                        {{notificacion.fechaRegistro | timeAgo}}
-                      </i>
-                    </small>
-                  </td>
-                </tr>
+      <ul class="mon-list" [class.mon-list--cargando]="cargando">
+        @for (notificacion of notificaciones; track notificacion.id) {
+        <li class="mon-item" [class.mon-item--nueva]="!notificacion.leido">
+          <app-user-avatar class="mon-item__avatar" [avatar]="notificacion.usuarioQueHaceAccion?.avatar"
+            [userName]="notificacion.usuarioQueHaceAccion?.userName" [width]="40" [height]="40">
+          </app-user-avatar>
+
+          <div class="mon-item__body">
+            <a class="mon-item__user" [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion?.userName]"
+              [appUserPopover]="notificacion.usuarioQueHaceAccion?.userName">
+              {{'@'}}{{notificacion.usuarioQueHaceAccion?.userName}}
+            </a>
+            <div class="mon-item__msg">
+              <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
+              <span [innerHTML]="notificacion.mensaje"></span>
+              @if (notificacion.post) {
+              <a [routerLink]="['/posts/' + notificacion.post.categoria?.seo + '/' + notificacion.post.id + '/' + notificacion.post.url]"
+                [fragment]="notificacion.comentarioId ? 'comentario-' + notificacion.comentarioId : undefined"
+                title="{{notificacion.post.titulo}}">
+                {{notificacion.post.titulo}}
+              </a>
               }
-            </tbody>
-          </table>
-        </main>
-      }
+            </div>
+          </div>
 
-      @if (notificaciones.length > 0) {
-        <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
-          [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)"
-          >
-        </mat-paginator>
+          <small class="mon-item__fecha text-muted cursor--help" matTooltip="{{notificacion.fechaRegistro | date:'medium'}}">
+            {{notificacion.fechaRegistro | timeAgo}}
+          </small>
+        </li>
+        }
+      </ul>
+
+      <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+        [pageIndex]="paginationService.page - 1" [pageSizeOptions]="paginationService.selectItemsPerPage"
+        (page)="pageChange($event)">
+      </mat-paginator>
       }
     </div>
 
-    <form class="col-12 col-sm-6 col-md-3 dotted-border--left">
+    <!-- Columna derecha: tipos de actividad -->
+    <aside class="col-12 col-sm-6 col-md-3 dotted-border--left">
       <h6 class="main-title">
         <span>Filtrar actividad</span>
       </h6>
 
-      <form [formGroup]="formGroup">
-        <section class="mb-3">
-          <div class="dsw">
+      <div class="mon-masivo">
+        <button type="button" class="mon-link" (click)="marcarTodos(true)" [disabled]="todosMarcados">Todos</button>
+        ·
+        <button type="button" class="mon-link" (click)="marcarTodos(false)" [disabled]="ningunoMarcado">Ninguno</button>
+      </div>
 
-            <ul class="list-unstyled mt-2">
-              <h2 style="margin: 0;">Mis Posts</h2>
-              <li>
-                <label>
-                  <span class="monac_icons ma_star"></span>
-                  <input type="checkbox" formControlName="favorito" (change)="filtrarActividad()" />
-                  Favoritos
-                </label>
-              </li>
-
-              <li>
-                <label>
-                  <span class="monac_icons ma_comment_post"></span>
-                  <input type="checkbox" formControlName="comentarios" (change)="filtrarActividad()" />
-                  Comentarios
-                </label>
-              </li>
-
-              <li>
-                <label>
-                  <span class="monac_icons ma_points"></span>
-                  <input type="checkbox" formControlName="puntos" (change)="filtrarActividad()" />
-                  Puntos Recibidos
-                </label>
-              </li>
-
-              <h2>Mis Comentarios</h2>
-              <!-- <li>
-              <label>
-                <span class="monac_icons ma_voto"></span>
-                <input type="checkbox" (change)="filtrarActividad()" />
-                Votos
-              </label>
-            </li> -->
-
+      <div class="dsw mb-3">
+        @for (grupo of grupos; track grupo.titulo) {
+        <section class="mon-grupo">
+          <label class="mon-grupo__titulo">
+            <input type="checkbox" [checked]="grupoMarcado(grupo)" [indeterminate]="grupoParcial(grupo)"
+              (change)="toggleGrupo(grupo, $any($event.target).checked)" />
+            {{grupo.titulo}}
+          </label>
+          <ul class="list-unstyled">
+            @for (t of grupo.tipos; track t.tipo) {
             <li>
               <label>
-                <span class="monac_icons ma_comment_resp"></span>
-                <input type="checkbox" formControlName="respuestas" (change)="filtrarActividad()" />
-                Respuestas
+                <span class="monac_icons {{t.icono}}"></span>
+                <input type="checkbox" [checked]="seleccionados.has(t.tipo)"
+                  (change)="toggleTipo(t.tipo, $any($event.target).checked)" />
+                {{t.label}}
               </label>
             </li>
+            }
+          </ul>
+        </section>
+        }
+      </div>
 
-            <!-- <li>
-            <label>
-              <span class="monac_icons ma_blue_ball"></span>
-              <input type="checkbox" (change)="filtrarActividad()" />
-              Menciones
-            </label>
-          </li> -->
-
-          <h2>Usuarios que sigo</h2>
-
-          <li>
-            <label>
-              <span class="monac_icons ma_follow"></span>
-              <input type="checkbox" checked="checked" formControlName="seguidores" (change)="filtrarActividad()" />
-              Nuevos
-            </label>
-          </li>
-
-          <li>
-            <label>
-              <span class="monac_icons ma_post"></span>
-              <input type="checkbox" formControlName="postNuevo" (change)="filtrarActividad()" />
-              Posts
-            </label>
-          </li>
-
-          <!-- <li>
-          <label>
-            <span class="monac_icons ma_photo"></span>
-            <input type="checkbox" (change)="filtrarActividad()">
-            Fotos
-          </label>
-        </li> -->
-
-        <li>
-          <label>
-            <span class="monac_icons ma_share"></span>
-            <input type="checkbox" formControlName="recomendaciones" (change)="filtrarActividad()" />
-            Recomendaciones
-          </label>
-        </li>
-
-        <h2>Posts que sigo</h2>
-
-        <li>
-          <label>
-            <span class="monac_icons ma_blue_ball"></span>
-            <input type="checkbox"  formControlName="comentariosPostQueSigue" (change)="filtrarActividad()" />
-            Comentarios
-          </label>
-        </li>
-
-        <!-- <li>
-        <h2>Mis Fotos</h2>
-      </li>
-
-      <li>
-        <label>
-          <span class="monac_icons ma_comment_post"></span>
-          <input type="checkbox" (change)="filtrarActividad()" />
-          Comentarios
-        </label>
-      </li>
-
-      <h2>Perfil</h2>
-
-      <li>
-        <label>
-          <span class="monac_icons ma_status"></span>
-          <input type="checkbox" checked="checked" (change)="filtrarActividad()" />
-          Publicaciones
-        </label>
-      </li>
-
-      <li>
-        <label>
-          <span class="monac_icons ma_w_comment"></span>
-          <input type="checkbox" checked="checked" (change)="filtrarActividad()" />
-          Comentarios
-        </label>
-      </li>
-
-      <li>
-        <label>
-          <span class="monac_icons ma_w_like"></span>
-          <input type="checkbox" checked="checked" (change)="filtrarActividad()" />
-          Likes
-        </label>
-      </li> -->
-
-      <!-- <h2>Notificaciones Live</h2>
-
-      <li>
-        <label>
-          <input type="checkbox" checked="checked" (change)="filtrarActividad()" />
-          Mostrar notificaciones
-        </label>
-      </li>
-
-      <li>
-        <label>
-          <input type="checkbox" checked="checked" (change)="filtrarActividad()" />
-          Mostrar mensajes nuevos
-        </label>
-      </li>
-
-      <li>
-        <label>
-          <input type="checkbox" checked="checked" (change)="filtrarActividad()" />
-          Reproducir sonidos
-        </label>
-      </li> -->
-    </ul>
+      <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
+    </aside>
   </div>
-</section>
-</form>
-
-<!-- <h6 class="main-title">
-<span>Siguiendo</span>
-</h6>
-
-<div class="sigoo">
-  <a href="/monitor/seguidores">
-    Seguidores <span>0</span>
-  </a>
-
-  <a href="/monitor/siguiendo">
-    Siguiendo <span>1</span>
-  </a>
-
-  <a href="/monitor/posts">
-    Posts <span>0</span>
-  </a>
-</div> -->
-
-<ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
-</form>
-</div>
 </div>

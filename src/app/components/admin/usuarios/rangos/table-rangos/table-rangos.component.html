@@ -1,3 +1,11 @@
+<app-admin-filtros [config]="filtrosConfig" [total]="totalCount" [cargando]="cargando" (cambio)="aplicarFiltro($event)"></app-admin-filtros>
+@if (cargando) {
+<div class="adm-cargando" role="progressbar" aria-label="Cargando"></div>
+}
+@if (!cargando && !rangos?.length) {
+<div class="adm-vacio"><i class="ti ti-database-search" aria-hidden="true"></i>No hay resultados{{ filtro.q || filtro.tipo || filtro.estado || filtro.usuario || filtro.desde || filtro.hasta ? ' con estos filtros' : '' }}.</div>
+}
+
 <div class="mb-2 mt-0">
   <div class="float-start">
     <button type="button" mat-flat-button color="warn" (click)="updateRangoUsuarios()">
@@ -104,7 +112,7 @@
   }
 
   @if (rangos.length > 0) {
-    <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
+    <mat-paginator [pageIndex]="paginationService.page - 1" [length]="totalCount" [pageSize]="paginationService.pageCount"
       [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
     </mat-paginator>
   }

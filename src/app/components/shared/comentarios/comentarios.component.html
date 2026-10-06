@@ -58,7 +58,8 @@
 
 <!-- Comentario (raíz y respuesta) -->
 <ng-template #comentarioTpl let-c let-esRespuesta="esRespuesta">
-  <div class="coment" [class.is-destacado]="c.destacado && !esRespuesta">
+  <div class="coment" [id]="'comentario-' + c.id" [class.is-destacado]="c.destacado && !esRespuesta"
+    [class.coment--resaltado]="resaltadoId === c.id">
     @if (c.destacado && !esRespuesta) {
     <div class="coment-top-badge"><i class="ti ti-award"></i> Comentario destacado</div>
     }

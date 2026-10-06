@@ -1,3 +1,4 @@
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
@@ -15,7 +16,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 export class MainSubmenuComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
   public display!: DisplayComponentModel;
 
   /** Sección activa: define qué items del submenú se muestran */

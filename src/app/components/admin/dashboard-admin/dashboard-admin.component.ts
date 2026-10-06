@@ -1,3 +1,4 @@
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AdminDashboardService } from 'src/app/services/shared/adminDashboard.service';
@@ -35,7 +36,7 @@ export class DashboardAdminComponent implements OnInit {
   private readonly dashboardService = inject(AdminDashboardService);
   private readonly securityService = inject(IHttpSecurityService);
 
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
   public resumen: DashboardResumen | null = null;
   public cargando = false;
   public error: string | null = null;

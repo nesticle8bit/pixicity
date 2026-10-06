@@ -2,6 +2,7 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ComunidadDetalle, TemaGuardar } from 'src/app/models/comunidades/comunidad.model';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
@@ -10,13 +11,14 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   standalone: false,
   selector: 'app-comunidad-tema-create',
   templateUrl: './comunidad-tema-create.component.html',
-  styleUrls: ['../comunidad-create/comunidad-create.component.scss'],
+  // Mismo diseño que crear post: comparte sus estilos (cp-*) más unos pocos propios.
+  styleUrls: ['../../posts/posts-create/posts-create.component.scss', './comunidad-tema-create.component.scss'],
 })
 export class ComunidadTemaCreateComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
-  public comunidad: any = null;
+  public comunidad: ComunidadDetalle | null = null;
   public loading: boolean = false;
   public slug: string = '';
   public temaId: number = 0;
@@ -53,6 +55,29 @@ export class ComunidadTemaCreateComponent implements OnInit {
     });
   }
 
+  get largoTitulo(): number {
+    return (this.formGroup.get('titulo')?.value ?? '').length;
+  }
+
+  get pasos(): { label: string; ok: boolean }[] {
+    const contenido = (this.formGroup.get('contenido')?.value ?? '').replace(/<[^>]*>/g, '').trim();
+    return [
+      { label: 'Título', ok: this.formGroup.get('titulo')?.valid ?? false },
+      { label: 'Contenido', ok: contenido.length > 0 },
+      { label: 'Desarrollo (al menos 200 caracteres)', ok: contenido.length >= 200 },
+    ];
+  }
+
+  get progreso(): number {
+    const pasos = this.pasos;
+    return Math.round((pasos.filter((p) => p.ok).length / pasos.length) * 100);
+  }
+
+  /** Cancelar vuelve al tema al editar y a la comunidad al crear. */
+  get volverA(): (string | number)[] {
+    return this.temaId ? ['/comunidades', this.slug, 'tema', this.temaId, 'ver'] : ['/comunidades', this.slug];
+  }
+
   cargarTema(id: number): void {
     this.comunidadesService.getTema(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (tema) => {
@@ -72,7 +97,7 @@ export class ComunidadTemaCreateComponent implements OnInit {
     }
 
     this.loading = true;
-    const model: any = {
+    const model: TemaGuardar = {
       id: this.temaId,
       comunidadId: this.comunidad.id,
       titulo: this.formGroup.get('titulo')?.value,

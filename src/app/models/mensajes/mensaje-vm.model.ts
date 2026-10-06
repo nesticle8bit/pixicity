@@ -23,6 +23,9 @@ export interface ConversacionViewModel {
   otro: UsuarioAvatarViewModel;
 }
 
+/** Fila de la bandeja: la conversación más la marca de selección local. */
+export type ConversacionFila = ConversacionViewModel & { selected: boolean };
+
 export interface ConversacionPage {
   mensajes: MensajeViewModel[];
   hayMas: boolean;

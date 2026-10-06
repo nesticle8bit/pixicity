@@ -14,7 +14,6 @@ import {
   ComunidadMiembro,
   ComunidadSubCategoria,
   ComunidadSubCategoriaGuardar,
-  DenunciaComentarioComunidad,
   ResultadoVoto,
   TemaComentarioGuardar,
   TemaDetalle,
@@ -62,15 +61,6 @@ export abstract class IHttpComunidadesService {
   abstract votarTema(temaId: number, valor: number): Observable<ResultadoVoto>;
   abstract fijarComentario(comentarioId: number): Observable<boolean>;
   abstract denunciarComentario(comentarioId: number, motivo: string): Observable<boolean>;
-
-  // Denuncias de comentarios (panel admin)
-  abstract getDenunciasComentarios(
-    page: number,
-    pageCount: number,
-    soloPendientes?: boolean
-  ): Observable<PaginatedData<DenunciaComentarioComunidad> & { pendientes: number }>;
-  abstract resolverDenunciaComentario(denunciaId: number): Observable<boolean>;
-  abstract eliminarDenunciaComentario(denunciaId: number): Observable<boolean>;
 
   // Widgets
   abstract getTopTemas(comunidadId: number, periodo?: string): Observable<TemaTop[]>;

@@ -1,3 +1,6 @@
+import { finalize } from 'rxjs';
+import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
+import { CensuraViewModel } from 'src/app/models/parametros/parametros-vm.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,8 +19,16 @@ import { DialogCreateUpdateCensurasComponent } from '../dialog-create-update-cen
 export class TableCensurasComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  public censuras: any[] = [];
+  public censuras: CensuraViewModel[] = [];
   public totalCount: number = 0;
+
+  public filtro: AdminFiltro = {};
+  public cargando = false;
+  public readonly filtrosConfig: AdminFiltrosConfig = {
+    placeholder: 'Buscar palabras...',
+    fechas: true,
+    orden: true,
+  };
 
   constructor(
     public paginationService: PaginationService,
@@ -33,13 +44,14 @@ export class TableCensurasComponent implements OnInit {
   }
 
   getCensuras(): void {
-    this.parametrosService.getCensuras().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      this.censuras = response?.data;
+    this.cargando = true;
+    this.parametrosService.getCensuras(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+      this.censuras = response?.data ?? [];
       this.totalCount = response?.pagination?.totalCount;
     });
   }
 
-  upsertCensura(censura?: any): void {
+  upsertCensura(censura?: CensuraViewModel): void {
     const dialogRef = this.dialog.open(DialogCreateUpdateCensurasComponent, {
       width: '600px',
       data: censura,
@@ -53,7 +65,9 @@ export class TableCensurasComponent implements OnInit {
     });
   }
 
-  deleteCensura(censura: any, index: number): void {
+  deleteCensura(censura: CensuraViewModel, index: number): void {
+    if (!censura.id) return;
+
     if (!this.notificationService.confirm(`¿Eliminar la palabra censurada "${censura.palabra}"?`)) {
       return;
     }
@@ -64,6 +78,13 @@ export class TableCensurasComponent implements OnInit {
         this.censuras.splice(index, 1);
       }
     });
+  }
+
+  /** Nuevo filtro desde <app-admin-filtros>: vuelve a la primera página. */
+  aplicarFiltro(filtro: AdminFiltro): void {
+    this.filtro = filtro;
+    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
+    this.getCensuras();
   }
 
   pageChange(event: PageEvent): void {

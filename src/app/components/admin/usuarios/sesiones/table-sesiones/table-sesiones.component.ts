@@ -1,3 +1,5 @@
+import { finalize } from 'rxjs';
+import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -18,6 +20,19 @@ export class TableSesionesComponent implements OnInit {
   public sesiones: any[] = [];
   public totalCount: number = 0;
 
+  public filtro: AdminFiltro = {};
+  public cargando = false;
+  public readonly filtrosConfig: AdminFiltrosConfig = {
+    placeholder: 'Buscar por usuario o IP...',
+    fechas: true,
+    estado: true,
+    orden: true,
+    usuario: 'Usuario',
+    tipos: [
+      { valor: 'vigentes', label: 'Vigentes' },
+    ],
+  };
+
   constructor(
     public paginationService: PaginationService,
     private securityService: IHttpSecurityService,
@@ -32,7 +47,8 @@ export class TableSesionesComponent implements OnInit {
   }
 
   getSesiones(): void {
-    this.securityService.getSesiones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.cargando = true;
+    this.securityService.getSesiones(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.sesiones = response?.data;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -65,6 +81,13 @@ export class TableSesionesComponent implements OnInit {
         }
       });
     }
+  }
+
+  /** Nuevo filtro desde <app-admin-filtros>: vuelve a la primera página. */
+  aplicarFiltro(filtro: AdminFiltro): void {
+    this.filtro = filtro;
+    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
+    this.getSesiones();
   }
 
   pageChange(event: PageEvent): void {

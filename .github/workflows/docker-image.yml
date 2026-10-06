@@ -41,6 +41,12 @@ jobs:
     - name: Build
       run: npx ng build
 
+    # Pruebas en navegador sobre el build anterior, con el API simulado (ver e2e/api-simulada.ts).
+    - name: E2E tests
+      run: |
+        npx playwright install --with-deps chromium
+        npm run e2e
+
   docker:
 
     needs: test

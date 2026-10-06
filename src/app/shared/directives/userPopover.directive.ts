@@ -19,7 +19,8 @@ const PENDING = new Set<string>();
 
 @Directive({ selector: '[appUserPopover]', standalone: false })
 export class UserPopoverDirective implements OnDestroy {
-  @Input('appUserPopover') userName: string = '';
+  // Acepta null/undefined (usuarios borrados o datos aún cargando): sin nombre no se abre el popover.
+  @Input({ alias: 'appUserPopover', transform: (v: string | null | undefined) => v ?? '' }) userName: string = '';
 
   private overlayRef: OverlayRef | null = null;
   private cardRef: ComponentRef<UserPopoverCardComponent> | null = null;

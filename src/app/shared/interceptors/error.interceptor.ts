@@ -17,7 +17,7 @@ export const TOKEN_EXPIRADO_HEADER = 'Token-Expired';
 
 /** El cuerpo estándar del API: { status, errors, data }. */
 export function esRespuestaApi(body: unknown): body is { status: number; errors: string[] } {
-  return !!body && typeof body === 'object' && typeof (body as any).status === 'number' && Array.isArray((body as any).errors);
+  return !!body && typeof body === 'object' && typeof (body as { status?: unknown }).status === 'number' && Array.isArray((body as { errors?: unknown }).errors);
 }
 
 @Injectable()
@@ -30,7 +30,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     private notificationService: NotificationService
   ) {}
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((err) => {
         if (!(err instanceof HttpErrorResponse)) {
@@ -48,7 +48,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   // El API responde con el código HTTP real pero el mismo cuerpo de siempre: los servicios lo leen
   // (response.status / response.errors) y deciden. Por eso se entrega como respuesta normal.
-  private entregar(err: unknown): Observable<HttpEvent<any>> {
+  private entregar(err: unknown): Observable<HttpEvent<unknown>> {
     if (err instanceof HttpErrorResponse && esRespuestaApi(err.error)) {
       return of(
         new HttpResponse({ body: err.error, headers: err.headers, status: err.status, statusText: err.statusText, url: err.url ?? undefined })
@@ -59,7 +59,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     return throwError(() => error);
   }
 
-  private debeRenovar(err: HttpErrorResponse, request: HttpRequest<any>): boolean {
+  private debeRenovar(err: HttpErrorResponse, request: HttpRequest<unknown>): boolean {
     const currentUser = this.securityService.getCurrentUser();
     const hasSession = !!(currentUser && currentUser.token);
 
@@ -71,7 +71,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     return !esRespuestaApi(err.error) || err.headers?.get(TOKEN_EXPIRADO_HEADER) === 'true';
   }
 
-  private renovarYReintentar(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  private renovarYReintentar(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return this.securityService.refreshAccessToken().pipe(
       catchError((refreshErr) => {
         // Refresh falló: sesión muerta. Se avisa antes de volver al inicio para que no parezca un error de la página.

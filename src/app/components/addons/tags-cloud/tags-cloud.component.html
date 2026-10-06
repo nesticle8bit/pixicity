@@ -1,7 +1,7 @@
 <section class="textrank-tags">
   @for (current of cloudTags; track current) {
     <div class="tag-size{{current.class}}">
-      <a rel="tag" [routerLink]="['/buscar/posts/' + current.tag]">
+      <a rel="tag" [routerLink]="['/buscar', 'posts', current.tag]" [queryParams]="{ en: 'tags' }">
         {{current.tag}}
       </a>
     </div>

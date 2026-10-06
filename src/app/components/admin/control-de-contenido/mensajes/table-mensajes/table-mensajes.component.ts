@@ -1,3 +1,5 @@
+import { finalize } from 'rxjs';
+import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
@@ -17,6 +19,19 @@ export class TableMensajesComponent implements OnInit {
   public mensajes: any;
   public totalCount: number = 0;
 
+  public filtro: AdminFiltro = {};
+  public cargando = false;
+  public readonly filtrosConfig: AdminFiltrosConfig = {
+    placeholder: 'Buscar en asunto, contenido o usuarios...',
+    fechas: true,
+    estado: true,
+    orden: true,
+    usuario: 'Remitente o destinatario',
+    tipos: [
+      { valor: 'no-leidos', label: 'No leídos' },
+    ],
+  };
+
   constructor(
     public paginationService: PaginationService,
     private mensajesService: IHttpMensajesService,
@@ -30,10 +45,18 @@ export class TableMensajesComponent implements OnInit {
   }
 
   getMensajes(): void {
-    this.mensajesService.getMensajesAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.cargando = true;
+    this.mensajesService.getMensajesAdmin(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.mensajes = response?.mensajes;
       this.totalCount = response?.pagination?.totalCount;
     });
+  }
+
+  /** Nuevo filtro desde <app-admin-filtros>: vuelve a la primera página. */
+  aplicarFiltro(filtro: AdminFiltro): void {
+    this.filtro = filtro;
+    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
+    this.getMensajes();
   }
 
   pageChange(event: PageEvent): void {

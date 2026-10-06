@@ -14,6 +14,7 @@ import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametr
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { IHttpBloqueosService } from 'src/app/services/interfaces/httpBloqueos.interface';
 import { BloqueoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { EstadoViewModel, PaisViewModel } from 'src/app/models/parametros/parametros-vm.model';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
@@ -25,12 +26,11 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
 export class AccountComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  public currentUser: any;
   public changeEmailStatus: boolean = false;
   public currentStep: number = 0;
-  public paises: any[] = [];
-  public estados: any[] = [];
-  public generos: any[] = [
+  public paises: PaisViewModel[] = [];
+  public estados: EstadoViewModel[] = [];
+  public generos: { value: number; label: string }[] = [
     {
       value: 1,
       label: 'Masculino',
@@ -45,8 +45,8 @@ export class AccountComponent implements OnInit {
     },
   ];
 
-  public dias: any[] = [];
-  public meses: any[] = [
+  public dias: number[] = [];
+  public meses: { label: string; value: string }[] = [
     {
       label: 'Enero',
       value: '01',
@@ -96,7 +96,7 @@ export class AccountComponent implements OnInit {
       value: '12',
     },
   ];
-  public years: any[] = [];
+  public years: number[] = [];
 
   public estadosCiviles: string[] = [
     'Sin respuesta',

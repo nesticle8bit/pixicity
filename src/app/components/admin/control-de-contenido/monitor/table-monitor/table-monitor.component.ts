@@ -1,3 +1,5 @@
+import { finalize } from 'rxjs';
+import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent } from '@angular/material/paginator';
@@ -17,6 +19,28 @@ export class TableMonitorComponent implements OnInit {
   public monitors: any[] = [];
   public totalCount: number = 0;
 
+  public filtro: AdminFiltro = {};
+  public cargando = false;
+  public readonly filtrosConfig: AdminFiltrosConfig = {
+    placeholder: 'Buscar en notificaciones...',
+    fechas: true,
+    estado: true,
+    orden: true,
+    usuario: 'Usuario',
+    tipos: [
+      { valor: 'no-leidas', label: 'No leídas' },
+      { valor: 'Comentario', label: 'Comentarios' },
+      { valor: 'Respuestas', label: 'Respuestas' },
+      { valor: 'Puntos', label: 'Puntos' },
+      { valor: 'Favoritos', label: 'Favoritos' },
+      { valor: 'Seguir', label: 'Seguidores' },
+      { valor: 'Recomendacion', label: 'Recomendaciones' },
+      { valor: 'Mencion', label: 'Menciones' },
+      { valor: 'Shout', label: 'Shouts' },
+      { valor: 'Rango', label: 'Rangos' },
+    ],
+  };
+
   constructor(
     public paginationService: PaginationService,
     private logsService: IHttpLogsService,
@@ -30,7 +54,8 @@ export class TableMonitorComponent implements OnInit {
   }
 
   getMonitors(): void {
-    this.logsService.getMonitorsAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.cargando = true;
+    this.logsService.getMonitorsAdmin(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response?.data) {
         response.data = response.data.map((notificacion: any) => {
           if (notificacion.mensaje) {
@@ -75,6 +100,13 @@ export class TableMonitorComponent implements OnInit {
 
   setProfile(text: string, userName: any): string {
     return `<a href='/perfil/${userName}'>${text}</a>`;
+  }
+
+  /** Nuevo filtro desde <app-admin-filtros>: vuelve a la primera página. */
+  aplicarFiltro(filtro: AdminFiltro): void {
+    this.filtro = filtro;
+    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
+    this.getMonitors();
   }
 
   pageChange(event: PageEvent): void {

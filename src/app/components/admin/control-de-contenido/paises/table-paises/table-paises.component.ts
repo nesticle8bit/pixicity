@@ -1,3 +1,5 @@
+import { finalize } from 'rxjs';
+import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,6 +20,13 @@ export class TablePaisesComponent implements OnInit {
   public paises: any[] = [];
   public totalCount: number = 0;
 
+  public filtro: AdminFiltro = {};
+  public cargando = false;
+  public readonly filtrosConfig: AdminFiltrosConfig = {
+    placeholder: 'Buscar países o códigos ISO...',
+    estado: true,
+  };
+
   constructor(
     public paginationService: PaginationService,
     private parametrosService: IHttpParametrosService,
@@ -31,7 +40,8 @@ export class TablePaisesComponent implements OnInit {
   }
 
   getPaises(): void {
-    this.parametrosService.getPaises().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.cargando = true;
+    this.parametrosService.getPaises(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if(response.data) {
         response.data = response.data.map((pais: any) => {
           pais.isO2 = pais.isO2?.toLowerCase();
@@ -58,6 +68,13 @@ export class TablePaisesComponent implements OnInit {
         this.getPaises();
       }
     });
+  }
+
+  /** Nuevo filtro desde <app-admin-filtros>: vuelve a la primera página. */
+  aplicarFiltro(filtro: AdminFiltro): void {
+    this.filtro = filtro;
+    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
+    this.getPaises();
   }
 
   pageChange(event: PageEvent): void {

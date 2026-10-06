@@ -1,3 +1,5 @@
+import { finalize } from 'rxjs';
+import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent } from '@angular/material/paginator';
@@ -17,6 +19,16 @@ export class TableFotosComponent implements OnInit {
   public fotos: any[] = [];
   public totalCount: number = 0;
 
+  public filtro: AdminFiltro = {};
+  public cargando = false;
+  public readonly filtrosConfig: AdminFiltrosConfig = {
+    placeholder: 'Buscar fotos o autores...',
+    fechas: true,
+    estado: true,
+    orden: true,
+    usuario: 'Autor',
+  };
+
   constructor(
     public paginationService: PaginationService,
     private fotosService: IHttpFotosService,
@@ -30,13 +42,21 @@ export class TableFotosComponent implements OnInit {
   }
 
   getFotos(): void {
+    this.cargando = true;
     this.fotosService
-      .getFotosAdmin({ page: this.paginationService.page, pageCount: this.paginationService.pageCount })
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .getFotosAdmin({ page: this.paginationService.page, pageCount: this.paginationService.pageCount }, this.filtro)
+      .pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         this.fotos = response.data;
         this.totalCount = response.pagination.totalCount;
       });
+  }
+
+  /** Nuevo filtro desde <app-admin-filtros>: vuelve a la primera página. */
+  aplicarFiltro(filtro: AdminFiltro): void {
+    this.filtro = filtro;
+    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
+    this.getFotos();
   }
 
   pageChange(event: PageEvent): void {

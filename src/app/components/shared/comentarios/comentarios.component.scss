@@ -337,3 +337,28 @@
 
   .coment-actions { gap: 12px; }
 }
+
+// Resaltado temporal al llegar con #comentario-{id} (p. ej. desde una notificación del Monitor).
+.coment--resaltado {
+  border-radius: 8px;
+  animation: coment-resaltado 4s ease-out;
+}
+
+@keyframes coment-resaltado {
+  0%,
+  60% {
+    background: #fff4c2;
+    box-shadow: 0 0 0 3px #ffd54f;
+  }
+  100% {
+    background: transparent;
+    box-shadow: 0 0 0 3px transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coment--resaltado {
+    animation: none;
+    background: #fff4c2;
+  }
+}

@@ -1,6 +1,9 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Pagination } from 'src/app/models/api/api-response.model';
+import { ComunidadCard, ComunidadCategoria } from 'src/app/models/comunidades/comunidad.model';
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -15,10 +18,10 @@ import { SEOService } from 'src/app/services/shared/seo.service';
 export class ComunidadesExplorarComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  public comunidades: any[] = [];
-  public categorias: any[] = [];
-  public pagination: any = {};
-  public currentUser: any;
+  public comunidades: ComunidadCard[] = [];
+  public categorias: ComunidadCategoria[] = [];
+  public pagination: Partial<Pagination> = {};
+  public currentUser?: JwtUserModel;
   public loading: boolean = false;
 
   public categoriaId: number = 0;
@@ -89,7 +92,7 @@ export class ComunidadesExplorarComponent implements OnInit {
     this.loadComunidades();
   }
 
-  queryParamsPara(pagina: number): any {
+  queryParamsPara(pagina: number): Params {
     return pagina <= 1 ? { page: null } : { page: pagina };
   }
 

@@ -1,3 +1,4 @@
+import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpNoticiasService } from '../interfaces/httpNoticias.interface';
 import { PaginationService } from '../shared/pagination.service';
 import { environment } from 'src/environments/environment';
@@ -19,10 +20,10 @@ export class HttpNoticiasService implements IHttpNoticiasService {
     private http: HttpClient,
   ) {}
 
-  getNoticias(search: string): Observable<PaginatedData<NoticiaModel, 'noticias'>> {
+  getNoticias(search: string, filtro: AdminFiltro = {}): Observable<PaginatedData<NoticiaModel, 'noticias'>> {
     return this.http
       .get<ApiResponse<PaginatedData<NoticiaModel, 'noticias'>>>(
-        `${environment.api}/api/noticias/getNoticias?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${search}`,
+        `${environment.api}/api/noticias/getNoticias?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${search}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {

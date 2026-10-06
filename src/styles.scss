@@ -4,6 +4,7 @@
 // Subconjunto de Tabler con solo los íconos usados (~15 KB en vez de ~500 KB de fuente + 210 KB de CSS).
 // Se regenera con: npm run icons   (y `npm run icons:check` lo valida en CI).
 @use "assets/styles/tabler-icons-subset";
+@use "assets/styles/admin-tablas";
 
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 @import "material-icons/iconfont/material-icons.css";

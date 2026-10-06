@@ -1,54 +1,52 @@
-import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ShoutComentarioViewModel, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
+import { ComentarioHilo, ComentariosAcciones } from 'src/app/models/shared/comentario-hilo.model';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { NotificationService } from 'src/app/services/shared/notification.service';
-import { ShoutComentarioViewModel, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
-import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 
-/** Comentario con el estado que solo existe en pantalla (árbol, destacado, colapso, voto en curso). */
-type ComentarioVista = ShoutComentarioViewModel & {
-  respuestas?: ComentarioVista[];
-  destacado?: boolean;
-  _mostrar?: boolean;
-  votando?: boolean;
-};
+/** Convierte un comentario de shout al formato común de <app-comentarios>. */
+function aHilo(c: ShoutComentarioViewModel): ComentarioHilo {
+  return {
+    id: c.id,
+    parentId: c.parentId ?? null,
+    contenido: c.comentario,
+    fecha: c.fechaRegistro,
+    fechaEdicion: c.fechaActualiza ?? null,
+    userName: c.usuario,
+    avatar: c.avatar,
+    rango: c.rango ? { nombre: c.rango.nombre, color: c.rango.color, icono: c.rango.icono } : null,
+    votos: c.votos ?? 0,
+    miVoto: c.miVoto ?? 0,
+    votosArriba: c.votosArriba ?? 0,
+    votosAbajo: c.votosAbajo ?? 0,
+    fijado: !!c.fijado,
+    denunciasPendientes: c.denunciasPendientes ?? 0,
+  };
+}
 
-const UMBRAL_COLAPSO = -5;
-const UMBRAL_DENUNCIAS = 3;
-const MOTIVOS_DENUNCIA = ['Spam o publicidad', 'Contenido ofensivo', 'Acoso', 'Información falsa', 'Contenido sexual', 'Otro'];
-
+/** Comentarios de un shout: carga los datos del API de shouts y los muestra con <app-comentarios>. */
 @Component({
   standalone: false,
   selector: 'app-shouts-comments',
   templateUrl: './shouts-comments.component.html',
-  styleUrls: ['./shouts-comments.component.scss'],
 })
-export class ShoutsCommentsComponent implements OnInit {
+export class ShoutsCommentsComponent {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly perfilService = inject(IHttpPerfilService);
+  private readonly securityService = inject(IHttpSecurityService);
 
   private _shout: ShoutViewModel | null = null;
 
-  public comentarios: ComentarioVista[] = [];
-  public arbol: ComentarioVista[] = [];
-  public nuevoComentario: string = '';
-  public enviando: boolean = false;
-  public currentUser: JwtUserModel | null = null;
-
-  public orden: 'mejores' | 'recientes' | 'controvertido' = 'mejores';
-
-  public replyTo: number | null = null;
-  public replyText: string = '';
-  public replyEnviando: boolean = false;
-
-  public editId: number | null = null;
-  public editText: string = '';
-  public editEnviando: boolean = false;
+  public comentarios: ComentarioHilo[] = [];
+  /** La vista del shout lo muestra en su cabecera. */
+  public totalComentarios = 0;
 
   @Input() set shout(value: ShoutViewModel | null) {
+    const cambio = value?.id !== this._shout?.id;
     this._shout = value;
-    if (value?.id) {
-      this.loadComentarios();
+    if (cambio) {
+      this.cargar();
     }
   }
 
@@ -56,301 +54,44 @@ export class ShoutsCommentsComponent implements OnInit {
     return this._shout;
   }
 
-  constructor(
-    private perfilService: IHttpPerfilService,
-    private securityService: IHttpSecurityService,
-    private notificationService: NotificationService
-  ) {}
+  public readonly acciones: ComentariosAcciones = {
+    comentar: (contenido, parentId) =>
+      this.perfilService.addShoutComentario({ shoutId: this._shout!.id, comentario: contenido, parentId: parentId ?? undefined }),
+    editar: (id, contenido) => this.perfilService.editarShoutComentario(id, contenido),
+    eliminar: (id) => this.perfilService.deleteShoutComentario(id),
+    votar: (id, valor) => this.perfilService.votarShoutComentario(id, valor),
+    fijar: (id) => this.perfilService.fijarShoutComentario(id),
+    denunciar: (id, motivo) => this.perfilService.denunciarShoutComentario(id, motivo),
+  };
 
-  ngOnInit(): void {
-    this.currentUser = this.securityService.getCurrentUser();
+  /** Autor del shout: fija y borra comentarios en su publicación. */
+  get autor(): string | null {
+    return this._shout?.avatar?.userName ?? null;
   }
 
-  // - Carga / árbol
+  get esAutorShout(): boolean {
+    const yo = this.securityService.getCurrentUser()?.usuario?.userName;
+    return !!yo && yo === this.autor;
+  }
 
-  loadComentarios(): void {
-    if (!this._shout) {
+  get puedeFijar(): boolean {
+    const rango = this.securityService.getCurrentUser()?.usuario?.rango;
+    return this.esAutorShout || rango === 'Administrador' || rango === 'Moderador';
+  }
+
+  private cargar(): void {
+    if (!this._shout?.id) {
+      this.comentarios = [];
+      this.totalComentarios = 0;
       return;
     }
 
-    this.perfilService.getComentariosByShoutId(this._shout.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
-      this.comentarios = data || [];
-      this.construirArbol();
-    });
-  }
-
-  construirArbol(): void {
-    const flat: ComentarioVista[] = this.comentarios ?? [];
-    const roots = flat.filter((c) => !c.parentId);
-    const hijos = new Map<number, ComentarioVista[]>();
-
-    for (const c of flat) {
-      if (c.parentId) {
-        const arr = hijos.get(c.parentId) ?? [];
-        arr.push(c);
-        hijos.set(c.parentId, arr);
-      }
-    }
-
-    for (const r of roots) {
-      r.respuestas = (hijos.get(r.id) ?? [])
-        .sort((a, b) => new Date(a.fechaRegistro).getTime() - new Date(b.fechaRegistro).getTime());
-    }
-
-    if (this.orden === 'mejores') {
-      roots.sort((a, b) => (b.fijado ? 1 : 0) - (a.fijado ? 1 : 0)
-        || (b.votos || 0) - (a.votos || 0)
-        || new Date(b.fechaRegistro).getTime() - new Date(a.fechaRegistro).getTime());
-    } else if (this.orden === 'controvertido') {
-      roots.sort((a, b) => (b.fijado ? 1 : 0) - (a.fijado ? 1 : 0)
-        || this.controversia(b) - this.controversia(a)
-        || this.totalVotos(b) - this.totalVotos(a)
-        || new Date(b.fechaRegistro).getTime() - new Date(a.fechaRegistro).getTime());
-    } else {
-      roots.sort((a, b) => (b.fijado ? 1 : 0) - (a.fijado ? 1 : 0)
-        || new Date(b.fechaRegistro).getTime() - new Date(a.fechaRegistro).getTime());
-    }
-
-    roots.forEach((r) => (r.destacado = false));
-    const top = roots.reduce<ComentarioVista | null>((best, r) => ((r.votos || 0) > (best?.votos || 0) ? r : best), null);
-    if (top && (top.votos || 0) >= 3) top.destacado = true;
-
-    this.arbol = roots;
-  }
-
-  cambiarOrden(o: 'mejores' | 'recientes' | 'controvertido'): void {
-    if (this.orden === o) return;
-    this.orden = o;
-    this.construirArbol();
-  }
-
-  private controversia(c: ComentarioVista): number {
-    return Math.min(c.votosArriba || 0, c.votosAbajo || 0);
-  }
-
-  private totalVotos(c: ComentarioVista): number {
-    return (c.votosArriba || 0) + (c.votosAbajo || 0);
-  }
-
-  get totalComentarios(): number {
-    return this.comentarios?.length ?? 0;
-  }
-
-  // - Permisos / estado
-
-  get logueado(): boolean {
-    return !!this.currentUser?.usuario;
-  }
-
-  get esAdmin(): boolean {
-    const rango = this.currentUser?.usuario?.rango;
-    return rango === 'Administrador' || rango === 'Moderador';
-  }
-
-  esComentarioPropio(c: ComentarioVista): boolean {
-    return c?.usuario === this.currentUser?.usuario?.userName;
-  }
-
-  puedeModerar(c: ComentarioVista): boolean {
-    return this.logueado && (this.esComentarioPropio(c) || this.esAdmin);
-  }
-
-  estaColapsado(c: ComentarioVista): boolean {
-    if (c._mostrar) return false;
-    return (c.votos || 0) <= UMBRAL_COLAPSO || (c.denunciasPendientes || 0) >= UMBRAL_DENUNCIAS;
-  }
-
-  get esDueñoShout(): boolean {
-    return !!this.currentUser?.usuario?.userName && this._shout?.avatar?.userName === this.currentUser.usuario.userName;
-  }
-
-  puedeFijar(c: ComentarioVista): boolean {
-    if (c?.parentId) return false;
-    return this.esDueñoShout || this.esAdmin;
-  }
-
-  mostrarColapsado(c: ComentarioVista): void {
-    c._mostrar = true;
-  }
-
-  // - Acciones
-
-  enviarComentario(): void {
-    const shout = this._shout;
-    if (!shout || !this.nuevoComentario?.trim() || this.enviando) return;
-
-    this.enviando = true;
-    const texto = this.nuevoComentario.trim();
-
-    this.perfilService.addShoutComentario({ shoutId: shout.id, comentario: texto })
+    this.perfilService
+      .getComentariosByShoutId(this._shout.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (nuevoId) => {
-          this.comentarios.push(this.crearLocal(nuevoId, texto, null));
-          this.nuevoComentario = '';
-          this.enviando = false;
-          this.construirArbol();
-        },
-        error: () => { this.enviando = false; },
+      .subscribe((lista) => {
+        this.comentarios = (lista ?? []).map(aHilo);
+        this.totalComentarios = this.comentarios.length;
       });
-  }
-
-  responder(c: ComentarioVista): void {
-    if (!this.logueado) {
-      this.notificationService.warning('Inicia sesión para responder', 'Shouts');
-      return;
-    }
-    this.replyTo = c.id;
-    this.replyText = '';
-  }
-
-  cancelarRespuesta(): void {
-    this.replyTo = null;
-    this.replyText = '';
-  }
-
-  enviarRespuesta(c: ComentarioVista): void {
-    const shout = this._shout;
-    if (!shout || !this.replyText?.trim() || this.replyEnviando) return;
-
-    this.replyEnviando = true;
-    const texto = this.replyText.trim();
-
-    this.perfilService.addShoutComentario({ shoutId: shout.id, parentId: c.id, comentario: texto })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (nuevoId) => {
-          const parentRoot = c.parentId ?? c.id;
-          this.comentarios.push(this.crearLocal(nuevoId, texto, parentRoot));
-          this.replyEnviando = false;
-          this.cancelarRespuesta();
-          this.construirArbol();
-        },
-        error: () => { this.replyEnviando = false; },
-      });
-  }
-
-  eliminarComentario(c: ComentarioVista): void {
-    if (!this.notificationService.confirm('¿Seguro que deseas eliminar este comentario?')) return;
-
-    this.perfilService.deleteShoutComentario(c.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.comentarios = this.comentarios.filter((x) => x.id !== c.id && x.parentId !== c.id);
-      this.construirArbol();
-    });
-  }
-
-  editar(c: ComentarioVista): void {
-    this.editId = c.id;
-    this.editText = c.comentario;
-    this.replyTo = null;
-  }
-
-  cancelarEdicion(): void {
-    this.editId = null;
-    this.editText = '';
-  }
-
-  guardarEdicion(c: ComentarioVista): void {
-    if (!this.editText?.trim() || this.editEnviando) return;
-
-    this.editEnviando = true;
-    const texto = this.editText.trim();
-    this.perfilService.editarShoutComentario(c.id, texto).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
-        c.comentario = texto;
-        this.editEnviando = false;
-        this.cancelarEdicion();
-      },
-      error: () => { this.editEnviando = false; },
-    });
-  }
-
-  fijar(c: ComentarioVista): void {
-    this.perfilService.fijarShoutComentario(c.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (fijado) => {
-        c.fijado = fijado;
-        this.notificationService.success(fijado ? 'Comentario fijado' : 'Comentario desfijado', 'Shouts');
-        this.construirArbol();
-      },
-      error: () => {},
-    });
-  }
-
-  denunciar(c: ComentarioVista): void {
-    if (!this.logueado) {
-      this.notificationService.warning('Inicia sesión para denunciar', 'Shouts');
-      return;
-    }
-    const motivo = this.pedirMotivoDenuncia();
-    if (!motivo) return;
-
-    this.perfilService.denunciarShoutComentario(c.id, motivo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => this.notificationService.success('Denuncia enviada. Gracias por reportar.', 'Denuncia'),
-      error: () => {},
-    });
-  }
-
-  private pedirMotivoDenuncia(): string | null {
-    const msg = 'Motivo de la denuncia:\n' +
-      MOTIVOS_DENUNCIA.map((r, i) => `${i + 1}. ${r}`).join('\n') +
-      '\n\nEscribe el número de una opción (o tu propio motivo):';
-    const input = (window.prompt(msg) || '').trim();
-    if (!input) return null;
-    const n = parseInt(input, 10);
-    if (n >= 1 && n <= MOTIVOS_DENUNCIA.length) return MOTIVOS_DENUNCIA[n - 1];
-    return input;
-  }
-
-  votar(c: any, valor: number): void {
-    if (!this.logueado) {
-      this.notificationService.warning('Inicia sesión para votar', 'Shouts');
-      return;
-    }
-    if (c.votando) return;
-
-    c.votando = true;
-    this.perfilService.votarShoutComentario(c.id, valor).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (res) => {
-        c.votos = res?.total ?? c.votos ?? 0;
-        c.miVoto = res?.miVoto ?? 0;
-        c.votando = false;
-      },
-      error: () => { c.votando = false; },
-    });
-  }
-
-  // - Helpers
-
-  private crearLocal(id: number, comentario: string, parentId: number | null): ComentarioVista {
-    return {
-      id,
-      shoutId: this._shout?.id ?? 0,
-      usuarioId: 0,
-      parentId,
-      comentario,
-      fechaRegistro: new Date().toISOString(),
-      usuario: this.currentUser?.usuario?.userName ?? '',
-      avatar: this.currentUser?.usuario?.avatar ?? null,
-      votos: 0,
-      miVoto: 0,
-      votosArriba: 0,
-      votosAbajo: 0,
-      fijado: false,
-      denunciasPendientes: 0,
-    };
-  }
-
-  /** Escapa HTML y convierte URLs y @menciones en enlaces. */
-  formatear(texto: string): string {
-    if (!texto) return '';
-    const escapado = texto
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-
-    return escapado
-      .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="nofollow noopener">$1</a>')
-      .replace(/(^|\s)@([a-zA-Z0-9_]+)/g, '$1<a href="/perfil/$2">@$2</a>')
-      .replace(/\n/g, '<br>');
   }
 }

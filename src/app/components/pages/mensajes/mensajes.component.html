@@ -42,14 +42,14 @@
         </div>
 
         <ul class="msg-list">
-          @for (c of conversaciones; track c.otro?.id; let even = $even) {
+          @for (c of conversaciones; track c.otro.id; let even = $even) {
             <li class="msg-item" [class.msg-item--alt]="even" [class.msg-item--unread]="c.noLeidos > 0" [class.msg-item--selected]="c.selected">
               <mat-checkbox color="primary" class="msg-item__check" [(ngModel)]="c.selected"
-                [attr.aria-label]="'Seleccionar conversación con ' + c.otro?.userName">
+                [attr.aria-label]="'Seleccionar conversación con ' + c.otro.userName">
               </mat-checkbox>
 
-              <app-user-avatar class="msg-item__avatar" [avatar]="c.otro?.avatar"
-                [userName]="c.otro?.userName" [height]="40">
+              <app-user-avatar class="msg-item__avatar" [avatar]="c.otro.avatar"
+                [userName]="c.otro.userName" [height]="40">
               </app-user-avatar>
 
               <div class="msg-item__body" role="link" tabindex="0"
@@ -58,9 +58,9 @@
                   @if (c.noLeidos > 0) {
                     <span class="msg-item__dot" title="Sin leer"></span>
                   }
-                  <a class="msg-item__from" [routerLink]="['/perfil/' + c.otro?.userName]"
-                    [appUserPopover]="c.otro?.userName" (click)="$event.stopPropagation()">
-                    {{'@'}}{{c.otro?.userName}}
+                  <a class="msg-item__from" [routerLink]="['/perfil/' + c.otro.userName]"
+                    [appUserPopover]="c.otro.userName" (click)="$event.stopPropagation()">
+                    {{'@'}}{{c.otro.userName}}
                   </a>
                   @if (c.noLeidos > 0) {
                     <span class="badge bg-primary" [attr.aria-label]="c.noLeidos + ' sin leer'">{{c.noLeidos}}</span>

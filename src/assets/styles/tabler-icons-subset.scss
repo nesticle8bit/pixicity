@@ -1,11 +1,11 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (120).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (128).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2?v=0af647e633") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=0b2a771988") format("woff2");
 }
 
 @font-face {
@@ -29,6 +29,7 @@
 }
 
 .ti-adjustments:before { content: "\ea03"; }
+.ti-adjustments-horizontal:before { content: "\ec38"; }
 .ti-alert-circle:before { content: "\ea05"; }
 .ti-alert-triangle:before { content: "\ea06"; }
 .ti-antenna:before { content: "\f094"; }
@@ -62,26 +63,31 @@
 .ti-checks:before { content: "\ebaa"; }
 .ti-chevron-down:before { content: "\ea5f"; }
 .ti-chevron-right:before { content: "\ea61"; }
+.ti-chevron-up:before { content: "\ea62"; }
 .ti-circle:before { content: "\ea6b"; }
 .ti-circle-check:before { content: "\ea67"; }
 .ti-circle-chevron-left:before { content: "\f623"; }
 .ti-circle-dot:before { content: "\efb1"; }
 .ti-circle-x:before { content: "\ea6a"; }
 .ti-clock:before { content: "\ea70"; }
+.ti-cloud-off:before { content: "\ed3e"; }
 .ti-cloud-upload:before { content: "\ea75"; }
 .ti-coin:before { content: "\eb82"; }
 .ti-copy:before { content: "\ea7a"; }
+.ti-database-search:before { content: "\fa18"; }
 .ti-device-floppy:before { content: "\eb62"; }
 .ti-dots-vertical:before { content: "\ea94"; }
 .ti-edit:before { content: "\ea98"; }
 .ti-external-link:before { content: "\ea99"; }
 .ti-eye:before { content: "\ea9a"; }
 .ti-file-text:before { content: "\eaa2"; }
+.ti-filter:before { content: "\eaa5"; }
 .ti-flag:before { content: "\eaa6"; }
 .ti-flame:before { content: "\ec2c"; }
 .ti-gender-female:before { content: "\f0e7"; }
 .ti-gender-male:before { content: "\f0ee"; }
 .ti-gender-neutrois:before { content: "\f0ef"; }
+.ti-heading:before { content: "\ee9b"; }
 .ti-history:before { content: "\ebea"; }
 .ti-id-badge:before { content: "\eff7"; }
 .ti-id-badge-2:before { content: "\f076"; }
@@ -137,6 +143,7 @@
 .ti-trash:before { content: "\eb41"; }
 .ti-trophy:before { content: "\eb45"; }
 .ti-upload:before { content: "\eb47"; }
+.ti-user:before { content: "\eb4d"; }
 .ti-user-check:before { content: "\eb49"; }
 .ti-user-minus:before { content: "\eb4a"; }
 .ti-user-plus:before { content: "\eb4b"; }
@@ -147,4 +154,5 @@
 .ti-wand:before { content: "\ebcb"; }
 .ti-wifi:before { content: "\eb52"; }
 .ti-world:before { content: "\eb54"; }
+.ti-world-search:before { content: "\f9e7"; }
 .ti-x:before { content: "\eb55"; }

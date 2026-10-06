@@ -1,3 +1,4 @@
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { DialogChangeRangosComponent } from 'src/app/components/dialogs/dialog-change-rangos/dialog-change-rangos.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { Component, Input, OnInit } from '@angular/core';
@@ -10,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./change-rango.component.scss'],
 })
 export class ChangeRangoComponent implements OnInit {
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
   @Input() data: any;
 
   constructor(

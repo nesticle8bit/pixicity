@@ -12,6 +12,23 @@ export interface PaisViewModel {
   iso3: string;
 }
 
+/** Categoría con su total de posts públicos (widget de la home). */
+export interface TopCategoriaViewModel {
+  id: number;
+  nombre: string;
+  seo: string;
+  icono: string;
+  totalPosts: number;
+}
+
+/** Palabra censurada y su reemplazo. */
+export interface CensuraViewModel {
+  id?: number;
+  palabra: string;
+  reemplazo: string;
+  fechaRegistro?: string;
+}
+
 export interface EstadoViewModel {
   id: number;
   nombre: string;

@@ -1,3 +1,5 @@
+import { finalize } from 'rxjs';
+import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { environment } from 'src/environments/environment';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
@@ -22,6 +24,19 @@ export class TableAfiliadosComponent implements OnInit {
   public afiliados: any[] = [];
   public totalCount: number = 0;
 
+  public filtro: AdminFiltro = {};
+  public cargando = false;
+  public readonly filtrosConfig: AdminFiltrosConfig = {
+    placeholder: 'Buscar afiliados...',
+    fechas: true,
+    orden: true,
+    tipoLabel: 'Estado',
+    tipos: [
+      { valor: 'activos', label: 'Activos' },
+      { valor: 'inactivos', label: 'Inactivos' },
+    ],
+  };
+
   constructor(
     public paginationService: PaginationService,
     private generalService: IHttpGeneralService,
@@ -38,10 +53,18 @@ export class TableAfiliadosComponent implements OnInit {
   }
 
   getAfiliados(): void {
-    this.generalService.getAfiliados().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.cargando = true;
+    this.generalService.getAfiliados(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.afiliados = response.data;
       this.totalCount = response.pagination.totalCount;
     });
+  }
+
+  /** Nuevo filtro desde <app-admin-filtros>: vuelve a la primera página. */
+  aplicarFiltro(filtro: AdminFiltro): void {
+    this.filtro = filtro;
+    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
+    this.getAfiliados();
   }
 
   pageChange(event: PageEvent): void {

@@ -1,0 +1,48 @@
+// Complementos al diseño de crear post (posts-create.component.scss).
+
+.cp-bar__comunidad {
+  font-size: 13px;
+  color: #777;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  a {
+    color: #006595;
+    font-weight: 700;
+  }
+}
+
+.cp-bar__actions .boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+}
+
+.cp-comunidad {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: #333;
+  text-decoration: none;
+
+  strong {
+    color: #006595;
+  }
+
+  small {
+    color: #888;
+    font-size: 12px;
+  }
+
+  &:hover strong {
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .cp-bar__comunidad {
+    display: none;
+  }
+}

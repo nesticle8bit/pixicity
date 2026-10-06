@@ -1,3 +1,4 @@
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +18,7 @@ export class FotosIndexComponent implements OnInit {
 
   public fotos: any[] = [];
   public pagination: any = {};
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
   public loading: boolean = false;
   public userName: string = '';
 

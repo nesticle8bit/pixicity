@@ -1,3 +1,5 @@
+import { finalize } from 'rxjs';
+import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -19,6 +21,16 @@ export class TablePaginasComponent implements OnInit {
 
   public paginas: any[] = [];
   public totalCount: number = 0;
+
+  public filtro: AdminFiltro = {};
+  public cargando = false;
+  public readonly filtrosConfig: AdminFiltrosConfig = {
+    placeholder: 'Buscar por título, slug o contenido...',
+    fechas: true,
+    estado: true,
+    orden: true,
+    usuario: 'Creada por',
+  };
   public formGroup: FormGroup;
 
   constructor(
@@ -40,9 +52,10 @@ export class TablePaginasComponent implements OnInit {
   }
 
   getPaginas(): void {
+    this.cargando = true;
     this.webService
-      .getPaginas(this.formGroup.value.search)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .getPaginas(this.formGroup.value.search, this.filtro)
+      .pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         this.paginas = response?.paginas;
         this.totalCount = response?.pagination?.totalCount;
@@ -76,6 +89,13 @@ export class TablePaginasComponent implements OnInit {
         }
       });
     }
+  }
+
+  /** Nuevo filtro desde <app-admin-filtros>: vuelve a la primera página. */
+  aplicarFiltro(filtro: AdminFiltro): void {
+    this.filtro = filtro;
+    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
+    this.getPaginas();
   }
 
   pageChange(event: PageEvent): void {

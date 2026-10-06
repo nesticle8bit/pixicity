@@ -1,3 +1,5 @@
+import { finalize } from 'rxjs';
+import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,6 +20,10 @@ export class TableCategoriasComponent implements OnInit {
   public categorias: any[] = [];
   public totalCount: number = 0;
 
+  public filtro: AdminFiltro = {};
+  public cargando = false;
+  public readonly filtrosConfig: AdminFiltrosConfig = { placeholder: 'Buscar categorías...' };
+
   constructor(
     public paginationService: PaginationService,
     private parametrosService: IHttpParametrosService,
@@ -31,10 +37,18 @@ export class TableCategoriasComponent implements OnInit {
   }
 
   getCategorias(): void {
-    this.parametrosService.getCategoriasAdmin().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.cargando = true;
+    this.parametrosService.getCategoriasAdmin(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.categorias = response.categorias;
       this.totalCount = response.pagination.totalCount;
     });
+  }
+
+  /** Nuevo filtro desde <app-admin-filtros>: vuelve a la primera página. */
+  aplicarFiltro(filtro: AdminFiltro): void {
+    this.filtro = filtro;
+    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
+    this.getCategorias();
   }
 
   pageChange(event: PageEvent): void {

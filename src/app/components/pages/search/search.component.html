@@ -1,127 +1,260 @@
-<form [formGroup]="searchFormGroup" (ngSubmit)="search()">
-  <div class="container container--home">
-    @if (!isSearch) {
-      <div class="row">
-        <div class="col-12 p-3">
-          <div class="buscador-home mx-auto p-5">
-            <span id="buscador" class="mb-4"></span>
-            <input class="buscador me-3" type="text" formControlName="search" />
-            <button type="submit" mat-flat-button color="primary" class="btn-buscar verde">
-              <mat-icon>search</mat-icon> Buscar
-            </button>
-          </div>
-        </div>
-      </div>
-    }
+<div class="bq container container--home">
+  @if (!hayBusqueda) {
+  <!-- ===================== Inicio del buscador ===================== -->
+  <section class="bq-hero">
+    <h1 class="bq-hero__title">¿Qué estás buscando?</h1>
+    <p class="bq-hero__sub">Encuentra posts por título, contenido o etiquetas.</p>
 
-    @if (isSearch) {
-      <div class="row">
-        <div class="row">
-          <div class="col-12 col-sm-12 col-md-9">
-            <div class="ladoi">
-              <section class="text-center">
-                <div class="row">
-                  <div class="col-12 col-sm-12 col-md-10 my-2">
-                    <input class="form-control" type="text" formControlName="search" />
-                  </div>
-                  <div class="col-12 col-sm-12 col-md-2 my-2">
-                    <button type="button" (click)="search()" mat-flat-button color="primary" class="col-12"
-                      [disabled]="!searchFormGroup.value.search">
-                      <mat-icon>search</mat-icon> Buscar
-                    </button>
-                  </div>
-                </div>
-              </section>
-              <section>
-                <h6 class="main-title my-2">
-                  <span style="padding-right: 0;">Posts</span>
-                  <small style="background: #fff; color: #b4b4b4; padding: 0 4px; font-size: .65rem; position: relative; top: -2px;">
-                    ({{totalCount}})
-                  </small>
-                </h6>
-                @if (posts.length > 0) {
-                  @for (post of posts; track post) {
-                    <article class="list-posts row">
-                      <section class="col-12 col-sm-12 col-md-11">
-                        <a class="post-title" [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" title="{{post.titulo}}">
-                          <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
-                            alt="{{post.categoria.nombre}}" loading="lazy"/>
-                            {{post.titulo}}
-                          </a>
-                          <p class="info mt-1">
-                            {{post.fechaRegistro | timeAgo}} - En <a target="_blank" [routerLink]="['/posts/' + post.categoria.seo]">{{post.categoria.nombre}}</a> - Por <a target="_blank" [routerLink]="['/perfil/' + post.usuario.userName]" [appUserPopover]="post.usuario.userName">{{post.usuario.userName}}</a> - 1 Favoritos - {{post.comentarios}} {{post.comentarios === 1 ? 'Comentario' : 'Comentarios'}}
-                          </p>
-                        </section>
-                        <section class="col-12 col-sm-12 col-md-1 text-end">
-                          <span class="post-points d-block">
-                            {{post.puntos}}
-                          </span>
-                          <p class="info mt-0">
-                            Puntos
-                          </p>
-                        </section>
-                      </article>
-                    }
-                  }
-                  @if (posts.length < 1) {
-                    <div class="alert alert-warning">
-                      <h3>👀 Oops... Nada por aquí</h3>
-                      <h6>No hay resultados para "{{searchFormGroup.value?.search}}" intenta usando alguno de los filtros</h6>
-                    </div>
-                  }
-                  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)">
-                  </mat-paginator>
-                </section>
-              </div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-3 dotted-border--left">
-              <h6 class="main-title my-2">
-                <span>Filtros</span>
-              </h6>
-              <section class="mb-3">
-                <label class="control-label">
-                  <span class="required"></span> Categoría
-                </label>
-                <app-select [items]="categorias" bindLabel="nombre" bindValue="seo" formControlName="categoria">
-                  <ng-template appSelectLabel let-item="item">
-                    <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
-                      [src]="'/assets/images/categorias/' + item?.icono" alt="" aria-hidden="true"loading="lazy"/>
-                      {{item.nombre}}
-                    </ng-template>
-                    <ng-template appSelectOption let-item="item" let-index="index">
-                      <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
-                        [src]="'/assets/images/categorias/' + item?.icono" alt="" aria-hidden="true"loading="lazy"/>
-                        {{item.nombre}}
-                      </ng-template>
-                    </app-select>
-                  </section>
-                  <section class="mb-3">
-                    <label class="control-label">
-                      <span class="required"></span> Tipo
-                    </label>
-                    <br>
-                      <mat-radio-group class="mt-1" color="primary" formControlName="searchType">
-                        <mat-radio-button class="d-block my-3" value="titulo">
-                          Título
-                        </mat-radio-button>
-                        <mat-radio-button class="d-block my-3" value="contenido">
-                          Contenido
-                        </mat-radio-button>
-                        <mat-radio-button class="d-block my-3" value="tags">
-                          Tags
-                        </mat-radio-button>
-                      </mat-radio-group>
-                    </section>
-                    <section class="mb-3">
-                      <label class="control-label">
-                        <span class="required"></span> Autor
-                      </label>
-                      <input type="text" class="form-control" formControlName="autor" />
-                    </section>
-                    <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
-                  </div>
-                </div>
-              </div>
+    <form class="bq-box bq-box--grande" role="search" (ngSubmit)="buscar()">
+      <i class="ti ti-search bq-box__icono" aria-hidden="true"></i>
+      <input class="bq-box__input" type="search" name="q" [(ngModel)]="texto" autocomplete="off" autofocus
+        placeholder="Ej.: Stephen King, tutorial de Angular…" aria-label="Texto a buscar" />
+      <button type="submit" class="bq-box__btn" [disabled]="!texto.trim()">Buscar</button>
+    </form>
+
+    <div class="bq-tipos" role="radiogroup" aria-label="Buscar en">
+      @for (t of tipos; track t.valor) {
+      <button type="button" role="radio" [attr.aria-checked]="tipoElegido === t.valor" [class.active]="tipoElegido === t.valor"
+        (click)="elegirTipo(t.valor)">
+        <i class="ti {{t.icono}}" aria-hidden="true"></i> {{t.label}}
+      </button>
+      }
+    </div>
+
+    @if (recientes.length) {
+    <div class="bq-recientes">
+      <span class="bq-recientes__titulo"><i class="ti ti-history"></i> Búsquedas recientes</span>
+      <div class="bq-recientes__lista">
+        @for (r of recientes; track r) {
+        <span class="bq-chip">
+          <a [routerLink]="['/buscar', 'posts', r]">{{r}}</a>
+          <button type="button" (click)="quitarReciente(r, $event)" [attr.aria-label]="'Quitar ' + r"><i class="ti ti-x"></i></button>
+        </span>
+        }
+      </div>
+    </div>
+    }
+  </section>
+
+  @if (categoriasPopulares.length) {
+  <section class="bq-explorar">
+    <h2 class="bq-explorar__titulo">Explorar categorías</h2>
+    <div class="bq-explorar__grid">
+      @for (c of categoriasPopulares; track c.id) {
+      <a class="bq-cat" [routerLink]="['/posts', c.seo]">
+        <img [src]="'/assets/images/categorias/' + c.icono" alt="" aria-hidden="true" loading="lazy" width="20" height="20" />
+        <span class="bq-cat__nombre">{{c.nombre}}</span>
+        <span class="bq-cat__total">{{c.totalPosts | number}}</span>
+      </a>
+      }
+    </div>
+  </section>
+  }
+  } @else {
+  <!-- ===================== Resultados ===================== -->
+  <form class="bq-barra" role="search" (ngSubmit)="buscar()">
+    <div class="bq-box">
+      <i class="ti ti-search bq-box__icono" aria-hidden="true"></i>
+      <input class="bq-box__input" type="search" name="q" [(ngModel)]="texto" autocomplete="off" aria-label="Texto a buscar" />
+      <button type="submit" class="bq-box__btn" [disabled]="!texto.trim()">Buscar</button>
+    </div>
+    <div class="bq-tipos bq-tipos--compacto" role="radiogroup" aria-label="Buscar en">
+      @for (t of tipos; track t.valor) {
+      <button type="button" role="radio" [attr.aria-checked]="tipoElegido === t.valor" [class.active]="tipoElegido === t.valor"
+        (click)="elegirTipo(t.valor)">
+        <i class="ti {{t.icono}}" aria-hidden="true"></i> {{t.label}}
+      </button>
+      }
+    </div>
+  </form>
+
+  <div class="bq-layout">
+    <main class="bq-main">
+      <div class="bq-resumen">
+        <p class="bq-resumen__texto" aria-live="polite">
+          @if (cargando) {
+          Buscando…
+          } @else if (totalCount > 0) {
+          <strong>{{totalCount | number}}</strong> {{totalCount === 1 ? 'resultado' : 'resultados'}} para
+          <strong>«{{estado.q}}»</strong>
+          @if (totalCount > porPagina) { <span class="bq-resumen__rango">· {{desde}}–{{hasta}}</span> }
+          } @else if (!error) {
+          Sin resultados para <strong>«{{estado.q}}»</strong>
+          }
+        </p>
+
+        <label class="bq-orden">
+          <span>Ordenar por</span>
+          <select [ngModel]="estado.orden" (ngModelChange)="elegirOrden($event)" name="orden">
+            @for (o of ordenes; track o.valor) {
+            <option [value]="o.valor">{{o.label}}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      @if (hayFiltros) {
+      <div class="bq-activos">
+        @if (estado.tipo !== 'todo') {
+        <button type="button" class="bq-filtro" (click)="elegirTipo('todo')">En: {{tipoActual}} <i class="ti ti-x"></i></button>
+        }
+        @if (estado.categoria) {
+        <button type="button" class="bq-filtro" (click)="elegirCategoria(null)">
+          {{categoriaActual?.nombre ?? estado.categoria}} <i class="ti ti-x"></i>
+        </button>
+        }
+        @if (estado.autor) {
+        <button type="button" class="bq-filtro" (click)="quitarAutor()">Autor: {{estado.autor}} <i class="ti ti-x"></i></button>
+        }
+        @if (estado.periodo) {
+        <button type="button" class="bq-filtro" (click)="elegirPeriodo('')">{{periodoActual}} <i class="ti ti-x"></i></button>
+        }
+        <button type="button" class="bq-link" (click)="limpiarFiltros()">Quitar todo</button>
+      </div>
+      }
+
+      @if (cargando && !resultados.length) {
+      <div class="bq-lista" aria-hidden="true">
+        @for (s of esqueletos; track s) {
+        <div class="bq-res bq-res--esqueleto">
+          <span class="sk sk--meta"></span>
+          <span class="sk sk--titulo"></span>
+          <span class="sk sk--linea"></span>
+          <span class="sk sk--linea sk--corta"></span>
+        </div>
+        }
+      </div>
+      } @else if (error) {
+      <div class="bq-vacio">
+        <i class="ti ti-cloud-off"></i>
+        <h3>No pudimos completar la búsqueda</h3>
+        <p>Revisa tu conexión e inténtalo de nuevo.</p>
+        <button type="button" class="boton azul" (click)="buscar(estado.q)">Reintentar</button>
+      </div>
+      } @else if (!resultados.length) {
+      <div class="bq-vacio">
+        <i class="ti ti-mood-empty"></i>
+        <h3>Nada por aquí</h3>
+        <p>No encontramos posts para «{{estado.q}}».</p>
+        <ul class="bq-vacio__tips">
+          @if (hayFiltros) {
+          <li><button type="button" class="bq-link" (click)="limpiarFiltros()">Quitar los filtros</button> y buscar de nuevo.</li>
+          }
+          @if (estado.tipo !== 'todo' && !hayFiltros) {
+          <li><button type="button" class="bq-link" (click)="elegirTipo('todo')">Buscar en todo</button> (título, contenido y etiquetas).</li>
+          }
+          <li>Usa menos palabras o palabras más generales.</li>
+          <li>Revisa la ortografía.</li>
+        </ul>
+      </div>
+      } @else {
+      <ol class="bq-lista" [class.bq-lista--cargando]="cargando">
+        @for (p of resultados; track p.id) {
+        <li class="bq-res">
+          <div class="bq-res__meta">
+            <a class="bq-res__cat" [routerLink]="['/posts', p.categoria.seo]">
+              <img [src]="'/assets/images/categorias/' + p.categoria.icono" alt="" aria-hidden="true" loading="lazy" width="14" height="14" />
+              {{p.categoria.nombre}}
+            </a>
+            <span aria-hidden="true">·</span>
+            <time [attr.datetime]="p.fechaRegistro" [matTooltip]="(p.fechaRegistro | date:'medium') ?? ''">{{p.fechaRegistro | timeAgo}}</time>
+            @if (p.esPrivado) {
+            <span class="bq-res__privado" matTooltip="Solo usuarios registrados"><i class="ti ti-lock"></i> Privado</span>
             }
           </div>
-        </form>
+
+          <h3 class="bq-res__titulo">
+            <a [routerLink]="['/posts', p.categoria.seo, p.id, p.url]" [innerHTML]="resaltar(p.titulo)"></a>
+          </h3>
+
+          @if (p.extracto) {
+          <p class="bq-res__extracto" [innerHTML]="resaltar(p.extracto)"></p>
+          }
+
+          @if (p.etiquetas.length) {
+          <div class="bq-res__tags">
+            @for (t of p.etiquetas; track t) {
+            <a [routerLink]="['/buscar', 'posts', t]" [queryParams]="{ en: 'tags' }" [class.coincide]="esEtiquetaBuscada(t)">#{{t}}</a>
+            }
+          </div>
+          }
+
+          <div class="bq-res__pie">
+            <a class="bq-res__autor" [routerLink]="['/perfil', p.autor]" [appUserPopover]="p.autor">
+              <app-user-avatar [avatar]="p.autorAvatar" [userName]="p.autor" [width]="20" [height]="20"></app-user-avatar>
+              {{p.autor}}
+            </a>
+            <span class="bq-res__stats">
+              <span matTooltip="Puntos"><i class="ti ti-award"></i> {{p.puntos | number}}</span>
+              <span matTooltip="Comentarios"><i class="ti ti-message-circle"></i> {{p.comentarios | number}}</span>
+              <span matTooltip="Favoritos"><i class="ti ti-star"></i> {{p.favoritos | number}}</span>
+              <span matTooltip="Visitas"><i class="ti ti-eye"></i> {{p.visitantes | number}}</span>
+            </span>
+          </div>
+        </li>
+        }
+      </ol>
+
+      @if (totalCount > porPagina) {
+      <mat-paginator [length]="totalCount" [pageSize]="porPagina" [pageIndex]="estado.pagina - 1" [hidePageSize]="true"
+        (page)="pageChange($event)" aria-label="Páginas de resultados">
+      </mat-paginator>
+      }
+      }
+    </main>
+
+    <!-- Panel de filtros -->
+    <aside class="bq-panel">
+      <!-- En móvil los filtros se pliegan para no empujar los resultados; en escritorio siempre abiertos. -->
+      <details class="bq-plegable" [open]="panelAbierto" (toggle)="panelAbierto = $any($event.target).open">
+      <summary class="bq-plegable__boton">
+        <i class="ti ti-adjustments-horizontal"></i> Filtros
+        @if (hayFiltros) { <span class="bq-plegable__activos">activos</span> }
+      </summary>
+      <section class="bq-card">
+        <h4 class="bq-card__titulo"><i class="ti ti-category"></i> Categorías</h4>
+        @if (categorias.length) {
+        <ul class="bq-facetas">
+          @for (c of categorias; track c.id) {
+          <li>
+            <button type="button" [class.active]="estado.categoria === c.seo" (click)="elegirCategoria(c.seo)"
+              [attr.aria-pressed]="estado.categoria === c.seo">
+              <img [src]="'/assets/images/categorias/' + c.icono" alt="" aria-hidden="true" loading="lazy" width="14" height="14" />
+              <span class="bq-facetas__nombre">{{c.nombre}}</span>
+              <span class="bq-facetas__total">{{c.total | number}}</span>
+            </button>
+          </li>
+          }
+        </ul>
+        } @else {
+        <p class="bq-card__vacio">{{cargando ? 'Cargando…' : 'Sin categorías para esta búsqueda.'}}</p>
+        }
+      </section>
+
+      <section class="bq-card">
+        <h4 class="bq-card__titulo"><i class="ti ti-calendar"></i> Fecha</h4>
+        <div class="bq-opciones" role="radiogroup" aria-label="Fecha">
+          @for (p of periodos; track p.valor) {
+          <button type="button" role="radio" [attr.aria-checked]="estado.periodo === p.valor" [class.active]="estado.periodo === p.valor"
+            (click)="elegirPeriodo(p.valor)">{{p.label}}</button>
+          }
+        </div>
+      </section>
+
+      <section class="bq-card">
+        <h4 class="bq-card__titulo"><i class="ti ti-user"></i> Autor</h4>
+        <div class="bq-autor">
+          <input type="text" [value]="autorTexto" (input)="onAutor($any($event.target).value)" placeholder="Nombre de usuario"
+            aria-label="Filtrar por autor" autocomplete="off" />
+          @if (autorTexto) {
+          <button type="button" (click)="quitarAutor()" aria-label="Quitar autor"><i class="ti ti-x"></i></button>
+          }
+        </div>
+      </section>
+      </details>
+
+      <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
+    </aside>
+  </div>
+  }
+</div>

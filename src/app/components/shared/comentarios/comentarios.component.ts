@@ -43,6 +43,41 @@ export class ComentariosComponent {
   @Input() set comentarios(value: ComentarioHilo[] | null | undefined) {
     this.lista = (value ?? []).map((c) => ({ ...c }));
     this.construirArbol();
+    this.irAlComentarioDelHash();
+  }
+
+  /** Comentario resaltado unos segundos al llegar con #comentario-{id} (p. ej. desde una notificación). */
+  public resaltadoId: number | null = null;
+  private hashAtendido: string | null = null;
+  private timerResaltado?: ReturnType<typeof setTimeout>;
+
+  constructor() {
+    // Mismo documento con otro hash (la notificación apunta a la página abierta): el navegador no recarga.
+    const alCambiarHash = () => this.irAlComentarioDelHash();
+    window.addEventListener('hashchange', alCambiarHash);
+    this.destroyRef.onDestroy(() => {
+      window.removeEventListener('hashchange', alCambiarHash);
+      clearTimeout(this.timerResaltado);
+    });
+  }
+
+  private irAlComentarioDelHash(): void {
+    const hash = window.location.hash;
+    const id = Number(/^#comentario-(\d+)$/.exec(hash)?.[1]);
+    if (!id || hash === this.hashAtendido) return;
+
+    const comentario = this.lista.find((c) => c.id === id);
+    if (!comentario) return; // Aún no cargó (o se borró): se reintenta cuando lleguen los comentarios.
+    this.hashAtendido = hash;
+    comentario.mostrarOculto = true; // Si estaba colapsado por puntaje o denuncias, se muestra.
+
+    // Esperar a que se pinte antes de desplazar.
+    setTimeout(() => {
+      document.getElementById(`comentario-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      this.resaltadoId = id;
+      clearTimeout(this.timerResaltado);
+      this.timerResaltado = setTimeout(() => (this.resaltadoId = null), 4000);
+    }, 150);
   }
 
   @Input({ required: true }) acciones!: ComentariosAcciones;

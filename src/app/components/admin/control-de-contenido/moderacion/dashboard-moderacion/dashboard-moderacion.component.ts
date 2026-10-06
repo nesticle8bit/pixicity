@@ -1,6 +1,7 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent } from '@angular/material/paginator';
+import { ModeracionLog, Reporte } from 'src/app/models/admin/moderacion.model';
 import { IHttpModeracionService } from 'src/app/services/interfaces/httpModeracion.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
@@ -15,7 +16,7 @@ import { SignalrService } from 'src/app/services/shared/signalr.service';
 export class DashboardModeracionComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
-  public reportes: any[] = [];
+  public reportes: Reporte[] = [];
   public totalCount = 0;
   public pendientes = 0;
   public soloPendientes = true;
@@ -23,7 +24,7 @@ export class DashboardModeracionComponent implements OnInit {
 
   // Vista de bitácora de acciones de staff
   public verBitacora = false;
-  public logs: any[] = [];
+  public logs: ModeracionLog[] = [];
   public logsTotal = 0;
 
   public readonly tipos = [
@@ -99,7 +100,7 @@ export class DashboardModeracionComponent implements OnInit {
     this.getReportes();
   }
 
-  resolver(reporte: any): void {
+  resolver(reporte: Reporte): void {
     this.moderacionService.resolverReporte(reporte.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (resuelto: boolean) => {
         reporte.resuelto = resuelto;
@@ -108,7 +109,7 @@ export class DashboardModeracionComponent implements OnInit {
     });
   }
 
-  descartar(reporte: any): void {
+  descartar(reporte: Reporte): void {
     if (!this.notificationService.confirm('¿Descartar este reporte del listado?')) return;
     this.moderacionService.descartarReporte(reporte.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
@@ -118,7 +119,7 @@ export class DashboardModeracionComponent implements OnInit {
     });
   }
 
-  eliminarContenido(reporte: any): void {
+  eliminarContenido(reporte: Reporte): void {
     if (!this.notificationService.confirm('¿Borrar el contenido reportado? Esta acción no se puede deshacer.')) return;
     this.moderacionService.eliminarContenidoReportado(reporte.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {

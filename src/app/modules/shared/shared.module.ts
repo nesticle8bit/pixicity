@@ -22,6 +22,7 @@ import { BanearUsuarioComponent } from '../../components/admin/usuarios/usuarios
 import { ChangeAvatarComponent } from '../../components/admin/usuarios/usuarios/change-avatar/change-avatar.component';
 import { ChangeRangoComponent } from '../../components/admin/usuarios/rangos/change-rango/change-rango.component';
 import { TableUsuariosComponent } from '../../components/admin/usuarios/usuarios/table-usuarios/table-usuarios.component';
+import { AdminFiltrosComponent } from '../../components/admin/shared/admin-filtros/admin-filtros.component';
 import { UserPopoverCardComponent } from '../../components/addons/user-popover-card/user-popover-card.component';
 import { UserPopoverDirective } from '../../shared/directives/userPopover.directive';
 import { TopTimesSelectorComponent } from '../../components/sections/top-times-selector/top-times-selector.component';
@@ -59,6 +60,8 @@ const SHARED = [
   ChangeAvatarComponent,
   ChangeRangoComponent,
   TableUsuariosComponent,
+  // Buscador/filtros de las tablas del panel (TableUsuarios vive aquí y lo usa).
+  AdminFiltrosComponent,
   // User popover
   UserPopoverCardComponent,
   UserPopoverDirective,

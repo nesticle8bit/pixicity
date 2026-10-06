@@ -1,3 +1,4 @@
+import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
 import { UsuarioAdminSearchFilter, UsuarioSearchFilter } from 'src/app/models/shared/service-types.model';
 import { IHttpSecurityService } from '../interfaces/httpSecurity.interface';
 import { JwtUserModel, LoginResponse } from 'src/app/models/security/jwtUser.model';
@@ -12,7 +13,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { PerfilInfoResponse, PerfilUsuarioViewModel, RangoUsuarioReportViewModel, SeguidoresResponse, UsuarioAvatarViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { PerfilInfoResponse, PerfilUsuarioViewModel, RangoUsuarioReportViewModel, SeguidoresResponse, UsuarioAdminViewModel, UsuarioAvatarViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { ActividadViewModel } from 'src/app/models/logs/logs-vm.model';
 import { DropdownViewModel } from 'src/app/models/parametros/parametros-vm.model';
 
@@ -177,7 +178,7 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getUsuariosAdmin(search: UsuarioAdminSearchFilter): Observable<PaginatedData<UsuarioViewModel, 'usuarios'>> {
+  getUsuariosAdmin(search: UsuarioAdminSearchFilter, filtro: AdminFiltro = {}): Observable<PaginatedData<UsuarioAdminViewModel, 'usuarios'>> {
     let searchParams = ``;
 
     if (search?.rangoId) {
@@ -185,8 +186,8 @@ export class HttpSecurityService implements IHttpSecurityService {
     }
 
     return this.http
-      .get<ApiResponse<PaginatedData<UsuarioViewModel, 'usuarios'>>>(
-        `${environment.api}/api/usuarios/getUsuariosAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${searchParams}`
+      .get<ApiResponse<PaginatedData<UsuarioAdminViewModel, 'usuarios'>>>(
+        `${environment.api}/api/usuarios/getUsuariosAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${searchParams}`, { params: adminParams(filtro) }
       )
       .pipe(
         map((response) => {
@@ -235,10 +236,10 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getSesiones(): Observable<PaginatedData<unknown>> {
+  getSesiones(filtro: AdminFiltro = {}): Observable<PaginatedData<unknown>> {
     return this.http
       .get<ApiResponse<PaginatedData<unknown>>>(
-        `${environment.api}/api/usuarios/getSesiones?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`
+        `${environment.api}/api/usuarios/getSesiones?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) }
       )
       .pipe(
         map((response) => {
@@ -560,9 +561,9 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getRangosUsuarios(): Observable<PaginatedData<unknown, 'rangos'>> {
+  getRangosUsuarios(filtro: AdminFiltro = {}): Observable<PaginatedData<unknown, 'rangos'>> {
     return this.http
-      .get<ApiResponse<PaginatedData<unknown, 'rangos'>>>(`${environment.api}/api/rangos/getRangosUsuarios`)
+      .get<ApiResponse<PaginatedData<unknown, 'rangos'>>>(`${environment.api}/api/rangos/getRangosUsuarios`, { params: adminParams(filtro, this.paginationService) })
       .pipe(
         map((response) => {
           if (response.status === 200) {

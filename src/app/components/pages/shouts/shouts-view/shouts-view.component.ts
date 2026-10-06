@@ -1,3 +1,4 @@
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { environment } from 'src/environments/environment';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -20,7 +21,7 @@ export class ShoutsViewComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public currentUser: any;
+  public currentUser?: JwtUserModel;
   public shout: any;
 
   constructor(
