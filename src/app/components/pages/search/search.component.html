@@ -1,6 +1,5 @@
 <div class="bq container container--home">
   @if (!hayBusqueda) {
-  <!-- ===================== Inicio del buscador ===================== -->
   <section class="bq-hero">
     <h1 class="bq-hero__title">¿Qué estás buscando?</h1>
     <p class="bq-hero__sub">Encuentra posts por título, contenido o etiquetas.</p>
@@ -8,14 +7,14 @@
     <form class="bq-box bq-box--grande" role="search" (ngSubmit)="buscar()">
       <i class="ti ti-search bq-box__icono" aria-hidden="true"></i>
       <input class="bq-box__input" type="search" name="q" [(ngModel)]="texto" autocomplete="off" autofocus
-        placeholder="Ej.: Stephen King, tutorial de Angular…" aria-label="Texto a buscar" />
+        placeholder="Ej.: El resplandor, metallica, tutorial de Angular…" aria-label="Texto a buscar" />
       <button type="submit" class="bq-box__btn" [disabled]="!texto.trim()">Buscar</button>
     </form>
 
     <div class="bq-tipos" role="radiogroup" aria-label="Buscar en">
       @for (t of tipos; track t.valor) {
-      <button type="button" role="radio" [attr.aria-checked]="tipoElegido === t.valor" [class.active]="tipoElegido === t.valor"
-        (click)="elegirTipo(t.valor)">
+      <button type="button" role="radio" [attr.aria-checked]="tipoElegido === t.valor"
+        [class.active]="tipoElegido === t.valor" (click)="elegirTipo(t.valor)">
         <i class="ti {{t.icono}}" aria-hidden="true"></i> {{t.label}}
       </button>
       }
@@ -28,7 +27,8 @@
         @for (r of recientes; track r) {
         <span class="bq-chip">
           <a [routerLink]="['/buscar', 'posts', r]">{{r}}</a>
-          <button type="button" (click)="quitarReciente(r, $event)" [attr.aria-label]="'Quitar ' + r"><i class="ti ti-x"></i></button>
+          <button type="button" (click)="quitarReciente(r, $event)" [attr.aria-label]="'Quitar ' + r"><i
+              class="ti ti-x"></i></button>
         </span>
         }
       </div>
@@ -42,7 +42,8 @@
     <div class="bq-explorar__grid">
       @for (c of categoriasPopulares; track c.id) {
       <a class="bq-cat" [routerLink]="['/posts', c.seo]">
-        <img [src]="'/assets/images/categorias/' + c.icono" alt="" aria-hidden="true" loading="lazy" width="20" height="20" />
+        <img [src]="'/assets/images/categorias/' + c.icono" alt="" aria-hidden="true" loading="lazy" width="20"
+          height="20" />
         <span class="bq-cat__nombre">{{c.nombre}}</span>
         <span class="bq-cat__total">{{c.totalPosts | number}}</span>
       </a>
@@ -51,17 +52,17 @@
   </section>
   }
   } @else {
-  <!-- ===================== Resultados ===================== -->
   <form class="bq-barra" role="search" (ngSubmit)="buscar()">
     <div class="bq-box">
       <i class="ti ti-search bq-box__icono" aria-hidden="true"></i>
-      <input class="bq-box__input" type="search" name="q" [(ngModel)]="texto" autocomplete="off" aria-label="Texto a buscar" />
+      <input class="bq-box__input" type="search" name="q" [(ngModel)]="texto" autocomplete="off"
+        aria-label="Texto a buscar" />
       <button type="submit" class="bq-box__btn" [disabled]="!texto.trim()">Buscar</button>
     </div>
     <div class="bq-tipos bq-tipos--compacto" role="radiogroup" aria-label="Buscar en">
       @for (t of tipos; track t.valor) {
-      <button type="button" role="radio" [attr.aria-checked]="tipoElegido === t.valor" [class.active]="tipoElegido === t.valor"
-        (click)="elegirTipo(t.valor)">
+      <button type="button" role="radio" [attr.aria-checked]="tipoElegido === t.valor"
+        [class.active]="tipoElegido === t.valor" (click)="elegirTipo(t.valor)">
         <i class="ti {{t.icono}}" aria-hidden="true"></i> {{t.label}}
       </button>
       }
@@ -96,7 +97,8 @@
       @if (hayFiltros) {
       <div class="bq-activos">
         @if (estado.tipo !== 'todo') {
-        <button type="button" class="bq-filtro" (click)="elegirTipo('todo')">En: {{tipoActual}} <i class="ti ti-x"></i></button>
+        <button type="button" class="bq-filtro" (click)="elegirTipo('todo')">En: {{tipoActual}} <i
+            class="ti ti-x"></i></button>
         }
         @if (estado.categoria) {
         <button type="button" class="bq-filtro" (click)="elegirCategoria(null)">
@@ -104,10 +106,12 @@
         </button>
         }
         @if (estado.autor) {
-        <button type="button" class="bq-filtro" (click)="quitarAutor()">Autor: {{estado.autor}} <i class="ti ti-x"></i></button>
+        <button type="button" class="bq-filtro" (click)="quitarAutor()">Autor: {{estado.autor}} <i
+            class="ti ti-x"></i></button>
         }
         @if (estado.periodo) {
-        <button type="button" class="bq-filtro" (click)="elegirPeriodo('')">{{periodoActual}} <i class="ti ti-x"></i></button>
+        <button type="button" class="bq-filtro" (click)="elegirPeriodo('')">{{periodoActual}} <i
+            class="ti ti-x"></i></button>
         }
         <button type="button" class="bq-link" (click)="limpiarFiltros()">Quitar todo</button>
       </div>
@@ -138,10 +142,12 @@
         <p>No encontramos posts para «{{estado.q}}».</p>
         <ul class="bq-vacio__tips">
           @if (hayFiltros) {
-          <li><button type="button" class="bq-link" (click)="limpiarFiltros()">Quitar los filtros</button> y buscar de nuevo.</li>
+          <li><button type="button" class="bq-link" (click)="limpiarFiltros()">Quitar los filtros</button> y buscar de
+            nuevo.</li>
           }
           @if (estado.tipo !== 'todo' && !hayFiltros) {
-          <li><button type="button" class="bq-link" (click)="elegirTipo('todo')">Buscar en todo</button> (título, contenido y etiquetas).</li>
+          <li><button type="button" class="bq-link" (click)="elegirTipo('todo')">Buscar en todo</button> (título,
+            contenido y etiquetas).</li>
           }
           <li>Usa menos palabras o palabras más generales.</li>
           <li>Revisa la ortografía.</li>
@@ -153,13 +159,16 @@
         <li class="bq-res">
           <div class="bq-res__meta">
             <a class="bq-res__cat" [routerLink]="['/posts', p.categoria.seo]">
-              <img [src]="'/assets/images/categorias/' + p.categoria.icono" alt="" aria-hidden="true" loading="lazy" width="14" height="14" />
+              <img [src]="'/assets/images/categorias/' + p.categoria.icono" alt="" aria-hidden="true" loading="lazy"
+                width="14" height="14" />
               {{p.categoria.nombre}}
             </a>
             <span aria-hidden="true">·</span>
-            <time [attr.datetime]="p.fechaRegistro" [matTooltip]="(p.fechaRegistro | date:'medium') ?? ''">{{p.fechaRegistro | timeAgo}}</time>
+            <time [attr.datetime]="p.fechaRegistro"
+              [matTooltip]="(p.fechaRegistro | date:'medium') ?? ''">{{p.fechaRegistro | timeAgo}}</time>
             @if (p.esPrivado) {
-            <span class="bq-res__privado" matTooltip="Solo usuarios registrados"><i class="ti ti-lock"></i> Privado</span>
+            <span class="bq-res__privado" matTooltip="Solo usuarios registrados"><i class="ti ti-lock"></i>
+              Privado</span>
             }
           </div>
 
@@ -174,14 +183,16 @@
           @if (p.etiquetas.length) {
           <div class="bq-res__tags">
             @for (t of p.etiquetas; track t) {
-            <a [routerLink]="['/buscar', 'posts', t]" [queryParams]="{ en: 'tags' }" [class.coincide]="esEtiquetaBuscada(t)">#{{t}}</a>
+            <a [routerLink]="['/buscar', 'posts', t]" [queryParams]="{ en: 'tags' }"
+              [class.coincide]="esEtiquetaBuscada(t)">#{{t}}</a>
             }
           </div>
           }
 
           <div class="bq-res__pie">
             <a class="bq-res__autor" [routerLink]="['/perfil', p.autor]" [appUserPopover]="p.autor">
-              <app-user-avatar [avatar]="p.autorAvatar" [userName]="p.autor" [width]="20" [height]="20"></app-user-avatar>
+              <app-user-avatar [avatar]="p.autorAvatar" [userName]="p.autor" [width]="20"
+                [height]="20"></app-user-avatar>
               {{p.autor}}
             </a>
             <span class="bq-res__stats">
@@ -207,50 +218,51 @@
     <aside class="bq-panel">
       <!-- En móvil los filtros se pliegan para no empujar los resultados; en escritorio siempre abiertos. -->
       <details class="bq-plegable" [open]="panelAbierto" (toggle)="panelAbierto = $any($event.target).open">
-      <summary class="bq-plegable__boton">
-        <i class="ti ti-adjustments-horizontal"></i> Filtros
-        @if (hayFiltros) { <span class="bq-plegable__activos">activos</span> }
-      </summary>
-      <section class="bq-card">
-        <h4 class="bq-card__titulo"><i class="ti ti-category"></i> Categorías</h4>
-        @if (categorias.length) {
-        <ul class="bq-facetas">
-          @for (c of categorias; track c.id) {
-          <li>
-            <button type="button" [class.active]="estado.categoria === c.seo" (click)="elegirCategoria(c.seo)"
-              [attr.aria-pressed]="estado.categoria === c.seo">
-              <img [src]="'/assets/images/categorias/' + c.icono" alt="" aria-hidden="true" loading="lazy" width="14" height="14" />
-              <span class="bq-facetas__nombre">{{c.nombre}}</span>
-              <span class="bq-facetas__total">{{c.total | number}}</span>
-            </button>
-          </li>
+        <summary class="bq-plegable__boton">
+          <i class="ti ti-adjustments-horizontal"></i> Filtros
+          @if (hayFiltros) { <span class="bq-plegable__activos">activos</span> }
+        </summary>
+        <section class="bq-card mb-3">
+          <h4 class="bq-card__titulo"><i class="ti ti-category"></i> Categorías</h4>
+          @if (categorias.length) {
+          <ul class="bq-facetas">
+            @for (c of categorias; track c.id) {
+            <li>
+              <button type="button" [class.active]="estado.categoria === c.seo" (click)="elegirCategoria(c.seo)"
+                [attr.aria-pressed]="estado.categoria === c.seo">
+                <img [src]="'/assets/images/categorias/' + c.icono" alt="" aria-hidden="true" loading="lazy" width="14"
+                  height="14" />
+                <span class="bq-facetas__nombre">{{c.nombre}}</span>
+                <span class="bq-facetas__total">{{c.total | number}}</span>
+              </button>
+            </li>
+            }
+          </ul>
+          } @else {
+          <p class="bq-card__vacio">{{cargando ? 'Cargando…' : 'Sin categorías para esta búsqueda.'}}</p>
           }
-        </ul>
-        } @else {
-        <p class="bq-card__vacio">{{cargando ? 'Cargando…' : 'Sin categorías para esta búsqueda.'}}</p>
-        }
-      </section>
+        </section>
 
-      <section class="bq-card">
-        <h4 class="bq-card__titulo"><i class="ti ti-calendar"></i> Fecha</h4>
-        <div class="bq-opciones" role="radiogroup" aria-label="Fecha">
-          @for (p of periodos; track p.valor) {
-          <button type="button" role="radio" [attr.aria-checked]="estado.periodo === p.valor" [class.active]="estado.periodo === p.valor"
-            (click)="elegirPeriodo(p.valor)">{{p.label}}</button>
-          }
-        </div>
-      </section>
+        <section class="bq-card mb-3">
+          <h4 class="bq-card__titulo"><i class="ti ti-calendar"></i> Fecha</h4>
+          <div class="bq-opciones" role="radiogroup" aria-label="Fecha">
+            @for (p of periodos; track p.valor) {
+            <button type="button" role="radio" [attr.aria-checked]="estado.periodo === p.valor"
+              [class.active]="estado.periodo === p.valor" (click)="elegirPeriodo(p.valor)">{{p.label}}</button>
+            }
+          </div>
+        </section>
 
-      <section class="bq-card">
-        <h4 class="bq-card__titulo"><i class="ti ti-user"></i> Autor</h4>
-        <div class="bq-autor">
-          <input type="text" [value]="autorTexto" (input)="onAutor($any($event.target).value)" placeholder="Nombre de usuario"
-            aria-label="Filtrar por autor" autocomplete="off" />
-          @if (autorTexto) {
-          <button type="button" (click)="quitarAutor()" aria-label="Quitar autor"><i class="ti ti-x"></i></button>
-          }
-        </div>
-      </section>
+        <section class="bq-card mb-3">
+          <h4 class="bq-card__titulo"><i class="ti ti-user"></i> Autor</h4>
+          <div class="bq-autor">
+            <input type="text" [value]="autorTexto" (input)="onAutor($any($event.target).value)"
+              placeholder="Nombre de usuario" aria-label="Filtrar por autor" autocomplete="off" />
+            @if (autorTexto) {
+            <button type="button" (click)="quitarAutor()" aria-label="Quitar autor"><i class="ti ti-x"></i></button>
+            }
+          </div>
+        </section>
       </details>
 
       <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
