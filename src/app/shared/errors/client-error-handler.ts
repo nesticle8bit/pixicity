@@ -1,5 +1,6 @@
 import { HttpBackend, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler, Injectable } from '@angular/core';
+import { HTTP_ERROR_GENERICO } from 'src/app/services/shared/helper.service';
 import { environment } from 'src/environments/environment';
 
 interface ClienteLog {
@@ -56,6 +57,10 @@ export class ClientErrorHandler implements ErrorHandler {
 
     if (original instanceof Error) {
       return { nivel: 'Error', tipo: original.name || 'Error', mensaje: original.message || String(original), stackTrace: original.stack, ruta };
+    }
+
+    if (original === HTTP_ERROR_GENERICO) {
+      return null;
     }
 
     if (typeof original === 'string') {

@@ -95,6 +95,6 @@ export class SectionHomeComponent implements OnInit, OnDestroy {
   }
 
   private pingOnline(): void {
-    this.securityService.sessionOnlineUser().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {});
+    this.securityService.sessionOnlineUser().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({ error: () => undefined });
   }
 }

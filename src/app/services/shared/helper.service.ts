@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { throwError } from 'rxjs';
 
+// Mensaje que errorHandler relanza tras un fallo HTTP; el API ya registró ese error, así que ClientErrorHandler lo ignora.
+export const HTTP_ERROR_GENERICO = 'Something bad happened; please try again later.';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -43,7 +46,7 @@ export class HelperService {
     }
 
     // return an observable with a user-facing error message
-    return throwError('Something bad happened; please try again later.');
+    return throwError(HTTP_ERROR_GENERICO);
   };
 
   scrollToTop = () => {
