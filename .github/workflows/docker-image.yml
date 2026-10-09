@@ -58,6 +58,11 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag pixicity
 
+    # Imagen del render en el servidor para bots (servicio "ssr" del compose): se construye para detectar a tiempo
+    # cualquier código que rompa el SSR (p. ej. uso de window/localStorage al arrancar).
+    - name: Build the SSR image
+      run: docker build . --file Dockerfile --target ssr --tag pixicity-ssr
+
     # Solo se publica al hacer push a main; las pull requests construyen la imagen pero no la suben.
     - name: login-registry
       if: github.event_name == 'push'
