@@ -18,7 +18,7 @@
         <div class="com-info">
           <div class="com-info__avatar">
             @if (comunidad.imagen) {
-              <img [src]="comunidad.imagen" [alt]="comunidad.nombre" loading="lazy" decoding="async"/>
+              <img [src]="comunidad.imagen | thumb: 96" [alt]="comunidad.nombre" loading="lazy" decoding="async"/>
             } @else {
               <span class="ph"><i class="ti ti-users-group"></i></span>
             }
@@ -89,8 +89,8 @@
           </div>
 
           <div class="com-temas__search">
-            <input type="text" [(ngModel)]="queryTemas" (keyup.enter)="buscarTemas()" placeholder="Buscar temas..." />
-            <button (click)="buscarTemas()"><i class="ti ti-search"></i></button>
+            <input type="text" [(ngModel)]="queryTemas" (keyup.enter)="buscarTemas()" aria-label="Buscar temas" placeholder="Buscar temas..." />
+            <button type="button" (click)="buscarTemas()" aria-label="Buscar"><i class="ti ti-search" aria-hidden="true"></i></button>
           </div>
 
           @if (temas.length === 0) {

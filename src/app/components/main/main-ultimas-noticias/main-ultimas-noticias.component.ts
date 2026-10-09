@@ -8,22 +8,24 @@ import {
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpNoticiasService } from 'src/app/services/interfaces/httpNoticias.interface';
+import { enNavegador } from '../../../shared/helpers/plataforma';
 
 @Component({
-  standalone: false,
-  selector: 'app-main-ultimas-noticias',
-  templateUrl: './main-ultimas-noticias.component.html',
-  styleUrls: ['./main-ultimas-noticias.component.scss'],
+    selector: 'app-main-ultimas-noticias',
+    templateUrl: './main-ultimas-noticias.component.html',
+    styleUrls: ['./main-ultimas-noticias.component.scss'],
 })
 export class MainUltimasNoticiasComponent implements OnInit {
+  private noticiasService = inject(IHttpNoticiasService);
+
   private readonly destroyRef = inject(DestroyRef);
+  private rotacion?: ReturnType<typeof setTimeout>;
 
   public noticias: any[] = [];
   public currentIndex = -1;
 
-  constructor(private noticiasService: IHttpNoticiasService) {}
-
   ngOnInit(): void {
+    this.destroyRef.onDestroy(() => clearTimeout(this.rotacion));
     this.getNoticias();
   }
 
@@ -43,8 +45,12 @@ export class MainUltimasNoticiasComponent implements OnInit {
       this.currentIndex = 0;
     }
 
-    setTimeout(() => {
-      this.showNext();
-    }, 6000);
+    // Solo en el navegador: en el SSR este temporizador que se reprograma deja la app inestable y el render
+    // nunca termina. Se cancela al destruir el componente (antes seguía corriendo para siempre).
+    if (!enNavegador()) {
+      return;
+    }
+    clearTimeout(this.rotacion);
+    this.rotacion = setTimeout(() => this.showNext(), 6000);
   }
 }

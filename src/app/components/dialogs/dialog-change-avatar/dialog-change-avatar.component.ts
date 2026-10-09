@@ -3,9 +3,10 @@ import { ImageCropperComponent, ImageCroppedEvent, LoadedImage } from 'ngx-image
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 
 // Standalone + import() diferido: el cropper solo se usa en el panel de admin.
 @Component({
@@ -16,17 +17,16 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styleUrls: ['./dialog-change-avatar.component.scss'],
 })
 export class DialogChangeAvatarComponent implements OnInit {
+  private securityService = inject(IHttpSecurityService);
+  private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
+  dialogRef = inject<MatDialogRef<DialogChangeAvatarComponent>>(MatDialogRef);
+  data = inject(MAT_DIALOG_DATA);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
-
-  constructor(
-    private securityService: IHttpSecurityService,
-    public dialogRef: MatDialogRef<DialogChangeAvatarComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private notificationService: NotificationService
-  ) {}
 
   ngOnInit(): void {}
 
@@ -60,7 +60,7 @@ export class DialogChangeAvatarComponent implements OnInit {
         }
       });
     } else {
-      this.securityService.changeAvatar(imageFile).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+      this.usuarioPerfilService.changeAvatar(imageFile).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           const currentUser = this.securityService.getCurrentUser();
           if (currentUser.usuario) {

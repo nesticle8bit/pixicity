@@ -3,14 +3,23 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent } from '@angular/material/paginator';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { RouterLink } from '@angular/router';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ShoutMediaComponent } from '../../addons/shout-media/shout-media.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  standalone: false,
-  selector: 'app-profile-shouts-wall',
-  templateUrl: './profile-shouts-wall.component.html',
-  styleUrls: ['./profile-shouts-wall.component.scss']
+    selector: 'app-profile-shouts-wall',
+    templateUrl: './profile-shouts-wall.component.html',
+    styleUrls: ['./profile-shouts-wall.component.scss'],
+    imports: [RouterLink, UserPopoverDirective, UserAvatarComponent, MatTooltip, ShoutMediaComponent, DatePipe]
 })
 export class ProfileShoutsWallComponent implements OnInit {
+  private perfilService = inject(IHttpPerfilService);
+  paginationService = inject(PaginationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   private _user: any;
@@ -39,9 +48,7 @@ export class ProfileShoutsWallComponent implements OnInit {
   public shoutsList: any[] = [];
   public totalCount: number = 0;
   
-  constructor(
-    private perfilService: IHttpPerfilService,
-    public paginationService: PaginationService) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
   }
 

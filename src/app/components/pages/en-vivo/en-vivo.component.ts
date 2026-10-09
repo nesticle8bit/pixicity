@@ -1,17 +1,29 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
 import { ActividadEnVivo as AccionEnVivo } from 'src/app/models/shared/realtime.model';
+import { RouterLink } from '@angular/router';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { enNavegador } from '../../../shared/helpers/plataforma';
 
 @Component({
-  standalone: false,
-  selector: 'app-en-vivo',
-  templateUrl: './en-vivo.component.html',
-  styleUrls: ['./en-vivo.component.scss'],
+    selector: 'app-en-vivo',
+    templateUrl: './en-vivo.component.html',
+    styleUrls: ['./en-vivo.component.scss'],
+    imports: [
+        RouterLink,
+        MatTooltip,
+        AdsByTypeComponent,
+    ],
 })
 export class EnVivoComponent implements OnInit, OnDestroy {
+  private displayService = inject(DisplayComponentService);
+  private signalrService = inject(SignalrService);
+  private seoService = inject(SEOService);
+
   public acciones: AccionEnVivo[] = [];
   public totalAcciones: number = 0;
   public velocidad: string = '0,00';
@@ -24,11 +36,7 @@ export class EnVivoComponent implements OnInit, OnDestroy {
   private actividadSub?: Subscription;
   private timestamps: number[] = [];
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private signalrService: SignalrService,
-    private seoService: SEOService
-  ) {
+  constructor() {
     this.seoService.setSEO({
       title: 'En vivo | Actividad de la comunidad',
       description:
@@ -48,6 +56,10 @@ export class EnVivoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // El reloj y el tiempo real solo tienen sentido en el navegador (en el SSR dejarían el render colgado).
+    if (!enNavegador()) {
+      return;
+    }
     this.displayTime();
 
     this.actividadSub = this.signalrService.actividad$.subscribe((accion: AccionEnVivo) =>

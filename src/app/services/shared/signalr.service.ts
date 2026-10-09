@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, inject } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import {
   HubConnection,
@@ -18,6 +18,8 @@ import { IHttpSecurityService } from '../interfaces/httpSecurity.interface';
 
 @Injectable({ providedIn: 'root' })
 export class SignalrService {
+  private injector = inject(Injector);
+
   private connection?: HubConnection;
 
   private notificationSubject = new Subject<NotificacionEnVivo>();
@@ -44,10 +46,6 @@ export class SignalrService {
   public mensajesLeidos$: Observable<EventoDeUsuario> = this.mensajesLeidosSubject.asObservable();
   // El otro usuario está escribiéndome.
   public escribiendo$: Observable<EventoDeUsuario> = this.escribiendoSubject.asObservable();
-
-  // El servicio de seguridad se pide al usarlo: inyectarlo en el constructor de un servicio "root" lo crearía antes que
-  // los proveedores del AppModule.
-  constructor(private injector: Injector) {}
 
   // Inicia la conexión y se suscribe a los grupos del usuario. Idempotente.
   async start(token: string): Promise<void> {

@@ -1,12 +1,19 @@
-import { Component, DestroyRef, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, OnInit, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { MensajesBadgeService } from 'src/app/services/shared/mensajes-badge.service';
+import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.component';
+import { UserPopoverDirective } from '../../../../shared/directives/userPopover.directive';
+import { MatTooltip } from '@angular/material/tooltip';
+import { FormsModule } from '@angular/forms';
+import { MensajesSidebarComponent } from '../mensajes-sidebar/mensajes-sidebar.component';
+import { DatePipe } from '@angular/common';
+import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 
 const PAGE_SIZE = 30;
 // Distancia (px) al fondo bajo la cual se considera que el usuario "está siguiendo" el chat.
@@ -16,16 +23,33 @@ const TYPING_SEND_EVERY_MS = 2500;
 const TYPING_SHOW_FOR_MS = 3500;
 
 @Component({
-  standalone: false,
-  selector: 'app-mensajes-conversacion',
-  templateUrl: './mensajes-conversacion.component.html',
-  styleUrls: ['./mensajes-conversacion.component.scss'],
+    selector: 'app-mensajes-conversacion',
+    templateUrl: './mensajes-conversacion.component.html',
+    styleUrls: ['./mensajes-conversacion.component.scss'],
+    imports: [
+        RouterLink,
+        UserAvatarComponent,
+        UserPopoverDirective,
+        MatTooltip,
+        FormsModule,
+        MensajesSidebarComponent,
+        DatePipe,
+        TruncatePipe,
+    ],
 })
 export class MensajesConversacionComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  private mensajesService = inject(IHttpMensajesService);
+  private fotosService = inject(IHttpFotosService);
+  private activatedRoute = inject(ActivatedRoute);
+  private notificationService = inject(NotificationService);
+  private signalrService = inject(SignalrService);
+  private badgeService = inject(MensajesBadgeService);
+
   private readonly destroyRef = inject(DestroyRef);
 
-  @ViewChild('chatBody') chatBody?: ElementRef<HTMLElement>;
-  @ViewChild('fileInput') fileInput?: ElementRef<HTMLInputElement>;
+  readonly chatBody = viewChild<ElementRef<HTMLElement>>('chatBody');
+  readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
 
   public mensajes: any[] = [];
   public otro: any;
@@ -44,15 +68,7 @@ export class MensajesConversacionComponent implements OnInit {
   private lastTypingSent = 0;
   private typingTimer: any;
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private mensajesService: IHttpMensajesService,
-    private fotosService: IHttpFotosService,
-    private activatedRoute: ActivatedRoute,
-    private notificationService: NotificationService,
-    private signalrService: SignalrService,
-    private badgeService: MensajesBadgeService
-  ) {
+  constructor() {
     // La ruta es /conversacion/:id (mensaje base) o /chat/:userName (chat nuevo / sin historial).
     this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.id = value.get('id') ? Number(value.get('id')) : undefined;
@@ -123,7 +139,7 @@ export class MensajesConversacionComponent implements OnInit {
       return;
     }
 
-    const el = this.chatBody?.nativeElement;
+    const el = this.chatBody()?.nativeElement;
     const alturaPrevia = el?.scrollHeight ?? 0;
     const topPrevio = el?.scrollTop ?? 0;
     this.cargandoMas = true;
@@ -195,7 +211,7 @@ export class MensajesConversacionComponent implements OnInit {
   }
 
   onScroll(): void {
-    const el = this.chatBody?.nativeElement;
+    const el = this.chatBody()?.nativeElement;
 
     if (!el) {
       return;
@@ -338,13 +354,13 @@ export class MensajesConversacionComponent implements OnInit {
   }
 
   private estaAbajo(): boolean {
-    const el = this.chatBody?.nativeElement;
+    const el = this.chatBody()?.nativeElement;
 
     return !el || el.scrollHeight - el.scrollTop - el.clientHeight < NEAR_BOTTOM;
   }
 
   private scrollToBottom(): void {
-    const el = this.chatBody?.nativeElement;
+    const el = this.chatBody()?.nativeElement;
 
     if (el) {
       el.scrollTop = el.scrollHeight;

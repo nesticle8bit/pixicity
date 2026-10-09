@@ -10,6 +10,12 @@
 
   &--register {
     background: #95c317 !important;
+
+    // Texto oscuro sobre el lima: el blanco no llegaba a 2.1:1.
+    > a,
+    span {
+      color: #1f2d00 !important;
+    }
     text-transform: uppercase;
   }
 }

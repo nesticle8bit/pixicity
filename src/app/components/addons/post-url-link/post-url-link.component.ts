@@ -1,26 +1,28 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-post-url-link',
-  templateUrl: './post-url-link.component.html',
-  styleUrls: ['./post-url-link.component.scss'],
+    selector: 'app-post-url-link',
+    templateUrl: './post-url-link.component.html',
+    styleUrls: ['./post-url-link.component.scss'],
+    imports: [RouterLink, TruncatePipe],
 })
 export class PostUrlLinkComponent implements OnInit {
-  @Input() post = {
+  readonly post = input({
     id: 0,
     url: '',
     titulo: '',
     truncate: 70
-  };
+});
 
-  @Input() categoria = {
+  readonly categoria = input({
     icono: '',
     nombre: '',
     seo: '',
-  };
+});
 
-  @Input() target: string = '_self';
+  readonly target = input<string>('_self');
 
   constructor() {}
 

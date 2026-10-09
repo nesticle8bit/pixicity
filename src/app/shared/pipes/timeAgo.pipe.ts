@@ -17,9 +17,8 @@ const INTERVALS: Interval[] = [
 ];
 
 @Pipe({
-  standalone: false,
-  name: 'timeAgo',
-  pure: true,
+    name: 'timeAgo',
+    pure: true,
 })
 export class TimeAgoPipe implements PipeTransform {
   transform(value: Date | string | number | null | undefined): string {

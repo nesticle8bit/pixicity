@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { SEOService } from 'src/app/services/shared/seo.service';
 
 @Component({
-  standalone: false,
-  selector: 'app-post-not-found',
-  templateUrl: './post-not-found.component.html',
-  styleUrls: ['./post-not-found.component.scss']
+    selector: 'app-post-not-found',
+    templateUrl: './post-not-found.component.html',
+    styleUrls: ['./post-not-found.component.scss']
 })
 export class PostNotFoundComponent implements OnInit {
+  private seoService = inject(SEOService);
 
-  constructor(private seoService: SEOService) { }
 
   ngOnInit(): void {
     // noindex + status 404 real en el prerender: sin esto Google lo lee como

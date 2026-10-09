@@ -6,12 +6,12 @@
 
     <div class="sh-composer__main">
         <textarea class="sh-composer__input" rows="3" formControlName="comentario"
-            placeholder="¿Qué estás pensando?"></textarea>
+            aria-label="¿Qué estás pensando?" placeholder="¿Qué estás pensando?"></textarea>
 
         <div class="sh-composer__media">
             <i class="ti ti-link"></i>
             <input type="url" class="sh-composer__url" formControlName="url"
-                placeholder="Pega un enlace: YouTube, Spotify, imagen o web (opcional)">
+                aria-label="Pega un enlace: YouTube, Spotify, imagen o web (opcional)" placeholder="Pega un enlace: YouTube, Spotify, imagen o web (opcional)">
         </div>
 
         @if (formGroup.value.url) {

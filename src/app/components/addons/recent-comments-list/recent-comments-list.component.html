@@ -2,7 +2,7 @@
   <span>Comentarios recientes</span>
 
   <div class="float-end">
-    <img class="cursor--pointer" alt="" src="/assets/images/icons/arrow-circle-double.png"
+    <img loading="lazy" decoding="async" class="cursor--pointer" alt="" src="/assets/images/icons/arrow-circle-double.png"
       style="background: #fff; padding-left: 5px" (click)="actualizar.emit()"
       matTooltip="Actualizar comentarios" [matTooltipPosition]="'above'" role="button" tabindex="0"
       aria-label="Actualizar comentarios" (keydown.enter)="actualizar.emit()"
@@ -10,22 +10,22 @@
   </div>
 </h6>
 
-@if (!comentarios?.length) {
+@if (!comentarios()?.length) {
 <section>
   <div class="alert alert-warning">
-    😴 <strong>{{mensajeVacio}}</strong>
+    😴 <strong>{{mensajeVacio()}}</strong>
   </div>
 </section>
 } @else {
-@for (comment of comentarios; track $index) {
-<article class="list-posts--zebra" [ngClass]="{'opacity-50': cargando}">
+@for (comment of comentarios(); track $index) {
+<article class="list-posts--zebra" [ngClass]="{'opacity-50': cargando()}">
   <strong>
     <a class="value" [routerLink]="['/perfil', comment.usuario]" [appUserPopover]="comment.usuario">
       {{comment.usuario}}
     </a>
   </strong>
   <span class="text-muted">
-    <a [routerLink]="comment.link" [matTooltip]="comment.titulo">
+    <a [routerLink]="comment.link" [matTooltip]="comment.titulo" [attr.aria-label]="comment.titulo">
       {{comment.titulo | truncate:[28]}}
     </a>
   </span>

@@ -1,18 +1,29 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
-  standalone: false,
-  selector: 'app-foto-create',
-  templateUrl: './foto-create.component.html',
-  styleUrls: ['./foto-create.component.scss'],
+    selector: 'app-foto-create',
+    templateUrl: './foto-create.component.html',
+    styleUrls: ['./foto-create.component.scss'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        RouterLink,
+    ],
 })
 export class FotoCreateComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  private fotosService = inject(IHttpFotosService);
+  private route = inject(ActivatedRoute);
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
@@ -26,14 +37,7 @@ export class FotoCreateComponent implements OnInit {
   public previewUrl: string = '';
   public uploadedFile: File | null = null;
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private fotosService: IHttpFotosService,
-    private route: ActivatedRoute,
-    private fb: FormBuilder,
-    private router: Router,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.formGroup = this.fb.group({
       titulo: ['', [Validators.required, Validators.maxLength(150)]],
       descripcion: ['', Validators.maxLength(1000)],

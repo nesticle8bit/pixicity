@@ -2,7 +2,7 @@
   <span>Shouts recientes</span>
 
   <div class="float-end">
-    <img class="cursor--pointer"
+    <img loading="lazy" decoding="async" class="cursor--pointer"
       [src]="paused ? '/assets/images/icons/icon_play.png' : '/assets/images/icons/icon_pause.png'"
       [matTooltip]="paused ? 'Reanudar' : 'Pausar'" style="background: #fff; padding-left: 5px"
       (click)="togglePause()" alt="" role="button" tabindex="0" [attr.aria-label]="paused ? 'Reanudar' : 'Pausar'" (keydown.enter)="togglePause()" (keydown.space)="togglePause(); $event.preventDefault()">

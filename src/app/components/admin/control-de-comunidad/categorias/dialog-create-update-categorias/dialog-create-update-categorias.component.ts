@@ -1,17 +1,41 @@
-import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup , Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { SelectAutocompleteComponent } from '../../../../shared/select-autocomplete/select-autocomplete.component';
+import { SelectLabelDirective, SelectOptionDirective } from '../../../../shared/select-autocomplete/select-template.directives';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  standalone: false,
-  selector: 'app-dialog-create-update-categorias',
-  templateUrl: './dialog-create-update-categorias.component.html',
-  styleUrls: ['./dialog-create-update-categorias.component.scss'],
+    selector: 'app-dialog-create-update-categorias',
+    templateUrl: './dialog-create-update-categorias.component.html',
+    styleUrls: ['./dialog-create-update-categorias.component.scss'],
+    imports: [
+        MatDialogTitle,
+        FormsModule,
+        ReactiveFormsModule,
+        CdkScrollable,
+        MatDialogContent,
+        SelectAutocompleteComponent,
+        SelectLabelDirective,
+        SelectOptionDirective,
+        MatSlideToggle,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ],
 })
 export class DialogCreateUpdateCategoriasComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<DialogCreateUpdateCategoriasComponent>>(MatDialogRef);
+  private parametrosService = inject(IHttpParametrosService);
+  data = inject(MAT_DIALOG_DATA);
+  private formBuilder = inject(FormBuilder);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public iconos: string[] = [
@@ -101,13 +125,7 @@ export class DialogCreateUpdateCategoriasComponent implements OnInit {
   ];
   public formGroup: FormGroup;
 
-  constructor(
-    public dialogRef: MatDialogRef<DialogCreateUpdateCategoriasComponent>,
-    private parametrosService: IHttpParametrosService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private formBuilder: FormBuilder,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({
       id: this.data?.id ? this.data?.id : 0,
       eliminado: this.data?.eliminado ? this.data?.eliminado : false,

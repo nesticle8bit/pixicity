@@ -6,6 +6,8 @@ import { ComentarioViewModel, PostDetalle } from 'src/app/models/posts/post-vm.m
 import { ComentarioHilo, ComentariosAcciones } from 'src/app/models/shared/comentario-hilo.model';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { ComentariosComponent } from '../../shared/comentarios/comentarios.component';
+import { IHttpComentariosPostService } from '../../../services/interfaces/httpComentariosPost.interface';
 
 /** Convierte un comentario de post (y sus respuestas anidadas) al formato plano de <app-comentarios>. */
 function aHilo(c: ComentarioViewModel, parentId: number | null): ComentarioHilo[] {
@@ -34,13 +36,13 @@ function aHilo(c: ComentarioViewModel, parentId: number | null): ComentarioHilo[
 
 /** Comentarios de un post: carga los datos del API de posts y los muestra con <app-comentarios>. */
 @Component({
-  standalone: false,
-  selector: 'app-post-comments',
-  templateUrl: './post-comments.component.html',
+    selector: 'app-post-comments',
+    templateUrl: './post-comments.component.html',
+    imports: [ComentariosComponent],
 })
 export class PostCommentsComponent {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly postService = inject(IHttpPostsService);
+  private comentariosPostService = inject(IHttpComentariosPostService);
   private readonly securityService = inject(IHttpSecurityService);
   private readonly dialog = inject(MatDialog);
 
@@ -62,12 +64,12 @@ export class PostCommentsComponent {
 
   public readonly acciones: ComentariosAcciones = {
     comentar: (contenido, parentId) =>
-      this.postService.addComentario({ postId: this._post?.id, contenido, comentarioId: parentId ?? undefined }),
-    editar: (id, contenido) => this.postService.updateComentario({ id, contenido }),
-    eliminar: (id) => this.postService.deleteComentario(id),
-    votar: (id, valor) => this.postService.votarComentario(id, valor),
-    fijar: (id) => this.postService.fijarComentario(id),
-    denunciar: (id, motivo) => this.postService.denunciarComentario(id, motivo),
+      this.comentariosPostService.addComentario({ postId: this._post?.id, contenido, comentarioId: parentId ?? undefined }),
+    editar: (id, contenido) => this.comentariosPostService.updateComentario({ id, contenido }),
+    eliminar: (id) => this.comentariosPostService.deleteComentario(id),
+    votar: (id, valor) => this.comentariosPostService.votarComentario(id, valor),
+    fijar: (id) => this.comentariosPostService.fijarComentario(id),
+    denunciar: (id, motivo) => this.comentariosPostService.denunciarComentario(id, motivo),
   };
 
   /** Fija comentarios el autor del post o el staff. */
@@ -83,7 +85,7 @@ export class PostCommentsComponent {
       return;
     }
 
-    this.postService
+    this.comentariosPostService
       .getComentariosByPostId(this._post.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((lista) => (this.comentarios = (lista ?? []).flatMap((c) => aHilo(c, null))));

@@ -3,7 +3,7 @@ import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filt
 import { environment } from 'src/environments/environment';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
@@ -11,14 +11,37 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
 import { MatDialog } from '@angular/material/dialog';
 import { DialogUpdateAfiliadosComponent } from '../dialog-update-afiliados/dialog-update-afiliados.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgClass } from '@angular/common';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-afiliados',
-  templateUrl: './table-afiliados.component.html',
-  styleUrls: ['./table-afiliados.component.scss'],
+    selector: 'app-table-afiliados',
+    templateUrl: './table-afiliados.component.html',
+    styleUrls: ['./table-afiliados.component.scss'],
+    imports: [
+        AdminFiltrosComponent,
+        MatTooltip,
+        NgClass,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatIcon,
+        MatPaginator,
+        TimeAgoPipe,
+    ],
 })
 export class TableAfiliadosComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private generalService = inject(IHttpGeneralService);
+  private webService = inject(IHttpWebService);
+  private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public afiliados: any[] = [];
@@ -37,14 +60,7 @@ export class TableAfiliadosComponent implements OnInit {
     ],
   };
 
-  constructor(
-    public paginationService: PaginationService,
-    private generalService: IHttpGeneralService,
-    private webService: IHttpWebService,
-    private snackBar: MatSnackBar,
-    private dialog: MatDialog,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 

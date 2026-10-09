@@ -1,31 +1,50 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { RichEditorComponent } from '../../shared/rich-editor/rich-editor.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  standalone: false,
-  selector: 'app-dialog-enviar-mp',
-  templateUrl: './dialog-enviar-mp.component.html',
-  styleUrls: ['./dialog-enviar-mp.component.scss'],
+    selector: 'app-dialog-enviar-mp',
+    templateUrl: './dialog-enviar-mp.component.html',
+    styleUrls: ['./dialog-enviar-mp.component.scss'],
+    imports: [
+        MatDialogTitle,
+        FormsModule,
+        ReactiveFormsModule,
+        CdkScrollable,
+        MatDialogContent,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatError,
+        RichEditorComponent,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ],
 })
 export class DialogEnviarMPComponent implements OnInit {
+  private dialogRef = inject<MatDialogRef<DialogEnviarMPComponent>>(MatDialogRef);
+  private mensajeService = inject(IHttpMensajesService);
+  data = inject(MAT_DIALOG_DATA);
+  private formBuilder = inject(FormBuilder);
+  private notificationService = inject(NotificationService);
+  private router = inject(Router);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
   public userName: string = '';
 
-  constructor(
-    private dialogRef: MatDialogRef<DialogEnviarMPComponent>,
-    private mensajeService: IHttpMensajesService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private formBuilder: FormBuilder,
-    private notificationService: NotificationService,
-    private router: Router
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({
       aUserName: ['', Validators.required],
       contenido: ['', Validators.required],

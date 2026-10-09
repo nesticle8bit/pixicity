@@ -1,25 +1,32 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  standalone: false,
-  selector: 'app-dashboard-ads',
-  templateUrl: './dashboard-ads.component.html',
-  styleUrls: ['./dashboard-ads.component.scss'],
+    selector: 'app-dashboard-ads',
+    templateUrl: './dashboard-ads.component.html',
+    styleUrls: ['./dashboard-ads.component.scss'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatButton,
+        MatIcon,
+    ],
 })
 export class DashboardAdsComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private generalService = inject(IHttpGeneralService);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private generalService: IHttpGeneralService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({
       headerScript: [''],
       footerScript: [''],

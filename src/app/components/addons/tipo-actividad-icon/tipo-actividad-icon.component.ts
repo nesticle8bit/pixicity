@@ -1,10 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, input } from '@angular/core';
 
 @Component({
-  standalone: false,
-  selector: 'addons-tipo-actividad-icon',
-  templateUrl: './tipo-actividad-icon.component.html',
-  styleUrls: ['./tipo-actividad-icon.component.scss'],
+    selector: 'addons-tipo-actividad-icon',
+    templateUrl: './tipo-actividad-icon.component.html',
+    styleUrls: ['./tipo-actividad-icon.component.scss'],
 })
 export class TipoActividadIconComponent implements OnInit {
   private _tipoActividad: any;
@@ -17,7 +16,7 @@ export class TipoActividadIconComponent implements OnInit {
     return this._tipoActividad;
   }
 
-  @Input() class: string = '';
+  readonly class = input<string>('');
 
   constructor() {}
 

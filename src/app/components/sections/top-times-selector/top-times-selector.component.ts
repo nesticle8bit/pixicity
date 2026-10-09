@@ -1,18 +1,17 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, output, inject } from '@angular/core';
 
 @Component({
-  standalone: false,
-  selector: 'app-top-times-selector',
-  templateUrl: './top-times-selector.component.html',
-  styleUrls: ['./top-times-selector.component.scss'],
+    selector: 'app-top-times-selector',
+    templateUrl: './top-times-selector.component.html',
+    styleUrls: ['./top-times-selector.component.scss'],
 })
 export class TopTimesSelectorComponent {
+  private elementRef = inject(ElementRef);
+
   @Input() selection: string = 'all';
-  @Output() selectedDate = new EventEmitter<any>();
+  readonly selectedDate = output<any>();
 
   public displayMenu: boolean = false;
-
-  constructor(private elementRef: ElementRef) {}
 
   toggleMenu(): void {
     this.displayMenu = !this.displayMenu;

@@ -1,17 +1,20 @@
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { PostRankListComponent } from '../post-rank-list/post-rank-list.component';
 
 @Component({
-  standalone: false,
-  selector: 'app-post-related-posts',
-  template: `
+    selector: 'app-post-related-posts',
+    template: `
     <app-post-rank-list titulo="Posts Relacionados" icono="ti-stack-2"
       mensajeVacio="Sin posts relacionados" iconoVacio="ti-target-off" [posts]="relatedPosts">
     </app-post-rank-list>
   `,
+    imports: [PostRankListComponent],
 })
 export class PostRelatedPostsComponent implements OnInit {
+  private postService = inject(IHttpPostsService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   private _post: any;
@@ -29,7 +32,6 @@ export class PostRelatedPostsComponent implements OnInit {
   }
 
   public relatedPosts: any = [];
-  constructor(private postService: IHttpPostsService) {}
 
   ngOnInit(): void {}
 

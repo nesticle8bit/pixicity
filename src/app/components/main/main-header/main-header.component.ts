@@ -3,6 +3,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { MobileNavService } from 'src/app/services/shared/mobile-nav.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
+import { SectionUserInfoLoginComponent } from '../../sections/section-user-info-login/section-user-info-login.component';
+import { enNavegador } from '../../../shared/helpers/plataforma';
 
 // En móvil el header se esconde al bajar y reaparece al subir; no se esconde en los primeros px de la página.
 const HIDE_AFTER_PX = 120;
@@ -10,12 +14,15 @@ const HIDE_AFTER_PX = 120;
 const SCROLL_THRESHOLD_PX = 8;
 
 @Component({
-  standalone: false,
-  selector: 'main-header',
-  templateUrl: './main-header.component.html',
-  styleUrls: ['./main-header.component.scss']
+    selector: 'main-header',
+    templateUrl: './main-header.component.html',
+    styleUrls: ['./main-header.component.scss'],
+    imports: [MatTooltip, RouterLink, SectionUserInfoLoginComponent]
 })
 export class MainHeaderComponent implements OnInit {
+  nav = inject(MobileNavService);
+  private securityService = inject(IHttpSecurityService);
+
   private readonly destroyRef = inject(DestroyRef);
   private readonly zone = inject(NgZone);
 
@@ -26,10 +33,7 @@ export class MainHeaderComponent implements OnInit {
   private lastY = 0;
   private ticking = false;
 
-  constructor(
-    public nav: MobileNavService,
-    private securityService: IHttpSecurityService
-  ) {
+  constructor() {
     this.securityService
       .getCurrentUserAsObservable()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -44,6 +48,10 @@ export class MainHeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.nav.watchStats();
+
+    if (!enNavegador()) {
+      return;
+    }
 
     // El scroll se escucha fuera de Angular para no disparar detección de cambios en cada evento;
     // solo se vuelve a entrar a la zona cuando el header realmente cambia de estado.

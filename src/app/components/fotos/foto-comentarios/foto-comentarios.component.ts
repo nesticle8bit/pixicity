@@ -1,9 +1,10 @@
-import { Component, DestroyRef, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, DestroyRef, inject, Input, input, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FotoComentarioViewModel } from 'src/app/models/fotos/foto-vm.model';
 import { ComentarioHilo, ComentariosAcciones } from 'src/app/models/shared/comentario-hilo.model';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { ComentariosComponent } from '../../shared/comentarios/comentarios.component';
 
 /** Convierte un comentario de foto al formato común de <app-comentarios>. */
 function aHilo(c: FotoComentarioViewModel): ComentarioHilo {
@@ -27,9 +28,9 @@ function aHilo(c: FotoComentarioViewModel): ComentarioHilo {
 
 /** Comentarios de una foto: carga los datos del API de fotos y los muestra con <app-comentarios>. */
 @Component({
-  standalone: false,
-  selector: 'app-foto-comentarios',
-  templateUrl: './foto-comentarios.component.html',
+    selector: 'app-foto-comentarios',
+    templateUrl: './foto-comentarios.component.html',
+    imports: [ComentariosComponent],
 })
 export class FotoComentariosComponent {
   private readonly destroyRef = inject(DestroyRef);
@@ -51,10 +52,10 @@ export class FotoComentariosComponent {
   }
 
   /** Autor de la foto: puede fijar y borrar comentarios, y los suyos llevan la marca "OP". */
-  @Input() autor: string | null = null;
+  readonly autor = input<string | null>(null);
 
   /** Cambió la cantidad de comentarios. */
-  @Output() totalCambio = new EventEmitter<number>();
+  readonly totalCambio = output<number>();
 
   public readonly acciones: ComentariosAcciones = {
     comentar: (contenido, parentId) => this.fotosService.addComentario({ fotoId: this._fotoId, contenido, parentId }),
@@ -67,7 +68,7 @@ export class FotoComentariosComponent {
 
   get esAutorFoto(): boolean {
     const yo = this.securityService.getCurrentUser()?.usuario?.userName;
-    return !!yo && yo === this.autor;
+    return !!yo && yo === this.autor();
   }
 
   get puedeFijar(): boolean {

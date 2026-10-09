@@ -32,14 +32,13 @@ describe('DashboardAdsComponent', () => {
     general.updateAds.and.returnValue(of(true));
 
     await TestBed.configureTestingModule({
-      declarations: [DashboardAdsComponent],
-      imports: [ReactiveFormsModule],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [
+    imports: [ReactiveFormsModule, DashboardAdsComponent],
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [
         { provide: IHttpGeneralService, useValue: general },
         { provide: NotificationService, useValue: jasmine.createSpyObj('NotificationService', ['success', 'error']) },
-      ],
-    })
+    ],
+})
       .overrideComponent(DashboardAdsComponent, { set: { template: '' } })
       .compileComponents();
 

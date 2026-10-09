@@ -3,8 +3,8 @@
     <div class="col-12">
       <div class="com-toolbar">
         <div class="com-search">
-          <input type="text" [(ngModel)]="query" (keyup.enter)="buscar()" placeholder="Buscar comunidad..." />
-          <button (click)="buscar()"><i class="ti ti-search"></i></button>
+          <input type="text" [(ngModel)]="query" (keyup.enter)="buscar()" aria-label="Buscar comunidad" placeholder="Buscar comunidad..." />
+          <button type="button" (click)="buscar()" aria-label="Buscar"><i class="ti ti-search" aria-hidden="true"></i></button>
         </div>
 
         <div class="com-cats">
@@ -31,7 +31,7 @@
         <a class="com-card mb-2" [routerLink]="['/comunidades', com.nombreCorto]">
           <div class="com-card__img">
             @if (com.imagen) {
-            <img [src]="com.imagen" [alt]="com.nombre" loading="lazy" decoding="async"/>
+            <img [src]="com.imagen | thumb: 64" [alt]="com.nombre" loading="lazy" decoding="async"/>
             } @else {
             <span class="com-card__placeholder"><i class="ti ti-users-group"></i></span>
             }

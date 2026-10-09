@@ -2,18 +2,47 @@ import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { NgClass } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
+import { WhoIsIpComponent } from '../../../../addons/who-is-ip/who-is-ip.component';
+import { UserPopoverDirective } from '../../../../../shared/directives/userPopover.directive';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
+import { TruncatePipe } from '../../../../../shared/pipes/truncate.pipe';
+import { IHttpComentariosPostService } from '../../../../../services/interfaces/httpComentariosPost.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-comments',
-  templateUrl: './table-comments.component.html',
-  styleUrls: ['./table-comments.component.scss'],
+    selector: 'app-table-comments',
+    templateUrl: './table-comments.component.html',
+    styleUrls: ['./table-comments.component.scss'],
+    imports: [
+        AdminFiltrosComponent,
+        NgClass,
+        MatTooltip,
+        RouterLink,
+        WhoIsIpComponent,
+        UserPopoverDirective,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatIcon,
+        MatPaginator,
+        TimeAgoPipe,
+        TruncatePipe,
+    ],
 })
 export class TableCommentsComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private comentariosPostService = inject(IHttpComentariosPostService);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public comments: any[] = [];
@@ -33,11 +62,7 @@ export class TableCommentsComponent implements OnInit {
     ],
   };
 
-  constructor(
-    public paginationService: PaginationService,
-    private postsService: IHttpPostsService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 
@@ -47,7 +72,7 @@ export class TableCommentsComponent implements OnInit {
 
   getComentarios(): void {
     this.cargando = true;
-    this.postsService.getComentarios(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.comentariosPostService.getComentarios(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.comments = response?.data;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -69,8 +94,8 @@ export class TableCommentsComponent implements OnInit {
     const accion = comentario.eliminado ? 'recuperar' : 'eliminar';
     if (this.notificationService.confirm(`¿Está seguro de ${accion} este comentario?`)) {
       const accion$ = comentario.eliminado
-        ? this.postsService.recuperarComentario(comentario.id)
-        : this.postsService.deleteComentario(comentario.id);
+        ? this.comentariosPostService.recuperarComentario(comentario.id)
+        : this.comentariosPostService.deleteComentario(comentario.id);
       accion$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success(

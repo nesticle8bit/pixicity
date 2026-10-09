@@ -1,4 +1,4 @@
-<div class="container" [ngClass]="{'bg-login container--home mt-3': !hide?.sidebar}">
+<div class="container" [ngClass]="{'bg-login container--home mt-3': !hide()?.sidebar}">
   @if (configuracion?.disableUserRegistration === true) {
     <div class="row">
       <div class="col-12 col-sm-12 col-md-9">
@@ -7,17 +7,17 @@
         </div>
       </div>
       <div class="col-12 col-sm-12 col-md-3 dotted-border--left">
-        <img class="noim" src="/assets/images/404graph.png" alt="" aria-hidden="true">
+        <img loading="lazy" decoding="async" class="noim" src="/assets/images/404graph.png" alt="" aria-hidden="true">
       </div>
     </div>
   }
 
   @if (configuracion?.disableUserRegistration === false) {
     <div class="row bg-white"
-      [ngClass]="{'p-4': !hide?.sidebar}">
+      [ngClass]="{'p-4': !hide()?.sidebar}">
       <div class="col-12 text-center main-login--head"
-        [ngClass]="{'col-sm-12': hide?.sidebar, 'col-sm-8': !hide?.sidebar}">
-        @if (!hide?.sidebar) {
+        [ngClass]="{'col-sm-12': hide()?.sidebar, 'col-sm-8': !hide()?.sidebar}">
+        @if (!hide()?.sidebar) {
           <section>
             <h1>Bienvenido a Taringa!</h1>
             <p>
@@ -32,10 +32,10 @@
         </div>
         <form [formGroup]="formGroup" (ngSubmit)="registerUser()" class="login_box mx-auto">
           <div class="mb-3 pos-relative">
-            <label>
+            <label for="register-userName">
               Nombre de Usuario <strong class="text-danger">*</strong>
             </label>
-            <input type="text" formControlName="userName" autocomplete="off" class="form-control mx-auto"
+            <input id="register-userName" type="text" formControlName="userName" autocomplete="off" class="form-control mx-auto"
               on-focus="onFocus('userName')" on-blur="removePopover()" />
               <!-- <div class="form-text text-danger">
               El campo nombre de usuario es requerido
@@ -50,7 +50,7 @@
             }
           </div>
           <div class="mb-3 pos-relative">
-            <label>
+            <label for="password">
               Contraseña Deseada <strong class="text-danger">*</strong>
             </label>
             <input id="password" type="password" formControlName="password" autocomplete="off"
@@ -65,10 +65,10 @@
               }
             </div>
             <div class="mb-3 pos-relative">
-              <label>
+              <label for="register-email">
                 Correo Electrónico <strong class="text-danger">*</strong>
               </label>
-              <input type="email" formControlName="email" class="form-control mx-auto" on-focus="onFocus('email')"
+              <input id="register-email" type="email" formControlName="email" class="form-control mx-auto" on-focus="onFocus('email')"
                 on-blur="removePopover()" />
                 @if (currentFocus === 'email') {
                   <div class="pixicity-popover help info">
@@ -174,10 +174,10 @@
           </div>
         </form>
       </div>
-      @if (!hide?.sidebar) {
+      @if (!hide()?.sidebar) {
         <div class="col-12 col-sm-4">
           <div class="text-center">
-            <img src="/assets/images/login-bg.gif" alt="">
+            <img loading="lazy" decoding="async" src="/assets/images/login-bg.gif" alt="">
             <div class="dot--ccc mt-0">
               <span class="w200">¿Ya tienes una cuenta?</span>
             </div>

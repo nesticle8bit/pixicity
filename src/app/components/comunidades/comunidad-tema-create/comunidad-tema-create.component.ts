@@ -1,36 +1,50 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ComunidadDetalle, TemaGuardar } from 'src/app/models/comunidades/comunidad.model';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { RichEditorComponent } from '../../shared/rich-editor/rich-editor.component';
+import { DecimalPipe } from '@angular/common';
+import { BorradorLocal } from 'src/app/shared/helpers/borrador-local';
+import { BorradorAvisoComponent } from '../../shared/borrador-aviso/borrador-aviso.component';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-comunidad-tema-create',
-  templateUrl: './comunidad-tema-create.component.html',
-  // Mismo diseño que crear post: comparte sus estilos (cp-*) más unos pocos propios.
-  styleUrls: ['../../posts/posts-create/posts-create.component.scss', './comunidad-tema-create.component.scss'],
+    selector: 'app-comunidad-tema-create',
+    templateUrl: './comunidad-tema-create.component.html',
+    // Mismo diseño que crear post: comparte sus estilos (cp-*) más unos pocos propios.
+    styleUrls: ['../../posts/posts-create/posts-create.component.scss', './comunidad-tema-create.component.scss'],
+    imports: [
+        BorradorAvisoComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterLink,
+        RichEditorComponent,
+        DecimalPipe,
+    ],
 })
 export class ComunidadTemaCreateComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  private comunidadesService = inject(IHttpComunidadesService);
+  private fb = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
+  public borrador: BorradorLocal | null = null;
+  private securityService = inject(IHttpSecurityService);
   public comunidad: ComunidadDetalle | null = null;
   public loading: boolean = false;
   public slug: string = '';
   public temaId: number = 0;
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private comunidadesService: IHttpComunidadesService,
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.formGroup = this.fb.group({
       titulo: ['', [Validators.required, Validators.maxLength(150)]],
       contenido: ['', [Validators.required]],
@@ -51,6 +65,8 @@ export class ComunidadTemaCreateComponent implements OnInit {
 
       if (this.temaId) {
         this.cargarTema(this.temaId);
+      } else {
+        this.iniciarBorrador();
       }
     });
   }
@@ -85,9 +101,17 @@ export class ComunidadTemaCreateComponent implements OnInit {
           titulo: tema.titulo,
           contenido: tema.contenido,
         });
+        this.iniciarBorrador();
       },
       error: () => this.router.navigate(['/comunidades', this.slug]),
     });
+  }
+
+  /** Borrador automático en el navegador: se ofrece recuperarlo si se vuelve sin haber publicado. */
+  private iniciarBorrador(): void {
+    const clave = this.temaId ? `tema:${this.temaId}` : `tema:${this.slug}:nuevo`;
+    this.borrador = new BorradorLocal(clave, this.securityService.getCurrentUser()?.usuario?.userName, this.formGroup, this.destroyRef);
+    this.borrador.iniciar();
   }
 
   crear(): void {
@@ -106,6 +130,7 @@ export class ComunidadTemaCreateComponent implements OnInit {
 
     this.comunidadesService.saveTema(model).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (id) => {
+        this.borrador?.limpiar();
         if (this.temaId) {
           this.notificationService.success('Tu tema ha sido actualizado', 'Tema actualizado');
           this.router.navigate(['/comunidades', this.slug, 'tema', this.temaId, this.urlSeo(model.titulo)]);

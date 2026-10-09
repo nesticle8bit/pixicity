@@ -98,7 +98,7 @@
               @for (otraFoto of foto.otrasFotosUsuario; track otraFoto.id) {
               <a [routerLink]="['/fotos', foto.usuario, otraFoto.id, otraFoto.url]" class="sidebar-thumb"
                 [title]="otraFoto.titulo">
-                <img [src]="otraFoto.imageUrl" [alt]="otraFoto.titulo" loading="lazy">
+                <img [src]="otraFoto.imageUrl | thumb: 120" [alt]="otraFoto.titulo" loading="lazy">
                 <div class="sidebar-thumb-overlay">
                   <span class="overlay-title">{{otraFoto.titulo}}</span>
                   <span class="overlay-stat">
@@ -116,7 +116,7 @@
         </aside>
 
         <!-- Contenido principal -->
-        <main class="detail-main">
+        <div class="detail-main">
           <div class="foto-image-container">
             <img [src]="foto.imageUrl" [alt]="foto.titulo" class="foto-main-img" fetchpriority="high" decoding="async">
           </div>
@@ -141,11 +141,11 @@
               <span class="voto-label">Calificar:</span>
               @if (currentUser?.usuario && !esMio) {
               <a class="voto-btn positivo" [ngClass]="{'voted': foto.miVoto === 1}" (click)="votar(1)"
-                matTooltip="Votar positivo" role="button" tabindex="0" (keydown.enter)="votar(1)" (keydown.space)="votar(1); $event.preventDefault()">
+                matTooltip="Votar positivo" aria-label="Votar positivo" role="button" tabindex="0" (keydown.enter)="votar(1)" (keydown.space)="votar(1); $event.preventDefault()">
                 <i class="ti ti-thumb-up"></i>
               </a>
               <a class="voto-btn negativo" [ngClass]="{'voted': foto.miVoto === -1}" (click)="votar(-1)"
-                matTooltip="Votar negativo" role="button" tabindex="0" (keydown.enter)="votar(-1)" (keydown.space)="votar(-1); $event.preventDefault()">
+                matTooltip="Votar negativo" aria-label="Votar negativo" role="button" tabindex="0" (keydown.enter)="votar(-1)" (keydown.space)="votar(-1); $event.preventDefault()">
                 <i class="ti ti-thumb-down"></i>
               </a>
               }
@@ -181,7 +181,7 @@
           <!-- Comentarios -->
           <app-foto-comentarios [fotoId]="foto.id" [autor]="foto.usuario"
             (totalCambio)="foto.totalComentarios = $event"></app-foto-comentarios>
-        </main>
+        </div>
       </div>
     </div>
   </div>

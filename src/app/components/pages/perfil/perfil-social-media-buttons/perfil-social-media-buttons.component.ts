@@ -1,14 +1,18 @@
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { MatTooltip } from '@angular/material/tooltip';
+import { IHttpUsuarioPerfilService } from '../../../../services/interfaces/httpUsuarioPerfil.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-perfil-social-media-buttons',
-  templateUrl: './perfil-social-media-buttons.component.html',
-  styleUrls: ['./perfil-social-media-buttons.component.scss'],
+    selector: 'app-perfil-social-media-buttons',
+    templateUrl: './perfil-social-media-buttons.component.html',
+    styleUrls: ['./perfil-social-media-buttons.component.scss'],
+    imports: [MatTooltip],
 })
 export class PerfilSocialMediaButtonsComponent implements OnInit {
+  private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   private _usuarioId: any;
@@ -27,12 +31,10 @@ export class PerfilSocialMediaButtonsComponent implements OnInit {
 
   public socialMedia: any;
 
-  constructor(private securityService: IHttpSecurityService) {}
-
   ngOnInit(): void {}
 
   getSocialMedia(): void {
-    this.securityService
+    this.usuarioPerfilService
       .getSocialMediaByUsuarioId(this.usuarioId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => {

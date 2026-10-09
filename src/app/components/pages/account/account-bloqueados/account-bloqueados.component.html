@@ -1,0 +1,19 @@
+<div class="mt-3">
+  @if (bloqueados.length === 0) {
+    <div class="alert alert-info">
+      No tienes usuarios bloqueados.
+    </div>
+  }
+
+  @for (b of bloqueados; track b.id) {
+    <div class="d-flex align-items-center justify-content-between p-2 border-bottom">
+      <div class="d-flex align-items-center gap-2">
+        <app-user-avatar [avatar]="b.avatar" [userName]="b.userName" [height]="40" [width]="40" class="rounded-circle"></app-user-avatar>
+        <a [routerLink]="['/perfil', b.userName]" class="fw-bold text-decoration-none">{{ b.userName }}</a>
+      </div>
+      <button mat-stroked-button color="warn" (click)="desbloquearUsuario(b)" [attr.aria-label]="'Desbloquear a ' + b.userName">
+        <mat-icon>lock_open</mat-icon> Desbloquear
+      </button>
+    </div>
+  }
+</div>

@@ -1,20 +1,22 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
+import { TopTimesSelectorComponent } from '../../../sections/top-times-selector/top-times-selector.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  standalone: false,
-  selector: 'app-comunidades-top-temas',
-  templateUrl: './comunidades-top-temas.component.html',
-  styleUrls: ['./comunidades-top-temas.component.scss'],
+    selector: 'app-comunidades-top-temas',
+    templateUrl: './comunidades-top-temas.component.html',
+    styleUrls: ['./comunidades-top-temas.component.scss'],
+    imports: [TopTimesSelectorComponent, RouterLink],
 })
 export class ComunidadesTopTemasComponent implements OnInit {
+  private comunidadesService = inject(IHttpComunidadesService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public temas: any[] = [];
   public periodo: string = 'ultimos7dias';
-
-  constructor(private comunidadesService: IHttpComunidadesService) {}
 
   ngOnInit(): void {
     this.cargar();

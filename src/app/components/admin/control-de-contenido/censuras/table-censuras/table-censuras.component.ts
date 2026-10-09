@@ -4,19 +4,42 @@ import { CensuraViewModel } from 'src/app/models/parametros/parametros-vm.model'
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { DialogCreateUpdateCensurasComponent } from '../dialog-create-update-censuras/dialog-create-update-censuras.component';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { DatePipe } from '@angular/common';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-censuras',
-  templateUrl: './table-censuras.component.html',
-  styleUrls: ['./table-censuras.component.scss'],
+    selector: 'app-table-censuras',
+    templateUrl: './table-censuras.component.html',
+    styleUrls: ['./table-censuras.component.scss'],
+    imports: [
+        AdminFiltrosComponent,
+        MatButton,
+        MatIcon,
+        MatTooltip,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatPaginator,
+        DatePipe,
+        TimeAgoPipe,
+    ],
 })
 export class TableCensurasComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private parametrosService = inject(IHttpParametrosService);
+  private notificationService = inject(NotificationService);
+  private dialog = inject(MatDialog);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public censuras: CensuraViewModel[] = [];
@@ -30,12 +53,7 @@ export class TableCensurasComponent implements OnInit {
     orden: true,
   };
 
-  constructor(
-    public paginationService: PaginationService,
-    private parametrosService: IHttpParametrosService,
-    private notificationService: NotificationService,
-    private dialog: MatDialog
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 

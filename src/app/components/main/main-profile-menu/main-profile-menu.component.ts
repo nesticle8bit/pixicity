@@ -1,13 +1,14 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit, output } from '@angular/core';
+import { NgClass } from '@angular/common';
 
 @Component({
-  standalone: false,
-  selector: 'app-main-profile-menu',
-  templateUrl: './main-profile-menu.component.html',
-  styleUrls: ['./main-profile-menu.component.scss'],
+    selector: 'app-main-profile-menu',
+    templateUrl: './main-profile-menu.component.html',
+    styleUrls: ['./main-profile-menu.component.scss'],
+    imports: [NgClass],
 })
 export class MainProfileMenuComponent implements OnInit {
-  @Output() selectedChanged = new EventEmitter<string>();
+  readonly selectedChanged = output<string>();
 
   public selected: string = 'shouts';
 

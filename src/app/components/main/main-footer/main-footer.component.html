@@ -6,8 +6,8 @@
         <div class="inpie">
           <div class="busb float-start">
             <form [formGroup]="formGroup" (ngSubmit)="search()" action="/buscar/posts/" name="top_search_box">
-              <input class="bbcuerpo" type="text" name="q" value="" formControlName="search" placeholder="Buscar..." />
-              <input class="bbboton" vspace="2" hspace="10" type="submit" value="" />
+              <input class="bbcuerpo" type="text" name="q" value="" formControlName="search" aria-label="Buscar" placeholder="Buscar..." />
+              <input class="bbboton" type="submit" value="" aria-label="Buscar en el sitio" />
             </form>
           </div>
           <a class="ircielo float-end" (click)="goToHeaven()" role="button" tabindex="0" (keydown.enter)="goToHeaven()" (keydown.space)="goToHeaven(); $event.preventDefault()">

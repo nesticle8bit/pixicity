@@ -8,7 +8,7 @@
   </header> -->
 
   <form [formGroup]="formGroup" (ngSubmit)="crear()" class="cc-grid">
-    <main class="cc-main">
+    <div class="cc-main">
       <section class="cc-card">
         <div class="cc-card__head">
           <span class="cc-card__title"><i class="ti ti-id-badge-2"></i> Identidad</span>
@@ -16,12 +16,12 @@
 
         <div class="cc-field">
           <div class="cc-field__head">
-            <label>Nombre <span class="cc-req">*</span></label>
+            <label for="comunidad-create-nombre">Nombre <span class="cc-req">*</span></label>
             <span class="cc-counter" [class.cc-counter--warn]="(formGroup.value?.nombre?.length || 0) >= 70">
               {{ formGroup.value?.nombre?.length || 0 }}/80
             </span>
           </div>
-          <input type="text" formControlName="nombre" (input)="onNombreChange()" maxlength="80"
+          <input id="comunidad-create-nombre" type="text" formControlName="nombre" (input)="onNombreChange()" maxlength="80"
             placeholder="Ej. Amantes del café" />
           @if (formGroup.get('nombre')?.touched && formGroup.get('nombre')?.invalid) {
           <small class="cc-err">El nombre es obligatorio.</small>
@@ -29,10 +29,10 @@
         </div>
 
         <div class="cc-field">
-          <label>Nombre corto (URL) <span class="cc-req">*</span></label>
+          <label for="comunidad-create-nombreCorto">Nombre corto (URL) <span class="cc-req">*</span></label>
           <div class="cc-slug">
             <span class="cc-slug__prefix">{{publicHost}}/comunidades/</span>
-            <input type="text" formControlName="nombreCorto" placeholder="amantes-del-cafe" />
+            <input id="comunidad-create-nombreCorto" type="text" formControlName="nombreCorto" placeholder="amantes-del-cafe" />
           </div>
           <small class="cc-hint">
             Sólo minúsculas, números y guiones medios (-). <strong>No se podrá modificar después.</strong>
@@ -44,12 +44,12 @@
 
         <div class="cc-field">
           <div class="cc-field__head">
-            <label>Descripción <span class="cc-req">*</span></label>
+            <label for="comunidad-create-descripcion">Descripción <span class="cc-req">*</span></label>
             <span class="cc-counter" [class.cc-counter--warn]="(formGroup.value?.descripcion?.length || 0) >= 900">
               {{ formGroup.value?.descripcion?.length || 0 }}/1000
             </span>
           </div>
-          <textarea formControlName="descripcion" maxlength="1000" rows="4"
+          <textarea id="comunidad-create-descripcion" formControlName="descripcion" maxlength="1000" rows="4"
             placeholder="¿De qué trata tu comunidad? Cuéntale a la gente por qué debería unirse…"></textarea>
           @if (formGroup.get('descripcion')?.touched && formGroup.get('descripcion')?.invalid) {
           <small class="cc-err">La descripción es obligatoria.</small>
@@ -153,7 +153,7 @@
           <i class="ti ti-check"></i> Crear comunidad
         </button>
       </div>
-    </main>
+    </div>
 
     <aside class="cc-aside">
       <div class="cc-rules">

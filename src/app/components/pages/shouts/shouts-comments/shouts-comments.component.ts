@@ -4,6 +4,7 @@ import { ShoutComentarioViewModel, ShoutViewModel } from 'src/app/models/perfil/
 import { ComentarioHilo, ComentariosAcciones } from 'src/app/models/shared/comentario-hilo.model';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { ComentariosComponent } from '../../../shared/comentarios/comentarios.component';
 
 /** Convierte un comentario de shout al formato común de <app-comentarios>. */
 function aHilo(c: ShoutComentarioViewModel): ComentarioHilo {
@@ -27,9 +28,9 @@ function aHilo(c: ShoutComentarioViewModel): ComentarioHilo {
 
 /** Comentarios de un shout: carga los datos del API de shouts y los muestra con <app-comentarios>. */
 @Component({
-  standalone: false,
-  selector: 'app-shouts-comments',
-  templateUrl: './shouts-comments.component.html',
+    selector: 'app-shouts-comments',
+    templateUrl: './shouts-comments.component.html',
+    imports: [ComentariosComponent],
 })
 export class ShoutsCommentsComponent {
   private readonly destroyRef = inject(DestroyRef);

@@ -1,20 +1,25 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
+import { UserAvatarComponent } from '../../../../addons/user-avatar/user-avatar.component';
+import { RouterLink } from '@angular/router';
+import { UserPopoverDirective } from '../../../../../shared/directives/userPopover.directive';
+import { NgStyle, SlicePipe, DecimalPipe, DatePipe } from '@angular/common';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  standalone: false,
-  selector: 'app-dashboard-estadisticas',
-  templateUrl: './dashboard-estadisticas.component.html',
-  styleUrls: ['./dashboard-estadisticas.component.scss']
+    selector: 'app-dashboard-estadisticas',
+    templateUrl: './dashboard-estadisticas.component.html',
+    styleUrls: ['./dashboard-estadisticas.component.scss'],
+    imports: [UserAvatarComponent, RouterLink, UserPopoverDirective, NgStyle, MatButton, SlicePipe, DecimalPipe, DatePipe]
 })
 export class DashboardEstadisticasComponent implements OnInit {
+  private generalService = inject(IHttpGeneralService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public stats: any = null;
   public loading = true;
-
-  constructor(private generalService: IHttpGeneralService) {}
 
   ngOnInit(): void {
     this.load();

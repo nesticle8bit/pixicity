@@ -1,22 +1,19 @@
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, input, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-change-avatar',
-  templateUrl: './change-avatar.component.html',
-  styleUrls: ['./change-avatar.component.scss'],
+    selector: 'app-change-avatar',
+    templateUrl: './change-avatar.component.html',
+    styleUrls: ['./change-avatar.component.scss'],
 })
 export class ChangeAvatarComponent implements OnInit {
-  public currentUser?: JwtUserModel;
-  @Input() data: any;
+  private dialog = inject(MatDialog);
+  private securityService = inject(IHttpSecurityService);
 
-  constructor(
-    private dialog: MatDialog,
-    private securityService: IHttpSecurityService
-  ) {}
+  public currentUser?: JwtUserModel;
+  readonly data = input<any>();
 
   ngOnInit(): void {
     this.currentUser = this.securityService.getCurrentUser();
@@ -28,14 +25,15 @@ export class ChangeAvatarComponent implements OnInit {
       'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component'
     );
 
+    const data = this.data();
     this.dialog.open(DialogChangeAvatarComponent, {
       width: '350px',
       disableClose: true,
       data: {
         isAdmin: true,
         usuario: {
-          id: this.data?.id,
-          userName: this.data?.userName,
+          id: data?.id,
+          userName: data?.userName,
         },
       },
     });

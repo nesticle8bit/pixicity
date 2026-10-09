@@ -2,15 +2,29 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
+import { MatTooltip } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
+import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
+import { IHttpComentariosPostService } from '../../../services/interfaces/httpComentariosPost.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-profile-comments',
-  templateUrl: './profile-comments.component.html',
-  styleUrls: ['./profile-comments.component.scss'],
+    selector: 'app-profile-comments',
+    templateUrl: './profile-comments.component.html',
+    styleUrls: ['./profile-comments.component.scss'],
+    imports: [
+        MatTooltip,
+        RouterLink,
+        MatPaginator,
+        TimeAgoPipe,
+        TruncatePipe,
+    ],
 })
 export class ProfileCommentsComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private comentariosPostService = inject(IHttpComentariosPostService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   private _user: any;
@@ -30,17 +44,14 @@ export class ProfileCommentsComponent implements OnInit {
   public comments: any[] = [];
   public totalCount: number = 0;
 
-  constructor(
-    public paginationService: PaginationService,
-    private postService: IHttpPostsService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
   }
 
   ngOnInit(): void {}
 
   getCommentsByUserId(): void {
-    this.postService.getComentariosByUserId(this.user.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.comentariosPostService.getComentariosByUserId(this.user.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.comments = response?.data;
       this.totalCount = response?.pagination?.totalCount;
     });

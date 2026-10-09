@@ -59,18 +59,17 @@ describe('MensajesConversacionComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [MensajesConversacionComponent],
-      imports: [FormsModule],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [
+    imports: [FormsModule, MensajesConversacionComponent],
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [
         { provide: IHttpMensajesService, useValue: mensajes },
         { provide: IHttpFotosService, useValue: fotos },
         { provide: NotificationService, useValue: notificaciones },
         { provide: SignalrService, useValue: signalr },
-        { provide: DisplayComponentService, useValue: { setDisplay: () => {} } },
+        { provide: DisplayComponentService, useValue: { setDisplay: () => { } } },
         { provide: ActivatedRoute, useValue: { paramMap: of(convertToParamMap({ userName: 'ana' })) } },
-      ],
-    })
+    ],
+})
       // Se prueba la lógica del componente; el template depende de pipes/componentes de otros módulos.
       .overrideComponent(MensajesConversacionComponent, { set: { template: '' } })
       .compileComponents();

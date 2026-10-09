@@ -1,17 +1,42 @@
-import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup , Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { SelectAutocompleteComponent } from '../../shared/select-autocomplete/select-autocomplete.component';
+import { SelectOptionDirective } from '../../shared/select-autocomplete/select-template.directives';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatButton } from '@angular/material/button';
+import { IHttpRangosService } from '../../../services/interfaces/httpRangos.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-dialog-add-update-rango',
-  templateUrl: './dialog-add-update-rango.component.html',
-  styleUrls: ['./dialog-add-update-rango.component.scss'],
+    selector: 'app-dialog-add-update-rango',
+    templateUrl: './dialog-add-update-rango.component.html',
+    styleUrls: ['./dialog-add-update-rango.component.scss'],
+    imports: [
+        MatDialogTitle,
+        FormsModule,
+        ReactiveFormsModule,
+        CdkScrollable,
+        MatDialogContent,
+        SelectAutocompleteComponent,
+        SelectOptionDirective,
+        MatRadioGroup,
+        MatRadioButton,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ],
 })
 export class DialogAddUpdateRangoComponent implements OnInit {
+  private dialogRef = inject<MatDialogRef<DialogAddUpdateRangoComponent>>(MatDialogRef);
+  private rangosService = inject(IHttpRangosService);
+  data = inject(MAT_DIALOG_DATA);
+  private formBuilder = inject(FormBuilder);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public iconos: string[] = [
@@ -41,13 +66,7 @@ export class DialogAddUpdateRangoComponent implements OnInit {
 
   public formGroup: FormGroup;
 
-  constructor(
-    private dialogRef: MatDialogRef<DialogAddUpdateRangoComponent>,
-    private securityService: IHttpSecurityService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private formBuilder: FormBuilder,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({
       id: 0,
       nombre: ['', Validators.required],
@@ -81,7 +100,7 @@ export class DialogAddUpdateRangoComponent implements OnInit {
     const rango = Object.assign({}, this.formGroup.value);
     rango.tipo = parseInt(rango.tipo);
 
-    this.securityService.addUpdateRango(rango).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: number) => {
+    this.rangosService.addUpdateRango(rango).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: number) => {
       if (value) {
         this.notificationService.success('El rango se ha guardado correctamente', 'Guardado');
 

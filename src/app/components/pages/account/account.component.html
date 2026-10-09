@@ -16,19 +16,19 @@
                     <div class="col-12">
                       <div class="mb-3 row">
                         <div class="col-sm-2 text-end">
-                          <label class="col-form-label">
+                          <label class="col-form-label" for="account-email">
                             E-Mail
                           </label>
                         </div>
 
                         <div class="col-sm-10">
-                          <input type="text"
+                          <input id="account-email" type="text"
                             [ngClass]="{'form-control-plaintext': changeEmailStatus === false, 'form-control': changeEmailStatus === true}"
                             formControlName="email" />
                             <strong>
                               @if (!changeEmailStatus) {
                                 <a (click)="changeEmail()"
-                                   role="button" tabindex="0" (keydown.enter)="changeEmail()" (keydown.space)="changeEmail(); $event.preventDefault()">
+                                  role="button" tabindex="0" (keydown.enter)="changeEmail()" (keydown.space)="changeEmail(); $event.preventDefault()">
                                   (Cambiar)
                                 </a>
                               }
@@ -38,7 +38,7 @@
 
                         <div class="mb-3 row">
                           <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
+                            <label class="col-form-label" for="account-profileBackground">
                               País
                             </label>
                           </div>
@@ -122,572 +122,7 @@
                   Perfil
                 </ng-template>
 
-                <form [formGroup]="formGroupPerfil" (ngSubmit)="savePerfilInfo()" class="mt-3">
-                  <mat-accordion class="accordion-bg">
-                    <mat-expansion-panel class="mb-2" [expanded]="currentStep === 0" (opened)="currentStep = 0">
-                      <mat-expansion-panel-header class="accordion-panel">
-                        <mat-panel-title>
-                          Más sobre mi
-                        </mat-panel-title>
-
-                        <mat-panel-description>
-                          &nbsp;
-                          <mat-icon>account_circle</mat-icon>
-                        </mat-panel-description>
-                      </mat-expansion-panel-header>
-
-                      <section class="container">
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Nombre completo
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <input type="text" formControlName="completeName" class="form-control" />
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Mensaje personal
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <textarea class="form-control" formControlName="personalMessage" rows="3"></textarea>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Sitio web
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <input type="url" class="form-control" formControlName="website" />
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Redes sociales
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <section class="mb-3">
-                              <label>
-                                <strong class="text-rose">
-                                  <i class="ti ti-brand-instagram"></i> instagram.com/
-                                </strong>
-                              </label>
-                              <input type="text" class="form-control" formControlName="instagram" />
-                            </section>
-
-                            <section class="mb-3">
-                              <label>
-                                <strong class="text-primary">
-                                  <i class="ti ti-brand-facebook"></i> facebook.com/
-                                </strong>
-                              </label>
-                              <input type="text" class="form-control" formControlName="facebook" />
-                            </section>
-
-                            <section class="mb-3">
-                              <label>
-                                <strong class="text-info">
-                                  <i class="ti ti-brand-twitter"></i> twitter.com/
-                                </strong>
-                              </label>
-                              <input type="text" class="form-control" formControlName="twitter" />
-                            </section>
-
-                            <section class="mb-3">
-                              <label>
-                                <strong class="text-danger">
-                                  <i class="ti ti-brand-youtube"></i> youtube.com/
-                                </strong>
-                              </label>
-                              <input type="text" class="form-control" formControlName="youtube" />
-                            </section>
-
-                            <section>
-                              <label>
-                                <strong>
-                                  <i class="ti ti-brand-tiktok"></i> tiktok.com/
-                                </strong>
-                              </label>
-                              <input type="text" class="form-control" formControlName="tiktok" />
-                            </section>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Me gustaría
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <p class="mb-1">
-                              <mat-checkbox formControlName="like1" color="primary">
-                                Hacer amigos
-                              </mat-checkbox>
-                            </p>
-
-                            <p class="mb-1">
-                              <mat-checkbox formControlName="like2" color="primary">
-                                Conocer gente con mis intereses
-                              </mat-checkbox>
-                            </p>
-
-                            <p class="mb-1">
-                              <mat-checkbox formControlName="like3" color="primary">
-                                Conocer gente para negocios
-                              </mat-checkbox>
-                            </p>
-
-                            <p class="mb-1">
-                              <mat-checkbox formControlName="like4" color="primary">
-                                Encontrar pareja
-                              </mat-checkbox>
-                            </p>
-
-                            <p class="mb-1">
-                              <mat-checkbox formControlName="like_all" color="primary">
-                                De todo
-                              </mat-checkbox>
-                            </p>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Estado civil
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <app-select formControlName="estadoCivil" [items]="estadosCiviles"></app-select>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Hijos
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <app-select formControlName="hijos" [items]="hijos"></app-select>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Vivo con
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <app-select formControlName="vivoCon" [items]="vivoCon"></app-select>
-                          </div>
-                        </div>
-                      </section>
-
-                      <div class="form-container--footer text-center">
-                        <button class="me-2" mat-flat-button color="primary" type="submit">
-                          <mat-icon>save</mat-icon> Guardar
-                        </button>
-
-                        <button mat-flat-button type="button" (click)="currentStep = currentStep + 1">
-                          Siguiente <mat-icon>navigate_next</mat-icon>
-                        </button>
-                      </div>
-                    </mat-expansion-panel>
-
-                    <mat-expansion-panel class="mb-2" [expanded]="currentStep === 1" (opened)="currentStep = 1">
-                      <mat-expansion-panel-header class="accordion-panel">
-                        <mat-panel-title>
-                          Como soy
-                        </mat-panel-title>
-
-                        <mat-panel-description>
-                          &nbsp;
-                          <mat-icon>face</mat-icon>
-                        </mat-panel-description>
-                      </mat-expansion-panel-header>
-
-                      <section class="container">
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Mi altura (cm)
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <input type="text" formControlName="altura" class="form-control" />
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Mi peso (kg)
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <input type="text" formControlName="peso" class="form-control" />
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Color de cabello
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <app-select formControlName="colorCabello" [items]="colorCabello"></app-select>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Color de ojos
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <app-select formControlName="colorOjos" [items]="colorOjos"></app-select>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Complexión
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <app-select formControlName="complexion" [items]="complexiones"></app-select>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Mi dieta es
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <app-select formControlName="dieta" [items]="dietas"></app-select>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Tengo
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <p class="mb-1">
-                              <mat-checkbox formControlName="tatuajes" color="primary">
-                                Tatuajes
-                              </mat-checkbox>
-                            </p>
-
-                            <p class="mb-1">
-                              <mat-checkbox formControlName="piercings" color="primary">
-                                Piercings
-                              </mat-checkbox>
-                            </p>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Fumo
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <app-select formControlName="fumo" [items]="fumoAlcohol"></app-select>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Tomo alcohol
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <app-select formControlName="alcohol" [items]="fumoAlcohol"></app-select>
-                          </div>
-                        </div>
-                      </section>
-
-                      <div class="form-container--footer text-center">
-                        <button class="me-2" mat-flat-button color="primary" type="submit">
-                          <mat-icon>save</mat-icon> Guardar
-                        </button>
-
-                        <button mat-flat-button type="button" (click)="currentStep = currentStep + 1">
-                          Siguiente <mat-icon>navigate_next</mat-icon>
-                        </button>
-                      </div>
-                    </mat-expansion-panel>
-
-                    <mat-expansion-panel class="mb-2" [expanded]="currentStep === 2" (opened)="currentStep = 2">
-                      <mat-expansion-panel-header class="accordion-panel">
-                        <mat-panel-title>
-                          Formación y trabajo
-                        </mat-panel-title>
-
-                        <mat-panel-description>
-                          &nbsp;
-                          <mat-icon>work</mat-icon>
-                        </mat-panel-description>
-                      </mat-expansion-panel-header>
-
-                      <section class="container">
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Estudios
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <app-select formControlName="estudios" [items]="estudios"></app-select>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Profesión
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <input type="text" class="form-control" formControlName="profesion" />
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Empresa
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <input type="text" class="form-control" formControlName="empresa" />
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Sector
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <app-select formControlName="sector" [items]="sector"></app-select>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Intereses Profesionales
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <textarea class="form-control" formControlName="interesesProfesionales" rows="3"></textarea>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Habilidades Profesionales
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <textarea class="form-control" formControlName="habilidadesProfesionales" rows="3"></textarea>
-                          </div>
-                        </div>
-
-                      </section>
-
-                      <div class="form-container--footer text-center">
-                        <button class="me-2" mat-flat-button color="primary" type="submit">
-                          <mat-icon>save</mat-icon> Guardar
-                        </button>
-
-                        <button mat-flat-button type="button" (click)="currentStep = currentStep + 1">
-                          Siguiente <mat-icon>navigate_next</mat-icon>
-                        </button>
-                      </div>
-                    </mat-expansion-panel>
-
-                    <mat-expansion-panel class="mb-2" [expanded]="currentStep === 3" (opened)="currentStep = 3">
-                      <mat-expansion-panel-header class="accordion-panel">
-                        <mat-panel-title>
-                          Intereses y preferencias
-                        </mat-panel-title>
-
-                        <mat-panel-description>
-                          &nbsp;
-                          <mat-icon>games</mat-icon>
-                        </mat-panel-description>
-                      </mat-expansion-panel-header>
-
-                      <section class="container">
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Mis intereses
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <textarea class="form-control" formControlName="misIntereses" rows="3"></textarea>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Hobbies
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <textarea class="form-control" formControlName="hobbies" rows="3"></textarea>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Series de TV favoritas
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <textarea class="form-control" formControlName="seriesTV" rows="3"></textarea>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Música favorita
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <textarea class="form-control" formControlName="musicaFavorita" rows="3"></textarea>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Deportes y equipos favoritos
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <textarea class="form-control" formControlName="deportesFavoritos" rows="3"></textarea>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Libros favoritos
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <textarea class="form-control" formControlName="librosFavoritos" rows="3"></textarea>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Películas favoritas
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <textarea class="form-control" formControlName="peliculasFavoritas" rows="3"></textarea>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Comida favorita
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <textarea class="form-control" formControlName="comidaFavorita" rows="3"></textarea>
-                          </div>
-                        </div>
-
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Mis héroes son
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <textarea class="form-control" formControlName="misHeroesSon" rows="3"></textarea>
-                          </div>
-                        </div>
-
-                      </section>
-
-                      <div class="form-container--footer text-center">
-                        <button class="me-2" mat-flat-button color="primary" type="submit">
-                          <mat-icon>save</mat-icon> Guardar
-                        </button>
-                      </div>
-                    </mat-expansion-panel>
-                  </mat-accordion>
-                </form>
+                <app-account-perfil [perfil]="perfilActual"></app-account-perfil>
               </mat-tab>
 
               <mat-tab>
@@ -719,7 +154,7 @@
                           </div>
 
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" placeholder="URL de la imagen" formControlName="profileBackground" />
+                            <input id="account-profileBackground" type="text" class="form-control" placeholder="URL de la imagen" formControlName="profileBackground" />
                             <div class="form-text">Sólo se aceptarán imágenes que tengan el formato (.jpg, .jpeg o .png) </div>
                           </div>
                         </div>
@@ -745,108 +180,32 @@
                 Bloqueados
               </ng-template>
 
-              <div class="mt-3">
-                <div *ngIf="bloqueados.length === 0" class="alert alert-info">
-                  No tienes usuarios bloqueados.
-                </div>
+              <app-account-bloqueados></app-account-bloqueados>
+              </mat-tab>
 
-                <div *ngFor="let b of bloqueados" class="d-flex align-items-center justify-content-between p-2 border-bottom">
-                  <div class="d-flex align-items-center gap-2">
-                    <img
-                      [src]="b.avatar ? '/assets/avatars/' + b.avatar : '/assets/images/default-avatar.png'"
-                      width="40" height="40"
-                      class="rounded-circle"
-                      [alt]="b.userName" loading="lazy" decoding="async"/>
-                    <a [routerLink]="['/u', b.userName]" class="fw-bold text-decoration-none">{{ b.userName }}</a>
-                  </div>
-                  <button mat-stroked-button color="warn" (click)="desbloquearUsuario(b)">
-                    <mat-icon>lock_open</mat-icon> Desbloquear
-                  </button>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon>password</mat-icon>
+                  Cambiar contraseña
+                </ng-template>
+
+                <app-account-password></app-account-password>
+                    </mat-tab>
+                  </mat-tab-group>
                 </div>
               </div>
-            </mat-tab>
+            </div>
 
-            <mat-tab>
-              <ng-template mat-tab-label>
-                <mat-icon>password</mat-icon>
-                Cambiar contraseña
-              </ng-template>
+            <div class="dotted-border--left col-12 col-sm-3 text-center">
+              <h6>Mi Avatar</h6>
 
-              <form [formGroup]="formGroupCambiarContrasena" (ngSubmit)="changePassword()"
-                class="form-container">
-                <div class="container mx-auto" style="width: 80%;">
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="mb-3 row">
-                        <div class="col-sm-3 text-end">
-                          <label class="col-form-label">
-                            Contraseña actual:
-                          </label>
-                        </div>
+              <app-user-avatar [avatar]="formGroupCuenta.value.avatar" [userName]="formGroupCuenta.value.userName" [height]="200"></app-user-avatar>
 
-                        <div class="col-sm-9">
-                          <input type="password" formControlName="currentPassword"
-                            class="form-control" autocomplete="off" />
-                          </div>
-                        </div>
+              <br>
 
-                        <div class="mb-3 row">
-                          <div class="col-sm-3 text-end">
-                            <label class="col-form-label">
-                              Contraseña nueva:
-                            </label>
-                          </div>
-
-                          <div class="col-sm-9">
-                            <input type="password" formControlName="newPassword"
-                              class="form-control" autocomplete="off" />
-                            </div>
-                          </div>
-
-                          <div class="mb-3 row">
-                            <div class="col-sm-3 text-end">
-                              <label class="col-form-label">
-                                Repetir Contraseña:
-                              </label>
-                            </div>
-
-                            <div class="col-sm-9">
-                              <input type="password" formControlName="confirmPassword"
-                                class="form-control" autocomplete="off" />
-                                @if (formGroupCambiarContrasena.hasError('notSame')) {
-                                  <mat-error>
-                                    La contraseña debe coincidir
-                                  </mat-error>
-                                }
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="form-container--footer text-center">
-                        <button mat-flat-button color="primary" type="submit"
-                          [disabled]="formGroupCambiarContrasena.invalid">
-                          <mat-icon>vpn_key</mat-icon> Cambiar contraseña
-                        </button>
-                      </div>
-                    </form>
-                  </mat-tab>
-                </mat-tab-group>
+                <button class="mt-3 col-9" (click)="changeAvatar()" mat-flat-button color="primary">
+                  Editar
+                </button>
               </div>
             </div>
-          </div>
-
-          <div class="dotted-border--left col-12 col-sm-3 text-center">
-            <h6>Mi Avatar</h6>
-
-            <app-user-avatar [avatar]="formGroupCuenta.value.avatar" [userName]="formGroupCuenta.value.userName" [height]="200"></app-user-avatar>
-
-            <br>
-
-              <button class="mt-3 col-9" (click)="changeAvatar()" mat-flat-button color="primary">
-                Editar
-              </button>
-            </div>
-          </div>
-        </section>
+          </section>

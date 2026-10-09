@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  standalone: false,
-  selector: 'app-who-is-ip',
-  templateUrl: './who-is-ip.component.html',
-  styleUrls: ['./who-is-ip.component.scss']
+    selector: 'app-who-is-ip',
+    templateUrl: './who-is-ip.component.html',
+    styleUrls: ['./who-is-ip.component.scss']
 })
 export class WhoIsIpComponent implements OnInit {
   private _IP: any;

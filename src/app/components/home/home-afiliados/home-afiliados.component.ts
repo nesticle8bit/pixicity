@@ -3,18 +3,22 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAfiliarseComponent } from 'src/app/components/dialogs/dialog-afiliarse/dialog-afiliarse.component';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  standalone: false,
-  selector: 'app-home-afiliados',
-  templateUrl: './home-afiliados.component.html',
-  styleUrls: ['./home-afiliados.component.scss'],
+    selector: 'app-home-afiliados',
+    templateUrl: './home-afiliados.component.html',
+    styleUrls: ['./home-afiliados.component.scss'],
+    imports: [MatTooltip, MatButton],
 })
 export class HomeAfiliadosComponent implements OnInit {
+  private webService = inject(IHttpWebService);
+  private dialog = inject(MatDialog);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public afiliados: any[] = [];
-  constructor(private webService: IHttpWebService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.getAfiliados();

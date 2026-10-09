@@ -1,28 +1,39 @@
-import { Component, DestroyRef, inject, Inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  standalone: false,
-  selector: 'app-dialog-create-update-censuras',
-  templateUrl: './dialog-create-update-censuras.component.html',
-  styleUrls: ['./dialog-create-update-censuras.component.scss'],
+    selector: 'app-dialog-create-update-censuras',
+    templateUrl: './dialog-create-update-censuras.component.html',
+    styleUrls: ['./dialog-create-update-censuras.component.scss'],
+    imports: [
+        MatDialogTitle,
+        FormsModule,
+        ReactiveFormsModule,
+        CdkScrollable,
+        MatDialogContent,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ],
 })
 export class DialogCreateUpdateCensurasComponent {
+  data = inject(MAT_DIALOG_DATA);
+  dialogRef = inject<MatDialogRef<DialogCreateUpdateCensurasComponent>>(MatDialogRef);
+  private formBuilder = inject(FormBuilder);
+  private parametrosService = inject(IHttpParametrosService);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialogRef: MatDialogRef<DialogCreateUpdateCensurasComponent>,
-    private formBuilder: FormBuilder,
-    private parametrosService: IHttpParametrosService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({
       id: this.data?.id ?? 0,
       palabra: [this.data?.palabra, Validators.required],

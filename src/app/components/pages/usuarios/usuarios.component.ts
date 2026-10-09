@@ -2,18 +2,52 @@ import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametr
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { PageEvent } from '@angular/material/paginator';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgClass } from '@angular/common';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { SelectAutocompleteComponent } from '../../shared/select-autocomplete/select-autocomplete.component';
+import { SelectOptionDirective, SelectLabelDirective } from '../../shared/select-autocomplete/select-template.directives';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { IHttpRangosService } from '../../../services/interfaces/httpRangos.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-usuarios',
-  templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.scss'],
+    selector: 'app-usuarios',
+    templateUrl: './usuarios.component.html',
+    styleUrls: ['./usuarios.component.scss'],
+    imports: [
+        RouterLink,
+        UserPopoverDirective,
+        MatTooltip,
+        NgClass,
+        UserAvatarComponent,
+        MatPaginator,
+        FormsModule,
+        ReactiveFormsModule,
+        MatRadioGroup,
+        MatRadioButton,
+        SelectAutocompleteComponent,
+        SelectOptionDirective,
+        SelectLabelDirective,
+        MatButton,
+        MatIcon,
+    ],
 })
 export class UsuariosComponent implements OnInit {
+  private parametrosService = inject(IHttpParametrosService);
+  private displayService = inject(DisplayComponentService);
+  private securityService = inject(IHttpSecurityService);
+  private rangosService = inject(IHttpRangosService);
+  paginationService = inject(PaginationService);
+  private formBuilder = inject(FormBuilder);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public usuarios: any = [];
@@ -31,13 +65,7 @@ export class UsuariosComponent implements OnInit {
 
   public formGroup: FormGroup;
 
-  constructor(
-    private parametrosService: IHttpParametrosService,
-    private displayService: DisplayComponentService,
-    private securityService: IHttpSecurityService,
-    public paginationService: PaginationService,
-    private formBuilder: FormBuilder
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
 
     this.formGroup = this.formBuilder.group({
@@ -80,7 +108,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   getRangos(): void {
-    this.securityService.getRangosDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
+    this.rangosService.getRangosDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
       this.rangos = values;
     });
   }

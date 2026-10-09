@@ -1,8 +1,10 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AdminDashboardService } from 'src/app/services/shared/adminDashboard.service';
+import { MatIcon } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
 
 interface AdminMenuItem {
   titulo: string;
@@ -23,10 +25,14 @@ interface AdminMenuGrupo {
 const ESTADO_GRUPOS_KEY = 'admin-menu-grupos-cerrados';
 
 @Component({
-  standalone: false,
-  selector: 'app-dashboard-sidebar',
-  templateUrl: './dashboard-sidebar.component.html',
-  styleUrls: ['./dashboard-sidebar.component.scss'],
+    selector: 'app-dashboard-sidebar',
+    templateUrl: './dashboard-sidebar.component.html',
+    styleUrls: ['./dashboard-sidebar.component.scss'],
+    imports: [
+        MatIcon,
+        FormsModule,
+        RouterLink,
+    ],
 })
 export class DashboardSidebarComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);

@@ -3,8 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BusquedaPostsFiltro, BusquedaPostsResultado } from 'src/app/models/posts/busqueda.model';
 import { PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
-import { CloudTagViewModel, ComentarioViewModel, ComentarioVotoResponse, PostDetailResponse, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
-
+import { CloudTagViewModel, PostDetailResponse, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
 @Injectable()
 export abstract class IHttpPostsService {
   abstract getPosts(categoria?: string): Observable<PaginatedData<PostViewModel>>;
@@ -15,12 +14,6 @@ export abstract class IHttpPostsService {
   abstract getPostById(postId: number): Observable<PostDetailResponse>;
   abstract savePost(post: Partial<PostViewModel>): Observable<number>;
   abstract updatePost(post: Partial<PostViewModel>): Observable<number>;
-  abstract getComentarios(filtro?: AdminFiltro): Observable<PaginatedData<ComentarioViewModel>>;
-  abstract getComentariosByUserId(userId: number): Observable<PaginatedData<ComentarioViewModel>>;
-  abstract getUltimosComentarios(): Observable<ComentarioViewModel[]>;
-  abstract addComentario(comentario: Partial<ComentarioViewModel>): Observable<number>;
-  abstract updateComentario(comentario: Partial<ComentarioViewModel>): Observable<ComentarioViewModel>;
-  abstract getComentariosByPostId(postId: number): Observable<ComentarioViewModel[]>;
   abstract deletePost(postId: number, razon: string): Observable<boolean>;
   abstract changeStickyPost(postId: number): Observable<boolean>;
   abstract getAvailableVotos(type: number): Observable<number>;
@@ -37,11 +30,6 @@ export abstract class IHttpPostsService {
   abstract seguirPost(postId: number): Observable<boolean>;
   abstract getCloudTags(): Observable<CloudTagViewModel[]>;
   abstract getBorradores(search: string, categoriaId: number): Observable<PaginatedWithCategorias<PostViewModel>>;
-  abstract deleteComentario(comentarioId: number): Observable<boolean>;
-  abstract recuperarComentario(comentarioId: number): Observable<boolean>;
-  abstract votarComentario(comentarioId: number, cantidad: number): Observable<ComentarioVotoResponse>;
-  abstract fijarComentario(comentarioId: number): Observable<boolean>;
-  abstract denunciarComentario(comentarioId: number, motivo: string): Observable<boolean>;
   abstract recomendarPost(postId: number): Observable<number>;
   abstract getVotos(filtro?: AdminFiltro): Observable<PaginatedData<unknown>>;
   abstract getPostsRelatedByTitle(title: string): Observable<PostSimpleViewModel[]>;

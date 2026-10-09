@@ -1,14 +1,14 @@
 @if (!vacio) {
-  <svg class="spark" [style.height.px]="alto" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
+  <svg class="spark" [style.height.px]="alto()" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
     <defs>
       <linearGradient [attr.id]="gradientId" x1="0" x2="0" y1="0" y2="1">
-        <stop offset="0%" [attr.stop-color]="color" stop-opacity=".28" />
-        <stop offset="100%" [attr.stop-color]="color" stop-opacity="0" />
+        <stop offset="0%" [attr.stop-color]="color()" stop-opacity=".28" />
+        <stop offset="100%" [attr.stop-color]="color()" stop-opacity="0" />
       </linearGradient>
     </defs>
 
     <path [attr.d]="area" [attr.fill]="'url(#' + gradientId + ')'" />
-    <path [attr.d]="linea" fill="none" [attr.stroke]="color" stroke-width="1.6"
+    <path [attr.d]="linea" fill="none" [attr.stroke]="color()" stroke-width="1.6"
       vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
   </svg>
 }

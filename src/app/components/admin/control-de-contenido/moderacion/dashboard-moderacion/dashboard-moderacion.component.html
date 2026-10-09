@@ -14,7 +14,7 @@
     <button type="button" [class.active]="!soloPendientes" (click)="cambiarFiltro(false)">Todos</button>
   </div>
 
-  <select class="form-select form-select-sm mod-select" [ngModel]="tipoContenido" (ngModelChange)="cambiarTipo($event)">
+  <select class="form-select form-select-sm mod-select" [ngModel]="tipoContenido" aria-label="Tipo de contenido" (ngModelChange)="cambiarTipo($event)">
     @for (t of tipos; track t.id) {
       <option [ngValue]="t.id">{{t.nombre}}</option>
     }
@@ -26,7 +26,7 @@
 </div>
 
 @if (reportes.length > 0) {
-  <main class="table-responsive">
+  <div class="table-responsive">
     <table class="table table-sm table-striped table-hover align-middle">
       <thead>
         <tr>
@@ -68,7 +68,7 @@
               }
             </td>
             <td class="text-center" width="30px">
-              <button class="btn-menu" [matMenuTriggerFor]="menu">
+              <button type="button" class="btn-menu" aria-label="Acciones" [matMenuTriggerFor]="menu">
                 <i class="ti ti-dots-vertical"></i>
               </button>
               <mat-menu #menu="matMenu">
@@ -92,7 +92,7 @@
         }
       </tbody>
     </table>
-  </main>
+  </div>
 
   <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
     [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
@@ -106,7 +106,7 @@
 @if (verBitacora) {
   <h2 class="mod-bitacora-title">Bitácora de acciones ({{logsTotal}})</h2>
   @if (logs.length > 0) {
-    <main class="table-responsive">
+    <div class="table-responsive">
       <table class="table table-sm table-striped align-middle">
         <thead>
           <tr><th>Fecha</th><th>Staff</th><th>Acción</th><th>Detalle</th></tr>
@@ -122,7 +122,7 @@
           }
         </tbody>
       </table>
-    </main>
+    </div>
   } @else {
     <div class="alert alert-light">Sin acciones registradas.</div>
   }

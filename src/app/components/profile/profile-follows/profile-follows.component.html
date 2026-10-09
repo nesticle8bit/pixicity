@@ -1,20 +1,20 @@
 @if (usuarios.length < 1) {
-  <main class="alert alert-warning mt-3">
-    @if (tipo === 'siguiendo') {
-      👾 <strong>El usuario {{user.userName}} no ha comenzado a seguir usuarios en la comunidad</strong>
+  <div class="alert alert-warning mt-3">
+    @if (tipo() === 'siguiendo') {
+      👾 <strong>El usuario {{user().userName}} no ha comenzado a seguir usuarios en la comunidad</strong>
     } @else {
-      😊 <strong>El usuario {{user.userName}} no tiene seguidores, pero pronto los tendrá.</strong>
+      😊 <strong>El usuario {{user().userName}} no tiene seguidores, pero pronto los tendrá.</strong>
     }
-  </main>
+  </div>
 } @else {
-  <main class="mt-3">
+  <div class="mt-3">
     <h6 class="main-title my-2">
       <span>
-        {{tipo === 'siguiendo' ? 'Usuarios que sigue ' + user.userName : 'Últimos seguidores del usuario ' + user.userName}}
+        {{tipo() === 'siguiendo' ? 'Usuarios que sigue ' + user().userName : 'Últimos seguidores del usuario ' + user().userName}}
       </span>
     </h6>
 
-    <main class="container-fluid">
+    <div class="container-fluid">
       @for (usuario of usuarios; track usuario.userName) {
         <section class="row user-list">
           <div class="col-12 col-sm-12 col-md-9">
@@ -43,10 +43,10 @@
           </div>
         </section>
       }
-    </main>
+    </div>
 
     <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
       [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
     </mat-paginator>
-  </main>
+  </div>
 }

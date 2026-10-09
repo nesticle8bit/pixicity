@@ -1,9 +1,17 @@
-import { Component, DestroyRef, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, DestroyRef, inject, Input, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ComentarioHilo, ComentariosAcciones, OrdenComentarios } from 'src/app/models/shared/comentario-hilo.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { FormsModule } from '@angular/forms';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgTemplateOutlet, NgStyle } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
+import { enNavegador } from '../../../shared/helpers/plataforma';
 
 /** Comentario con el estado que solo existe en pantalla. */
 interface ComentarioVista extends ComentarioHilo {
@@ -27,10 +35,19 @@ const MOTIVOS_DENUNCIA = ['Spam o publicidad', 'Contenido ofensivo', 'Acoso', 'I
  * Cada página le pasa los comentarios ya convertidos a ComentarioHilo y las llamadas a su API en `acciones`.
  */
 @Component({
-  standalone: false,
-  selector: 'app-comentarios',
-  templateUrl: './comentarios.component.html',
-  styleUrls: ['./comentarios.component.scss'],
+    selector: 'app-comentarios',
+    templateUrl: './comentarios.component.html',
+    styleUrls: ['./comentarios.component.scss'],
+    imports: [
+        UserAvatarComponent,
+        FormsModule,
+        MatTooltip,
+        NgTemplateOutlet,
+        RouterLink,
+        UserPopoverDirective,
+        NgStyle,
+        TimeAgoPipe,
+    ],
 })
 export class ComentariosComponent {
   private readonly destroyRef = inject(DestroyRef);
@@ -54,14 +71,15 @@ export class ComentariosComponent {
   constructor() {
     // Mismo documento con otro hash (la notificación apunta a la página abierta): el navegador no recarga.
     const alCambiarHash = () => this.irAlComentarioDelHash();
-    window.addEventListener('hashchange', alCambiarHash);
+    if (enNavegador()) window.addEventListener('hashchange', alCambiarHash);
     this.destroyRef.onDestroy(() => {
-      window.removeEventListener('hashchange', alCambiarHash);
+      if (enNavegador()) window.removeEventListener('hashchange', alCambiarHash);
       clearTimeout(this.timerResaltado);
     });
   }
 
   private irAlComentarioDelHash(): void {
+    if (!enNavegador()) return;
     const hash = window.location.hash;
     const id = Number(/^#comentario-(\d+)$/.exec(hash)?.[1]);
     if (!id || hash === this.hashAtendido) return;
@@ -93,9 +111,9 @@ export class ComentariosComponent {
   @Input() cerrados = false;
 
   /** Se pidió ver las versiones anteriores de un comentario (solo si trae historial). */
-  @Output() verHistorial = new EventEmitter<ComentarioHilo>();
+  readonly verHistorial = output<ComentarioHilo>();
   /** Cambió la cantidad de comentarios (alta o baja). */
-  @Output() totalCambio = new EventEmitter<number>();
+  readonly totalCambio = output<number>();
 
   public arbol: ComentarioVista[] = [];
   public orden: OrdenComentarios = 'mejores';

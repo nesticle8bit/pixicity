@@ -5,7 +5,7 @@
 <form [formGroup]="formGroup" (ngSubmit)="enviarDenuncia()">
     <mat-dialog-content>
         <div class="mb-1">
-            <label class="form-label">Denunciar el post:</label> <br>
+            <label class="form-label" for="dialog-denunciar-post-comentarios">Denunciar el post:</label> <br>
             <p>{{data.titulo}}</p>
         </div>
 
@@ -17,7 +17,7 @@
 
         <div class="mb-1">
             <label class="form-label">Aclaración y comentarios:</label> <br>
-            <textarea rows="8" class="form-control" formControlName="comentarios"></textarea>
+            <textarea id="dialog-denunciar-post-comentarios" rows="8" class="form-control" formControlName="comentarios"></textarea>
         </div>
 
         <div class="alert alert-warning mt-2 mb-0">

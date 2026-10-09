@@ -1,37 +1,57 @@
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { PageEvent } from '@angular/material/paginator';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
+import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ConversacionFila } from 'src/app/models/mensajes/mensaje-vm.model';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { MensajesSidebarComponent } from './mensajes-sidebar/mensajes-sidebar.component';
+import { DatePipe } from '@angular/common';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-mensajes',
-  templateUrl: './mensajes.component.html',
-  styleUrls: ['./mensajes.component.scss'],
+    selector: 'app-mensajes',
+    templateUrl: './mensajes.component.html',
+    styleUrls: ['./mensajes.component.scss'],
+    imports: [
+        MatCheckbox,
+        MatButton,
+        MatTooltip,
+        FormsModule,
+        UserAvatarComponent,
+        RouterLink,
+        UserPopoverDirective,
+        MatPaginator,
+        MensajesSidebarComponent,
+        DatePipe,
+        TimeAgoPipe,
+    ],
 })
 export class MensajesComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  private mensajesService = inject(IHttpMensajesService);
+  paginationService = inject(PaginationService);
+  private formBuilder = inject(FormBuilder);
+  private notificationService = inject(NotificationService);
+  private signalrService = inject(SignalrService);
+  private router = inject(Router);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
   public conversaciones: ConversacionFila[] = [];
   public totalCount: number = 0;
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private mensajesService: IHttpMensajesService,
-    public paginationService: PaginationService,
-    private formBuilder: FormBuilder,
-    private notificationService: NotificationService,
-    private signalrService: SignalrService,
-    private router: Router
-  ) {
+  constructor() {
     this.displaySections();
 
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });

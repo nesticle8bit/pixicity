@@ -2,17 +2,39 @@ import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { NgClass } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
+import { PostUrlLinkComponent } from '../../../../addons/post-url-link/post-url-link.component';
+import { UserAvatarComponent } from '../../../../addons/user-avatar/user-avatar.component';
+import { UserPopoverDirective } from '../../../../../shared/directives/userPopover.directive';
+import { MatMenuTrigger, MatMenu } from '@angular/material/menu';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-votos',
-  templateUrl: './table-votos.component.html',
-  styleUrls: ['./table-votos.component.scss'],
+    selector: 'app-table-votos',
+    templateUrl: './table-votos.component.html',
+    styleUrls: ['./table-votos.component.scss'],
+    imports: [
+        AdminFiltrosComponent,
+        NgClass,
+        MatTooltip,
+        PostUrlLinkComponent,
+        UserAvatarComponent,
+        UserPopoverDirective,
+        MatMenuTrigger,
+        MatMenu,
+        MatPaginator,
+        TimeAgoPipe,
+    ],
 })
 export class TableVotosComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private postService = inject(IHttpPostsService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public votos: any[] = [];
@@ -31,10 +53,7 @@ export class TableVotosComponent implements OnInit {
     ],
   };
 
-  constructor(
-    public paginationService: PaginationService,
-    private postService: IHttpPostsService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 

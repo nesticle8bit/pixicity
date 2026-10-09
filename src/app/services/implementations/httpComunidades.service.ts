@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -32,13 +32,11 @@ import {
 
 @Injectable()
 export class HttpComunidadesService implements IHttpComunidadesService {
-  private readonly base = `${environment.api}/api/comunidades`;
+  private http = inject(HttpClient);
+  private helper = inject(HelperService);
+  private notificationService = inject(NotificationService);
 
-  constructor(
-    private http: HttpClient,
-    private helper: HelperService,
-    private notificationService: NotificationService
-  ) {}
+  private readonly base = `${environment.api}/api/comunidades`;
 
   private unwrap<T>(obs: Observable<ApiResponse<T>>): Observable<T> {
     return obs.pipe(

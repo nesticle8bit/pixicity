@@ -3,18 +3,18 @@
 <form [formGroup]="formGroup" (ngSubmit)="guardar()">
   <mat-dialog-content>
     <div class="mb-3">
-      <label class="form-label">Nombre</label>
-      <input type="text" class="form-control" formControlName="nombre" cdkFocusInitial />
+      <label class="form-label" for="dialog-comunidad-categoria-nombre">Nombre</label>
+      <input id="dialog-comunidad-categoria-nombre" type="text" class="form-control" formControlName="nombre" cdkFocusInitial />
     </div>
 
     <div class="mb-3">
-      <label class="form-label">SEO (opcional)</label>
-      <input type="text" class="form-control" formControlName="seo" placeholder="se genera del nombre si se deja vacío" />
+      <label class="form-label" for="dialog-comunidad-categoria-seo">SEO (opcional)</label>
+      <input id="dialog-comunidad-categoria-seo" type="text" class="form-control" formControlName="seo" placeholder="se genera del nombre si se deja vacío" />
     </div>
 
     <div class="mb-3">
-      <label class="form-label">Orden</label>
-      <input type="number" class="form-control" formControlName="orden" />
+      <label class="form-label" for="dialog-comunidad-categoria-orden">Orden</label>
+      <input id="dialog-comunidad-categoria-orden" type="number" class="form-control" formControlName="orden" />
     </div>
   </mat-dialog-content>
 

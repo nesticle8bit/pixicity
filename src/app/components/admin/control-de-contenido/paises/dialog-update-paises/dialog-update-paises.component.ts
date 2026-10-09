@@ -1,28 +1,39 @@
-import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  standalone: false,
-  selector: 'app-dialog-update-paises',
-  templateUrl: './dialog-update-paises.component.html',
-  styleUrls: ['./dialog-update-paises.component.scss'],
+    selector: 'app-dialog-update-paises',
+    templateUrl: './dialog-update-paises.component.html',
+    styleUrls: ['./dialog-update-paises.component.scss'],
+    imports: [
+        MatDialogTitle,
+        FormsModule,
+        ReactiveFormsModule,
+        CdkScrollable,
+        MatDialogContent,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ],
 })
 export class DialogUpdatePaisesComponent implements OnInit {
+  data = inject(MAT_DIALOG_DATA);
+  dialogRef = inject<MatDialogRef<DialogUpdatePaisesComponent>>(MatDialogRef);
+  private formBuilder = inject(FormBuilder);
+  private httpParametros = inject(IHttpParametrosService);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialogRef: MatDialogRef<DialogUpdatePaisesComponent>,
-    private formBuilder: FormBuilder,
-    private httpParametros: IHttpParametrosService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({
       id: [undefined],
       nombre: ['', Validators.required],

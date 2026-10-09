@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { debounceTime, filter, merge } from 'rxjs';
 import { IHttpLogsService } from '../interfaces/httpLogs.interface';
@@ -12,18 +12,16 @@ export const MOBILE_MAX_WIDTH = 767.98;
 // Estado del menú hamburguesa móvil: abierto/cerrado y contadores de no leídos (notificaciones y mensajes).
 @Injectable({ providedIn: 'root' })
 export class MobileNavService {
+  private logsService = inject(IHttpLogsService);
+  private securityService = inject(IHttpSecurityService);
+  private signalrService = inject(SignalrService);
+  private badgeService = inject(MensajesBadgeService);
+  private router = inject(Router);
+
   public readonly isOpen = signal(false);
   public readonly stats = signal({ notifications: 0, messages: 0 });
 
   private watching = false;
-
-  constructor(
-    private logsService: IHttpLogsService,
-    private securityService: IHttpSecurityService,
-    private signalrService: SignalrService,
-    private badgeService: MensajesBadgeService,
-    private router: Router
-  ) {}
 
   open(): void {
     this.isOpen.set(true);

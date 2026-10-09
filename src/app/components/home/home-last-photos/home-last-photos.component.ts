@@ -1,14 +1,20 @@
 import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
+import { MatTooltip } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
+import { ThumbPipe } from '../../../shared/pipes/thumb.pipe';
+import { enNavegador } from '../../../shared/helpers/plataforma';
 
 @Component({
-  standalone: false,
-  selector: 'app-home-last-photos',
-  templateUrl: './home-last-photos.component.html',
-  styleUrls: ['./home-last-photos.component.scss']
+    selector: 'app-home-last-photos',
+    templateUrl: './home-last-photos.component.html',
+    styleUrls: ['./home-last-photos.component.scss'],
+    imports: [ThumbPipe, MatTooltip, RouterLink]
 })
 export class HomeLastPhotosComponent implements OnInit, OnDestroy {
+  private fotosService = inject(IHttpFotosService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public fotos: any[] = [];
@@ -18,8 +24,6 @@ export class HomeLastPhotosComponent implements OnInit, OnDestroy {
 
   private readonly interval = 4000;
   private timer: any = null;
-
-  constructor(private fotosService: IHttpFotosService) {}
 
   ngOnInit(): void {
     this.fotosService.getTopFotos(5).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
@@ -44,7 +48,7 @@ export class HomeLastPhotosComponent implements OnInit, OnDestroy {
   startTimer(): void {
     if (this.paused) return;
     this.stopTimer();
-    this.timer = setInterval(() => this.next(), this.interval);
+    if (enNavegador()) this.timer = setInterval(() => this.next(), this.interval);
   }
 
   stopTimer(): void {

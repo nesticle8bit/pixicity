@@ -1,14 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup , Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  standalone: false,
-  selector: 'app-posts-generator',
-  templateUrl: './posts-generator.component.html',
-  styleUrls: ['./posts-generator.component.scss'],
+    selector: 'app-posts-generator',
+    templateUrl: './posts-generator.component.html',
+    styleUrls: ['./posts-generator.component.scss'],
+    imports: [
+        MatDialogTitle,
+        FormsModule,
+        ReactiveFormsModule,
+        CdkScrollable,
+        MatDialogContent,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ],
 })
 export class PostsGeneratorComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private dialogRef = inject<MatDialogRef<PostsGeneratorComponent>>(MatDialogRef);
+
   public formGroup: FormGroup;
 
   public readonly dividers = [
@@ -20,10 +34,7 @@ export class PostsGeneratorComponent implements OnInit {
     { id: 'pill', label: 'Píldora' },
   ];
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private dialogRef: MatDialogRef<PostsGeneratorComponent>
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({
       imagenInicial: '',
       informacion: '',

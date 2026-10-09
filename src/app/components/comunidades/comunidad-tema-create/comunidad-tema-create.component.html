@@ -1,6 +1,9 @@
 <!-- Mismo diseño que crear post (estilos cp-* de posts-create). -->
 <div class="cp container container--home">
   <form [formGroup]="formGroup" (ngSubmit)="crear()">
+    @if (borrador?.pendiente; as pendiente) {
+      <app-borrador-aviso [fecha]="pendiente.fecha" (recuperar)="borrador?.recuperar()" (descartar)="borrador?.descartar()"></app-borrador-aviso>
+    }
     <!-- Barra superior: estado + acciones -->
     <header class="cp-bar">
       <div class="cp-bar__state">
@@ -31,7 +34,7 @@
 
     <div class="cp-layout">
       <!-- Columna de escritura -->
-      <main class="cp-write">
+      <div class="cp-write">
         <div class="cp-title">
           <input type="text" class="cp-title__input" formControlName="titulo" maxlength="150"
             placeholder="Escribe un título que abra el debate…" aria-label="Título del tema"
@@ -52,7 +55,7 @@
           <p class="cp-empty-hint"><i class="ti ti-alert-circle"></i> El contenido es obligatorio.</p>
           }
         </section>
-      </main>
+      </div>
 
       <!-- Panel lateral -->
       <aside class="cp-rail">

@@ -1,20 +1,22 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, input } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { NgStyle } from '@angular/common';
+import { ThumbPipe } from '../../../shared/pipes/thumb.pipe';
 
 @Component({
-  standalone: false,
-  // Solo depende de sus @Input: se vuelve a evaluar únicamente cuando cambian (se usa en cada lista de la app).
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-user-avatar',
-  templateUrl: './user-avatar.component.html',
-  styleUrls: ['./user-avatar.component.scss'],
+    // Solo depende de sus @Input: se vuelve a evaluar únicamente cuando cambian (se usa en cada lista de la app).
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-user-avatar',
+    templateUrl: './user-avatar.component.html',
+    styleUrls: ['./user-avatar.component.scss'],
+    imports: [ThumbPipe, NgStyle],
 })
 export class UserAvatarComponent implements OnInit {
   public backendURL: string = `${environment.api}/images/avatars`;
 
-  @Input() height: number | string | null = null;
-  @Input() width: number | string | null = null;
-  @Input() class: string = '';
+  readonly height = input<number | string | null>(null);
+  readonly width = input<number | string | null>(null);
+  readonly class = input<string>('');
 
   private _avatar: string | null | undefined;
 
@@ -34,6 +36,12 @@ export class UserAvatarComponent implements OnInit {
 
   get userName(): string {
     return this._userName ? this._userName : '';
+  }
+
+  /** Tamaño mostrado (para pedir la miniatura adecuada); sin tamaño explícito se asume un avatar de lista. */
+  get avatarAncho(): number {
+    const lado = Math.max(Number(this.width()) || 0, Number(this.height()) || 0);
+    return lado || 64;
   }
 
   get imageURL(): string {

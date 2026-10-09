@@ -1,6 +1,8 @@
+import { environment } from 'src/environments/environment';
+import { DOCUMENT } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { Pagination } from 'src/app/models/api/api-response.model';
 import { ComentarioReciente, ComunidadDetalle, ComunidadMiembro, TemaListado, TemaTop } from 'src/app/models/comunidades/comunidad.model';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
@@ -9,14 +11,34 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { FormsModule } from '@angular/forms';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
+import { ThumbPipe } from '../../../shared/pipes/thumb.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-comunidad-view',
-  templateUrl: './comunidad-view.component.html',
-  styleUrls: ['./comunidad-view.component.scss'],
+    selector: 'app-comunidad-view',
+    templateUrl: './comunidad-view.component.html',
+    styleUrls: ['./comunidad-view.component.scss'],
+    imports: [ThumbPipe, 
+        RouterLink,
+        FormsModule,
+        UserPopoverDirective,
+        UserAvatarComponent,
+        TimeAgoPipe,
+    ],
 })
 export class ComunidadViewComponent implements OnInit {
+  private readonly documento = inject(DOCUMENT);
+  private displayService = inject(DisplayComponentService);
+  private comunidadesService = inject(IHttpComunidadesService);
+  private securityService = inject(IHttpSecurityService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
+  private seoService = inject(SEOService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public comunidad: ComunidadDetalle | null = null;
@@ -33,15 +55,7 @@ export class ComunidadViewComponent implements OnInit {
   public pageTemas: number = 1;
   public paginationTemas: Partial<Pagination> = {};
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private comunidadesService: IHttpComunidadesService,
-    private securityService: IHttpSecurityService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private notificationService: NotificationService,
-    private seoService: SEOService
-  ) {
+  constructor() {
     this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: true, submenu: true, background: '' });
   }
 
@@ -79,27 +93,27 @@ export class ComunidadViewComponent implements OnInit {
           type: 'website',
           imageURL: comunidad.imagen || '',
           tags: [comunidad.nombre, 'comunidad', 'taringas'],
-          canonical: `${location.origin}${location.pathname}`,
+          canonical: `${environment.publicUrl}${this.documento.location.pathname}`,
           jsonLd: {
             '@context': 'https://schema.org',
             '@graph': [{
               '@type': 'CollectionPage',
               name: comunidad.nombre,
               description: comunidad.descripcion || undefined,
-              url: `${location.origin}${location.pathname}`,
+              url: `${environment.publicUrl}${this.documento.location.pathname}`,
               image: comunidad.imagen || undefined,
-              isPartOf: { '@id': `${location.origin}/#website` },
+              isPartOf: { '@id': `${environment.publicUrl}/#website` },
               dateCreated: comunidad.fechaRegistro,
             }, {
               '@type': 'BreadcrumbList',
               itemListElement: [
-                { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${location.origin}/` },
-                { '@type': 'ListItem', position: 2, name: 'Comunidades', item: `${location.origin}/comunidades` },
+                { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${environment.publicUrl}/` },
+                { '@type': 'ListItem', position: 2, name: 'Comunidades', item: `${environment.publicUrl}/comunidades` },
                 {
                   '@type': 'ListItem',
                   position: 3,
                   name: comunidad.nombre,
-                  item: `${location.origin}${location.pathname}`,
+                  item: `${environment.publicUrl}${this.documento.location.pathname}`,
                 },
               ],
             }],

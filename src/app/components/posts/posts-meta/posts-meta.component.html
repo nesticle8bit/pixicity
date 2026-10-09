@@ -40,10 +40,10 @@
     @if (currentUser?.usuario && currentUser?.usuario?.userName != post?.usuario?.userName) {
     <div class="botones float-start py-2">
       <li>
-        <a (click)="recomendarPost(post.id)" matTooltip="Recomendar post" class="tetese" role="button" tabindex="0" (keydown.enter)="recomendarPost(post.id)" (keydown.space)="recomendarPost(post.id); $event.preventDefault()">P!</a>
+        <a (click)="recomendarPost(post.id)" matTooltip="Recomendar post" aria-label="Recomendar post" class="tetese" role="button" tabindex="0" (keydown.enter)="recomendarPost(post.id)" (keydown.space)="recomendarPost(post.id); $event.preventDefault()">P!</a>
       </li>
       <li>
-        <a (click)="agregarFavorito(post.id)" matTooltip="Agregar favoritos" role="button" tabindex="0" (keydown.enter)="agregarFavorito(post.id)" (keydown.space)="agregarFavorito(post.id); $event.preventDefault()">
+        <a (click)="agregarFavorito(post.id)" matTooltip="Agregar favoritos" aria-label="Agregar favoritos" role="button" tabindex="0" (keydown.enter)="agregarFavorito(post.id)" (keydown.space)="agregarFavorito(post.id); $event.preventDefault()">
           <i class="ti ti-star favoritos"></i>
         </a>
       </li>

@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { PaginationService } from '../shared/pagination.service';
@@ -17,12 +17,11 @@ import { DashboardResumen } from 'src/app/models/admin/dashboard.model';
 
 @Injectable()
 export class HttpGeneralService implements IHttpGeneralService {
-  constructor(
-    private notificationService: NotificationService,
-    private paginationService: PaginationService,
-    private helper: HelperService,
-    private http: HttpClient,
-  ) {}
+  private notificationService = inject(NotificationService);
+  private paginationService = inject(PaginationService);
+  private helper = inject(HelperService);
+  private http = inject(HttpClient);
+
 
   getDashboardResumen(): Observable<DashboardResumen> {
     return this.http

@@ -8,11 +8,11 @@
         {{ labelOf(selectedItem) }}
       }
     } @else {
-      <span class="asel__placeholder">{{ placeholder }}</span>
+      <span class="asel__placeholder">{{ placeholder() }}</span>
     }
   </div>
 
-  @if (clearable && hasValue && !disabled) {
+  @if (clearable() && hasValue && !disabled) {
     <button type="button" class="asel__clear" (click)="clear($event)" aria-label="Limpiar">
       <i class="ti ti-x"></i>
     </button>
@@ -25,10 +25,10 @@
   [cdkConnectedOverlayHasBackdrop]="true" cdkConnectedOverlayBackdropClass="asel__backdrop"
   (backdropClick)="close()" (detach)="close()">
   <div class="asel__panel">
-    @if (searchable) {
+    @if (searchable()) {
       <div class="asel__search">
         <i class="ti ti-search"></i>
-        <input #searchInput type="text" [(ngModel)]="search" placeholder="Buscar..." autocomplete="off" />
+        <input #searchInput type="text" [(ngModel)]="search" aria-label="Buscar" placeholder="Buscar..." autocomplete="off" />
       </div>
     }
     <ul class="asel__options">

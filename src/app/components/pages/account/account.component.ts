@@ -1,29 +1,58 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogChangeAvatarComponent } from 'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { IHttpBloqueosService } from 'src/app/services/interfaces/httpBloqueos.interface';
-import { BloqueoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { UsuarioPerfilViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { EstadoViewModel, PaisViewModel } from 'src/app/models/parametros/parametros-vm.model';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { MatTabGroup, MatTab, MatTabLabel } from '@angular/material/tabs';
+import { MatIcon } from '@angular/material/icon';
+import { NgClass } from '@angular/common';
+import { SelectAutocompleteComponent } from '../../shared/select-autocomplete/select-autocomplete.component';
+import { MatButton } from '@angular/material/button';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
+import { AccountPerfilComponent } from './account-perfil/account-perfil.component';
+import { AccountBloqueadosComponent } from './account-bloqueados/account-bloqueados.component';
+import { AccountPasswordComponent } from './account-password/account-password.component';
 
 @Component({
-  standalone: false,
-  selector: 'app-account',
-  templateUrl: './account.component.html',
-  styleUrls: ['./account.component.scss'],
+    selector: 'app-account',
+    templateUrl: './account.component.html',
+    styleUrls: ['./account.component.scss'],
+    imports: [
+    MatTabGroup,
+    MatTab,
+    MatTabLabel,
+    MatIcon,
+    FormsModule,
+    ReactiveFormsModule,
+    NgClass,
+    SelectAutocompleteComponent,
+    MatButton,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    MatExpansionPanelDescription,
+    UserAvatarComponent,
+    AccountPerfilComponent,
+    AccountBloqueadosComponent,
+    AccountPasswordComponent,
+],
 })
 export class AccountComponent implements OnInit {
+  private securityService = inject(IHttpSecurityService);
+  private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
+  private parametrosService = inject(IHttpParametrosService);
+  private formBuilder = inject(FormBuilder);
+  private dialog = inject(MatDialog);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public changeEmailStatus: boolean = false;
@@ -98,183 +127,13 @@ export class AccountComponent implements OnInit {
   ];
   public years: number[] = [];
 
-  public estadosCiviles: string[] = [
-    'Sin respuesta',
-    'Soltero/a',
-    'Con novio/a',
-    'Casado/a',
-    'Divorciado/a',
-    'Viudo/a',
-    'En algo...',
-  ];
-
-  public hijos: string[] = [
-    'Sin respuesta',
-    'No tengo',
-    'Algún día',
-    'Está en camino',
-    'No son lo mío',
-    'Tengo, vivo con ellos',
-    'Tengo, no vivo con ellos',
-  ];
-
-  public vivoCon: string[] = [
-    'Sin respuesta',
-    'Sólo',
-    'Con mis padres',
-    'Con mi pareja',
-    'Con amigos',
-    'Otro',
-  ];
-
-  public colorCabello: string[] = [
-    'Sin respuesta',
-    'Negro',
-    'Castaño oscuro',
-    'Castaño claro',
-    'Rubio',
-    'Pelirrojo',
-    'Gris',
-    'Verde',
-    'Naranja',
-    'Morado',
-    'Azul',
-    'Canoso',
-    'Teñido',
-    'Rapado',
-    'Calvo',
-  ];
-
-  public colorOjos: string[] = [
-    'Sin respuesta',
-    'Negros',
-    'Marrones',
-    'Celestes',
-    'Verdes',
-    'Grises',
-  ];
-
-  public complexiones: string[] = [
-    'Sin respuesta',
-    'Delgado/a',
-    'Atlético',
-    'Normal',
-    'Algunos kilos de más',
-    'Corpulento/a',
-  ];
-
-  public dietas: string[] = [
-    'Sin respuesta',
-    'Vegetariana',
-    'Lacto Vegetariana',
-    'Orgánica',
-    'De todo',
-    'Comida basura',
-  ];
-
-  public fumoAlcohol: string[] = [
-    'Sin respuesta',
-    'No',
-    'Casualmente',
-    'Socialmente',
-    'Regularmente',
-    'Mucho',
-  ];
-
-  public estudios: string[] = [
-    'Sin respuesta',
-    'Sin Estudios',
-    'Primario completo',
-    'Secundario en curso',
-    'Secundario completo',
-    'Terciario en curso',
-    'Terciario completo',
-    'Universitario en curso',
-    'Universitario completo',
-    'Post-grado en curso',
-    'Post-grado completo',
-  ];
-
-  public sector: string[] = [
-    'Sin respuesta',
-    'Abastecimiento',
-    'Administración',
-    'Apoderado Aduanal',
-    'Asesoría en Comercio Exterior',
-    'Asesoría Legal Internacional',
-    'Asistente de Tráfico',
-    'Auditoría',
-    'Calidad',
-    'Call Center',
-    'Capacitación Comercio Exterior',
-    'Comercial',
-    'Comercio Exterior',
-    'Compras',
-    'Compras Internacionales/Importación',
-    'Comunicación Social',
-    'Comunicaciones Externas',
-    'Comunicaciones Internas',
-    'Consultoría',
-    'Consultorías Comercio Exterior',
-    'Contabilidad',
-    'Control de Gestión',
-    'Creatividad',
-    'Diseño',
-    'Distribución',
-    'E-commerce',
-    'Educación',
-    'Finanzas',
-    'Finanzas Internacionales',
-    'Gerencia / Dirección General',
-    'Impuestos',
-    'Ingeniería',
-    'Internet',
-    'Investigación y Desarrollo',
-    'Jóvenes Profesionales',
-    'Legal',
-    'Logística',
-    'Mantenimiento',
-    'Marketing',
-    'Medio Ambiente',
-    'Mercadotecnia Internacional',
-    'Multimedia',
-    'Otra',
-    'Pasantías',
-    'Periodismo',
-    'Planeamiento',
-    'Producción',
-    'Producción e Ingeniería',
-    'Recursos Humanos',
-    'Relaciones Institucionales / Públicas',
-    'Salud',
-    'Seguridad Industrial',
-    'Servicios',
-    'Soporte Técnico',
-    'Tecnología',
-    'Tecnologías de la Información',
-    'Telecomunicaciones',
-    'Telemarketing',
-    'Traducción',
-    'Transporte',
-    'Ventas',
-    'Ventas Internacionales/Exportación',
-  ];
-
-  public bloqueados: BloqueoViewModel[] = [];
-
   public formGroupCuenta: FormGroup;
-  public formGroupPerfil: FormGroup;
-  public formGroupCambiarContrasena: FormGroup;
   public formGroupPersonalizacion: FormGroup;
 
-  constructor(
-    private securityService: IHttpSecurityService,
-    private parametrosService: IHttpParametrosService,
-    private bloqueosService: IHttpBloqueosService,
-    private formBuilder: FormBuilder,
-    private dialog: MatDialog,
-    private notificationService: NotificationService
-  ) {
+  // Perfil extendido: se pide una sola vez aquí (también trae el fondo) y se pasa a <app-account-perfil>.
+  public perfilActual: UsuarioPerfilViewModel | null = null;
+
+  constructor() {
     this.formGroupCuenta = this.formBuilder.group({
       avatar: '',
       userName: '',
@@ -287,62 +146,6 @@ export class AccountComponent implements OnInit {
       año: [undefined, Validators.required],
     });
 
-    this.formGroupPerfil = this.formBuilder.group({
-      completeName: [''],
-      personalMessage: [''],
-      website: [''],
-      instagram: [''],
-      facebook: [''],
-      twitter: [''],
-      tiktok: [''],
-      youtube: [''],
-      like1: [false],
-      like2: [false],
-      like3: [false],
-      like4: [false],
-      like_all: [false],
-      estadoCivil: [''],
-      hijos: [''],
-      vivoCon: [''],
-
-      altura: [''],
-      peso: [''],
-      colorCabello: [''],
-      colorOjos: [''],
-      complexion: [''],
-      dieta: [''],
-      tatuajes: [false],
-      piercings: [false],
-      fumo: [''],
-      alcohol: [''],
-
-      estudios: [''],
-      profesion: [''],
-      empresa: [''],
-      sector: [''],
-      interesesProfesionales: [''],
-      habilidadesProfesionales: [''],
-
-      misIntereses: [''],
-      hobbies: [''],
-      seriesTV: [''],
-      musicaFavorita: [''],
-      deportesFavoritos: [''],
-      librosFavoritos: [''],
-      peliculasFavoritas: [''],
-      comidaFavorita: [''],
-      misHeroesSon: [''],
-    });
-
-    this.formGroupCambiarContrasena = this.formBuilder.group(
-      {
-        currentPassword: ['', Validators.required],
-        newPassword: ['', Validators.required],
-        confirmPassword: [''],
-      },
-      { validators: this.checkPasswords }
-    );
-
     this.formGroupPersonalizacion = this.formBuilder.group({
       profileBackground: ''
     });
@@ -351,52 +154,9 @@ export class AccountComponent implements OnInit {
   }
 
   getCurrentPerfilInfo(): void {
-    this.securityService.getCurrentPerfilInfo().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.usuarioPerfilService.getCurrentPerfilInfo().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
-        this.formGroupPerfil.patchValue({
-          completeName: response.perfil?.completeName,
-          personalMessage: response.perfil?.personalMessage,
-          website: response.perfil?.website,
-          instagram: response.perfil?.instagram,
-          facebook: response.perfil?.facebook,
-          twitter: response.perfil?.twitter,
-          tiktok: response.perfil?.tiktok,
-          youtube: response.perfil?.youtube,
-          like1: response.perfil?.like1,
-          like2: response.perfil?.like2,
-          like3: response.perfil?.like3,
-          like4: response.perfil?.like4,
-          like_all: response.perfil?.like_All,
-          estadoCivil: response.perfil?.estadoCivil,
-          hijos: response.perfil?.hijos,
-          vivoCon: response.perfil?.vivoCon,
-          altura: response.perfil?.altura,
-          peso: response.perfil?.peso,
-          colorCabello: response.perfil?.colorCabello,
-          colorOjos: response.perfil?.colorOjos,
-          complexion: response.perfil?.complexion,
-          dieta: response.perfil?.dieta,
-          tatuajes: response.perfil?.tatuajes,
-          piercings: response.perfil?.piercings,
-          fumo: response.perfil?.fumo,
-          alcohol: response.perfil?.alcohol,
-          estudios: response.perfil?.estudios,
-          profesion: response.perfil?.profesion,
-          empresa: response.perfil?.empresa,
-          sector: response.perfil?.sector,
-          interesesProfesionales: response.perfil?.interesesProfesionales,
-          habilidadesProfesionales: response.perfil?.habilidadesProfesionales,
-          misIntereses: response.perfil?.misIntereses,
-          hobbies: response.perfil?.hobbies,
-          seriesTV: response.perfil?.seriesTV,
-          musicaFavorita: response.perfil?.musicaFavorita,
-          deportesFavoritos: response.perfil?.deportesFavoritos,
-          librosFavoritos: response.perfil?.librosFavoritos,
-          peliculasFavoritas: response.perfil?.peliculasFavoritas,
-          comidaFavorita: response.perfil?.comidaFavorita,
-          misHeroesSon: response.perfil?.misHeroesSon,
-        });
-
+        this.perfilActual = response.perfil ?? null;
         this.formGroupPersonalizacion.patchValue({
           profileBackground: response.background
         });
@@ -404,41 +164,10 @@ export class AccountComponent implements OnInit {
     });
   }
 
-  checkPasswords: ValidatorFn = (
-    group: AbstractControl
-  ): ValidationErrors | null => {
-    let pass = group?.get('newPassword')?.value;
-    let confirmPass = group?.get('confirmPassword')?.value;
-
-    if (!pass || !confirmPass) {
-      return null;
-    }
-
-    return pass === confirmPass ? null : { notSame: true };
-  };
-
   ngOnInit(): void {
     this.getCurrentUser();
     this.getPaises();
     this.initFechas();
-    this.loadBloqueados();
-  }
-
-  loadBloqueados(): void {
-    this.bloqueosService.getBloqueados().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (data) => this.bloqueados = data,
-      error: () => {}
-    });
-  }
-
-  desbloquearUsuario(bloqueo: BloqueoViewModel): void {
-    this.bloqueosService.desbloquearUsuario(bloqueo.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
-        this.bloqueados = this.bloqueados.filter(b => b.id !== bloqueo.id);
-        this.notificationService.success(`${bloqueo.userName} ha sido desbloqueado`, 'Desbloqueado');
-      },
-      error: () => {}
-    });
   }
 
   getCurrentUser(): void {
@@ -506,35 +235,6 @@ export class AccountComponent implements OnInit {
     });
   }
 
-  changePassword(): void {
-    const passwords = Object.assign({}, this.formGroupCambiarContrasena.value);
-
-    this.securityService
-      .changePassword(passwords)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response) => {
-        if (response) {
-          this.formGroupCambiarContrasena.patchValue({
-            currentPassword: '',
-            newPassword: '',
-            confirmPassword: '',
-          });
-
-          this.notificationService.success('La contraseña ha sido actualizada correctamente', 'Actualizado');
-        }
-      });
-  }
-
-  savePerfilInfo(): void {
-    const perfil = Object.assign({}, this.formGroupPerfil.value);
-
-    this.securityService.savePerfilInfo(perfil).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      if (response) {
-        this.notificationService.success('Los cambios fueron aceptados y serán aplicados', 'Actualizado');
-      }
-    });
-  }
-
   changeAvatar(): void {
     const dialogRef = this.dialog.open(DialogChangeAvatarComponent, {
       width: '350px',
@@ -559,7 +259,7 @@ export class AccountComponent implements OnInit {
   saveFormGroupPersonalizacion(): void {
     const personalization = Object.assign({}, this.formGroupPersonalizacion.value);
 
-    this.securityService.changeBackgroundProfile(personalization).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+    this.usuarioPerfilService.changeBackgroundProfile(personalization).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.notificationService.success('El background de tu perfil ha sido actualizado correctamente', 'Actualizado');
     });
   }

@@ -10,7 +10,7 @@
 <div class="clearfix"></div>
 
 @if (noticias.length > 0) {
-  <main class="table-responsive">
+  <div class="table-responsive">
     <table class="table table-sm table-striped table-hover">
       <thead>
         <tr>
@@ -45,7 +45,7 @@
               </app-user-avatar> {{noticia.usuario?.userName}}
             </td>
             <td class="text-center" width="30px">
-              <button class="btn-menu" [matMenuTriggerFor]="menu">
+              <button type="button" class="btn-menu" aria-label="Acciones" [matMenuTriggerFor]="menu">
                 <i class="ti ti-dots-vertical"></i>
               </button>
               <mat-menu #menu="matMenu">
@@ -71,7 +71,7 @@
         }
       </tbody>
     </table>
-  </main>
+  </div>
 }
 
 @if (noticias.length > 0) {

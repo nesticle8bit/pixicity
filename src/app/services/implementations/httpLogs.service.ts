@@ -6,19 +6,18 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
 import { catchError, map } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
 import { FiltroNotificaciones, MonitorViewModel, StatsViewModel } from 'src/app/models/logs/logs-vm.model';
 
 @Injectable()
 export class HttpLogsService implements IHttpLogsService {
-  constructor(
-    private notificationService: NotificationService,
-    private paginationService: PaginationService,
-    private helper: HelperService,
-    private http: HttpClient,
-  ) {}
+  private notificationService = inject(NotificationService);
+  private paginationService = inject(PaginationService);
+  private helper = inject(HelperService);
+  private http = inject(HttpClient);
+
 
   getNotificaciones(filtro: FiltroNotificaciones = {}): Observable<PaginatedData<MonitorViewModel>> {
     let params = new HttpParams()

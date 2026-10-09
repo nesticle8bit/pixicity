@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { TableVotosComponent } from '../table-votos/table-votos.component';
 
 @Component({
-  standalone: false,
-  selector: 'app-dashboard-votos',
-  templateUrl: './dashboard-votos.component.html',
-  styleUrls: ['./dashboard-votos.component.scss']
+    selector: 'app-dashboard-votos',
+    templateUrl: './dashboard-votos.component.html',
+    styleUrls: ['./dashboard-votos.component.scss'],
+    imports: [TableVotosComponent]
 })
 export class DashboardVotosComponent implements OnInit {
 

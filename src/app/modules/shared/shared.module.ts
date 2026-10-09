@@ -79,19 +79,19 @@ const SHARED = [
 ];
 
 @NgModule({
-  declarations: SHARED,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    OverlayModule,
-    MatTooltipModule,
-    MatIconModule,
-    MatMenuModule,
-    MatDividerModule,
-    MatPaginatorModule,
-    MatButtonModule,
-  ],
-  exports: [...SHARED, MatTooltipModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule,
+        OverlayModule,
+        MatTooltipModule,
+        MatIconModule,
+        MatMenuModule,
+        MatDividerModule,
+        MatPaginatorModule,
+        MatButtonModule,
+        ...SHARED,
+    ],
+    exports: [...SHARED, MatTooltipModule],
 })
 export class SharedModule {}

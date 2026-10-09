@@ -23,14 +23,14 @@ describe('AppComponent', () => {
     seo$ = new BehaviorSubject<any>({});
 
     await TestBed.configureTestingModule({
-      declarations: [AppComponent],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [
+    imports: [AppComponent],
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [
         provideRouter([]),
         { provide: DisplayComponentService, useValue: { getDisplay: () => display$.asObservable() } },
         { provide: SEOService, useValue: { getSEO: () => seo$.asObservable() } },
-      ],
-    })
+    ],
+})
       // Solo se prueba la lógica del componente raíz (SEO y visibilidad de secciones).
       .overrideComponent(AppComponent, { set: { template: '' } })
       .compileComponents();

@@ -1,6 +1,8 @@
 <ngx-ui-loader [fgsType]="'pulse'" [fgsColor]="'#137eff'" [overlayColor]="'rgb(18 36 58 / 80%)'" [pbColor]="'#137eff'">
 </ngx-ui-loader>
 
+<a class="skip-link" href="#contenido-principal" (click)="saltarAlContenido($event)">Saltar al contenido</a>
+
 <main-header></main-header>
 <!-- Fuera del header: el header móvil se desplaza con transform y eso rompería el position: fixed del cajón. -->
 <app-mobile-drawer></app-mobile-drawer>
@@ -11,7 +13,9 @@
 <app-main-ultimas-noticias></app-main-ultimas-noticias>
 
 <div [ngStyle]="{'background': displayComponent.background ? 'url(' + displayComponent.background +')' : ''}">
-  <router-outlet></router-outlet>
+  <main id="contenido-principal" tabindex="-1">
+    <router-outlet></router-outlet>
+  </main>
 
   <main-footer></main-footer>
 </div>

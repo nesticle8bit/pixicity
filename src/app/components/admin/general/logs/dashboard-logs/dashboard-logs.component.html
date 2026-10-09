@@ -71,7 +71,7 @@
 </div>
 
 @if (logs.length > 0) {
-  <main class="table-responsive">
+  <div class="table-responsive">
     <table class="table table-sm table-hover align-middle logs-tabla">
       <thead>
         <tr>
@@ -86,7 +86,7 @@
       <tbody>
         @for (log of logs; track log.id) {
           <tr class="logs-fila" [class.logs-fila--activa]="seleccionado?.id === log.id" [class.opacity-50]="log.resuelto"
-            (click)="ver(log)">
+            (click)="ver(log)" tabindex="0" (keydown.enter)="ver(log)">
             <td class="text-nowrap"><span matTooltip="{{log.fecha}}">{{log.fecha | timeAgo}}</span></td>
             <td><span class="badge" [ngClass]="claseNivel(log.nivel)">{{nombreNivel(log.nivel)}}</span></td>
             <td>{{log.origen === 'frontend' ? 'Navegador' : 'API'}}</td>
@@ -105,7 +105,7 @@
         }
       </tbody>
     </table>
-  </main>
+  </div>
 
   <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
     [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">

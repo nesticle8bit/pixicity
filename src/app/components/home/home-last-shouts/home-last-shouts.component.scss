@@ -99,7 +99,7 @@
 
 .shout-time {
   font-size: .72rem;
-  color: #999;
+  color: #6b6b6b;
 }
 
 .shout-rank {
@@ -120,7 +120,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 
-  &:hover { color: #007bff; }
+  &:hover { color: #0062cc; }
 }
 
 .shout-media-tag {
@@ -131,7 +131,7 @@
   color: #555;
   min-width: 0;
 
-  i { color: #007bff; flex-shrink: 0; }
+  i { color: #0062cc; flex-shrink: 0; }
 }
 
 .shout-media-thumb {
@@ -152,7 +152,7 @@
 
 .shout-target {
   font-size: .72rem;
-  color: #999;
+  color: #6b6b6b;
   margin-top: auto;
 }
 
@@ -209,6 +209,6 @@
 
 .shout-empty {
   font-size: .82rem;
-  color: #999;
+  color: #6b6b6b;
   padding: 12px 0;
 }

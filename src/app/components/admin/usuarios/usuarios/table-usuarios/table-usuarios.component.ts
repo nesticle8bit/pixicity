@@ -5,24 +5,55 @@ import { DialogBanUserComponent } from 'src/app/components/dialogs/dialog-ban-us
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { UsuarioAdminSearchFilter } from 'src/app/models/shared/service-types.model';
 import { UsuarioAdminViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgClass, DatePipe } from '@angular/common';
+import { UserAvatarComponent } from '../../../../addons/user-avatar/user-avatar.component';
+import { UserPopoverDirective } from '../../../../../shared/directives/userPopover.directive';
+import { CountryFlagComponent } from '../../../../addons/country-flag/country-flag.component';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatDivider } from '@angular/material/divider';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-usuarios',
-  templateUrl: './table-usuarios.component.html',
-  styleUrls: ['./table-usuarios.component.scss'],
+    selector: 'app-table-usuarios',
+    templateUrl: './table-usuarios.component.html',
+    styleUrls: ['./table-usuarios.component.scss'],
+    imports: [
+        AdminFiltrosComponent,
+        MatTooltip,
+        NgClass,
+        UserAvatarComponent,
+        UserPopoverDirective,
+        CountryFlagComponent,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatIcon,
+        MatDivider,
+        MatPaginator,
+        DatePipe,
+        TimeAgoPipe,
+    ],
 })
 export class TableUsuariosComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private securityService = inject(IHttpSecurityService);
+  private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
-  @Input() searchParameters?: UsuarioAdminSearchFilter;
+  readonly searchParameters = input<UsuarioAdminSearchFilter>();
 
   public usuarios: UsuarioAdminViewModel[] = [];
   public totalCount: number = 0;
@@ -41,13 +72,7 @@ export class TableUsuariosComponent implements OnInit {
     ],
   };
 
-  constructor(
-    public paginationService: PaginationService,
-    private securityService: IHttpSecurityService,
-    private snackBar: MatSnackBar,
-    private dialog: MatDialog,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 
@@ -59,8 +84,9 @@ export class TableUsuariosComponent implements OnInit {
     this.cargando = true;
     const parameters: UsuarioAdminSearchFilter = {};
 
-    if(this.searchParameters?.rangoId) {
-      parameters.rangoId = this.searchParameters?.rangoId;
+    const searchParameters = this.searchParameters();
+    if(searchParameters?.rangoId) {
+      parameters.rangoId = searchParameters?.rangoId;
     }
 
     this.securityService.getUsuariosAdmin(parameters, this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {

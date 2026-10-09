@@ -5,13 +5,13 @@
     <p class="text-muted" style="font-size:13px;">Categoría: <strong>{{categoria?.nombre}}</strong></p>
 
     <div class="mb-3">
-      <label class="form-label">Nombre</label>
-      <input type="text" class="form-control" formControlName="nombre" cdkFocusInitial />
+      <label class="form-label" for="dialog-comunidad-subcategoria-nombre">Nombre</label>
+      <input id="dialog-comunidad-subcategoria-nombre" type="text" class="form-control" formControlName="nombre" cdkFocusInitial />
     </div>
 
     <div class="mb-3">
-      <label class="form-label">Orden</label>
-      <input type="number" class="form-control" formControlName="orden" />
+      <label class="form-label" for="dialog-comunidad-subcategoria-orden">Orden</label>
+      <input id="dialog-comunidad-subcategoria-orden" type="number" class="form-control" formControlName="orden" />
     </div>
   </mat-dialog-content>
 

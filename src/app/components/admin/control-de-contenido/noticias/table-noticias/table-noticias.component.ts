@@ -3,19 +3,46 @@ import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filt
 import { DialogCreateUpdateNoticiasComponent } from '../dialog-create-update-noticias/dialog-create-update-noticias.component';
 import { IHttpNoticiasService } from 'src/app/services/interfaces/httpNoticias.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { NgClass } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
+import { UserAvatarComponent } from '../../../../addons/user-avatar/user-avatar.component';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
+import { TruncatePipe } from '../../../../../shared/pipes/truncate.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-noticias',
-  templateUrl: './table-noticias.component.html',
-  styleUrls: ['./table-noticias.component.scss'],
+    selector: 'app-table-noticias',
+    templateUrl: './table-noticias.component.html',
+    styleUrls: ['./table-noticias.component.scss'],
+    imports: [
+        AdminFiltrosComponent,
+        MatButton,
+        MatIcon,
+        NgClass,
+        MatTooltip,
+        UserAvatarComponent,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatPaginator,
+        TimeAgoPipe,
+        TruncatePipe,
+    ],
 })
 export class TableNoticiasComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private noticiasService = inject(IHttpNoticiasService);
+  private dialog = inject(MatDialog);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public noticias: any[] = [];
@@ -31,12 +58,7 @@ export class TableNoticiasComponent implements OnInit {
     usuario: 'Autor',
   };
 
-  constructor(
-    public paginationService: PaginationService,
-    private noticiasService: IHttpNoticiasService,
-    private dialog: MatDialog,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 

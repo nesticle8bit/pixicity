@@ -1,19 +1,30 @@
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ViewportScroller } from '@angular/common';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ViewportScroller, NgClass } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 
 @Component({
-  standalone: false,
-  selector: 'main-footer',
-  templateUrl: './main-footer.component.html',
-  styleUrls: ['./main-footer.component.scss'],
+    selector: 'main-footer',
+    templateUrl: './main-footer.component.html',
+    styleUrls: ['./main-footer.component.scss'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        RouterLink,
+        NgClass,
+    ],
 })
 export class MainFooterComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  private webService = inject(IHttpWebService);
+  private viewPort = inject(ViewportScroller);
+  private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public display!: DisplayComponentModel;
@@ -23,13 +34,7 @@ export class MainFooterComponent implements OnInit {
     footer: '',
   };
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private webService: IHttpWebService,
-    private viewPort: ViewportScroller,
-    private formBuilder: FormBuilder,
-    private router: Router
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({
       search: '',
     });

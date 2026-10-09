@@ -1,23 +1,20 @@
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { DialogChangeRangosComponent } from 'src/app/components/dialogs/dialog-change-rangos/dialog-change-rangos.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, input, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  standalone: false,
-  selector: 'app-change-rango',
-  templateUrl: './change-rango.component.html',
-  styleUrls: ['./change-rango.component.scss'],
+    selector: 'app-change-rango',
+    templateUrl: './change-rango.component.html',
+    styleUrls: ['./change-rango.component.scss'],
 })
 export class ChangeRangoComponent implements OnInit {
-  public currentUser?: JwtUserModel;
-  @Input() data: any;
+  private dialog = inject(MatDialog);
+  private securityService = inject(IHttpSecurityService);
 
-  constructor(
-    private dialog: MatDialog,
-    private securityService: IHttpSecurityService
-  ) {}
+  public currentUser?: JwtUserModel;
+  readonly data = input<any>();
 
   ngOnInit(): void {
     this.currentUser = this.securityService.getCurrentUser();
@@ -26,7 +23,7 @@ export class ChangeRangoComponent implements OnInit {
   changeRango(): void {
     this.dialog.open(DialogChangeRangosComponent, {
       width: '350px',
-      data: this.data,
+      data: this.data(),
       disableClose: true,
     });
   }

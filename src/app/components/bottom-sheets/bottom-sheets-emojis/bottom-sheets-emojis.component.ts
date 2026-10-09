@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 
@@ -12,9 +12,8 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
   styleUrls: ['./bottom-sheets-emojis.component.scss'],
 })
 export class BottomSheetsEmojisComponent implements OnInit {
-  constructor(
-    private ref: MatBottomSheetRef<BottomSheetsEmojisComponent>
-  ) {}
+  private ref = inject<MatBottomSheetRef<BottomSheetsEmojisComponent>>(MatBottomSheetRef);
+
 
   ngOnInit(): void {}
 

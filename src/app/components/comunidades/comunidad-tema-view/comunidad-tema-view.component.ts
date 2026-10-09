@@ -1,6 +1,7 @@
+import { environment } from 'src/environments/environment';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -10,6 +11,16 @@ import { TemaComentario, TemaDetalle } from 'src/app/models/comunidades/comunida
 import { idUsuarioSesion, JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { ComentarioHilo, ComentariosAcciones } from 'src/app/models/shared/comentario-hilo.model';
 import { PerfilUsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { NgStyle, DecimalPipe, DatePipe, DOCUMENT } from '@angular/common';
+import { FollowButtonComponent } from '../../addons/follow-button/follow-button.component';
+import { ShareButtonsComponent } from '../../addons/share-buttons/share-buttons.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ComentariosComponent } from '../../shared/comentarios/comentarios.component';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
+import { ContenidoSeoPipe } from '../../../shared/pipes/contenidoSeo.pipe';
+import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 
 type TemaVista = TemaDetalle & { _votando?: boolean };
 
@@ -34,12 +45,35 @@ function aHilo(c: TemaComentario): ComentarioHilo {
 }
 
 @Component({
-  standalone: false,
-  selector: 'app-comunidad-tema-view',
-  templateUrl: './comunidad-tema-view.component.html',
-  styleUrls: ['./comunidad-tema-view.component.scss'],
+    selector: 'app-comunidad-tema-view',
+    templateUrl: './comunidad-tema-view.component.html',
+    styleUrls: ['./comunidad-tema-view.component.scss'],
+    imports: [
+        RouterLink,
+        UserPopoverDirective,
+        UserAvatarComponent,
+        NgStyle,
+        FollowButtonComponent,
+        ShareButtonsComponent,
+        MatTooltip,
+        ComentariosComponent,
+        DecimalPipe,
+        DatePipe,
+        TimeAgoPipe,
+        ContenidoSeoPipe,
+    ],
 })
 export class ComunidadTemaViewComponent implements OnInit {
+  private readonly documento = inject(DOCUMENT);
+  private displayService = inject(DisplayComponentService);
+  private comunidadesService = inject(IHttpComunidadesService);
+  private securityService = inject(IHttpSecurityService);
+  private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
+  private seoService = inject(SEOService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public tema: TemaVista | null = null;
@@ -61,15 +95,7 @@ export class ComunidadTemaViewComponent implements OnInit {
     denunciar: (id, motivo) => this.comunidadesService.denunciarComentario(id, motivo),
   };
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private comunidadesService: IHttpComunidadesService,
-    private securityService: IHttpSecurityService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private notificationService: NotificationService,
-    private seoService: SEOService
-  ) {
+  constructor() {
     this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: true, submenu: true, background: '' });
   }
 
@@ -97,7 +123,7 @@ export class ComunidadTemaViewComponent implements OnInit {
           .createUrlTree(['/comunidades', tema.comunidad?.nombreCorto, 'tema', tema.id, tema.url])
           .toString();
 
-        if (decodeURIComponent(location.pathname) !== decodeURIComponent(rutaCanonica.split('?')[0])) {
+        if (decodeURIComponent(this.documento.location.pathname) !== decodeURIComponent(rutaCanonica.split('?')[0])) {
           // Mismo problema que en posts: el tema se resuelve por id.
           this.router.navigateByUrl(rutaCanonica, { replaceUrl: true });
           return;
@@ -111,7 +137,7 @@ export class ComunidadTemaViewComponent implements OnInit {
           type: 'article',
           imageURL: imagen,
           tags: [tema.titulo, tema.comunidad?.nombre, 'comunidad', 'taringas'].filter((t): t is string => !!t),
-          canonical: `${location.origin}${rutaCanonica}`,
+          canonical: `${environment.publicUrl}${rutaCanonica}`,
           publishedTime: tema.fechaRegistro,
           modifiedTime: tema.fechaRegistro,
           author: tema.userName ?? undefined,
@@ -128,30 +154,30 @@ export class ComunidadTemaViewComponent implements OnInit {
               '@type': 'Person',
               name: tema.userName ?? 'Taringa!',
             },
-            publisher: { '@id': `${location.origin}/#organization` },
-            mainEntityOfPage: { '@type': 'WebPage', '@id': `${location.origin}${location.pathname}` },
+            publisher: { '@id': `${environment.publicUrl}/#organization` },
+            mainEntityOfPage: { '@type': 'WebPage', '@id': `${environment.publicUrl}${this.documento.location.pathname}` },
             commentCount: tema.comentarios.length,
             isPartOf: {
               '@type': 'WebSite',
-              '@id': `${location.origin}/#website`,
+              '@id': `${environment.publicUrl}/#website`,
               name: tema.comunidad?.nombre,
             },
           }, {
             '@type': 'BreadcrumbList',
             itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${location.origin}/` },
-              { '@type': 'ListItem', position: 2, name: 'Comunidades', item: `${location.origin}/comunidades` },
+              { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${environment.publicUrl}/` },
+              { '@type': 'ListItem', position: 2, name: 'Comunidades', item: `${environment.publicUrl}/comunidades` },
               {
                 '@type': 'ListItem',
                 position: 3,
                 name: tema.comunidad?.nombre,
-                item: `${location.origin}/comunidades/${tema.comunidad?.nombreCorto ?? ''}`,
+                item: `${environment.publicUrl}/comunidades/${tema.comunidad?.nombreCorto ?? ''}`,
               },
               {
                 '@type': 'ListItem',
                 position: 4,
                 name: tema.titulo,
-                item: `${location.origin}${location.pathname}`,
+                item: `${environment.publicUrl}${this.documento.location.pathname}`,
               },
             ],
           }],
@@ -179,7 +205,7 @@ export class ComunidadTemaViewComponent implements OnInit {
       return;
     }
 
-    this.securityService
+    this.usuarioPerfilService
       .getUsuarioInfo(userName)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((info) => (this.autor = info ?? null));

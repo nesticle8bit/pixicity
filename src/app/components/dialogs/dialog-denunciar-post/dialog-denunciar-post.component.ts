@@ -1,17 +1,26 @@
-import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { SelectAutocompleteComponent } from '../../shared/select-autocomplete/select-autocomplete.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  standalone: false,
-  selector: 'app-dialog-denunciar-post',
-  templateUrl: './dialog-denunciar-post.component.html',
-  styleUrls: ['./dialog-denunciar-post.component.scss']
+    selector: 'app-dialog-denunciar-post',
+    templateUrl: './dialog-denunciar-post.component.html',
+    styleUrls: ['./dialog-denunciar-post.component.scss'],
+    imports: [MatDialogTitle, FormsModule, ReactiveFormsModule, CdkScrollable, MatDialogContent, SelectAutocompleteComponent, MatDialogActions, MatButton, MatDialogClose]
 })
 export class DialogDenunciarPostComponent implements OnInit {
+  data = inject(MAT_DIALOG_DATA);
+  private formBuilder = inject(FormBuilder);
+  private postService = inject(IHttpPostsService);
+  private dialogRef = inject<MatDialogRef<DialogDenunciarPostComponent>>(MatDialogRef);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
@@ -56,13 +65,7 @@ export class DialogDenunciarPostComponent implements OnInit {
     label: 'Otra razón (por favor especificar)'
   }];
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private formBuilder: FormBuilder,
-    private postService: IHttpPostsService,
-    private dialogRef: MatDialogRef<DialogDenunciarPostComponent>,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({
       postId: [this.data?.id, Validators.required],
       razonDenunciaId: [undefined, Validators.required],

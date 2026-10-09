@@ -1,6 +1,6 @@
 <div class="container container--home foto-create-cc">
   <form [formGroup]="formGroup" (ngSubmit)="submit()" class="cc-grid">
-    <main class="cc-main">
+    <div class="cc-main">
       <section class="cc-card">
         <div class="cc-card__head">
           <span class="cc-card__title"><i class="ti ti-photo"></i> {{ isEdit ? 'Editar foto' : 'Detalles de la foto'
@@ -9,12 +9,12 @@
 
         <div class="cc-field">
           <div class="cc-field__head">
-            <label>Título <span class="cc-req">*</span></label>
+            <label for="foto-create-titulo">Título <span class="cc-req">*</span></label>
             <span class="cc-counter" [class.cc-counter--warn]="(formGroup.value?.titulo?.length || 0) >= 140">
               {{ formGroup.value?.titulo?.length || 0 }}/150
             </span>
           </div>
-          <input type="text" formControlName="titulo" maxlength="150" placeholder="Ponle un buen título a tu foto" />
+          <input id="foto-create-titulo" type="text" formControlName="titulo" maxlength="150" placeholder="Ponle un buen título a tu foto" />
           @if (formGroup.get('titulo')?.touched && formGroup.get('titulo')?.invalid) {
           <small class="cc-err">El título es obligatorio (máx. 150 caracteres).</small>
           }
@@ -22,12 +22,12 @@
 
         <div class="cc-field">
           <div class="cc-field__head">
-            <label>Descripción</label>
+            <label for="foto-create-descripcion">Descripción</label>
             <span class="cc-counter" [class.cc-counter--warn]="(formGroup.value?.descripcion?.length || 0) >= 900">
               {{ formGroup.value?.descripcion?.length || 0 }}/1000
             </span>
           </div>
-          <textarea formControlName="descripcion" maxlength="1000" rows="4"
+          <textarea id="foto-create-descripcion" formControlName="descripcion" maxlength="1000" rows="4"
             placeholder="Cuéntale a la gente de qué trata tu foto… (opcional)"></textarea>
         </div>
       </section>
@@ -38,7 +38,7 @@
         </div>
 
         <div class="cc-field">
-          <label>Origen de la imagen <span class="cc-req">*</span></label>
+          <label for="foto-create-imageUrl">Origen de la imagen <span class="cc-req">*</span></label>
 
           <div class="fc-tabs">
             <button type="button" class="fc-tab" [class.fc-tab--on]="imageSource === 'url'"
@@ -51,7 +51,7 @@
           </div>
 
           @if (imageSource === 'url') {
-          <input type="url" formControlName="imageUrl" class="fc-mt" placeholder="https://ejemplo.com/imagen.jpg"
+          <input id="foto-create-imageUrl" type="url" formControlName="imageUrl" class="fc-mt" placeholder="https://ejemplo.com/imagen.jpg"
             (input)="onUrlChange($event)" />
           }
 
@@ -105,7 +105,7 @@
           }
         </button>
       </div>
-    </main>
+    </div>
 
     <aside class="cc-aside">
       <div class="cc-rules">

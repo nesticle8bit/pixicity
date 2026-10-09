@@ -2,16 +2,28 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { PageEvent } from '@angular/material/paginator';
-import { ActivatedRoute, Router } from '@angular/router';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { NgClass } from '@angular/common';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-profile-posts',
-  templateUrl: './profile-posts.component.html',
-  styleUrls: ['./profile-posts.component.scss'],
+    selector: 'app-profile-posts',
+    templateUrl: './profile-posts.component.html',
+    styleUrls: ['./profile-posts.component.scss'],
+    imports: [
+        NgClass,
+        RouterLink,
+        MatPaginator,
+        TimeAgoPipe,
+    ],
 })
 export class ProfilePostsComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private postService = inject(IHttpPostsService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   private readonly destroyRef = inject(DestroyRef);
 
   private _user: any;
@@ -32,12 +44,7 @@ export class ProfilePostsComponent implements OnInit {
   public totalCount: number = 0;
   public pageIndex: number = 0;
 
-  constructor(
-    public paginationService: PaginationService,
-    private postService: IHttpPostsService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
   }
 

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { Injectable, inject } from '@angular/core';
+import { NotificationService } from './notification.service';
 import { throwError } from 'rxjs';
 
 // Mensaje que errorHandler relanza tras un fallo HTTP; el API ya registró ese error, así que ClientErrorHandler lo ignora.
@@ -10,7 +10,9 @@ export const HTTP_ERROR_GENERICO = 'Something bad happened; please try again lat
   providedIn: 'root',
 })
 export class HelperService {
-  constructor(private toastr: ToastrService) {}
+  // Por NotificationService: en el render del servidor no hay toasts (ngx-toastr usa window).
+  private toastr = inject(NotificationService);
+
 
   generateObjectId = (): string => {
     const timestamp = ((new Date().getTime() / 1000) | 0).toString(16);
@@ -26,7 +28,8 @@ export class HelperService {
   };
 
   errorHandler = (httpError: HttpErrorResponse) => {
-    if (httpError.error instanceof ErrorEvent) {
+    // ErrorEvent no existe en Node (SSR): sin la comprobación, el manejo del error fallaba en el servidor.
+    if (typeof ErrorEvent !== 'undefined' && httpError.error instanceof ErrorEvent) {
       if (httpError?.error?.message) {
         this.toastr.error(
           `An error occurred ${httpError?.error?.message}`,

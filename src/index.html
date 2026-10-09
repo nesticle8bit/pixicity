@@ -3,13 +3,16 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Taringa - Inteligencia colectiva | Comunidad para compartir información</title>
+  <title>Taringa! - Inteligencia colectiva | Posts y comunidades</title>
 
-  <meta name="description"
-    content="Bienvenido a la comunidad de Taringa! Descubrí y compartí información, videos, imágenes y memes en nuestra plataforma ¡Te esperamos!" />
-  <meta name="keywords" content="taringa, comunidad, memes, link sharing system, taringas" />
-  <meta name="author" content="Gorgoroth" />
-  <meta name="robots" content="index, follow, archive" />
+  <!-- Descripción del sitio para Google (resultado de búsqueda) y redes. La portada la vuelve a fijar en
+       SectionHomeForumComponent.setSeoHome(): mantener ambos textos iguales. -->
+  <meta name="description" content="Compartí y descubrí posts, guías, fotos, videos y memes en Taringa!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="author" content="Taringa!" />
+  <meta name="application-name" content="Taringa!" />
+  <meta name="apple-mobile-web-app-title" content="Taringa!" />
+  <meta name="format-detection" content="telephone=no" />
 
   <!-- Prerender (bots): el server de prerender espera a que la app marque -->
   <!-- prerenderReady=true (SEOService) antes de capturar el HTML. Sin esto -->
@@ -18,25 +21,26 @@
 
   <link rel="canonical" href="https://taringas.net/" />
 
+  <!-- Open Graph (Facebook, WhatsApp, Telegram, Discord, LinkedIn) -->
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Taringa! - Inteligencia colectiva" />
+  <meta property="og:site_name" content="Taringa!" />
   <meta property="og:locale" content="es_AR" />
-  <meta property="og:description"
-    content="Bienvenido a la comunidad de Taringa! Descubri y comparti informacion, videos, imagenes y memes en nuestra plataforma" />
-  <meta property="og:title" content="Taringa - Inteligencia colectiva | Comunidad para compartir información" />
-  <meta property="og:url" content="https://taringas.net" />
-  <meta property="og:image" content="https://taringas.net/assets/images/avatar.png" />
+  <meta property="og:url" content="https://taringas.net/" />
+  <meta property="og:title" content="Taringa! - Inteligencia colectiva | Posts y comunidades" />
+  <meta property="og:description" content="Compartí y descubrí posts, guías, fotos, videos y memes en Taringa!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos." />
+  <meta property="og:image" content="https://taringas.net/assets/images/og-image.jpg" />
+  <meta property="og:image:secure_url" content="https://taringas.net/assets/images/og-image.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Taringa! - Inteligencia colectiva" />
 
-  <meta name="twitter:title" content="Taringa - Inteligencia colectiva | Comunidad para compartir información">
-  <meta name="twitter:description"
-    content="Bienvenido a la comunidad de Taringa! Descubrí y compartí información, videos, imágenes y memes en nuestra plataforma ¡Te esperamos!">
-  <meta name="twitter:image" content="https://taringas.net/assets/images/avatar.png">
-  <meta property="og:image:width" content="512" />
-  <meta property="og:image:height" content="512" />
-  <meta property="og:image:alt" content="Taringa!" />
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image:alt" content="Taringa!">
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Taringa! - Inteligencia colectiva | Posts y comunidades" />
+  <meta name="twitter:description" content="Compartí y descubrí posts, guías, fotos, videos y memes en Taringa!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos." />
+  <meta name="twitter:image" content="https://taringas.net/assets/images/og-image.jpg" />
+  <meta name="twitter:image:alt" content="Taringa! - Inteligencia colectiva" />
 
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -82,12 +86,14 @@
         "url": "https://taringas.net/",
         "name": "Taringa!",
         "alternateName": "Taringa - Inteligencia colectiva",
+        "description": "Compartí y descubrí posts, guías, fotos, videos y memes en Taringa!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos.",
         "inLanguage": "es",
+        "publisher": { "@id": "https://taringas.net/#organization" },
         "potentialAction": {
           "@type": "SearchAction",
           "target": {
             "@type": "EntryPoint",
-            "urlTemplate": "https://taringas.net/buscar?q={search_term_string}"
+            "urlTemplate": "https://taringas.net/buscar/posts/{search_term_string}"
           },
           "query-input": "required name=search_term_string"
         }
@@ -97,7 +103,13 @@
         "@id": "https://taringas.net/#organization",
         "name": "Taringa!",
         "url": "https://taringas.net/",
-        "logo": "https://taringas.net/assets/images/avatar.png"
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://taringas.net/assets/images/avatar.png",
+          "width": 512,
+          "height": 512
+        },
+        "image": "https://taringas.net/assets/images/og-image.jpg"
       }
     ]
   }

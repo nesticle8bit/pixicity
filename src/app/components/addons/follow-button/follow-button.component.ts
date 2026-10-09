@@ -4,24 +4,27 @@ import {
   AfterViewInit,
   Component,
   DestroyRef,
-  EventEmitter,
   inject,
   Input,
   OnInit,
-  Output,
+  input,
+  output
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-follow-button',
-  templateUrl: './follow-button.component.html',
-  styleUrls: ['./follow-button.component.scss'],
+    selector: 'app-follow-button',
+    templateUrl: './follow-button.component.html',
+    styleUrls: ['./follow-button.component.scss'],
 })
 export class FollowButtonComponent implements OnInit {
+  private securityService = inject(IHttpSecurityService);
+  private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
+
   private readonly destroyRef = inject(DestroyRef);
 
-  @Input() icon: boolean = false;
+  readonly icon = input<boolean>(false);
 
   private _userName: any;
 
@@ -37,11 +40,11 @@ export class FollowButtonComponent implements OnInit {
     return this._userName;
   }
 
-  @Output() followingChange = new EventEmitter<boolean>();
+  readonly followingChange = output<boolean>();
 
   public isFollowing: boolean = false;
   public currentUser?: JwtUserModel;
-  constructor(private securityService: IHttpSecurityService) {
+  constructor() {
     this.currentUser = this.securityService.getCurrentUser();
   }
 
@@ -52,7 +55,7 @@ export class FollowButtonComponent implements OnInit {
       return;
     }
 
-    this.securityService
+    this.usuarioPerfilService
       .isFollowingTheUser(userName)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => {
@@ -65,7 +68,7 @@ export class FollowButtonComponent implements OnInit {
       userName: this.userName,
     };
 
-    this.securityService.seguirUsuario(follow).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.usuarioPerfilService.seguirUsuario(follow).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.isFollowing = !this.isFollowing;
         this.followingChange.emit(this.isFollowing);

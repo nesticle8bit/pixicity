@@ -3,17 +3,21 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterLinkActive, RouterLink } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 @Component({
-  standalone: false,
-  selector: 'main-submenu',
-  templateUrl: './main-submenu.component.html',
-  styleUrls: ['./main-submenu.component.scss'],
+    selector: 'main-submenu',
+    templateUrl: './main-submenu.component.html',
+    styleUrls: ['./main-submenu.component.scss'],
+    imports: [RouterLinkActive, RouterLink],
 })
 export class MainSubmenuComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  private securityService = inject(IHttpSecurityService);
+  private router = inject(Router);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public currentUser?: JwtUserModel;
@@ -22,11 +26,7 @@ export class MainSubmenuComponent implements OnInit {
   /** Sección activa: define qué items del submenú se muestran */
   public seccion: 'comunidades' | 'general' = 'general';
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private securityService: IHttpSecurityService,
-    private router: Router
-  ) {
+  constructor() {
     this.currentUser = this.securityService.getCurrentUser();
 
     // Reactivo: "Crear Post" / "Moderación" aparecen o desaparecen al iniciar o cerrar sesión.

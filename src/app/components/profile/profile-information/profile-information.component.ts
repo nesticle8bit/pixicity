@@ -2,14 +2,18 @@ import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { DatePipe } from '@angular/common';
+import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-profile-information',
-  templateUrl: './profile-information.component.html',
-  styleUrls: ['./profile-information.component.scss'],
+    selector: 'app-profile-information',
+    templateUrl: './profile-information.component.html',
+    styleUrls: ['./profile-information.component.scss'],
+    imports: [DatePipe],
 })
 export class ProfileInformationComponent implements OnInit {
+  private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   private _user: any;
@@ -28,8 +32,6 @@ export class ProfileInformationComponent implements OnInit {
   public perfil: any;
   public userInformation: any = {};
 
-  constructor(private securityService: IHttpSecurityService) {}
-
   ngOnInit(): void {
     this.getCurrentPerfilInfo();
   }
@@ -39,7 +41,7 @@ export class ProfileInformationComponent implements OnInit {
       return;
     }
 
-    this.securityService
+    this.usuarioPerfilService
       .getPerfilInfoByUserId(this.user.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {

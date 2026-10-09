@@ -24,7 +24,7 @@
                 {{tema.userName}}
               </a>
               @if (autor && autor.rango && autor.rango.nombre) {
-              <span class="sidebar-rango" [ngStyle]="{'color': autor.rango.color}">
+              <span class="sidebar-rango" [style.--rango]="autor.rango.color">
                 <img src="/assets/images/icons/rangos/{{autor.rango.icono}}" alt="" aria-hidden="true" loading="lazy">
                 {{autor.rango.nombre}}
               </span>
@@ -112,7 +112,7 @@
         </aside>
 
         <!-- Contenido principal -->
-        <main class="detail-main">
+        <div class="detail-main">
           <nav class="com-breadcrumb" aria-label="Ruta">
             <a [routerLink]="['/comunidades']">Comunidades</a>
             <span>›</span>
@@ -171,7 +171,7 @@
             [puedeFijar]="esAdmin || esDuenoComunidad" [puedeBorrarTodos]="esDuenoComunidad"
             [autorContenido]="tema.userName" (totalCambio)="totalComentarios = $event">
           </app-comentarios>
-        </main>
+        </div>
       </div>
     </div>
   </div>

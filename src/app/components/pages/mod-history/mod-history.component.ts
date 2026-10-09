@@ -3,23 +3,25 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { NgClass } from '@angular/common';
 
 @Component({
-  standalone: false,
-  selector: 'app-mod-history',
-  templateUrl: './mod-history.component.html',
-  styleUrls: ['./mod-history.component.scss'],
+    selector: 'app-mod-history',
+    templateUrl: './mod-history.component.html',
+    styleUrls: ['./mod-history.component.scss'],
+    imports: [UserPopoverDirective, NgClass],
 })
 export class ModHistoryComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  private webService = inject(IHttpWebService);
+  private title = inject(Title);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public posts: any[] = [];
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private webService: IHttpWebService,
-    private title: Title
-  ) {
+  constructor() {
     this.title.setTitle(`Historial de moderación | Taringa - Inteligencia colectiva | Comunidad para Compartir Información`);
     this.displayService.setDisplay({
       mainMenu: true,

@@ -7,16 +7,16 @@
     <div class="row">
       <div class="col-12">
         <div class="mb-3">
-          <label class="form-label">Palabra o frase prohibida</label>
-          <input type="text" class="form-control" formControlName="palabra" cdkFocusInitial
+          <label class="form-label" for="dialog-create-update-censuras-palabra">Palabra o frase prohibida</label>
+          <input id="dialog-create-update-censuras-palabra" type="text" class="form-control" formControlName="palabra" cdkFocusInitial
             placeholder="Ej. malapalabra" />
         </div>
       </div>
 
       <div class="col-12">
         <div class="mb-3">
-          <label class="form-label">Reemplazo</label>
-          <input type="text" class="form-control" formControlName="reemplazo" placeholder="*** (por defecto)" />
+          <label class="form-label" for="dialog-create-update-censuras-reemplazo">Reemplazo</label>
+          <input id="dialog-create-update-censuras-reemplazo" type="text" class="form-control" formControlName="reemplazo" placeholder="*** (por defecto)" />
           <small class="text-muted">Si lo dejas vacío se usará <code>***</code>.</small>
         </div>
       </div>

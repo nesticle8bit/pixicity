@@ -1,19 +1,35 @@
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { PageEvent } from '@angular/material/paginator';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { RouterLink } from '@angular/router';
+import { MatTooltip } from '@angular/material/tooltip';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-borradores',
-  templateUrl: './borradores.component.html',
-  styleUrls: ['./borradores.component.scss'],
+    selector: 'app-borradores',
+    templateUrl: './borradores.component.html',
+    styleUrls: ['./borradores.component.scss'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        RouterLink,
+        MatTooltip,
+        MatPaginator,
+        TimeAgoPipe,
+    ],
 })
 export class BorradoresComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  paginationService = inject(PaginationService);
+  private postService = inject(IHttpPostsService);
+  private formBuilder = inject(FormBuilder);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public borradores: any[] = [];
@@ -21,13 +37,7 @@ export class BorradoresComponent implements OnInit {
   public totalCount: number = 0;
   public formGroup: FormGroup;
 
-  constructor(
-    private displayService: DisplayComponentService,
-    public paginationService: PaginationService,
-    private postService: IHttpPostsService,
-    private formBuilder: FormBuilder,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
 
     this.formGroup = this.formBuilder.group({

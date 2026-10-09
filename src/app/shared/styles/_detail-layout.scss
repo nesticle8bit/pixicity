@@ -51,7 +51,7 @@
 .sidebar-section-title {
   font-size: .72rem;
   font-weight: 700;
-  color: #999;
+  color: #6b6b6b;
   text-transform: uppercase;
   letter-spacing: .06em;
   margin-bottom: 10px;
@@ -86,13 +86,13 @@
   text-overflow: ellipsis;
 
   &:hover {
-    color: #007bff;
+    color: #0062cc;
   }
 }
 
 .sidebar-last-seen {
   font-size: .72rem;
-  color: #aaa;
+  color: #6b6b6b;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -105,7 +105,7 @@
 
 .sidebar-ver-perfil {
   font-size: .75rem;
-  color: #007bff;
+  color: #0062cc;
   text-decoration: none;
   margin-top: 2px;
 
@@ -139,7 +139,7 @@
 
   .stat-lbl {
     font-size: .68rem;
-    color: #999;
+    color: #6b6b6b;
     margin-top: 2px;
   }
 }
@@ -158,7 +158,7 @@
   padding: 4px 8px;
   border-radius: 20px;
   background: #eef4ff;
-  color: #3a7bd5;
+  color: #1f5fb8;
   text-decoration: none;
   transition: background .15s;
 
@@ -186,7 +186,7 @@
     i.ti {
       width: 14px;
       text-align: center;
-      color: #aaa;
+      color: #6b6b6b;
     }
 
     &.stat-pos i.ti {
@@ -208,7 +208,7 @@
 
 .ver-todas-link {
   font-size: .74rem;
-  color: #007bff;
+  color: #0062cc;
   text-decoration: none;
 
   &:hover {
@@ -229,7 +229,7 @@
   align-items: center;
   gap: 12px;
   font-size: .85rem;
-  color: #777;
+  color: #666;
   margin-bottom: 10px;
 }
 

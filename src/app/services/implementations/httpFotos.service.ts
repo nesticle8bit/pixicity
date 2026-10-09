@@ -14,12 +14,10 @@ import { NotificationService } from '../shared/notification.service';
 
 @Injectable()
 export class HttpFotosService implements IHttpFotosService {
-  private readonly notificationService = inject(NotificationService);
+  private http = inject(HttpClient);
+  private helper = inject(HelperService);
 
-  constructor(
-    private http: HttpClient,
-    private helper: HelperService
-  ) {}
+  private readonly notificationService = inject(NotificationService);
 
   /** Devuelve data si el API respondió bien; si no, muestra el error al usuario y falla. */
   private datos<T>() {

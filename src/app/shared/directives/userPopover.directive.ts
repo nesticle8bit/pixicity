@@ -1,38 +1,29 @@
-import {
-  ComponentRef,
-  Directive,
-  ElementRef,
-  HostListener,
-  Input,
-  OnDestroy,
-  ViewContainerRef,
-} from '@angular/core';
+import { ComponentRef, Directive, ElementRef, HostListener, OnDestroy, ViewContainerRef, input, inject } from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { forkJoin } from 'rxjs';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { UserPopoverCardComponent } from 'src/app/components/addons/user-popover-card/user-popover-card.component';
+import { IHttpUsuarioPerfilService } from '../../services/interfaces/httpUsuarioPerfil.interface';
 
 // Shared cache across all directive instances
 const USER_CACHE = new Map<string, { userData: any; activo: number | null }>();
 const PENDING = new Set<string>();
 
-@Directive({ selector: '[appUserPopover]', standalone: false })
+@Directive({ selector: '[appUserPopover]' })
 export class UserPopoverDirective implements OnDestroy {
+  private el = inject(ElementRef);
+  private overlay = inject(Overlay);
+  private vcr = inject(ViewContainerRef);
+  private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
+
   // Acepta null/undefined (usuarios borrados o datos aún cargando): sin nombre no se abre el popover.
-  @Input({ alias: 'appUserPopover', transform: (v: string | null | undefined) => v ?? '' }) userName: string = '';
+  readonly userName = input<string, string | null | undefined>('', { alias: "appUserPopover", transform: (v: string | null | undefined) => v ?? '' });
 
   private overlayRef: OverlayRef | null = null;
   private cardRef: ComponentRef<UserPopoverCardComponent> | null = null;
   private showTimer: ReturnType<typeof setTimeout> | null = null;
   private hideTimer: ReturnType<typeof setTimeout> | null = null;
-
-  constructor(
-    private el: ElementRef,
-    private overlay: Overlay,
-    private vcr: ViewContainerRef,
-    private securityService: IHttpSecurityService
-  ) {}
 
   @HostListener('mouseenter')
   onMouseEnter(): void {
@@ -47,7 +38,8 @@ export class UserPopoverDirective implements OnDestroy {
   }
 
   private show(): void {
-    if (!this.userName || this.overlayRef) return;
+    const userName = this.userName();
+    if (!userName || this.overlayRef) return;
 
     this.overlayRef = this.overlay.create({
       positionStrategy: this.overlay
@@ -88,7 +80,7 @@ export class UserPopoverDirective implements OnDestroy {
     const portal = new ComponentPortal(UserPopoverCardComponent, this.vcr);
     this.cardRef = this.overlayRef.attach(portal);
 
-    const cached = USER_CACHE.get(this.userName);
+    const cached = USER_CACHE.get(userName);
     if (cached) {
       this.cardRef.setInput('userData', cached.userData);
       this.cardRef.setInput('activo', cached.activo);
@@ -117,17 +109,19 @@ export class UserPopoverDirective implements OnDestroy {
   }
 
   private loadUserData(): void {
-    if (PENDING.has(this.userName)) return;
-    PENDING.add(this.userName);
+    const userName = this.userName();
+    if (PENDING.has(userName)) return;
+    PENDING.add(userName);
 
     forkJoin({
-      info: this.securityService.getUsuarioInfo(this.userName),
-      status: this.securityService.getUserStatus(this.userName),
+      info: this.usuarioPerfilService.getUsuarioInfo(userName),
+      status: this.usuarioPerfilService.getUserStatus(userName),
     }).subscribe({
       next: ({ info, status }: any) => {
         const entry = { userData: info, activo: status ?? null };
-        USER_CACHE.set(this.userName, entry);
-        PENDING.delete(this.userName);
+        const userNameValue = this.userName();
+        USER_CACHE.set(userNameValue, entry);
+        PENDING.delete(userNameValue);
 
         // Update card if still open
         if (this.cardRef) {
@@ -137,7 +131,7 @@ export class UserPopoverDirective implements OnDestroy {
         }
       },
       error: () => {
-        PENDING.delete(this.userName);
+        PENDING.delete(this.userName());
         if (this.cardRef) {
           this.cardRef.setInput('userData', null);
           this.cardRef.setInput('loading', false);

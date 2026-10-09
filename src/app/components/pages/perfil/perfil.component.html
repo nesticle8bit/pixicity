@@ -36,7 +36,7 @@
                         [title]="currentUser?.pais?.nombre"></addon-country-flag>
                       <!-- <i class="icon date"></i> -->
 
-                      <img class="mx-2" src="/assets/images/icons/date.png"
+                      <img loading="lazy" decoding="async" class="mx-2" src="/assets/images/icons/date.png"
                         matTooltip="Se unió a Taringa! el {{currentUser?.fechaRegistro | date:'dd'}} de {{currentUser?.fechaRegistro | date:'MMMM'}} del {{currentUser?.fechaRegistro | date: 'YYYY'}}" alt="" aria-hidden="true"/>
                     </div>
                   </div>
@@ -109,7 +109,7 @@
 
                   @if (loggedUser?.usuario && loggedUser?.usuario?.userName !== currentUser.userName) {
                   <div class="col-12 col-sm-2">
-                    <main>
+                    <div>
                       @if (!bloqueoActivo) {
                       <a class="button-uppercase brojo" (click)="bloquearUsuario()" role="button" tabindex="0" (keydown.enter)="bloquearUsuario()" (keydown.space)="bloquearUsuario(); $event.preventDefault()">
                         <i class="ti ti-ban"></i> Bloquear
@@ -119,7 +119,7 @@
                         <i class="ti ti-lock-open"></i> Desbloquear
                       </a>
                       }
-                    </main>
+                    </div>
                   </div>
                   }
                 </div>

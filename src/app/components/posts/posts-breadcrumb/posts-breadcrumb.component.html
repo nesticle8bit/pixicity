@@ -1,6 +1,6 @@
 <ul class="list-unstyled list-inline post-header-list">
     <li class="list-inline-item mr-2">
-        <i class="ti ti-clock"></i> {{post?.fechaRegistro | timeAgo}}
+        <i class="ti ti-clock"></i> {{post()?.fechaRegistro | timeAgo}}
     </li>
 
     <li class="list-inline-item">
@@ -10,14 +10,14 @@
     </li>
 
     <li class="list-inline-item">
-        <a [routerLink]="['/posts/' + post?.categoria?.seo]">
-            <i class="ti ti-chevron-right"></i> {{post?.categoria?.nombre}}
+        <a [routerLink]="['/posts/' + post()?.categoria?.seo]">
+            <i class="ti ti-chevron-right"></i> {{post()?.categoria?.nombre}}
         </a>
     </li>
 
     <li class="list-inline-item">
-        <a [routerLink]="['/posts/' + post?.categoria?.seo + '/' + post?.id + '/' + post?.url]">
-            <i class="ti ti-chevron-right"></i> {{post?.titulo}}
+        <a [routerLink]="['/posts/' + post()?.categoria?.seo + '/' + post()?.id + '/' + post()?.url]">
+            <i class="ti ti-chevron-right"></i> {{post()?.titulo}}
         </a>
     </li>
 </ul>

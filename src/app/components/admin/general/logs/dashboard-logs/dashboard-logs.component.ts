@@ -1,20 +1,36 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { AppLog, AppLogFiltro, AppLogGrupo, AppLogNivel, AppLogOrigen, AppLogResumen } from 'src/app/models/logs/app-log.model';
 import { IHttpAppLogsService } from 'src/app/services/interfaces/httpAppLogs.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { NgClass, NgTemplateOutlet, DatePipe } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
+import { FormsModule } from '@angular/forms';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-dashboard-logs',
-  templateUrl: './dashboard-logs.component.html',
-  styleUrls: ['./dashboard-logs.component.scss'],
+    selector: 'app-dashboard-logs',
+    templateUrl: './dashboard-logs.component.html',
+    styleUrls: ['./dashboard-logs.component.scss'],
+    imports: [
+        NgClass,
+        MatTooltip,
+        FormsModule,
+        NgTemplateOutlet,
+        MatPaginator,
+        DatePipe,
+        TimeAgoPipe,
+    ],
 })
 export class DashboardLogsComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private appLogsService = inject(IHttpAppLogsService);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
   private readonly busqueda$ = new Subject<string>();
 
@@ -39,11 +55,7 @@ export class DashboardLogsComponent implements OnInit {
     { valor: 'frontend', nombre: 'Navegador' },
   ];
 
-  constructor(
-    public paginationService: PaginationService,
-    private appLogsService: IHttpAppLogsService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 

@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
@@ -11,11 +11,10 @@ import { ModeracionLog, PaginaReportes } from 'src/app/models/admin/moderacion.m
 
 @Injectable()
 export class HttpModeracionService implements IHttpModeracionService {
-  constructor(
-    private notificationService: NotificationService,
-    private helper: HelperService,
-    private http: HttpClient
-  ) {}
+  private notificationService = inject(NotificationService);
+  private helper = inject(HelperService);
+  private http = inject(HttpClient);
+
 
   private unwrap<T>() {
     return map((response: ApiResponse<T>) => {

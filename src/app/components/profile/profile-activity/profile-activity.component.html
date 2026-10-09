@@ -2,7 +2,7 @@
   <span>Última actividad de {{user.userName}}</span>
 
   <strong class="float-end">
-    <select class="form-select form-select-xs" formControlName="tipoActividad" (change)="getActividadUsuario()">
+    <select class="form-select form-select-xs" formControlName="tipoActividad" aria-label="Filtrar actividad por tipo" (change)="getActividadUsuario()">
       <option value="" selected>Todas</option>
       @for (tipo of tipoActividades; track tipo) {
         <option value="{{tipo.value}}">{{tipo.key}}</option>

@@ -1,18 +1,41 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { RouterLink } from '@angular/router';
+import { SelectAutocompleteComponent } from '../../shared/select-autocomplete/select-autocomplete.component';
+import { SelectLabelDirective, SelectOptionDirective } from '../../shared/select-autocomplete/select-template.directives';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-tops',
-  templateUrl: './tops.component.html',
-  styleUrls: ['./tops.component.scss'],
+    selector: 'app-tops',
+    templateUrl: './tops.component.html',
+    styleUrls: ['./tops.component.scss'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        RouterLink,
+        SelectAutocompleteComponent,
+        SelectLabelDirective,
+        SelectOptionDirective,
+        MatRadioGroup,
+        MatRadioButton,
+        AdsByTypeComponent,
+        TruncatePipe,
+    ],
 })
 export class TopsComponent implements OnInit {
+  private httpParametrosService = inject(IHttpParametrosService);
+  private displayService = inject(DisplayComponentService);
+  private postService = inject(IHttpPostsService);
+  private formBuilder = inject(FormBuilder);
+  private seoService = inject(SEOService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
@@ -20,13 +43,7 @@ export class TopsComponent implements OnInit {
   public topPosts: any;
   public date: string = 'all';
 
-  constructor(
-    private httpParametrosService: IHttpParametrosService,
-    private displayService: DisplayComponentService,
-    private postService: IHttpPostsService,
-    private formBuilder: FormBuilder,
-    private seoService: SEOService
-  ) {
+  constructor() {
     this.seoService.setSEO({
       title: 'Tops | Los mejores posts de Taringa',
       description:

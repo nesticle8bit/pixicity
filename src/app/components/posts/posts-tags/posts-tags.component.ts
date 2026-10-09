@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  standalone: false,
-  selector: 'app-posts-tags',
-  templateUrl: './posts-tags.component.html',
-  styleUrls: ['./posts-tags.component.scss']
+    selector: 'app-posts-tags',
+    templateUrl: './posts-tags.component.html',
+    styleUrls: ['./posts-tags.component.scss'],
+    imports: [RouterLink]
 })
 export class PostsTagsComponent implements OnInit {
   private _post: any;

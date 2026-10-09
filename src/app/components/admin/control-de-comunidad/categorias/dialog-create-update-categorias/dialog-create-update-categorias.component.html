@@ -6,7 +6,7 @@
   <mat-dialog-content>
     @if (formGroup.value?.id) {
       <div class="mb-3">
-        <label>Id</label> <br>
+        <label for="dialog-create-update-categorias-nombre">Id</label> <br>
         <span class="badge bg-primary">{{formGroup.value?.id}}</span>
       </div>
     }
@@ -35,15 +35,15 @@
       <div class="col-12 col-sm-12 col-md-6">
         <div class="mb-3">
           <label>Nombre <strong class="text-danger">*</strong></label>
-          <input type="text" class="form-control" formControlName="nombre" [maxLength]="100"
+          <input id="dialog-create-update-categorias-nombre" type="text" class="form-control" formControlName="nombre" [maxLength]="100"
             cdkFocusInitial />
           </div>
         </div>
 
         <div class="col-12 col-sm-12 col-md-6">
           <div class="mb-3">
-            <label>SEO <strong class="text-danger">*</strong></label>
-            <input type="text" class="form-control" formControlName="seo" [maxLength]="100" />
+            <label for="dialog-create-update-categorias-seo">SEO <strong class="text-danger">*</strong></label>
+            <input id="dialog-create-update-categorias-seo" type="text" class="form-control" formControlName="seo" [maxLength]="100" />
           </div>
         </div>
       </div>

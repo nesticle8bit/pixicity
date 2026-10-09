@@ -16,14 +16,13 @@ describe('DialogAfiliarseComponent', () => {
     general = jasmine.createSpyObj('IHttpGeneralService', ['saveAfiliacion']);
 
     await TestBed.configureTestingModule({
-      declarations: [DialogAfiliarseComponent],
-      imports: [ReactiveFormsModule],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [
+    imports: [ReactiveFormsModule, DialogAfiliarseComponent],
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [
         { provide: IHttpGeneralService, useValue: general },
         { provide: MatDialogRef, useValue: {} },
-      ],
-    })
+    ],
+})
       .overrideComponent(DialogAfiliarseComponent, { set: { template: '' } })
       .compileComponents();
 

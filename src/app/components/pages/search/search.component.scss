@@ -3,7 +3,7 @@ $accent-dark: #004160;
 $accent-soft: rgba(0, 101, 149, 0.08);
 $borde: #e4e4e4;
 $texto: #333;
-$suave: #777;
+$suave: #666;
 $mark: #fff1a8;
 
 :host {
@@ -32,7 +32,7 @@ $mark: #fff1a8;
   &__icono {
     position: absolute;
     left: 14px;
-    color: #999;
+    color: #6b6b6b;
     font-size: 18px;
     pointer-events: none;
   }
@@ -214,7 +214,7 @@ $mark: #fff1a8;
     padding: 4px 9px 4px 4px;
     border: none;
     background: none;
-    color: #aaa;
+    color: #6b6b6b;
     cursor: pointer;
 
     &:hover {
@@ -270,7 +270,7 @@ $mark: #fff1a8;
 
   &__total {
     font-size: 12px;
-    color: #999;
+    color: #6b6b6b;
   }
 }
 
@@ -316,7 +316,7 @@ $mark: #fff1a8;
   }
 
   &__rango {
-    color: #999;
+    color: #6b6b6b;
   }
 }
 
@@ -410,7 +410,7 @@ $mark: #fff1a8;
     align-items: center;
     gap: 6px;
     font-size: 12px;
-    color: #999;
+    color: #6b6b6b;
   }
 
   &__cat {
@@ -643,7 +643,7 @@ $mark: #fff1a8;
     &::after {
       content: '▾';
       margin-left: auto;
-      color: #999;
+      color: #6b6b6b;
     }
   }
 
@@ -690,7 +690,7 @@ $mark: #fff1a8;
   &__vacio {
     margin: 0;
     font-size: 12.5px;
-    color: #999;
+    color: #6b6b6b;
   }
 }
 
@@ -739,7 +739,7 @@ $mark: #fff1a8;
     border-radius: 999px;
     background: #f0f0f0;
     font-size: 11.5px;
-    color: #777;
+    color: #666;
   }
 }
 
@@ -793,7 +793,7 @@ $mark: #fff1a8;
     transform: translateY(-50%);
     border: none;
     background: none;
-    color: #999;
+    color: #6b6b6b;
     cursor: pointer;
   }
 }

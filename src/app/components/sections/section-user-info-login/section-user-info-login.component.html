@@ -2,7 +2,7 @@
   <section>
     <form [formGroup]="formGroup" (ngSubmit)="buscar()" class="d-none d-md-block"
       style="float:right; margin-top: 17px;">
-      <input type="text" id="ibuscadorq" name="q" placeholder="Buscar..." title="Buscar..." formControlName="search"
+      <input type="text" id="ibuscadorq" name="q" aria-label="Buscar" placeholder="Buscar..." title="Buscar..." formControlName="search"
         class="mini_ibuscador onblur_effect">
         <input vspace="2" hspace="10" type="submit" alt="Buscar" value="" title="Buscar" class="mini_bbuscador" />
       </form>
@@ -148,7 +148,7 @@
                     <app-user-avatar [class]="'avamu'" [avatar]="currentUser.usuario?.avatar"
                     [userName]="currentUser.usuario?.userName" [height]="20"></app-user-avatar>
                     <span>{{currentUser.usuario?.userName}}</span>
-                    <img class="punti" src="/assets/images/ui/arrowd.png" alt="" aria-hidden="true"/>
+                    <img loading="lazy" decoding="async" class="punti" src="/assets/images/ui/arrowd.png" alt="" aria-hidden="true"/>
                   </a>
                   <div class="menuver" style="top: 16px; z-index: 1;" [style.display]="displayMenu ? 'block' : 'none'"
                     (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
@@ -170,7 +170,7 @@
 
         @if (!currentUser.usuario) {
           <div>
-            <a class="registro float-end" [routerLink]="['/registro']"></a>
+            <a class="registro float-end" [routerLink]="['/registro']" aria-label="Crear una cuenta"></a>
             <a class="identificarse float-end" [routerLink]="['/login']">Identificarme</a>
           </div>
         }

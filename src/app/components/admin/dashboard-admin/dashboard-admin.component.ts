@@ -8,6 +8,14 @@ import {
   DashboardResumen,
   DashboardSerieDia,
 } from 'src/app/models/admin/dashboard.model';
+import { MatIcon } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AdminSparklineComponent } from '../shared/admin-sparkline/admin-sparkline.component';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { NgStyle, LowerCasePipe, DecimalPipe, DatePipe } from '@angular/common';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 
 interface KpiCard {
   clave: 'usuarios' | 'posts' | 'comentarios' | 'shouts';
@@ -26,10 +34,22 @@ interface AccesoRapido {
 }
 
 @Component({
-  standalone: false,
-  selector: 'app-dashboard-admin',
-  templateUrl: './dashboard-admin.component.html',
-  styleUrls: ['./dashboard-admin.component.scss'],
+    selector: 'app-dashboard-admin',
+    templateUrl: './dashboard-admin.component.html',
+    styleUrls: ['./dashboard-admin.component.scss'],
+    imports: [
+        MatIcon,
+        RouterLink,
+        MatTooltip,
+        AdminSparklineComponent,
+        UserAvatarComponent,
+        UserPopoverDirective,
+        NgStyle,
+        LowerCasePipe,
+        DecimalPipe,
+        DatePipe,
+        TimeAgoPipe,
+    ],
 })
 export class DashboardAdminComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);

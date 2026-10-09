@@ -3,20 +3,46 @@ import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filt
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DialogCreateUpdatePaginasComponent } from '../dialog-create-update-paginas/dialog-create-update-paginas.component';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { NgClass } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
+import { UserAvatarComponent } from '../../../../addons/user-avatar/user-avatar.component';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-paginas',
-  templateUrl: './table-paginas.component.html',
-  styleUrls: ['./table-paginas.component.scss'],
+    selector: 'app-table-paginas',
+    templateUrl: './table-paginas.component.html',
+    styleUrls: ['./table-paginas.component.scss'],
+    imports: [
+        AdminFiltrosComponent,
+        MatButton,
+        MatIcon,
+        NgClass,
+        MatTooltip,
+        UserAvatarComponent,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatPaginator,
+        TimeAgoPipe,
+    ],
 })
 export class TablePaginasComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private webService = inject(IHttpWebService);
+  private formBuilder = inject(FormBuilder);
+  private dialog = inject(MatDialog);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public paginas: any[] = [];
@@ -33,13 +59,7 @@ export class TablePaginasComponent implements OnInit {
   };
   public formGroup: FormGroup;
 
-  constructor(
-    public paginationService: PaginationService,
-    private webService: IHttpWebService,
-    private formBuilder: FormBuilder,
-    private dialog: MatDialog,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({
       search: '',
     });

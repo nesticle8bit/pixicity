@@ -71,7 +71,7 @@
       outline: none;
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
-      &::placeholder { color: #aaa; }
+      &::placeholder { color: #6b6b6b; }
       &:focus { border-color: $accent; box-shadow: 0 0 0 2px rgba(0, 133, 196, 0.13); }
     }
 
@@ -82,7 +82,7 @@
 
   .cc-counter {
     font-size: 11px;
-    color: #999;
+    color: #6b6b6b;
     &--warn { color: #e67e22; font-weight: 600; }
   }
 
@@ -205,7 +205,7 @@
     cursor: pointer;
     font-size: 12px;
     font-weight: 600;
-    color: #6a7882;
+    color: #52606a;
     padding: 5px 14px;
     border-radius: 18px;
     display: inline-flex;

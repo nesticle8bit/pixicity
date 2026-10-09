@@ -19,13 +19,13 @@ describe('RichEditorComponent', () => {
     notifications = jasmine.createSpyObj('NotificationService', ['warning', 'error', 'success']);
 
     await TestBed.configureTestingModule({
-      declarations: [RichEditorComponent],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [
+    imports: [RichEditorComponent],
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [
         { provide: IHttpFotosService, useValue: { uploadImage: () => upload$ } },
         { provide: NotificationService, useValue: notifications },
-      ],
-    }).compileComponents();
+    ],
+}).compileComponents();
 
     fixture = TestBed.createComponent(RichEditorComponent);
     component = fixture.componentInstance;

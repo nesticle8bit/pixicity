@@ -33,7 +33,7 @@
         @for (foto of fotos; track foto.id) {
         <div class="foto-card">
           <a [routerLink]="['/fotos', foto.usuario, foto.id, foto.url]" class="foto-thumb">
-            <img [src]="foto.imageUrl" [alt]="foto.titulo" loading="lazy">
+            <img [src]="foto.imageUrl | thumb: 280" [alt]="foto.titulo" loading="lazy">
             <div class="foto-overlay">
               <span class="foto-overlay-title">{{foto.titulo}}</span>
               <div class="foto-overlay-stats">

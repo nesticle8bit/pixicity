@@ -10,7 +10,7 @@
 <div class="clearfix"></div>
 
 @if (censuras.length > 0) {
-  <main class="table-responsive">
+  <div class="table-responsive">
     <table class="table table-sm table-striped table-hover">
       <thead>
         <tr>
@@ -35,7 +35,7 @@
               <code>{{censura.reemplazo || '***'}}</code>
             </td>
             <td class="text-center" width="30px">
-              <button class="btn-menu" [matMenuTriggerFor]="menu">
+              <button type="button" class="btn-menu" aria-label="Acciones" [matMenuTriggerFor]="menu">
                 <i class="ti ti-dots-vertical"></i>
               </button>
               <mat-menu #menu="matMenu">
@@ -53,7 +53,7 @@
         }
       </tbody>
     </table>
-  </main>
+  </div>
 } @else if (!cargando) {
   <div class="adm-vacio"><i class="ti ti-database-search" aria-hidden="true"></i>{{ filtro.q || filtro.estado || filtro.usuario || filtro.desde || filtro.hasta ? 'No hay resultados con estos filtros.' : 'No hay palabras censuradas todavía.' }}</div>
 }

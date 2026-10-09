@@ -1,22 +1,53 @@
+import { environment } from 'src/environments/environment';
 import { DisplayComponentService } from './services/shared/displayComponents.service';
 import { DisplayComponentModel } from './models/shared/displayComponent.model';
-import { Component, DestroyRef, EventEmitter, inject, Output } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { Component, DestroyRef, EventEmitter, inject, Output, PLATFORM_ID, RESPONSE_INIT } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser, NgStyle } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { SEOService } from './services/shared/seo.service';
 import { SEOModel } from './models/shared/seo.model';
 import { Meta, Title } from '@angular/platform-browser';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { MainHeaderComponent } from './components/main/main-header/main-header.component';
+import { MobileDrawerComponent } from './components/main/mobile-drawer/mobile-drawer.component';
+import { MainMenuComponent } from './components/main/main-menu/main-menu.component';
+import { MainSubmenuComponent } from './components/main/main-submenu/main-submenu.component';
+import { MainUltimasNoticiasComponent } from './components/main/main-ultimas-noticias/main-ultimas-noticias.component';
+import { MainFooterComponent } from './components/main/main-footer/main-footer.component';
+
+/** Tarjeta social del sitio (1200x630) para páginas sin imagen propia. */
+const DEFAULT_OG_IMAGE = '/assets/images/og-image.jpg';
 
 @Component({
-  standalone: false,
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    imports: [
+        NgxUiLoaderModule,
+        MainHeaderComponent,
+        MobileDrawerComponent,
+        MainMenuComponent,
+        MainSubmenuComponent,
+        MainUltimasNoticiasComponent,
+        NgStyle,
+        RouterOutlet,
+        MainFooterComponent,
+    ],
 })
 export class AppComponent {
+  private displayComponentService = inject(DisplayComponentService);
+  private seoService = inject(SEOService);
+  private router = inject(Router);
+  private title = inject(Title);
+  private meta = inject(Meta);
+
   private readonly destroyRef = inject(DestroyRef);
   private readonly document = inject(DOCUMENT);
+  // En el render del servidor (SSR, solo para bots) no hay window ni prerender: ver isPlatformBrowser.
+  private readonly esNavegador = isPlatformBrowser(inject(PLATFORM_ID));
+  // Respuesta HTTP del render en el servidor: permite devolver 404/403 reales a los bots.
+  private readonly respuestaSsr = inject(RESPONSE_INIT, { optional: true });
   private prerenderTimer: any = null;
 
   public displayComponent: DisplayComponentModel = {
@@ -27,13 +58,7 @@ export class AppComponent {
     background: '',
   };
 
-  constructor(
-    private displayComponentService: DisplayComponentService,
-    private seoService: SEOService,
-    private router: Router,
-    private title: Title,
-    private meta: Meta,
-  ) {
+  constructor() {
     this.displayComponentService
       .getDisplay()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -77,15 +102,19 @@ export class AppComponent {
         });
       }
 
+      // og:image debe ser absoluta: las redes y Google descartan las relativas. Sin imagen propia se usa la
+      // tarjeta del sitio (1200x630); si no, quedaba la imagen de la página anterior al navegar.
+      const imagen = this.toAbsoluteUrl(value.imageURL || DEFAULT_OG_IMAGE);
+      this.meta.updateTag({ property: 'og:image', content: imagen });
+      this.meta.updateTag({ name: 'twitter:image', content: imagen });
+      this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
       if (value.imageURL) {
-        // og:image debe ser absoluta: las redes y Google descartan las relativas.
-        const imagen = this.toAbsoluteUrl(value.imageURL);
-        this.meta.updateTag({ property: 'og:image', content: imagen });
-        this.meta.updateTag({ name: 'twitter:image', content: imagen });
-        this.meta.updateTag({
-          name: 'twitter:card',
-          content: 'summary_large_image',
-        });
+        // Las dimensiones de la tarjeta por defecto no aplican a una imagen arbitraria.
+        this.meta.removeTag("property='og:image:width'");
+        this.meta.removeTag("property='og:image:height'");
+      } else {
+        this.meta.updateTag({ property: 'og:image:width', content: '1200' });
+        this.meta.updateTag({ property: 'og:image:height', content: '630' });
       }
 
       if (value.type) {
@@ -124,10 +153,12 @@ export class AppComponent {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
-      window.scrollTo(0, 0);
+      if (this.esNavegador) {
+        window.scrollTo(0, 0);
+      }
       // Canonical por defecto = URL absoluta actual (sin query params).
       // Si una página setea uno específico vía SEOService, lo sobrescribe.
-      const origin = this.document.location.origin;
+      const origin = environment.publicUrl;
       const [path, query] = evt.urlAfterRedirects.split('?');
       // Se conserva ?page= : cada pagina de un listado es una URL distinta y
       // necesita canonical propio, si no Google descarta las paginas 2..N.
@@ -143,6 +174,9 @@ export class AppComponent {
    * la pagina publica su SEO; el timer es el fallback para vistas que no lo hacen.
    */
   private resetPrerenderReady(): void {
+    if (!this.esNavegador) {
+      return;
+    }
     (window as any).prerenderReady = false;
 
     if (this.prerenderTimer) {
@@ -153,6 +187,9 @@ export class AppComponent {
   }
 
   private markPrerenderReady(): void {
+    if (!this.esNavegador) {
+      return;
+    }
     if (this.prerenderTimer) {
       clearTimeout(this.prerenderTimer);
       this.prerenderTimer = null;
@@ -202,12 +239,20 @@ export class AppComponent {
     }
   }
 
+  /** Skip-link: mueve el foco al contenido sin navegar (con <base href> un "#ancla" iría a la portada). */
+  saltarAlContenido(event: Event): void {
+    event.preventDefault();
+    const main = this.document.getElementById('contenido-principal');
+    main?.focus();
+    main?.scrollIntoView();
+  }
+
   private toAbsoluteUrl(url: string): string {
     if (!url || /^https?:\/\//i.test(url)) {
       return url;
     }
 
-    const origin = this.document.location.origin;
+    const origin = environment.publicUrl;
     return `${origin}${url.startsWith('/') ? '' : '/'}${url}`;
   }
 
@@ -232,6 +277,10 @@ export class AppComponent {
 
   /** Prerender lee estos metas para devolver el status HTTP real (evita soft 404). */
   private setPrerenderStatus(statusCode?: number): void {
+    if (this.respuestaSsr) {
+      this.respuestaSsr.status = statusCode || 200;
+    }
+
     const existing = this.document.head.querySelector('meta[name="prerender-status-code"]');
     existing?.remove();
 

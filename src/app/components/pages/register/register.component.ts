@@ -1,7 +1,7 @@
-import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { ConfiguracionModel } from 'src/app/models/general/configuracion.model';
 import { EstadoViewModel, PaisViewModel } from 'src/app/models/parametros/parametros-vm.model';
 import { UserModel } from 'src/app/models/security/user.model';
@@ -11,17 +11,33 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { NgClass } from '@angular/common';
+import { SelectAutocompleteComponent } from '../../shared/select-autocomplete/select-autocomplete.component';
+import { SelectOptionDirective, SelectLabelDirective } from '../../shared/select-autocomplete/select-template.directives';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  standalone: false,
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss'],
+    imports: [NgClass, FormsModule, ReactiveFormsModule, SelectAutocompleteComponent, SelectOptionDirective, SelectLabelDirective, MatCheckbox, MatButton, RouterLink]
 })
 export class RegisterComponent implements OnInit {
+  private parametrosService = inject(IHttpParametrosService);
+  private displayService = inject(DisplayComponentService);
+  private securityService = inject(IHttpSecurityService);
+  private generalService = inject(IHttpGeneralService);
+  private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
-  @Input() hide?: { sidebar?: boolean; welcome?: boolean };
+  readonly hide = input<{
+    sidebar?: boolean;
+    welcome?: boolean;
+}>();
   public configuracion?: ConfiguracionModel;
   public formGroup: FormGroup;
 
@@ -94,15 +110,7 @@ export class RegisterComponent implements OnInit {
   public estados: EstadoViewModel[] = [];
   public currentFocus: string = '';
 
-  constructor(
-    private parametrosService: IHttpParametrosService,
-    private displayService: DisplayComponentService,
-    private securityService: IHttpSecurityService,
-    private generalService: IHttpGeneralService,
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({
       userName: ['', Validators.required],
       password: ['', Validators.required],

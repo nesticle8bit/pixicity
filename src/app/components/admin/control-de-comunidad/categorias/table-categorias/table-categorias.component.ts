@@ -3,18 +3,41 @@ import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filt
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { DialogCreateUpdateCategoriasComponent } from '../dialog-create-update-categorias/dialog-create-update-categorias.component';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgClass, DatePipe } from '@angular/common';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-categorias',
-  templateUrl: './table-categorias.component.html',
-  styleUrls: ['./table-categorias.component.scss'],
+    selector: 'app-table-categorias',
+    templateUrl: './table-categorias.component.html',
+    styleUrls: ['./table-categorias.component.scss'],
+    imports: [
+        AdminFiltrosComponent,
+        MatButton,
+        MatIcon,
+        MatTooltip,
+        NgClass,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatPaginator,
+        DatePipe,
+        TimeAgoPipe,
+    ],
 })
 export class TableCategoriasComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private parametrosService = inject(IHttpParametrosService);
+  private dialog = inject(MatDialog);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public categorias: any[] = [];
@@ -24,11 +47,7 @@ export class TableCategoriasComponent implements OnInit {
   public cargando = false;
   public readonly filtrosConfig: AdminFiltrosConfig = { placeholder: 'Buscar categorías...' };
 
-  constructor(
-    public paginationService: PaginationService,
-    private parametrosService: IHttpParametrosService,
-    private dialog: MatDialog
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 

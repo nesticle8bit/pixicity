@@ -8,10 +8,10 @@ import {
   forwardRef,
   HostListener,
   inject,
-  Input,
   NgZone,
   OnDestroy,
-  ViewChild,
+  input,
+  viewChild
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -35,6 +35,8 @@ import {
   unwrapNode,
 } from './rich-editor-dom';
 import { cleanPastedHtml, imageNode, plainTextFragment } from './rich-editor-paste';
+import { MatIcon } from '@angular/material/icon';
+import { NgTemplateOutlet } from '@angular/common';
 
 type InlineMark = 'bold' | 'italic' | 'underline' | 'strike' | 'code';
 type ToolbarMenu = 'heading' | 'color' | 'image';
@@ -117,28 +119,28 @@ const BUBBLE_EDGE = 4;
 const HISTORY_LIMIT = 200;
 
 @Component({
-  standalone: false,
-  selector: 'app-rich-editor',
-  templateUrl: './rich-editor.component.html',
-  styleUrls: ['./rich-editor.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => RichEditorComponent),
-      multi: true,
-    },
-  ],
+    selector: 'app-rich-editor',
+    templateUrl: './rich-editor.component.html',
+    styleUrls: ['./rich-editor.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => RichEditorComponent),
+            multi: true,
+        },
+    ],
+    imports: [MatIcon, NgTemplateOutlet],
 })
 export class RichEditorComponent implements ControlValueAccessor, AfterViewInit, OnDestroy {
-  @Input() placeholder: string = 'Escribe aquí...';
+  readonly placeholder = input<string>('Escribe aquí...');
 
-  @ViewChild('wrapperEl') wrapperEl!: ElementRef<HTMLDivElement>;
-  @ViewChild('toolbarEl') toolbarEl!: ElementRef<HTMLDivElement>;
-  @ViewChild('editorEl') editorEl!: ElementRef<HTMLDivElement>;
-  @ViewChild('bubbleEl') bubbleEl!: ElementRef<HTMLDivElement>;
-  @ViewChild('linkInputEl') linkInputEl?: ElementRef<HTMLInputElement>;
-  @ViewChild('fileInputEl') fileInputEl!: ElementRef<HTMLInputElement>;
+  readonly wrapperEl = viewChild.required<ElementRef<HTMLDivElement>>('wrapperEl');
+  readonly toolbarEl = viewChild.required<ElementRef<HTMLDivElement>>('toolbarEl');
+  readonly editorEl = viewChild.required<ElementRef<HTMLDivElement>>('editorEl');
+  readonly bubbleEl = viewChild.required<ElementRef<HTMLDivElement>>('bubbleEl');
+  readonly linkInputEl = viewChild<ElementRef<HTMLInputElement>>('linkInputEl');
+  readonly fileInputEl = viewChild.required<ElementRef<HTMLInputElement>>('fileInputEl');
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly zone = inject(NgZone);
@@ -266,7 +268,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   };
 
   private get editor(): HTMLDivElement {
-    return this.editorEl.nativeElement;
+    return this.editorEl().nativeElement;
   }
 
   isMenu(item: EditorButton | MenuButton): item is MenuButton {
@@ -290,7 +292,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
 
   writeValue(value: string): void {
     const html = value || '';
-    if (this.initialized && this.editorEl) {
+    if (this.initialized && this.editorEl()) {
       this.setContent(html);
     } else {
       this.pendingValue = html;
@@ -538,7 +540,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   pickImage(): void {
     this.openMenu = null;
     this.uploadSel = this.offsetsOf(this.currentRange());
-    this.fileInputEl.nativeElement.click();
+    this.fileInputEl().nativeElement.click();
   }
 
   onFilesChosen(input: HTMLInputElement): void {
@@ -688,11 +690,11 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       if (this.linkEl?.isConnected) return this.linkEl.getBoundingClientRect();
       return this.savedSel ? this.rangeRect(rangeFromOffsets(this.editor, this.savedSel.start, this.savedSel.end)) : null;
     });
-    setTimeout(() => this.linkInputEl?.nativeElement.select(), 0);
+    setTimeout(() => this.linkInputEl()?.nativeElement.select(), 0);
   }
 
   applyLink(): void {
-    const url = (this.linkInputEl?.nativeElement.value || '').trim();
+    const url = (this.linkInputEl()?.nativeElement.value || '').trim();
     const link = this.linkEl;
     const sel = this.savedSel;
     this.hideBubble();
@@ -1299,7 +1301,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   //  Selección
 
   private currentRange(): Range | null {
-    if (!this.editorEl) return null;
+    if (!this.editorEl()) return null;
     const sel = window.getSelection();
     if (!sel || sel.rangeCount === 0) return null;
     const range = sel.getRangeAt(0);
@@ -1449,9 +1451,9 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   // Coloca el bubble sobre `anchor`; si ahí taparía la toolbar, lo pasa debajo.
   // Las coordenadas son relativas al wrapper (position: relative).
   private positionBubble(anchor: DOMRect): void {
-    const wrap = this.wrapperEl.nativeElement.getBoundingClientRect();
+    const wrap = this.wrapperEl().nativeElement.getBoundingClientRect();
     const content = this.editor.getBoundingClientRect();
-    const toolbarBottom = this.toolbarEl.nativeElement.getBoundingClientRect().bottom;
+    const toolbarBottom = this.toolbarEl().nativeElement.getBoundingClientRect().bottom;
 
     // Zona visible del área editable (el editor tiene scroll propio y puede estar
     // recortado por la ventana, un diálogo o la toolbar fija)
@@ -1464,7 +1466,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       return;
     }
 
-    const bubble = this.bubbleEl.nativeElement;
+    const bubble = this.bubbleEl().nativeElement;
     const bw = bubble.offsetWidth || 280;
     const bh = bubble.offsetHeight || 40;
 
@@ -1516,7 +1518,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   }
 
   private closestAnyTag(node: Node | null, tags: string[]): HTMLElement | null {
-    if (!this.editorEl) return null;
+    if (!this.editorEl()) return null;
     return closestWithin(node, this.editor, (el) => tags.includes(el.tagName));
   }
 }

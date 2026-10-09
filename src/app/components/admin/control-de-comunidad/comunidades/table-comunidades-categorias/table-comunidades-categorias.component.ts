@@ -5,23 +5,29 @@ import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunid
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { DialogComunidadCategoriaComponent } from '../dialog-comunidad-categoria/dialog-comunidad-categoria.component';
 import { DialogComunidadSubcategoriaComponent } from '../dialog-comunidad-subcategoria/dialog-comunidad-subcategoria.component';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-comunidades-categorias',
-  templateUrl: './table-comunidades-categorias.component.html',
-  styleUrls: ['./table-comunidades-categorias.component.scss'],
+    selector: 'app-table-comunidades-categorias',
+    templateUrl: './table-comunidades-categorias.component.html',
+    styleUrls: ['./table-comunidades-categorias.component.scss'],
+    imports: [
+        MatButton,
+        MatIcon,
+        MatIconButton,
+        MatTooltip,
+    ],
 })
 export class TableComunidadesCategoriasComponent implements OnInit {
+  private comunidadesService = inject(IHttpComunidadesService);
+  private notificationService = inject(NotificationService);
+  private dialog = inject(MatDialog);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public categorias: any[] = [];
-
-  constructor(
-    private comunidadesService: IHttpComunidadesService,
-    private notificationService: NotificationService,
-    private dialog: MatDialog
-  ) {}
 
   ngOnInit(): void {
     this.getCategorias();

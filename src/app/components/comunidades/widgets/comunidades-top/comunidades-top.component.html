@@ -2,7 +2,7 @@
   <span>Top comunidades</span>
 
   <div class="float-end">
-    <img class="cursor--pointer"
+    <img loading="lazy" decoding="async" class="cursor--pointer"
       [src]="paused ? '/assets/images/icons/icon_play.png' : '/assets/images/icons/icon_pause.png'"
       [matTooltip]="paused ? 'Reanudar' : 'Pausar'" style="background: #fff; padding-left: 5px"
       (click)="togglePause()" alt="" role="button" tabindex="0" [attr.aria-label]="paused ? 'Reanudar' : 'Pausar'" (keydown.enter)="togglePause()" (keydown.space)="togglePause(); $event.preventDefault()">
@@ -18,7 +18,7 @@
   @for (com of comunidades; track com.id; let i = $index) {
   <a [routerLink]="['/comunidades', com.nombreCorto]" class="carousel-slide" [class.active]="i === currentIndex">
     @if (com.imagen) {
-    <img [src]="com.imagen" [alt]="com.nombre" loading="lazy">
+    <img [src]="com.imagen | thumb: 48" [alt]="com.nombre" loading="lazy">
     } @else {
     <span class="carousel-placeholder"><i class="ti ti-users-group"></i></span>
     }

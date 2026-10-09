@@ -2,18 +2,43 @@ import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { NgClass } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { WhoIsIpComponent } from '../../../../addons/who-is-ip/who-is-ip.component';
+import { UserPopoverDirective } from '../../../../../shared/directives/userPopover.directive';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
+import { ThumbPipe } from '../../../../../shared/pipes/thumb.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-fotos',
-  templateUrl: './table-fotos.component.html',
-  styleUrls: ['./table-fotos.component.scss'],
+    selector: 'app-table-fotos',
+    templateUrl: './table-fotos.component.html',
+    styleUrls: ['./table-fotos.component.scss'],
+    imports: [ThumbPipe, 
+        AdminFiltrosComponent,
+        NgClass,
+        RouterLink,
+        WhoIsIpComponent,
+        UserPopoverDirective,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatIcon,
+        MatPaginator,
+        TimeAgoPipe,
+    ],
 })
 export class TableFotosComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private fotosService = inject(IHttpFotosService);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public fotos: any[] = [];
@@ -29,11 +54,7 @@ export class TableFotosComponent implements OnInit {
     usuario: 'Autor',
   };
 
-  constructor(
-    public paginationService: PaginationService,
-    private fotosService: IHttpFotosService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 

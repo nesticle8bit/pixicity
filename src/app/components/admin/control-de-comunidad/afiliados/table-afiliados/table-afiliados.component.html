@@ -7,7 +7,7 @@
 }
 
 @if (afiliados.length > 0) {
-  <main class="table-responsive">
+  <div class="table-responsive">
     <table class="table table-sm table-striped table-hover">
       <thead>
         <tr>
@@ -30,7 +30,7 @@
               </span>
             </td>
             <td>
-              <i class="ti ti-copy mr-3 text-secondary cursor--pointer" matTooltip="Copiar al portapapeles" (click)="clipboard(afiliado.codigo)"></i>
+              <i class="ti ti-copy mr-3 text-secondary cursor--pointer" matTooltip="Copiar al portapapeles" role="button" tabindex="0" aria-label="Copiar al portapapeles" (click)="clipboard(afiliado.codigo)" (keydown.enter)="clipboard(afiliado.codigo)"></i>
               &nbsp;
               <span class="badge bg-primary">
                 {{afiliado.codigo}}
@@ -58,7 +58,7 @@
               </span>
             </td>
             <td class="text-center" width="30px">
-              <button class="btn-menu" [matMenuTriggerFor]="menu">
+              <button type="button" class="btn-menu" aria-label="Acciones" [matMenuTriggerFor]="menu">
                 <i class="ti ti-dots-vertical"></i>
               </button>
               <mat-menu #menu="matMenu">
@@ -90,7 +90,7 @@
         }
       </tbody>
     </table>
-  </main>
+  </div>
 }
 
 @if (afiliados.length < 1) {

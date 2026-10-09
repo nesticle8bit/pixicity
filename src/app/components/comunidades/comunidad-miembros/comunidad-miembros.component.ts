@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Pagination } from 'src/app/models/api/api-response.model';
 import { ComunidadDetalle, ComunidadMiembro } from 'src/app/models/comunidades/comunidad.model';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
@@ -8,14 +8,27 @@ import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunid
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 
 @Component({
-  standalone: false,
-  selector: 'app-comunidad-miembros',
-  templateUrl: './comunidad-miembros.component.html',
-  styleUrls: ['./comunidad-miembros.component.scss'],
+    selector: 'app-comunidad-miembros',
+    templateUrl: './comunidad-miembros.component.html',
+    styleUrls: ['./comunidad-miembros.component.scss'],
+    imports: [
+        RouterLink,
+        UserPopoverDirective,
+        UserAvatarComponent,
+    ],
 })
 export class ComunidadMiembrosComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  private comunidadesService = inject(IHttpComunidadesService);
+  private securityService = inject(IHttpSecurityService);
+  private notificationService = inject(NotificationService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public comunidad: ComunidadDetalle | null = null;
@@ -27,14 +40,7 @@ export class ComunidadMiembrosComponent implements OnInit {
   public gestionandoId: number | null = null;
   private page: number = 1;
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private comunidadesService: IHttpComunidadesService,
-    private securityService: IHttpSecurityService,
-    private notificationService: NotificationService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {
+  constructor() {
     this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: true, submenu: true, background: '' });
   }
 

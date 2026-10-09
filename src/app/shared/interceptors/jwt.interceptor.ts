@@ -1,6 +1,6 @@
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 
@@ -9,7 +9,8 @@ const MARGEN_EXPIRACION_MS = 60 * 1000;
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-    constructor(private securityService: IHttpSecurityService) { }
+    private securityService = inject(IHttpSecurityService);
+
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const currentUser = this.securityService.getCurrentUser();

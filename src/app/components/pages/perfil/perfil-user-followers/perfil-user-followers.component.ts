@@ -1,14 +1,26 @@
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.component';
+import { RouterLink } from '@angular/router';
+import { UserPopoverDirective } from '../../../../shared/directives/userPopover.directive';
+import { MatTooltip } from '@angular/material/tooltip';
+import { IHttpUsuarioPerfilService } from '../../../../services/interfaces/httpUsuarioPerfil.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-perfil-user-followers',
-  templateUrl: './perfil-user-followers.component.html',
-  styleUrls: ['./perfil-user-followers.component.scss'],
+    selector: 'app-perfil-user-followers',
+    templateUrl: './perfil-user-followers.component.html',
+    styleUrls: ['./perfil-user-followers.component.scss'],
+    imports: [
+        UserAvatarComponent,
+        RouterLink,
+        UserPopoverDirective,
+        MatTooltip,
+    ],
 })
 export class PerfilUserFollowersComponent implements OnInit {
+  private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   private _usuarioId: any;
@@ -27,8 +39,6 @@ export class PerfilUserFollowersComponent implements OnInit {
     return this._usuarioId;
   }
 
-  constructor(private securityService: IHttpSecurityService) {}
-
   ngOnInit(): void {}
 
   getSeguidores(): void {
@@ -36,7 +46,7 @@ export class PerfilUserFollowersComponent implements OnInit {
       return;
     }
 
-    this.securityService
+    this.usuarioPerfilService
       .getLastFollowersByUserId(this._usuarioId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {

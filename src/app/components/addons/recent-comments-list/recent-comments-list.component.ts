@@ -1,4 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgClass } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 
 export interface ComentarioReciente {
   usuario: string;
@@ -7,13 +12,19 @@ export interface ComentarioReciente {
 }
 
 @Component({
-  standalone: false,
-  selector: 'app-recent-comments-list',
-  templateUrl: './recent-comments-list.component.html',
+    selector: 'app-recent-comments-list',
+    templateUrl: './recent-comments-list.component.html',
+    imports: [
+        MatTooltip,
+        NgClass,
+        RouterLink,
+        UserPopoverDirective,
+        TruncatePipe,
+    ],
 })
 export class RecentCommentsListComponent {
-  @Input() comentarios: ComentarioReciente[] | null = [];
-  @Input() cargando: boolean = false;
-  @Input() mensajeVacio: string = 'Aún no se han realizado comentarios';
-  @Output() actualizar = new EventEmitter<void>();
+  readonly comentarios = input<ComentarioReciente[] | null>([]);
+  readonly cargando = input<boolean>(false);
+  readonly mensajeVacio = input<string>('Aún no se han realizado comentarios');
+  readonly actualizar = output<void>();
 }

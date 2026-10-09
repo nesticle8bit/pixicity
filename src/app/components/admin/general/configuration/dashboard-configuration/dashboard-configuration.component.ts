@@ -1,28 +1,39 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { SelectAutocompleteComponent } from '../../../../shared/select-autocomplete/select-autocomplete.component';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  standalone: false,
-  selector: 'app-dashboard-configuration',
-  templateUrl: './dashboard-configuration.component.html',
-  styleUrls: ['./dashboard-configuration.component.scss'],
+    selector: 'app-dashboard-configuration',
+    templateUrl: './dashboard-configuration.component.html',
+    styleUrls: ['./dashboard-configuration.component.scss'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatSlideToggle,
+        SelectAutocompleteComponent,
+        MatButton,
+        MatIcon,
+    ],
 })
 export class DashboardConfigurationComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private generalService = inject(IHttpGeneralService);
+  private securityService = inject(IHttpSecurityService);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
   public administradores: any[] = [];
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private generalService: IHttpGeneralService,
-    private securityService: IHttpSecurityService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({
       siteName: [''],
       slogan: [''],

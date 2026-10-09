@@ -2,18 +2,40 @@ import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { NgClass } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
+import { TruncatePipe } from '../../../../../shared/pipes/truncate.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-contactos',
-  templateUrl: './table-contactos.component.html',
-  styleUrls: ['./table-contactos.component.scss'],
+    selector: 'app-table-contactos',
+    templateUrl: './table-contactos.component.html',
+    styleUrls: ['./table-contactos.component.scss'],
+    imports: [
+        AdminFiltrosComponent,
+        NgClass,
+        MatTooltip,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatIcon,
+        MatPaginator,
+        TimeAgoPipe,
+        TruncatePipe,
+    ],
 })
 export class TableContactosComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private generalService = inject(IHttpGeneralService);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public contactos: any[] = [];
@@ -33,11 +55,7 @@ export class TableContactosComponent implements OnInit {
     ],
   };
 
-  constructor(
-    public paginationService: PaginationService,
-    private generalService: IHttpGeneralService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 

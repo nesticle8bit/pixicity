@@ -1,5 +1,8 @@
 <div class="cp container container--home">
   <form [formGroup]="formGroup" (ngSubmit)="publicarPost()">
+    @if (borrador?.pendiente; as pendiente) {
+      <app-borrador-aviso [fecha]="pendiente.fecha" (recuperar)="recuperarBorrador()" (descartar)="borrador?.descartar()"></app-borrador-aviso>
+    }
     <!-- Barra superior: estado + acciones -->
     <header class="cp-bar">
       <div class="cp-bar__state">
@@ -39,7 +42,7 @@
 
     <div class="cp-layout">
       <!-- Columna de escritura -->
-      <main class="cp-write">
+      <div class="cp-write">
         <div class="cp-title">
           <input type="text" class="cp-title__input" formControlName="titulo" maxlength="80"
             placeholder="Escribe un título que atrape…" aria-label="Título del post" (blur)="onTituloBlur()"
@@ -105,7 +108,7 @@
           </p>
           }
         </section>
-      </main>
+      </div>
 
       <!-- Panel lateral -->
       <aside class="cp-rail">
@@ -144,10 +147,10 @@
                 <i class="ti ti-sparkles cp-tag__spark" title="Sugerida a partir del título"></i>
                 }
                 {{ tag }}
-                <button matChipRemove><mat-icon>cancel</mat-icon></button>
+                <button matChipRemove [attr.aria-label]="'Quitar etiqueta ' + tag"><mat-icon>cancel</mat-icon></button>
               </mat-chip-row>
               }
-              <input placeholder="Agregar y Enter…" [matChipInputFor]="chipList"
+              <input aria-label="Agregar y Enter" placeholder="Agregar y Enter…" [matChipInputFor]="chipList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
                 (matChipInputTokenEnd)="addTag($event)" />
             </mat-chip-grid>

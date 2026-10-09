@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { PageEvent } from '@angular/material/paginator';
+import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { combineLatest, debounceTime, distinctUntilChanged, Subject, switchMap, of, catchError } from 'rxjs';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
@@ -16,6 +16,13 @@ import {
   PostBusqueda,
   TipoBusqueda,
 } from 'src/app/models/posts/busqueda.model';
+import { FormsModule } from '@angular/forms';
+import { MatTooltip } from '@angular/material/tooltip';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { DecimalPipe, DatePipe } from '@angular/common';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 
 const CLAVE_RECIENTES = 'busquedas-recientes';
 const MAX_RECIENTES = 8;
@@ -38,12 +45,30 @@ interface EstadoBusqueda {
  * el botón "atrás" funciona.
  */
 @Component({
-  standalone: false,
-  selector: 'app-search',
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss'],
+    selector: 'app-search',
+    templateUrl: './search.component.html',
+    styleUrls: ['./search.component.scss'],
+    imports: [
+        FormsModule,
+        RouterLink,
+        MatTooltip,
+        UserPopoverDirective,
+        UserAvatarComponent,
+        MatPaginator,
+        AdsByTypeComponent,
+        DecimalPipe,
+        DatePipe,
+        TimeAgoPipe,
+    ],
 })
 export class SearchComponent implements OnInit {
+  private postService = inject(IHttpPostsService);
+  private parametrosService = inject(IHttpParametrosService);
+  private displayService = inject(DisplayComponentService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private seoService = inject(SEOService);
+
   private readonly destroyRef = inject(DestroyRef);
   private readonly autor$ = new Subject<string>();
 
@@ -90,14 +115,7 @@ export class SearchComponent implements OnInit {
   public readonly porPagina = POR_PAGINA;
   public readonly esqueletos = [1, 2, 3, 4];
 
-  constructor(
-    private postService: IHttpPostsService,
-    private parametrosService: IHttpParametrosService,
-    private displayService: DisplayComponentService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private seoService: SEOService
-  ) {
+  constructor() {
     this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: true, submenu: true, background: '' });
   }
 

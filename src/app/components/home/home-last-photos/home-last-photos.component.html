@@ -2,7 +2,7 @@
   <span>Top Fotos</span>
 
   <div class="float-end">
-    <img class="cursor--pointer"
+    <img loading="lazy" decoding="async" class="cursor--pointer"
       [src]="paused ? '/assets/images/icons/icon_play.png' : '/assets/images/icons/icon_pause.png'"
       [matTooltip]="paused ? 'Reanudar' : 'Pausar'" style="background: #fff; padding-left: 5px"
       (click)="togglePause()" alt="" role="button" tabindex="0" [attr.aria-label]="paused ? 'Reanudar' : 'Pausar'" (keydown.enter)="togglePause()" (keydown.space)="togglePause(); $event.preventDefault()">
@@ -18,7 +18,7 @@
   @for (foto of fotos; track foto.id; let i = $index) {
   <a [routerLink]="['/fotos', foto.usuario, foto.id, foto.url]" class="carousel-slide"
     [class.active]="i === currentIndex">
-    <img [src]="foto.imageUrl" [alt]="foto.titulo" loading="lazy">
+    <img [src]="foto.imageUrl | thumb: 280" [alt]="foto.titulo" loading="lazy">
 
     <div class="carousel-progress" [class.running]="i === currentIndex && !paused" [class.paused]="paused"></div>
 

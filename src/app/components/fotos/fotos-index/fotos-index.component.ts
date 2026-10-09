@@ -1,19 +1,37 @@
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { NgClass } from '@angular/common';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
+import { ThumbPipe } from '../../../shared/pipes/thumb.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-fotos-index',
-  templateUrl: './fotos-index.component.html',
-  styleUrls: ['./fotos-index.component.scss'],
+    selector: 'app-fotos-index',
+    templateUrl: './fotos-index.component.html',
+    styleUrls: ['./fotos-index.component.scss'],
+    imports: [ThumbPipe, 
+        RouterLink,
+        UserPopoverDirective,
+        UserAvatarComponent,
+        NgClass,
+        TimeAgoPipe,
+    ],
 })
 export class FotosIndexComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  private securityService = inject(IHttpSecurityService);
+  private fotosService = inject(IHttpFotosService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private seoService = inject(SEOService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public fotos: any[] = [];
@@ -25,14 +43,7 @@ export class FotosIndexComponent implements OnInit {
   private page: number = 1;
   private pageCount: number = 12;
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private securityService: IHttpSecurityService,
-    private fotosService: IHttpFotosService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private seoService: SEOService
-  ) {
+  constructor() {
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,

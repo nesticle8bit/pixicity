@@ -1,7 +1,8 @@
 import { HttpBackend, HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { ErrorHandler, Injectable } from '@angular/core';
+import { ErrorHandler, Injectable, inject } from '@angular/core';
 import { HTTP_ERROR_GENERICO } from 'src/app/services/shared/helper.service';
 import { environment } from 'src/environments/environment';
+import { enNavegador } from '../helpers/plataforma';
 
 interface ClienteLog {
   nivel: 'Warning' | 'Error';
@@ -26,7 +27,9 @@ export class ClientErrorHandler implements ErrorHandler {
   private enviados = 0;
   private readonly ultimos = new Map<string, number>();
 
-  constructor(httpBackend: HttpBackend) {
+  constructor() {
+    const httpBackend = inject(HttpBackend);
+
     this.http = new HttpClient(httpBackend);
   }
 
@@ -45,7 +48,7 @@ export class ClientErrorHandler implements ErrorHandler {
 
   private construir(error: unknown): ClienteLog | null {
     const original = (error as any)?.rejection ?? (error as any)?.originalError ?? error;
-    const ruta = window.location.pathname + window.location.search;
+    const ruta = enNavegador() ? window.location.pathname + window.location.search : '(servidor)';
 
     if (original instanceof HttpErrorResponse) {
       // Los errores HTTP con respuesta del API ya quedan registrados en el servidor; aquí solo interesan los de red.

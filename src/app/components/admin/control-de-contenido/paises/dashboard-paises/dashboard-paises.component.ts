@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { TablePaisesComponent } from '../table-paises/table-paises.component';
 
 @Component({
-  standalone: false,
-  selector: 'app-dashboard-paises',
-  templateUrl: './dashboard-paises.component.html',
-  styleUrls: ['./dashboard-paises.component.scss']
+    selector: 'app-dashboard-paises',
+    templateUrl: './dashboard-paises.component.html',
+    styleUrls: ['./dashboard-paises.component.scss'],
+    imports: [TablePaisesComponent]
 })
 export class DashboardPaisesComponent implements OnInit {
 

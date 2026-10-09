@@ -2,7 +2,7 @@ import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { IHttpFavoritosService } from '../interfaces/httpFavoritos.interface';
 import { PaginationService } from '../shared/pagination.service';
 import { Observable } from 'rxjs';
@@ -13,12 +13,11 @@ import { CategoriaViewModel } from 'src/app/models/parametros/parametros-vm.mode
 
 @Injectable()
 export class HttpFavoritosService implements IHttpFavoritosService {
-  constructor(
-    private http: HttpClient,
-    private helper: HelperService,
-    private paginationService: PaginationService,
-    private notificationService: NotificationService
-  ) {}
+  private http = inject(HttpClient);
+  private helper = inject(HelperService);
+  private paginationService = inject(PaginationService);
+  private notificationService = inject(NotificationService);
+
 
   getLastFavoritos(count: number): Observable<FavoritosViewModel[]> {
     return this.http

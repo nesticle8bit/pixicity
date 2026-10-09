@@ -11,13 +11,13 @@ import { FotoCreateComponent } from '../../components/fotos/foto-create/foto-cre
 import { FotoComentariosComponent } from '../../components/fotos/foto-comentarios/foto-comentarios.component';
 
 @NgModule({
-  declarations: [FotosIndexComponent, FotoDetailComponent, FotoCreateComponent, FotoComentariosComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SharedModule,
-    FotosRoutingModule,
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        FotosRoutingModule,
+        FotosIndexComponent, FotoDetailComponent, FotoCreateComponent, FotoComentariosComponent,
+    ],
 })
 export class FotosModule {}

@@ -1,24 +1,31 @@
-import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  standalone: false,
-  selector: 'app-dialog-recomendar-post',
-  templateUrl: './dialog-recomendar-post.component.html',
-  styleUrls: ['./dialog-recomendar-post.component.scss'],
+    selector: 'app-dialog-recomendar-post',
+    templateUrl: './dialog-recomendar-post.component.html',
+    styleUrls: ['./dialog-recomendar-post.component.scss'],
+    imports: [
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ],
 })
 export class DialogRecomendarPostComponent implements OnInit {
-  private readonly destroyRef = inject(DestroyRef);
+  data = inject(MAT_DIALOG_DATA);
+  private dialogRef = inject<MatDialogRef<DialogRecomendarPostComponent>>(MatDialogRef);
+  private postService = inject(IHttpPostsService);
+  private notificationService = inject(NotificationService);
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<DialogRecomendarPostComponent>,
-    private postService: IHttpPostsService,
-    private notificationService: NotificationService
-  ) {}
+  private readonly destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {}
 

@@ -8,7 +8,7 @@ import { HelperService } from '../shared/helper.service';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from '../shared/notification.service';
 import { TopUserModel } from 'src/app/models/web/topUser.model';
@@ -19,13 +19,12 @@ import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.mode
 
 @Injectable()
 export class HttpWebService implements IHttpWebService {
-  constructor(
-    private notificationService: NotificationService,
-    private paginationService: PaginationService,
-    private helper: HelperService,
-    private http: HttpClient,
-    private router: Router,
-  ) {}
+  private notificationService = inject(NotificationService);
+  private paginationService = inject(PaginationService);
+  private helper = inject(HelperService);
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
 
   getTopUsers(): Observable<TopUserModel[]> {
     return this.http

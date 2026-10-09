@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { Pagination } from 'src/app/models/api/api-response.model';
 import { ComunidadCard, ComunidadCategoria } from 'src/app/models/comunidades/comunidad.model';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
@@ -8,14 +8,23 @@ import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunid
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { FormsModule } from '@angular/forms';
+import { ThumbPipe } from '../../../shared/pipes/thumb.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-comunidades-explorar',
-  templateUrl: './comunidades-explorar.component.html',
-  styleUrls: ['../comunidades-index/comunidades-index.component.scss'],
+    selector: 'app-comunidades-explorar',
+    templateUrl: './comunidades-explorar.component.html',
+    styleUrls: ['../comunidades-index/comunidades-index.component.scss'],
+    imports: [ThumbPipe, FormsModule, RouterLink],
 })
 export class ComunidadesExplorarComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  private comunidadesService = inject(IHttpComunidadesService);
+  private securityService = inject(IHttpSecurityService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private seoService = inject(SEOService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public comunidades: ComunidadCard[] = [];
@@ -29,14 +38,7 @@ export class ComunidadesExplorarComponent implements OnInit {
   private page: number = 1;
   private pageCount: number = 12;
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private comunidadesService: IHttpComunidadesService,
-    private securityService: IHttpSecurityService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private seoService: SEOService
-  ) {
+  constructor() {
     this.seoService.setSEO({
       title: 'Explorar comunidades',
       description:

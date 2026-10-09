@@ -5,28 +5,28 @@
 <form [formGroup]="formGroupAfiliacion" (ngSubmit)="updateAfiliacion()">
     <mat-dialog-content>
         <div class="mb-3">
-            <label>Código</label> <br>
+            <label for="dialog-update-afiliados-titulo">Código</label> <br>
             <span class="badge bg-primary">{{formGroupAfiliacion.value?.codigo}}</span>
         </div>
 
         <div class="mb-3">
             <label>Título <strong class="text-danger">*</strong></label>
-            <input type="text" class="form-control" formControlName="titulo" [maxLength]="100" cdkFocusInitial />
+            <input id="dialog-update-afiliados-titulo" type="text" class="form-control" formControlName="titulo" [maxLength]="100" cdkFocusInitial />
         </div>
 
         <div class="mb-3">
-            <label>URL <strong class="text-danger">*</strong></label>
-            <input type="text" class="form-control" formControlName="url" [maxLength]="350" />
+            <label for="dialog-update-afiliados-url">URL <strong class="text-danger">*</strong></label>
+            <input id="dialog-update-afiliados-url" type="text" class="form-control" formControlName="url" [maxLength]="350" />
         </div>
 
         <div class="mb-3">
-            <label>Favicon (16x16px) <strong class="text-danger">*</strong></label>
-            <input type="text" class="form-control" formControlName="banner" [maxLength]="350" />
+            <label for="dialog-update-afiliados-banner">Favicon (16x16px) <strong class="text-danger">*</strong></label>
+            <input id="dialog-update-afiliados-banner" type="text" class="form-control" formControlName="banner" [maxLength]="350" />
         </div>
 
         <div class="mb-3">
-            <label>Descripción</label>
-            <textarea rows="4" class="form-control" formControlName="descripcion" [maxLength]="200"></textarea>
+            <label for="dialog-update-afiliados-descripcion">Descripción</label>
+            <textarea id="dialog-update-afiliados-descripcion" rows="4" class="form-control" formControlName="descripcion" [maxLength]="200"></textarea>
         </div>
 
         <div class="mb-3">

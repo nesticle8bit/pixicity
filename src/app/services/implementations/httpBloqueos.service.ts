@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -11,11 +11,10 @@ import { BloqueoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 
 @Injectable()
 export class HttpBloqueosService implements IHttpBloqueosService {
-  constructor(
-    private http: HttpClient,
-    private helper: HelperService,
-    private notificationService: NotificationService,
-  ) {}
+  private http = inject(HttpClient);
+  private helper = inject(HelperService);
+  private notificationService = inject(NotificationService);
+
 
   getBloqueados(): Observable<BloqueoViewModel[]> {
     return this.http

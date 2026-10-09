@@ -38,9 +38,9 @@
           <i class="ti ti-id-badge"></i>
         </div>
         <div class="pg-field__body">
-          <label class="pg-field__label">Imagen inicial</label>
+          <label class="pg-field__label" for="posts-generator-imagenInicial">Imagen inicial</label>
           <p class="pg-field__hint">Actuará como portada de tu post.</p>
-          <input type="text" class="pg-input" placeholder="https://..." formControlName="imagenInicial" />
+          <input id="posts-generator-imagenInicial" type="text" class="pg-input" placeholder="https://..." formControlName="imagenInicial" />
         </div>
       </div>
 
@@ -49,9 +49,9 @@
           <i class="ti ti-info-circle"></i>
         </div>
         <div class="pg-field__body">
-          <label class="pg-field__label">Información</label>
+          <label class="pg-field__label" for="posts-generator-informacion">Información</label>
           <p class="pg-field__hint">Descripciones, sinopsis, tracklist…</p>
-          <textarea class="pg-input" rows="6" formControlName="informacion"
+          <textarea id="posts-generator-informacion" class="pg-input" rows="6" formControlName="informacion"
             placeholder="Escribe la información de tu post..."></textarea>
         </div>
       </div>
@@ -61,13 +61,13 @@
           <i class="ti ti-photo"></i>
         </div>
         <div class="pg-field__body">
-          <label class="pg-field__label">Imágenes</label>
+          <label class="pg-field__label" for="posts-generator-image1">Imágenes</label>
           <p class="pg-field__hint">URLs de las imágenes a incrustar (máximo 3).</p>
 
           <div class="pg-imgrow">
-            <input type="url" placeholder="http://" class="pg-input" formControlName="image1" />
-            <input type="url" placeholder="http://" class="pg-input" formControlName="image2" />
-            <input type="url" placeholder="http://" class="pg-input" formControlName="image3" />
+            <input id="posts-generator-image1" type="url" placeholder="http://" class="pg-input" formControlName="image1" />
+            <input type="url" aria-label="http://" placeholder="http://" class="pg-input" formControlName="image2" />
+            <input type="url" aria-label="http://" placeholder="http://" class="pg-input" formControlName="image3" />
           </div>
         </div>
       </div>
@@ -77,9 +77,9 @@
           <i class="ti ti-link"></i>
         </div>
         <div class="pg-field__body">
-          <label class="pg-field__label">Links de descarga</label>
+          <label class="pg-field__label" for="posts-generator-links">Links de descarga</label>
           <p class="pg-field__hint">Un link por fila.</p>
-          <textarea class="pg-input" rows="5" formControlName="links"
+          <textarea id="posts-generator-links" class="pg-input" rows="5" formControlName="links"
             placeholder="https://...&#10;https://..."></textarea>
         </div>
       </div>
@@ -89,9 +89,9 @@
           <i class="ti ti-lock-open"></i>
         </div>
         <div class="pg-field__body">
-          <label class="pg-field__label">Contraseña</label>
+          <label class="pg-field__label" for="posts-generator-password">Contraseña</label>
           <p class="pg-field__hint">Si tus archivos tienen clave, escríbela aquí.</p>
-          <input type="text" class="pg-input" placeholder="Contraseña de los archivos" formControlName="password" />
+          <input id="posts-generator-password" type="text" class="pg-input" placeholder="Contraseña de los archivos" formControlName="password" />
         </div>
       </div>
 

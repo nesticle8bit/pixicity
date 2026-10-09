@@ -1,15 +1,18 @@
 import { DialogEnviarMPComponent } from 'src/app/components/dialogs/dialog-enviar-mp/dialog-enviar-mp.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { AdsByTypeComponent } from '../../../ads/ads-by-type/ads-by-type.component';
 
 @Component({
-  standalone: false,
-  selector: 'app-mensajes-sidebar',
-  templateUrl: './mensajes-sidebar.component.html',
-  styleUrls: ['./mensajes-sidebar.component.scss'],
+    selector: 'app-mensajes-sidebar',
+    templateUrl: './mensajes-sidebar.component.html',
+    styleUrls: ['./mensajes-sidebar.component.scss'],
+    imports: [RouterLink, AdsByTypeComponent],
 })
 export class MensajesSidebarComponent implements OnInit {
-  constructor(private dialog: MatDialog) {}
+  private dialog = inject(MatDialog);
+
 
   ngOnInit(): void {}
 

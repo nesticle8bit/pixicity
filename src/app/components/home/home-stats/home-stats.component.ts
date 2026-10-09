@@ -1,14 +1,19 @@
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { enNavegador } from '../../../shared/helpers/plataforma';
 
 @Component({
-  standalone: false,
-  selector: 'app-home-stats',
-  templateUrl: './home-stats.component.html',
-  styleUrls: ['./home-stats.component.scss'],
+    selector: 'app-home-stats',
+    templateUrl: './home-stats.component.html',
+    styleUrls: ['./home-stats.component.scss'],
+    imports: [RouterLink, DatePipe],
 })
 export class HomeStatsComponent implements OnInit, OnDestroy {
+  private generalService = inject(IHttpGeneralService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public estadisticas: any;
@@ -17,12 +22,10 @@ export class HomeStatsComponent implements OnInit, OnDestroy {
   private readonly refreshMs = 120000;
   private refreshTimer: any = null;
 
-  constructor(private generalService: IHttpGeneralService) {}
-
   ngOnInit(): void {
     this.loadStats();
 
-    this.refreshTimer = setInterval(() => this.loadStats(), this.refreshMs);
+    if (enNavegador()) this.refreshTimer = setInterval(() => this.loadStats(), this.refreshMs);
   }
 
   ngOnDestroy(): void {

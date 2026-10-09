@@ -58,12 +58,54 @@ ol li {
   list-style: none;
 }
 
-input:active {
-  outline: 0;
+// Foco visible al navegar con teclado (WCAG 2.4.7). :focus-visible no lo muestra al hacer clic en botones/enlaces.
+// Los .form-control ya marcan el foco con la sombra de Bootstrap; antes "input:focus { outline: 0 }" lo ocultaba en todos.
+:where(a, button, select, summary, [tabindex]):focus-visible,
+:where(input, textarea):not(.form-control):focus-visible {
+  outline: 2px solid #0b6ea5;
+  outline-offset: 2px;
 }
 
-input:focus {
-  outline: 0;
+// Nombre del rango con el color elegido en el admin, oscurecido a la mitad: cualquier color (incluso amarillos)
+// queda legible sobre fondo claro (WCAG AA) y conserva su tono.
+.sidebar-rango,
+.coment-rango {
+  color: color-mix(in srgb, var(--rango, currentColor) 50%, #000);
+}
+
+// "Saltar al contenido": primer elemento enfocable de la página, visible solo con foco.
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2000;
+  padding: 8px 14px;
+  border-radius: 4px;
+  background: #0b6ea5;
+  color: #fff !important;
+  font-weight: 500;
+  transform: translateY(-200%);
+  transition: transform 0.15s;
+
+  &:focus {
+    transform: translateY(0);
+  }
+}
+
+#contenido-principal:focus {
+  outline: none; // recibe el foco por programa al saltar; no necesita marco
+}
+
+// Respeta "reducir movimiento" del sistema operativo.
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 // input, textarea {
@@ -195,7 +237,7 @@ header {
       margin: 0 auto;
       font-size: 18px;
       padding: 0 20px;
-      color: #999;
+      color: #6b6b6b;
       font-family: Georgia, "Times New Roman", Times, serif;
       font-style: italic;
 
@@ -223,7 +265,7 @@ header {
   background: #fff;
   padding-right: 10px;
   line-height: 1.2em;
-  color: #8B8B8B;
+  color: #666;
   float: left;
 }
 
@@ -366,7 +408,7 @@ input.buscador:focus {
 }
 
 a.ircielo {
-  color: #999 !important;
+  color: #6b6b6b !important;
   border-bottom: 1px dotted #999;
   float: right;
   text-decoration: none;
@@ -383,7 +425,7 @@ a.ircielo {
 
   & p {
     font-size: 16px;
-    color: #999;
+    color: #6b6b6b;
     margin: 10px 0 0;
     padding: 0 0 10px;
   }
@@ -448,7 +490,7 @@ a.ircielo {
 .olvidar {
   & a {
     display: block;
-    color: #999;
+    color: #6b6b6b;
     font-weight: 400;
     font-size: 15px;
     margin: 0 0 10px;
@@ -458,7 +500,7 @@ a.ircielo {
     padding: 5px;
     font-size: 15px;
     list-style: disc inside;
-    color: #999;
+    color: #6b6b6b;
   }
 
   & span {
@@ -791,7 +833,7 @@ a.nick span {
   width: 183px;
   height: 34px;
   font-size: 14px;
-  color: #999;
+  color: #6b6b6b;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
@@ -976,7 +1018,7 @@ textarea:focus#msg_body {
 
 .liscat a.listo,
 .liscat a:hover {
-  color: #2594ef;
+  color: #0a6fc2;
   text-decoration: none;
 }
 
@@ -1168,9 +1210,9 @@ textarea:focus#msg_body {
 // defecto usa container-color: white), además del background-color plano para
 // usos no-MDC (snackbars, etc.).
 .mat-success {
-  --mat-button-filled-container-color: #05c46b;
+  --mat-button-filled-container-color: #08884c; // 4.5:1 con texto blanco
   --mat-button-filled-label-text-color: #fff;
-  background-color: #05c46b;
+  background-color: #08884c;
   color: #fff;
 }
 
@@ -1472,7 +1514,7 @@ textarea:focus#msg_body {
 }
 
 .letres {
-  color: #7e7e7e;
+  color: #666;
   float: left;
   font-size: 13px;
   font-weight: 700;
@@ -1483,7 +1525,7 @@ textarea:focus#msg_body {
   display: block;
   float: left;
   padding: 0 5px;
-  color: #2594ef;
+  color: #0a6fc2;
   font-weight: 400;
   text-transform: uppercase;
   font-size: 13px;
@@ -1604,7 +1646,7 @@ p.cupuntos {
   border: 1px solid #f0f0f0 !important;
   font-size: 11px;
   font-weight: 700;
-  color: #7e7e7e;
+  color: #666;
   text-align: center;
   text-transform: uppercase;
   background: #f0f0f0;
@@ -1671,7 +1713,7 @@ p.cupuntos {
   font-size: 10px;
   line-height: 12px;
   text-align: right;
-  color: #999;
+  color: #6b6b6b;
 }
 
 .bulto strong {
@@ -1886,7 +1928,7 @@ p.cupuntos {
 }
 
 .tyes i.ti {
-  color: #7e7e7e;
+  color: #666;
   font-size: 13px;
   margin-right: 5px;
 }
@@ -1901,7 +1943,7 @@ p.cupuntos {
 .interes h3 {
   margin: 5px 0 10px;
   font-size: 16px;
-  color: #7e7e7e;
+  color: #666;
   font-weight: 700;
   border-bottom: 1px solid #ebebeb;
   border-top: 1px solid #ebebeb;
@@ -1997,7 +2039,7 @@ p.cupuntos {
 }
 
 #post-comentarios .titular h3 {
-  color: #7e7e7e;
+  color: #666;
   background: #fff;
   font-size: 16px;
   font-weight: 700;
@@ -2344,7 +2386,7 @@ span.positivo {
   width: 48px;
   font-size: 11px;
   line-height: 15px;
-  color: #777;
+  color: #666;
 
   & img {
     width: 48px;
@@ -2427,7 +2469,7 @@ span.positivo {
 a.vemas {
   display: block;
   background: #f8f8f8;
-  color: #2594ef;
+  color: #0a6fc2;
   text-align: center;
   line-height: 18px;
   font-size: 10px;
@@ -2450,12 +2492,12 @@ a.vemas {
 .post {
   &-header {
     a {
-      color: #7e7e7e;
+      color: #666;
     }
 
     &-list {
       font-weight: 400;
-      color: #7e7e7e;
+      color: #666;
 
       & li {
         max-width: 180px;
@@ -2723,7 +2765,7 @@ ul#resultados-borradores li {
 
     & span {
       display: block;
-      color: #999;
+      color: #6b6b6b;
     }
   }
 
@@ -2932,7 +2974,7 @@ span.ma_monitor_rango {
   & .info {
     margin: 3px 0 0;
     font-size: 11px;
-    color: #999;
+    color: #6b6b6b;
 
     a {
       font-weight: 600;
@@ -2953,7 +2995,7 @@ span.ma_monitor_rango {
 
   & strong {
     width: 21px;
-    color: #8b8b8b;
+    color: #666;
     font-weight: 700;
     margin-right: 2px;
   }
@@ -3123,7 +3165,7 @@ span.ma_monitor_rango {
   &__timeAgo {
     font-size: 11px;
     font-weight: 400;
-    color: #999;
+    color: #6b6b6b;
     margin: 1px 0 0 10px;
     display: block;
     float: left;
@@ -3151,7 +3193,7 @@ span.ma_monitor_rango {
   padding-top: 0.395rem;
 
   & i.ti {
-    color: #999;
+    color: #6b6b6b;
   }
 
   & svg {
@@ -3161,7 +3203,7 @@ span.ma_monitor_rango {
   & a {
     font-size: 11px;
     font-weight: 400;
-    color: #999;
+    color: #6b6b6b;
     text-decoration: none;
   }
 
@@ -3376,7 +3418,7 @@ span.ma_monitor_rango {
   }
 
   & span {
-    color: #999;
+    color: #6b6b6b;
     font-size: 12px;
   }
 }
@@ -3770,7 +3812,7 @@ span.ma_monitor_rango {
   }
 
   &__preview {
-    color: #777;
+    color: #666;
     font-size: 13px;
   }
 }

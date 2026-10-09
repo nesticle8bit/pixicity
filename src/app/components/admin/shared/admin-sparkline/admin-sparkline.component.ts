@@ -1,14 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, input } from '@angular/core';
 
 /**
  * Sparkline SVG sin dependencias: dibuja una serie corta como área + línea.
  * El viewBox es fijo (100x30) y el SVG escala al ancho del contenedor.
  */
 @Component({
-  standalone: false,
-  selector: 'app-admin-sparkline',
-  templateUrl: './admin-sparkline.component.html',
-  styleUrls: ['./admin-sparkline.component.scss'],
+    selector: 'app-admin-sparkline',
+    templateUrl: './admin-sparkline.component.html',
+    styleUrls: ['./admin-sparkline.component.scss'],
 })
 export class AdminSparklineComponent {
   private static uid = 0;
@@ -21,8 +20,8 @@ export class AdminSparklineComponent {
   public ultimoX = 0;
   public ultimoY = 0;
 
-  @Input() color = '#0B6EA5';
-  @Input() alto = 40;
+  readonly color = input('#0B6EA5');
+  readonly alto = input(40);
 
   @Input()
   set valores(value: number[] | null | undefined) {

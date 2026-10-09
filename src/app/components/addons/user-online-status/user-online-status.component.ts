@@ -1,14 +1,19 @@
-import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { NgClass } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
+import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-user-online-status',
-  templateUrl: './user-online-status.component.html',
-  styleUrls: ['./user-online-status.component.scss'],
+    selector: 'app-user-online-status',
+    templateUrl: './user-online-status.component.html',
+    styleUrls: ['./user-online-status.component.scss'],
+    imports: [NgClass, MatTooltip],
 })
 export class UserOnlineStatusComponent implements OnInit {
+  private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   private _userName: any;
@@ -25,16 +30,14 @@ export class UserOnlineStatusComponent implements OnInit {
     return this._userName ? this._userName : '';
   }
 
-  @Input() class: string = '';
+  readonly class = input<string>('');
 
   public activo: number = 0;
-
-  constructor(private securityService: IHttpSecurityService) {}
 
   ngOnInit(): void {}
 
   getUserStatus(userName: string): void {
-    this.securityService.getUserStatus(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.usuarioPerfilService.getUserStatus(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.activo = response ?? 0;
     });
   }

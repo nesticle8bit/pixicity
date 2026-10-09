@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 
 @Component({
-  standalone: false,
-  selector: 'app-api-documentation',
-  templateUrl: './api-documentation.component.html',
-  styleUrls: ['./api-documentation.component.scss'],
+    selector: 'app-api-documentation',
+    templateUrl: './api-documentation.component.html',
+    styleUrls: ['./api-documentation.component.scss'],
 })
 export class ApiDocumentationComponent implements OnInit {
-  constructor(private displayService: DisplayComponentService) {
+  private displayService = inject(DisplayComponentService);
+
+  constructor() {
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,

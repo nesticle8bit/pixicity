@@ -1,13 +1,15 @@
-import { Component, DestroyRef, effect, ElementRef, HostListener, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, DestroyRef, effect, ElementRef, HostListener, inject, OnInit, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { NavigationEnd, Router } from '@angular/router';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { MOBILE_MAX_WIDTH, MobileNavService } from 'src/app/services/shared/mobile-nav.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { isLinkActive, linksFor, NavLink } from '../main-nav.config';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { enNavegador } from '../../../shared/helpers/plataforma';
 
 // Cuánto (px) hay que arrastrar para que el gesto cuente, y cuánto para que al soltar se cierre.
 const SWIPE_START_PX = 12;
@@ -16,15 +18,27 @@ const SWIPE_CLOSE_PX = 70;
 // Cajón de navegación para móvil: agrupa todo lo que en escritorio vive en el header (monitor, mensajes,
 // favoritos, perfil, búsqueda, salir) más los enlaces de menú y submenú.
 @Component({
-  standalone: false,
-  selector: 'app-mobile-drawer',
-  templateUrl: './mobile-drawer.component.html',
-  styleUrls: ['./mobile-drawer.component.scss'],
+    selector: 'app-mobile-drawer',
+    templateUrl: './mobile-drawer.component.html',
+    styleUrls: ['./mobile-drawer.component.scss'],
+    imports: [
+        RouterLink,
+        UserAvatarComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterLinkActive,
+    ],
 })
 export class MobileDrawerComponent implements OnInit {
+  nav = inject(MobileNavService);
+  private securityService = inject(IHttpSecurityService);
+  private signalrService = inject(SignalrService);
+  private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
+
   private readonly destroyRef = inject(DestroyRef);
 
-  @ViewChild('closeBtn') closeBtn?: ElementRef<HTMLButtonElement>;
+  readonly closeBtn = viewChild<ElementRef<HTMLButtonElement>>('closeBtn');
 
   public currentUser: JwtUserModel = { usuario: undefined, token: '' };
   public formGroup: FormGroup;
@@ -34,13 +48,7 @@ export class MobileDrawerComponent implements OnInit {
   private touchStart?: { x: number; y: number };
   private swiping = false;
 
-  constructor(
-    public nav: MobileNavService,
-    private securityService: IHttpSecurityService,
-    private signalrService: SignalrService,
-    private formBuilder: FormBuilder,
-    private router: Router
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({ search: '' });
 
     this.securityService
@@ -60,11 +68,14 @@ export class MobileDrawerComponent implements OnInit {
     let wasOpen = false;
     effect(() => {
       const open = this.nav.isOpen();
+      if (!enNavegador()) {
+        return;
+      }
 
       document.body.style.overflow = open ? 'hidden' : '';
 
       if (open) {
-        setTimeout(() => this.closeBtn?.nativeElement.focus());
+        setTimeout(() => this.closeBtn()?.nativeElement.focus());
       } else if (wasOpen) {
         document.getElementById('mobile-nav-toggle')?.focus();
       }
@@ -72,11 +83,14 @@ export class MobileDrawerComponent implements OnInit {
       wasOpen = open;
     });
 
-    this.destroyRef.onDestroy(() => (document.body.style.overflow = ''));
+    this.destroyRef.onDestroy(() => enNavegador() && (document.body.style.overflow = ''));
   }
 
   ngOnInit(): void {
     // Si se agranda la ventana (rotar a horizontal, tablet) el cajón ya no aplica: se cierra.
+    if (!enNavegador()) {
+      return;
+    }
     const mql = window.matchMedia(`(min-width: ${MOBILE_MAX_WIDTH + 0.02}px)`);
     const onChange = (e: MediaQueryListEvent) => e.matches && this.nav.close();
 

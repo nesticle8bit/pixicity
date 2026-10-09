@@ -1,8 +1,8 @@
 import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, map, of, switchMap } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatChipInputEvent, MatChipGrid, MatChipRow, MatChipRemove, MatChipInput } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogPrevisualizarPostComponent } from 'src/app/components/dialogs/dialog-previsualizar-post/dialog-previsualizar-post.component';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
@@ -15,6 +15,16 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Title } from '@angular/platform-browser';
 import { PostsGeneratorComponent } from '../posts-generator/posts-generator.component';
+import { MatButton } from '@angular/material/button';
+import { PostUrlLinkComponent } from '../../addons/post-url-link/post-url-link.component';
+import { SelectAutocompleteComponent } from '../../shared/select-autocomplete/select-autocomplete.component';
+import { SelectLabelDirective, SelectOptionDirective } from '../../shared/select-autocomplete/select-template.directives';
+import { RichEditorComponent } from '../../shared/rich-editor/rich-editor.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { DatePipe } from '@angular/common';
+import { BorradorLocal } from 'src/app/shared/helpers/borrador-local';
+import { BorradorAvisoComponent } from '../../shared/borrador-aviso/borrador-aviso.component';
 
 // Palabras vacías (es/en) que no sirven como etiqueta.
 const STOP_WORDS = new Set([
@@ -30,15 +40,44 @@ const STOP_WORDS = new Set([
 const MAX_AUTO_TAGS = 6;
 
 @Component({
-  standalone: false,
-  selector: 'app-posts-create',
-  templateUrl: './posts-create.component.html',
-  styleUrls: ['./posts-create.component.scss'],
+    selector: 'app-posts-create',
+    templateUrl: './posts-create.component.html',
+    styleUrls: ['./posts-create.component.scss'],
+    imports: [
+        BorradorAvisoComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        MatButton,
+        PostUrlLinkComponent,
+        SelectAutocompleteComponent,
+        SelectLabelDirective,
+        SelectOptionDirective,
+        RichEditorComponent,
+        MatChipGrid,
+        MatChipRow,
+        MatChipRemove,
+        MatIcon,
+        MatChipInput,
+        MatSlideToggle,
+        DatePipe,
+    ],
 })
 export class PostsCreateComponent implements OnInit, OnDestroy {
+  private parametrosService = inject(IHttpParametrosService);
+  private displayService = inject(DisplayComponentService);
+  private securityService = inject(IHttpSecurityService);
+  private postService = inject(IHttpPostsService);
+  private activatedRoute = inject(ActivatedRoute);
+  private formBuilder = inject(FormBuilder);
+  private dialog = inject(MatDialog);
+  private router = inject(Router);
+  private title = inject(Title);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
+  public borrador: BorradorLocal | null = null;
   public categorias: any[] = [];
   public etiquetas: any = [];
   public quienPuedeComentar: any = [
@@ -62,18 +101,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   public autoTags = new Set<string>();
   private lastAutoTitulo = '';
 
-  constructor(
-    private parametrosService: IHttpParametrosService,
-    private displayService: DisplayComponentService,
-    private securityService: IHttpSecurityService,
-    private postService: IHttpPostsService,
-    private activatedRoute: ActivatedRoute,
-    private formBuilder: FormBuilder,
-    private dialog: MatDialog,
-    private router: Router,
-    private title: Title,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.currentUser = this.securityService.getCurrentUser();
 
     this.displayService.setDisplay({
@@ -103,6 +131,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
         this.title.setTitle(
           `Crear post | Taringa - Inteligencia colectiva | Comunidad para Compartir Información`
         );
+        this.iniciarBorrador();
         return;
       }
 
@@ -123,6 +152,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
         }
 
         this.setPostOnEdit(response.post);
+        this.iniciarBorrador();
       });
     });
 
@@ -134,6 +164,18 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {}
+
+  /** Borrador automático en el navegador (aparte del borrador del servidor): se ofrece recuperarlo al volver. */
+  private iniciarBorrador(): void {
+    this.borrador = new BorradorLocal(`post:${this.postId || 'nuevo'}`, this.currentUser.usuario?.userName, this.formGroup, this.destroyRef);
+    this.borrador.iniciar();
+  }
+
+  recuperarBorrador(): void {
+    this.borrador?.recuperar();
+    // Las etiquetas viven también fuera del formulario (chips).
+    this.etiquetas = [...(this.formGroup.value?.etiquetas ?? [])];
+  }
 
   // - Progreso -
   get hasContenido(): boolean {
@@ -280,6 +322,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     if (!this.postId) {
       this.postService.savePost(post).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
+          this.borrador?.limpiar();
           this.notificationService.success('Se ha creado recientemente tu post 👋🏼', 'Creado');
           this.router.navigate(['']);
         }
@@ -287,6 +330,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     } else {
       this.postService.updatePost(post).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
+          this.borrador?.limpiar();
           this.notificationService.success('Se ha actualizado recientemente tu post 👋🏼, ahora lo podrás visualizar con los cambios realizados', 'Actualizado');
           this.router.navigate([
             `/posts/${categoria.nombre.toLowerCase()}/${post.id}/${post.titulo}`,

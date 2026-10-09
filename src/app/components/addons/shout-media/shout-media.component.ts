@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, input, inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 /**
@@ -9,15 +9,16 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
  * - Enlace -> tarjeta con preview Open Graph (imagen + título + descripción)
  */
 @Component({
-  standalone: false,
-  selector: 'app-shout-media',
-  templateUrl: './shout-media.component.html',
-  styleUrls: ['./shout-media.component.scss'],
+    selector: 'app-shout-media',
+    templateUrl: './shout-media.component.html',
+    styleUrls: ['./shout-media.component.scss'],
 })
 export class ShoutMediaComponent implements OnChanges {
-  @Input() url: string | null = null;
-  @Input() tipo: string | null = null;
-  @Input() mediaTitulo: string | null = null;
+  private sanitizer = inject(DomSanitizer);
+
+  readonly url = input<string | null>(null);
+  readonly tipo = input<string | null>(null);
+  readonly mediaTitulo = input<string | null>(null);
   @Input() mediaImagen: string | null = null;
   @Input() mediaDescripcion: string | null = null;
 
@@ -27,8 +28,6 @@ export class ShoutMediaComponent implements OnChanges {
   public spotifyEmbed: SafeResourceUrl | null = null;
   public hostname = '';
 
-  constructor(private sanitizer: DomSanitizer) {}
-
   ngOnChanges(): void {
     this.hostname = this.calcularHostname();
     this.youtubeEmbed = this.esVideo ? this.calcularYoutubeEmbed() : null;
@@ -36,30 +35,32 @@ export class ShoutMediaComponent implements OnChanges {
   }
 
   get tieneMedia(): boolean {
-    return !!this.url && this.tipo !== 'Texto';
+    return !!this.url() && this.tipo() !== 'Texto';
   }
 
-  get esVideo(): boolean { return this.tipo === 'Video'; }
-  get esSpotify(): boolean { return this.tipo === 'Spotify'; }
-  get esFoto(): boolean { return this.tipo === 'Foto'; }
-  get esEnlace(): boolean { return this.tipo === 'Enlace'; }
+  get esVideo(): boolean { return this.tipo() === 'Video'; }
+  get esSpotify(): boolean { return this.tipo() === 'Spotify'; }
+  get esFoto(): boolean { return this.tipo() === 'Foto'; }
+  get esEnlace(): boolean { return this.tipo() === 'Enlace'; }
 
   private calcularHostname(): string {
-    try { return new URL(this.url!).hostname.replace('www.', ''); }
-    catch { return this.url || ''; }
+    try { return new URL(this.url()!).hostname.replace('www.', ''); }
+    catch { return this.url() || ''; }
   }
 
   private calcularYoutubeEmbed(): SafeResourceUrl | null {
-    if (!this.url) return null;
-    const id = this.extractYoutubeId(this.url);
+    const url = this.url();
+    if (!url) return null;
+    const id = this.extractYoutubeId(url);
     if (!id) return null;
     return this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube-nocookie.com/embed/${id}`);
   }
 
   private calcularSpotifyEmbed(): SafeResourceUrl | null {
-    if (!this.url) return null;
+    const url = this.url();
+    if (!url) return null;
     // Soporta el segmento de idioma opcional (ej: /intl-es/track/...).
-    const m = this.url.match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(track|album|playlist|episode|show)\/([a-zA-Z0-9]+)/);
+    const m = url.match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(track|album|playlist|episode|show)\/([a-zA-Z0-9]+)/);
     if (!m) return null;
     return this.sanitizer.bypassSecurityTrustResourceUrl(`https://open.spotify.com/embed/${m[1]}/${m[2]}`);
   }

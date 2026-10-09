@@ -5,18 +5,42 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogRangosChangesReportComponent } from '../dialog-rangos-changes-report/dialog-rangos-changes-report.component';
 import { DialogVerUsuariosComponent } from 'src/app/components/dialogs/dialog-ver-usuarios/dialog-ver-usuarios.component';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgStyle, DatePipe } from '@angular/common';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
+import { IHttpRangosService } from '../../../../../services/interfaces/httpRangos.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-rangos',
-  templateUrl: './table-rangos.component.html',
-  styleUrls: ['./table-rangos.component.scss'],
+    selector: 'app-table-rangos',
+    templateUrl: './table-rangos.component.html',
+    styleUrls: ['./table-rangos.component.scss'],
+    imports: [
+        AdminFiltrosComponent,
+        MatButton,
+        MatIcon,
+        MatTooltip,
+        NgStyle,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatPaginator,
+        DatePipe,
+        TimeAgoPipe,
+    ],
 })
 export class TableRangosComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private rangosService = inject(IHttpRangosService);
+  private dialog = inject(MatDialog);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public rangos: any[] = [];
@@ -26,11 +50,7 @@ export class TableRangosComponent implements OnInit {
   public cargando = false;
   public readonly filtrosConfig: AdminFiltrosConfig = { placeholder: 'Buscar rangos...' };
 
-  constructor(
-    public paginationService: PaginationService,
-    private securityService: IHttpSecurityService,
-    private dialog: MatDialog
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 
@@ -40,7 +60,7 @@ export class TableRangosComponent implements OnInit {
 
   getRangos(): void {
     this.cargando = true;
-    this.securityService.getRangosUsuarios(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.rangosService.getRangosUsuarios(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.rangos = response?.rangos;
       this.totalCount = response?.pagination?.totalCount;
     });
@@ -88,7 +108,7 @@ export class TableRangosComponent implements OnInit {
   deleteRango(id: number): void {}
 
   updateRangoUsuarios(): void {
-    this.securityService
+    this.rangosService
       .changeUsuariosRangosByPuntos()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {

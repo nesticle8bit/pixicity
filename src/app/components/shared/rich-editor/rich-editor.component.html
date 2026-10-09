@@ -93,7 +93,7 @@
 
   <div #editorEl class="rich-editor__content" [class.is-empty]="isEmpty" role="textbox" aria-multiline="true"
     [attr.contenteditable]="disabled ? 'false' : 'true'" [attr.aria-disabled]="disabled"
-    [attr.aria-placeholder]="placeholder" [attr.data-placeholder]="placeholder" (input)="onInput()"
+    [attr.aria-placeholder]="placeholder()" [attr.data-placeholder]="placeholder()" (input)="onInput()"
     (blur)="onBlur()" (keydown)="onKeydown($event)" (paste)="onPaste($event)" (dragstart)="onDragStart()"
     (dragend)="onDragEnd()" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
     (drop)="onDrop($event)">

@@ -3,20 +3,47 @@ import { environment } from 'src/environments/environment';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { UserPopoverDirective } from '../../../../shared/directives/userPopover.directive';
+import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ShoutMediaComponent } from '../../../addons/shout-media/shout-media.component';
+import { ShoutsCommentsComponent } from '../shouts-comments/shouts-comments.component';
+import { PostOriginalPosterInfoComponent } from '../../../posts/post-original-poster-info/post-original-poster-info.component';
+import { MatButton } from '@angular/material/button';
+import { DatePipe, DOCUMENT } from '@angular/common';
 
 @Component({
-  standalone: false,
-  selector: 'app-shouts-view',
-  templateUrl: './shouts-view.component.html',
-  styleUrls: ['./shouts-view.component.scss'],
+    selector: 'app-shouts-view',
+    templateUrl: './shouts-view.component.html',
+    styleUrls: ['./shouts-view.component.scss'],
+    imports: [
+        RouterLink,
+        UserPopoverDirective,
+        UserAvatarComponent,
+        MatTooltip,
+        ShoutMediaComponent,
+        ShoutsCommentsComponent,
+        PostOriginalPosterInfoComponent,
+        MatButton,
+        DatePipe,
+    ],
 })
 export class ShoutsViewComponent implements OnInit {
+  private readonly documento = inject(DOCUMENT);
+  private displayService = inject(DisplayComponentService);
+  private securityService = inject(IHttpSecurityService);
+  private activatedRoute = inject(ActivatedRoute);
+  private perfilService = inject(IHttpPerfilService);
+  private snackBar = inject(MatSnackBar);
+  private notificationService = inject(NotificationService);
+  private seoService = inject(SEOService);
+
   public readonly publicUrl = environment.publicUrl;
 
   private readonly destroyRef = inject(DestroyRef);
@@ -24,15 +51,7 @@ export class ShoutsViewComponent implements OnInit {
   public currentUser?: JwtUserModel;
   public shout: any;
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private securityService: IHttpSecurityService,
-    private activatedRoute: ActivatedRoute,
-    private perfilService: IHttpPerfilService,
-    private snackBar: MatSnackBar,
-    private notificationService: NotificationService,
-    private seoService: SEOService
-  ) {
+  constructor() {
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,
@@ -77,15 +96,15 @@ export class ShoutsViewComponent implements OnInit {
           type: 'article',
           imageURL: '',
           tags: [autor, 'shout', 'taringas'].filter(Boolean),
-          canonical: `${location.origin}${location.pathname}`,
+          canonical: `${environment.publicUrl}${this.documento.location.pathname}`,
           jsonLd: {
             '@context': 'https://schema.org',
             '@type': 'SocialMediaPosting',
             headline: texto ? texto.substring(0, 110) : `Shout de ${autor}`,
             datePublished: this.shout.fechaRegistro,
             author: { '@type': 'Person', name: autor },
-            publisher: { '@id': `${location.origin}/#organization` },
-            mainEntityOfPage: { '@type': 'WebPage', '@id': `${location.origin}${location.pathname}` },
+            publisher: { '@id': `${environment.publicUrl}/#organization` },
+            mainEntityOfPage: { '@type': 'WebPage', '@id': `${environment.publicUrl}${this.documento.location.pathname}` },
           },
         });
       }

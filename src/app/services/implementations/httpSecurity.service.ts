@@ -9,28 +9,24 @@ import { HelperService } from '../shared/helper.service';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, finalize, map, shareReplay } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { PerfilInfoResponse, PerfilUsuarioViewModel, RangoUsuarioReportViewModel, SeguidoresResponse, UsuarioAdminViewModel, UsuarioAvatarViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
-import { ActividadViewModel } from 'src/app/models/logs/logs-vm.model';
-import { DropdownViewModel } from 'src/app/models/parametros/parametros-vm.model';
-
-
-
+import { PerfilUsuarioViewModel, UsuarioAdminViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { enNavegador } from '../../shared/helpers/plataforma';
 @Injectable()
 export class HttpSecurityService implements IHttpSecurityService {
+  private http = inject(HttpClient);
+  private helper = inject(HelperService);
+  private router = inject(Router);
+  private paginationService = inject(PaginationService);
+  private notificationService = inject(NotificationService);
+
   public currentUser: Observable<JwtUserModel>;
   private currentUserSubject: BehaviorSubject<JwtUserModel>;
 
-  constructor(
-    private http: HttpClient,
-    private helper: HelperService,
-    private router: Router,
-    private paginationService: PaginationService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.currentUserSubject = new BehaviorSubject<JwtUserModel>(
       JSON.parse(localStorage.getItem('taringas') || '{}')
     );
@@ -38,7 +34,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
     // Otra pestaña que renueva el token rota el refresh token: sin sincronizar, esta pestaña
     // intentaría renovar con uno ya invalidado y cerraría la sesión.
-    window.addEventListener('storage', (event) => {
+    if (enNavegador()) window.addEventListener('storage', (event) => {
       if (event.key === 'taringas') {
         this.currentUserSubject.next(this.readStoredUser());
       }
@@ -316,202 +312,9 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getUsuarioInfo(userName: string): Observable<PerfilUsuarioViewModel> {
-    return this.http
-      .get<ApiResponse<PerfilUsuarioViewModel>>(
-        `${environment.api}/api/usuarios/getUsuarioInfo?userName=${userName}`
-      )
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  seguirUsuario(usuario: { userName: string }): Observable<boolean> {
-    return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/seguirUsuario`, usuario)
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  isFollowingTheUser(userName: string): Observable<boolean> {
-    return this.http
-      .get<ApiResponse<boolean>>(
-        `${environment.api}/api/usuarios/isFollowingTheUser?userName=${userName}`
-      )
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  getFollowingUsersByUserId(id: number): Observable<PaginatedData<UsuarioAvatarViewModel>> {
-    return this.http
-      .get<ApiResponse<PaginatedData<UsuarioAvatarViewModel>>>(
-        `${environment.api}/api/usuarios/getFollowingUsersByUserId?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${id}`
-      )
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  getFollowersByUserId(userId: number): Observable<PaginatedData<UsuarioAvatarViewModel>> {
-    return this.http
-      .get<ApiResponse<PaginatedData<UsuarioAvatarViewModel>>>(
-        `${environment.api}/api/usuarios/getFollowersByUserId?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${userId}`
-      )
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  getLastFollowersByUserId(userId: number): Observable<SeguidoresResponse> {
-    return this.http
-      .get<ApiResponse<SeguidoresResponse>>(
-        `${environment.api}/api/usuarios/getLastFollowersByUserId?userId=${userId}`
-      )
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  savePerfilInfo(perfil: Partial<PerfilUsuarioViewModel>): Observable<boolean> {
-    return this.http
-      .put<ApiResponse<boolean>>(`${environment.api}/api/usuarios/savePerfilInfo`, perfil)
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  getCurrentPerfilInfo(): Observable<PerfilInfoResponse> {
-    return this.http
-      .get<ApiResponse<PerfilInfoResponse>>(`${environment.api}/api/usuarios/getCurrentPerfilInfo`)
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  getPerfilInfoByUserId(userId: number): Observable<PerfilUsuarioViewModel> {
-    return this.http
-      .get<ApiResponse<PerfilUsuarioViewModel>>(
-        `${environment.api}/api/usuarios/getPerfilInfoByUserId?usuarioId=${userId}`
-      )
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  getSocialMediaByUsuarioId(usuarioId: number): Observable<unknown> {
-    return this.http
-      .get<ApiResponse<unknown>>(
-        `${environment.api}/api/usuarios/getSocialMediaByUsuarioId?usuarioId=${usuarioId}`
-      )
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
   banUser(usuario: { userName: string; razon?: string }): Observable<boolean> {
     return this.http
       .post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/banUser`, usuario)
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  changeAvatar(file: Blob): Observable<string> {
-    const formData: FormData = new FormData();
-    formData.append('avatar.jpeg', file);
-
-    return this.http
-      .post<ApiResponse<string>>(`${environment.api}/api/usuarios/changeAvatar`, formData)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -561,91 +364,6 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getRangosUsuarios(filtro: AdminFiltro = {}): Observable<PaginatedData<unknown, 'rangos'>> {
-    return this.http
-      .get<ApiResponse<PaginatedData<unknown, 'rangos'>>>(`${environment.api}/api/rangos/getRangosUsuarios`, { params: adminParams(filtro, this.paginationService) })
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  getRangosDropdown(): Observable<DropdownViewModel[]> {
-    return this.http
-      .get<ApiResponse<DropdownViewModel[]>>(`${environment.api}/api/rangos/getRangosDropdown`)
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  getActividadUsuario(usuarioId: number, tipoActividad: number): Observable<ActividadViewModel[]> {
-    return this.http
-      .get<ApiResponse<ActividadViewModel[]>>(
-        `${environment.api}/api/usuarios/getActividadUsuario?usuarioId=${usuarioId}&tipoActividad=${tipoActividad}`
-      )
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  addUpdateRango(rango: unknown): Observable<number> {
-    return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/rangos/addUpdateRango`, rango)
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  changeRango(rangoUsuario: { userId: number; rangoId: number }): Observable<boolean> {
-    return this.http
-      .post<ApiResponse<boolean>>(
-        `${environment.api}/api/rangos/changeRangoUsuario`,
-        rangoUsuario
-      )
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
   sessionOnlineUser(): Observable<boolean> {
     return this.http
       .get<ApiResponse<boolean>>(`${environment.api}/api/usuarios/sessionOnlineUser`)
@@ -662,59 +380,9 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  changeBackgroundProfile(obj: { imageUrl: string }): Observable<boolean> {
-    return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/changeBackgroundProfile`, obj)
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
   getAdminsList(): Observable<UsuarioViewModel[]> {
     return this.http
       .get<ApiResponse<UsuarioViewModel[]>>(`${environment.api}/api/usuarios/getAdmins`)
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  changeUsuariosRangosByPuntos(): Observable<RangoUsuarioReportViewModel[]> {
-    return this.http
-      .get<ApiResponse<RangoUsuarioReportViewModel[]>>(`${environment.api}/api/rangos/changeUsuariosRangosByPuntos`)
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        })
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  getUserStatus(userName: string): Observable<number | null> {
-    return this.http
-      .get<ApiResponse<number | null>>(
-        `${environment.api}/api/usuarios/getUserStatus?userName=${userName}`
-      )
       .pipe(
         map((response) => {
           if (response.status === 200) {

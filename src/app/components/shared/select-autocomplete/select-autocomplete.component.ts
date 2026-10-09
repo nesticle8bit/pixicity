@@ -2,17 +2,19 @@ import {
   Component,
   ContentChild,
   ElementRef,
-  EventEmitter,
   forwardRef,
   Input,
   OnChanges,
-  Output,
   SimpleChanges,
   TemplateRef,
-  ViewChild,
+  input,
+  output,
+  viewChild
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
 import { SelectLabelDirective, SelectOptionDirective } from './select-template.directives';
+import { CdkOverlayOrigin, CdkConnectedOverlay } from '@angular/cdk/overlay';
+import { NgTemplateOutlet } from '@angular/common';
 
 /**
  * Select con autocompletado y búsqueda por texto parcial. Reemplaza a @ng-select.
@@ -23,34 +25,39 @@ import { SelectLabelDirective, SelectOptionDirective } from './select-template.d
  * (change) emite el item completo seleccionado (paridad con ng-select).
  */
 @Component({
-  standalone: false,
-  selector: 'app-select',
-  templateUrl: './select-autocomplete.component.html',
-  styleUrls: ['./select-autocomplete.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SelectAutocompleteComponent),
-      multi: true,
-    },
-  ],
+    selector: 'app-select',
+    templateUrl: './select-autocomplete.component.html',
+    styleUrls: ['./select-autocomplete.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => SelectAutocompleteComponent),
+            multi: true,
+        },
+    ],
+    imports: [
+        CdkOverlayOrigin,
+        NgTemplateOutlet,
+        CdkConnectedOverlay,
+        FormsModule,
+    ],
 })
 export class SelectAutocompleteComponent implements ControlValueAccessor, OnChanges {
-  @Input() items: any[] = [];
-  @Input() bindLabel?: string;
-  @Input() bindValue?: string;
-  @Input() placeholder = 'Seleccionar...';
-  @Input() clearable = true;
-  @Input() searchable = true;
+  readonly items = input<any[]>([]);
+  readonly bindLabel = input<string>();
+  readonly bindValue = input<string>();
+  readonly placeholder = input('Seleccionar...');
+  readonly clearable = input(true);
+  readonly searchable = input(true);
 
-  @Output() change = new EventEmitter<any>();
-  @Output() opened = new EventEmitter<void>();
-  @Output() closed = new EventEmitter<void>();
+  readonly change = output<any>();
+  readonly opened = output<void>();
+  readonly closed = output<void>();
 
   @ContentChild(SelectOptionDirective, { read: TemplateRef }) optionTpl?: TemplateRef<any>;
   @ContentChild(SelectLabelDirective, { read: TemplateRef }) labelTpl?: TemplateRef<any>;
 
-  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
+  readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
 
   @Input() disabled = false;
 
@@ -80,23 +87,25 @@ export class SelectAutocompleteComponent implements ControlValueAccessor, OnChan
       this.selectedItem = null;
       return;
     }
-    const found = (this.items || []).find((it) => this.valueOf(it) === this.value);
+    const found = (this.items() || []).find((it) => this.valueOf(it) === this.value);
     // Sin bindValue, el propio valor es el item (listas de strings)
-    this.selectedItem = found ?? (this.bindValue ? this.selectedItem : this.value);
+    this.selectedItem = found ?? (this.bindValue() ? this.selectedItem : this.value);
   }
 
-  valueOf(item: any): any { return this.bindValue ? item?.[this.bindValue] : item; }
+  valueOf(item: any): any { const bindValue = this.bindValue();
+                            return bindValue ? item?.[bindValue] : item; }
   labelOf(item: any): any {
     if (item === null || item === undefined) return '';
-    return this.bindLabel ? item?.[this.bindLabel] : item;
+    const bindLabel = this.bindLabel();
+    return bindLabel ? item?.[bindLabel] : item;
   }
 
   get hasValue(): boolean { return this.value !== null && this.value !== undefined; }
 
   get filtered(): any[] {
     const q = this.normalize(this.search);
-    if (!q) return this.items || [];
-    return (this.items || []).filter((it) => this.normalize(String(this.labelOf(it))).includes(q));
+    if (!q) return this.items() || [];
+    return (this.items() || []).filter((it) => this.normalize(String(this.labelOf(it))).includes(q));
   }
 
   private normalize(text: string): string {
@@ -111,7 +120,7 @@ export class SelectAutocompleteComponent implements ControlValueAccessor, OnChan
     this.isOpen = true;
     this.search = '';
     this.opened.emit();
-    setTimeout(() => this.searchInput?.nativeElement.focus(), 0);
+    setTimeout(() => this.searchInput()?.nativeElement.focus(), 0);
   }
 
   close(): void {

@@ -1,24 +1,25 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
-import { ComentarioReciente } from '../../addons/recent-comments-list/recent-comments-list.component';
+import { ComentarioReciente, RecentCommentsListComponent } from '../../addons/recent-comments-list/recent-comments-list.component';
+import { IHttpComentariosPostService } from '../../../services/interfaces/httpComentariosPost.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-home-last-comments',
-  template: `
+    selector: 'app-home-last-comments',
+    template: `
     <app-recent-comments-list [comentarios]="comentarios" [cargando]="cargando"
       mensajeVacio="Aún no se han realizado comentarios en Taringa!" (actualizar)="getUltimosComentarios()">
     </app-recent-comments-list>
   `,
+    imports: [RecentCommentsListComponent],
 })
 export class HomeLastCommentsComponent implements OnInit {
+  private comentariosPostService = inject(IHttpComentariosPostService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public cargando: boolean = false;
   public comentarios: ComentarioReciente[] = [];
-
-  constructor(private postService: IHttpPostsService) {}
 
   ngOnInit(): void {
     this.getUltimosComentarios();
@@ -27,7 +28,7 @@ export class HomeLastCommentsComponent implements OnInit {
   getUltimosComentarios(): void {
     this.cargando = true;
 
-    this.postService
+    this.comentariosPostService
       .getUltimosComentarios()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((comentarios: any[]) => {

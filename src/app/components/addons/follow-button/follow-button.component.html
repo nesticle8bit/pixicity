@@ -1,18 +1,18 @@
 @if (currentUser?.usuario && currentUser?.usuario?.userName !== userName) {
-  <main>
+  <div>
     @if (isFollowing) {
       <a class=" bgris unfollow_user_post" (click)="followUser(false)" role="button" tabindex="0" (keydown.enter)="followUser(false)" (keydown.space)="followUser(false); $event.preventDefault()">
-        @if (icon) {
+        @if (icon()) {
           <i class="ti ti-eye"></i>
           } Siguiendo
         </a>
       }
       @if (!isFollowing) {
         <a class="bverde follow_user_post" (click)="followUser(!isFollowing)" role="button" tabindex="0" (keydown.enter)="followUser(!isFollowing)" (keydown.space)="followUser(!isFollowing); $event.preventDefault()">
-          @if (icon) {
+          @if (icon()) {
             <i class="ti ti-eye"></i>
             } Seguir
           </a>
         }
-      </main>
+      </div>
     }

@@ -3,18 +3,42 @@ import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filt
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { NgClass, DatePipe } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
+import { TruncatePipe } from '../../../../../shared/pipes/truncate.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-sesiones',
-  templateUrl: './table-sesiones.component.html',
-  styleUrls: ['./table-sesiones.component.scss'],
+    selector: 'app-table-sesiones',
+    templateUrl: './table-sesiones.component.html',
+    styleUrls: ['./table-sesiones.component.scss'],
+    imports: [
+        AdminFiltrosComponent,
+        NgClass,
+        MatTooltip,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatIcon,
+        MatPaginator,
+        DatePipe,
+        TimeAgoPipe,
+        TruncatePipe,
+    ],
 })
 export class TableSesionesComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private securityService = inject(IHttpSecurityService);
+  private snackBar = inject(MatSnackBar);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public sesiones: any[] = [];
@@ -33,12 +57,7 @@ export class TableSesionesComponent implements OnInit {
     ],
   };
 
-  constructor(
-    public paginationService: PaginationService,
-    private securityService: IHttpSecurityService,
-    private snackBar: MatSnackBar,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 

@@ -1,29 +1,40 @@
-import { Component, DestroyRef, inject, Inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  standalone: false,
-  selector: 'app-dialog-comunidad-subcategoria',
-  templateUrl: './dialog-comunidad-subcategoria.component.html',
-  styleUrls: ['./dialog-comunidad-subcategoria.component.scss'],
+    selector: 'app-dialog-comunidad-subcategoria',
+    templateUrl: './dialog-comunidad-subcategoria.component.html',
+    styleUrls: ['./dialog-comunidad-subcategoria.component.scss'],
+    imports: [
+        MatDialogTitle,
+        FormsModule,
+        ReactiveFormsModule,
+        CdkScrollable,
+        MatDialogContent,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+    ],
 })
 export class DialogComunidadSubcategoriaComponent {
+  data = inject(MAT_DIALOG_DATA);
+  dialogRef = inject<MatDialogRef<DialogComunidadSubcategoriaComponent>>(MatDialogRef);
+  private fb = inject(FormBuilder);
+  private comunidadesService = inject(IHttpComunidadesService);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
   public categoria: any;
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialogRef: MatDialogRef<DialogComunidadSubcategoriaComponent>,
-    private fb: FormBuilder,
-    private comunidadesService: IHttpComunidadesService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.categoria = this.data?.categoria;
     const sub = this.data?.sub;
     this.formGroup = this.fb.group({

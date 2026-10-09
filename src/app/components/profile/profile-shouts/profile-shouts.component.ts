@@ -2,16 +2,29 @@ import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup , Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { ShoutMediaComponent } from '../../addons/shout-media/shout-media.component';
+import { ProfileShoutsWallComponent } from '../profile-shouts-wall/profile-shouts-wall.component';
 
 @Component({
-  standalone: false,
-  selector: 'app-profile-shouts',
-  templateUrl: './profile-shouts.component.html',
-  styleUrls: ['./profile-shouts.component.scss'],
+    selector: 'app-profile-shouts',
+    templateUrl: './profile-shouts.component.html',
+    styleUrls: ['./profile-shouts.component.scss'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        UserAvatarComponent,
+        ShoutMediaComponent,
+        ProfileShoutsWallComponent,
+    ],
 })
 export class ProfileShoutsComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private perfilService = inject(IHttpPerfilService);
+  private securityService = inject(IHttpSecurityService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public reloadShouts: boolean = false;
@@ -34,11 +47,7 @@ export class ProfileShoutsComponent implements OnInit {
   public formGroup: FormGroup;
   public currentUser?: JwtUserModel;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private perfilService: IHttpPerfilService,
-    private securityService: IHttpSecurityService
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({
       comentario: ['', Validators.required],
       perfilId: [0, Validators.required],

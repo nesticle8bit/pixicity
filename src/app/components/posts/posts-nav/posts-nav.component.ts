@@ -1,20 +1,22 @@
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
-import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
-  standalone: false,
-  selector: 'app-posts-nav',
-  templateUrl: './posts-nav.component.html',
-  styleUrls: ['./posts-nav.component.scss'],
+    selector: 'app-posts-nav',
+    templateUrl: './posts-nav.component.html',
+    styleUrls: ['./posts-nav.component.scss'],
+    imports: [MatTooltip],
 })
 export class PostsNavComponent implements OnInit {
+  private postService = inject(IHttpPostsService);
+  private router = inject(Router);
+
   private readonly destroyRef = inject(DestroyRef);
 
-  @Input() post: any;
-
-  constructor(private postService: IHttpPostsService, private router: Router) {}
+  readonly post = input<any>();
 
   ngOnInit(): void {}
 

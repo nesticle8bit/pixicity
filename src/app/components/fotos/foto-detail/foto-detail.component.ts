@@ -1,19 +1,47 @@
+import { environment } from 'src/environments/environment';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { ShareButtonsComponent } from '../../addons/share-buttons/share-buttons.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgClass, DecimalPipe, DatePipe, DOCUMENT } from '@angular/common';
+import { FotoComentariosComponent } from '../foto-comentarios/foto-comentarios.component';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
+import { ThumbPipe } from '../../../shared/pipes/thumb.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-foto-detail',
-  templateUrl: './foto-detail.component.html',
-  styleUrls: ['./foto-detail.component.scss'],
+    selector: 'app-foto-detail',
+    templateUrl: './foto-detail.component.html',
+    styleUrls: ['./foto-detail.component.scss'],
+    imports: [ThumbPipe, 
+        RouterLink,
+        UserPopoverDirective,
+        UserAvatarComponent,
+        ShareButtonsComponent,
+        MatTooltip,
+        NgClass,
+        FotoComentariosComponent,
+        DecimalPipe,
+        DatePipe,
+        TimeAgoPipe,
+    ],
 })
 export class FotoDetailComponent implements OnInit {
+  private readonly documento = inject(DOCUMENT);
+  private displayService = inject(DisplayComponentService);
+  private securityService = inject(IHttpSecurityService);
+  private fotosService = inject(IHttpFotosService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private seoService = inject(SEOService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public foto: any = null;
@@ -21,14 +49,7 @@ export class FotoDetailComponent implements OnInit {
   public loading: boolean = true;
   public fotoId: number = 0;
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private securityService: IHttpSecurityService,
-    private fotosService: IHttpFotosService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private seoService: SEOService,
-  ) {
+  constructor() {
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,
@@ -58,7 +79,7 @@ export class FotoDetailComponent implements OnInit {
           .createUrlTree(['/fotos', this.foto.usuario, this.foto.id, this.foto.url])
           .toString();
 
-        if (decodeURIComponent(location.pathname) !== decodeURIComponent(rutaCanonica.split('?')[0])) {
+        if (decodeURIComponent(this.documento.location.pathname) !== decodeURIComponent(rutaCanonica.split('?')[0])) {
           this.router.navigateByUrl(rutaCanonica, { replaceUrl: true });
           return;
         }
@@ -71,7 +92,7 @@ export class FotoDetailComponent implements OnInit {
           type: 'article',
           imageURL: this.foto.imageUrl || '',
           tags: [this.foto.titulo, this.foto.categoria, this.foto.usuario, 'fotos', 'taringas'].filter(Boolean),
-          canonical: `${location.origin}${rutaCanonica}`,
+          canonical: `${environment.publicUrl}${rutaCanonica}`,
           jsonLd: {
             '@context': 'https://schema.org',
             '@graph': [{
@@ -82,17 +103,17 @@ export class FotoDetailComponent implements OnInit {
               creditText: this.foto.usuario,
               author: { '@type': 'Person', name: this.foto.usuario },
               copyrightNotice: this.foto.usuario,
-              license: `${location.origin}/paginas/terminos-y-condiciones`,
+              license: `${environment.publicUrl}/paginas/terminos-y-condiciones`,
             }, {
               '@type': 'BreadcrumbList',
               itemListElement: [
-                { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${location.origin}/` },
-                { '@type': 'ListItem', position: 2, name: 'Fotos', item: `${location.origin}/fotos` },
+                { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${environment.publicUrl}/` },
+                { '@type': 'ListItem', position: 2, name: 'Fotos', item: `${environment.publicUrl}/fotos` },
                 {
                   '@type': 'ListItem',
                   position: 3,
                   name: this.foto.titulo,
-                  item: `${location.origin}${location.pathname}`,
+                  item: `${environment.publicUrl}${this.documento.location.pathname}`,
                 },
               ],
             }],

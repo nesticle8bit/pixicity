@@ -171,7 +171,7 @@
     }
 
     .tema-title { font-size: 14px; font-weight: 600; color: #1a1a1a; text-decoration: none; &:hover { color: #006595; } }
-    .tema-meta { font-size: 11.5px; color: #999; margin-top: 3px; a { color: #006595; text-decoration: none; } }
+    .tema-meta { font-size: 11.5px; color: #6b6b6b; margin-top: 3px; a { color: #006595; text-decoration: none; } }
   }
 
   .com-empty {
@@ -180,7 +180,7 @@
     border-radius: 6px;
     padding: 14px;
     text-align: center;
-    color: #5a7a8c;
+    color: #476474;
     font-size: 13px;
 
     &.sm { padding: 8px; font-size: 12px; }
@@ -272,14 +272,14 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 10px; font-weight: 700;
       border-radius: 50%;
-      background: #eef1f3; color: #777;
+      background: #eef1f3; color: #666;
     }
     .tt-title {
       flex: 1; min-width: 0;
       font-size: 12px; color: #333;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .tt-views { font-size: 11px; color: #999; white-space: nowrap; }
+    .tt-views { font-size: 11px; color: #6b6b6b; white-space: nowrap; }
   }
 }
 

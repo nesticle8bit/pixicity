@@ -13,16 +13,16 @@ import { MensajesConversacionComponent } from '../../components/pages/mensajes/m
 import { MensajesSidebarComponent } from '../../components/pages/mensajes/mensajes-sidebar/mensajes-sidebar.component';
 
 @NgModule({
-  declarations: [MensajesComponent, MensajesConversacionComponent, MensajesSidebarComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatPaginatorModule,
-    SharedModule,
-    MensajesRoutingModule,
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatPaginatorModule,
+        SharedModule,
+        MensajesRoutingModule,
+        MensajesComponent, MensajesConversacionComponent, MensajesSidebarComponent,
+    ],
 })
 export class MensajesModule {}

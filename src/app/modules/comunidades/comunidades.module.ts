@@ -20,27 +20,25 @@ import { ComunidadesTopTemasComponent } from '../../components/comunidades/widge
 import { ComunidadesStatsComponent } from '../../components/comunidades/widgets/comunidades-stats/comunidades-stats.component';
 
 @NgModule({
-  declarations: [
-    ComunidadesIndexComponent,
-    ComunidadCreateComponent,
-    ComunidadViewComponent,
-    ComunidadEditComponent,
-    ComunidadTemaCreateComponent,
-    ComunidadTemaViewComponent,
-    ComunidadMiembrosComponent,
-    ComunidadesExplorarComponent,
-    ComunidadesTemasRecientesComponent,
-    ComunidadesUltimosComentariosComponent,
-    ComunidadesTopComponent,
-    ComunidadesTopTemasComponent,
-    ComunidadesStatsComponent,
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SharedModule,
-    ComunidadesRoutingModule,
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        ComunidadesRoutingModule,
+        ComunidadesIndexComponent,
+        ComunidadCreateComponent,
+        ComunidadViewComponent,
+        ComunidadEditComponent,
+        ComunidadTemaCreateComponent,
+        ComunidadTemaViewComponent,
+        ComunidadMiembrosComponent,
+        ComunidadesExplorarComponent,
+        ComunidadesTemasRecientesComponent,
+        ComunidadesUltimosComentariosComponent,
+        ComunidadesTopComponent,
+        ComunidadesTopTemasComponent,
+        ComunidadesStatsComponent,
+    ],
 })
 export class ComunidadesModule {}

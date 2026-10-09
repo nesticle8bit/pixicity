@@ -1,14 +1,20 @@
 import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
+import { MatTooltip } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
+import { ThumbPipe } from '../../../../shared/pipes/thumb.pipe';
+import { enNavegador } from '../../../../shared/helpers/plataforma';
 
 @Component({
-  standalone: false,
-  selector: 'app-comunidades-top',
-  templateUrl: './comunidades-top.component.html',
-  styleUrls: ['./comunidades-top.component.scss'],
+    selector: 'app-comunidades-top',
+    templateUrl: './comunidades-top.component.html',
+    styleUrls: ['./comunidades-top.component.scss'],
+    imports: [ThumbPipe, MatTooltip, RouterLink],
 })
 export class ComunidadesTopComponent implements OnInit, OnDestroy {
+  private comunidadesService = inject(IHttpComunidadesService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public comunidades: any[] = [];
@@ -18,8 +24,6 @@ export class ComunidadesTopComponent implements OnInit, OnDestroy {
 
   private readonly interval = 4000;
   private timer: any = null;
-
-  constructor(private comunidadesService: IHttpComunidadesService) {}
 
   ngOnInit(): void {
     this.comunidadesService.getTopComunidades(5).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
@@ -44,7 +48,7 @@ export class ComunidadesTopComponent implements OnInit, OnDestroy {
   startTimer(): void {
     if (this.paused) return;
     this.stopTimer();
-    this.timer = setInterval(() => this.next(), this.interval);
+    if (enNavegador()) this.timer = setInterval(() => this.next(), this.interval);
   }
 
   stopTimer(): void {

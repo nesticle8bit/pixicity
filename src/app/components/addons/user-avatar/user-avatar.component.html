@@ -1,1 +1,1 @@
-<img class="img-fluid rounded {{class}}" [src]="imageURL" [alt]="userName ? 'Avatar de ' + userName : 'Avatar'" loading="lazy" [ngStyle]="{'width': width + 'px', 'height': height + 'px'}" />
+<img class="img-fluid rounded {{class()}}" [src]="imageURL | thumb: avatarAncho" [alt]="userName ? 'Avatar de ' + userName : 'Avatar'" loading="lazy" [ngStyle]="{'width': width() + 'px', 'height': height() + 'px'}" />

@@ -7,7 +7,10 @@ import { MainMenuComponent } from './main-menu.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { NAV_LINKS, linksFor } from '../main-nav.config';
 
-@Component({ standalone: false, template: '' })
+@Component({
+    template: '',
+    imports: [RouterModule]
+})
 class DummyComponent {}
 
 
@@ -20,23 +23,22 @@ describe('MainMenuComponent (pestañas)', () => {
     user$ = new BehaviorSubject<any>({ usuario, token: usuario ? 't' : '' });
 
     await TestBed.configureTestingModule({
-      declarations: [MainMenuComponent, DummyComponent],
-      imports: [RouterModule],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [
+    imports: [RouterModule, MainMenuComponent, DummyComponent],
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [
         provideRouter([
-          { path: '', component: DummyComponent },
-          { path: 'tops', component: DummyComponent },
-          { path: 'comunidades', children: [{ path: 'explorar', component: DummyComponent }] },
-          { path: 'administracion', children: [{ path: 'dashboard', component: DummyComponent }, { path: 'usuarios', component: DummyComponent }] },
-          { path: 'login', component: DummyComponent },
+            { path: '', component: DummyComponent },
+            { path: 'tops', component: DummyComponent },
+            { path: 'comunidades', children: [{ path: 'explorar', component: DummyComponent }] },
+            { path: 'administracion', children: [{ path: 'dashboard', component: DummyComponent }, { path: 'usuarios', component: DummyComponent }] },
+            { path: 'login', component: DummyComponent },
         ]),
         {
-          provide: IHttpSecurityService,
-          useValue: { getCurrentUserAsObservable: () => user$.asObservable() },
+            provide: IHttpSecurityService,
+            useValue: { getCurrentUserAsObservable: () => user$.asObservable() },
         },
-      ],
-    }).compileComponents();
+    ],
+}).compileComponents();
 
     router = TestBed.inject(Router);
     fixture = TestBed.createComponent(MainMenuComponent);

@@ -2,19 +2,44 @@ import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { NgClass } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { WhoIsIpComponent } from '../../../../addons/who-is-ip/who-is-ip.component';
+import { UserPopoverDirective } from '../../../../../shared/directives/userPopover.directive';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-posts',
-  templateUrl: './table-posts.component.html',
-  styleUrls: ['./table-posts.component.scss'],
+    selector: 'app-table-posts',
+    templateUrl: './table-posts.component.html',
+    styleUrls: ['./table-posts.component.scss'],
+    imports: [
+        AdminFiltrosComponent,
+        NgClass,
+        RouterLink,
+        WhoIsIpComponent,
+        UserPopoverDirective,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatIcon,
+        MatPaginator,
+        TimeAgoPipe,
+    ],
 })
 export class TablePostsComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private postsService = inject(IHttpPostsService);
+  private notificationService = inject(NotificationService);
+  private parametrosService = inject(IHttpParametrosService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public posts: any[] = [];
@@ -36,12 +61,7 @@ export class TablePostsComponent implements OnInit {
     ],
   };
 
-  constructor(
-    public paginationService: PaginationService,
-    private postsService: IHttpPostsService,
-    private notificationService: NotificationService,
-    private parametrosService: IHttpParametrosService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 

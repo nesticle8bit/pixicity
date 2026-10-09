@@ -1,7 +1,9 @@
-import { Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit, input, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, Subject } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig, contarFiltrosAvanzados } from 'src/app/models/admin/admin-filtro.model';
+import { FormsModule } from '@angular/forms';
+import { DecimalPipe } from '@angular/common';
 
 /**
  * Barra de búsqueda de las tablas del panel: buscador (busca en todos los campos de texto de la tabla) y un botón
@@ -9,10 +11,10 @@ import { AdminFiltro, AdminFiltrosConfig, contarFiltrosAvanzados } from 'src/app
  * cambio; el texto con una pausa para no consultar en cada tecla.
  */
 @Component({
-  standalone: false,
-  selector: 'app-admin-filtros',
-  templateUrl: './admin-filtros.component.html',
-  styleUrls: ['./admin-filtros.component.scss'],
+    selector: 'app-admin-filtros',
+    templateUrl: './admin-filtros.component.html',
+    styleUrls: ['./admin-filtros.component.scss'],
+    imports: [FormsModule, DecimalPipe],
 })
 export class AdminFiltrosComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
@@ -22,9 +24,9 @@ export class AdminFiltrosComponent implements OnInit {
   @Input() config: AdminFiltrosConfig = {};
   /** Total de resultados con el filtro actual (se muestra a la derecha). */
   @Input() total: number | null = null;
-  @Input() cargando = false;
+  readonly cargando = input(false);
 
-  @Output() cambio = new EventEmitter<AdminFiltro>();
+  readonly cambio = output<AdminFiltro>();
 
   public filtro: AdminFiltro = {};
   public abierto = false;

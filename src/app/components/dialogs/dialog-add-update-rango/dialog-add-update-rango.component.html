@@ -7,8 +7,8 @@
         <div class="row">
             <div class="col-12 col-sm-12">
                 <div class="mb-3">
-                    <label class="form-label">Rango</label>
-                    <input type="text" class="form-control" formControlName="nombre" />
+                    <label class="form-label" for="dialog-add-update-rango-nombre">Rango</label>
+                    <input id="dialog-add-update-rango-nombre" type="text" class="form-control" formControlName="nombre" />
                 </div>
             </div>
         </div>
@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-12 col-sm-12">
                 <div class="mb-3">
-                    <label class="form-label">Ícono</label>
+                    <label class="form-label" for="dialog-add-update-rango-puntos">Ícono</label>
 
                     <app-select [items]="iconos" formControlName="icono">
                         <ng-template appSelectOption let-item="item" let-index="index">
@@ -32,23 +32,23 @@
             <div class="col-12 col-sm-12">
                 <div class="mb-3">
                     <label class="form-label">Puntos</label>
-                    <input type="number" class="form-control" formControlName="puntos" />
+                    <input id="dialog-add-update-rango-puntos" type="number" class="form-control" formControlName="puntos" />
                     <small class="text-muted">Puntos que necesita para llegar a este Rango</small>
                 </div>
             </div>
 
             <div class="col-12 col-sm-12">
                 <div class="mb-3">
-                    <label class="form-label">Puntos por día</label>
-                    <input type="number" min="0" max="10000" class="form-control" formControlName="puntosDiarios" />
+                    <label class="form-label" for="dialog-add-update-rango-puntosDiarios">Puntos por día</label>
+                    <input id="dialog-add-update-rango-puntosDiarios" type="number" min="0" max="10000" class="form-control" formControlName="puntosDiarios" />
                     <small class="text-muted">Puntos que un usuario con este rango puede repartir en votos cada día</small>
                 </div>
             </div>
 
             <div class="col-12 col-sm-12">
                 <div class="mb-3">
-                    <label class="form-label">Color</label>
-                    <input type="text" class="form-control" formControlName="color" />
+                    <label class="form-label" for="dialog-add-update-rango-color">Color</label>
+                    <input id="dialog-add-update-rango-color" type="text" class="form-control" formControlName="color" />
                 </div>
             </div>
         </div>

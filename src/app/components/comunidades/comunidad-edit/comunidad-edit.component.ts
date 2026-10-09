@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
@@ -9,12 +9,21 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 @Component({
-  standalone: false,
-  selector: 'app-comunidad-edit',
-  templateUrl: './comunidad-edit.component.html',
-  styleUrls: ['../comunidad-create/comunidad-create.component.scss'],
+    selector: 'app-comunidad-edit',
+    templateUrl: './comunidad-edit.component.html',
+    styleUrls: ['../comunidad-create/comunidad-create.component.scss'],
+    imports: [FormsModule, ReactiveFormsModule],
 })
 export class ComunidadEditComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  private comunidadesService = inject(IHttpComunidadesService);
+  private parametrosService = inject(IHttpParametrosService);
+  private fotosService = inject(IHttpFotosService);
+  private fb = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
@@ -26,16 +35,7 @@ export class ComunidadEditComponent implements OnInit {
   public comunidadId: number = 0;
   public nombreCorto: string = '';
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private comunidadesService: IHttpComunidadesService,
-    private parametrosService: IHttpParametrosService,
-    private fotosService: IHttpFotosService,
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.formGroup = this.fb.group({
       id: [0],
       nombre: ['', [Validators.required, Validators.maxLength(80)]],

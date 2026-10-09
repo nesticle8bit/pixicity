@@ -7,26 +7,32 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogDenunciarPostComponent } from 'src/app/components/dialogs/dialog-denunciar-post/dialog-denunciar-post.component';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { DialogRecomendarPostComponent } from 'src/app/components/dialogs/dialog-recomendar-post/dialog-recomendar-post.component';
+import { NgClass } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
-  standalone: false,
-  selector: 'app-posts-meta',
-  templateUrl: './posts-meta.component.html',
-  styleUrls: ['./posts-meta.component.scss'],
-  animations: [
-    trigger('enterAnimation', [
-      transition(':enter', [
-        style({ transform: 'translateY(100%)', opacity: 0 }),
-        animate('500ms', style({ transform: 'translateY(0)', opacity: 1 })),
-      ]),
-      transition(':leave', [
-        style({ transform: 'translateY(0)', opacity: 1 }),
-        animate('500ms', style({ transform: 'translateY(100%)', opacity: 0 })),
-      ]),
-    ]),
-  ],
+    selector: 'app-posts-meta',
+    templateUrl: './posts-meta.component.html',
+    styleUrls: ['./posts-meta.component.scss'],
+    animations: [
+        trigger('enterAnimation', [
+            transition(':enter', [
+                style({ transform: 'translateY(100%)', opacity: 0 }),
+                animate('500ms', style({ transform: 'translateY(0)', opacity: 1 })),
+            ]),
+            transition(':leave', [
+                style({ transform: 'translateY(0)', opacity: 1 }),
+                animate('500ms', style({ transform: 'translateY(100%)', opacity: 0 })),
+            ]),
+        ]),
+    ],
+    imports: [NgClass, MatTooltip],
 })
 export class PostsMetaComponent implements OnInit {
+  private securityService = inject(IHttpSecurityService);
+  private postService = inject(IHttpPostsService);
+  private dialog = inject(MatDialog);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public savedToFavorites: any = {
@@ -52,12 +58,6 @@ export class PostsMetaComponent implements OnInit {
   public addedPuntos: boolean = false;
   public availablePuntos: number[] = [];
   public currentUser?: JwtUserModel;
-
-  constructor(
-    private securityService: IHttpSecurityService,
-    private postService: IHttpPostsService,
-    private dialog: MatDialog
-  ) {}
 
   ngOnInit(): void {
     this.currentUser = this.securityService.getCurrentUser();

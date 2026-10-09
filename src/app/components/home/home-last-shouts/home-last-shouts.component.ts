@@ -7,14 +7,28 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
+import { MatTooltip } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { ShoutMediaComponent } from '../../addons/shout-media/shout-media.component';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
+import { enNavegador } from '../../../shared/helpers/plataforma';
 
 @Component({
-  standalone: false,
-  selector: 'app-home-last-shouts',
-  templateUrl: './home-last-shouts.component.html',
-  styleUrls: ['./home-last-shouts.component.scss'],
+    selector: 'app-home-last-shouts',
+    templateUrl: './home-last-shouts.component.html',
+    styleUrls: ['./home-last-shouts.component.scss'],
+    imports: [
+        MatTooltip,
+        RouterLink,
+        UserAvatarComponent,
+        ShoutMediaComponent,
+        TimeAgoPipe,
+    ],
 })
 export class HomeLastShoutsComponent implements OnInit, OnDestroy {
+  private perfilService = inject(IHttpPerfilService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public shouts: any[] = [];
@@ -24,8 +38,6 @@ export class HomeLastShoutsComponent implements OnInit, OnDestroy {
 
   private readonly interval = 4000;
   private timer: any = null;
-
-  constructor(private perfilService: IHttpPerfilService) {}
 
   ngOnInit(): void {
     this.perfilService
@@ -55,7 +67,7 @@ export class HomeLastShoutsComponent implements OnInit, OnDestroy {
   startTimer(): void {
     if (this.paused) return;
     this.stopTimer();
-    this.timer = setInterval(() => this.next(), this.interval);
+    if (enNavegador()) this.timer = setInterval(() => this.next(), this.interval);
   }
 
   stopTimer(): void {

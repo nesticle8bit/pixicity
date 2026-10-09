@@ -3,22 +3,53 @@ import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.i
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component, DestroyRef, HostListener, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { MensajesBadgeService } from 'src/app/services/shared/mensajes-badge.service';
 import { debounceTime, merge } from 'rxjs';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ClickOutsideDirective } from '../../../shared/directives/clickOutside.directive';
+import { NgClass, DatePipe } from '@angular/common';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { TipoIconMonitorComponent } from '../../addons/tipo-icon-monitor/tipo-icon-monitor.component';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
+import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-section-user-info-login',
-  templateUrl: './section-user-info-login.component.html',
-  styleUrls: ['./section-user-info-login.component.scss'],
+    selector: 'app-section-user-info-login',
+    templateUrl: './section-user-info-login.component.html',
+    styleUrls: ['./section-user-info-login.component.scss'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatTooltip,
+        ClickOutsideDirective,
+        NgClass,
+        UserAvatarComponent,
+        TipoIconMonitorComponent,
+        RouterLink,
+        UserPopoverDirective,
+        DatePipe,
+        TimeAgoPipe,
+        TruncatePipe,
+    ],
 })
 export class SectionUserInfoLoginComponent implements OnInit {
+  private securityService = inject(IHttpSecurityService);
+  private favoritosService = inject(IHttpFavoritosService);
+  private mensajesService = inject(IHttpMensajesService);
+  private httpLogs = inject(IHttpLogsService);
+  private signalrService = inject(SignalrService);
+  private badgeService = inject(MensajesBadgeService);
+  private toast = inject(NotificationService);
+  private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
@@ -37,17 +68,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
     messages: 0,
   };
 
-  constructor(
-    private securityService: IHttpSecurityService,
-    private favoritosService: IHttpFavoritosService,
-    private mensajesService: IHttpMensajesService,
-    private httpLogs: IHttpLogsService,
-    private signalrService: SignalrService,
-    private badgeService: MensajesBadgeService,
-    private toast: NotificationService,
-    private formBuilder: FormBuilder,
-    private router: Router
-  ) {
+  constructor() {
     this.securityService
       .getCurrentUserAsObservable()
       .pipe(takeUntilDestroyed(this.destroyRef))

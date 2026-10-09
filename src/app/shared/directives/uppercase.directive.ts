@@ -1,9 +1,6 @@
 import { Directive, ElementRef, HostListener } from '@angular/core';
 
-@Directive({
-  standalone: false,
-  selector: '[pixicityUppercase]',
-})
+@Directive({ selector: '[pixicityUppercase]', })
 export class UppercaseDirective {
   constructor(public ref: ElementRef) {}
 

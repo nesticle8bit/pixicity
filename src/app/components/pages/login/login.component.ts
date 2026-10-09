@@ -1,22 +1,36 @@
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, DestroyRef, inject, OnInit, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { NgClass, DatePipe } from '@angular/common';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  standalone: false,
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    imports: [
+        NgClass,
+        FormsModule,
+        ReactiveFormsModule,
+        MatButton,
+        RouterLink,
+        DatePipe,
+    ],
 })
 export class LoginComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  private securityService = inject(IHttpSecurityService);
+  private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
+
   private readonly destroyRef = inject(DestroyRef);
 
-  @Input() hide: any;
+  readonly hide = input<any>();
   /** Ruta interna a la que volver tras iniciar sesión (p. ej. el post privado que se quería ver). */
-  @Input() volverA?: string | null;
+  readonly volverA = input<string | null>();
 
   public loginForm: FormGroup;
   public error: string = '';
@@ -26,12 +40,7 @@ export class LoginComponent implements OnInit {
     hasta: new Date(),
   };
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private securityService: IHttpSecurityService,
-    private formBuilder: FormBuilder,
-    private router: Router
-  ) {
+  constructor() {
     this.loginForm = this.formBuilder.group({
       userName: ['', Validators.required],
       password: ['', Validators.required],
@@ -88,7 +97,8 @@ export class LoginComponent implements OnInit {
       }
 
       this.securityService.setUserToLocalStorage(value);
-      window.location.href = esRutaInterna(this.volverA) ? this.volverA! : '';
+      const volverA = this.volverA();
+      window.location.href = esRutaInterna(volverA) ? volverA! : '';
     });
   }
 }

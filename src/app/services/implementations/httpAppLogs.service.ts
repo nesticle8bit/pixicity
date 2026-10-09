@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
@@ -11,13 +11,11 @@ import { NotificationService } from '../shared/notification.service';
 
 @Injectable()
 export class HttpAppLogsService implements IHttpAppLogsService {
-  private readonly base = `${environment.api}/api/appLogs`;
+  private http = inject(HttpClient);
+  private helper = inject(HelperService);
+  private notificationService = inject(NotificationService);
 
-  constructor(
-    private http: HttpClient,
-    private helper: HelperService,
-    private notificationService: NotificationService
-  ) {}
+  private readonly base = `${environment.api}/api/appLogs`;
 
   private unwrap<T>() {
     return map((response: ApiResponse<T>) => {

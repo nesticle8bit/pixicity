@@ -10,11 +10,13 @@ import { MobileDrawerComponent } from '../mobile-drawer/mobile-drawer.component'
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { MobileNavService } from 'src/app/services/shared/mobile-nav.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
+import { SectionUserInfoLoginComponent } from '../../sections/section-user-info-login/section-user-info-login.component';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 
 // Igual que app.component.html: el cajón es hermano del header, no hijo.
 @Component({
-  standalone: false,
-  template: '<main-header></main-header><app-mobile-drawer></app-mobile-drawer>',
+    template: '<main-header></main-header><app-mobile-drawer></app-mobile-drawer>',
+    imports: [MainHeaderComponent, MobileDrawerComponent],
 })
 class HostComponent {}
 
@@ -43,23 +45,33 @@ describe('MainHeader + MobileDrawer (hamburguesa)', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [HostComponent, MainHeaderComponent, MobileDrawerComponent],
-      imports: [ReactiveFormsModule, RouterModule],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [
+    imports: [ReactiveFormsModule, RouterModule, HostComponent, MainHeaderComponent, MobileDrawerComponent],
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [
         provideRouter([]),
         { provide: MobileNavService, useValue: nav },
         {
-          provide: IHttpSecurityService,
-          useValue: {
-            getCurrentUserAsObservable: () => user$.asObservable(),
-            getCurrentUser: () => user$.value,
-            logout: jasmine.createSpy('logout'),
-          },
+            provide: IHttpSecurityService,
+            useValue: {
+                getCurrentUserAsObservable: () => user$.asObservable(),
+                getCurrentUser: () => user$.value,
+                logout: jasmine.createSpy('logout'),
+            },
         },
-        { provide: SignalrService, useValue: { stop: () => {}, notification$: new Subject() } },
-      ],
-    }).compileComponents();
+        { provide: SignalrService, useValue: { stop: () => { }, notification$: new Subject() } },
+    ],
+})
+      // Solo las plantillas del header y del cajón: los hijos de otros contextos (info del usuario, avatar) se
+      // sacan para no tener que proveer todos sus servicios.
+      .overrideComponent(MainHeaderComponent, {
+        remove: { imports: [SectionUserInfoLoginComponent] },
+        add: { schemas: [NO_ERRORS_SCHEMA] },
+      })
+      .overrideComponent(MobileDrawerComponent, {
+        remove: { imports: [UserAvatarComponent] },
+        add: { schemas: [NO_ERRORS_SCHEMA] },
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();

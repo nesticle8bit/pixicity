@@ -7,12 +7,34 @@ import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { HomeLastPostsComponent } from '../../home/home-last-posts/home-last-posts.component';
+import { HomeStatsComponent } from '../../home/home-stats/home-stats.component';
+import { HomeLastCommentsComponent } from '../../home/home-last-comments/home-last-comments.component';
+import { HomeTopPostsComponent } from '../../home/home-top-posts/home-top-posts.component';
+import { HomeTopUsersComponent } from '../../home/home-top-users/home-top-users.component';
+import { HomeLastPhotosComponent } from '../../home/home-last-photos/home-last-photos.component';
+import { HomeLastShoutsComponent } from '../../home/home-last-shouts/home-last-shouts.component';
+import { TagsCloudComponent } from '../../addons/tags-cloud/tags-cloud.component';
+import { HomeAfiliadosComponent } from '../../home/home-afiliados/home-afiliados.component';
+import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { enNavegador } from '../../../shared/helpers/plataforma';
 
 @Component({
-  standalone: false,
-  selector: 'section-home',
-  templateUrl: './section-home.component.html',
-  styleUrls: ['./section-home.component.scss'],
+    selector: 'section-home',
+    templateUrl: './section-home.component.html',
+    styleUrls: ['./section-home.component.scss'],
+    imports: [
+        HomeLastPostsComponent,
+        HomeStatsComponent,
+        HomeLastCommentsComponent,
+        HomeTopPostsComponent,
+        HomeTopUsersComponent,
+        HomeLastPhotosComponent,
+        HomeLastShoutsComponent,
+        TagsCloudComponent,
+        HomeAfiliadosComponent,
+        AdsByTypeComponent,
+    ],
 })
 export class SectionHomeComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
@@ -88,7 +110,7 @@ export class SectionHomeComponent implements OnInit, OnDestroy {
     // Primer ping inmediato + ping periódico para que el conteo refleje presencia real
     this.pingOnline();
 
-    this.onlineHeartbeatTimer = setInterval(
+    if (enNavegador()) this.onlineHeartbeatTimer = setInterval(
       () => this.pingOnline(),
       this.onlineHeartbeatMs
     );

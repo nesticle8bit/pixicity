@@ -1,31 +1,34 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { enNavegador } from '../../shared/helpers/plataforma';
 
+/** Avisos al usuario. En el render del servidor (SSR para bots) no hay a quién mostrarlos: no hacen nada. */
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
-  constructor(private toastr: ToastrService) {}
+  private toastr = inject(ToastrService);
+  private readonly activo = enNavegador();
 
   success(message: string, title?: string): void {
-    this.toastr.success(message, title);
+    if (this.activo) this.toastr.success(message, title);
   }
 
   error(message: string, title?: string): void {
-    this.toastr.error(message, title);
+    if (this.activo) this.toastr.error(message, title);
   }
 
   info(message: string, title?: string): void {
-    this.toastr.info(message, title);
+    if (this.activo) this.toastr.info(message, title);
   }
 
   warning(message: string, title?: string): void {
-    this.toastr.warning(message, title);
+    if (this.activo) this.toastr.warning(message, title);
   }
 
   confirm(message: string): boolean {
-    return window.confirm(message);
+    return this.activo && window.confirm(message);
   }
 
   prompt(message: string): string | null {
-    return window.prompt(message);
+    return this.activo ? window.prompt(message) : null;
   }
 }

@@ -1,19 +1,20 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  standalone: false,
-  selector: 'app-tags-cloud',
-  templateUrl: './tags-cloud.component.html',
-  styleUrls: ['./tags-cloud.component.scss'],
+    selector: 'app-tags-cloud',
+    templateUrl: './tags-cloud.component.html',
+    styleUrls: ['./tags-cloud.component.scss'],
+    imports: [RouterLink],
 })
 export class TagsCloudComponent implements OnInit {
+  private postService = inject(IHttpPostsService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public cloudTags: any;
-
-  constructor(private postService: IHttpPostsService) {}
 
   ngOnInit(): void {
     this.getCloudTags();

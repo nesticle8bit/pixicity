@@ -7,7 +7,7 @@
 }
 
 @if (fotos.length > 0) {
-  <main class="table-responsive">
+  <div class="table-responsive">
     <table class="table table-sm table-striped table-hover">
       <thead>
         <tr>
@@ -27,7 +27,7 @@
           <tr [ngClass]="{'row-deleted': foto.eliminado}">
             <td>
               <a [routerLink]="['/fotos/' + foto.userName + '/' + foto.id + '/' + foto.url]" title="{{foto.titulo}}">
-                <img [src]="foto.imageUrl" [alt]="foto.titulo" class="foto-thumb" loading="lazy" decoding="async"/>
+                <img [src]="foto.imageUrl | thumb: 48" [alt]="foto.titulo" class="foto-thumb" loading="lazy" decoding="async"/>
               </a>
             </td>
             <td>{{foto.fechaRegistro | timeAgo}}</td>
@@ -52,7 +52,7 @@
               </a>
             </td>
             <td class="text-center" width="30px">
-              <button class="btn-menu" [matMenuTriggerFor]="menu">
+              <button type="button" class="btn-menu" aria-label="Acciones" [matMenuTriggerFor]="menu">
                 <i class="ti ti-dots-vertical"></i>
               </button>
               <mat-menu #menu="matMenu">
@@ -70,7 +70,7 @@
         }
       </tbody>
     </table>
-  </main>
+  </div>
 }
 
 @if (fotos.length > 0) {

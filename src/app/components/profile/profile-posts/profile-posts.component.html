@@ -3,13 +3,13 @@
 </h6>
 
 @if (posts.length < 1) {
-  <main class="alert alert-warning">
+  <div class="alert alert-warning">
     🐱‍💻 <strong>El usuario {{user.userName}} no ha publicado ningun post hasta el momento.</strong>
-  </main>
+  </div>
 }
 
 @if (posts.length > 0) {
-  <main class="table-responsive">
+  <div class="table-responsive">
     <table class="table table-sm table-striped table-hover">
       <thead>
         <tr>
@@ -39,7 +39,7 @@
           }
         </tbody>
       </table>
-    </main>
+    </div>
   }
 
   <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" [pageIndex]="pageIndex"

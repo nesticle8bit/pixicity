@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
@@ -22,13 +22,11 @@ export function esRespuestaApi(body: unknown): body is { status: number; errors:
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
+  private securityService = inject(IHttpSecurityService);
+  private notificationService = inject(NotificationService);
+
   // 401 = access JWT vencido; 423 (Locked) = sesión vencida. Ambos se intentan refrescar.
   private readonly refreshableStatuses = [401, 423];
-
-  constructor(
-    private securityService: IHttpSecurityService,
-    private notificationService: NotificationService
-  ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(

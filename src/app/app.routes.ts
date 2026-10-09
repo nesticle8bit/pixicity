@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
 import { ApiDocumentationComponent } from './components/pages/api-documentation/api-documentation.component';
 import { BorradoresComponent } from './components/pages/borradores/borradores.component';
@@ -25,7 +24,7 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { AuthLoggedUserGuard } from './shared/guards/auth.loggedUser.guard';
 import { PaginasComponent } from './components/pages/paginas/paginas.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', component: SectionHomeForumComponent },
   {
     path: 'registro',
@@ -137,9 +136,3 @@ const routes: Routes = [
   // desconocidas no matcheaban ninguna ruta y el bot recibia una pagina rota.
   { path: '**', component: PostNotFoundComponent },
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}

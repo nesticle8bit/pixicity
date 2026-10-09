@@ -1,20 +1,36 @@
 import { environment } from 'src/environments/environment';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { SelectAutocompleteComponent } from '../../shared/select-autocomplete/select-autocomplete.component';
+import { SelectOptionDirective, SelectLabelDirective } from '../../shared/select-autocomplete/select-template.directives';
 
 @Component({
-  standalone: false,
-  selector: 'app-comunidad-create',
-  templateUrl: './comunidad-create.component.html',
-  styleUrls: ['./comunidad-create.component.scss'],
+    selector: 'app-comunidad-create',
+    templateUrl: './comunidad-create.component.html',
+    styleUrls: ['./comunidad-create.component.scss'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        SelectAutocompleteComponent,
+        SelectOptionDirective,
+        SelectLabelDirective,
+        RouterLink,
+    ],
 })
 export class ComunidadCreateComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  private comunidadesService = inject(IHttpComunidadesService);
+  private parametrosService = inject(IHttpParametrosService);
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
+
   // Solo el host (sin protocolo) para mostrar el prefijo de la URL de la comunidad.
   public readonly publicHost = new URL(environment.publicUrl).host;
 
@@ -26,14 +42,7 @@ export class ComunidadCreateComponent implements OnInit {
   public paises: any[] = [];
   public loading: boolean = false;
 
-  constructor(
-    private displayService: DisplayComponentService,
-    private comunidadesService: IHttpComunidadesService,
-    private parametrosService: IHttpParametrosService,
-    private fb: FormBuilder,
-    private router: Router,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.formGroup = this.fb.group({
       nombre: ['', [Validators.required, Validators.maxLength(80)]],
       nombreCorto: ['', [Validators.required, Validators.pattern(/^[a-z0-9-]+$/)]],

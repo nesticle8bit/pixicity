@@ -17,13 +17,13 @@
         <small class="text-muted">/{{cat.seo}}/</small>
       </div>
       <div class="cat-card__actions">
-        <button mat-icon-button matTooltip="Agregar sub-categoría" (click)="upsertSubcategoria(cat)">
+        <button mat-icon-button matTooltip="Agregar sub-categoría" aria-label="Agregar sub-categoría" (click)="upsertSubcategoria(cat)">
           <mat-icon>playlist_add</mat-icon>
         </button>
-        <button mat-icon-button matTooltip="Editar" (click)="upsertCategoria(cat)">
+        <button mat-icon-button matTooltip="Editar" aria-label="Editar" (click)="upsertCategoria(cat)">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button matTooltip="Eliminar" color="warn" (click)="deleteCategoria(cat)">
+        <button mat-icon-button matTooltip="Eliminar" aria-label="Eliminar" color="warn" (click)="deleteCategoria(cat)">
           <mat-icon>delete_outline</mat-icon>
         </button>
       </div>
@@ -34,8 +34,8 @@
         @for (sub of cat.subCategorias; track sub.id) {
           <span class="sub-chip">
             {{sub.nombre}}
-            <a matTooltip="Editar" (click)="upsertSubcategoria(cat, sub)" role="button" tabindex="0" (keydown.enter)="upsertSubcategoria(cat, sub)" (keydown.space)="upsertSubcategoria(cat, sub); $event.preventDefault()"><i class="ti ti-pencil"></i></a>
-            <a matTooltip="Eliminar" class="del" (click)="deleteSubcategoria(sub)" role="button" tabindex="0" (keydown.enter)="deleteSubcategoria(sub)" (keydown.space)="deleteSubcategoria(sub); $event.preventDefault()"><i class="ti ti-x"></i></a>
+            <a matTooltip="Editar" aria-label="Editar" (click)="upsertSubcategoria(cat, sub)" role="button" tabindex="0" (keydown.enter)="upsertSubcategoria(cat, sub)" (keydown.space)="upsertSubcategoria(cat, sub); $event.preventDefault()"><i class="ti ti-pencil"></i></a>
+            <a matTooltip="Eliminar" aria-label="Eliminar" class="del" (click)="deleteSubcategoria(sub)" role="button" tabindex="0" (keydown.enter)="deleteSubcategoria(sub)" (keydown.space)="deleteSubcategoria(sub); $event.preventDefault()"><i class="ti ti-x"></i></a>
           </span>
         }
       } @else {

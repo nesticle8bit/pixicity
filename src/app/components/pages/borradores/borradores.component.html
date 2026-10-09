@@ -3,7 +3,7 @@
     <div class="col-12 col-sm-6 col-md-9">
       <h6 class="main-title">
         <span>Borradores</span>
-        <input type="text" id="borradores-search" autocomplete="off" formControlName="search"
+        <input type="text" id="borradores-search" aria-label="Buscar en mis borradores" autocomplete="off" formControlName="search"
           (keyup)="getBorradores(0)" />
         </h6>
 
@@ -14,7 +14,7 @@
         }
 
         @if (borradores.length > 0) {
-          <main class="table-responsive mt-3">
+          <div class="table-responsive mt-3">
             <table class="table table-sm table-striped table-hover">
               <thead>
                 <tr>
@@ -43,13 +43,13 @@
                       <td class="text-center" width="30px">
                         <a (click)="deleteBorrador(borrador)" role="button" tabindex="0" (keydown.enter)="deleteBorrador(borrador)" (keydown.space)="deleteBorrador(borrador); $event.preventDefault()">
                           @if (!borrador.eliminado) {
-                            <img src="/assets/images/icons/cross.png" alt="Eliminar" #tooltip="matTooltip"
-                              matTooltip="Eliminar" [matTooltipPosition]="'above'"
+                            <img loading="lazy" decoding="async" src="/assets/images/icons/cross.png" alt="Eliminar" #tooltip="matTooltip"
+                              matTooltip="Eliminar" aria-label="Eliminar" [matTooltipPosition]="'above'"
                               />
                           }
                           @if (borrador.eliminado) {
-                            <img src="/assets/images/icons/reload.png" alt="Recuperar" #tooltip="matTooltip"
-                              matTooltip="Recuperar" [matTooltipPosition]="'above'"
+                            <img loading="lazy" decoding="async" src="/assets/images/icons/reload.png" alt="Recuperar" #tooltip="matTooltip"
+                              matTooltip="Recuperar" aria-label="Recuperar" [matTooltipPosition]="'above'"
                               />
                           }
                         </a>
@@ -58,7 +58,7 @@
                   }
                 </tbody>
               </table>
-            </main>
+            </div>
           }
 
           <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)">

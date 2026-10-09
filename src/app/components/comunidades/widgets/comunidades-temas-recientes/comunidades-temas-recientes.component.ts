@@ -1,20 +1,29 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
+import { RouterLink } from '@angular/router';
+import { UserPopoverDirective } from '../../../../shared/directives/userPopover.directive';
+import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.component';
+import { TimeAgoPipe } from '../../../../shared/pipes/timeAgo.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-comunidades-temas-recientes',
-  templateUrl: './comunidades-temas-recientes.component.html',
-  styleUrls: ['./comunidades-temas-recientes.component.scss'],
+    selector: 'app-comunidades-temas-recientes',
+    templateUrl: './comunidades-temas-recientes.component.html',
+    styleUrls: ['./comunidades-temas-recientes.component.scss'],
+    imports: [
+        RouterLink,
+        UserPopoverDirective,
+        UserAvatarComponent,
+        TimeAgoPipe,
+    ],
 })
 export class ComunidadesTemasRecientesComponent implements OnInit {
+  private comunidadesService = inject(IHttpComunidadesService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public temas: any[] = [];
   public loading: boolean = true;
-
-  constructor(private comunidadesService: IHttpComunidadesService) {}
 
   ngOnInit(): void {
     this.comunidadesService.getTemasRecientes(15).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({

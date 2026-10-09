@@ -1,0 +1,163 @@
+// Opciones de los desplegables del perfil extendido (Cuenta > Perfil).
+
+export const ESTADOS_CIVILES: string[] = [
+  'Sin respuesta',
+  'Soltero/a',
+  'Con novio/a',
+  'Casado/a',
+  'Divorciado/a',
+  'Viudo/a',
+  'En algo...',
+];
+
+export const HIJOS: string[] = [
+  'Sin respuesta',
+  'No tengo',
+  'Algún día',
+  'Está en camino',
+  'No son lo mío',
+  'Tengo, vivo con ellos',
+  'Tengo, no vivo con ellos',
+];
+
+export const VIVO_CON: string[] = [
+  'Sin respuesta',
+  'Sólo',
+  'Con mis padres',
+  'Con mi pareja',
+  'Con amigos',
+  'Otro',
+];
+
+export const COLOR_CABELLO: string[] = [
+  'Sin respuesta',
+  'Negro',
+  'Castaño oscuro',
+  'Castaño claro',
+  'Rubio',
+  'Pelirrojo',
+  'Gris',
+  'Verde',
+  'Naranja',
+  'Morado',
+  'Azul',
+  'Canoso',
+  'Teñido',
+  'Rapado',
+  'Calvo',
+];
+
+export const COLOR_OJOS: string[] = [
+  'Sin respuesta',
+  'Negros',
+  'Marrones',
+  'Celestes',
+  'Verdes',
+  'Grises',
+];
+
+export const COMPLEXIONES: string[] = [
+  'Sin respuesta',
+  'Delgado/a',
+  'Atlético',
+  'Normal',
+  'Algunos kilos de más',
+  'Corpulento/a',
+];
+
+export const DIETAS: string[] = [
+  'Sin respuesta',
+  'Vegetariana',
+  'Lacto Vegetariana',
+  'Orgánica',
+  'De todo',
+  'Comida basura',
+];
+
+export const FUMO_ALCOHOL: string[] = [
+  'Sin respuesta',
+  'No',
+  'Casualmente',
+  'Socialmente',
+  'Regularmente',
+  'Mucho',
+];
+
+export const ESTUDIOS: string[] = [
+  'Sin respuesta',
+  'Sin Estudios',
+  'Primario completo',
+  'Secundario en curso',
+  'Secundario completo',
+  'Terciario en curso',
+  'Terciario completo',
+  'Universitario en curso',
+  'Universitario completo',
+  'Post-grado en curso',
+  'Post-grado completo',
+];
+
+export const SECTORES: string[] = [
+  'Sin respuesta',
+  'Abastecimiento',
+  'Administración',
+  'Apoderado Aduanal',
+  'Asesoría en Comercio Exterior',
+  'Asesoría Legal Internacional',
+  'Asistente de Tráfico',
+  'Auditoría',
+  'Calidad',
+  'Call Center',
+  'Capacitación Comercio Exterior',
+  'Comercial',
+  'Comercio Exterior',
+  'Compras',
+  'Compras Internacionales/Importación',
+  'Comunicación Social',
+  'Comunicaciones Externas',
+  'Comunicaciones Internas',
+  'Consultoría',
+  'Consultorías Comercio Exterior',
+  'Contabilidad',
+  'Control de Gestión',
+  'Creatividad',
+  'Diseño',
+  'Distribución',
+  'E-commerce',
+  'Educación',
+  'Finanzas',
+  'Finanzas Internacionales',
+  'Gerencia / Dirección General',
+  'Impuestos',
+  'Ingeniería',
+  'Internet',
+  'Investigación y Desarrollo',
+  'Jóvenes Profesionales',
+  'Legal',
+  'Logística',
+  'Mantenimiento',
+  'Marketing',
+  'Medio Ambiente',
+  'Mercadotecnia Internacional',
+  'Multimedia',
+  'Otra',
+  'Pasantías',
+  'Periodismo',
+  'Planeamiento',
+  'Producción',
+  'Producción e Ingeniería',
+  'Recursos Humanos',
+  'Relaciones Institucionales / Públicas',
+  'Salud',
+  'Seguridad Industrial',
+  'Servicios',
+  'Soporte Técnico',
+  'Tecnología',
+  'Tecnologías de la Información',
+  'Telecomunicaciones',
+  'Telemarketing',
+  'Traducción',
+  'Transporte',
+  'Ventas',
+  'Ventas Internacionales/Exportación',
+];

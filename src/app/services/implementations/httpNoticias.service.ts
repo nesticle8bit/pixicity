@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
@@ -13,12 +13,11 @@ import { NoticiaModel } from 'src/app/models/web/noticia.model';
 
 @Injectable()
 export class HttpNoticiasService implements IHttpNoticiasService {
-  constructor(
-    private notificationService: NotificationService,
-    private paginationService: PaginationService,
-    private helper: HelperService,
-    private http: HttpClient,
-  ) {}
+  private notificationService = inject(NotificationService);
+  private paginationService = inject(PaginationService);
+  private helper = inject(HelperService);
+  private http = inject(HttpClient);
+
 
   getNoticias(search: string, filtro: AdminFiltro = {}): Observable<PaginatedData<NoticiaModel, 'noticias'>> {
     return this.http

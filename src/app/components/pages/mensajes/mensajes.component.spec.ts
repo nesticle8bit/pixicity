@@ -44,18 +44,17 @@ describe('MensajesComponent (bandeja de conversaciones)', () => {
     mensajes.getConversaciones.and.returnValue(of(pagina(conv(1, 2), conv(2, 0), conv(3, 3))));
 
     await TestBed.configureTestingModule({
-      declarations: [MensajesComponent],
-      imports: [ReactiveFormsModule],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [
+    imports: [ReactiveFormsModule, MensajesComponent],
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [
         { provide: IHttpMensajesService, useValue: mensajes },
         { provide: NotificationService, useValue: notificaciones },
         { provide: Router, useValue: router },
         { provide: SignalrService, useValue: { mensaje$ } },
-        { provide: DisplayComponentService, useValue: { setDisplay: () => {} } },
-        { provide: PaginationService, useValue: { change: () => {}, pageCount: 10, selectItemsPerPage: [10] } },
-      ],
-    })
+        { provide: DisplayComponentService, useValue: { setDisplay: () => { } } },
+        { provide: PaginationService, useValue: { change: () => { }, pageCount: 10, selectItemsPerPage: [10] } },
+    ],
+})
       // Se prueba la lógica; el template usa pipes y componentes de otros módulos.
       .overrideComponent(MensajesComponent, { set: { template: '' } })
       .compileComponents();

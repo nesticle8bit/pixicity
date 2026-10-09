@@ -9,61 +9,67 @@
       <span class="op-rango" [ngStyle]="{'color': info?.rango?.color}">
         <img src="/assets/images/icons/rangos/{{info?.rango?.icono}}" matTooltip="{{info?.rango?.nombre}}"
           [matTooltipPosition]="'below'" alt="" aria-hidden="true" loading="lazy">
-        <span>{{info?.rango?.nombre}}</span>
-      </span>
+          <span>{{info?.rango?.nombre}}</span>
+        </span>
+      </div>
+
+      <div class="op-main-info">
+        <div class="op-name-row">
+          <app-user-online-status [userName]="userName"></app-user-online-status>
+          <a class="op-username" [routerLink]="['/perfil/' + userName]" [appUserPopover]="userName">
+            {{userName}}
+          </a>
+          <addon-country-flag [iso2]="info?.estado?.pais?.isO2" [title]="info?.estado?.pais?.nombre">
+          </addon-country-flag>
+          <app-genre-icon [genre]="info?.genero"></app-genre-icon>
+        </div>
+
+        @if (info?.completeName) {
+          <div class="op-fullname">
+            {{info?.completeName}}
+          </div>
+        }
+
+        @if (info?.mensajePersonal) {
+          <div class="op-bio">
+            <i class="ti ti-quote"></i> {{info?.mensajePersonal}}
+          </div>
+        }
+
+        @if (info?.fechaRegistro) {
+          <div class="op-since">
+            <i class="ti ti-calendar"></i>
+            Miembro desde {{info?.fechaRegistro | date:'MMM yyyy'}}
+          </div>
+        }
+      </div>
     </div>
 
-    <div class="op-main-info">
-      <div class="op-name-row">
-        <app-user-online-status [userName]="userName"></app-user-online-status>
-        <a class="op-username" [routerLink]="['/perfil/' + userName]" [appUserPopover]="userName">
-          {{userName}}
-        </a>
-        <addon-country-flag [iso2]="info?.estado?.pais?.isO2" [title]="info?.estado?.pais?.nombre">
-        </addon-country-flag>
-        <app-genre-icon [genre]="info?.genero"></app-genre-icon>
+    <div class="op-stats">
+      <div class="op-stat">
+        <i class="ti ti-users"></i>
+        <b>{{info?.seguidoresCount ? info?.seguidoresCount : 0}}</b>
+        <span>Seguidores</span>
       </div>
+      <div class="op-stat">
+        <i class="ti ti-copy"></i>
+        <b>{{info?.postsCount ? info?.postsCount : 0}}</b>
+        <span>Posts</span>
+      </div>
+      <div class="op-stat">
+        <i class="ti ti-message-circle"></i>
+        <b>{{info?.comentariosCount ? info?.comentariosCount : 0}}</b>
+        <span>Comentarios</span>
+      </div>
+      <div class="op-stat">
+        <i class="ti ti-chart-line"></i>
+        <b>{{info?.puntos ? info?.puntos : 0}}</b>
+        <span>Puntos</span>
+      </div>
+    </div>
 
-      <div class="op-fullname" *ngIf="info?.completeName">
-        {{info?.completeName}}
-      </div>
-
-      <div class="op-bio" *ngIf="info?.mensajePersonal">
-        <i class="ti ti-quote"></i> {{info?.mensajePersonal}}
-      </div>
-
-      <div class="op-since" *ngIf="info?.fechaRegistro">
-        <i class="ti ti-calendar"></i>
-        Miembro desde {{info?.fechaRegistro | date:'MMM yyyy'}}
-      </div>
+    <div class="op-actions">
+      <app-follow-button [userName]="userName" [icon]="true" (followingChange)="changeSeguidores($event)">
+      </app-follow-button>
     </div>
   </div>
-
-  <div class="op-stats">
-    <div class="op-stat">
-      <i class="ti ti-users"></i>
-      <b>{{info?.seguidoresCount ? info?.seguidoresCount : 0}}</b>
-      <span>Seguidores</span>
-    </div>
-    <div class="op-stat">
-      <i class="ti ti-copy"></i>
-      <b>{{info?.postsCount ? info?.postsCount : 0}}</b>
-      <span>Posts</span>
-    </div>
-    <div class="op-stat">
-      <i class="ti ti-message-circle"></i>
-      <b>{{info?.comentariosCount ? info?.comentariosCount : 0}}</b>
-      <span>Comentarios</span>
-    </div>
-    <div class="op-stat">
-      <i class="ti ti-chart-line"></i>
-      <b>{{info?.puntos ? info?.puntos : 0}}</b>
-      <span>Puntos</span>
-    </div>
-  </div>
-
-  <div class="op-actions">
-    <app-follow-button [userName]="userName" [icon]="true" (followingChange)="changeSeguidores($event)">
-    </app-follow-button>
-  </div>
-</div>

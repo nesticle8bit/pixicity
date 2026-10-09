@@ -9,7 +9,7 @@
       <div class="col-12 col-sm-12 col-md-7">
         @if (post.sticky) {
           <img width="16" height="16" src="/assets/images/categorias/sticky.png" class="sticky-post--home"
-            matTooltip="Post fijado por el Staff" matTooltipPosition="left" alt="Sticky" loading="lazy"/>
+            matTooltip="Post fijado por el Staff" aria-label="Post fijado por el Staff" matTooltipPosition="left" alt="Sticky" loading="lazy"/>
         }
         <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
           <img width="16" height="16" src="/assets/images/categorias/{{post.categoria.icono}}"

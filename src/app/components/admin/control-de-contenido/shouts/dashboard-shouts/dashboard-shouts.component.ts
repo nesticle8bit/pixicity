@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { TableShoutsComponent } from '../table-shouts/table-shouts.component';
 
 @Component({
-  standalone: false,
-  selector: 'app-dashboard-shouts',
-  templateUrl: './dashboard-shouts.component.html',
-  styleUrls: ['./dashboard-shouts.component.scss']
+    selector: 'app-dashboard-shouts',
+    templateUrl: './dashboard-shouts.component.html',
+    styleUrls: ['./dashboard-shouts.component.scss'],
+    imports: [TableShoutsComponent]
 })
 export class DashboardShoutsComponent implements OnInit {
 

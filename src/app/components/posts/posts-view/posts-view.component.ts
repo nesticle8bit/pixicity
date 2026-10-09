@@ -1,8 +1,9 @@
+import { environment } from 'src/environments/environment';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { SEOModel } from 'src/app/models/shared/seo.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
@@ -10,14 +11,59 @@ import { SEOService } from 'src/app/services/shared/seo.service';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { PostDetalle } from 'src/app/models/posts/post-vm.model';
 import { PerfilUsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { NgStyle, DecimalPipe, DatePipe, DOCUMENT } from '@angular/common';
+import { FollowButtonComponent } from '../../addons/follow-button/follow-button.component';
+import { PostMoreFromOPComponent } from '../post-more-from-op/post-more-from-op.component';
+import { PostRelatedPostsComponent } from '../post-related-posts/post-related-posts.component';
+import { PostsBreadcrumbComponent } from '../posts-breadcrumb/posts-breadcrumb.component';
+import { PostsNavComponent } from '../posts-nav/posts-nav.component';
+import { ShareButtonsComponent } from '../../addons/share-buttons/share-buttons.component';
+import { PostsTagsComponent } from '../posts-tags/posts-tags.component';
+import { PostsMetaComponent } from '../posts-meta/posts-meta.component';
+import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { PostCommentsComponent } from '../post-comments/post-comments.component';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
+import { ContenidoSeoPipe } from '../../../shared/pipes/contenidoSeo.pipe';
+import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-posts-view',
-  templateUrl: './posts-view.component.html',
-  styleUrls: ['./posts-view.component.scss'],
+    selector: 'app-posts-view',
+    templateUrl: './posts-view.component.html',
+    styleUrls: ['./posts-view.component.scss'],
+    imports: [
+        RouterLink,
+        UserPopoverDirective,
+        UserAvatarComponent,
+        NgStyle,
+        FollowButtonComponent,
+        PostMoreFromOPComponent,
+        PostRelatedPostsComponent,
+        PostsBreadcrumbComponent,
+        PostsNavComponent,
+        ShareButtonsComponent,
+        PostsTagsComponent,
+        PostsMetaComponent,
+        AdsByTypeComponent,
+        PostCommentsComponent,
+        DecimalPipe,
+        DatePipe,
+        TimeAgoPipe,
+        ContenidoSeoPipe,
+    ],
 })
 export class PostsViewComponent implements OnInit {
+  private readonly documento = inject(DOCUMENT);
+  private securityService = inject(IHttpSecurityService);
+  private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
+  private activatedRoute = inject(ActivatedRoute);
+  private postService = inject(IHttpPostsService);
+  private displayService = inject(DisplayComponentService);
+  private seoService = inject(SEOService);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public seo: SEOModel = {
@@ -44,15 +90,7 @@ export class PostsViewComponent implements OnInit {
     return rango === 'Administrador' || rango === 'Moderador';
   }
 
-  constructor(
-    private securityService: IHttpSecurityService,
-    private activatedRoute: ActivatedRoute,
-    private postService: IHttpPostsService,
-    private displayService: DisplayComponentService,
-    private seoService: SEOService,
-    private router: Router,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.currentUser = this.securityService.getCurrentUser();
   }
 
@@ -81,7 +119,7 @@ export class PostsViewComponent implements OnInit {
       if (value.post.esPrivado && !value.post.id) {
         this.router.navigate([`/posts/privado/${this.tituloRuta}`], {
           replaceUrl: true,
-          queryParams: { volver: location.pathname },
+          queryParams: { volver: this.documento.location.pathname },
         });
         return;
       }
@@ -103,11 +141,11 @@ export class PostsViewComponent implements OnInit {
       const rutaCanonica = this.router
         .createUrlTree(['/posts', value.post.categoria?.seo, postId, value.post.url])
         .toString();
-      const canonical = `${location.origin}${rutaCanonica}`;
+      const canonical = `${environment.publicUrl}${rutaCanonica}`;
 
       if (this.rutaDistinta(rutaCanonica)) {
         // Conserva el #comentario-{id} de las notificaciones al corregir la URL.
-        this.router.navigateByUrl(rutaCanonica + location.hash, { replaceUrl: true });
+        this.router.navigateByUrl(rutaCanonica + this.documento.location.hash, { replaceUrl: true });
         return;
       }
 
@@ -138,10 +176,10 @@ export class PostsViewComponent implements OnInit {
             '@type': 'Person',
             name: value.post.usuario?.userName ?? 'Taringa!',
             url: value.post.usuario?.userName
-              ? `${location.origin}/perfil/${value.post.usuario.userName}`
+              ? `${environment.publicUrl}/perfil/${value.post.usuario.userName}`
               : undefined,
           },
-          publisher: { '@id': `${location.origin}/#organization` },
+          publisher: { '@id': `${environment.publicUrl}/#organization` },
           mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
           commentCount: value.post.cantidadComentarios,
         }, this.breadcrumb(value.post, canonical)],
@@ -155,14 +193,14 @@ export class PostsViewComponent implements OnInit {
       return;
     }
 
-    this.securityService.getUsuarioInfo(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((info) => {
+    this.usuarioPerfilService.getUsuarioInfo(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((info) => {
       this.autor = info;
     });
   }
 
   /** Compara la ruta visitada con la canonica, sin que la codificacion moleste. */
   private rutaDistinta(rutaCanonica: string): boolean {
-    const actual = decodeURIComponent(location.pathname);
+    const actual = decodeURIComponent(this.documento.location.pathname);
     const esperada = decodeURIComponent(rutaCanonica.split('?')[0]);
 
     return actual !== esperada;
@@ -173,12 +211,12 @@ export class PostsViewComponent implements OnInit {
     return {
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${location.origin}/` },
+        { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${environment.publicUrl}/` },
         {
           '@type': 'ListItem',
           position: 2,
           name: post.categoria?.nombre,
-          item: `${location.origin}/posts/${post.categoria?.seo}`,
+          item: `${environment.publicUrl}/posts/${post.categoria?.seo}`,
         },
         { '@type': 'ListItem', position: 3, name: post.titulo, item: canonical },
       ],
@@ -193,7 +231,7 @@ export class PostsViewComponent implements OnInit {
     }
 
     const src = match[1];
-    return src.startsWith('http') ? src : `${location.origin}${src.startsWith('/') ? '' : '/'}${src}`;
+    return src.startsWith('http') ? src : `${environment.publicUrl}${src.startsWith('/') ? '' : '/'}${src}`;
   }
 
   actualizarPost(): void {

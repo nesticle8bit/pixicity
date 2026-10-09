@@ -6,7 +6,7 @@
   <mat-dialog-content>
     @if (formGroup.value?.id) {
       <div class="mb-3">
-        <label>Id</label> <br>
+        <label for="dialog-create-update-paginas-titulo">Id</label> <br>
         <span class="badge bg-primary">{{formGroup.value?.id}}</span>
       </div>
     }
@@ -15,14 +15,14 @@
       <div class="col-12 col-sm-12 col-md-6">
         <div class="mb-3">
           <label>Titulo <strong class="text-danger">*</strong></label>
-          <input class="form-control" type="text" formControlName="titulo" />
+          <input id="dialog-create-update-paginas-titulo" class="form-control" type="text" formControlName="titulo" />
         </div>
       </div>
 
       <div class="col-12 col-sm-12 col-md-6">
         <div class="mb-3">
-          <label>Slug</label>
-          <input class="form-control" type="text" formControlName="slug" />
+          <label for="dialog-create-update-paginas-slug">Slug</label>
+          <input id="dialog-create-update-paginas-slug" class="form-control" type="text" formControlName="slug" />
         </div>
       </div>
     </div>

@@ -14,19 +14,19 @@ import { CuentaRoutingModule } from './cuenta-routing.module';
 import { AccountComponent } from '../../components/pages/account/account.component';
 
 @NgModule({
-  declarations: [AccountComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatExpansionModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatTabsModule,
-    SharedModule,
-    CuentaRoutingModule,
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatExpansionModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatTabsModule,
+        SharedModule,
+        CuentaRoutingModule,
+        AccountComponent,
+    ],
 })
 export class CuentaModule {}

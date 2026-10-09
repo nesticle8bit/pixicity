@@ -20,7 +20,7 @@
                 {{post.usuario.userName}}
               </a>
               @if (autor && autor.rango && autor.rango.nombre) {
-              <span class="sidebar-rango" [ngStyle]="{'color': autor.rango.color}">
+              <span class="sidebar-rango" [style.--rango]="autor.rango.color">
                 <img src="/assets/images/icons/rangos/{{autor.rango.icono}}" alt="" aria-hidden="true" loading="lazy">
                 {{autor.rango.nombre}}
               </span>
@@ -94,7 +94,7 @@
         </aside>
 
         <!-- Contenido principal -->
-        <main class="detail-main">
+        <div class="detail-main">
           <div class="post-header">
             <app-posts-breadcrumb [post]="post"></app-posts-breadcrumb>
             <app-posts-nav [post]="post"></app-posts-nav>
@@ -151,7 +151,7 @@
           @if (post?.id) {
           <app-post-comments [post]="post"></app-post-comments>
           }
-        </main>
+        </div>
       </div>
     </div>
   </div>

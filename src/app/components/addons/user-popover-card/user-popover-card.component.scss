@@ -210,7 +210,7 @@
 
 .upop__stat-lbl {
   font-size: .68rem;
-  color: #999;
+  color: #6b6b6b;
   margin-top: 2px;
   text-align: center;
 }
@@ -225,7 +225,7 @@
 
 .upop__since {
   font-size: .78rem;
-  color: #aaa;
+  color: #6b6b6b;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -234,7 +234,7 @@
 .upop__link {
   font-size: .82rem;
   font-weight: 600;
-  color: #3b82f6;
+  color: #2563eb;
   text-decoration: none;
 
   &:hover {
@@ -245,6 +245,6 @@
 .upop__error {
   padding: 16px;
   text-align: center;
-  color: #999;
+  color: #6b6b6b;
   font-size: .85rem;
 }

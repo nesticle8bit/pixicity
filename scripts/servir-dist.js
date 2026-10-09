@@ -17,7 +17,10 @@ const arg = (name, fallback) => {
 const root = path.resolve(arg('dist', path.join(__dirname, '..', 'dist', 'pixicity', 'browser')));
 const port = Number(arg('port', 4300));
 
-if (!fs.existsSync(path.join(root, 'index.html'))) {
+// Con SSR activado el build genera index.csr.html (la app de cliente) en vez de index.html (igual que en el Dockerfile).
+const INDEX = fs.existsSync(path.join(root, 'index.html')) ? 'index.html' : 'index.csr.html';
+
+if (!fs.existsSync(path.join(root, INDEX))) {
   console.error(`No existe ${root}/index.html. Genera el build primero (npm run build).`);
   process.exit(2);
 }
@@ -44,7 +47,7 @@ http
     // normalize + comprobación de prefijo: no se sirve nada fuera de la carpeta del build.
     const pedido = path.normalize(path.join(root, decodeURIComponent(req.url.split('?')[0])));
     const dentro = pedido.startsWith(root);
-    const archivo = dentro && fs.existsSync(pedido) && fs.statSync(pedido).isFile() ? pedido : path.join(root, 'index.html');
+    const archivo = dentro && fs.existsSync(pedido) && fs.statSync(pedido).isFile() ? pedido : path.join(root, INDEX);
     res.writeHead(200, { 'Content-Type': mime[path.extname(archivo)] || 'application/octet-stream' });
     fs.createReadStream(archivo).pipe(res);
   })

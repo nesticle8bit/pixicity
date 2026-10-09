@@ -100,9 +100,9 @@
             <span class="coment-fijado" matTooltip="Comentario fijado"><i class="ti ti-pin"></i> Fijado</span>
           }
           @if (c.rango?.nombre) {
-          <span class="coment-rango" [ngStyle]="{ color: c.rango.color }">
+          <span class="coment-rango" [style.--rango]="c.rango.color">
             @if (c.rango.icono) {
-            <img src="/assets/images/icons/rangos/{{c.rango.icono}}" [matTooltip]="c.rango.nombre" alt="" aria-hidden="true" loading="lazy">
+            <img src="/assets/images/icons/rangos/{{c.rango.icono}}" [matTooltip]="c.rango.nombre" [attr.aria-label]="c.rango.nombre" alt="" aria-hidden="true" loading="lazy">
             }
             {{c.rango.nombre}}
           </span>

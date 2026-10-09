@@ -1,15 +1,22 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { PostUrlLinkComponent } from '../../addons/post-url-link/post-url-link.component';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
-  standalone: false,
-  selector: 'app-post-rank-list',
-  templateUrl: './post-rank-list.component.html',
-  styleUrls: ['./post-rank-list.component.scss'],
+    selector: 'app-post-rank-list',
+    templateUrl: './post-rank-list.component.html',
+    styleUrls: ['./post-rank-list.component.scss'],
+    imports: [
+        NgClass,
+        PostUrlLinkComponent,
+        MatTooltip,
+    ],
 })
 export class PostRankListComponent {
-  @Input() titulo: string = '';
-  @Input() icono: string = 'ti-list-numbers';
-  @Input() mensajeVacio: string = '';
-  @Input() iconoVacio: string = 'ti-mood-empty';
-  @Input() posts: any[] | null = [];
+  readonly titulo = input<string>('');
+  readonly icono = input<string>('ti-list-numbers');
+  readonly mensajeVacio = input<string>('');
+  readonly iconoVacio = input<string>('ti-mood-empty');
+  readonly posts = input<any[] | null>([]);
 }

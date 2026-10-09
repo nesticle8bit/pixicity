@@ -2,18 +2,40 @@ import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { NgClass } from '@angular/common';
+import { UserAvatarComponent } from '../../../../addons/user-avatar/user-avatar.component';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
+import { TruncatePipe } from '../../../../../shared/pipes/truncate.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-shouts',
-  templateUrl: './table-shouts.component.html',
-  styleUrls: ['./table-shouts.component.scss'],
+    selector: 'app-table-shouts',
+    templateUrl: './table-shouts.component.html',
+    styleUrls: ['./table-shouts.component.scss'],
+    imports: [
+        AdminFiltrosComponent,
+        NgClass,
+        UserAvatarComponent,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatIcon,
+        MatPaginator,
+        TimeAgoPipe,
+        TruncatePipe,
+    ],
 })
 export class TableShoutsComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private perfilService = inject(IHttpPerfilService);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public shouts: any[] = [];
@@ -36,11 +58,7 @@ export class TableShoutsComponent implements OnInit {
     ],
   };
 
-  constructor(
-    public paginationService: PaginationService,
-    private perfilService: IHttpPerfilService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 

@@ -8,10 +8,7 @@ import { Pipe, PipeTransform } from '@angular/core';
  * Solo agrega atributos a las <img> que no los tengan: no reescribe ni filtra
  * el resto del HTML (de eso se encarga el saneado del servidor).
  */
-@Pipe({
-  standalone: false,
-  name: 'contenidoSeo',
-})
+@Pipe({ name: 'contenidoSeo', })
 export class ContenidoSeoPipe implements PipeTransform {
   private static readonly IMG = /<img\b[^>]*?\/?>/gis;
 

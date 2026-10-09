@@ -1,11 +1,19 @@
 import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { FiltroNotificaciones, MonitorViewModel } from 'src/app/models/logs/logs-vm.model';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { RouterLink } from '@angular/router';
+import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
+import { TipoIconMonitorComponent } from '../../addons/tipo-icon-monitor/tipo-icon-monitor.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { DatePipe } from '@angular/common';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 
 interface TipoFiltro {
   /** Nombre de TipoMonitor en el API. */
@@ -23,12 +31,26 @@ interface GrupoFiltro {
 type Periodo = NonNullable<FiltroNotificaciones['periodo']>;
 
 @Component({
-  standalone: false,
-  selector: 'app-monitor',
-  templateUrl: './monitor.component.html',
-  styleUrls: ['./monitor.component.scss'],
+    selector: 'app-monitor',
+    templateUrl: './monitor.component.html',
+    styleUrls: ['./monitor.component.scss'],
+    imports: [
+        UserAvatarComponent,
+        RouterLink,
+        UserPopoverDirective,
+        TipoIconMonitorComponent,
+        MatTooltip,
+        MatPaginator,
+        AdsByTypeComponent,
+        DatePipe,
+        TimeAgoPipe,
+    ],
 })
 export class MonitorComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  paginationService = inject(PaginationService);
+  private logsService = inject(IHttpLogsService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public readonly grupos: GrupoFiltro[] = [
@@ -87,11 +109,7 @@ export class MonitorComponent implements OnInit {
 
   private readonly busqueda$ = new Subject<string>();
 
-  constructor(
-    private displayService: DisplayComponentService,
-    public paginationService: PaginationService,
-    private logsService: IHttpLogsService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
 
     this.displayService.setDisplay({

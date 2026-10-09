@@ -7,7 +7,7 @@
 }
 
 @if (sesiones.length > 0) {
-  <main class="table-responsive">
+  <div class="table-responsive">
     <table class="table table-sm table-striped table-hover">
       <thead>
         <tr>
@@ -30,7 +30,7 @@
               {{sesion.fechaRegistro | timeAgo}}
             </td>
             <td>
-              <i class="ti ti-copy mr-3 text-secondary cursor--pointer" matTooltip="Copiar al portapapeles" (click)="clipboard(sesion.token)"></i> &nbsp;
+              <i class="ti ti-copy mr-3 text-secondary cursor--pointer" matTooltip="Copiar al portapapeles" role="button" tabindex="0" aria-label="Copiar al portapapeles" (click)="clipboard(sesion.token)" (keydown.enter)="clipboard(sesion.token)"></i> &nbsp;
               <span class="cursor--help" matTooltip="{{sesion.token}}">
                 {{sesion.token | truncate:[60]}}
               </span>
@@ -66,7 +66,7 @@
           }
         </td>
         <td class="text-center" width="30px">
-          <button class="btn-menu" [matMenuTriggerFor]="menu">
+          <button type="button" class="btn-menu" aria-label="Acciones" [matMenuTriggerFor]="menu">
             <i class="ti ti-dots-vertical"></i>
           </button>
           <mat-menu #menu="matMenu">
@@ -80,7 +80,7 @@
     }
   </tbody>
 </table>
-</main>
+</div>
 }
 
 @if (sesiones.length > 0) {

@@ -1,19 +1,40 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { ModeracionLog, Reporte } from 'src/app/models/admin/moderacion.model';
 import { IHttpModeracionService } from 'src/app/services/interfaces/httpModeracion.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
+import { FormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-dashboard-moderacion',
-  templateUrl: './dashboard-moderacion.component.html',
-  styleUrls: ['./dashboard-moderacion.component.scss'],
+    selector: 'app-dashboard-moderacion',
+    templateUrl: './dashboard-moderacion.component.html',
+    styleUrls: ['./dashboard-moderacion.component.scss'],
+    imports: [
+        FormsModule,
+        NgClass,
+        MatTooltip,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatIcon,
+        MatPaginator,
+        TimeAgoPipe,
+    ],
 })
 export class DashboardModeracionComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private moderacionService = inject(IHttpModeracionService);
+  private notificationService = inject(NotificationService);
+  private signalrService = inject(SignalrService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public reportes: Reporte[] = [];
@@ -36,12 +57,7 @@ export class DashboardModeracionComponent implements OnInit {
     { id: 5, nombre: 'Comentarios de foto' },
   ];
 
-  constructor(
-    public paginationService: PaginationService,
-    private moderacionService: IHttpModeracionService,
-    private notificationService: NotificationService,
-    private signalrService: SignalrService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 

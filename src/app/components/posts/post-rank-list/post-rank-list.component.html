@@ -1,17 +1,17 @@
 <div class="rank-widget">
   <div class="rank-widget__head">
-    <i class="ti" [ngClass]="icono"></i>
-    <h2>{{titulo}}</h2>
+    <i class="ti" [ngClass]="icono()"></i>
+    <h2>{{titulo()}}</h2>
   </div>
 
-  @if (!posts?.length) {
+  @if (!posts()?.length) {
     <div class="rank-widget__empty">
-      <i class="ti" [ngClass]="iconoVacio"></i>
-      {{mensajeVacio}}
+      <i class="ti" [ngClass]="iconoVacio()"></i>
+      {{mensajeVacio()}}
     </div>
   } @else {
     <div class="rank-widget__list">
-      @for (item of posts; track item.id; let i = $index) {
+      @for (item of posts(); track item.id; let i = $index) {
         <article class="rank-item">
           <span class="rank-item__rank" [ngClass]="{'gold': i === 0, 'silver': i === 1, 'bronze': i === 2}">
             {{i + 1}}

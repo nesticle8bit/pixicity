@@ -1,7 +1,7 @@
 <div class="upop">
 
   <!-- Skeleton -->
-  @if (loading) {
+  @if (loading()) {
     <div class="upop__skeleton">
       <div class="skel-avatar"></div>
       <div class="skel-lines">
@@ -13,7 +13,7 @@
   }
 
   <!-- Card content -->
-  @if (!loading && userData) {
+  @if (!loading() && userData) {
     <!-- Header -->
     <div class="upop__header">
       <div class="upop__avatar-wrap">
@@ -103,7 +103,7 @@
     </div>
   }
 
-  @if (!loading && !userData) {
+  @if (!loading() && !userData) {
     <div class="upop__error">Usuario no encontrado</div>
   }
 

@@ -1,15 +1,26 @@
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { TipoActividadIconComponent } from '../../addons/tipo-actividad-icon/tipo-actividad-icon.component';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
+import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 
 @Component({
-  standalone: false,
-  selector: 'app-profile-activity',
-  templateUrl: './profile-activity.component.html',
-  styleUrls: ['./profile-activity.component.scss'],
+    selector: 'app-profile-activity',
+    templateUrl: './profile-activity.component.html',
+    styleUrls: ['./profile-activity.component.scss'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        TipoActividadIconComponent,
+        TimeAgoPipe,
+    ],
 })
 export class ProfileActivityComponent implements OnInit {
+  private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
+  private formBuilder = inject(FormBuilder);
+
   private readonly destroyRef = inject(DestroyRef);
 
   private _user: any;
@@ -75,10 +86,7 @@ export class ProfileActivityComponent implements OnInit {
     },
   ];
 
-  constructor(
-    private securityService: IHttpSecurityService,
-    private formBuilder: FormBuilder
-  ) {
+  constructor() {
     this.formGroup = this.formBuilder.group({
       tipoActividad: '',
     });
@@ -87,7 +95,7 @@ export class ProfileActivityComponent implements OnInit {
   ngOnInit(): void {}
 
   getActividadUsuario(): void {
-    this.securityService
+    this.usuarioPerfilService
       .getActividadUsuario(this.user.id, this.formGroup.value.tipoActividad)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {

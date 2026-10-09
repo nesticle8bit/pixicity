@@ -2,18 +2,29 @@ import { IHttpFavoritosService } from 'src/app/services/interfaces/httpFavoritos
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PageEvent } from '@angular/material/paginator';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NgClass } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-favoritos',
-  templateUrl: './favoritos.component.html',
-  styleUrls: ['./favoritos.component.scss']
+    selector: 'app-favoritos',
+    templateUrl: './favoritos.component.html',
+    styleUrls: ['./favoritos.component.scss'],
+    imports: [FormsModule, ReactiveFormsModule, NgClass, RouterLink, MatTooltip, MatPaginator, AdsByTypeComponent, TimeAgoPipe]
 })
 export class FavoritosComponent implements OnInit {
+  private displayService = inject(DisplayComponentService);
+  favoritosService = inject(IHttpFavoritosService);
+  paginationService = inject(PaginationService);
+  private httpGeneral = inject(IHttpGeneralService);
+  private formBuilder = inject(FormBuilder);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public favoritos: any[] = [];
@@ -21,13 +32,7 @@ export class FavoritosComponent implements OnInit {
   public totalCount: number = 0;
   public formGroup!: FormGroup;
 
-  constructor(
-    private displayService: DisplayComponentService,
-    public favoritosService: IHttpFavoritosService,
-    public paginationService: PaginationService,
-    private httpGeneral: IHttpGeneralService,
-    private formBuilder: FormBuilder
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
 
     this.displayService.setDisplay({

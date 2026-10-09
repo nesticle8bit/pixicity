@@ -2,18 +2,44 @@ import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { AdminFiltrosComponent } from '../../../shared/admin-filtros/admin-filtros.component';
+import { NgClass } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
+import { UserAvatarComponent } from '../../../../addons/user-avatar/user-avatar.component';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatDivider } from '@angular/material/divider';
+import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
+import { TruncatePipe } from '../../../../../shared/pipes/truncate.pipe';
 
 @Component({
-  standalone: false,
-  selector: 'app-table-mensajes',
-  templateUrl: './table-mensajes.component.html',
-  styleUrls: ['./table-mensajes.component.scss'],
+    selector: 'app-table-mensajes',
+    templateUrl: './table-mensajes.component.html',
+    styleUrls: ['./table-mensajes.component.scss'],
+    imports: [
+        AdminFiltrosComponent,
+        NgClass,
+        MatTooltip,
+        UserAvatarComponent,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatIcon,
+        MatDivider,
+        MatPaginator,
+        TimeAgoPipe,
+        TruncatePipe,
+    ],
 })
 export class TableMensajesComponent implements OnInit {
+  paginationService = inject(PaginationService);
+  private mensajesService = inject(IHttpMensajesService);
+  private notificationService = inject(NotificationService);
+
   private readonly destroyRef = inject(DestroyRef);
 
   public mensajes: any;
@@ -32,11 +58,7 @@ export class TableMensajesComponent implements OnInit {
     ],
   };
 
-  constructor(
-    public paginationService: PaginationService,
-    private mensajesService: IHttpMensajesService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });
   }
 

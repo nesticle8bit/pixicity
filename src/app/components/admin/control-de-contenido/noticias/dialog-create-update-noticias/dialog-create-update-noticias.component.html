@@ -6,7 +6,7 @@
   <mat-dialog-content>
     @if (formGroup.value?.id) {
       <div class="mb-3">
-        <label>Id</label> <br>
+        <label for="dialog-create-update-noticias-contenido">Id</label> <br>
         <span class="badge bg-primary">{{formGroup.value?.id}}</span>
       </div>
     }
@@ -15,7 +15,7 @@
       <div class="col-12 col-sm-12 col-md-12">
         <div class="mb-3">
           <label>Contenido <strong class="text-danger">*</strong></label>
-          <textarea class="form-control" formControlName="contenido" rows="4"></textarea>
+          <textarea id="dialog-create-update-noticias-contenido" class="form-control" formControlName="contenido" rows="4"></textarea>
         </div>
       </div>
     </div>
