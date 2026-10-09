@@ -1279,6 +1279,7 @@ textarea:focus#msg_body {
   margin-top: 20px;
   max-width: 100%;
   overflow-x: hidden;
+  font-size: 0.9rem;
 
   /* Red de seguridad: ningún elemento del contenido (HTML de usuario,
      divs con width fijo, <center>, figures, embeds, etc.) puede superar

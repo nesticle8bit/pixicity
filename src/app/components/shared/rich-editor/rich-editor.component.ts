@@ -1,20 +1,127 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  DestroyRef,
   ElementRef,
   forwardRef,
   HostListener,
+  inject,
   Input,
+  NgZone,
   OnDestroy,
   ViewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
+import { NotificationService } from 'src/app/services/shared/notification.service';
+import {
+  BLOCK_TAGS,
+  CARET_GUARD,
+  closestWithin,
+  emptyParagraph,
+  INLINE_FORMAT_TAGS,
+  isAtomic,
+  isBlock,
+  isElement,
+  isolate,
+  isVisuallyEmpty,
+  normalizeInline,
+  rangeFromOffsets,
+  serializeHtml,
+  textOffset,
+  unwrapNode,
+} from './rich-editor-dom';
+import { cleanPastedHtml, imageNode, plainTextFragment } from './rich-editor-paste';
+
+type InlineMark = 'bold' | 'italic' | 'underline' | 'strike' | 'code';
+type ToolbarMenu = 'heading' | 'color' | 'image';
+type BubbleMode = 'format' | 'link' | 'edit-link';
+type StyleProp = 'color' | 'backgroundColor';
+
+interface EditorButton {
+  icon: string;
+  title: string;
+  run: () => void;
+  mark?: InlineMark; // si se indica, el botón refleja el estado activo de esa marca
+}
+
+interface MenuButton {
+  menu: ToolbarMenu;
+  icon: string;
+  title: string;
+}
+
+interface ToolbarGroup {
+  items: (EditorButton | MenuButton)[];
+  secondary?: boolean; // en móvil queda detrás del botón "más"
+}
+
+interface Palette {
+  prop: StyleProp;
+  label: string;
+  resetTitle: string;
+  colors: string[];
+}
+
+interface TextOffsets {
+  start: number;
+  end: number;
+}
+
+interface HistoryEntry {
+  html: string;
+  sel: TextOffsets | null;
+}
+
+// Tags que representan cada marca inline (`create` es el que se inserta)
+const INLINE_MARKS: Record<InlineMark, { tags: string[]; create: string }> = {
+  bold:      { tags: ['STRONG', 'B'], create: 'strong' },
+  italic:    { tags: ['EM', 'I'], create: 'em' },
+  underline: { tags: ['U'], create: 'u' },
+  strike:    { tags: ['S', 'STRIKE', 'DEL'], create: 's' },
+  code:      { tags: ['CODE'], create: 'code' },
+};
+
+// Atajos estilo markdown al escribir un prefijo + espacio al inicio de un párrafo
+const BLOCK_SHORTCUTS: { pattern: RegExp; block: string }[] = [
+  { pattern: /^#{1,6}$/, block: 'heading' },
+  { pattern: /^[-*+]$/, block: 'UL' },
+  { pattern: /^1[.)]$/, block: 'OL' },
+  { pattern: /^>$/, block: 'blockquote' },
+  { pattern: /^```$/, block: 'pre' },
+  { pattern: /^-{3}$/, block: 'hr' },
+];
+
+// Atajos inline al cerrar el delimitador: `código`, **negrita**, *cursiva*, _cursiva_
+// `open`: largo del delimitador de apertura; `typed`: parte del cierre ya escrita
+const INLINE_SHORTCUTS: { key: string; pattern: RegExp; tag: string; open: number; typed: number }[] = [
+  { key: '`', pattern: /`([^`]+)$/, tag: 'code', open: 1, typed: 0 },
+  { key: '*', pattern: /\*\*([^*]+)\*$/, tag: 'strong', open: 2, typed: 1 },
+  { key: '*', pattern: /(?:^|[^*\w])\*([^*\s][^*]*)$/, tag: 'em', open: 1, typed: 0 },
+  { key: '_', pattern: /(?:^|\s)_([^_\s][^_]*)$/, tag: 'em', open: 1, typed: 0 },
+];
+
+// Formato que quita "Eliminar formato" (los enlaces se conservan)
+const CLEARABLE_TAGS = INLINE_FORMAT_TAGS.filter((t) => t !== 'A');
+
+// Mismas reglas que /api/fotos/UploadImage (ImageUploadHelper.FotoMaxBytes)
+const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+const IMAGE_MAX_BYTES = 8 * 1024 * 1024;
+
+// Separación entre la selección y el bubble, y margen mínimo contra los bordes
+const BUBBLE_GAP = 8;
+const BUBBLE_EDGE = 4;
+const HISTORY_LIMIT = 200;
 
 @Component({
   standalone: false,
   selector: 'app-rich-editor',
   templateUrl: './rich-editor.component.html',
   styleUrls: ['./rich-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -25,69 +132,166 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class RichEditorComponent implements ControlValueAccessor, AfterViewInit, OnDestroy {
   @Input() placeholder: string = 'Escribe aquí...';
-  @ViewChild('editorEl') editorEl!: ElementRef<HTMLDivElement>;
 
-  showHeadingMenu = false;
-  showColorPicker = false;
-
-  //  Bubble menu (Notion-style) que aparece al seleccionar texto
   @ViewChild('wrapperEl') wrapperEl!: ElementRef<HTMLDivElement>;
+  @ViewChild('toolbarEl') toolbarEl!: ElementRef<HTMLDivElement>;
+  @ViewChild('editorEl') editorEl!: ElementRef<HTMLDivElement>;
   @ViewChild('bubbleEl') bubbleEl!: ElementRef<HTMLDivElement>;
-  @ViewChild('linkInputEl') linkInputEl!: ElementRef<HTMLInputElement>;
+  @ViewChild('linkInputEl') linkInputEl?: ElementRef<HTMLInputElement>;
+  @ViewChild('fileInputEl') fileInputEl!: ElementRef<HTMLInputElement>;
 
-  showBubble = false;
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly zone = inject(NgZone);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly fotosService = inject(IHttpFotosService);
+  private readonly notificationService = inject(NotificationService);
+
+  disabled = false;
+  isEmpty = true;
+  openMenu: ToolbarMenu | null = null;
+  showMore = false;
+  dragOver = false;
+  uploads = 0;
+  activeMarks = new Set<InlineMark>();
+
+  //  Bubble (Notion-style): formato de la selección, vista previa o edición de enlace
+  bubbleMode: BubbleMode | null = null;
   showBubbleColors = false;
-  showLinkInput = false;
+  bubbleBelow = false; // true cuando se coloca debajo de la selección
   bubbleTop = 0;
   bubbleLeft = 0;
-  linkUrl = '';
-  private savedRange: Range | null = null;
+  bubbleArrowX = 0;
+  linkHref = '';
 
   readonly headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
-  readonly colors = [
-    '#000000', '#434343', '#666666', '#999999', '#b7b7b7', '#cccccc', '#d9d9d9', '#ffffff',
-    '#ff0000', '#ff4500', '#ff8c00', '#ffd700', '#adff2f', '#008000', '#00ced1', '#0000ff',
-    '#8b008b', '#ff1493', '#ff69b4', '#a52a2a', '#d2691e', '#f4a460', '#deb887', '#2e8b57',
+  readonly palettes: Palette[] = [
+    {
+      prop: 'color', label: 'Texto', resetTitle: 'Sin color',
+      colors: [
+        '#000000', '#434343', '#666666', '#999999', '#b7b7b7', '#cccccc', '#d9d9d9', '#ffffff',
+        '#ff0000', '#ff4500', '#ff8c00', '#ffd700', '#adff2f', '#008000', '#00ced1', '#0000ff',
+        '#8b008b', '#ff1493', '#ff69b4', '#a52a2a', '#d2691e', '#f4a460', '#deb887', '#2e8b57',
+      ],
+    },
+    {
+      prop: 'backgroundColor', label: 'Resaltado', resetTitle: 'Sin resaltado',
+      colors: [
+        '#fff59d', '#ffe0b2', '#ffcdd2', '#f8bbd0', '#e1bee7', '#d1c4e9', '#c5cae9', '#bbdefb',
+        '#b2ebf2', '#c8e6c9', '#dcedc8', '#e0e0e0',
+      ],
+    },
   ];
 
-  private static readonly BLOCK_TAGS = ['P', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'BLOCKQUOTE', 'LI', 'PRE'];
+  readonly toolbarGroups: ToolbarGroup[] = [
+    { items: [
+      { icon: 'format_bold', title: 'Negrita (Ctrl+B)', mark: 'bold', run: () => this.bold() },
+      { icon: 'format_italic', title: 'Cursiva (Ctrl+I)', mark: 'italic', run: () => this.italic() },
+      { icon: 'format_underlined', title: 'Subrayado (Ctrl+U)', mark: 'underline', run: () => this.underline() },
+      { icon: 'format_strikethrough', title: 'Tachado', mark: 'strike', run: () => this.strikeThrough() },
+    ] },
+    { items: [
+      { icon: 'format_list_bulleted', title: 'Lista de viñetas (- espacio)', run: () => this.bulletList() },
+      { icon: 'format_list_numbered', title: 'Lista ordenada (1. espacio)', run: () => this.orderedList() },
+    ] },
+    { items: [
+      { icon: 'link', title: 'Insertar enlace (Ctrl+K)', run: () => this.insertLink() },
+      { menu: 'image', icon: 'image', title: 'Insertar imagen' },
+    ] },
+    { secondary: true, items: [
+      { menu: 'heading', icon: 'title', title: 'Encabezado (# espacio)' },
+      { menu: 'color', icon: 'format_color_text', title: 'Color y resaltado' },
+    ] },
+    { secondary: true, items: [
+      { icon: 'code', title: 'Código inline (`texto`)', mark: 'code', run: () => this.toggleCode() },
+      { icon: 'integration_instructions', title: 'Bloque de código (``` espacio)', run: () => this.toggleCodeBlock() },
+      { icon: 'format_quote', title: 'Cita (> espacio)', run: () => this.toggleBlockquote() },
+    ] },
+    { secondary: true, items: [
+      { icon: 'format_align_left', title: 'Alinear izquierda', run: () => this.applyAlign('left') },
+      { icon: 'format_align_center', title: 'Centrar', run: () => this.applyAlign('center') },
+      { icon: 'format_align_right', title: 'Alinear derecha', run: () => this.applyAlign('right') },
+      { icon: 'format_align_justify', title: 'Justificar', run: () => this.applyAlign('justify') },
+    ] },
+    { secondary: true, items: [
+      { icon: 'horizontal_rule', title: 'Línea horizontal (--- espacio)', run: () => this.horizontalRule() },
+      { icon: 'format_clear', title: 'Eliminar formato', run: () => this.removeFormat() },
+    ] },
+    { secondary: true, items: [
+      { icon: 'undo', title: 'Deshacer (Ctrl+Z)', run: () => this.undo() },
+      { icon: 'redo', title: 'Rehacer (Ctrl+Y)', run: () => this.redo() },
+    ] },
+  ];
+
+  readonly bubbleMarks: EditorButton[] = [
+    { icon: 'format_bold', title: 'Negrita', mark: 'bold', run: () => this.bold() },
+    { icon: 'format_italic', title: 'Cursiva', mark: 'italic', run: () => this.italic() },
+    { icon: 'format_underlined', title: 'Subrayado', mark: 'underline', run: () => this.underline() },
+    { icon: 'format_strikethrough', title: 'Tachado', mark: 'strike', run: () => this.strikeThrough() },
+    { icon: 'code', title: 'Código', mark: 'code', run: () => this.toggleCode() },
+  ];
 
   private onChange: (value: string) => void = () => {};
   private onTouched: () => void = () => {};
   private pendingValue = '';
+  private lastEmitted: string | null = null;
   private initialized = false;
 
-  // Historial propio (reemplaza execCommand undo/redo)
-  private history: string[] = [];
-  private historyIndex = -1;
-  private snapshotTimer: any = null;
+  // En táctiles el menú nativo de selección ya ofrece acciones: no se muestra el bubble de formato
+  private readonly isTouch = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
 
-  constructor(private host: ElementRef<HTMLElement>) {}
+  private plainPaste = false; // Ctrl+Shift+V
+  private uploadSel: TextOffsets | null = null; // dónde insertar las imágenes elegidas
+  private internalDrag = false;
+  private uploadSeq = 0;
+
+  // Estado del bubble
+  private savedSel: TextOffsets | null = null; // selección a la que se aplicará el enlace
+  private linkEl: HTMLAnchorElement | null = null; // enlace bajo el caret / en edición
+  private bubbleAnchor: (() => DOMRect | null) | null = null;
+
+  // Historial propio (reemplaza execCommand undo/redo)
+  private history: HistoryEntry[] = [];
+  private historyIndex = -1;
+  private snapshotTimer: ReturnType<typeof setTimeout> | undefined;
+
+  // Reposiciona el bubble en cualquier scroll (ventana, diálogo o el propio editor)
+  private scrollFrame = 0;
+  private readonly onAnyScroll = () => {
+    if (!this.bubbleMode || this.scrollFrame) return;
+    this.scrollFrame = requestAnimationFrame(() => {
+      this.scrollFrame = 0;
+      this.zone.run(() => this.repositionBubble());
+    });
+  };
 
   private get editor(): HTMLDivElement {
     return this.editorEl.nativeElement;
   }
 
+  isMenu(item: EditorButton | MenuButton): item is MenuButton {
+    return 'menu' in item;
+  }
+
   ngAfterViewInit(): void {
     this.initialized = true;
-    if (this.pendingValue) {
-      this.editor.innerHTML = this.pendingValue;
-    }
-    this.normalizeTrailing();
-    this.resetHistory();
+    this.setContent(this.pendingValue);
+    // capture: true para enterarse también del scroll de contenedores (mat-dialog, el editor)
+    this.zone.runOutsideAngular(() => document.addEventListener('scroll', this.onAnyScroll, true));
   }
 
   ngOnDestroy(): void {
     clearTimeout(this.snapshotTimer);
+    cancelAnimationFrame(this.scrollFrame);
+    document.removeEventListener('scroll', this.onAnyScroll, true);
   }
 
-  // ControlValueAccessor
+  //  ControlValueAccessor
+
   writeValue(value: string): void {
     const html = value || '';
     if (this.initialized && this.editorEl) {
-      this.editor.innerHTML = html;
-      this.normalizeTrailing();
-      this.resetHistory();
+      this.setContent(html);
     } else {
       this.pendingValue = html;
     }
@@ -101,9 +305,37 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.onTouched = fn;
   }
 
-  // Input events
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+    if (isDisabled) {
+      this.openMenu = null;
+      this.hideBubble();
+    }
+    this.cdr.markForCheck();
+  }
+
+  private setContent(html: string): void {
+    this.editor.innerHTML = html;
+    this.normalizeTrailing();
+    this.lastEmitted = serializeHtml(this.editor);
+    this.isEmpty = !this.lastEmitted;
+    this.resetHistory();
+    this.cdr.markForCheck();
+  }
+
+  // Emite el valor limpio; un editor sin contenido vale '' (así `required` funciona)
+  private emit(): void {
+    const value = serializeHtml(this.editor);
+    this.isEmpty = !value;
+    if (value === this.lastEmitted) return;
+    this.lastEmitted = value;
+    this.onChange(value);
+  }
+
+  //  Eventos del área editable
+
   onInput(): void {
-    this.onChange(this.editor.innerHTML);
+    this.emit();
     clearTimeout(this.snapshotTimer);
     this.snapshotTimer = setTimeout(() => this.recordHistory(), 350);
   }
@@ -112,119 +344,264 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.onTouched();
   }
 
-  // Atajos de teclado (sin execCommand nativo)
   onKeydown(event: KeyboardEvent): void {
-    if (!(event.ctrlKey || event.metaKey)) return;
-    const key = event.key.toLowerCase();
+    if (event.isComposing || this.disabled) return;
 
-    if (key === 'z') {
-      event.preventDefault();
-      event.shiftKey ? this.redo() : this.undo();
+    if (event.ctrlKey || event.metaKey) {
+      const key = event.key.toLowerCase();
+      if (key === 'v' && event.shiftKey) {
+        this.plainPaste = true; // el evento paste que sigue pega texto plano
+        return;
+      }
+      const actions: Record<string, () => void> = {
+        z: () => (event.shiftKey ? this.redo() : this.undo()),
+        y: () => this.redo(),
+        b: () => this.bold(),
+        i: () => this.italic(),
+        u: () => this.underline(),
+        k: () => this.insertLink(),
+      };
+      const action = actions[key];
+      if (action) {
+        event.preventDefault();
+        action();
+      }
       return;
     }
-    if (key === 'y') {
-      event.preventDefault();
-      this.redo();
-      return;
+    if (event.altKey) return;
+
+    let handled = false;
+    switch (event.key) {
+      case ' ': handled = this.blockShortcut(); break;
+      case '`':
+      case '*':
+      case '_': handled = this.inlineShortcut(event.key); break;
+      case 'Enter': handled = !event.shiftKey && this.handleEnter(); break;
+      case 'Tab': handled = this.handleTab(event.shiftKey); break;
     }
-    if (key === 'b') { event.preventDefault(); this.bold(); }
-    else if (key === 'i') { event.preventDefault(); this.italic(); }
-    else if (key === 'u') { event.preventDefault(); this.underline(); }
+    if (handled) event.preventDefault();
   }
 
-  // Close dropdowns on outside click
+  onPaste(event: ClipboardEvent): void {
+    const data = event.clipboardData;
+    if (!data || this.disabled) return;
+    event.preventDefault();
+
+    const plain = this.plainPaste;
+    this.plainPaste = false;
+    const range = this.currentRange();
+    if (!range) return;
+
+    const html = data.getData('text/html');
+    const text = data.getData('text/plain');
+    const files = Array.from(data.files);
+
+    // Imagen copiada (captura, archivo): se sube
+    if (files.length && !text.trim()) {
+      this.uploadImages(files, this.offsetsOf(range));
+      return;
+    }
+
+    // URL pegada sobre texto seleccionado: lo convierte en enlace
+    const url = text.trim();
+    if (!range.collapsed && this.isUrl(url)) {
+      this.linkOffsets(this.normalizeUrl(url), this.offsetsOf(range));
+      return;
+    }
+
+    if (this.closestAnyTag(range.startContainer, ['PRE', 'CODE'])) {
+      const frag = document.createDocumentFragment();
+      frag.appendChild(document.createTextNode(text));
+      this.insertFragment(frag, range);
+    } else {
+      this.insertFragment(!plain && html ? cleanPastedHtml(html) : plainTextFragment(text), range);
+    }
+    this.afterChange();
+  }
+
+  //  Arrastrar y soltar (imágenes o contenido externo)
+
+  onDragStart(): void {
+    this.internalDrag = true;
+  }
+
+  onDragEnd(): void {
+    this.internalDrag = false;
+    this.dragOver = false;
+  }
+
+  onDragOver(event: DragEvent): void {
+    if (this.disabled || !event.dataTransfer?.types.includes('Files')) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'copy';
+    this.dragOver = true;
+  }
+
+  onDragLeave(event: DragEvent): void {
+    if (!(event.relatedTarget instanceof Node && this.editor.contains(event.relatedTarget))) {
+      this.dragOver = false;
+    }
+  }
+
+  onDrop(event: DragEvent): void {
+    this.dragOver = false;
+    const internal = this.internalDrag;
+    this.internalDrag = false;
+    const dt = event.dataTransfer;
+    if (this.disabled || !dt) return;
+
+    const point = this.rangeFromPoint(event.clientX, event.clientY);
+    if (dt.files.length) {
+      event.preventDefault();
+      this.uploadImages(Array.from(dt.files), point ? this.offsetsOf(point) : null);
+      return;
+    }
+    if (internal) return; // mover texto dentro del editor: comportamiento nativo
+
+    const html = dt.getData('text/html');
+    const text = dt.getData('text/plain');
+    if (!html && !text) return;
+    event.preventDefault();
+    if (point) this.selectRange(point);
+    this.insertFragment(html ? cleanPastedHtml(html) : plainTextFragment(text), point ?? undefined);
+    this.afterChange();
+  }
+
+  //  Toolbar
+
   @HostListener('document:click', ['$event.target'])
   onDocumentClick(target: EventTarget | null): void {
-    if (!(target instanceof HTMLElement)) return;
-    if (!target.closest('.rich-editor__dropdown')) {
-      this.showHeadingMenu = false;
-      this.showColorPicker = false;
+    if (this.openMenu && target instanceof HTMLElement && !target.closest('.rich-editor__dropdown')) {
+      this.openMenu = null;
     }
   }
 
-  //  Comandos de la toolbar (Range/Selection, sin execCommand)
-
-  bold(): void          { this.toggleInline(['STRONG', 'B'], 'strong'); }
-  italic(): void        { this.toggleInline(['EM', 'I'], 'em'); }
-  underline(): void     { this.toggleInline(['U'], 'u'); }
-  strikeThrough(): void { this.toggleInline(['S', 'STRIKE', 'DEL'], 's'); }
-  toggleCode(): void    { this.toggleInline(['CODE'], 'code'); }
-
-  toggleBlockquote(): void {
-    const blocks = this.selectedBlocks();
-    const inQuote = blocks.some((b) => this.closestAnyTag(b, ['BLOCKQUOTE']));
-    this.applyBlock(inQuote ? 'p' : 'blockquote');
+  // Los clics en toolbar/bubble no deben quitar la selección del editor
+  // (salvo en inputs, que necesitan recibir el foco)
+  keepSelection(event: MouseEvent): void {
+    if (!(event.target instanceof HTMLInputElement)) event.preventDefault();
   }
 
-  orderedList(): void { this.toggleList('OL'); }
-  bulletList(): void  { this.toggleList('UL'); }
+  toggleMenu(menu: ToolbarMenu): void {
+    this.openMenu = this.openMenu === menu ? null : menu;
+  }
+
+  bold(): void          { this.toggleMark('bold'); }
+  italic(): void        { this.toggleMark('italic'); }
+  underline(): void     { this.toggleMark('underline'); }
+  strikeThrough(): void { this.toggleMark('strike'); }
+  toggleCode(): void    { this.toggleMark('code'); }
+
+  orderedList(): void { this.structural(() => this.toggleList('OL')); }
+  bulletList(): void  { this.structural(() => this.toggleList('UL')); }
+
+  toggleBlockquote(): void {
+    this.structural(() => {
+      const blocks = this.selectedBlocks();
+      const quotes = blocks
+        .map((b) => this.closestAnyTag(b, ['BLOCKQUOTE']))
+        .filter((q): q is HTMLElement => !!q);
+      if (!quotes.length) return this.applyBlock('blockquote');
+
+      // Quitar la cita: una cita "plana" pasa a párrafo; una con bloques dentro se desenvuelve
+      let first: HTMLElement | null = null;
+      for (const q of new Set(quotes)) {
+        let result: HTMLElement;
+        if (Array.from(q.children).some(isBlock)) {
+          result = q.firstElementChild as HTMLElement;
+          unwrapNode(q);
+        } else {
+          result = this.renameBlock(q, 'p');
+        }
+        first ??= result;
+      }
+      return first;
+    });
+  }
+
+  toggleCodeBlock(): void {
+    this.structural(() => {
+      const inPre = this.selectedBlocks().some((b) => b.tagName === 'PRE');
+      return this.applyBlock(inPre ? 'p' : 'pre');
+    });
+  }
 
   formatHeading(tag: string): void {
-    this.applyBlock(tag);
-    this.showHeadingMenu = false;
+    this.structural(() => this.applyBlock(tag));
+    this.openMenu = null;
   }
 
   insertLink(): void {
-    const url = (prompt('URL del enlace:') || '').trim();
-    if (url) this.createLink(this.normalizeUrl(url));
+    this.openLinkEditor();
   }
 
-  insertImage(): void {
+  pickImage(): void {
+    this.openMenu = null;
+    this.uploadSel = this.offsetsOf(this.currentRange());
+    this.fileInputEl.nativeElement.click();
+  }
+
+  onFilesChosen(input: HTMLInputElement): void {
+    const files = Array.from(input.files || []);
+    input.value = '';
+    this.uploadImages(files, this.uploadSel);
+    this.uploadSel = null;
+  }
+
+  imageFromUrl(): void {
+    this.openMenu = null;
+    const sel = this.offsetsOf(this.currentRange());
     const url = (prompt('URL de la imagen:') || '').trim();
     if (!url) return;
-    const img = document.createElement('img');
-    img.src = url;
-
-    // Envoltura redimensionable (la imagen no es editable, el span lleva el handle)
-    const wrap = document.createElement('span');
-    wrap.className = 'img-resizable';
-    wrap.setAttribute('contenteditable', 'false');
-    wrap.appendChild(img);
-
-    const range = this.currentRange();
-    if (range) {
-      range.collapse(false);
-      range.insertNode(wrap);
-    } else {
-      this.editor.appendChild(wrap);
+    if (!/^https?:\/\//i.test(url)) {
+      this.notificationService.warning('La URL de la imagen debe empezar con http:// o https://', 'Imagen no válida');
+      return;
     }
-
-    // Garantiza un bloque editable después de la imagen y coloca ahí el caret
-    this.ensureBlockAfter(wrap);
+    this.editor.focus();
+    if (sel) this.restoreOffsets(sel);
+    const frag = document.createDocumentFragment();
+    frag.appendChild(imageNode(url));
+    this.insertFragment(frag);
     this.afterChange();
   }
 
-  setColor(color: string): void {
-    this.applyForeColor(color);
-    this.showColorPicker = false;
+  applyStyle(prop: StyleProp, value: string | null): void {
+    this.openMenu = null;
+    if (this.bubbleMode === 'format') this.showBubbleColors = false;
+
+    const range = this.currentRange();
+    if (!range || range.collapsed) return;
+    const match = (el: HTMLElement) => el.tagName === 'SPAN' && !el.hasAttribute('class') && !!el.style[prop];
+    const clear = (el: HTMLElement) => { el.style[prop] = ''; };
+    const wrapper = value
+      ? () => { const span = document.createElement('span'); span.style[prop] = value; return span; }
+      : undefined;
+    this.formatRange(range, (block, s, e) => this.reformat(block, s, e, match, clear, wrapper));
   }
 
-  alignLeft(): void    { this.applyAlign('left'); }
-  alignCenter(): void  { this.applyAlign('center'); }
-  alignRight(): void   { this.applyAlign('right'); }
-  alignJustify(): void { this.applyAlign('justify'); }
+  applyAlign(value: string): void {
+    this.structural(() => {
+      const blocks = this.selectedBlocks();
+      blocks.forEach((b) => (b.style.textAlign = value === 'left' ? '' : value));
+      return blocks[0];
+    });
+  }
 
   horizontalRule(): void {
-    const range = this.currentRange();
-    if (!range) return;
-    const hr = document.createElement('hr');
-    range.collapse(false);
-    range.insertNode(hr);
-    this.ensureBlockAfter(hr);
+    if (!this.currentRange()) this.placeCaretEnd();
+    const frag = document.createDocumentFragment();
+    frag.appendChild(document.createElement('hr'));
+    this.insertFragment(frag);
     this.afterChange();
   }
 
+  // Quita marcas, colores y resaltados de la selección; conserva párrafos, enlaces e imágenes
   removeFormat(): void {
     const range = this.currentRange();
     if (!range || range.collapsed) return;
-    const text = range.toString();
-    range.deleteContents();
-    const node = document.createTextNode(text);
-    range.insertNode(node);
-    const r = document.createRange();
-    r.selectNode(node);
-    this.selectRange(r);
-    this.afterChange();
+    const match = (el: HTMLElement) =>
+      CLEARABLE_TAGS.includes(el.tagName) && !el.hasAttribute('class') && !isAtomic(el);
+    this.formatRange(range, (block, s, e) => this.reformat(block, s, e, match, unwrapNode));
   }
 
   undo(): void {
@@ -239,100 +616,687 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.restoreHistory();
   }
 
-  //  Bubble menu (Notion-style)
+  //  Bubble
 
   @HostListener('document:selectionchange')
   onSelectionChange(): void {
-    if (this.showLinkInput) return;
-    this.updateBubble();
-  }
+    if (!this.initialized || this.bubbleMode === 'edit-link') return;
+    const range = this.currentRange();
+    if (!range) {
+      if (this.bubbleMode) this.hideBubble();
+      return;
+    }
+    this.activeMarks = this.marksAt(range);
 
-  @HostListener('window:resize')
-  @HostListener('window:scroll')
-  onViewportChange(): void {
-    if (this.showBubble && !this.showLinkInput) this.updateBubble();
-  }
-
-  @HostListener('document:mousedown', ['$event.target'])
-  onDocMouseDown(target: EventTarget | null): void {
-    if (target instanceof Node && !this.host.nativeElement.contains(target)) {
+    const link = range.collapsed ? this.closestAnyTag(range.startContainer, ['A']) : null;
+    if (!range.collapsed && range.toString().trim() && !this.isTouch) {
+      this.showBubbleAt('format', () => this.rangeRect(this.currentRange()));
+    } else if (link) {
+      this.linkEl = link as HTMLAnchorElement;
+      this.linkHref = link.getAttribute('href') || '';
+      this.showBubbleAt('link', () => (link.isConnected ? link.getBoundingClientRect() : null));
+    } else if (this.bubbleMode) {
       this.hideBubble();
     }
   }
 
-  preventLoseSelection(event: Event): void {
-    event.preventDefault();
+  @HostListener('window:resize')
+  onViewportChange(): void {
+    this.repositionBubble();
+  }
+
+  @HostListener('document:mousedown', ['$event.target'])
+  onDocMouseDown(target: EventTarget | null): void {
+    if (this.bubbleMode && target instanceof Node && !this.host.nativeElement.contains(target)) {
+      this.hideBubble();
+    }
   }
 
   toggleBubbleColors(): void {
     this.showBubbleColors = !this.showBubbleColors;
-    this.showLinkInput = false;
+    // El bubble crece: recalcula para que no tape la selección ni la toolbar
+    this.cdr.detectChanges();
+    this.repositionBubble();
   }
 
-  applyColor(color: string): void {
-    this.restoreSelection();
-    this.applyForeColor(color);
-    this.showBubbleColors = false;
-    this.updateBubble();
-  }
+  // Abre el input de enlace: sobre el enlace bajo el caret, la selección o (sin
+  // selección) para insertar uno nuevo en el caret
+  openLinkEditor(): void {
+    if (this.disabled) return;
+    const range = this.currentRange();
+    const existing = this.bubbleMode === 'link' ? this.linkEl
+      : (range ? this.closestAnyTag(range.commonAncestorContainer, ['A']) as HTMLAnchorElement | null : null);
 
-  openLink(): void {
-    const selectedText = (this.savedRange?.toString() || '').trim();
-    if (this.isUrl(selectedText)) {
-      this.restoreSelection();
-      this.createLink(this.normalizeUrl(selectedText));
-      this.showLinkInput = false;
-      this.updateBubble();
-      return;
+    if (!existing) {
+      if (!range) {
+        this.placeCaretEnd();
+        return this.openLinkEditor();
+      }
+      // Texto seleccionado que ya es una URL: se enlaza directo
+      const text = range.toString().trim();
+      if (!range.collapsed && this.isUrl(text)) {
+        this.linkOffsets(this.normalizeUrl(text), this.offsetsOf(range));
+        return;
+      }
     }
 
-    const existing = this.closestTag(this.savedRange?.commonAncestorContainer ?? null, 'A');
-    this.linkUrl = existing ? (existing as HTMLAnchorElement).getAttribute('href') || '' : '';
-    this.showLinkInput = true;
+    this.linkEl = existing;
+    this.linkHref = existing?.getAttribute('href') || '';
+    this.savedSel = this.offsetsOf(range);
     this.showBubbleColors = false;
-    setTimeout(() => this.linkInputEl?.nativeElement.focus(), 0);
+    this.showBubbleAt('edit-link', () => {
+      if (this.linkEl?.isConnected) return this.linkEl.getBoundingClientRect();
+      return this.savedSel ? this.rangeRect(rangeFromOffsets(this.editor, this.savedSel.start, this.savedSel.end)) : null;
+    });
+    setTimeout(() => this.linkInputEl?.nativeElement.select(), 0);
   }
 
   applyLink(): void {
     const url = (this.linkInputEl?.nativeElement.value || '').trim();
-    this.restoreSelection();
-    if (url) this.createLink(this.normalizeUrl(url));
-    this.showLinkInput = false;
-    this.updateBubble();
+    const link = this.linkEl;
+    const sel = this.savedSel;
+    this.hideBubble();
+    this.editor.focus();
+
+    if (link?.isConnected) {
+      if (url) link.setAttribute('href', this.normalizeUrl(url));
+      else unwrapNode(link);
+      if (sel) this.restoreOffsets(sel);
+      this.afterChange();
+    } else if (url && sel) {
+      this.linkOffsets(this.normalizeUrl(url), sel);
+    } else if (sel) {
+      this.restoreOffsets(sel);
+    }
+  }
+
+  cancelLink(): void {
+    const sel = this.savedSel;
+    this.hideBubble();
+    this.editor.focus();
+    if (sel) this.restoreOffsets(sel);
   }
 
   removeLink(): void {
-    this.restoreSelection();
-    const range = this.currentRange();
-    const a = this.closestTag(range?.commonAncestorContainer ?? null, 'A');
-    if (a) {
-      this.unwrap(a);
+    const link = this.linkEl;
+    const sel = this.savedSel ?? this.offsetsOf(this.currentRange());
+    this.hideBubble();
+    this.editor.focus();
+
+    if (link?.isConnected) {
+      unwrapNode(link);
+      if (sel) this.restoreOffsets(sel);
       this.afterChange();
+    } else if (sel && sel.start !== sel.end) {
+      const range = rangeFromOffsets(this.editor, sel.start, sel.end);
+      this.formatRange(range, (block, s, e) => this.reformat(block, s, e, (el) => el.tagName === 'A', unwrapNode));
     }
-    this.showLinkInput = false;
-    this.updateBubble();
   }
 
-  isActive(command: string): boolean {
-    // El template evalúa esto en la primera detección de cambios, antes de que
-    // @ViewChild('editorEl') esté resuelto. Sin esta guarda, closestAnyTag
-    // accede a this.editor (editorEl.nativeElement) y lanza:
-    // "Cannot read properties of undefined (reading 'nativeElement')".
-    if (!this.initialized || !this.editorEl) return false;
+  //  Motor de formato inline (por bloque, con offsets de texto)
 
-    const map: Record<string, string[]> = {
-      bold: ['STRONG', 'B'],
-      italic: ['EM', 'I'],
-      underline: ['U'],
-      strikeThrough: ['S', 'STRIKE', 'DEL'],
-    };
-    const tags = map[command];
-    if (!tags) return false;
-    const sel = window.getSelection();
-    return !!this.closestAnyTag(sel?.anchorNode ?? null, tags);
+  private toggleMark(mark: InlineMark): void {
+    const range = this.currentRange();
+    if (!range || range.collapsed) return;
+    const { tags, create } = INLINE_MARKS[mark];
+    const match = (el: HTMLElement) => tags.includes(el.tagName);
+    // Si todo lo seleccionado ya tiene la marca se quita; si no, se aplica a todo
+    const wrapper = this.rangeHasMark(range, tags) ? undefined : () => document.createElement(create);
+    this.formatRange(range, (block, s, e) => this.reformat(block, s, e, match, unwrapNode, wrapper));
   }
 
-  //  Motor de edición (Range/Selection)
+  // Aplica `op` a cada bloque que toca el rango (así nunca se envuelven bloques en
+  // un inline), normaliza y restaura la selección
+  private formatRange(range: Range, op: (block: HTMLElement, start: number, end: number) => void): void {
+    const sel = this.offsetsOf(range);
+    this.blockSlices(range).forEach(({ block, start, end }) => op(block, start, end));
+    normalizeInline(this.editor);
+    if (sel) this.restoreOffsets(sel);
+    this.afterChange();
+  }
+
+  // Quita el formato `match` del tramo [start, end) de `block` y, opcionalmente, lo
+  // envuelve en `wrapper`. Los ancestros con el formato se dividen para que solo
+  // cambie la parte seleccionada.
+  private reformat(
+    block: HTMLElement,
+    start: number,
+    end: number,
+    match: (el: HTMLElement) => boolean,
+    clear: (el: HTMLElement) => void,
+    wrapper?: () => HTMLElement,
+  ): void {
+    for (let guard = 0; guard < 20; guard++) {
+      const range = rangeFromOffsets(block, start, end);
+      const ancestor = closestWithin(range.commonAncestorContainer, block, match);
+      if (!ancestor) break;
+      clear(isolate(ancestor, range));
+    }
+
+    const range = rangeFromOffsets(block, start, end);
+    const frag = range.extractContents();
+    frag.querySelectorAll<HTMLElement>('*').forEach((el) => match(el) && clear(el));
+    if (wrapper) {
+      const el = wrapper();
+      el.appendChild(frag);
+      range.insertNode(el);
+    } else {
+      range.insertNode(frag);
+    }
+  }
+
+  private blockSlices(range: Range): { block: HTMLElement; start: number; end: number }[] {
+    const blocks = this.selectedBlocks(range);
+    if (blocks.length === 0) blocks.push(this.editor);
+
+    return blocks
+      .map((block) => {
+        const r = document.createRange();
+        r.selectNodeContents(block);
+        if (block.contains(range.startContainer)) r.setStart(range.startContainer, range.startOffset);
+        if (block.contains(range.endContainer)) r.setEnd(range.endContainer, range.endOffset);
+        return {
+          block,
+          start: textOffset(block, r.startContainer, r.startOffset),
+          end: textOffset(block, r.endContainer, r.endOffset),
+        };
+      })
+      .filter((slice) => slice.end > slice.start);
+  }
+
+  // Nodos de texto con contenido realmente seleccionado
+  private selectedTextNodes(range: Range): Text[] {
+    const root = range.commonAncestorContainer;
+    const nodes: Text[] = [];
+    if (root.nodeType === Node.TEXT_NODE) {
+      nodes.push(root as Text);
+    } else {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+        if (range.intersectsNode(n)) nodes.push(n as Text);
+      }
+    }
+    return nodes.filter((n) => {
+      if (n === range.startContainer && range.startOffset >= n.data.length) return false;
+      if (n === range.endContainer && range.endOffset === 0) return false;
+      return !!n.data.replace(new RegExp(CARET_GUARD, 'g'), '').trim();
+    });
+  }
+
+  private rangeHasMark(range: Range, tags: string[]): boolean {
+    const nodes = this.selectedTextNodes(range);
+    return nodes.length > 0 && nodes.every((n) => !!this.closestAnyTag(n, tags));
+  }
+
+  private marksAt(range: Range): Set<InlineMark> {
+    const marks = new Set<InlineMark>();
+    (Object.keys(INLINE_MARKS) as InlineMark[]).forEach((mark) => {
+      const { tags } = INLINE_MARKS[mark];
+      const active = range.collapsed ? !!this.closestAnyTag(range.startContainer, tags) : this.rangeHasMark(range, tags);
+      if (active) marks.add(mark);
+    });
+    return marks;
+  }
+
+  private linkOffsets(url: string, sel: TextOffsets | null): void {
+    if (!sel) return;
+    this.editor.focus();
+    const range = rangeFromOffsets(this.editor, sel.start, sel.end);
+
+    if (range.collapsed) {
+      // Sin selección: inserta el enlace usando la URL como texto
+      const frag = document.createDocumentFragment();
+      const a = this.anchor(url);
+      a.textContent = url;
+      frag.append(a, document.createTextNode(CARET_GUARD));
+      this.insertFragment(frag, range);
+      this.afterChange();
+      return;
+    }
+    const match = (el: HTMLElement) => el.tagName === 'A';
+    this.formatRange(range, (block, s, e) => this.reformat(block, s, e, match, unwrapNode, () => this.anchor(url)));
+  }
+
+  private anchor(url: string): HTMLAnchorElement {
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferrer');
+    return a;
+  }
+
+  //  Inserción de contenido
+
+  // Inserta contenido en el rango. El contenido de bloque divide el bloque actual
+  // (no se anidan <p> dentro de <p>); dentro de listas/encabezados se aplana.
+  private insertFragment(frag: DocumentFragment, range: Range | null | undefined = this.currentRange()): void {
+    if (!range) {
+      this.placeCaretEnd();
+      range = this.currentRange();
+      if (!range) return;
+    }
+    range.deleteContents();
+
+    let nodes: Node[] = Array.from(frag.childNodes);
+    if (!nodes.length) return;
+
+    const host = this.blockOf(range.startContainer);
+    const isBlockNode = (n: Node) => isBlock(n) || (isElement(n) && ['UL', 'OL', 'HR'].includes(n.tagName));
+    const hasBlocks = nodes.some(isBlockNode);
+
+    if (hasBlocks && host && host.tagName !== 'P' && host.tagName !== 'DIV' && host.tagName !== 'BLOCKQUOTE') {
+      if (host.tagName === 'PRE') {
+        nodes = [document.createTextNode(nodes.map((n) => n.textContent).join('\n'))];
+      } else {
+        nodes = this.flattenBlocks(nodes);
+      }
+      return this.insertInline(nodes, range);
+    }
+    if (!hasBlocks) return this.insertInline(nodes, range);
+
+    const blocks = this.wrapLooseInline(nodes);
+    const last = blocks[blocks.length - 1];
+
+    if (host && host !== this.editor) {
+      // Divide el bloque actual en el caret e inserta los bloques entre las dos mitades
+      const tail = document.createRange();
+      tail.setStart(range.startContainer, range.startOffset);
+      tail.setEndAfter(host);
+      const tailFrag = tail.extractContents();
+      host.after(...blocks);
+      const tailBlock = tailFrag.firstChild;
+      last.after(tailFrag);
+      if (isVisuallyEmpty(host)) host.remove();
+      if (tailBlock && isVisuallyEmpty(tailBlock)) (tailBlock as ChildNode).remove();
+    } else {
+      const holder = document.createDocumentFragment();
+      holder.append(...blocks);
+      range.insertNode(holder);
+    }
+    // Tras una línea horizontal siempre queda un bloque donde seguir escribiendo
+    if (last.tagName === 'HR') this.ensureBlockAfter(last);
+    else this.caretAtEnd(last);
+    this.normalizeTrailing();
+  }
+
+  private insertInline(nodes: Node[], range: Range): void {
+    const holder = document.createDocumentFragment();
+    holder.append(...nodes);
+    const last = nodes[nodes.length - 1];
+    range.insertNode(holder);
+
+    // Imagen suelta al final del editor: deja un párrafo para seguir escribiendo
+    if (last.parentNode === this.editor && !isBlock(last)) {
+      this.ensureBlockAfter(last);
+      return;
+    }
+    const caret = document.createRange();
+    caret.setStartAfter(last);
+    caret.collapse(true);
+    this.selectRange(caret);
+  }
+
+  // Bloques -> su contenido inline separado por <br>
+  private flattenBlocks(nodes: Node[]): Node[] {
+    const out: Node[] = [];
+    nodes.forEach((n) => {
+      if (isElement(n) && (isBlock(n) || ['UL', 'OL'].includes(n.tagName))) {
+        if (out.length) out.push(document.createElement('br'));
+        out.push(document.createTextNode(n.textContent || ''));
+      } else if (!(isElement(n) && n.tagName === 'HR')) {
+        out.push(n);
+      }
+    });
+    return out;
+  }
+
+  // Agrupa nodos inline sueltos en párrafos
+  private wrapLooseInline(nodes: Node[]): HTMLElement[] {
+    const blocks: HTMLElement[] = [];
+    let p: HTMLElement | null = null;
+    nodes.forEach((n) => {
+      if (isElement(n) && (isBlock(n) || ['UL', 'OL', 'HR'].includes(n.tagName))) {
+        blocks.push(n);
+        p = null;
+      } else if (n.nodeType !== Node.TEXT_NODE || (n as Text).data.trim()) {
+        if (!p) blocks.push((p = document.createElement('p')));
+        p.appendChild(n);
+      }
+    });
+    return blocks;
+  }
+
+  private uploadImages(files: File[], at: TextOffsets | null): void {
+    const valid = files.filter((f) => IMAGE_TYPES.includes(f.type) && f.size <= IMAGE_MAX_BYTES);
+    if (valid.length < files.length) {
+      this.notificationService.warning('Solo se permiten imágenes JPG, PNG, GIF o WEBP de hasta 8 MB', 'Imagen no válida');
+    }
+    if (!valid.length) return;
+
+    this.editor.focus();
+    if (at) this.restoreOffsets(at);
+    else if (!this.currentRange()) this.placeCaretEnd();
+
+    valid.forEach((file) => {
+      const id = `${++this.uploadSeq}`;
+      const placeholder = document.createElement('span');
+      placeholder.className = 'rich-editor__uploading';
+      placeholder.dataset['upload'] = id;
+      placeholder.setAttribute('contenteditable', 'false');
+      placeholder.textContent = 'Subiendo imagen…';
+
+      const frag = document.createDocumentFragment();
+      frag.appendChild(placeholder);
+      this.insertFragment(frag);
+      this.uploads++;
+
+      this.fotosService
+        .uploadImage(file)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (url) => this.finishUpload(id, url),
+          error: () => this.finishUpload(id, null),
+        });
+    });
+    this.afterChange();
+  }
+
+  // Se busca el placeholder por id: un deshacer pudo haber recreado el nodo
+  private finishUpload(id: string, url: string | null): void {
+    this.uploads--;
+    const placeholder = this.editor.querySelector(`[data-upload="${id}"]`);
+    if (placeholder) {
+      if (url) placeholder.replaceWith(imageNode(url));
+      else placeholder.remove();
+      this.emit();
+      this.recordHistory();
+    }
+    this.cdr.markForCheck();
+  }
+
+  //  Atajos de teclado tipo markdown y comportamiento de listas/citas
+
+  private blockShortcut(): boolean {
+    const range = this.currentRange();
+    if (!range?.collapsed) return false;
+    const block = this.blockOf(range.startContainer);
+    if (!block || !['P', 'DIV'].includes(block.tagName) || block.hasAttribute('class')) return false;
+
+    const before = document.createRange();
+    before.setStart(block, 0);
+    before.setEnd(range.startContainer, range.startOffset);
+    const prefix = before.toString();
+    const rule = BLOCK_SHORTCUTS.find((r) => r.pattern.test(prefix));
+    if (!rule) return false;
+
+    before.deleteContents();
+    if (!block.firstChild) block.appendChild(document.createElement('br'));
+
+    let target: HTMLElement;
+    switch (rule.block) {
+      case 'heading': target = this.renameBlock(block, `h${prefix.length}`); break;
+      case 'UL':
+      case 'OL': target = this.listFromBlock(block, rule.block); break;
+      case 'hr': block.before(document.createElement('hr')); target = block; break;
+      default: target = this.renameBlock(block, rule.block);
+    }
+    this.caretAtStart(target);
+    this.afterChange();
+    return true;
+  }
+
+  private inlineShortcut(key: string): boolean {
+    const range = this.currentRange();
+    if (!range?.collapsed || range.startContainer.nodeType !== Node.TEXT_NODE) return false;
+    const text = range.startContainer as Text;
+    if (this.closestAnyTag(text, ['CODE', 'PRE'])) return false;
+
+    const before = text.data.slice(0, range.startOffset);
+    for (const rule of INLINE_SHORTCUTS) {
+      if (rule.key !== key) continue;
+      const m = before.match(rule.pattern);
+      if (!m) continue;
+
+      const content = m[1];
+      const start = range.startOffset - rule.typed - content.length - rule.open;
+      text.splitText(range.startOffset);
+      text.data = text.data.slice(0, start);
+
+      const el = document.createElement(rule.tag);
+      el.textContent = content;
+      // Caracter guía fuera del inline para que lo siguiente que se escriba no herede el formato
+      const guard = document.createTextNode(CARET_GUARD);
+      text.after(el, guard);
+
+      const caret = document.createRange();
+      caret.setStart(guard, 1);
+      caret.collapse(true);
+      this.selectRange(caret);
+      this.afterChange();
+      return true;
+    }
+    return false;
+  }
+
+  private handleEnter(): boolean {
+    const range = this.currentRange();
+    if (!range?.collapsed) return false;
+
+    // Enter en un ítem vacío: sale de la lista (o sube un nivel si está anidada)
+    const li = this.closestAnyTag(range.startContainer, ['LI']);
+    if (li) {
+      if (!isVisuallyEmpty(li)) return false;
+      this.caretAtStart(this.outdent(li));
+      this.afterChange();
+      return true;
+    }
+
+    // Enter en una línea vacía de una cita: sale de la cita
+    const quote = this.closestAnyTag(range.startContainer, ['BLOCKQUOTE']);
+    const line = this.blockOf(range.startContainer);
+    if (quote && line && isVisuallyEmpty(line)) {
+      let p: HTMLElement;
+      if (line === quote) {
+        p = this.renameBlock(quote, 'p');
+      } else {
+        line.remove();
+        p = emptyParagraph();
+        quote.after(p);
+      }
+      this.caretAtStart(p);
+      this.afterChange();
+      return true;
+    }
+    return false;
+  }
+
+  private handleTab(outdent: boolean): boolean {
+    const range = this.currentRange();
+    const first = range ? this.closestAnyTag(range.startContainer, ['LI']) : null;
+    if (!first) return false; // fuera de listas Tab mueve el foco, como siempre
+
+    const items = this.selectedBlocks().filter((b) => b.tagName === 'LI');
+    if (!items.includes(first)) items.unshift(first);
+    this.structural(() => {
+      items.forEach((li) => (outdent ? this.outdent(li) : this.indent(li)));
+      return first.isConnected ? first : null;
+    });
+    return true;
+  }
+
+  private indent(li: HTMLElement): void {
+    const prev = li.previousElementSibling as HTMLElement | null;
+    if (prev?.tagName !== 'LI') return;
+    let sub = prev.lastElementChild as HTMLElement | null;
+    if (!sub || !['UL', 'OL'].includes(sub.tagName)) {
+      sub = document.createElement(li.parentElement!.tagName);
+      prev.appendChild(sub);
+    }
+    sub.appendChild(li);
+  }
+
+  // Sube un nivel el ítem; en el primer nivel lo convierte en párrafo. Devuelve el
+  // elemento que conserva el contenido.
+  private outdent(li: HTMLElement): HTMLElement {
+    const list = li.parentElement!;
+    const rest = this.nextSiblings(li);
+    const parentLi = list.parentElement?.tagName === 'LI' ? list.parentElement : null;
+
+    if (parentLi) {
+      // Los ítems siguientes pasan a ser hijos del ítem que sube
+      if (rest.length) {
+        const sub = document.createElement(list.tagName);
+        sub.append(...rest);
+        li.appendChild(sub);
+      }
+      parentLi.after(li);
+      if (!list.children.length) list.remove();
+      return li;
+    }
+
+    const p = document.createElement('p');
+    const nested: Element[] = [];
+    Array.from(li.childNodes).forEach((n) => {
+      if (isElement(n) && ['UL', 'OL'].includes(n.tagName)) nested.push(n);
+      else p.appendChild(n);
+    });
+    if (!p.firstChild) p.appendChild(document.createElement('br'));
+
+    list.after(p);
+    let after: Element = p;
+    if (nested.length) {
+      after.after(...nested);
+      after = nested[nested.length - 1];
+    }
+    if (rest.length) {
+      const tail = document.createElement(list.tagName);
+      tail.append(...rest);
+      after.after(tail);
+    }
+    li.remove();
+    if (!list.children.length) list.remove();
+    return p;
+  }
+
+  private nextSiblings(el: Element): Element[] {
+    const out: Element[] = [];
+    for (let n = el.nextElementSibling; n; n = n.nextElementSibling) out.push(n);
+    return out;
+  }
+
+  //  Comandos de bloque
+
+  // Ejecuta un cambio estructural conservando la selección. `fn` puede devolver el
+  // bloque resultante para dejar ahí el caret cuando está vacío (sin texto que ubicar).
+  private structural(fn: () => HTMLElement | null | undefined): void {
+    const sel = this.offsetsOf(this.currentRange());
+    const target = fn();
+    if (target?.isConnected && isVisuallyEmpty(target)) this.caretAtStart(target);
+    else if (sel) this.restoreOffsets(sel);
+    this.afterChange();
+  }
+
+  private applyBlock(tag: string): HTMLElement | null {
+    // Los ítems de lista no se convierten (un <h2> dentro de <ul> no es válido)
+    const blocks = this.selectedBlocks().filter((b) => b.tagName !== 'LI');
+    if (blocks.length === 0) {
+      const range = this.currentRange();
+      if (!range || range.collapsed || this.closestAnyTag(range.startContainer, ['LI'])) return null;
+      const el = document.createElement(tag);
+      el.appendChild(range.extractContents());
+      range.insertNode(el);
+      return el;
+    }
+    return blocks.map((b) => this.renameBlock(b, tag))[0];
+  }
+
+  private renameBlock(block: HTMLElement, tag: string): HTMLElement {
+    if (block.tagName === tag.toUpperCase()) return block;
+    const el = document.createElement(tag);
+    if (block.style.textAlign) el.style.textAlign = block.style.textAlign;
+    while (block.firstChild) el.appendChild(block.firstChild);
+    block.replaceWith(el);
+    return el;
+  }
+
+  private listFromBlock(block: HTMLElement, listTag: string): HTMLElement {
+    const li = document.createElement('li');
+    while (block.firstChild) li.appendChild(block.firstChild);
+    const prev = block.previousElementSibling;
+    if (prev?.tagName === listTag) {
+      // Continúa la lista anterior
+      prev.appendChild(li);
+      block.remove();
+    } else {
+      const list = document.createElement(listTag);
+      list.appendChild(li);
+      block.replaceWith(list);
+    }
+    return li;
+  }
+
+  private toggleList(listTag: 'UL' | 'OL'): HTMLElement | null {
+    const blocks = this.selectedBlocks();
+    if (blocks.length === 0) return null;
+
+    const firstLi = this.closestAnyTag(blocks[0], ['LI']);
+    const parentList = firstLi?.parentElement ?? null;
+
+    if (parentList && parentList.tagName === listTag) {
+      // Misma lista -> desenvolver a párrafos
+      return this.unwrapList(parentList);
+    }
+    if (parentList && (parentList.tagName === 'UL' || parentList.tagName === 'OL')) {
+      // Cambiar tipo de lista
+      const newList = document.createElement(listTag);
+      while (parentList.firstChild) newList.appendChild(parentList.firstChild);
+      parentList.replaceWith(newList);
+      return firstLi;
+    }
+    // Envolver bloques en una lista nueva
+    const list = document.createElement(listTag);
+    blocks[0].parentNode?.insertBefore(list, blocks[0]);
+    blocks.forEach((b) => {
+      const li = document.createElement('li');
+      while (b.firstChild) li.appendChild(b.firstChild);
+      list.appendChild(li);
+      b.remove();
+    });
+    return list.firstElementChild as HTMLElement;
+  }
+
+  private unwrapList(list: HTMLElement): HTMLElement | null {
+    const frag = document.createDocumentFragment();
+    Array.from(list.children).forEach((li) => {
+      const p = document.createElement('p');
+      while (li.firstChild) p.appendChild(li.firstChild);
+      if (!p.firstChild) p.appendChild(document.createElement('br'));
+      frag.appendChild(p);
+    });
+    const first = frag.firstElementChild as HTMLElement | null;
+    list.replaceWith(frag);
+    return first;
+  }
+
+  // Bloques que intersecta la selección (hojas, no contenedores)
+  private selectedBlocks(range: Range | null = this.currentRange()): HTMLElement[] {
+    if (!range) return [];
+    const blocks = (Array.from(this.editor.querySelectorAll(BLOCK_TAGS.join(','))) as HTMLElement[])
+      .filter((el) => range.intersectsNode(el));
+
+    if (blocks.length === 0) {
+      const b = this.blockOf(range.startContainer);
+      return b ? [b] : [];
+    }
+    // Solo hojas (los que no contienen a otro bloque seleccionado)
+    return blocks.filter((b) => !blocks.some((o) => o !== b && b.contains(o)));
+  }
+
+  private blockOf(node: Node | null): HTMLElement | null {
+    return closestWithin(node, this.editor, (el) => isBlock(el));
+  }
+
+  //  Selección
 
   private currentRange(): Range | null {
     if (!this.editorEl) return null;
@@ -349,16 +1313,65 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     sel.addRange(range);
   }
 
-  private selectNodeContents(node: Node): void {
+  private offsetsOf(range: Range | null): TextOffsets | null {
+    if (!range || !this.editor.contains(range.commonAncestorContainer)) return null;
+    return {
+      start: textOffset(this.editor, range.startContainer, range.startOffset),
+      end: textOffset(this.editor, range.endContainer, range.endOffset),
+    };
+  }
+
+  private restoreOffsets(sel: TextOffsets): void {
+    this.selectRange(rangeFromOffsets(this.editor, sel.start, sel.end));
+  }
+
+  private caretAtStart(el: HTMLElement): void {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const first = walker.nextNode();
     const range = document.createRange();
-    range.selectNodeContents(node);
+    if (first) range.setStart(first, 0);
+    else range.setStart(el, 0);
+    range.collapse(true);
     this.selectRange(range);
+  }
+
+  private caretAtEnd(el: HTMLElement): void {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    this.selectRange(range);
+  }
+
+  private placeCaretEnd(): void {
+    this.editor.focus();
+    this.caretAtEnd(this.editor);
+  }
+
+  // Posición para soltar contenido según las coordenadas del mouse
+  private rangeFromPoint(x: number, y: number): Range | null {
+    const doc = document as Document & {
+      caretPositionFromPoint?: (x: number, y: number) => { offsetNode: Node; offset: number } | null;
+      caretRangeFromPoint?: (x: number, y: number) => Range | null;
+    };
+    let range: Range | null = null;
+    if (doc.caretPositionFromPoint) {
+      const pos = doc.caretPositionFromPoint(x, y);
+      if (pos) {
+        range = document.createRange();
+        range.setStart(pos.offsetNode, pos.offset);
+        range.collapse(true);
+      }
+    } else if (doc.caretRangeFromPoint) {
+      range = doc.caretRangeFromPoint(x, y);
+    }
+    return range && this.editor.contains(range.startContainer) ? range : null;
   }
 
   private afterChange(): void {
     this.editor.focus();
-    this.onChange(this.editor.innerHTML);
+    this.emit();
     this.recordHistory();
+    this.cdr.markForCheck();
   }
 
   // Crea un párrafo editable inmediatamente después de `node` si no hay un
@@ -366,301 +1379,144 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   // "bloqueado" cuando una imagen/hr es el último elemento.
   private ensureBlockAfter(node: Node): void {
     let next = node.nextSibling;
-    const nextIsBlock =
-      next instanceof HTMLElement && RichEditorComponent.BLOCK_TAGS.includes(next.tagName);
-
-    if (!nextIsBlock) {
-      const p = document.createElement('p');
-      p.appendChild(document.createElement('br'));
-      node.parentNode?.insertBefore(p, node.nextSibling);
-      next = p;
+    if (!isBlock(next)) {
+      next = emptyParagraph();
+      node.parentNode?.insertBefore(next, node.nextSibling);
     }
-
-    const range = document.createRange();
-    range.setStart(next as Node, 0);
-    range.collapse(true);
-    this.selectRange(range);
+    this.caretAtStart(next as HTMLElement);
   }
 
   // Asegura que el último hijo del editor sea un bloque editable, para poder
   // escribir debajo de imágenes/líneas insertadas al final.
   private normalizeTrailing(): void {
     const last = this.editor.lastChild;
-    const lastIsBlock =
-      last instanceof HTMLElement && RichEditorComponent.BLOCK_TAGS.includes(last.tagName);
-    if (last && !lastIsBlock) {
-      const p = document.createElement('p');
-      p.appendChild(document.createElement('br'));
-      this.editor.appendChild(p);
-    }
+    const editable = isBlock(last) || (isElement(last) && ['UL', 'OL'].includes(last.tagName));
+    if (last && !editable) this.editor.appendChild(emptyParagraph());
   }
 
-  // Toggle de formato inline envolviendo/desenvolviendo un tag
-  private toggleInline(tags: string[], createTag: string): void {
-    const range = this.currentRange();
-    if (!range || range.collapsed) return;
-
-    const existing = this.closestAnyTag(range.commonAncestorContainer, tags);
-    if (existing) {
-      this.unwrap(existing);
-    } else {
-      this.wrap(range, createTag);
-    }
-    this.afterChange();
-  }
-
-  private applyForeColor(color: string): void {
-    const range = this.currentRange();
-    if (!range || range.collapsed) return;
-    this.wrap(range, 'span', (el) => (el.style.color = color));
-    this.afterChange();
-  }
-
-  private createLink(url: string): void {
-    const range = this.currentRange();
-    if (!range || range.collapsed) return;
-    this.wrap(range, 'a', (el) => {
-      (el as HTMLAnchorElement).href = url;
-      el.setAttribute('target', '_blank');
-      el.setAttribute('rel', 'noopener noreferrer');
-    });
-    this.afterChange();
-  }
-
-  // Envuelve el contenido del rango en un nuevo elemento
-  private wrap(range: Range, tag: string, apply?: (el: HTMLElement) => void): void {
-    const el = document.createElement(tag);
-    if (apply) apply(el);
-    try {
-      range.surroundContents(el);
-    } catch {
-      el.appendChild(range.extractContents());
-      range.insertNode(el);
-    }
-    this.selectNodeContents(el);
-  }
-
-  // Quita un elemento dejando su contenido en su lugar
-  private unwrap(el: HTMLElement): void {
-    const parent = el.parentNode;
-    if (!parent) return;
-    const range = document.createRange();
-    range.selectNodeContents(el);
-    const frag = range.extractContents();
-    const first = frag.firstChild;
-    const last = frag.lastChild;
-    parent.replaceChild(frag, el);
-    if (first && last) {
-      const r = document.createRange();
-      r.setStartBefore(first);
-      r.setEndAfter(last);
-      this.selectRange(r);
-    }
-  }
-
-  // Cambia el tag del/los bloque(s) seleccionado(s)
-  private applyBlock(tag: string): void {
-    const blocks = this.selectedBlocks();
-    if (blocks.length === 0) {
-      // No hay bloque: envuelve la selección en uno nuevo
-      const range = this.currentRange();
-      if (range && !range.collapsed) this.wrap(range, tag);
-      this.afterChange();
-      return;
-    }
-    blocks.forEach((b) => this.renameBlock(b, tag));
-    this.afterChange();
-  }
-
-  private renameBlock(block: HTMLElement, tag: string): HTMLElement {
-    if (block.tagName === tag.toUpperCase()) return block;
-    const el = document.createElement(tag);
-    if (block.style.textAlign) el.style.textAlign = block.style.textAlign;
-    while (block.firstChild) el.appendChild(block.firstChild);
-    block.replaceWith(el);
-    return el;
-  }
-
-  private applyAlign(value: string): void {
-    const blocks = this.selectedBlocks();
-    if (blocks.length === 0) return;
-    blocks.forEach((b) => (b.style.textAlign = value));
-    this.afterChange();
-  }
-
-  private toggleList(listTag: 'UL' | 'OL'): void {
-    const blocks = this.selectedBlocks();
-    if (blocks.length === 0) return;
-
-    const firstLi = this.closestAnyTag(blocks[0], ['LI']);
-    const parentList = firstLi?.parentElement ?? null;
-
-    if (parentList && parentList.tagName === listTag) {
-      // Misma lista -> desenvolver a párrafos
-      this.unwrapList(parentList);
-    } else if (parentList && (parentList.tagName === 'UL' || parentList.tagName === 'OL')) {
-      // Cambiar tipo de lista
-      const newList = document.createElement(listTag);
-      while (parentList.firstChild) newList.appendChild(parentList.firstChild);
-      parentList.replaceWith(newList);
-    } else {
-      // Envolver bloques en una lista nueva
-      const list = document.createElement(listTag);
-      const first = blocks[0];
-      first.parentNode?.insertBefore(list, first);
-      blocks.forEach((b) => {
-        const li = document.createElement('li');
-        while (b.firstChild) li.appendChild(b.firstChild);
-        list.appendChild(li);
-        b.remove();
-      });
-    }
-    this.afterChange();
-  }
-
-  private unwrapList(list: HTMLElement): void {
-    const frag = document.createDocumentFragment();
-    Array.from(list.children).forEach((li) => {
-      const p = document.createElement('p');
-      while (li.firstChild) p.appendChild(li.firstChild);
-      frag.appendChild(p);
-    });
-    list.replaceWith(frag);
-  }
-
-  // Bloques que intersecta la selección (hojas, no contenedores)
-  private selectedBlocks(): HTMLElement[] {
-    const range = this.currentRange();
-    if (!range) return [];
-
-    const candidates = Array.from(
-      this.editor.querySelectorAll(RichEditorComponent.BLOCK_TAGS.join(','))
-    ) as HTMLElement[];
-
-    let blocks = candidates.filter((el) => range.intersectsNode(el));
-
-    if (blocks.length === 0) {
-      const b = this.blockOf(range.startContainer);
-      return b ? [b] : [];
-    }
-    // Solo hojas (los que no contienen a otro bloque seleccionado)
-    return blocks.filter((b) => !blocks.some((o) => o !== b && b.contains(o)));
-  }
-
-  private blockOf(node: Node | null): HTMLElement | null {
-    let cur: HTMLElement | null = node instanceof HTMLElement ? node : node?.parentElement ?? null;
-    while (cur && cur !== this.editor) {
-      if (RichEditorComponent.BLOCK_TAGS.includes(cur.tagName)) return cur;
-      cur = cur.parentElement;
-    }
-    return null;
-  }
-
-  //  Historial (snapshots de innerHTML)
+  //  Historial (snapshots de innerHTML + selección)
 
   private resetHistory(): void {
-    this.history = [this.editor.innerHTML];
+    this.history = [{ html: this.editor.innerHTML, sel: null }];
     this.historyIndex = 0;
   }
 
   private recordHistory(): void {
+    clearTimeout(this.snapshotTimer);
     const html = this.editor.innerHTML;
-    if (this.history[this.historyIndex] === html) return;
+    const sel = this.offsetsOf(this.currentRange());
+    const current = this.history[this.historyIndex];
+    if (current?.html === html) {
+      current.sel = sel ?? current.sel;
+      return;
+    }
     this.history = this.history.slice(0, this.historyIndex + 1);
-    this.history.push(html);
-    if (this.history.length > 200) this.history.shift();
+    this.history.push({ html, sel });
+    if (this.history.length > HISTORY_LIMIT) this.history.shift();
     this.historyIndex = this.history.length - 1;
   }
 
   private restoreHistory(): void {
-    this.editor.innerHTML = this.history[this.historyIndex] ?? '';
-    this.onChange(this.editor.innerHTML);
+    const entry = this.history[this.historyIndex];
+    this.editor.innerHTML = entry?.html ?? '';
+    this.emit();
     this.hideBubble();
-    this.placeCaretEnd();
-  }
-
-  private placeCaretEnd(): void {
-    const range = document.createRange();
-    range.selectNodeContents(this.editor);
-    range.collapse(false);
-    this.selectRange(range);
     this.editor.focus();
+    if (entry?.sel) this.restoreOffsets(entry.sel);
+    else this.caretAtEnd(this.editor);
+    this.cdr.markForCheck();
   }
 
   //  Bubble: visibilidad / posición
 
-  private updateBubble(): void {
-    const sel = window.getSelection();
-    const editor = this.editorEl?.nativeElement;
-
-    if (!sel || sel.rangeCount === 0 || sel.isCollapsed || !editor) {
-      this.hideBubble();
-      return;
+  private showBubbleAt(mode: BubbleMode, anchor: () => DOMRect | null): void {
+    this.bubbleAnchor = anchor;
+    if (this.bubbleMode !== mode) {
+      this.bubbleMode = mode;
+      this.cdr.detectChanges(); // renderiza el contenido nuevo para medirlo
     }
+    this.repositionBubble();
+  }
 
-    const range = sel.getRangeAt(0);
-    if (!editor.contains(range.commonAncestorContainer) || !sel.toString().trim()) {
-      this.hideBubble();
-      return;
-    }
+  private repositionBubble(): void {
+    if (!this.bubbleMode || !this.bubbleAnchor) return;
+    const rect = this.bubbleAnchor();
+    if (rect) this.positionBubble(rect);
+    else this.hideBubble();
+    this.cdr.markForCheck();
+  }
 
-    this.savedRange = range.cloneRange();
-
-    const rect = range.getBoundingClientRect();
+  // Coloca el bubble sobre `anchor`; si ahí taparía la toolbar, lo pasa debajo.
+  // Las coordenadas son relativas al wrapper (position: relative).
+  private positionBubble(anchor: DOMRect): void {
     const wrap = this.wrapperEl.nativeElement.getBoundingClientRect();
-    const bubble = this.bubbleEl?.nativeElement;
-    const bw = bubble?.offsetWidth || 280;
-    const bh = bubble?.offsetHeight || 40;
+    const content = this.editor.getBoundingClientRect();
+    const toolbarBottom = this.toolbarEl.nativeElement.getBoundingClientRect().bottom;
 
-    let top = rect.top - wrap.top - bh - 8;
-    if (top < 0) top = rect.bottom - wrap.top + 8;
+    // Zona visible del área editable (el editor tiene scroll propio y puede estar
+    // recortado por la ventana, un diálogo o la toolbar fija)
+    const visibleTop = Math.max(content.top, toolbarBottom, 0);
+    const visibleBottom = Math.min(content.bottom, window.innerHeight);
 
-    let left = rect.left - wrap.left + rect.width / 2 - bw / 2;
-    left = Math.max(4, Math.min(left, wrap.width - bw - 4));
+    // Ancla fuera de la zona visible: no mostrar el bubble flotando sobre la toolbar
+    if (anchor.bottom < visibleTop || anchor.top > visibleBottom) {
+      this.hideBubble();
+      return;
+    }
 
-    this.bubbleTop = top;
+    const bubble = this.bubbleEl.nativeElement;
+    const bw = bubble.offsetWidth || 280;
+    const bh = bubble.offsetHeight || 40;
+
+    const anchorTop = Math.max(anchor.top, visibleTop);
+    const anchorBottom = Math.min(anchor.bottom, visibleBottom);
+
+    const above = anchorTop - bh - BUBBLE_GAP;
+    this.bubbleBelow = above < visibleTop + BUBBLE_EDGE;
+    const top = this.bubbleBelow ? anchorBottom + BUBBLE_GAP : above;
+
+    const center = anchor.left + anchor.width / 2 - wrap.left;
+    const maxLeft = Math.max(BUBBLE_EDGE, wrap.width - bw - BUBBLE_EDGE);
+    const left = Math.min(Math.max(center - bw / 2, BUBBLE_EDGE), maxLeft);
+
+    this.bubbleTop = top - wrap.top;
     this.bubbleLeft = left;
-    this.showBubble = true;
+    this.bubbleArrowX = Math.min(Math.max(center - left, 12), bw - 12);
   }
 
   private hideBubble(): void {
-    this.showBubble = false;
+    this.bubbleMode = null;
+    this.bubbleAnchor = null;
     this.showBubbleColors = false;
-    this.showLinkInput = false;
+    this.linkEl = null;
+    this.savedSel = null;
+    this.cdr.markForCheck();
   }
 
-  private restoreSelection(): void {
-    if (!this.savedRange) return;
-    const sel = window.getSelection();
-    if (!sel) return;
-    sel.removeAllRanges();
-    sel.addRange(this.savedRange);
+  // Rectángulo visible de un rango; un caret en una línea vacía no tiene tamaño
+  private rangeRect(range: Range | null): DOMRect | null {
+    if (!range) return null;
+    const rect = range.getBoundingClientRect();
+    if (rect.width || rect.height) return rect;
+    const rects = range.getClientRects();
+    if (rects.length) return rects[0];
+    return this.blockOf(range.startContainer)?.getBoundingClientRect() ?? null;
   }
 
   //  Helpers
 
   private isUrl(text: string): boolean {
     if (!text || /\s/.test(text)) return false;
-    if (/^(https?:\/\/|mailto:|tel:)/i.test(text)) return true;
+    if (/^(https?:\/\/|mailto:)/i.test(text)) return true;
     return /^([a-z0-9-]+\.)+[a-z]{2,}([\/?#][^\s]*)?$/i.test(text);
   }
 
   private normalizeUrl(url: string): string {
-    return /^(https?:|mailto:|tel:|\/|#)/i.test(url) ? url : `https://${url}`;
-  }
-
-  private closestTag(node: Node | null, tag: string): HTMLElement | null {
-    return this.closestAnyTag(node, [tag]);
+    return /^(https?:|mailto:|\/|#)/i.test(url) ? url : `https://${url}`;
   }
 
   private closestAnyTag(node: Node | null, tags: string[]): HTMLElement | null {
     if (!this.editorEl) return null;
-    const upper = tags.map((t) => t.toUpperCase());
-    let current: Node | null = node;
-    while (current && current !== this.editor) {
-      if (current instanceof HTMLElement && upper.includes(current.tagName)) return current;
-      current = current.parentNode;
-    }
-    return null;
+    return closestWithin(node, this.editor, (el) => tags.includes(el.tagName));
   }
 }

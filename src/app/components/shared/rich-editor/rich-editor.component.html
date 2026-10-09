@@ -1,193 +1,175 @@
-<div class="rich-editor" #wrapperEl>
-  <div class="rich-editor__toolbar">
-    <div class="rich-editor__group">
-      <button type="button" title="Negrita (Ctrl+B)" [class.active]="isActive('bold')"
-        (mousedown)="preventLoseSelection($event)" (click)="bold()">
-        <mat-icon>format_bold</mat-icon>
+<!-- Paleta de color/resaltado: compartida por el menú de la toolbar y el bubble -->
+<ng-template #paletteTpl>
+  @for (palette of palettes; track palette.prop) {
+  <div class="rich-editor__palette-section">
+    <span class="rich-editor__palette-label">{{ palette.label }}</span>
+    <div class="rich-editor__swatches" [class.is-highlight]="palette.prop === 'backgroundColor'">
+      <button type="button" class="swatch swatch--reset" [title]="palette.resetTitle"
+        [attr.aria-label]="palette.resetTitle" (click)="applyStyle(palette.prop, null)">
+        <mat-icon>format_color_reset</mat-icon>
       </button>
-      <button type="button" title="Cursiva (Ctrl+I)" [class.active]="isActive('italic')"
-        (mousedown)="preventLoseSelection($event)" (click)="italic()">
-        <mat-icon>format_italic</mat-icon>
-      </button>
-    </div>
-
-    <div class="rich-editor__group">
-      <button type="button" title="Subrayado (Ctrl+U)" [class.active]="isActive('underline')"
-        (mousedown)="preventLoseSelection($event)" (click)="underline()">
-        <mat-icon>format_underlined</mat-icon>
-      </button>
-      <button type="button" title="Tachado" [class.active]="isActive('strikeThrough')"
-        (mousedown)="preventLoseSelection($event)" (click)="strikeThrough()">
-        <mat-icon>format_strikethrough</mat-icon>
-      </button>
-    </div>
-
-    <div class="rich-editor__group">
-      <button type="button" title="Código inline" (mousedown)="preventLoseSelection($event)" (click)="toggleCode()">
-        <mat-icon>code</mat-icon>
-      </button>
-      <button type="button" title="Cita" (mousedown)="preventLoseSelection($event)" (click)="toggleBlockquote()">
-        <mat-icon>format_quote</mat-icon>
-      </button>
-    </div>
-
-    <div class="rich-editor__group">
-      <button type="button" title="Lista ordenada" (mousedown)="preventLoseSelection($event)" (click)="orderedList()">
-        <mat-icon>format_list_numbered</mat-icon>
-      </button>
-      <button type="button" title="Lista de viñetas" (mousedown)="preventLoseSelection($event)" (click)="bulletList()">
-        <mat-icon>format_list_bulleted</mat-icon>
-      </button>
-    </div>
-
-    <div class="rich-editor__group rich-editor__dropdown">
-      <button type="button" class="btn-dropdown" title="Encabezado" (mousedown)="preventLoseSelection($event)"
-        (click)="showHeadingMenu = !showHeadingMenu; showColorPicker = false">
-        <mat-icon>title</mat-icon>
-        <mat-icon class="arrow">arrow_drop_down</mat-icon>
-      </button>
-      @if (showHeadingMenu) {
-      <div class="rich-editor__menu">
-        @for (h of headings; track h) {
-        <button type="button" (mousedown)="preventLoseSelection($event)" (click)="formatHeading(h)">{{ h.toUpperCase()
-          }}</button>
-        }
-        <button type="button" (mousedown)="preventLoseSelection($event)" (click)="formatHeading('p')">Normal</button>
-      </div>
+      @for (color of palette.colors; track color) {
+      <button type="button" class="swatch" [style.background]="color" [title]="color"
+        [attr.aria-label]="palette.label + ' ' + color" (click)="applyStyle(palette.prop, color)"></button>
       }
     </div>
+  </div>
+  }
+</ng-template>
 
-    <div class="rich-editor__group">
-      <button type="button" title="Insertar enlace" (mousedown)="preventLoseSelection($event)" (click)="insertLink()">
-        <mat-icon>link</mat-icon>
-      </button>
-      <button type="button" title="Insertar imagen" (mousedown)="preventLoseSelection($event)" (click)="insertImage()">
-        <mat-icon>image</mat-icon>
-      </button>
-    </div>
+<div class="rich-editor" #wrapperEl [class.is-disabled]="disabled" [class.is-dragover]="dragOver">
+  <div class="rich-editor__toolbar" #toolbarEl role="toolbar" aria-label="Formato de texto"
+    [class.is-expanded]="showMore" (mousedown)="keepSelection($event)">
+    @for (group of toolbarGroups; track $index) {
+    <div class="rich-editor__group" [class.is-secondary]="group.secondary">
+      @for (item of group.items; track item.icon) {
+      @if (isMenu(item)) {
+      <div class="rich-editor__dropdown">
+        <button type="button" class="btn-dropdown" [title]="item.title" [attr.aria-label]="item.title"
+          aria-haspopup="true" [attr.aria-expanded]="openMenu === item.menu" [class.open]="openMenu === item.menu"
+          [disabled]="disabled" (click)="toggleMenu(item.menu)">
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <mat-icon class="arrow">arrow_drop_down</mat-icon>
+        </button>
 
-    <div class="rich-editor__group rich-editor__dropdown">
-      <button type="button" class="btn-dropdown" title="Color de texto" (mousedown)="preventLoseSelection($event)"
-        (click)="showColorPicker = !showColorPicker; showHeadingMenu = false">
-        <mat-icon>format_color_text</mat-icon>
-        <mat-icon class="arrow">arrow_drop_down</mat-icon>
-      </button>
-      @if (showColorPicker) {
-      <div class="rich-editor__menu rich-editor__palette">
-        @for (color of colors; track color) {
-        <span class="swatch" [style.background]="color" (mousedown)="preventLoseSelection($event)"
-          (click)="setColor(color)" [title]="color" role="button" tabindex="0" (keydown.enter)="setColor(color)" (keydown.space)="setColor(color); $event.preventDefault()"></span>
+        @if (openMenu === item.menu) {
+        @switch (item.menu) {
+        @case ('heading') {
+        <div class="rich-editor__menu">
+          @for (h of headings; track h) {
+          <button type="button" [class]="'heading-option heading-option--' + h" (click)="formatHeading(h)">
+            {{ h.toUpperCase() }}
+          </button>
+          }
+          <button type="button" (click)="formatHeading('p')">Normal</button>
+        </div>
+        }
+        @case ('color') {
+        <div class="rich-editor__menu rich-editor__palette">
+          <ng-container [ngTemplateOutlet]="paletteTpl"></ng-container>
+        </div>
+        }
+        @case ('image') {
+        <div class="rich-editor__menu">
+          <button type="button" (click)="pickImage()">
+            <mat-icon>upload</mat-icon> Subir desde el equipo
+          </button>
+          <button type="button" (click)="imageFromUrl()">
+            <mat-icon>link</mat-icon> Desde una URL
+          </button>
+        </div>
+        }
+        }
         }
       </div>
+      } @else {
+      <button type="button" [title]="item.title" [attr.aria-label]="item.title"
+        [class.active]="!!item.mark && activeMarks.has(item.mark)"
+        [attr.aria-pressed]="item.mark ? activeMarks.has(item.mark) : null" [disabled]="disabled"
+        (click)="item.run()">
+        <mat-icon>{{ item.icon }}</mat-icon>
+      </button>
+      }
       }
     </div>
+    }
 
-    <div class="rich-editor__group">
-      <button type="button" title="Alinear izquierda" (mousedown)="preventLoseSelection($event)" (click)="alignLeft()">
-        <mat-icon>format_align_left</mat-icon>
-      </button>
-      <button type="button" title="Centrar" (mousedown)="preventLoseSelection($event)" (click)="alignCenter()">
-        <mat-icon>format_align_center</mat-icon>
-      </button>
-      <button type="button" title="Alinear derecha" (mousedown)="preventLoseSelection($event)" (click)="alignRight()">
-        <mat-icon>format_align_right</mat-icon>
-      </button>
-      <button type="button" title="Justificar" (mousedown)="preventLoseSelection($event)" (click)="alignJustify()">
-        <mat-icon>format_align_justify</mat-icon>
-      </button>
-    </div>
+    <!-- Móvil: muestra/oculta los grupos secundarios -->
+    <button type="button" class="rich-editor__more" [title]="showMore ? 'Menos opciones' : 'Más opciones'"
+      [attr.aria-label]="showMore ? 'Menos opciones' : 'Más opciones'" [attr.aria-expanded]="showMore"
+      [disabled]="disabled" (click)="showMore = !showMore">
+      <mat-icon>{{ showMore ? 'expand_less' : 'more_horiz' }}</mat-icon>
+    </button>
 
-    <div class="rich-editor__group">
-      <button type="button" title="Línea horizontal" (mousedown)="preventLoseSelection($event)"
-        (click)="horizontalRule()">
-        <mat-icon>horizontal_rule</mat-icon>
-      </button>
-      <button type="button" title="Eliminar formato" (mousedown)="preventLoseSelection($event)"
-        (click)="removeFormat()">
-        <mat-icon>format_clear</mat-icon>
-      </button>
-    </div>
-
-    <div class="rich-editor__group">
-      <button type="button" title="Deshacer (Ctrl+Z)" (mousedown)="preventLoseSelection($event)" (click)="undo()">
-        <mat-icon>undo</mat-icon>
-      </button>
-      <button type="button" title="Rehacer (Ctrl+Y)" (mousedown)="preventLoseSelection($event)" (click)="redo()">
-        <mat-icon>redo</mat-icon>
-      </button>
-    </div>
-
+    @if (uploads > 0) {
+    <span class="rich-editor__status" role="status">
+      <mat-icon>cloud_upload</mat-icon> Subiendo {{ uploads }} {{ uploads === 1 ? 'imagen' : 'imágenes' }}…
+    </span>
+    }
   </div>
 
-  <div #editorEl class="rich-editor__content" contenteditable="true" [attr.data-placeholder]="placeholder"
-    (input)="onInput()" (blur)="onBlur()" (keydown)="onKeydown($event)">
+  <input #fileInputEl type="file" hidden multiple accept="image/jpeg,image/png,image/gif,image/webp"
+    (change)="onFilesChosen(fileInputEl)" />
+
+  <div #editorEl class="rich-editor__content" [class.is-empty]="isEmpty" role="textbox" aria-multiline="true"
+    [attr.contenteditable]="disabled ? 'false' : 'true'" [attr.aria-disabled]="disabled"
+    [attr.aria-placeholder]="placeholder" [attr.data-placeholder]="placeholder" (input)="onInput()"
+    (blur)="onBlur()" (keydown)="onKeydown($event)" (paste)="onPaste($event)" (dragstart)="onDragStart()"
+    (dragend)="onDragEnd()" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)">
   </div>
 
-  <div #bubbleEl class="rich-editor__bubble" [class.is-visible]="showBubble" [style.top.px]="bubbleTop"
-    [style.left.px]="bubbleLeft">
+  <div #bubbleEl class="rich-editor__bubble" [class.is-visible]="!!bubbleMode" [class.is-below]="bubbleBelow"
+    [style.top.px]="bubbleTop" [style.left.px]="bubbleLeft" [style.--arrow-x]="bubbleArrowX + 'px'"
+    (mousedown)="keepSelection($event)">
 
-    @if (!showLinkInput) {
+    @switch (bubbleMode) {
+    @case ('format') {
     <div class="rich-editor__bubble-row">
-      <button type="button" title="Negrita" [class.active]="isActive('bold')" (mousedown)="preventLoseSelection($event)"
-        (click)="bold()">
-        <mat-icon>format_bold</mat-icon>
+      @for (btn of bubbleMarks; track btn.icon) {
+      <button type="button" [title]="btn.title" [attr.aria-label]="btn.title"
+        [class.active]="activeMarks.has(btn.mark!)" [attr.aria-pressed]="activeMarks.has(btn.mark!)"
+        (click)="btn.run()">
+        <mat-icon>{{ btn.icon }}</mat-icon>
       </button>
-      <button type="button" title="Cursiva" [class.active]="isActive('italic')"
-        (mousedown)="preventLoseSelection($event)" (click)="italic()">
-        <mat-icon>format_italic</mat-icon>
-      </button>
-      <button type="button" title="Subrayado" [class.active]="isActive('underline')"
-        (mousedown)="preventLoseSelection($event)" (click)="underline()">
-        <mat-icon>format_underlined</mat-icon>
-      </button>
-      <button type="button" title="Tachado" [class.active]="isActive('strikeThrough')"
-        (mousedown)="preventLoseSelection($event)" (click)="strikeThrough()">
-        <mat-icon>format_strikethrough</mat-icon>
-      </button>
-      <button type="button" title="Código" (mousedown)="preventLoseSelection($event)" (click)="toggleCode()">
-        <mat-icon>code</mat-icon>
-      </button>
+      }
 
       <span class="rich-editor__bubble-sep"></span>
 
-      <button type="button" title="Enlace" (mousedown)="preventLoseSelection($event)" (click)="openLink()">
+      <button type="button" title="Enlace (Ctrl+K)" aria-label="Enlace" (click)="openLinkEditor()">
         <mat-icon>link</mat-icon>
       </button>
-      <button type="button" class="btn-color" title="Color de texto" (mousedown)="preventLoseSelection($event)"
-        (click)="toggleBubbleColors()">
+      <button type="button" class="btn-color" title="Color y resaltado" aria-label="Color y resaltado"
+        [class.active]="showBubbleColors" (click)="toggleBubbleColors()">
         <mat-icon>format_color_text</mat-icon>
         <mat-icon class="arrow">arrow_drop_down</mat-icon>
       </button>
 
       <span class="rich-editor__bubble-sep"></span>
 
-      <button type="button" title="Quitar formato" (mousedown)="preventLoseSelection($event)" (click)="removeFormat()">
+      <button type="button" title="Quitar formato" aria-label="Quitar formato" (click)="removeFormat()">
         <mat-icon>format_clear</mat-icon>
       </button>
     </div>
 
     @if (showBubbleColors) {
     <div class="rich-editor__bubble-palette">
-      @for (color of colors; track color) {
-      <span class="swatch" [style.background]="color" [title]="color" (mousedown)="preventLoseSelection($event)"
-        (click)="applyColor(color)" role="button" tabindex="0" (keydown.enter)="applyColor(color)" (keydown.space)="applyColor(color); $event.preventDefault()"></span>
-      }
+      <ng-container [ngTemplateOutlet]="paletteTpl"></ng-container>
     </div>
     }
-    } @else {
-    <div class="rich-editor__bubble-link">
-      <mat-icon>link</mat-icon>
-      <input #linkInputEl type="text" placeholder="Pega o escribe un enlace…" [value]="linkUrl"
-        (keydown.enter)="applyLink()" (keydown.escape)="showLinkInput = false" />
-      <button type="button" class="apply" title="Aplicar" (mousedown)="preventLoseSelection($event)"
-        (click)="applyLink()">
-        <mat-icon>check</mat-icon>
+    }
+
+    @case ('link') {
+    <div class="rich-editor__bubble-row rich-editor__link-preview">
+      <a class="rich-editor__link-url" [href]="linkHref" target="_blank" rel="noopener noreferrer"
+        [title]="linkHref">
+        <mat-icon>open_in_new</mat-icon>
+        <span>{{ linkHref }}</span>
+      </a>
+      <span class="rich-editor__bubble-sep"></span>
+      <button type="button" title="Editar enlace" aria-label="Editar enlace" (click)="openLinkEditor()">
+        <mat-icon>edit</mat-icon>
       </button>
-      <button type="button" class="remove" title="Quitar enlace" (mousedown)="preventLoseSelection($event)"
-        (click)="removeLink()">
+      <button type="button" title="Quitar enlace" aria-label="Quitar enlace" (click)="removeLink()">
         <mat-icon>link_off</mat-icon>
       </button>
     </div>
+    }
+
+    @case ('edit-link') {
+    <div class="rich-editor__bubble-link">
+      <mat-icon>link</mat-icon>
+      <input #linkInputEl type="text" placeholder="Pega o escribe un enlace…" aria-label="URL del enlace"
+        [value]="linkHref" (keydown.enter)="applyLink(); $event.preventDefault()"
+        (keydown.escape)="cancelLink(); $event.stopPropagation()" />
+      <button type="button" class="apply" title="Aplicar" aria-label="Aplicar" (click)="applyLink()">
+        <mat-icon>check</mat-icon>
+      </button>
+      <button type="button" class="remove" title="Quitar enlace" aria-label="Quitar enlace" (click)="removeLink()">
+        <mat-icon>link_off</mat-icon>
+      </button>
+    </div>
+    }
     }
   </div>
 </div>
