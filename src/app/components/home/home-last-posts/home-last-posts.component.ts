@@ -62,7 +62,7 @@ export class HomeLastPostsComponent implements OnInit {
   private iniciado = false;
 
   constructor() {
-    this.paginationService.change({ pageIndex: 0, pageSize: 42, length: 0 });
+    this.paginationService.change({ pageIndex: 0, pageSize: 52, length: 0 });
   }
 
   ngOnInit(): void {
