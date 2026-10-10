@@ -15,6 +15,7 @@ import { MainMenuComponent } from './components/main/main-menu/main-menu.compone
 import { MainSubmenuComponent } from './components/main/main-submenu/main-submenu.component';
 import { MainUltimasNoticiasComponent } from './components/main/main-ultimas-noticias/main-ultimas-noticias.component';
 import { MainFooterComponent } from './components/main/main-footer/main-footer.component';
+import { SsrSalud } from './shared/helpers/ssr-salud';
 
 /** Tarjeta social del sitio (1200x630) para páginas sin imagen propia. */
 const DEFAULT_OG_IMAGE = '/assets/images/og-image.jpg';
@@ -48,6 +49,7 @@ export class AppComponent {
   private readonly esNavegador = isPlatformBrowser(inject(PLATFORM_ID));
   // Respuesta HTTP del render en el servidor: permite devolver 404/403 reales a los bots.
   private readonly respuestaSsr = inject(RESPONSE_INIT, { optional: true });
+  private readonly ssrSalud = inject(SsrSalud);
   private prerenderTimer: any = null;
 
   public displayComponent: DisplayComponentModel = {
@@ -277,7 +279,8 @@ export class AppComponent {
 
   /** Prerender lee estos metas para devolver el status HTTP real (evita soft 404). */
   private setPrerenderStatus(statusCode?: number): void {
-    if (this.respuestaSsr) {
+    // Si el API falló durante el render (SsrSalud) se queda el 503: nunca convertir un fallo en "no encontrado".
+    if (this.respuestaSsr && !this.ssrSalud.apiFallo) {
       this.respuestaSsr.status = statusCode || 200;
     }
 
