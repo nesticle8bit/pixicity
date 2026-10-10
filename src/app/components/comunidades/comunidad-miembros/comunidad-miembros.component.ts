@@ -1,3 +1,4 @@
+import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -15,7 +16,7 @@ import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.compon
     selector: 'app-comunidad-miembros',
     templateUrl: './comunidad-miembros.component.html',
     styleUrls: ['./comunidad-miembros.component.scss'],
-    imports: [
+    imports: [CargandoComponent, 
         RouterLink,
         UserPopoverDirective,
         UserAvatarComponent,

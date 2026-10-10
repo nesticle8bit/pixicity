@@ -1,3 +1,4 @@
+import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -10,7 +11,7 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
     selector: 'app-foto-create',
     templateUrl: './foto-create.component.html',
     styleUrls: ['./foto-create.component.scss'],
-    imports: [
+    imports: [CargandoComponent, 
         FormsModule,
         ReactiveFormsModule,
         RouterLink,

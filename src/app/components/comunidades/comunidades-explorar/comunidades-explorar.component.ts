@@ -1,3 +1,4 @@
+import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
@@ -15,7 +16,7 @@ import { ThumbPipe } from '../../../shared/pipes/thumb.pipe';
     selector: 'app-comunidades-explorar',
     templateUrl: './comunidades-explorar.component.html',
     styleUrls: ['../comunidades-index/comunidades-index.component.scss'],
-    imports: [ThumbPipe, FormsModule, RouterLink],
+    imports: [CargandoComponent, ThumbPipe, FormsModule, RouterLink],
 })
 export class ComunidadesExplorarComponent implements OnInit {
   private displayService = inject(DisplayComponentService);

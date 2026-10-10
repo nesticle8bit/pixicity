@@ -1,3 +1,4 @@
+import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { environment } from 'src/environments/environment';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -48,7 +49,7 @@ function aHilo(c: TemaComentario): ComentarioHilo {
     selector: 'app-comunidad-tema-view',
     templateUrl: './comunidad-tema-view.component.html',
     styleUrls: ['./comunidad-tema-view.component.scss'],
-    imports: [
+    imports: [CargandoComponent, 
         RouterLink,
         UserPopoverDirective,
         UserAvatarComponent,

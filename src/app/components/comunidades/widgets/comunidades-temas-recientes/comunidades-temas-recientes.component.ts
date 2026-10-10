@@ -1,3 +1,4 @@
+import { CargandoComponent } from '../../../shared/cargando/cargando.component';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
@@ -10,7 +11,7 @@ import { TimeAgoPipe } from '../../../../shared/pipes/timeAgo.pipe';
     selector: 'app-comunidades-temas-recientes',
     templateUrl: './comunidades-temas-recientes.component.html',
     styleUrls: ['./comunidades-temas-recientes.component.scss'],
-    imports: [
+    imports: [CargandoComponent, 
         RouterLink,
         UserPopoverDirective,
         UserAvatarComponent,

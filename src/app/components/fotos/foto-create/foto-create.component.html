@@ -66,7 +66,7 @@
             @if (!formGroup.value.imageUrl?.startsWith('/images/')) {
             <button type="button" class="cc-btn cc-btn--primary" (click)="uploadAndSetUrl()" [disabled]="uploading">
               @if (uploading) {
-              <img src="/assets/images/min-carga.gif" style="height:16px" alt="" aria-hidden="true"> Subiendo...
+              <app-cargando tamano="sm" color="actual" [decorativo]="true" /> Subiendo...
               } @else {
               <i class="ti ti-cloud-upload"></i> Comprimir y subir
               }
@@ -98,7 +98,7 @@
         <a routerLink="/fotos" class="cc-btn cc-btn--ghost">Cancelar</a>
         <button type="submit" class="cc-btn cc-btn--primary" [disabled]="loading || uploading">
           @if (loading) {
-          <img src="/assets/images/min-carga.gif" style="height:16px" alt="" aria-hidden="true"> Guardando...
+          <app-cargando tamano="sm" color="actual" [decorativo]="true" /> Guardando...
           } @else {
           <i class="ti" [class.ti-device-floppy]="isEdit" [class.ti-check]="!isEdit"></i>
           {{ isEdit ? 'Actualizar' : 'Publicar foto' }}

@@ -2,6 +2,7 @@
   "name": "pixicity",
   "version": "0.6.1",
   "scripts": {
+    "lock": "node scripts/lock.js",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",

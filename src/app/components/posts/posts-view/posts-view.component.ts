@@ -1,3 +1,4 @@
+import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { environment } from 'src/environments/environment';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -32,7 +33,7 @@ import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsua
     selector: 'app-posts-view',
     templateUrl: './posts-view.component.html',
     styleUrls: ['./posts-view.component.scss'],
-    imports: [
+    imports: [CargandoComponent, 
         RouterLink,
         UserPopoverDirective,
         UserAvatarComponent,

@@ -1,3 +1,4 @@
+import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { environment } from 'src/environments/environment';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
@@ -20,7 +21,7 @@ import { ThumbPipe } from '../../../shared/pipes/thumb.pipe';
     selector: 'app-foto-detail',
     templateUrl: './foto-detail.component.html',
     styleUrls: ['./foto-detail.component.scss'],
-    imports: [ThumbPipe, 
+    imports: [CargandoComponent, ThumbPipe, 
         RouterLink,
         UserPopoverDirective,
         UserAvatarComponent,

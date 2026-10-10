@@ -1,3 +1,4 @@
+import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { environment } from 'src/environments/environment';
 import { DOCUMENT } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
@@ -21,7 +22,7 @@ import { ThumbPipe } from '../../../shared/pipes/thumb.pipe';
     selector: 'app-comunidad-view',
     templateUrl: './comunidad-view.component.html',
     styleUrls: ['./comunidad-view.component.scss'],
-    imports: [ThumbPipe, 
+    imports: [CargandoComponent, ThumbPipe, 
         RouterLink,
         FormsModule,
         UserPopoverDirective,

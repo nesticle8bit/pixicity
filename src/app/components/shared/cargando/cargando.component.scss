@@ -1,0 +1,78 @@
+:host {
+  --cargando-tam: 28px;
+  --cargando-grosor: 3px;
+  --cargando-color: #006595;
+  --cargando-pista: rgba(0, 101, 149, 0.15);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  vertical-align: middle;
+  color: #5f6b73;
+  font-size: 13px;
+  // Si la respuesta llega enseguida, no se llega a ver (evita el parpadeo de un loader de 100 ms).
+  animation: cargando-aparecer 0.2s ease-out 0.15s both;
+}
+
+:host(.cargando--sm) {
+  --cargando-tam: 16px;
+  --cargando-grosor: 2px;
+  gap: 6px;
+  font-size: inherit;
+}
+
+:host(.cargando--lg) {
+  --cargando-tam: 40px;
+  --cargando-grosor: 4px;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14px;
+}
+
+:host(.cargando--actual) {
+  --cargando-color: currentColor;
+  --cargando-pista: color-mix(in srgb, currentColor 25%, transparent);
+  color: inherit;
+}
+
+.cargando__anillo {
+  position: relative;
+  flex: none;
+  width: var(--cargando-tam);
+  height: var(--cargando-tam);
+  border-radius: 50%;
+  border: var(--cargando-grosor) solid var(--cargando-pista);
+  border-top-color: var(--cargando-color);
+  animation: cargando-girar 0.75s cubic-bezier(0.5, 0.15, 0.5, 0.85) infinite;
+}
+
+.cargando__oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@keyframes cargando-girar {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cargando-aparecer {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+// Sin movimiento: el anillo late suavemente en vez de girar.
+@media (prefers-reduced-motion: reduce) {
+  .cargando__anillo {
+    animation: cargando-latir 1.6s ease-in-out infinite;
+    border-color: var(--cargando-color);
+  }
+
+  @keyframes cargando-latir {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 1; }
+  }
+}

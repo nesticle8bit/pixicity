@@ -92,6 +92,17 @@ const SIN_LOADER = [
   'general/getEstadisticas',
   'usuarios/getUsuarioInfo',
   'usuarios/getUserStatus',
+  // Pantallas con su propio indicador (app-cargando): el overlay de pantalla completa quedaba encima del anillo.
+  'posts/getPostById',
+  'comentarios/getComentariosByPostId',
+  'comunidades/getTema',
+  'comunidades/getComunidad',
+  'comunidades/getMiembros',
+  'comunidades/getTemasRecientes',
+  'fotos/GetFotoById',
+  'fotos/GetFotos',
+  'fotos/GetComentariosByFotoId',
+  'shouts/getComentariosByShoutId',
 ].map((ruta) => `${environment.api}/api/${ruta}`);
 
 export const appConfig: ApplicationConfig = {

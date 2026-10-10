@@ -1,3 +1,4 @@
+import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -16,7 +17,7 @@ import { ThumbPipe } from '../../../shared/pipes/thumb.pipe';
     selector: 'app-fotos-index',
     templateUrl: './fotos-index.component.html',
     styleUrls: ['./fotos-index.component.scss'],
-    imports: [ThumbPipe, 
+    imports: [CargandoComponent, ThumbPipe, 
         RouterLink,
         UserPopoverDirective,
         UserAvatarComponent,
