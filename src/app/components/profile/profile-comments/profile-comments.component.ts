@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs';
+import { PerfilRef, SIN_PERFIL } from 'src/app/models/seguridad/seguridad-vm.model';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
@@ -26,18 +28,20 @@ export class ProfileCommentsComponent implements OnInit {
   private comentariosPostService = inject(IHttpComentariosPostService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private cargaGetCommentsByUserId?: Subscription;
 
-  private _user: any;
+  private _user: PerfilRef = SIN_PERFIL;
 
-  @Input() set user(value: any) {
-    this._user = value;
+  @Input() set user(value: PerfilRef | null) {
+    this._user = value ?? SIN_PERFIL;
 
-    if (value) {
+    // Sin id todavía (el padre arranca con {}): no pedir datos de usuarioId=undefined.
+    if (value?.id) {
       this.getCommentsByUserId();
     }
   }
 
-  get user(): any {
+  get user(): PerfilRef {
     return this._user;
   }
 
@@ -51,7 +55,15 @@ export class ProfileCommentsComponent implements OnInit {
   ngOnInit(): void {}
 
   getCommentsByUserId(): void {
-    this.comentariosPostService.getComentariosByUserId(this.user.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    if (!this.user.id) {
+      return;
+    }
+
+    // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
+
+    this.cargaGetCommentsByUserId?.unsubscribe();
+
+    this.cargaGetCommentsByUserId = this.comentariosPostService.getComentariosByUserId(this.user.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.comments = response?.data;
       this.totalCount = response?.pagination?.totalCount;
     });

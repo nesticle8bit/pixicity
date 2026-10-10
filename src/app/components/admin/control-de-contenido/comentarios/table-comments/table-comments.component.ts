@@ -73,7 +73,7 @@ export class TableCommentsComponent implements OnInit {
   getComentarios(): void {
     this.cargando = true;
     this.comentariosPostService.getComentarios(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      this.comments = response?.data;
+      this.comments = response?.data ?? [];
       this.totalCount = response?.pagination?.totalCount;
     });
   }

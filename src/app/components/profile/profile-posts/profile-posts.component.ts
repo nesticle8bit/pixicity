@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs';
+import { PerfilRef, SIN_PERFIL } from 'src/app/models/seguridad/seguridad-vm.model';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
@@ -25,18 +27,21 @@ export class ProfilePostsComponent implements OnInit {
   private router = inject(Router);
 
   private readonly destroyRef = inject(DestroyRef);
+  private cargaGetPosts?: Subscription;
 
-  private _user: any;
+  private _user: PerfilRef = SIN_PERFIL;
 
-  @Input() set user(value: any) {
-    this._user = value;
+  @Input() set user(value: PerfilRef | null) {
+    this._user = value ?? SIN_PERFIL;
 
-    if (value) {
+    // Antes de ngOnInit no se carga: ngOnInit lo hace con la página del ?page= (si no, se pedían dos páginas a
+    // la vez y podía quedar la equivocada). Después sí: cambiar de perfil recarga.
+    if (value?.id && this.iniciado) {
       this.getPosts();
     }
   }
 
-  get user(): any {
+  get user(): PerfilRef {
     return this._user;
   }
 
@@ -44,11 +49,14 @@ export class ProfilePostsComponent implements OnInit {
   public totalCount: number = 0;
   public pageIndex: number = 0;
 
+  private iniciado = false;
+
   constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
   }
 
   ngOnInit(): void {
+    this.iniciado = true;
     // Los posts viejos de un perfil no tenian ningun enlace entrante: la
     // pagina pasa a vivir en ?page= y el paginador navega en vez de recargar.
     this.route.queryParamMap
@@ -62,7 +70,7 @@ export class ProfilePostsComponent implements OnInit {
           length: this.totalCount,
         });
 
-        if (this.user) {
+        if (this.user.id) {
           this.getPosts();
         }
       });
@@ -78,7 +86,11 @@ export class ProfilePostsComponent implements OnInit {
   }
 
   getPosts(): void {
-    this.postService
+    // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
+
+    this.cargaGetPosts?.unsubscribe();
+
+    this.cargaGetPosts = this.postService
       .getPostsByUserId(this.user.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {

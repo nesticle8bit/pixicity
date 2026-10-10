@@ -24,6 +24,7 @@ CMD ["node", "dist/pixicity/server/server.mjs"]
 ### STAGE 2: Run (default) ###
 FROM nginx:1.27-alpine
 COPY --from=build /opt/ng/nginx-custom.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /opt/ng/nginx-security-headers.inc /etc/nginx/snippets/security-headers.inc
 COPY --from=build /opt/ng/dist/pixicity/browser /usr/share/nginx/html
 # Con SSR activado Angular genera index.csr.html (la app de cliente) en vez de index.html: nginx sirve esa misma
 # página a las personas. Sin este paso nginx respondía 404 en la portada.

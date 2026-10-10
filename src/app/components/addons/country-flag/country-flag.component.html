@@ -1,1 +1,1 @@
-@if (iso2) {<img src="/assets/images/flags/{{iso2.toLowerCase()}}.png" matTooltip="{{title()}}" [alt]="title()" loading="lazy" style="margin: 0 10px 0 0;">}
+@if (iso2(); as iso2) {<img src="/assets/images/flags/{{iso2.toLowerCase()}}.png" matTooltip="{{title()}}" [alt]="title()" loading="lazy" style="margin: 0 10px 0 0;">}

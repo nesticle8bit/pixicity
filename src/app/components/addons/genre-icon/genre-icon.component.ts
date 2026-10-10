@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, input } from '@angular/core';
 import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
@@ -12,15 +12,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 export class GenreIconComponent implements OnInit {
   readonly class = input<string>('');
   
-  private _genre: any;
-
-  @Input() set genre(value: any) {
-    this._genre = value;
-  }
-
-  get genre(): any {
-    return this._genre;
-  }
+  readonly genre = input<string | null | undefined>(undefined);
 
   readonly isFA = input<boolean>(false);
   

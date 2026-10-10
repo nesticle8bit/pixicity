@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs';
+import { PostDetalle } from 'src/app/models/posts/post-vm.model';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -34,16 +36,17 @@ export class PostsMetaComponent implements OnInit {
   private dialog = inject(MatDialog);
 
   private readonly destroyRef = inject(DestroyRef);
+  private cargaGetAvailablePuntos?: Subscription;
 
-  public savedToFavorites: any = {
+  public savedToFavorites: { message: string; type: boolean; display: boolean } = {
     message: '',
     type: false,
     display: false,
   };
 
-  private _post: any;
+  private _post!: PostDetalle;
 
-  @Input() set post(value: any) {
+  @Input({ required: true }) set post(value: PostDetalle) {
     this._post = value;
 
     if (value) {
@@ -51,7 +54,7 @@ export class PostsMetaComponent implements OnInit {
     }
   }
 
-  get post(): any {
+  get post(): PostDetalle {
     return this._post;
   }
 
@@ -70,7 +73,11 @@ export class PostsMetaComponent implements OnInit {
       return;
     }
 
-    this.postService.getAvailableVotos(1).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
+
+    this.cargaGetAvailablePuntos?.unsubscribe();
+
+    this.cargaGetAvailablePuntos = this.postService.getAvailableVotos(1).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.availablePuntos = [];
 
       if (response > 0) {

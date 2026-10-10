@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, input } from '@angular/core';
 import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
@@ -10,7 +10,7 @@ import { MatTooltip } from '@angular/material/tooltip';
     imports: [MatTooltip],
 })
 export class CountryFlagComponent implements OnInit {
-  @Input() iso2: string = '';
+  readonly iso2 = input<string | null | undefined>('');
   readonly title = input<string>('');
 
   constructor() {}

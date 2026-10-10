@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs';
+import { PerfilRef, SIN_PERFIL } from 'src/app/models/seguridad/seguridad-vm.model';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent } from '@angular/material/paginator';
@@ -21,19 +23,20 @@ export class ProfileShoutsWallComponent implements OnInit {
   paginationService = inject(PaginationService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private cargaGetShouts?: Subscription;
 
-  private _user: any;
-  private _load: any;
+  private _user: PerfilRef = SIN_PERFIL;
+  private _load = false;
 
-  @Input() set user(value: any) {
-    this._user = value;
+  @Input() set user(value: PerfilRef | null) {
+    this._user = value ?? SIN_PERFIL;
 
     if (value && value.id) {
       this.getShouts();
     }
   }
 
-  @Input() set load(value: any) {
+  @Input() set load(value: boolean) {
     this._load = value;
 
     if (value) {
@@ -41,7 +44,7 @@ export class ProfileShoutsWallComponent implements OnInit {
     }
   }
 
-  get user(): any {
+  get user(): PerfilRef {
     return this._user;
   }
   
@@ -57,7 +60,15 @@ export class ProfileShoutsWallComponent implements OnInit {
   }
 
   getShouts(): void {
-    this.perfilService.getShouts(this.user.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    if (!this.user.id) {
+      return;
+    }
+
+    // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
+
+    this.cargaGetShouts?.unsubscribe();
+
+    this.cargaGetShouts = this.perfilService.getShouts(this.user.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.shoutsList = response.shouts;
       this.totalCount = response.pagination.totalCount;
     });

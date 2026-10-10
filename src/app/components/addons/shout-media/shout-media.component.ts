@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, input, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnChanges, input, inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 /**
@@ -10,6 +10,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
  */
 @Component({
     selector: 'app-shout-media',
+    // Solo depende de sus inputs: se vuelve a evaluar únicamente cuando cambian.
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './shout-media.component.html',
     styleUrls: ['./shout-media.component.scss'],
 })
@@ -19,8 +21,8 @@ export class ShoutMediaComponent implements OnChanges {
   readonly url = input<string | null>(null);
   readonly tipo = input<string | null>(null);
   readonly mediaTitulo = input<string | null>(null);
-  @Input() mediaImagen: string | null = null;
-  @Input() mediaDescripcion: string | null = null;
+  readonly mediaImagen = input<string | null>(null);
+  readonly mediaDescripcion = input<string | null>(null);
 
   // URLs de embed memoizadas (se recalculan SOLO cuando cambian los inputs,
   // no en cada ciclo de change detection — evita que el iframe parpadee/recargue).

@@ -77,7 +77,7 @@ export class TablePostsComponent implements OnInit {
   getPosts(): void {
     this.cargando = true;
     this.postsService.getPostsAdmin('', this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      this.posts = response.data;
+      this.posts = response.data ?? [];
       this.totalCount = response.pagination.totalCount;
     });
   }

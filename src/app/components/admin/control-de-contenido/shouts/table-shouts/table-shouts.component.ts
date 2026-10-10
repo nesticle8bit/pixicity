@@ -69,7 +69,7 @@ export class TableShoutsComponent implements OnInit {
   getShouts(): void {
     this.cargando = true;
     this.perfilService.getShoutsAdmin(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      this.shouts = response.shouts;
+      this.shouts = response.shouts ?? [];
       this.totalCount = response.pagination.totalCount;
     });
   }

@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
@@ -42,6 +43,7 @@ function aHilo(c: ComentarioViewModel, parentId: number | null): ComentarioHilo[
 })
 export class PostCommentsComponent {
   private readonly destroyRef = inject(DestroyRef);
+  private cargaCargar?: Subscription;
   private comentariosPostService = inject(IHttpComentariosPostService);
   private readonly securityService = inject(IHttpSecurityService);
   private readonly dialog = inject(MatDialog);
@@ -85,7 +87,11 @@ export class PostCommentsComponent {
       return;
     }
 
-    this.comentariosPostService
+    // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
+
+    this.cargaCargar?.unsubscribe();
+
+    this.cargaCargar = this.comentariosPostService
       .getComentariosByPostId(this._post.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((lista) => (this.comentarios = (lista ?? []).flatMap((c) => aHilo(c, null))));

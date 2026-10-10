@@ -19,7 +19,7 @@
           <a class="op-username" [routerLink]="['/perfil/' + userName]" [appUserPopover]="userName">
             {{userName}}
           </a>
-          <addon-country-flag [iso2]="info?.estado?.pais?.isO2" [title]="info?.estado?.pais?.nombre">
+          <addon-country-flag [iso2]="info?.pais?.isO2 ?? ''" [title]="info?.pais?.nombre ?? ''">
           </addon-country-flag>
           <app-genre-icon [genre]="info?.genero"></app-genre-icon>
         </div>

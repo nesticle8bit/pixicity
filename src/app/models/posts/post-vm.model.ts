@@ -67,6 +67,7 @@ export interface PostSimpleViewModel {
   id: number;
   url: string;
   titulo: string;
+  puntos?: number;
   categoria: {
     icono: string;
     nombre: string;

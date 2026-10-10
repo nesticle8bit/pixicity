@@ -1,15 +1,15 @@
 <span class="monac_icons" [ngClass]="{
-        'ma_comment_post': tipo === 'Comentario', 
-        'ma_voto_positivo': tipo === 'Like', 
-        'ma_voto_negativo': tipo === 'Dislike', 
-        'ma_star': tipo === 'Favoritos', 
-        'ma_points': tipo === 'Puntos', 
-        'ma_follow': tipo === 'Seguir',
-        'ma_blue_ball': tipo === 'ComentarioSiguePost',
-        'ma_share': tipo === 'Recomendacion',
-        'ma_wall_post': tipo === 'Shout',
-        'ma_monitor_rango': tipo === 'Rango',
-        'ma_post': tipo === 'PostNuevoUsuarioQueSigues',
-        'ma_comment_resp': tipo === 'Respuestas'
+        'ma_comment_post': tipo() === 'Comentario', 
+        'ma_voto_positivo': tipo() === 'Like', 
+        'ma_voto_negativo': tipo() === 'Dislike', 
+        'ma_star': tipo() === 'Favoritos', 
+        'ma_points': tipo() === 'Puntos', 
+        'ma_follow': tipo() === 'Seguir',
+        'ma_blue_ball': tipo() === 'ComentarioSiguePost',
+        'ma_share': tipo() === 'Recomendacion',
+        'ma_wall_post': tipo() === 'Shout',
+        'ma_monitor_rango': tipo() === 'Rango',
+        'ma_post': tipo() === 'PostNuevoUsuarioQueSigues',
+        'ma_comment_resp': tipo() === 'Respuestas'
         }">
 </span>

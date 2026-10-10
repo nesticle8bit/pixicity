@@ -90,7 +90,7 @@ export class TableUsuariosComponent implements OnInit {
     }
 
     this.securityService.getUsuariosAdmin(parameters, this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      this.usuarios = response.usuarios;
+      this.usuarios = response.usuarios ?? [];
       this.totalCount = response.pagination.totalCount;
     });
   }

@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import { ViewportScroller, NgClass } from '@angular/common';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -36,6 +37,7 @@ export class HomeLastPostsComponent implements OnInit {
   private router = inject(Router);
 
   private readonly destroyRef = inject(DestroyRef);
+  private cargaGetPosts?: Subscription;
 
   private _categoria: string = '';
 
@@ -55,12 +57,16 @@ export class HomeLastPostsComponent implements OnInit {
 
   /** Evita la doble carga cuando llegan a la vez la categoria y el ?page=. */
   private ultimaCarga: string = '';
+  // El input `categoria` llega antes de ngOnInit: si cargaba ahí pedía la página 1 y enseguida la del ?page=,
+  // y la respuesta que llegara última (a veces la página 1) quedaba en pantalla.
+  private iniciado = false;
 
   constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 42, length: 0 });
   }
 
   ngOnInit(): void {
+    this.iniciado = true;
     this.getStickyPosts();
 
     // La pagina vive en la URL (?page=N): asi Googlebot puede rastrear el
@@ -98,6 +104,9 @@ export class HomeLastPostsComponent implements OnInit {
   }
 
   private load(): void {
+    if (!this.iniciado) {
+      return;
+    }
     const clave = `${this._categoria}|${this.pageIndex}`;
     if (clave === this.ultimaCarga) {
       return;
@@ -113,7 +122,11 @@ export class HomeLastPostsComponent implements OnInit {
   }
 
   getPosts(categoria: string): void {
-    this.postService
+    // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
+
+    this.cargaGetPosts?.unsubscribe();
+
+    this.cargaGetPosts = this.postService
       .getPosts(categoria)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {

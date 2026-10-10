@@ -10,7 +10,7 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
 import { SEOService } from 'src/app/services/shared/seo.service';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { PostDetalle } from 'src/app/models/posts/post-vm.model';
-import { PerfilUsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { DecimalPipe, DatePipe, DOCUMENT } from '@angular/common';
@@ -74,7 +74,7 @@ export class PostsViewComponent implements OnInit {
   };
   public currentUser: JwtUserModel;
   public post: PostDetalle | null = null;
-  public autor: PerfilUsuarioViewModel | null = null;
+  public autor: UsuarioInfoViewModel | null = null;
   public show: boolean = false;
 
   /** Slug del título en la URL: se usa para redirigir a /posts/404 o /posts/privado antes de tener el post. */

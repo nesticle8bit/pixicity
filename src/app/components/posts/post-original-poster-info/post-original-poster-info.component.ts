@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs';
+import { UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -35,10 +37,11 @@ export class PostOriginalPosterInfoComponent implements OnInit {
   private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private cargaGetUsuarioInfo?: Subscription;
 
-  private _userName: any;
+  private _userName = '';
 
-  @Input() set userName(value: any) {
+  @Input() set userName(value: string) {
     this._userName = value;
 
     if (value) {
@@ -46,11 +49,11 @@ export class PostOriginalPosterInfoComponent implements OnInit {
     }
   }
 
-  get userName(): any {
+  get userName(): string {
     return this._userName;
   }
 
-  public info: any;
+  public info?: UsuarioInfoViewModel;
   public currentUser?: JwtUserModel;
 
   ngOnInit(): void {
@@ -62,7 +65,11 @@ export class PostOriginalPosterInfoComponent implements OnInit {
       return;
     }
 
-    this.usuarioPerfilService.getUsuarioInfo(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
+
+    this.cargaGetUsuarioInfo?.unsubscribe();
+
+    this.cargaGetUsuarioInfo = this.usuarioPerfilService.getUsuarioInfo(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.info = response;
       }
@@ -71,15 +78,8 @@ export class PostOriginalPosterInfoComponent implements OnInit {
 
   changeSeguidores(value: boolean): void {
     if (this.info) {
-      if (!this.info.seguidores) {
-        this.info.seguidores = 0;
-      }
-
-      if (value) {
-        this.info.seguidores += 1;
-      } else {
-        this.info.seguidores -= 1;
-      }
+      // La tarjeta muestra seguidoresCount (antes se sumaba a un campo "seguidores" que no se mostraba).
+      this.info.seguidoresCount = Math.max(0, (this.info.seguidoresCount ?? 0) + (value ? 1 : -1));
     }
   }
 }

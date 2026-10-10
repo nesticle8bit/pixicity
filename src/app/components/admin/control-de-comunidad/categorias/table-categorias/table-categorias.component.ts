@@ -58,7 +58,7 @@ export class TableCategoriasComponent implements OnInit {
   getCategorias(): void {
     this.cargando = true;
     this.parametrosService.getCategoriasAdmin(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      this.categorias = response.categorias;
+      this.categorias = response.categorias ?? [];
       this.totalCount = response.pagination.totalCount;
     });
   }

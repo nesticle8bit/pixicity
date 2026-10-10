@@ -61,7 +61,7 @@ export class TableRangosComponent implements OnInit {
   getRangos(): void {
     this.cargando = true;
     this.rangosService.getRangosUsuarios(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      this.rangos = response?.rangos;
+      this.rangos = response?.rangos ?? [];
       this.totalCount = response?.pagination?.totalCount;
     });
   }

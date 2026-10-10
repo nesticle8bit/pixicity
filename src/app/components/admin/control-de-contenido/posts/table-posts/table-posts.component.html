@@ -2,7 +2,7 @@
 @if (cargando) {
 <div class="adm-cargando" role="progressbar" aria-label="Cargando"></div>
 }
-@if (!cargando && !posts?.length) {
+@if (!cargando && !posts.length) {
 <div class="adm-vacio"><i class="ti ti-database-search" aria-hidden="true"></i>No hay resultados{{ filtro.q || filtro.tipo || filtro.estado || filtro.usuario || filtro.desde || filtro.hasta ? ' con estos filtros' : '' }}.</div>
 }
 

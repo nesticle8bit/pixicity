@@ -23,7 +23,7 @@ export class ComunidadesTopComponent implements OnInit, OnDestroy {
   public paused = false;
 
   private readonly interval = 4000;
-  private timer: any = null;
+  private timer: ReturnType<typeof setTimeout> | null = null;
 
   ngOnInit(): void {
     this.comunidadesService.getTopComunidades(5).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({

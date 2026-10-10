@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -14,10 +15,11 @@ export class PerfilSocialMediaButtonsComponent implements OnInit {
   private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private cargaGetSocialMedia?: Subscription;
 
-  private _usuarioId: any;
+  private _usuarioId: number | null | undefined;
 
-  @Input() set usuarioId(value: any) {
+  @Input() set usuarioId(value: number | null | undefined) {
     this._usuarioId = value;
 
     if (value) {
@@ -25,7 +27,7 @@ export class PerfilSocialMediaButtonsComponent implements OnInit {
     }
   }
 
-  get usuarioId(): any {
+  get usuarioId(): number | null | undefined {
     return this._usuarioId;
   }
 
@@ -34,7 +36,15 @@ export class PerfilSocialMediaButtonsComponent implements OnInit {
   ngOnInit(): void {}
 
   getSocialMedia(): void {
-    this.usuarioPerfilService
+    if (!this.usuarioId) {
+      return;
+    }
+
+    // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
+
+    this.cargaGetSocialMedia?.unsubscribe();
+
+    this.cargaGetSocialMedia = this.usuarioPerfilService
       .getSocialMediaByUsuarioId(this.usuarioId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => {

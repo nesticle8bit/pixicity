@@ -2,12 +2,13 @@ import { ComponentRef, Directive, ElementRef, HostListener, OnDestroy, ViewConta
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { forkJoin } from 'rxjs';
+import { UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { UserPopoverCardComponent } from 'src/app/components/addons/user-popover-card/user-popover-card.component';
 import { IHttpUsuarioPerfilService } from '../../services/interfaces/httpUsuarioPerfil.interface';
 
 // Shared cache across all directive instances
-const USER_CACHE = new Map<string, { userData: any; activo: number | null }>();
+const USER_CACHE = new Map<string, { userData: UsuarioInfoViewModel; activo: number | null }>();
 const PENDING = new Set<string>();
 
 @Directive({ selector: '[appUserPopover]' })
@@ -117,7 +118,7 @@ export class UserPopoverDirective implements OnDestroy {
       info: this.usuarioPerfilService.getUsuarioInfo(userName),
       status: this.usuarioPerfilService.getUserStatus(userName),
     }).subscribe({
-      next: ({ info, status }: any) => {
+      next: ({ info, status }) => {
         const entry = { userData: info, activo: status ?? null };
         const userNameValue = this.userName();
         USER_CACHE.set(userNameValue, entry);

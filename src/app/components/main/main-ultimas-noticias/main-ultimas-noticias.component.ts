@@ -20,6 +20,7 @@ export class MainUltimasNoticiasComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
   private rotacion?: ReturnType<typeof setTimeout>;
+  public cargado = false;
 
   public noticias: any[] = [];
   public currentIndex = -1;
@@ -33,9 +34,14 @@ export class MainUltimasNoticiasComponent implements OnInit {
     this.noticiasService
       .getAllNoticias()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response) => {
-        this.noticias = response;
-        this.showNext();
+      .subscribe({
+        next: (response) => {
+          this.noticias = response ?? [];
+          this.cargado = true;
+          this.showNext();
+        },
+        // Sin noticias (API caído): se libera el espacio reservado.
+        error: () => (this.cargado = true),
       });
   }
 

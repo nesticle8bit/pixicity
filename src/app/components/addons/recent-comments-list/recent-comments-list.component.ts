@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MatTooltip } from '@angular/material/tooltip';
 import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -13,6 +13,8 @@ export interface ComentarioReciente {
 
 @Component({
     selector: 'app-recent-comments-list',
+    // Solo depende de sus inputs: se vuelve a evaluar únicamente cuando cambian.
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './recent-comments-list.component.html',
     imports: [
         MatTooltip,

@@ -92,6 +92,13 @@ ol li {
   }
 }
 
+// Al menos una pantalla de alto: mientras la página carga su contenido el footer queda fuera de la vista. Antes
+// arrancaba visible y al llegar el contenido saltaba hacia abajo (era el mayor aporte al CLS en escritorio).
+#contenido-principal {
+  display: block;
+  min-height: 100vh;
+}
+
 #contenido-principal:focus {
   outline: none; // recibe el foco por programa al saltar; no necesita marco
 }

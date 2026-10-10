@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import { Component, DestroyRef, inject, Input, OnInit, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -15,10 +16,11 @@ export class UserOnlineStatusComponent implements OnInit {
   private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private cargaGetUserStatus?: Subscription;
 
-  private _userName: any;
+  private _userName: string | null | undefined;
 
-  @Input() set userName(value: any) {
+  @Input() set userName(value: string | null | undefined) {
     this._userName = value;
 
     if (value) {
@@ -26,7 +28,7 @@ export class UserOnlineStatusComponent implements OnInit {
     }
   }
 
-  get userName(): any {
+  get userName(): string | null | undefined {
     return this._userName ? this._userName : '';
   }
 
@@ -37,7 +39,11 @@ export class UserOnlineStatusComponent implements OnInit {
   ngOnInit(): void {}
 
   getUserStatus(userName: string): void {
-    this.usuarioPerfilService.getUserStatus(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
+
+    this.cargaGetUserStatus?.unsubscribe();
+
+    this.cargaGetUserStatus = this.usuarioPerfilService.getUserStatus(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.activo = response ?? 0;
     });
   }

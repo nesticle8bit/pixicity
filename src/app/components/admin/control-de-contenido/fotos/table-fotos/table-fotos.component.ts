@@ -68,7 +68,7 @@ export class TableFotosComponent implements OnInit {
       .getFotosAdmin({ page: this.paginationService.page, pageCount: this.paginationService.pageCount }, this.filtro)
       .pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
-        this.fotos = response.data;
+        this.fotos = response.data ?? [];
         this.totalCount = response.pagination.totalCount;
       });
   }

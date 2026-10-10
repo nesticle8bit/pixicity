@@ -71,7 +71,7 @@ export class TableAfiliadosComponent implements OnInit {
   getAfiliados(): void {
     this.cargando = true;
     this.generalService.getAfiliados(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      this.afiliados = response.data;
+      this.afiliados = response.data ?? [];
       this.totalCount = response.pagination.totalCount;
     });
   }

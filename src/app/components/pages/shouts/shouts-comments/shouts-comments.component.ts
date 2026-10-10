@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ShoutComentarioViewModel, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
@@ -34,6 +35,7 @@ function aHilo(c: ShoutComentarioViewModel): ComentarioHilo {
 })
 export class ShoutsCommentsComponent {
   private readonly destroyRef = inject(DestroyRef);
+  private cargaCargar?: Subscription;
   private readonly perfilService = inject(IHttpPerfilService);
   private readonly securityService = inject(IHttpSecurityService);
 
@@ -87,7 +89,11 @@ export class ShoutsCommentsComponent {
       return;
     }
 
-    this.perfilService
+    // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
+
+    this.cargaCargar?.unsubscribe();
+
+    this.cargaCargar = this.perfilService
       .getComentariosByShoutId(this._shout.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((lista) => {

@@ -68,7 +68,7 @@ export class TableSesionesComponent implements OnInit {
   getSesiones(): void {
     this.cargando = true;
     this.securityService.getSesiones(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      this.sesiones = response?.data;
+      this.sesiones = response?.data ?? [];
       this.totalCount = response?.pagination?.totalCount;
     });
   }

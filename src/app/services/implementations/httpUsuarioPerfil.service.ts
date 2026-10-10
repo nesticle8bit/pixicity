@@ -7,7 +7,7 @@ import { catchError, map } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { PerfilInfoResponse, PerfilUsuarioViewModel, SeguidoresResponse, UsuarioAvatarViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { PerfilInfoResponse, PerfilUsuarioViewModel, SeguidoresResponse, UsuarioAvatarViewModel, UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { ActividadViewModel } from 'src/app/models/logs/logs-vm.model';
 import { IHttpUsuarioPerfilService } from '../interfaces/httpUsuarioPerfil.interface';
 
@@ -19,9 +19,9 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
   private paginationService = inject(PaginationService);
   private notificationService = inject(NotificationService);
 
-  getUsuarioInfo(userName: string): Observable<PerfilUsuarioViewModel> {
+  getUsuarioInfo(userName: string): Observable<UsuarioInfoViewModel> {
     return this.http
-      .get<ApiResponse<PerfilUsuarioViewModel>>(
+      .get<ApiResponse<UsuarioInfoViewModel>>(
         `${environment.api}/api/usuarios/getUsuarioInfo?userName=${userName}`
       )
       .pipe(

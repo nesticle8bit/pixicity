@@ -64,7 +64,7 @@ export class TablePaisesComponent implements OnInit {
         });
       }
 
-      this.paises = response?.data;
+      this.paises = response?.data ?? [];
       this.totalCount = response?.pagination?.totalCount;
     });
   }

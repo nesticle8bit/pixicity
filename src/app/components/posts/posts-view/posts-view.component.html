@@ -1,11 +1,12 @@
 <div class="container container--home detail-page post-view-container mx-auto">
   <div class="row">
     <div class="col-12">
+      @if (post) {
       <div class="detail-layout">
         <!-- Sidebar izquierdo -->
         <aside class="detail-sidebar">
 
-          @if (post && post.usuario.userName) {
+          @if (post.usuario.userName) {
           <!-- User card -->
           <div class="sidebar-user-card">
             <a [routerLink]="['/perfil', post.usuario.userName]" [appUserPopover]="post.usuario.userName"
@@ -61,32 +62,30 @@
           <div class="sidebar-card">
             <div class="sidebar-section-title">Este post</div>
             <ul class="sidebar-item-stats">
-              @if (post) {
               <li>
                 <i class="ti ti-calendar"></i>
                 <span>{{post.fechaRegistro | date:'dd MMM yyyy'}}</span>
               </li>
-              }
               <li>
                 <i class="ti ti-eye"></i>
-                <span>{{(post?.visitantes ?? 0) | number}} visitas</span>
+                <span>{{post.visitantes | number}} visitas</span>
               </li>
               <li class="stat-pos">
                 <i class="ti ti-award"></i>
-                <span>{{post?.puntos ?? 0}} puntos</span>
+                <span>{{post.puntos}} puntos</span>
               </li>
               <li>
                 <i class="ti ti-star"></i>
-                <span>{{post?.favoritos ?? 0}} favoritos</span>
+                <span>{{post.favoritos}} favoritos</span>
               </li>
               <li>
                 <i class="ti ti-users"></i>
-                <span>{{post?.seguidores ?? 0}} seguidores</span>
+                <span>{{post.seguidores}} seguidores</span>
               </li>
             </ul>
           </div>
 
-          @if (post?.id) {
+          @if (post.id) {
           <app-post-more-from-op [post]="post"></app-post-more-from-op>
           <app-post-related-posts [post]="post"></app-post-related-posts>
           }
@@ -100,35 +99,30 @@
             <app-posts-nav [post]="post"></app-posts-nav>
           </div>
 
-          <h1 class="detail-main-title">{{post?.titulo}}</h1>
+          <h1 class="detail-main-title">{{post.titulo}}</h1>
 
           <div class="detail-main-meta">
-            @if (post) {
             <span>{{post.fechaRegistro | timeAgo}}</span>
-            }
-            @if (post && post.categoria.seo) {
+            @if (post.categoria.seo) {
             <a class="detail-cat" [routerLink]="['/posts', post.categoria.seo]">{{post.categoria.nombre}}</a>
             }
-            @if (post?.sticky) {
+            @if (post.sticky) {
             <span class="post-sticky"><i class="ti ti-pin"></i> Sticky</span>
             }
-            <app-share-buttons class="detail-share" [titulo]="post?.titulo ?? ''"></app-share-buttons>
+            <app-share-buttons class="detail-share" [titulo]="post.titulo"></app-share-buttons>
           </div>
 
           <div class="post-body">
             <div class="contenido">
-              <span [innerHTML]="(post?.contenido ?? '') | contenidoSeo:(post?.titulo ?? '')"></span>
+              <span [innerHTML]="post.contenido | contenidoSeo:post.titulo"></span>
             </div>
           </div>
 
           <app-posts-tags [post]="post"></app-posts-tags>
-          <!-- Puntos/favoritos/visitas: solo con el post cargado (antes leía post.visitantes con post = null). -->
-          @if (post) {
           <app-posts-meta [post]="post"></app-posts-meta>
-          }
 
           <!-- Acciones del dueño / staff -->
-          @if (post && (esAutor || esStaff)) {
+          @if (esAutor || esStaff) {
           <div class="detail-owner-actions post-owner-actions">
             <button type="button" class="boton azul" (click)="actualizarPost()">
               <i class="ti ti-pencil" aria-hidden="true"></i> Editar
@@ -148,11 +142,18 @@
             <ads-by-type [hideTitle]="true" [type]="'728x90'"></ads-by-type>
           </div>
 
-          @if (post?.id) {
+          @if (post.id) {
           <app-post-comments [post]="post"></app-post-comments>
           }
         </div>
       </div>
+      } @else {
+      <!-- Hasta que llega el post: un solo bloque. Antes la barra lateral se pintaba vacía y al llegar el post
+           la tarjeta del autor empujaba todo hacia abajo (CLS). -->
+      <div class="detail-cargando" role="status" aria-label="Cargando post">
+        <img src="/assets/images/min-carga.gif" alt="" aria-hidden="true">
+      </div>
+      }
     </div>
   </div>
 </div>

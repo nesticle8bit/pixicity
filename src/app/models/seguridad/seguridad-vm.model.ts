@@ -72,6 +72,27 @@ export interface PerfilUsuarioViewModel {
   pais: PaisViewModel;
 }
 
+/** Respuesta de usuarioPerfil/getUsuarioInfo: tarjeta del autor (posts, temas, popover). */
+export interface UsuarioInfoViewModel {
+  userName: string;
+  completeName: string;
+  avatar: string;
+  genero: string;
+  mensajePersonal: string;
+  puntos: number | null;
+  postsCount: number;
+  comentariosCount: number;
+  seguidoresCount: number;
+  fechaRegistro: string;
+  rango: RangoUsuarioViewModel | null;
+  /** Viene del ViewModel mapeado: la clave es `isO2` (camelCase de ISO2), no `iso2` como en las proyecciones. */
+  pais: { nombre: string; isO2: string } | null;
+}
+
+/** Lo que las secciones del perfil necesitan del dueño. Mientras el perfil carga llega SIN_PERFIL (id 0). */
+export type PerfilRef = Pick<PerfilUsuarioViewModel, 'id' | 'userName'>;
+export const SIN_PERFIL: PerfilRef = { id: 0, userName: '' };
+
 export interface UsuarioOnlineViewModel {
   userName: string;
   avatar: string;

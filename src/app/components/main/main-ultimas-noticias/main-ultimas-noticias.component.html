@@ -1,4 +1,7 @@
-@if (noticias.length > 0) {
+@if (!cargado) {
+  <!-- Mismo alto que la barra mientras llegan las noticias: si no, al aparecer empuja la página (CLS). -->
+  <section class="last_news last_news--cargando container" aria-hidden="true"></section>
+} @else if (noticias.length > 0) {
   <section class="last_news container">
     <div class="row">
       @for (noticia of noticias; track noticia; let i = $index) {

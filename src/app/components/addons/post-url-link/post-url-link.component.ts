@@ -1,9 +1,11 @@
-import { Component, OnInit, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 
 @Component({
     selector: 'app-post-url-link',
+    // Solo depende de sus inputs: se vuelve a evaluar únicamente cuando cambian.
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './post-url-link.component.html',
     styleUrls: ['./post-url-link.component.scss'],
     imports: [RouterLink, TruncatePipe],

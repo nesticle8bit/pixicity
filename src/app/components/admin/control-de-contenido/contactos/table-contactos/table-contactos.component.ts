@@ -66,7 +66,7 @@ export class TableContactosComponent implements OnInit {
   getContactos(): void {
     this.cargando = true;
     this.generalService.getContactos(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      this.contactos = response?.contactos;
+      this.contactos = response?.contactos ?? [];
       this.totalCount = response?.pagination?.totalCount;
     });
   }

@@ -1,4 +1,5 @@
-import { Component, Input, OnChanges, input } from '@angular/core';
+import { Component, OnChanges, input } from '@angular/core';
+import { UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 import { NgClass } from '@angular/common';
 import { CountryFlagComponent } from '../country-flag/country-flag.component';
@@ -18,7 +19,7 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
     ],
 })
 export class UserPopoverCardComponent implements OnChanges {
-  @Input() userData: any = null;
+  readonly userData = input<UsuarioInfoViewModel | null>(null);
   readonly activo = input<number | null>(null);
   readonly loading = input<boolean>(true);
 
@@ -31,9 +32,10 @@ export class UserPopoverCardComponent implements OnChanges {
   }
 
   get memberSince(): string {
-    if (!this.userData?.fechaRegistro) return '';
+    const fecha = this.userData()?.fechaRegistro;
+    if (!fecha) return '';
 
-    const d = new Date(this.userData.fechaRegistro);
+    const d = new Date(fecha);
     return d.toLocaleDateString('es', { year: 'numeric', month: 'short' });
   }
 }

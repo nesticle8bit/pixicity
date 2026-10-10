@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs';
+import { PerfilRef, SIN_PERFIL } from 'src/app/models/seguridad/seguridad-vm.model';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,18 +24,20 @@ export class ProfileActivityComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
 
   private readonly destroyRef = inject(DestroyRef);
+  private cargaGetActividadUsuario?: Subscription;
 
-  private _user: any;
+  private _user: PerfilRef = SIN_PERFIL;
 
-  @Input() set user(value: any) {
-    this._user = value;
+  @Input() set user(value: PerfilRef | null) {
+    this._user = value ?? SIN_PERFIL;
 
-    if (value) {
+    // Sin id todavía (el padre arranca con {}): no pedir datos de usuarioId=undefined.
+    if (value?.id) {
       this.getActividadUsuario();
     }
   }
 
-  get user(): any {
+  get user(): PerfilRef {
     return this._user;
   }
 
@@ -95,7 +99,15 @@ export class ProfileActivityComponent implements OnInit {
   ngOnInit(): void {}
 
   getActividadUsuario(): void {
-    this.usuarioPerfilService
+    if (!this.user.id) {
+      return;
+    }
+
+    // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
+
+    this.cargaGetActividadUsuario?.unsubscribe();
+
+    this.cargaGetActividadUsuario = this.usuarioPerfilService
       .getActividadUsuario(this.user.id, this.formGroup.value.tipoActividad)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {

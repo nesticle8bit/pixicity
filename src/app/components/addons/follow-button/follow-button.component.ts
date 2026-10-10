@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import {
@@ -23,12 +24,13 @@ export class FollowButtonComponent implements OnInit {
   private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private cargaIsFollowingTheUser?: Subscription;
 
   readonly icon = input<boolean>(false);
 
-  private _userName: any;
+  private _userName: string | null | undefined;
 
-  @Input() set userName(value: any) {
+  @Input() set userName(value: string | null | undefined) {
     this._userName = value;
 
     if (value) {
@@ -36,7 +38,7 @@ export class FollowButtonComponent implements OnInit {
     }
   }
 
-  get userName(): any {
+  get userName(): string | null | undefined {
     return this._userName;
   }
 
@@ -55,7 +57,11 @@ export class FollowButtonComponent implements OnInit {
       return;
     }
 
-    this.usuarioPerfilService
+    // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
+
+    this.cargaIsFollowingTheUser?.unsubscribe();
+
+    this.cargaIsFollowingTheUser = this.usuarioPerfilService
       .isFollowingTheUser(userName)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => {
@@ -64,7 +70,11 @@ export class FollowButtonComponent implements OnInit {
   }
 
   followUser(status: boolean): void {
-    let follow = {
+    if (!this.userName) {
+      return;
+    }
+
+    const follow = {
       userName: this.userName,
     };
 

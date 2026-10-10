@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, Input, OnInit, input, output } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, input, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, Subject } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig, contarFiltrosAvanzados } from 'src/app/models/admin/admin-filtro.model';
@@ -21,9 +21,9 @@ export class AdminFiltrosComponent implements OnInit {
   private readonly texto$ = new Subject<string>();
   private readonly usuario$ = new Subject<string>();
 
-  @Input() config: AdminFiltrosConfig = {};
+  readonly config = input<AdminFiltrosConfig>({});
   /** Total de resultados con el filtro actual (se muestra a la derecha). */
-  @Input() total: number | null = null;
+  readonly total = input<number | null>(null);
   readonly cargando = input(false);
 
   readonly cambio = output<AdminFiltro>();
@@ -47,7 +47,7 @@ export class AdminFiltrosComponent implements OnInit {
   }
 
   get tieneAvanzados(): boolean {
-    const c = this.config;
+    const c = this.config();
     return !!(c.fechas || c.estado || c.orden || c.usuario || c.categorias?.length || c.tipos?.length);
   }
 

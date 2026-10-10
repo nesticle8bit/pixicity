@@ -4,7 +4,7 @@
     <div class="busb adm-filtros__buscador">
       <form role="search" (submit)="$event.preventDefault(); buscarYa(busqueda.value)">
         <input #busqueda type="text" name="q" class="bbcuerpo" [value]="filtro.q ?? ''" autocomplete="off"
-          [placeholder]="config.placeholder ?? 'Buscar...'" [attr.aria-label]="config.placeholder ?? 'Buscar'"
+          [placeholder]="config().placeholder ?? 'Buscar...'" [attr.aria-label]="config().placeholder ?? 'Buscar'"
           (input)="onTexto(busqueda.value)" />
         <input type="submit" value="" class="bbboton" aria-label="Buscar" />
       </form>
@@ -31,15 +31,15 @@
     <span class="adm-filtros__total" aria-live="polite">
       @if (cargando()) {
       <i class="ti ti-loader-2 adm-filtros__spin" aria-hidden="true"></i> Buscando…
-      } @else if (total !== null) {
-      <strong>{{total | number}}</strong> {{total === 1 ? 'resultado' : 'resultados'}}
+      } @else if (total() !== null) {
+      <strong>{{total() | number}}</strong> {{total() === 1 ? 'resultado' : 'resultados'}}
       }
     </span>
   </div>
 
   @if (tieneAvanzados && abierto) {
   <div class="adm-filtros__panel" id="adm-filtros-panel">
-    @if (config.fechas) {
+    @if (config().fechas) {
     <label class="adm-campo">
       <span>Desde</span>
       <input type="date" [value]="filtro.desde ?? ''" [max]="filtro.hasta ?? null"
@@ -52,39 +52,39 @@
     </label>
     }
 
-    @if (config.usuario) {
+    @if (config().usuario) {
     <label class="adm-campo">
-      <span>{{config.usuario}}</span>
+      <span>{{config().usuario}}</span>
       <input type="text" [value]="filtro.usuario ?? ''" placeholder="Nombre de usuario" autocomplete="off"
         (input)="onUsuario($any($event.target).value)" />
     </label>
     }
 
-    @if (config.categorias?.length) {
+    @if (config().categorias?.length) {
     <label class="adm-campo">
       <span>Categoría</span>
       <select [value]="filtro.categoriaId ?? ''" (change)="set('categoriaId', +$any($event.target).value || null)">
         <option value="">Todas</option>
-        @for (c of config.categorias; track c.id) {
+        @for (c of config().categorias; track c.id) {
         <option [value]="c.id">{{c.nombre}}</option>
         }
       </select>
     </label>
     }
 
-    @if (config.tipos?.length) {
+    @if (config().tipos?.length) {
     <label class="adm-campo">
-      <span>{{config.tipoLabel ?? 'Tipo'}}</span>
+      <span>{{config().tipoLabel ?? 'Tipo'}}</span>
       <select [value]="filtro.tipo ?? ''" (change)="set('tipo', $any($event.target).value || undefined)">
         <option value="">Todos</option>
-        @for (t of config.tipos; track t.valor) {
+        @for (t of config().tipos; track t.valor) {
         <option [value]="t.valor">{{t.label}}</option>
         }
       </select>
     </label>
     }
 
-    @if (config.estado) {
+    @if (config().estado) {
     <label class="adm-campo">
       <span>Estado</span>
       <select [value]="filtro.estado ?? ''" (change)="set('estado', $any($event.target).value)">
@@ -95,7 +95,7 @@
     </label>
     }
 
-    @if (config.orden) {
+    @if (config().orden) {
     <label class="adm-campo">
       <span>Orden</span>
       <select [value]="filtro.orden ?? ''" (change)="set('orden', $any($event.target).value)">

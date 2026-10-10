@@ -1,4 +1,5 @@
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { PerfilRef, SIN_PERFIL } from 'src/app/models/seguridad/seguridad-vm.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -16,16 +17,16 @@ export class ProfileInformationComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  private _user: any;
+  private _user: PerfilRef = SIN_PERFIL;
 
-  @Input() set user(value: any) {
-    this._user = value;
+  @Input() set user(value: PerfilRef | null) {
+    this._user = value ?? SIN_PERFIL;
 
     if (value) {
     }
   }
 
-  get user(): any {
+  get user(): PerfilRef {
     return this._user;
   }
 

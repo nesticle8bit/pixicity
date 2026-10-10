@@ -1,0 +1,15 @@
+
+
+// Widgets con cantidad fija de filas: en escritorio reservan su alto mientras cargan (≈93 % del alto medido en
+// producción). Antes aparecían de a uno y empujaban hacia abajo a los de su columna (CLS). En móvil el CLS ya era 0.
+@media (min-width: 992px) {
+  app-home-stats { display: block; min-height: 150px; }
+  app-home-last-comments { display: block; min-height: 330px; }
+  app-home-top-posts { display: block; min-height: 440px; }
+  app-home-top-users { display: block; min-height: 300px; }
+  app-home-top-categorias { display: block; min-height: 340px; }
+  app-home-last-photos { display: block; min-height: 205px; }
+  app-home-last-shouts { display: block; min-height: 330px; }
+  app-home-afiliados { display: block; min-height: 115px; }
+  app-tags-cloud { display: block; min-height: 120px; }
+}

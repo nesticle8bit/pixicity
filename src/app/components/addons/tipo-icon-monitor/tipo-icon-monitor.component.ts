@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, input } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 @Component({
@@ -10,15 +10,7 @@ import { NgClass } from '@angular/common';
     imports: [NgClass],
 })
 export class TipoIconMonitorComponent implements OnInit {
-  private _tipo: any;
-
-  @Input() set tipo(value: any) {
-    this._tipo = value;
-  }
-
-  get tipo(): any {
-    return this._tipo;
-  }
+  readonly tipo = input<string | null | undefined>(undefined);
 
   constructor() {}
 

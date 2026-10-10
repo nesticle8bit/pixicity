@@ -1,5 +1,5 @@
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
-import { Component, Input, OnInit, input, inject } from '@angular/core';
+import { Component, OnInit, input, inject } from '@angular/core';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DialogEnviarMPComponent } from '../../dialogs/dialog-enviar-mp/dialog-enviar-mp.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,15 +15,7 @@ export class SendMessageButtonComponent implements OnInit {
 
   readonly icon = input<boolean>(false);
 
-  private _userName: any;
-
-  @Input() set userName(value: any) {
-    this._userName = value;
-  }
-
-  get userName(): any {
-    return this._userName;
-  }
+  readonly userName = input<string | null | undefined>(undefined);
 
   public currentUser?: JwtUserModel;
   constructor() {
@@ -37,7 +29,7 @@ export class SendMessageButtonComponent implements OnInit {
       width: '780px',
       disableClose: true,
       data: {
-        userName: this.userName,
+        userName: this.userName(),
       },
     });
   }

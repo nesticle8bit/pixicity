@@ -69,7 +69,7 @@
               <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
               <span [innerHTML]="notificacion.mensaje"></span>
               @if (notificacion.post) {
-              <a [routerLink]="['/posts/' + notificacion.post.categoria?.seo + '/' + notificacion.post.id + '/' + notificacion.post.url]"
+              <a [routerLink]="['/posts/' + notificacion.post.categoria.seo + '/' + notificacion.post.id + '/' + notificacion.post.url]"
                 [fragment]="notificacion.comentarioId ? 'comentario-' + notificacion.comentarioId : undefined"
                 title="{{notificacion.post.titulo}}">
                 {{notificacion.post.titulo}}

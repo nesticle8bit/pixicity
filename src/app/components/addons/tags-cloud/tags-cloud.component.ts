@@ -2,6 +2,7 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { RouterLink } from '@angular/router';
+import { CloudTagViewModel } from 'src/app/models/posts/post-vm.model';
 
 @Component({
     selector: 'app-tags-cloud',
@@ -14,7 +15,7 @@ export class TagsCloudComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public cloudTags: any;
+  public cloudTags: (CloudTagViewModel & { class: number })[] = [];
 
   ngOnInit(): void {
     this.getCloudTags();
@@ -22,40 +23,11 @@ export class TagsCloudComponent implements OnInit {
 
   getCloudTags(): void {
     this.postService.getCloudTags().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
-      this.cloudTags = value;
+      const tags = value ?? [];
+      const max = Math.max(1, ...tags.map((t) => t.count));
 
-      if (this.cloudTags?.length > 0) {
-        let array = this.cloudTags.map((value: any) => { return value.count });
-        let max = Math.max(...array);
-
-        this.cloudTags = this.cloudTags.map((tags: any) => {
-          let count = tags.count;
-          let percent = (count / max) * 100;
-
-          if (percent < 20)
-          {
-              tags.class = 5;
-          }
-          else if (percent < 40)
-          {
-            tags.class = 4;
-          }
-          else if (percent < 60)
-          {
-            tags.class = 3;
-          }
-          else if (percent < 80)
-          {
-            tags.class = 2;
-          }
-          else
-          {
-            tags.class = 1;
-          }
-
-          return tags;
-        });
-      }
+      // Tamaño 1 (más grande) a 5 según el uso relativo al tag más usado: <20% → 5, <40% → 4, ... ≥80% → 1.
+      this.cloudTags = tags.map((t) => ({ ...t, class: 5 - Math.min(4, Math.floor(((t.count / max) * 100) / 20)) }));
     });
   }
 }

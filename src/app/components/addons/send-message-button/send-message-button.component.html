@@ -1,4 +1,4 @@
-@if (currentUser?.usuario && currentUser?.usuario?.userName !== userName) {
+@if (currentUser?.usuario && currentUser?.usuario?.userName !== userName()) {
   <div>
     <a class="button-uppercase bazul" (click)="enviarMP()" role="button" tabindex="0" (keydown.enter)="enviarMP()" (keydown.space)="enviarMP(); $event.preventDefault()">
       @if (icon()) {

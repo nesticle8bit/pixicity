@@ -1,3 +1,4 @@
+@let datos = userData();
 <div class="upop">
 
   <!-- Skeleton -->
@@ -13,14 +14,14 @@
   }
 
   <!-- Card content -->
-  @if (!loading() && userData) {
+  @if (!loading() && datos) {
     <!-- Header -->
     <div class="upop__header">
       <div class="upop__avatar-wrap">
         <app-user-avatar
           [class]="'upop__avatar'"
-          [avatar]="userData.avatar"
-          [userName]="userData.userName"
+          [avatar]="datos.avatar"
+          [userName]="datos.userName"
           [width]="64">
         </app-user-avatar>
         <span class="upop__online-dot"
@@ -31,62 +32,62 @@
 
       <div class="upop__user-info">
         <div class="upop__username">
-          {{userData.userName}}
+          {{datos.userName}}
           <span class="upop__online-label" [ngClass]="{'online': isOnline}">
             {{isOnline ? 'Online' : 'Offline'}}
           </span>
         </div>
 
-        @if (userData.completeName) {
-          <div class="upop__fullname">{{userData.completeName}}</div>
+        @if (datos.completeName) {
+          <div class="upop__fullname">{{datos.completeName}}</div>
         }
 
-        @if (userData.rango) {
-          <span class="upop__rango" [style.color]="userData.rango.color">
+        @if (datos.rango) {
+          <span class="upop__rango" [style.color]="datos.rango.color">
             <!-- <i class="ti ti-star me-1"></i> -->
-             <img [src]="'/assets/images/icons/rangos/' + userData?.rango?.icono"
-                  [alt]="userData.rango.nombre"
+             <img [src]="'/assets/images/icons/rangos/' + datos.rango.icono"
+                  [alt]="datos.rango.nombre"
                   class="upop__rango-icon image-middle me-1" loading="lazy">
-            {{userData.rango.nombre}}
+            {{datos.rango.nombre}}
           </span>
         }
 
-        @if (userData.pais) {
+        @if (datos.pais) {
           <div class="upop__country">
             <addon-country-flag
-              [iso2]="userData.pais.iso2 || userData.pais.isO2"
-              [title]="userData.pais.nombre">
+              [iso2]="datos.pais.isO2"
+              [title]="datos.pais.nombre">
             </addon-country-flag>
-            <span>{{userData.pais.nombre}}</span>
+            <span>{{datos.pais.nombre}}</span>
           </div>
         }
       </div>
     </div>
 
     <!-- Personal message -->
-    @if (userData.mensajePersonal) {
+    @if (datos.mensajePersonal) {
       <div class="upop__msg">
         <i class="ti ti-quote"></i>
-        {{userData.mensajePersonal | truncate:[90]}}
+        {{datos.mensajePersonal | truncate:[90]}}
       </div>
     }
 
     <!-- Stats -->
     <div class="upop__stats">
       <div class="upop__stat">
-        <span class="upop__stat-val">{{userData.postsCount || 0}}</span>
+        <span class="upop__stat-val">{{datos.postsCount || 0}}</span>
         <span class="upop__stat-lbl">Posts</span>
       </div>
       <div class="upop__stat">
-        <span class="upop__stat-val">{{userData.comentariosCount || 0}}</span>
+        <span class="upop__stat-val">{{datos.comentariosCount || 0}}</span>
         <span class="upop__stat-lbl">Comentarios</span>
       </div>
       <div class="upop__stat">
-        <span class="upop__stat-val">{{userData.seguidoresCount || 0}}</span>
+        <span class="upop__stat-val">{{datos.seguidoresCount || 0}}</span>
         <span class="upop__stat-lbl">Seguidores</span>
       </div>
       <div class="upop__stat">
-        <span class="upop__stat-val">{{userData.puntos || 0}}</span>
+        <span class="upop__stat-val">{{datos.puntos || 0}}</span>
         <span class="upop__stat-lbl">Puntos</span>
       </div>
     </div>
@@ -97,13 +98,13 @@
         <i class="ti ti-calendar"></i>
         Miembro desde {{memberSince}}
       </span>
-      <a [routerLink]="['/perfil', userData.userName]" class="upop__link">
+      <a [routerLink]="['/perfil', datos.userName]" class="upop__link">
         Ver perfil →
       </a>
     </div>
   }
 
-  @if (!loading() && !userData) {
+  @if (!loading() && !datos) {
     <div class="upop__error">Usuario no encontrado</div>
   }
 

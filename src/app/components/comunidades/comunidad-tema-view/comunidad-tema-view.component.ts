@@ -10,7 +10,7 @@ import { SEOService } from 'src/app/services/shared/seo.service';
 import { TemaComentario, TemaDetalle } from 'src/app/models/comunidades/comunidad.model';
 import { idUsuarioSesion, JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { ComentarioHilo, ComentariosAcciones } from 'src/app/models/shared/comentario-hilo.model';
-import { PerfilUsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { DecimalPipe, DatePipe, DOCUMENT } from '@angular/common';
@@ -76,7 +76,7 @@ export class ComunidadTemaViewComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public tema: TemaVista | null = null;
-  public autor: PerfilUsuarioViewModel | null = null;
+  public autor: UsuarioInfoViewModel | null = null;
   public comentarios: ComentarioHilo[] = [];
   public totalComentarios = 0;
   public currentUser: JwtUserModel | null = null;

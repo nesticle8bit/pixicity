@@ -2,7 +2,7 @@
   <div class="fortags">
     <div class="letres">Tags:</div>
 
-    @for (etiqueta of post?.tags; track etiqueta; let last = $last) {
+    @for (etiqueta of post()?.tags; track etiqueta; let last = $last) {
       <div>
         <a rel="tag" [routerLink]="['/buscar', 'posts', etiqueta]" [queryParams]="{ en: 'tags' }">
           {{etiqueta}}

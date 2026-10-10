@@ -27,3 +27,8 @@
         opacity: 1;
     }
 }
+
+// Reserva el alto de una línea de noticia mientras cargan.
+.last_news--cargando {
+    height: 34px;
+}

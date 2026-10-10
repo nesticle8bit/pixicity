@@ -1,4 +1,4 @@
-import { Component, Input, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, input } from '@angular/core';
 
 /**
  * Sparkline SVG sin dependencias: dibuja una serie corta como área + línea.
@@ -6,6 +6,8 @@ import { Component, Input, input } from '@angular/core';
  */
 @Component({
     selector: 'app-admin-sparkline',
+    // Solo depende de sus inputs: se vuelve a evaluar únicamente cuando cambian.
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './admin-sparkline.component.html',
     styleUrls: ['./admin-sparkline.component.scss'],
 })

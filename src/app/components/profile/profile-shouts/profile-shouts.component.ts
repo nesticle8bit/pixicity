@@ -1,4 +1,5 @@
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
+import { PerfilRef, SIN_PERFIL } from 'src/app/models/seguridad/seguridad-vm.model';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -28,10 +29,10 @@ export class ProfileShoutsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public reloadShouts: boolean = false;
-  private _user: any;
+  private _user: PerfilRef = SIN_PERFIL;
 
-  @Input() set user(value: any) {
-    this._user = value;
+  @Input() set user(value: PerfilRef | null) {
+    this._user = value ?? SIN_PERFIL;
 
     if (value && value.id) {
       this.formGroup.patchValue({
@@ -40,7 +41,7 @@ export class ProfileShoutsComponent implements OnInit {
     }
   }
 
-  get user(): any {
+  get user(): PerfilRef {
     return this._user;
   }
 

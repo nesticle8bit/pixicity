@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import { Component, DestroyRef, inject, Input, input, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FotoComentarioViewModel } from 'src/app/models/fotos/foto-vm.model';
@@ -34,6 +35,7 @@ function aHilo(c: FotoComentarioViewModel): ComentarioHilo {
 })
 export class FotoComentariosComponent {
   private readonly destroyRef = inject(DestroyRef);
+  private cargaCargar?: Subscription;
   private readonly fotosService = inject(IHttpFotosService);
   private readonly securityService = inject(IHttpSecurityService);
 
@@ -82,7 +84,11 @@ export class FotoComentariosComponent {
       return;
     }
 
-    this.fotosService
+    // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
+
+    this.cargaCargar?.unsubscribe();
+
+    this.cargaCargar = this.fotosService
       .getComentariosByFotoId(this._fotoId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((lista) => (this.comentarios = (lista ?? []).map(aHilo)));

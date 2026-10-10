@@ -112,7 +112,7 @@ export class TableMonitorComponent implements OnInit {
         });
       }
 
-      this.monitors = response?.data;
+      this.monitors = response?.data ?? [];
       this.totalCount = response?.pagination?.totalCount;
     });
   }

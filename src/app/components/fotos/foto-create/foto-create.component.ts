@@ -77,20 +77,20 @@ export class FotoCreateComponent implements OnInit {
     });
   }
 
-  onUrlChange(event: any): void {
-    this.previewUrl = event.target.value;
+  onUrlChange(event: Event): void {
+    this.previewUrl = (event.target as HTMLInputElement).value;
   }
 
-  onFileSelected(event: any): void {
-    const file: File = event.target.files[0];
+  onFileSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
 
     this.uploadedFile = file;
 
     // Local preview
     const reader = new FileReader();
-    reader.onload = (e: any) => {
-      this.previewUrl = e.target.result;
+    reader.onload = () => {
+      this.previewUrl = reader.result as string;
     };
     reader.readAsDataURL(file);
   }
