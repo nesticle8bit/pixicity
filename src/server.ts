@@ -31,7 +31,10 @@ for (const nombre of ['localStorage', 'sessionStorage'] as const) {
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
-const angularApp = new AngularNodeAppEngine();
+// nginx (delante del SSR) agrega X-Forwarded-For / X-Forwarded-Proto. Angular rechaza por seguridad las cabeceras
+// de proxy no declaradas y, en vez de renderizar, devuelve la app de cliente vacía: los bots no veían contenido.
+// No se confía en X-Forwarded-Host (permitiría falsear el host); el host lo valida security.allowedHosts.
+const angularApp = new AngularNodeAppEngine({ trustProxyHeaders: ['x-forwarded-for', 'x-forwarded-proto'] });
 
 /** Salud del servidor SSR (healthcheck de Docker y monitores). */
 app.get('/ssr-health', (_req, res) => {
