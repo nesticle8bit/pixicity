@@ -16,9 +16,10 @@
   <div class="coment-form">
     <app-user-avatar class="coment-form__avatar" [avatar]="miAvatar" [userName]="''" [width]="38" [height]="38"></app-user-avatar>
     <div class="coment-form__campo">
-      <textarea [(ngModel)]="nuevoComentario" rows="3" placeholder="Escribe un comentario..." aria-label="Escribe un comentario"></textarea>
+      <textarea #campoComentario [(ngModel)]="nuevoComentario" rows="3" placeholder="Escribe un comentario..." aria-label="Escribe un comentario"></textarea>
       <div class="coment-form__acciones">
-        <button type="button" class="coment-emoji" (click)="abrirEmojis()" matTooltip="Emojis" aria-label="Agregar emoji">
+        <button #botonEmojis type="button" class="coment-emoji" [class.is-abierto]="emojisAbierto" (click)="abrirEmojis(botonEmojis)"
+          matTooltip="Emojis" aria-label="Agregar emoji" aria-haspopup="dialog" [attr.aria-expanded]="emojisAbierto">
           <i class="ti ti-mood-smile"></i>
         </button>
         <button type="button" class="boton azul" (click)="comentar()" [disabled]="enviando || !nuevoComentario.trim()">

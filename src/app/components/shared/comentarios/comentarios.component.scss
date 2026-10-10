@@ -103,7 +103,8 @@
   display: inline-flex;
 
   i { font-size: 20px; }
-  &:hover { color: #006595; background: #f1f4f6; }
+  &:hover,
+  &.is-abierto { color: #006595; background: #f1f4f6; }
 }
 
 .coment-list { list-style: none; margin: 0; padding: 0; }

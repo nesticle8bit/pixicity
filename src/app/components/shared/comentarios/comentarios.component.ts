@@ -1,4 +1,6 @@
-import { Component, DestroyRef, inject, Input, output } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, Input, output, viewChild } from '@angular/core';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ComentarioHilo, ComentariosAcciones, OrdenComentarios } from 'src/app/models/shared/comentario-hilo.model';
@@ -53,6 +55,12 @@ export class ComentariosComponent {
   private readonly securityService = inject(IHttpSecurityService);
   private readonly notificationService = inject(NotificationService);
   private readonly bottomSheet = inject(MatBottomSheet);
+  private readonly overlay = inject(Overlay);
+
+  private readonly campoComentario = viewChild<ElementRef<HTMLTextAreaElement>>('campoComentario');
+  /** Popover de emojis abierto (escritorio). */
+  private emojisRef: OverlayRef | null = null;
+  public emojisAbierto = false;
 
   private lista: ComentarioVista[] = [];
 
@@ -74,6 +82,7 @@ export class ComentariosComponent {
     this.destroyRef.onDestroy(() => {
       if (enNavegador()) window.removeEventListener('hashchange', alCambiarHash);
       clearTimeout(this.timerResaltado);
+      this.cerrarEmojis();
     });
   }
 
@@ -415,21 +424,83 @@ export class ComentariosComponent {
 
   // - Emojis
 
-  async abrirEmojis(): Promise<void> {
-    // emoji-mart pesa cientos de KB: se descarga recién al abrirlo.
+  /**
+   * Escritorio: popover pegado al botón (no tapa el comentario que se está escribiendo). Móvil: bottom sheet.
+   * En ambos queda abierto para elegir varios; cada emoji se inserta donde está el cursor del textarea.
+   */
+  async abrirEmojis(boton: HTMLElement): Promise<void> {
+    if (this.emojisRef) {
+      this.cerrarEmojis(true);
+      return;
+    }
+
     const { BottomSheetsEmojisComponent } = await import(
       'src/app/components/bottom-sheets/bottom-sheets-emojis/bottom-sheets-emojis.component'
     );
 
-    this.bottomSheet
-      .open(BottomSheetsEmojisComponent, { closeOnNavigation: true })
-      .afterDismissed()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((valor?: { emoji?: { native?: string } }) => {
-        if (valor?.emoji?.native) {
-          this.nuevoComentario += valor.emoji.native;
-        }
+    if (window.matchMedia('(max-width: 599.98px)').matches) {
+      const sheet = this.bottomSheet.open(BottomSheetsEmojisComponent, {
+        closeOnNavigation: true,
+        panelClass: 'emojis-sheet',
+        ariaLabel: 'Elegir emoji',
       });
+      sheet.instance.elegido.subscribe((emoji) => this.insertarEmoji(emoji));
+      sheet.instance.cerrar.subscribe(() => sheet.dismiss());
+      return;
+    }
+
+    // Debajo del botón si entra; si no, por ENCIMA del textarea (no sobre él: taparía lo que se está escribiendo).
+    const campo = this.campoComentario()?.nativeElement;
+    const sobreElCampo = campo ? campo.getBoundingClientRect().top - boton.getBoundingClientRect().top - 8 : -6;
+    const ref = this.overlay.create({
+      positionStrategy: this.overlay
+        .position()
+        .flexibleConnectedTo(boton)
+        .withPositions([
+          { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: 6 },
+          { originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom', offsetY: sobreElCampo },
+        ])
+        .withPush(true)
+        .withViewportMargin(8),
+      scrollStrategy: this.overlay.scrollStrategies.reposition(),
+      hasBackdrop: true,
+      backdropClass: 'cdk-overlay-transparent-backdrop',
+    });
+    this.emojisRef = ref;
+    this.emojisAbierto = true;
+    ref.overlayElement.setAttribute('role', 'dialog');
+    ref.overlayElement.setAttribute('aria-label', 'Elegir emoji');
+
+    const picker = ref.attach(new ComponentPortal(BottomSheetsEmojisComponent));
+    picker.instance.elegido.subscribe((emoji) => this.insertarEmoji(emoji));
+    picker.instance.cerrar.subscribe(() => this.cerrarEmojis(true));
+    ref.backdropClick().subscribe(() => this.cerrarEmojis());
+    picker.location.nativeElement.querySelector('.emojis__emoji')?.focus();
+  }
+
+  /** Cierra el popover; con `volverAlCampo` el foco vuelve al textarea (Escape o el mismo botón). */
+  cerrarEmojis(volverAlCampo = false): void {
+    if (!this.emojisRef) return;
+    this.emojisRef.dispose();
+    this.emojisRef = null;
+    this.emojisAbierto = false;
+    if (volverAlCampo) this.campoComentario()?.nativeElement.focus();
+  }
+
+  /** Inserta en la posición del cursor (o reemplaza la selección) y deja el cursor justo después del emoji. */
+  private insertarEmoji(emoji: string): void {
+    const campo = this.campoComentario()?.nativeElement;
+    const texto = this.nuevoComentario;
+    const inicio = campo?.selectionStart ?? texto.length;
+    const fin = campo?.selectionEnd ?? texto.length;
+
+    this.nuevoComentario = texto.slice(0, inicio) + emoji + texto.slice(fin);
+    if (campo) {
+      // Se escribe ya en el DOM para poder mover el cursor; ngModel después pone el mismo valor y no lo mueve.
+      campo.value = this.nuevoComentario;
+      const cursor = inicio + emoji.length;
+      campo.setSelectionRange(cursor, cursor);
+    }
   }
 
   // - Formato

@@ -1,5 +1,4 @@
 @use 'ngx-toastr/toastr';
-@use "@ctrl/ngx-emoji-mart/picker";
 @use "assets/styles/icons";
 // Subconjunto de Tabler con solo los íconos usados (~15 KB en vez de ~500 KB de fuente + 210 KB de CSS).
 // Se regenera con: npm run icons   (y `npm run icons:check` lo valida en CI).

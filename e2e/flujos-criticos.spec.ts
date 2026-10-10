@@ -141,3 +141,26 @@ test('moderar: marcar un reporte como resuelto', async ({ page }) => {
 function jasmineLike(parcial: Record<string, unknown>) {
   return expect.objectContaining(parcial);
 }
+
+test('emojis: se insertan donde está el cursor y el selector queda abierto para elegir varios', async ({ page }, info) => {
+  await conSesion(page, 'lector_tres');
+  await page.goto(`/posts/${POST.categoria.seo}/${POST.id}/${POST.url}`);
+
+  const campo = page.getByLabel('Escribe un comentario');
+  await campo.fill('hola mundo');
+  await campo.evaluate((el: HTMLTextAreaElement) => el.setSelectionRange(4, 4)); // después de "hola"
+
+  await page.getByRole('button', { name: 'Agregar emoji' }).click();
+  const selector = page.getByRole('dialog', { name: 'Elegir emoji' });
+  await expect(selector).toBeVisible();
+  // Escritorio: popover junto al botón; móvil: bottom sheet.
+  const enHoja = page.locator('mat-bottom-sheet-container[aria-label="Elegir emoji"]');
+  await expect(enHoja).toHaveCount(info.project.name === 'movil' ? 1 : 0);
+
+  await selector.getByRole('button', { name: '😀' }).click();
+  await selector.getByRole('button', { name: '😂' }).click();
+  await expect(campo).toHaveValue('hola😀😂 mundo');
+
+  await page.keyboard.press('Escape');
+  await expect(selector).toBeHidden();
+});

@@ -1,2 +1,18 @@
-<emoji-mart class="emoji-mart" [set]="'google'" (emojiSelect)="addEmoji($event)"
-    title="Elige un emoji..."></emoji-mart>
+<!-- El rol de diálogo lo pone el contenedor (panel del popover o bottom sheet). -->
+<div class="emojis" role="group" aria-label="Emojis">
+  <div class="emojis__tabs" role="tablist" aria-label="Categorías">
+    @for (c of categorias(); track c.id) {
+    <button type="button" role="tab" class="emojis__tab" [class.is-activa]="c.id === activaId()"
+      [attr.aria-selected]="c.id === activaId()" [attr.title]="c.nombre" [attr.aria-label]="c.nombre"
+      (click)="activaId.set(c.id)">{{c.icono}}</button>
+    }
+  </div>
+
+  <div class="emojis__titulo">{{activa().nombre}}</div>
+
+  <div class="emojis__grilla" role="tabpanel" [attr.aria-label]="activa().nombre">
+    @for (e of activa().emojis; track $index) {
+    <button type="button" class="emojis__emoji" [attr.aria-label]="e" (click)="elegir(e)">{{e}}</button>
+    }
+  </div>
+</div>
