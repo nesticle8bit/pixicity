@@ -1,3 +1,4 @@
+import { AfiliadoAdmin, ContactoAdmin } from 'src/app/models/admin/filas-admin.model';
 import { AdminFiltro } from 'src/app/models/admin/admin-filtro.model';
 import { ConfiguracionModel, ContactoModel } from 'src/app/models/general/configuracion.model';
 import { Injectable } from '@angular/core';
@@ -14,7 +15,7 @@ export abstract class IHttpGeneralService {
   abstract getAdminEstadisticas(): Observable<unknown>;
   abstract getDashboardResumen(): Observable<DashboardResumen>;
   abstract getMetricasApi(minutos: number): Observable<MetricasApi>;
-  abstract getAfiliados(filtro?: AdminFiltro): Observable<PaginatedData<AfiliacionModel>>;
+  abstract getAfiliados(filtro?: AdminFiltro): Observable<PaginatedData<AfiliadoAdmin>>;
   abstract saveAfiliacion(afiliacion: AfiliacionModel): Observable<number>;
   abstract getFavoritosByUser(search: string, categoriaId: number): Observable<PaginatedWithCategorias<FavoritosViewModel, 'favoritos'>>;
   abstract getConfiguracion(): Observable<ConfiguracionModel>;
@@ -23,7 +24,7 @@ export abstract class IHttpGeneralService {
   abstract updateAfiliacion(afiliacion: AfiliacionModel): Observable<boolean>;
   abstract setHitInByRefCode(refCode: string): Observable<boolean>;
   abstract deleteAfiliado(id: number): Observable<boolean>;
-  abstract getContactos(filtro?: AdminFiltro): Observable<PaginatedData<ContactoModel, 'contactos'>>;
+  abstract getContactos(filtro?: AdminFiltro): Observable<PaginatedData<ContactoAdmin, 'contactos'>>;
   abstract getContactosPendientes(): Observable<number>;
   abstract saveContacto(contacto: unknown): Observable<boolean>;
   abstract gestionarContacto(contactoId: number): Observable<boolean>;

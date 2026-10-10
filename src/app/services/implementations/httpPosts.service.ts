@@ -1,3 +1,4 @@
+import { PostAdmin } from 'src/app/models/admin/filas-admin.model';
 import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
@@ -41,9 +42,9 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getPostsAdmin(search: string, filtro: AdminFiltro = {}): Observable<PaginatedData<PostViewModel>> {
+  getPostsAdmin(search: string, filtro: AdminFiltro = {}): Observable<PaginatedData<PostAdmin>> {
     return this.http
-      .get<ApiResponse<PaginatedData<PostViewModel>>>(
+      .get<ApiResponse<PaginatedData<PostAdmin>>>(
         `${environment.api}/api/posts/getPostsAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}`, { params: adminParams(filtro) },
       )
       .pipe(
@@ -162,7 +163,7 @@ export class HttpPostsService implements IHttpPostsService {
   deletePost(postId: number, razon: string): Observable<boolean> {
     return this.http
       .delete<ApiResponse<boolean>>(
-        `${environment.api}/api/posts/deletePost?postId=${postId}&razon=${razon}`,
+        `${environment.api}/api/posts/deletePost?postId=${postId}&razon=${encodeURIComponent(razon ?? '')}`,
       )
       .pipe(
         map((response) => {
@@ -175,6 +176,21 @@ export class HttpPostsService implements IHttpPostsService {
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
+  }
+
+  recuperarPost(postId: number): Observable<boolean> {
+    return this.http
+      .post<ApiResponse<boolean>>(`${environment.api}/api/posts/recuperarPost?postId=${postId}`, null)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) {
+            return response.data!;
+          }
+          this.notificationService.error(response.errors.join(', '), 'Error');
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
+        catchError(this.helper.errorHandler),
+      );
   }
 
   changeStickyPost(postId: number): Observable<boolean> {

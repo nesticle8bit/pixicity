@@ -4,7 +4,7 @@ FROM node:22-alpine AS build
 WORKDIR /opt/ng
 # Con el lockfile y `npm ci` el build instala exactamente las versiones auditadas (antes `npm i` ignoraba package-lock.json).
 COPY package.json package-lock.json ./
-RUN npm ci --legacy-peer-deps
+RUN npm ci
 
 COPY . ./
 RUN node node_modules/@angular/cli/bin/ng build --configuration=production

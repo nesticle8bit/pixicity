@@ -1,3 +1,4 @@
+import { FotoAdmin } from 'src/app/models/admin/filas-admin.model';
 import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
@@ -41,7 +42,7 @@ export class TableFotosComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public fotos: any[] = [];
+  public fotos: FotoAdmin[] = [];
   public totalCount: number = 0;
 
   public filtro: AdminFiltro = {};

@@ -39,7 +39,7 @@
               </span>
             </td>
             <td>
-              {{shout.url}}
+              @if (shout.url) {<a [href]="shout.url" target="_blank" rel="noopener nofollow">{{shout.url | truncate:[40]}}</a>}
             </td>
             <td>
               <app-user-avatar [class]="'img-avatar'" [avatar]="shout.usuario.avatar"

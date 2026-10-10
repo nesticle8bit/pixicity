@@ -1,8 +1,7 @@
 import { Component, DestroyRef, ElementRef, inject, Input, output, viewChild } from '@angular/core';
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal } from '@angular/cdk/portal';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { EmojisPopoverService } from '../../bottom-sheets/bottom-sheets-emojis/emojis-popover.service';
+import { MatDialog } from '@angular/material/dialog';
 import { ComentarioHilo, ComentariosAcciones, OrdenComentarios } from 'src/app/models/shared/comentario-hilo.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
@@ -14,6 +13,7 @@ import { RouterLink } from '@angular/router';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { enNavegador } from '../../../shared/helpers/plataforma';
+import { MencionesDirective } from '../../../shared/menciones/menciones.directive';
 
 /** Comentario con el estado que solo existe en pantalla. */
 interface ComentarioVista extends ComentarioHilo {
@@ -47,19 +47,20 @@ const MOTIVOS_DENUNCIA = ['Spam o publicidad', 'Contenido ofensivo', 'Acoso', 'I
         NgTemplateOutlet,
         RouterLink,
         UserPopoverDirective,
-        TimeAgoPipe,
+        TimeAgoPipe, MencionesDirective
     ],
 })
 export class ComentariosComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly securityService = inject(IHttpSecurityService);
   private readonly notificationService = inject(NotificationService);
-  private readonly bottomSheet = inject(MatBottomSheet);
-  private readonly overlay = inject(Overlay);
+  private readonly emojis = inject(EmojisPopoverService);
+  private readonly dialog = inject(MatDialog);
 
   private readonly campoComentario = viewChild<ElementRef<HTMLTextAreaElement>>('campoComentario');
-  /** Popover de emojis abierto (escritorio). */
-  private emojisRef: OverlayRef | null = null;
+  /** Solo hay una respuesta abierta a la vez, así que alcanza con una referencia. */
+  private readonly campoRespuesta = viewChild<ElementRef<HTMLTextAreaElement>>('campoRespuesta');
+  public emojisRespuestaAbierto = false;
   public emojisAbierto = false;
 
   private lista: ComentarioVista[] = [];
@@ -82,7 +83,7 @@ export class ComentariosComponent {
     this.destroyRef.onDestroy(() => {
       if (enNavegador()) window.removeEventListener('hashchange', alCambiarHash);
       clearTimeout(this.timerResaltado);
-      this.cerrarEmojis();
+      this.emojis.cerrar();
     });
   }
 
@@ -127,6 +128,8 @@ export class ComentariosComponent {
   public orden: OrdenComentarios = 'mejores';
 
   public nuevoComentario = '';
+  /** Muestra debajo del campo el comentario con el mismo formato que tendrá publicado. */
+  public vistaPrevia = false;
   public enviando = false;
 
   public replyTo: number | null = null;
@@ -139,7 +142,7 @@ export class ComentariosComponent {
 
   // - Sesión y permisos
 
-  private get miUsuario(): string | undefined {
+  get miUsuario(): string | undefined {
     return this.securityService.getCurrentUser()?.usuario?.userName;
   }
 
@@ -276,12 +279,14 @@ export class ComentariosComponent {
       this.notificationService.warning('Inicia sesión para responder', 'Comentarios');
       return;
     }
+    this.cerrarEmojisRespuesta();
     this.replyTo = c.id;
     this.replyText = '';
     this.editId = null;
   }
 
   cancelarRespuesta(): void {
+    this.cerrarEmojisRespuesta();
     this.replyTo = null;
     this.replyText = '';
   }
@@ -330,6 +335,7 @@ export class ComentariosComponent {
   editar(c: ComentarioVista): void {
     this.editId = c.id;
     this.editText = c.contenido;
+    this.cerrarEmojisRespuesta();
     this.replyTo = null;
   }
 
@@ -401,106 +407,69 @@ export class ComentariosComponent {
     });
   }
 
-  denunciar(c: ComentarioVista): void {
-    const motivo = this.pedirMotivoDenuncia();
-    if (!motivo) return;
-
-    this.acciones.denunciar(c.id, motivo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() =>
-      this.notificationService.success('Denuncia enviada. Gracias por reportar.', 'Denuncia')
-    );
-  }
-
-  /** Pide un motivo de denuncia mostrando opciones predefinidas; acepta el número de una opción o texto libre. */
-  private pedirMotivoDenuncia(): string | null {
-    const msg = 'Motivo de la denuncia:\n' +
-      MOTIVOS_DENUNCIA.map((r, i) => `${i + 1}. ${r}`).join('\n') +
-      '\n\nEscribe el número de una opción (o tu propio motivo):';
-    const input = (window.prompt(msg) || '').trim();
-    if (!input) return null;
-    const n = parseInt(input, 10);
-    if (n >= 1 && n <= MOTIVOS_DENUNCIA.length) return MOTIVOS_DENUNCIA[n - 1];
-    return input;
+  async denunciar(c: ComentarioVista): Promise<void> {
+    // Antes era un window.prompt con números: ilegible en móvil e imposible de probar.
+    const { DialogMotivoDenunciaComponent } = await import('../../dialogs/dialog-motivo-denuncia/dialog-motivo-denuncia.component');
+    this.dialog
+      .open(DialogMotivoDenunciaComponent, { width: '440px', maxWidth: '95vw', data: { que: 'comentario', motivos: MOTIVOS_DENUNCIA } })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((motivo?: string) => {
+        if (!motivo) return;
+        this.acciones.denunciar(c.id, motivo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() =>
+          this.notificationService.success('Denuncia enviada. Gracias por reportar.', 'Denuncia')
+        );
+      });
   }
 
   // - Emojis
 
-  /**
-   * Escritorio: popover pegado al botón (no tapa el comentario que se está escribiendo). Móvil: bottom sheet.
-   * En ambos queda abierto para elegir varios; cada emoji se inserta donde está el cursor del textarea.
-   */
+  /** Popover junto al botón (escritorio) u hoja inferior (móvil); cada emoji va donde está el cursor del textarea. */
   async abrirEmojis(boton: HTMLElement): Promise<void> {
-    if (this.emojisRef) {
-      this.cerrarEmojis(true);
-      return;
-    }
-
-    const { BottomSheetsEmojisComponent } = await import(
-      'src/app/components/bottom-sheets/bottom-sheets-emojis/bottom-sheets-emojis.component'
-    );
-
-    if (window.matchMedia('(max-width: 599.98px)').matches) {
-      const sheet = this.bottomSheet.open(BottomSheetsEmojisComponent, {
-        closeOnNavigation: true,
-        panelClass: 'emojis-sheet',
-        ariaLabel: 'Elegir emoji',
-      });
-      sheet.instance.elegido.subscribe((emoji) => this.insertarEmoji(emoji));
-      sheet.instance.cerrar.subscribe(() => sheet.dismiss());
-      return;
-    }
-
-    // Debajo del botón si entra; si no, por ENCIMA del textarea (no sobre él: taparía lo que se está escribiendo).
-    const campo = this.campoComentario()?.nativeElement;
-    const sobreElCampo = campo ? campo.getBoundingClientRect().top - boton.getBoundingClientRect().top - 8 : -6;
-    const ref = this.overlay.create({
-      positionStrategy: this.overlay
-        .position()
-        .flexibleConnectedTo(boton)
-        .withPositions([
-          { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: 6 },
-          { originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom', offsetY: sobreElCampo },
-        ])
-        .withPush(true)
-        .withViewportMargin(8),
-      scrollStrategy: this.overlay.scrollStrategies.reposition(),
-      hasBackdrop: true,
-      backdropClass: 'cdk-overlay-transparent-backdrop',
+    await this.emojis.alternar(boton, {
+      alElegir: (emoji) => this.insertarEmoji(emoji),
+      noTapar: this.campoComentario()?.nativeElement,
+      alCerrar: (porTeclado) => {
+        this.emojisAbierto = false;
+        if (porTeclado) this.campoComentario()?.nativeElement.focus();
+      },
     });
-    this.emojisRef = ref;
-    this.emojisAbierto = true;
-    ref.overlayElement.setAttribute('role', 'dialog');
-    ref.overlayElement.setAttribute('aria-label', 'Elegir emoji');
-
-    const picker = ref.attach(new ComponentPortal(BottomSheetsEmojisComponent));
-    picker.instance.elegido.subscribe((emoji) => this.insertarEmoji(emoji));
-    picker.instance.cerrar.subscribe(() => this.cerrarEmojis(true));
-    ref.backdropClick().subscribe(() => this.cerrarEmojis());
-    picker.location.nativeElement.querySelector('.emojis__emoji')?.focus();
-  }
-
-  /** Cierra el popover; con `volverAlCampo` el foco vuelve al textarea (Escape o el mismo botón). */
-  cerrarEmojis(volverAlCampo = false): void {
-    if (!this.emojisRef) return;
-    this.emojisRef.dispose();
-    this.emojisRef = null;
-    this.emojisAbierto = false;
-    if (volverAlCampo) this.campoComentario()?.nativeElement.focus();
+    this.emojisAbierto = this.emojis.estaAbiertoPara(boton);
   }
 
   /** Inserta en la posición del cursor (o reemplaza la selección) y deja el cursor justo después del emoji. */
+  private cerrarEmojisRespuesta(): void {
+    if (this.emojisRespuestaAbierto) this.emojis.cerrar();
+  }
+
+  async abrirEmojisRespuesta(boton: HTMLElement): Promise<void> {
+    await this.emojis.alternar(boton, {
+      alElegir: (emoji) => (this.replyText = this.insertarEn(this.campoRespuesta()?.nativeElement, this.replyText, emoji)),
+      noTapar: this.campoRespuesta()?.nativeElement,
+      alCerrar: (porTeclado) => {
+        this.emojisRespuestaAbierto = false;
+        if (porTeclado) this.campoRespuesta()?.nativeElement.focus();
+      },
+    });
+    this.emojisRespuestaAbierto = this.emojis.estaAbiertoPara(boton);
+  }
+
   private insertarEmoji(emoji: string): void {
-    const campo = this.campoComentario()?.nativeElement;
-    const texto = this.nuevoComentario;
+    this.nuevoComentario = this.insertarEn(this.campoComentario()?.nativeElement, this.nuevoComentario, emoji);
+  }
+
+  /** Devuelve `texto` con el emoji en el cursor de `campo` (o reemplazando la selección) y deja el cursor después. */
+  private insertarEn(campo: HTMLTextAreaElement | undefined, texto: string, emoji: string): string {
     const inicio = campo?.selectionStart ?? texto.length;
     const fin = campo?.selectionEnd ?? texto.length;
-
-    this.nuevoComentario = texto.slice(0, inicio) + emoji + texto.slice(fin);
+    const nuevo = texto.slice(0, inicio) + emoji + texto.slice(fin);
     if (campo) {
       // Se escribe ya en el DOM para poder mover el cursor; ngModel después pone el mismo valor y no lo mueve.
-      campo.value = this.nuevoComentario;
+      campo.value = nuevo;
       const cursor = inicio + emoji.length;
       campo.setSelectionRange(cursor, cursor);
     }
+    return nuevo;
   }
 
   // - Formato

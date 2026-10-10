@@ -1,3 +1,4 @@
+import { UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -31,7 +32,7 @@ export class DashboardConfigurationComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
-  public administradores: any[] = [];
+  public administradores: UsuarioViewModel[] = [];
 
   constructor() {
     this.formGroup = this.formBuilder.group({

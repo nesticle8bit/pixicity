@@ -1,3 +1,4 @@
+import { ComunidadCategoria, ComunidadSubCategoria } from 'src/app/models/comunidades/comunidad.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
@@ -27,7 +28,7 @@ export class TableComunidadesCategoriasComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public categorias: any[] = [];
+  public categorias: ComunidadCategoria[] = [];
 
   ngOnInit(): void {
     this.getCategorias();
@@ -39,7 +40,7 @@ export class TableComunidadesCategoriasComponent implements OnInit {
     });
   }
 
-  upsertCategoria(categoria?: any): void {
+  upsertCategoria(categoria?: ComunidadCategoria): void {
     const dialogRef = this.dialog.open(DialogComunidadCategoriaComponent, {
       width: '500px',
       data: categoria,
@@ -50,7 +51,7 @@ export class TableComunidadesCategoriasComponent implements OnInit {
     });
   }
 
-  deleteCategoria(categoria: any): void {
+  deleteCategoria(categoria: ComunidadCategoria): void {
     if (!this.notificationService.confirm(`¿Eliminar la categoría "${categoria.nombre}"?`)) return;
     this.comunidadesService.deleteCategoria(categoria.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
@@ -60,7 +61,7 @@ export class TableComunidadesCategoriasComponent implements OnInit {
     });
   }
 
-  upsertSubcategoria(categoria: any, sub?: any): void {
+  upsertSubcategoria(categoria: ComunidadCategoria, sub?: ComunidadSubCategoria): void {
     const dialogRef = this.dialog.open(DialogComunidadSubcategoriaComponent, {
       width: '500px',
       data: { categoria, sub },
@@ -71,7 +72,7 @@ export class TableComunidadesCategoriasComponent implements OnInit {
     });
   }
 
-  deleteSubcategoria(sub: any): void {
+  deleteSubcategoria(sub: ComunidadSubCategoria): void {
     if (!this.notificationService.confirm(`¿Eliminar la sub-categoría "${sub.nombre}"?`)) return;
     this.comunidadesService.deleteSubCategoria(sub.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {

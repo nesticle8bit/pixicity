@@ -1,3 +1,4 @@
+import { ContactoAdmin } from 'src/app/models/admin/filas-admin.model';
 import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
@@ -38,7 +39,7 @@ export class TableContactosComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public contactos: any[] = [];
+  public contactos: ContactoAdmin[] = [];
   public totalCount: number = 0;
 
   public filtro: AdminFiltro = {};
@@ -83,7 +84,7 @@ export class TableContactosComponent implements OnInit {
     this.getContactos();
   }
 
-  gestionarContacto(contacto: any): void {
+  gestionarContacto(contacto: ContactoAdmin): void {
     if (this.notificationService.confirm('¿Está seguro de gestionar este contacto?')) {
       this.generalService.gestionarContacto(contacto.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
@@ -94,7 +95,7 @@ export class TableContactosComponent implements OnInit {
     }
   }
 
-  deleteContacto(contacto: any): void {
+  deleteContacto(contacto: ContactoAdmin): void {
     if (this.notificationService.confirm('¿Está seguro de eliminar este contacto?')) {
       this.generalService.deleteContacto(contacto.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {

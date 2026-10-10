@@ -1,3 +1,4 @@
+import { PostAdmin } from 'src/app/models/admin/filas-admin.model';
 import { AdminFiltro } from 'src/app/models/admin/admin-filtro.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -7,7 +8,7 @@ import { CloudTagViewModel, PostDetailResponse, PostSimpleViewModel, PostViewMod
 @Injectable()
 export abstract class IHttpPostsService {
   abstract getPosts(categoria?: string): Observable<PaginatedData<PostViewModel>>;
-  abstract getPostsAdmin(search: string, filtro?: AdminFiltro): Observable<PaginatedData<PostViewModel>>;
+  abstract getPostsAdmin(search: string, filtro?: AdminFiltro): Observable<PaginatedData<PostAdmin>>;
   abstract getPostsByUserId(userId: number): Observable<PaginatedData<PostViewModel>>;
   abstract getPostsByLoggedUser(search: string): Observable<PaginatedData<PostViewModel>>;
   abstract getStickyPosts(): Observable<PostViewModel[]>;
@@ -15,6 +16,7 @@ export abstract class IHttpPostsService {
   abstract savePost(post: Partial<PostViewModel>): Observable<number>;
   abstract updatePost(post: Partial<PostViewModel>): Observable<number>;
   abstract deletePost(postId: number, razon: string): Observable<boolean>;
+  abstract recuperarPost(postId: number): Observable<boolean>;
   abstract changeStickyPost(postId: number): Observable<boolean>;
   abstract getAvailableVotos(type: number): Observable<number>;
   abstract setVotos(voto: { typeId: number; cantidad: number; votosType: number }): Observable<boolean>;

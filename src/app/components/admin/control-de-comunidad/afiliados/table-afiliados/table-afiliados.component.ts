@@ -1,3 +1,4 @@
+import { AfiliadoAdmin } from 'src/app/models/admin/filas-admin.model';
 import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { environment } from 'src/environments/environment';
@@ -44,7 +45,7 @@ export class TableAfiliadosComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public afiliados: any[] = [];
+  public afiliados: AfiliadoAdmin[] = [];
   public totalCount: number = 0;
 
   public filtro: AdminFiltro = {};
@@ -88,7 +89,7 @@ export class TableAfiliadosComponent implements OnInit {
     this.getAfiliados();
   }
 
-  activarDesactivarAfiliado(afiliado: any): void {
+  activarDesactivarAfiliado(afiliado: AfiliadoAdmin): void {
     if (!afiliado) {
       return;
     }
@@ -110,7 +111,7 @@ export class TableAfiliadosComponent implements OnInit {
       });
   }
 
-  updateAfiliado(afiliado: any): void {
+  updateAfiliado(afiliado: AfiliadoAdmin): void {
     const dialogRef = this.dialog.open(DialogUpdateAfiliadosComponent, {
       width: '980px',
       data: afiliado,
@@ -146,7 +147,7 @@ export class TableAfiliadosComponent implements OnInit {
     });
   }
 
-  deleteAfiliado(afiliado: any, index: number): void {
+  deleteAfiliado(afiliado: AfiliadoAdmin, index: number): void {
     if (this.notificationService.confirm('¿Está seguro de eliminar esta afiliación?')) {
       this.generalService.deleteAfiliado(afiliado.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {

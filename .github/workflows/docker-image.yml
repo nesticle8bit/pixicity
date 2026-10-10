@@ -20,9 +20,9 @@ jobs:
         node-version: 22
         cache: npm
 
-    # --legacy-peer-deps: el árbol de dependencias tiene conflictos de peer que npm ci rechaza por defecto.
+    # Sin --legacy-peer-deps: las versiones de Angular están alineadas y el lockfile incluye los peers.
     - name: Install
-      run: npm ci --legacy-peer-deps
+      run: npm ci
 
     - name: Icon subset is up to date
       run: npm run icons:check
@@ -34,9 +34,10 @@ jobs:
     - name: Unit tests
       run: npm run test:ci
 
-    # Falla si una dependencia de producción tiene una vulnerabilidad alta o crítica.
+    # Falla si una dependencia de producción tiene una vulnerabilidad alta o crítica. --omit=peer/optional: npm
+    # cuenta como "de producción" peers opcionales que solo usa el tooling (p. ej. braces vía karma/dev-server).
     - name: Audit production dependencies
-      run: npm audit --omit=dev --audit-level=high --legacy-peer-deps
+      run: npm audit --omit=dev --omit=peer --omit=optional --audit-level=high
 
     - name: Build
       run: npx ng build

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { EmojisPopoverService } from '../../bottom-sheets/bottom-sheets-emojis/emojis-popover.service';
 import { of } from 'rxjs';
 import { ComentarioHilo, ComentariosAcciones } from 'src/app/models/shared/comentario-hilo.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -38,7 +38,7 @@ describe('ComentariosComponent', () => {
       providers: [
         { provide: IHttpSecurityService, useValue: { getCurrentUser: () => ({ usuario, token: 't' }) } },
         { provide: NotificationService, useValue: jasmine.createSpyObj('NotificationService', ['confirm', 'success', 'warning']) },
-        { provide: MatBottomSheet, useValue: {} },
+        { provide: EmojisPopoverService, useValue: { cerrar: () => {} } },
       ],
     });
 

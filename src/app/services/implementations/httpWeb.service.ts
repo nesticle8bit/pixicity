@@ -1,3 +1,4 @@
+import { PaginaAdmin } from 'src/app/models/admin/filas-admin.model';
 import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
 import { HistorialViewModel } from 'src/app/models/web/historial.model';
 import { PaginaViewModel } from 'src/app/models/shared/service-types.model';
@@ -138,9 +139,9 @@ export class HttpWebService implements IHttpWebService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getPaginas(search: string, filtro: AdminFiltro = {}): Observable<PaginatedData<PaginaViewModel, 'paginas'>> {
+  getPaginas(search: string, filtro: AdminFiltro = {}): Observable<PaginatedData<PaginaAdmin, 'paginas'>> {
     return this.http
-      .get<ApiResponse<PaginatedData<PaginaViewModel, 'paginas'>>>(
+      .get<ApiResponse<PaginatedData<PaginaAdmin, 'paginas'>>>(
         `${environment.api}/api/paginas/getPaginas?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&searchValue=${search}`, { params: adminParams(filtro) },
       )
       .pipe(

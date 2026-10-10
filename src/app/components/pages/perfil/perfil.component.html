@@ -20,24 +20,24 @@
                 <div class="row">
                   <div class="col-12 col-sm-8">
                     <h1 class="nick">
-                      {{currentUser?.completeName}}
+                      {{currentUser.completeName}}
                     </h1>
 
-                    <div class="pani" [routerLink]="['/perfil/' + currentUser?.userName]"
-                      [appUserPopover]="currentUser?.userName">
-                      {{'@'}}{{currentUser?.userName}}
+                    <div class="pani" [routerLink]="['/perfil/' + currentUser.userName]"
+                      [appUserPopover]="currentUser.userName">
+                      {{'@'}}{{currentUser.userName}}
                     </div>
                   </div>
 
                   <div class="col-12 col-sm-4">
                     <div class="text-end">
-                      <app-genre-icon class="mx-2" [genre]="currentUser?.genero"></app-genre-icon>
-                      <addon-country-flag [iso2]="currentUser?.pais?.isO2"
-                        [title]="currentUser?.pais?.nombre"></addon-country-flag>
+                      <app-genre-icon class="mx-2" [genre]="currentUser.genero"></app-genre-icon>
+                      <addon-country-flag [iso2]="currentUser.pais?.iso2"
+                        [title]="currentUser.pais?.nombre ?? ''"></addon-country-flag>
                       <!-- <i class="icon date"></i> -->
 
                       <img loading="lazy" decoding="async" class="mx-2" src="/assets/images/icons/date.png"
-                        matTooltip="Se unió a Taringa! el {{currentUser?.fechaRegistro | date:'dd'}} de {{currentUser?.fechaRegistro | date:'MMMM'}} del {{currentUser?.fechaRegistro | date: 'YYYY'}}" alt="" aria-hidden="true"/>
+                        matTooltip="Se unió a Taringa! el {{currentUser.fechaRegistro | date:'dd'}} de {{currentUser.fechaRegistro | date:'MMMM'}} del {{currentUser.fechaRegistro | date: 'YYYY'}}" alt="" aria-hidden="true"/>
                     </div>
                   </div>
                 </div>
@@ -80,34 +80,34 @@
                   <div class="col-12 col-sm-3">
                     <p>
                       <i class="ti ti-map-pin"></i>
-                      Vive en <b>{{currentUser?.pais?.nombre}}</b>
+                      Vive en <b>{{currentUser.pais?.nombre}}</b>
                     </p>
                   </div>
 
                   <!-- <div class="col-12 col-sm-4">
                   <p>
                     <i class="ti ti-clock"></i>
-                    Se unió a <b>Taringa!</b> <b id="espp"> el {{currentUser?.fechaRegistro |
-                    date:'dd'}} de {{currentUser?.fechaRegistro | date:'MMMM'}} del
-                  {{currentUser?.fechaRegistro | date: 'YYYY'}}</b>
+                    Se unió a <b>Taringa!</b> <b id="espp"> el {{currentUser.fechaRegistro |
+                    date:'dd'}} de {{currentUser.fechaRegistro | date:'MMMM'}} del
+                  {{currentUser.fechaRegistro | date: 'YYYY'}}</b>
                 </p>
               </div> -->
                 </div>
 
                 <div class="row mt-2">
-                  @if (loggedUser?.usuario && loggedUser?.usuario?.userName !== currentUser.userName) {
+                  @if (loggedUser.usuario && loggedUser.usuario.userName !== currentUser.userName) {
                   <div class="col-12 col-sm-2">
                     <app-follow-button [userName]="currentUser.userName" [icon]="true"></app-follow-button>
                   </div>
                   }
 
-                  @if (loggedUser?.usuario && loggedUser?.usuario?.userName !== currentUser.userName) {
+                  @if (loggedUser.usuario && loggedUser.usuario.userName !== currentUser.userName) {
                   <div class="col-12 col-sm-2">
                     <app-send-message-button [userName]="currentUser.userName" [icon]="true"></app-send-message-button>
                   </div>
                   }
 
-                  @if (loggedUser?.usuario && loggedUser?.usuario?.userName !== currentUser.userName) {
+                  @if (loggedUser.usuario && loggedUser.usuario.userName !== currentUser.userName) {
                   <div class="col-12 col-sm-2">
                     <div>
                       @if (!bloqueoActivo) {
@@ -125,24 +125,24 @@
                 </div>
 
                 <div class="row mt-2">
-                  @if (currentUser?.id) {
+                  @if (currentUser.id) {
                   <div class="col-12 col-sm-3">
-                    <app-banear-usuario [data]="{ usuarioId: currentUser?.id, nombre: currentUser.rango?.nombre}">
+                    <app-banear-usuario [data]="{ usuarioId: currentUser.id, nombre: currentUser.rango?.nombre}">
                     </app-banear-usuario>
                   </div>
                   }
 
-                  @if (currentUser?.rango) {
+                  @if (currentUser.rango) {
                   <div class="col-12 col-sm-3">
                     <app-change-rango
-                      [data]="{ id: currentUser?.rango?.id, usuarioId: currentUser?.id, icono: currentUser.rango?.icono, color: currentUser.rango?.color, nombre: currentUser.rango?.nombre }">
+                      [data]="{ id: currentUser.rango.id, usuarioId: currentUser.id, icono: currentUser.rango.icono, color: currentUser.rango.color, nombre: currentUser.rango.nombre }">
                     </app-change-rango>
                   </div>
                   }
 
-                  @if (loggedUser?.usuario && loggedUser?.usuario?.userName !== currentUser.userName) {
+                  @if (loggedUser.usuario && loggedUser.usuario.userName !== currentUser.userName) {
                   <div class="col-12 col-sm-3">
-                    <app-change-avatar [data]="{ id: currentUser?.id, userName: currentUser?.userName }">
+                    <app-change-avatar [data]="{ id: currentUser.id, userName: currentUser.userName }">
                     </app-change-avatar>
                   </div>
                   }
@@ -161,10 +161,10 @@
                   <p class="ranpe">
                     <b style="color:#171717">
 
-                      <span [ngStyle]="{'color': currentUser?.rango?.color}">{{currentUser?.rango?.nombre}}</span>
+                      <span [ngStyle]="{'color': currentUser.rango?.color}">{{currentUser.rango?.nombre}}</span>
                       <!-- <span class="status online"></span> -->
                       <app-user-online-status [class]="'float-end m-0'"
-                        [userName]="currentUser?.userName"></app-user-online-status>
+                        [userName]="currentUser.userName"></app-user-online-status>
                     </b>
                     <span>Rango</span>
                   </p>
@@ -173,7 +173,7 @@
                 <div class="col-12 col-sm-2">
                   <p>
                     <b>
-                      {{currentUser?.puntos ? currentUser?.puntos : 0}}
+                      {{currentUser.puntos ? currentUser.puntos : 0}}
                     </b>
 
                     <span>Puntos</span>

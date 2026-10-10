@@ -1,3 +1,4 @@
+import { PaisAdmin } from 'src/app/models/admin/filas-admin.model';
 import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
@@ -36,7 +37,7 @@ export class TablePaisesComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public paises: any[] = [];
+  public paises: PaisAdmin[] = [];
   public totalCount: number = 0;
 
   public filtro: AdminFiltro = {};
@@ -58,8 +59,8 @@ export class TablePaisesComponent implements OnInit {
     this.cargando = true;
     this.parametrosService.getPaises(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if(response.data) {
-        response.data = response.data.map((pais: any) => {
-          pais.isO2 = pais.isO2?.toLowerCase();
+        response.data = response.data.map((pais: PaisAdmin) => {
+          pais.iso2 = pais.iso2?.toLowerCase();
           return pais;
         });
       }

@@ -93,6 +93,44 @@
   }
 }
 
+.coment-preview {
+  border: 1px dashed #c9d4da;
+  border-radius: 6px;
+  padding: 8px 11px;
+  margin-bottom: 8px;
+  background: #fafcfd;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+
+  &__titulo {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #6b7780;
+    margin-bottom: 4px;
+  }
+
+  p { margin: 0; }
+}
+
+.coment-preview-toggle {
+  margin-right: auto;
+  border: none;
+  background: none;
+  color: #6b7780;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  &:hover,
+  &.is-activo { color: #006595; background: #f1f4f6; }
+}
+
 .coment-emoji {
   border: none;
   background: none;

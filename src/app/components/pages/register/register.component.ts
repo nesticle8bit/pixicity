@@ -121,7 +121,7 @@ export class RegisterComponent implements OnInit {
       // genero: [undefined, Validators.required],
       paisId: [undefined, Validators.required],
       estadoId: [undefined, Validators.required],
-      termsConditions: false,
+      termsConditions: [false, Validators.requiredTrue],
       // captcha: ['', Validators.required],
     });
   }
@@ -160,6 +160,10 @@ export class RegisterComponent implements OnInit {
   }
 
   getEstadosByPais(pais: PaisViewModel | null): void {
+    // El estado elegido antes pertenece al país anterior.
+    this.formGroup.patchValue({ estadoId: null });
+    this.estados = [];
+
     if (!pais) {
       return;
     }

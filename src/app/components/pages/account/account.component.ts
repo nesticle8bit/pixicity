@@ -210,7 +210,14 @@ export class AccountComponent implements OnInit {
     });
   }
 
-  getEstadosByPais(paisId: number): void {
+  /** El usuario eligió otro país: el estado anterior pertenece al país viejo, así que se vacía. */
+  cambiarPais(paisId: number | null | undefined): void {
+    this.formGroupCuenta.patchValue({ estadoId: null });
+    this.estados = [];
+    this.getEstadosByPais(paisId);
+  }
+
+  getEstadosByPais(paisId: number | null | undefined): void {
     if (!paisId) {
       return;
     }

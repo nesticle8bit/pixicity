@@ -1,3 +1,5 @@
+import { PERFIL_VACIO, PerfilUsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { environment } from 'src/environments/environment';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -77,8 +79,9 @@ export class PerfilComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public display: DisplayComponentModel = { mainMenu: true, footer: true, searchFooter: true, submenu: false, background: ''};
-  public currentUser: any = {};
-  public loggedUser: any = {};
+  /** Dueño del perfil: vacío hasta que llega del API (la plantilla lo lee desde el primer render). */
+  public currentUser: PerfilUsuarioViewModel = PERFIL_VACIO;
+  public loggedUser: JwtUserModel = this.securityService.getCurrentUser();
   public currentSelection = 'shouts';
   public bloqueoActivo: BloqueoViewModel | null = null;
 
@@ -130,19 +133,20 @@ export class PerfilComponent implements OnInit {
                 {
                   '@type': 'InteractionCounter',
                   interactionType: 'https://schema.org/FollowAction',
-                  userInteractionCount: this.currentUser.cantidadSeguidores ?? 0,
+                  userInteractionCount: this.currentUser.seguidoresCount ?? 0,
                 },
                 {
                   '@type': 'InteractionCounter',
                   interactionType: 'https://schema.org/WriteAction',
-                  userInteractionCount: this.currentUser.cantidadPosts ?? 0,
+                  userInteractionCount: this.currentUser.postsCount ?? 0,
                 },
               ],
             },
           },
         });
 
-        if (this.loggedUser && this.loggedUser.userName !== userName) {
+        // Solo con sesión y en un perfil ajeno (antes comparaba loggedUser.userName, que no existe: pedía siempre).
+        if (this.loggedUser.usuario && this.loggedUser.usuario.userName !== userName) {
           this.loadBloqueo(userName);
         }
       },

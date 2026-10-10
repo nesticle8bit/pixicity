@@ -21,7 +21,7 @@
       </thead>
       <tbody>
         @for (pais of paises; track pais; let i = $index) {
-          <tr [ngClass]="{'row-deleted': pais.deleted}">
+          <tr [ngClass]="{'row-deleted': pais.eliminado}">
             <td>
               <strong>{{pais.id}}</strong>
             </td>
@@ -29,14 +29,14 @@
               {{pais.fechaRegistro | timeAgo}}
             </td>
             <td>
-              <img src="/assets/images/flags/{{pais?.isO2}}.png" style="margin: 0 10px 0 0;" alt="" aria-hidden="true" loading="lazy">
+              <img src="/assets/images/flags/{{pais?.iso2}}.png" style="margin: 0 10px 0 0;" alt="" aria-hidden="true" loading="lazy">
               {{pais.nombre}}
             </td>
             <td>
-              {{pais.isO2 | uppercase}}
+              {{pais.iso2 | uppercase}}
             </td>
             <td>
-              {{pais.isO3 | uppercase}}
+              {{pais.iso3 | uppercase}}
             </td>
             <td class="text-center" width="30px">
               <button type="button" class="btn-menu" aria-label="Acciones" [matMenuTriggerFor]="menu">

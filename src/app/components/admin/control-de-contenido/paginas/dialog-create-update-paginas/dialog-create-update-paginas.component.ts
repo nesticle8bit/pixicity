@@ -38,8 +38,8 @@ export class DialogCreateUpdatePaginasComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
-  public tipos: any[] = ['routerLink', 'link'];
-  public targets: any[] = ['_blank', '_parent', '_self', '_top'];
+  public tipos = ['routerLink', 'link'] as const;
+  public targets = ['_blank', '_parent', '_self', '_top'] as const;
 
   constructor() {
     this.formGroup = this.formBuilder.group({

@@ -1,0 +1,43 @@
+.motivos {
+  border: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+
+  legend {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  &__opcion {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid #e1e5e8;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+
+    &:hover { background: #f6f8f9; }
+    &.is-activo { border-color: #006595; background: #eef5f9; }
+    input { accent-color: #006595; }
+  }
+}
+
+.detalle {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+textarea { resize: vertical; }
+
+.contador {
+  text-align: right;
+  font-size: 11px;
+  color: #6b7780;
+}

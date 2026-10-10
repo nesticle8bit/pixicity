@@ -14,10 +14,20 @@
   <div class="com-empty"><i class="ti ti-lock"></i> El autor cerró los comentarios.</div>
   } @else if (logueado) {
   <div class="coment-form">
-    <app-user-avatar class="coment-form__avatar" [avatar]="miAvatar" [userName]="''" [width]="38" [height]="38"></app-user-avatar>
+    <app-user-avatar class="coment-form__avatar" [avatar]="miAvatar" [userName]="miUsuario" [width]="38" [height]="38"></app-user-avatar>
     <div class="coment-form__campo">
-      <textarea #campoComentario [(ngModel)]="nuevoComentario" rows="3" placeholder="Escribe un comentario..." aria-label="Escribe un comentario"></textarea>
+      <textarea #campoComentario appMenciones [(ngModel)]="nuevoComentario" rows="3" placeholder="Escribe un comentario..." aria-label="Escribe un comentario"></textarea>
+      @if (vistaPrevia && nuevoComentario.trim()) {
+      <div class="coment-preview" aria-live="polite">
+        <span class="coment-preview__titulo">Vista previa</span>
+        <p [innerHTML]="formatear(nuevoComentario)"></p>
+      </div>
+      }
       <div class="coment-form__acciones">
+        <button type="button" class="coment-preview-toggle" [class.is-activo]="vistaPrevia" (click)="vistaPrevia = !vistaPrevia"
+          [attr.aria-pressed]="vistaPrevia" matTooltip="Ver cómo quedará (enlaces y menciones)">
+          <i class="ti ti-eye" aria-hidden="true"></i> Vista previa
+        </button>
         <button #botonEmojis type="button" class="coment-emoji" [class.is-abierto]="emojisAbierto" (click)="abrirEmojis(botonEmojis)"
           matTooltip="Emojis" aria-label="Agregar emoji" aria-haspopup="dialog" [attr.aria-expanded]="emojisAbierto">
           <i class="ti ti-mood-smile"></i>
@@ -115,7 +125,7 @@
 
         @if (editId === c.id) {
         <div class="coment-edit">
-          <textarea [(ngModel)]="editText" rows="2" aria-label="Editar comentario"></textarea>
+          <textarea appMenciones [(ngModel)]="editText" rows="2" aria-label="Editar comentario"></textarea>
           <div class="coment-mini-actions">
             <button class="boton azul" (click)="guardarEdicion(c)"
               [disabled]="editEnviando || !editText.trim()">Guardar</button>
@@ -146,8 +156,13 @@
 
         @if (replyTo === c.id) {
         <div class="coment-reply">
-          <textarea [(ngModel)]="replyText" rows="2" placeholder="Escribe una respuesta..." aria-label="Escribe una respuesta"></textarea>
+          <textarea #campoRespuesta appMenciones [(ngModel)]="replyText" rows="2" placeholder="Escribe una respuesta..." aria-label="Escribe una respuesta"></textarea>
           <div class="coment-mini-actions">
+            <button #botonEmojisRespuesta type="button" class="coment-emoji" [class.is-abierto]="emojisRespuestaAbierto"
+              (click)="abrirEmojisRespuesta(botonEmojisRespuesta)" matTooltip="Emojis" aria-label="Agregar emoji a la respuesta"
+              aria-haspopup="dialog" [attr.aria-expanded]="emojisRespuestaAbierto">
+              <i class="ti ti-mood-smile"></i>
+            </button>
             <button class="boton azul" (click)="enviarRespuesta(c)"
               [disabled]="replyEnviando || !replyText.trim()">Responder</button>
             <button class="boton gris" (click)="cancelarRespuesta()">Cancelar</button>

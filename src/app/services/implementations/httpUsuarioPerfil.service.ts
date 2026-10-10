@@ -1,7 +1,7 @@
 import { PaginationService } from '../shared/pagination.service';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
@@ -18,6 +18,16 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
   private helper = inject(HelperService);
   private paginationService = inject(PaginationService);
   private notificationService = inject(NotificationService);
+
+  sugerirMenciones(prefijo: string): Observable<UsuarioAvatarViewModel[]> {
+    // Silencioso: es una ayuda mientras se escribe; un fallo no debe mostrar errores.
+    return this.http
+      .get<ApiResponse<UsuarioAvatarViewModel[]>>(`${environment.api}/api/usuarios/sugerirMenciones`, { params: { q: prefijo } })
+      .pipe(
+        map((response) => (response.status === 200 ? response.data ?? [] : [])),
+        catchError(() => of([])),
+      );
+  }
 
   getUsuarioInfo(userName: string): Observable<UsuarioInfoViewModel> {
     return this.http

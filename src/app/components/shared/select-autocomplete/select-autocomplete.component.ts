@@ -42,20 +42,21 @@ import { NgTemplateOutlet } from '@angular/common';
         FormsModule,
     ],
 })
-export class SelectAutocompleteComponent implements ControlValueAccessor, OnChanges {
-  readonly items = input<any[]>([]);
+export class SelectAutocompleteComponent<T = unknown> implements ControlValueAccessor, OnChanges {
+  /** El tipo de los items (T) se infiere de lo que se pase en [items]; (change) emite ese mismo tipo. */
+  readonly items = input<readonly T[] | null | undefined>([]);
   readonly bindLabel = input<string>();
   readonly bindValue = input<string>();
   readonly placeholder = input('Seleccionar...');
   readonly clearable = input(true);
   readonly searchable = input(true);
 
-  readonly change = output<any>();
+  readonly change = output<T | null>();
   readonly opened = output<void>();
   readonly closed = output<void>();
 
-  @ContentChild(SelectOptionDirective, { read: TemplateRef }) optionTpl?: TemplateRef<any>;
-  @ContentChild(SelectLabelDirective, { read: TemplateRef }) labelTpl?: TemplateRef<any>;
+  @ContentChild(SelectOptionDirective, { read: TemplateRef }) optionTpl?: TemplateRef<unknown>;
+  @ContentChild(SelectLabelDirective, { read: TemplateRef }) labelTpl?: TemplateRef<unknown>;
 
   readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
 
@@ -63,10 +64,11 @@ export class SelectAutocompleteComponent implements ControlValueAccessor, OnChan
 
   isOpen = false;
   search = '';
-  value: any = null;
-  selectedItem: any = null;
+  /** Valor del control: el item o, con bindValue, la propiedad indicada (p. ej. un id). */
+  value: unknown = null;
+  selectedItem: T | null = null;
 
-  private onChange: (v: any) => void = () => {};
+  private onChange: (v: unknown) => void = () => {};
   private onTouched: () => void = () => {};
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -74,11 +76,11 @@ export class SelectAutocompleteComponent implements ControlValueAccessor, OnChan
   }
 
   // ControlValueAccessor
-  writeValue(value: any): void {
+  writeValue(value: unknown): void {
     this.value = value;
     this.syncSelected();
   }
-  registerOnChange(fn: (v: any) => void): void { this.onChange = fn; }
+  registerOnChange(fn: (v: unknown) => void): void { this.onChange = fn; }
   registerOnTouched(fn: () => void): void { this.onTouched = fn; }
   setDisabledState(isDisabled: boolean): void { this.disabled = isDisabled; }
 
@@ -89,23 +91,26 @@ export class SelectAutocompleteComponent implements ControlValueAccessor, OnChan
     }
     const found = (this.items() || []).find((it) => this.valueOf(it) === this.value);
     // Sin bindValue, el propio valor es el item (listas de strings)
-    this.selectedItem = found ?? (this.bindValue() ? this.selectedItem : this.value);
+    this.selectedItem = found ?? (this.bindValue() ? this.selectedItem : (this.value as T));
   }
 
-  valueOf(item: any): any { const bindValue = this.bindValue();
-                            return bindValue ? item?.[bindValue] : item; }
-  labelOf(item: any): any {
+  valueOf(item: T | null): unknown {
+    const bindValue = this.bindValue();
+    return bindValue ? propiedad(item, bindValue) : item;
+  }
+
+  labelOf(item: T | null): string {
     if (item === null || item === undefined) return '';
     const bindLabel = this.bindLabel();
-    return bindLabel ? item?.[bindLabel] : item;
+    return String((bindLabel ? propiedad(item, bindLabel) : item) ?? '');
   }
 
   get hasValue(): boolean { return this.value !== null && this.value !== undefined; }
 
-  get filtered(): any[] {
+  get filtered(): readonly T[] {
     const q = this.normalize(this.search);
     if (!q) return this.items() || [];
-    return (this.items() || []).filter((it) => this.normalize(String(this.labelOf(it))).includes(q));
+    return (this.items() || []).filter((it) => this.normalize(this.labelOf(it)).includes(q));
   }
 
   private normalize(text: string): string {
@@ -132,7 +137,7 @@ export class SelectAutocompleteComponent implements ControlValueAccessor, OnChan
 
   toggle(): void { this.isOpen ? this.close() : this.open(); }
 
-  select(item: any): void {
+  select(item: T): void {
     this.value = this.valueOf(item);
     this.selectedItem = item;
     this.onChange(this.value);
@@ -148,5 +153,9 @@ export class SelectAutocompleteComponent implements ControlValueAccessor, OnChan
     this.change.emit(null);
   }
 
-  isSelected(item: any): boolean { return this.valueOf(item) === this.value; }
+  isSelected(item: T): boolean { return this.valueOf(item) === this.value; }
+}
+
+function propiedad(item: unknown, clave: string): unknown {
+  return item !== null && typeof item === 'object' ? (item as Record<string, unknown>)[clave] : undefined;
 }

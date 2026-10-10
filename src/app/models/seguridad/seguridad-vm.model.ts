@@ -46,8 +46,7 @@ export interface UsuarioAdminViewModel {
   avatar: string | null;
   cantidadPosts: number;
   cantidadComentarios: number;
-  /** El API serializa ISO2 como 'isO2'. */
-  estado: { nombre: string; pais: { nombre: string; isO2: string } | null } | null;
+  estado: { nombre: string; pais: { nombre: string; iso2: string } | null } | null;
   eliminado: boolean;
 }
 
@@ -66,10 +65,10 @@ export interface PerfilUsuarioViewModel {
   seguidoresCount: number;
   siguiendoCount: number;
   genero: string;
-  rango: RangoUsuarioViewModel;
+  rango: RangoUsuarioViewModel | null;
   fechaNacimiento: string;
   edad: number;
-  pais: PaisViewModel;
+  pais: PaisViewModel | null;
 }
 
 /** Respuesta de usuarioPerfil/getUsuarioInfo: tarjeta del autor (posts, temas, popover). */
@@ -85,13 +84,19 @@ export interface UsuarioInfoViewModel {
   seguidoresCount: number;
   fechaRegistro: string;
   rango: RangoUsuarioViewModel | null;
-  /** Viene del ViewModel mapeado: la clave es `isO2` (camelCase de ISO2), no `iso2` como en las proyecciones. */
-  pais: { nombre: string; isO2: string } | null;
+  pais: { nombre: string; iso2: string } | null;
 }
 
 /** Lo que las secciones del perfil necesitan del dueño. Mientras el perfil carga llega SIN_PERFIL (id 0). */
 export type PerfilRef = Pick<PerfilUsuarioViewModel, 'id' | 'userName'>;
 export const SIN_PERFIL: PerfilRef = { id: 0, userName: '' };
+
+/** Perfil completo vacío: lo que muestra /perfil/:usuario hasta que llega la respuesta. */
+export const PERFIL_VACIO: PerfilUsuarioViewModel = {
+  id: 0, avatar: '', profileBackground: '', userName: '', completeName: '', mensajePersonal: '', website: '',
+  fechaRegistro: '', puntos: 0, comentariosCount: 0, postsCount: 0, seguidoresCount: 0, siguiendoCount: 0,
+  genero: '', rango: null, fechaNacimiento: '', edad: 0, pais: null,
+};
 
 export interface UsuarioOnlineViewModel {
   userName: string;

@@ -30,7 +30,7 @@
     </div>
 
     <div class="cat-card__subs">
-      @if (cat.subCategorias?.length > 0) {
+      @if (cat.subCategorias.length > 0) {
         @for (sub of cat.subCategorias; track sub.id) {
           <span class="sub-chip">
             {{sub.nombre}}

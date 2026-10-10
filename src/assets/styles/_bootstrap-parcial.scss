@@ -1,0 +1,36 @@
+// Bootstrap 5.3 solo con lo que la app usa (antes se cargaba bootstrap.min.css completo: ~230 KB en cada página).
+// Se sacaron módulos sin uso: accordion, breadcrumb, button-group, carousel, close, list-group, modal, nav, navbar,
+// offcanvas, popover, progress, toasts, tooltip y placeholders (los .carousel/.xx-pagination de la app son propios).
+// Si una plantilla empieza a usar uno de esos componentes, agregarlo acá.
+
+// Configuración
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+
+// Base
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/images";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+
+// Componentes usados
+@import "bootstrap/scss/tables";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/pagination";
+@import "bootstrap/scss/badge";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/spinners";
+
+// Helpers y utilidades (d-flex, mb-3, text-center...)
+@import "bootstrap/scss/helpers";
+@import "bootstrap/scss/utilities/api";

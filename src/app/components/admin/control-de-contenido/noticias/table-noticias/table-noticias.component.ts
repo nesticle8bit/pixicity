@@ -1,3 +1,4 @@
+import { NoticiaAdmin } from 'src/app/models/admin/filas-admin.model';
 import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { DialogCreateUpdateNoticiasComponent } from '../dialog-create-update-noticias/dialog-create-update-noticias.component';
@@ -45,7 +46,7 @@ export class TableNoticiasComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public noticias: any[] = [];
+  public noticias: NoticiaAdmin[] = [];
   public totalCount: number = 0;
 
   public filtro: AdminFiltro = {};
@@ -74,7 +75,7 @@ export class TableNoticiasComponent implements OnInit {
     });
   }
 
-  updateNoticia(noticia: any = null): void {
+  updateNoticia(noticia: NoticiaAdmin | null = null): void {
     const dialogRef = this.dialog.open(DialogCreateUpdateNoticiasComponent, {
       width: '1080px',
       data: noticia,
@@ -88,7 +89,7 @@ export class TableNoticiasComponent implements OnInit {
     });
   }
 
-  deleteNoticia(noticia: any): void {
+  deleteNoticia(noticia: NoticiaAdmin): void {
     const accion = noticia.eliminado ? 'recuperar' : 'eliminar';
     if (this.notificationService.confirm(`¿Está seguro de ${accion} esta noticia?`)) {
       this.noticiasService.deleteNoticias(noticia.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {

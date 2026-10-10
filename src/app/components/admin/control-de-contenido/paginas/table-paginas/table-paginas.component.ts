@@ -1,3 +1,4 @@
+import { PaginaAdmin } from 'src/app/models/admin/filas-admin.model';
 import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
@@ -45,7 +46,7 @@ export class TablePaginasComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public paginas: any[] = [];
+  public paginas: PaginaAdmin[] = [];
   public totalCount: number = 0;
 
   public filtro: AdminFiltro = {};
@@ -82,7 +83,7 @@ export class TablePaginasComponent implements OnInit {
       });
   }
 
-  createUpdatePagina(pagina: any = null): void {
+  createUpdatePagina(pagina: PaginaAdmin | null = null): void {
     const dialogRef = this.dialog.open(DialogCreateUpdatePaginasComponent, {
       width: '1080px',
       data: pagina,
@@ -96,7 +97,7 @@ export class TablePaginasComponent implements OnInit {
     });
   }
 
-  deletePagina(pagina: any): void {
+  deletePagina(pagina: PaginaAdmin): void {
     const accion = pagina.eliminado ? 'recuperar' : 'eliminar';
     if (this.notificationService.confirm(`¿Está seguro de ${accion} esta página?`)) {
       this.webService.deletePagina(pagina.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {

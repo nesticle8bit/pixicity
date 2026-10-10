@@ -5,7 +5,7 @@
     </div>
 
     <div class="sh-composer__main">
-        <textarea class="sh-composer__input" rows="3" formControlName="comentario"
+        <textarea #campoShout class="sh-composer__input" rows="3" formControlName="comentario"
             aria-label="¿Qué estás pensando?" placeholder="¿Qué estás pensando?"></textarea>
 
         <div class="sh-composer__media">
@@ -22,6 +22,10 @@
 
         <div class="sh-composer__actions">
             <span class="sh-composer__hint">Comparte algo con la comunidad</span>
+            <button #botonEmojis type="button" class="sh-composer__emoji" (click)="abrirEmojis(botonEmojis)"
+                aria-label="Agregar emoji" aria-haspopup="dialog" [attr.aria-expanded]="emojisAbierto">
+                <i class="ti ti-mood-smile" aria-hidden="true"></i>
+            </button>
             <button type="submit" class="sh-btn" [disabled]="!formGroup.value.comentario">
                 <i class="ti ti-send"></i> Compartir
             </button>

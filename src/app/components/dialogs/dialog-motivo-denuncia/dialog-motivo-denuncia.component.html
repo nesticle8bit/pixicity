@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Denunciar {{data.que}}</h2>
+
+<form (submit)="$event.preventDefault(); enviar()">
+  <mat-dialog-content>
+    <fieldset class="motivos">
+      <legend>¿Por qué lo denuncias?</legend>
+      @for (m of motivos; track m) {
+      <label class="motivos__opcion" [class.is-activo]="elegido() === m">
+        <input type="radio" name="motivo" [value]="m" [checked]="elegido() === m" (change)="elegido.set(m)" />
+        <span>{{m}}</span>
+      </label>
+      }
+    </fieldset>
+
+    <label class="detalle" for="motivo-detalle">
+      {{esOtro() ? 'Cuéntanos el motivo' : 'Aclaración (opcional)'}}
+    </label>
+    <textarea #campo id="motivo-detalle" class="form-control" rows="3" [maxLength]="maxDetalle" [value]="detalle()"
+      (input)="detalle.set(campo.value)" [attr.aria-required]="esOtro()"></textarea>
+    <div class="contador">{{detalle().length}}/{{maxDetalle}}</div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button type="button" mat-button mat-dialog-close>Cancelar</button>
+    <button type="submit" mat-button color="warn" [disabled]="!valido()">Denunciar</button>
+  </mat-dialog-actions>
+</form>

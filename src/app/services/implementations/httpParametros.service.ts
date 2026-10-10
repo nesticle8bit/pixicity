@@ -1,3 +1,4 @@
+import { CategoriaAdmin, PaisAdmin } from 'src/app/models/admin/filas-admin.model';
 import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpParametrosService } from '../interfaces/httpParametros.interface';
 import { environment } from 'src/environments/environment';
@@ -19,9 +20,9 @@ export class HttpParametrosService implements IHttpParametrosService {
   private http = inject(HttpClient);
 
 
-  getPaises(filtro: AdminFiltro = {}): Observable<PaginatedData<PaisViewModel>> {
+  getPaises(filtro: AdminFiltro = {}): Observable<PaginatedData<PaisAdmin>> {
     return this.http
-      .get<ApiResponse<PaginatedData<PaisViewModel>>>(
+      .get<ApiResponse<PaginatedData<PaisAdmin>>>(
         `${environment.api}/api/paises/getPaises?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
@@ -103,9 +104,9 @@ export class HttpParametrosService implements IHttpParametrosService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getCategoriasAdmin(filtro: AdminFiltro = {}): Observable<PaginatedData<CategoriaViewModel, 'categorias'>> {
+  getCategoriasAdmin(filtro: AdminFiltro = {}): Observable<PaginatedData<CategoriaAdmin, 'categorias'>> {
     return this.http
-      .get<ApiResponse<PaginatedData<CategoriaViewModel, 'categorias'>>>(
+      .get<ApiResponse<PaginatedData<CategoriaAdmin, 'categorias'>>>(
         `${environment.api}/api/categorias/getCategoriasAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
@@ -151,6 +152,22 @@ export class HttpParametrosService implements IHttpParametrosService {
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
+  }
+
+  /** Alterna eliminada/activa; devuelve true si quedó eliminada. */
+  cambiarEstadoCategoria(id: number): Observable<boolean> {
+    return this.http
+      .post<ApiResponse<boolean>>(`${environment.api}/api/categorias/cambiarEstadoCategoria?id=${id}`, null)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) {
+            return response.data!;
+          }
+          this.notificationService.error(response.errors.join(', '), 'Error');
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
+        catchError(this.helper.errorHandler),
+      );
   }
 
   saveCategoria(categoria: Partial<CategoriaViewModel>): Observable<number> {

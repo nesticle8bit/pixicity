@@ -47,8 +47,8 @@ export class DialogUpdatePaisesComponent implements OnInit {
       this.formGroup.patchValue({
         id: this.data.id,
         nombre: this.data.nombre,
-        iso2: this.data.isO2,
-        iso3: this.data.isO3,
+        iso2: this.data.iso2,
+        iso3: this.data.iso3,
       });
     }
   }

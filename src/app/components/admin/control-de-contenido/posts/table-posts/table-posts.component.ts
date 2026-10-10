@@ -1,3 +1,4 @@
+import { PostAdmin } from 'src/app/models/admin/filas-admin.model';
 import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
@@ -42,7 +43,7 @@ export class TablePostsComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public posts: any[] = [];
+  public posts: PostAdmin[] = [];
   public totalCount: number = 0;
 
   public filtro: AdminFiltro = {};
@@ -110,10 +111,21 @@ export class TablePostsComponent implements OnInit {
         this.postsService.deletePost(postId, razon).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: boolean) => {
           if (response) {
             this.notificationService.success('El post ha sido eliminado correctamente, ahora nadie lo podrá visualizar', 'Eliminado');
-            this.posts[index].eliminado = !this.posts[index].eliminado;
+            this.posts[index].eliminado = true;
           }
         });
       }
+    }
+  }
+
+  recuperarPost(postId: number, index: number): void {
+    if (this.notificationService.confirm('¿Recuperar este post? Volverá a estar visible para todos.')) {
+      this.postsService.recuperarPost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok) => {
+        if (ok) {
+          this.notificationService.success('El post volvió a estar visible', 'Recuperado');
+          this.posts[index].eliminado = false;
+        }
+      });
     }
   }
 }

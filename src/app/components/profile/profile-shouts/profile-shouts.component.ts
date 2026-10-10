@@ -1,7 +1,8 @@
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { PerfilRef, SIN_PERFIL } from 'src/app/models/seguridad/seguridad-vm.model';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
-import { Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output, ElementRef, viewChild } from '@angular/core';
+import { EmojisPopoverService } from '../../bottom-sheets/bottom-sheets-emojis/emojis-popover.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -29,6 +30,9 @@ export class ProfileShoutsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public reloadShouts: boolean = false;
+  public emojisAbierto = false;
+  private readonly emojis = inject(EmojisPopoverService);
+  private readonly campoShout = viewChild<ElementRef<HTMLTextAreaElement>>('campoShout');
   private _user: PerfilRef = SIN_PERFIL;
 
   @Input() set user(value: PerfilRef | null) {
@@ -70,6 +74,32 @@ export class ProfileShoutsComponent implements OnInit {
     if (u.includes('spotify.com')) return 'Spotify';
     if (/\.(jpg|jpeg|png|gif|webp|bmp|avif)(\?.*)?$/.test(u)) return 'Foto';
     return 'Enlace';
+  }
+
+  async abrirEmojis(boton: HTMLElement): Promise<void> {
+    await this.emojis.alternar(boton, {
+      alElegir: (emoji) => this.insertarEmoji(emoji),
+      noTapar: this.campoShout()?.nativeElement,
+      alCerrar: (porTeclado) => {
+        this.emojisAbierto = false;
+        if (porTeclado) this.campoShout()?.nativeElement.focus();
+      },
+    });
+    this.emojisAbierto = this.emojis.estaAbiertoPara(boton);
+  }
+
+  /** Inserta en el cursor del textarea (o reemplaza la selección) y deja el cursor después del emoji. */
+  private insertarEmoji(emoji: string): void {
+    const campo = this.campoShout()?.nativeElement;
+    const texto: string = this.formGroup.value.comentario ?? '';
+    const inicio = campo?.selectionStart ?? texto.length;
+    const fin = campo?.selectionEnd ?? texto.length;
+    const nuevo = texto.slice(0, inicio) + emoji + texto.slice(fin);
+    this.formGroup.patchValue({ comentario: nuevo });
+    if (campo) {
+      campo.value = nuevo;
+      campo.setSelectionRange(inicio + emoji.length, inicio + emoji.length);
+    }
   }
 
   createShout(): void {

@@ -8,6 +8,8 @@ import { PerfilInfoResponse, PerfilUsuarioViewModel, SeguidoresResponse, Usuario
 @Injectable()
 export abstract class IHttpUsuarioPerfilService {
   abstract getUsuarioInfo(userName: string): Observable<UsuarioInfoViewModel>;
+  /** Autocompletar @menciones. Nunca falla: ante un error devuelve []. */
+  abstract sugerirMenciones(prefijo: string): Observable<UsuarioAvatarViewModel[]>;
   abstract seguirUsuario(usuario: { userName: string }): Observable<boolean>;
   abstract isFollowingTheUser(userName: string): Observable<boolean>;
   abstract getFollowingUsersByUserId(id: number): Observable<PaginatedData<UsuarioAvatarViewModel>>;

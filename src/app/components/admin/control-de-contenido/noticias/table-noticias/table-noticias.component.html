@@ -40,9 +40,9 @@
               {{noticia.eliminado ? 'Eliminado' : 'Activo'}}
             </td>
             <td>
-              <app-user-avatar [class]="'img-avatar'" [avatar]="noticia.usuario?.avatar"
-                [userName]="noticia.usuario?.userName">
-              </app-user-avatar> {{noticia.usuario?.userName}}
+              <app-user-avatar [class]="'img-avatar'" [avatar]="null"
+                [userName]="noticia.usuarioRegistra">
+              </app-user-avatar> {{noticia.usuarioRegistra}}
             </td>
             <td class="text-center" width="30px">
               <button type="button" class="btn-menu" aria-label="Acciones" [matMenuTriggerFor]="menu">

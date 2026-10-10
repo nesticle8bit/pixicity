@@ -1,3 +1,4 @@
+import { ComunidadCategoria } from 'src/app/models/comunidades/comunidad.model';
 import { Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -32,7 +33,7 @@ export class DialogComunidadSubcategoriaComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
-  public categoria: any;
+  public categoria?: ComunidadCategoria;
 
   constructor() {
     this.categoria = this.data?.categoria;

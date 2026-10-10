@@ -61,10 +61,17 @@
                     <mat-icon>edit</mat-icon>
                     <span>Actualizar</span>
                   </button>
-                  <button type="button" class="text-danger" mat-menu-item (click)="deleteCategoria(categoria, i)">
+                  @if (!categoria.eliminado) {
+                  <button type="button" class="text-danger" mat-menu-item (click)="cambiarEstado(categoria)">
                     <mat-icon class="text-danger">delete_outline</mat-icon>
                     <span>Eliminar</span>
                   </button>
+                  } @else {
+                  <button type="button" mat-menu-item (click)="cambiarEstado(categoria)">
+                    <mat-icon>undo</mat-icon>
+                    <span>Recuperar</span>
+                  </button>
+                  }
                 </mat-menu>
               </td>
             </tr>

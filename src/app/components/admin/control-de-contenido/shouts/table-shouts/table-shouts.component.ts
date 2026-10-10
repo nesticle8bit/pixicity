@@ -1,3 +1,4 @@
+import { ShoutAdmin } from 'src/app/models/perfil/shout-vm.model';
 import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
@@ -38,7 +39,7 @@ export class TableShoutsComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public shouts: any[] = [];
+  public shouts: ShoutAdmin[] = [];
   public totalCount: number = 0;
 
   public filtro: AdminFiltro = {};

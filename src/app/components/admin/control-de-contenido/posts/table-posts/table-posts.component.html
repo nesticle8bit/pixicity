@@ -72,10 +72,17 @@
                       <mat-icon>edit</mat-icon>
                       <span>Actualizar</span>
                     </button>
+                    @if (!post.eliminado) {
                     <button type="button" mat-menu-item (click)="eliminarPost(post.id, i)">
                       <mat-icon>delete_outline</mat-icon>
                       <span>Eliminar</span>
                     </button>
+                    } @else {
+                    <button type="button" mat-menu-item (click)="recuperarPost(post.id, i)">
+                      <mat-icon>undo</mat-icon>
+                      <span>Recuperar</span>
+                    </button>
+                    }
                   </mat-menu>
                 </td>
               </tr>

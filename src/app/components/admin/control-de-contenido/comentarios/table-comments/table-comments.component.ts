@@ -1,3 +1,4 @@
+import { ComentarioViewModel } from 'src/app/models/posts/post-vm.model';
 import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
@@ -45,7 +46,7 @@ export class TableCommentsComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public comments: any[] = [];
+  public comments: ComentarioViewModel[] = [];
   public totalCount: number = 0;
 
   public filtro: AdminFiltro = {};
@@ -90,7 +91,7 @@ export class TableCommentsComponent implements OnInit {
     this.getComentarios();
   }
 
-  deleteComentario(comentario: any): void {
+  deleteComentario(comentario: ComentarioViewModel): void {
     const accion = comentario.eliminado ? 'recuperar' : 'eliminar';
     if (this.notificationService.confirm(`¿Está seguro de ${accion} este comentario?`)) {
       const accion$ = comentario.eliminado

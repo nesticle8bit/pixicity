@@ -37,12 +37,14 @@
               </span>
             </td>
             <td>
-              <a [routerLink]="['/posts/' + comment.post.categoria.seo + '/' + comment.post.id + '/' + comment.post.url]"
-                title="{{comment.post.titulo}}">
-                <img src="/assets/images/categorias/{{comment.post.categoria.icono}}" title="{{comment.post.categoria.nombre}}"
-                  alt="{{comment.post.categoria.nombre}}" loading="lazy"/>
-                  {{comment.post.titulo | truncate:[70]}}
+              @if (comment.post; as post) {
+              <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
+                title="{{post.titulo}}">
+                <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
+                  alt="{{post.categoria.nombre}}" loading="lazy"/>
+                  {{post.titulo | truncate:[70]}}
                 </a>
+              }
               </td>
               <td>
                 <app-who-is-ip [IP]="comment.ip"></app-who-is-ip>

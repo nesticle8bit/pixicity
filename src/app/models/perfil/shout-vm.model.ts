@@ -20,6 +20,8 @@ export interface ShoutAdmin {
   perfil: { userName: string; avatar: string | null };
   usuario: { userName: string; avatar: string | null };
   comentario: string;
+  /** Enlace/media adjunto (YouTube, imagen...). */
+  url: string | null;
   fechaRegistro: string;
   tipoString: string;
   eliminado: boolean;

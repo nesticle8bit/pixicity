@@ -1,3 +1,4 @@
+import { EmojisPopoverService } from '../../bottom-sheets/bottom-sheets-emojis/emojis-popover.service';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -147,6 +148,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly destroyRef = inject(DestroyRef);
   private readonly fotosService = inject(IHttpFotosService);
+  private readonly emojis = inject(EmojisPopoverService);
   private readonly notificationService = inject(NotificationService);
 
   disabled = false;
@@ -199,6 +201,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     { items: [
       { icon: 'link', title: 'Insertar enlace (Ctrl+K)', run: () => this.insertLink() },
       { menu: 'image', icon: 'image', title: 'Insertar imagen' },
+      { icon: 'mood', title: 'Insertar emoji', run: () => this.abrirEmojis() },
     ] },
     { secondary: true, items: [
       { menu: 'heading', icon: 'title', title: 'Encabezado (# espacio)' },
@@ -244,6 +247,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
 
   private plainPaste = false; // Ctrl+Shift+V
   private uploadSel: TextOffsets | null = null; // dónde insertar las imágenes elegidas
+  private emojiSel: TextOffsets | null = null; // dónde va el próximo emoji (el foco está en el selector)
   private internalDrag = false;
   private uploadSeq = 0;
 
@@ -286,6 +290,8 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     clearTimeout(this.snapshotTimer);
     cancelAnimationFrame(this.scrollFrame);
     document.removeEventListener('scroll', this.onAnyScroll, true);
+    const boton = this.toolbarEl().nativeElement.querySelector<HTMLElement>('[aria-label="Insertar emoji"]');
+    if (boton && this.emojis.estaAbiertoPara(boton)) this.emojis.cerrar();
   }
 
   //  ControlValueAccessor
@@ -541,6 +547,32 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.openMenu = null;
     this.uploadSel = this.offsetsOf(this.currentRange());
     this.fileInputEl().nativeElement.click();
+  }
+
+  /** Selector de emojis junto al botón; queda abierto y cada emoji se inserta donde estaba el cursor. */
+  abrirEmojis(): void {
+    this.openMenu = null;
+    const boton = this.toolbarEl().nativeElement.querySelector<HTMLElement>('[aria-label="Insertar emoji"]');
+    if (!boton) return;
+    this.emojiSel = this.offsetsOf(this.currentRange());
+    void this.emojis.alternar(boton, {
+      alElegir: (emoji) => this.insertarEmoji(emoji),
+      alCerrar: (porTeclado) => {
+        this.emojiSel = null;
+        if (porTeclado) this.editor.focus();
+      },
+    });
+  }
+
+  private insertarEmoji(emoji: string): void {
+    this.editor.focus({ preventScroll: true });
+    if (this.emojiSel) this.restoreOffsets(this.emojiSel);
+    else this.placeCaretEnd();
+    const frag = document.createDocumentFragment();
+    frag.appendChild(document.createTextNode(emoji));
+    this.insertFragment(frag);
+    this.afterChange();
+    this.emojiSel = this.offsetsOf(this.currentRange());
   }
 
   onFilesChosen(input: HTMLInputElement): void {

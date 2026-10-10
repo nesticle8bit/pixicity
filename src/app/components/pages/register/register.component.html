@@ -12,7 +12,7 @@
     </div>
   }
 
-  @if (configuracion?.disableUserRegistration === false) {
+  @if (configuracion?.disableUserRegistration !== true) {
     <div class="row bg-white"
       [ngClass]="{'p-4': !hide()?.sidebar}">
       <div class="col-12 text-center main-login--head"
@@ -188,12 +188,14 @@
               <span class="w200">Regístrate para</span>
             </div>
             <div class="olvidar">
-              <li>Empezar a interactuar con la comunidad.</li>
-              <li>Crear y compartir tu contenido favorito.</li>
-              <li>Votar lo que más te gusta del sitio.</li>
-              <li>Buscar y seguir amigos.</li>
-              <li>Promocionar e incrementar el tráfico a tu sitio.</li>
-              <li>Ser parte de la <b>Inteligencia colectiva!</b></li>
+              <ul class="registro-beneficios">
+                <li>Empezar a interactuar con la comunidad.</li>
+                <li>Crear y compartir tu contenido favorito.</li>
+                <li>Votar lo que más te gusta del sitio.</li>
+                <li>Buscar y seguir amigos.</li>
+                <li>Promocionar e incrementar el tráfico a tu sitio.</li>
+                <li>Ser parte de la <b>Inteligencia colectiva!</b></li>
+              </ul>
               <span>¡Empieza a participar ahora, es gratis!</span>
             </div>
           </div>

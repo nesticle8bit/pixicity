@@ -1,3 +1,4 @@
+import { NoticiaAdmin } from 'src/app/models/admin/filas-admin.model';
 import { AdminFiltro } from 'src/app/models/admin/admin-filtro.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -6,7 +7,7 @@ import { NoticiaModel } from 'src/app/models/web/noticia.model';
 
 @Injectable()
 export abstract class IHttpNoticiasService {
-  abstract getNoticias(search: string, filtro?: AdminFiltro): Observable<PaginatedData<NoticiaModel, 'noticias'>>;
+  abstract getNoticias(search: string, filtro?: AdminFiltro): Observable<PaginatedData<NoticiaAdmin, 'noticias'>>;
   abstract saveNoticias(noticia: Partial<NoticiaModel>): Observable<number>;
   abstract updateNoticias(noticia: Partial<NoticiaModel>): Observable<boolean>;
   abstract deleteNoticias(id: number): Observable<boolean>;

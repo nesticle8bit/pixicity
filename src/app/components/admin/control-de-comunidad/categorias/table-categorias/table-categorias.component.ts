@@ -1,3 +1,5 @@
+import { NotificationService } from 'src/app/services/shared/notification.service';
+import { CategoriaAdmin } from 'src/app/models/admin/filas-admin.model';
 import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
@@ -37,10 +39,11 @@ export class TableCategoriasComponent implements OnInit {
   paginationService = inject(PaginationService);
   private parametrosService = inject(IHttpParametrosService);
   private dialog = inject(MatDialog);
+  private notificationService = inject(NotificationService);
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public categorias: any[] = [];
+  public categorias: CategoriaAdmin[] = [];
   public totalCount: number = 0;
 
   public filtro: AdminFiltro = {};
@@ -75,7 +78,7 @@ export class TableCategoriasComponent implements OnInit {
     this.getCategorias();
   }
 
-  updateCategoria(categoria: any): void {
+  updateCategoria(categoria?: CategoriaAdmin): void {
     const dialogRef = this.dialog.open(DialogCreateUpdateCategoriasComponent, {
       width: '1280px',
       data: categoria,
@@ -89,7 +92,17 @@ export class TableCategoriasComponent implements OnInit {
     });
   }
 
-  deleteCategoria(categoriaId: number, index: number): void {
+  /** Alterna eliminada/activa: una categoría eliminada no se ofrece al crear posts, pero sus posts siguen visibles. */
+  cambiarEstado(categoria: CategoriaAdmin): void {
+    const accion = categoria.eliminado ? 'recuperar' : 'eliminar';
+    if (!this.notificationService.confirm(`¿Seguro que deseas ${accion} la categoría "${categoria.nombre}"?`)) return;
 
+    this.parametrosService.cambiarEstadoCategoria(categoria.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((eliminada) => {
+      categoria.eliminado = eliminada;
+      this.notificationService.success(
+        eliminada ? 'La categoría ya no se ofrece al crear posts' : 'La categoría vuelve a estar disponible',
+        eliminada ? 'Eliminada' : 'Recuperada',
+      );
+    });
   }
 }

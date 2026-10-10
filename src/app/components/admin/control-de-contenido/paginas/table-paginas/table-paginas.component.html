@@ -65,9 +65,9 @@
               {{pagina.eliminado ? 'Eliminado' : 'Activo'}}
             </td>
             <td>
-              <app-user-avatar [class]="'img-avatar'" [avatar]="pagina.usuario?.avatar"
-                [userName]="pagina.usuario?.userName">
-              </app-user-avatar> {{pagina.usuario?.userName}}
+              <app-user-avatar [class]="'img-avatar'" [avatar]="null"
+                [userName]="pagina.usuarioRegistra">
+              </app-user-avatar> {{pagina.usuarioRegistra}}
             </td>
             <td class="text-center" width="30px">
               <button type="button" class="btn-menu" aria-label="Acciones" [matMenuTriggerFor]="menu">
