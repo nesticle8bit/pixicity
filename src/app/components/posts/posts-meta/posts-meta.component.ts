@@ -57,7 +57,9 @@ export class PostsMetaComponent implements OnInit {
 
   public addedPuntos: boolean = false;
   public availablePuntos: number[] = [];
-  public currentUser?: JwtUserModel;
+  // Se lee al crear el componente: el setter de `post` corre ANTES de ngOnInit (posts-view lo crea dentro de
+  // @if (post)) y, si el usuario se leía en ngOnInit, la barra de "Dar puntos" nunca se cargaba.
+  public currentUser: JwtUserModel = this.securityService.getCurrentUser();
 
   ngOnInit(): void {
     this.currentUser = this.securityService.getCurrentUser();
