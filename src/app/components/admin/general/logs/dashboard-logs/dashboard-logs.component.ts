@@ -11,6 +11,7 @@ import { NgClass, NgTemplateOutlet, DatePipe } from '@angular/common';
 import { MatTooltip } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
+import { MetricasApiComponent } from '../metricas-api/metricas-api.component';
 
 @Component({
     selector: 'app-dashboard-logs',
@@ -24,6 +25,7 @@ import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
         MatPaginator,
         DatePipe,
         TimeAgoPipe,
+        MetricasApiComponent,
     ],
 })
 export class DashboardLogsComponent implements OnInit {

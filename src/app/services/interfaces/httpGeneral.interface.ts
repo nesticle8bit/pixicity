@@ -3,7 +3,7 @@ import { ConfiguracionModel, ContactoModel } from 'src/app/models/general/config
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AfiliacionModel } from 'src/app/models/general/afiliacion.model';
-import { DashboardResumen } from 'src/app/models/admin/dashboard.model';
+import { DashboardResumen, MetricasApi } from 'src/app/models/admin/dashboard.model';
 import { PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
 import { FavoritosViewModel } from 'src/app/models/posts/post-vm.model';
 import { EstadisticasViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
@@ -13,6 +13,7 @@ export abstract class IHttpGeneralService {
   abstract getEstadisticas(): Observable<EstadisticasViewModel>;
   abstract getAdminEstadisticas(): Observable<unknown>;
   abstract getDashboardResumen(): Observable<DashboardResumen>;
+  abstract getMetricasApi(minutos: number): Observable<MetricasApi>;
   abstract getAfiliados(filtro?: AdminFiltro): Observable<PaginatedData<AfiliacionModel>>;
   abstract saveAfiliacion(afiliacion: AfiliacionModel): Observable<number>;
   abstract getFavoritosByUser(search: string, categoriaId: number): Observable<PaginatedWithCategorias<FavoritosViewModel, 'favoritos'>>;

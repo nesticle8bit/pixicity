@@ -78,3 +78,27 @@ export interface DashboardResumen {
   topPostsSemana: DashboardPost[];
   actividad: DashboardActividad[];
 }
+
+/** Rendimiento de un endpoint del API (ver RequestMetrics en el backend). */
+export interface MetricaRuta {
+  ruta: string;
+  peticiones: number;
+  errores: number;
+  promedioMs: number;
+  p95Ms: number;
+  maxMs: number;
+}
+
+/** GET /api/dashboard/getMetricas: métricas en memoria desde el último reinicio del API. */
+export interface MetricasApi {
+  minutos: number;
+  peticiones: number;
+  peticionesPorMinuto: number;
+  errores: number;
+  tasaError: number;
+  p50Ms: number;
+  p95Ms: number;
+  masLentas: MetricaRuta[];
+  conErrores: MetricaRuta[];
+  masUsadas: MetricaRuta[];
+}

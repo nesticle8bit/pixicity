@@ -7,7 +7,7 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { FormsModule } from '@angular/forms';
 import { MatTooltip } from '@angular/material/tooltip';
-import { NgTemplateOutlet, NgStyle } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
@@ -45,7 +45,6 @@ const MOTIVOS_DENUNCIA = ['Spam o publicidad', 'Contenido ofensivo', 'Acoso', 'I
         NgTemplateOutlet,
         RouterLink,
         UserPopoverDirective,
-        NgStyle,
         TimeAgoPipe,
     ],
 })

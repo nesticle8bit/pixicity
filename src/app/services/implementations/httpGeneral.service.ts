@@ -13,7 +13,7 @@ import { PaginationService } from '../shared/pagination.service';
 import { ApiResponse, PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
 import { EstadisticasViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { FavoritosViewModel } from 'src/app/models/posts/post-vm.model';
-import { DashboardResumen } from 'src/app/models/admin/dashboard.model';
+import { DashboardResumen, MetricasApi } from 'src/app/models/admin/dashboard.model';
 
 @Injectable()
 export class HttpGeneralService implements IHttpGeneralService {
@@ -26,6 +26,20 @@ export class HttpGeneralService implements IHttpGeneralService {
   getDashboardResumen(): Observable<DashboardResumen> {
     return this.http
       .get<ApiResponse<DashboardResumen>>(`${environment.api}/api/dashboard/getResumen`)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) {
+            return response.data!;
+          }
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getMetricasApi(minutos: number): Observable<MetricasApi> {
+    return this.http
+      .get<ApiResponse<MetricasApi>>(`${environment.api}/api/dashboard/getMetricas`, { params: { minutos } })
       .pipe(
         map((response) => {
           if (response.status === 200) {

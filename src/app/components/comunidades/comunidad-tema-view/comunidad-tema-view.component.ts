@@ -13,7 +13,7 @@ import { ComentarioHilo, ComentariosAcciones } from 'src/app/models/shared/comen
 import { PerfilUsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
-import { NgStyle, DecimalPipe, DatePipe, DOCUMENT } from '@angular/common';
+import { DecimalPipe, DatePipe, DOCUMENT } from '@angular/common';
 import { FollowButtonComponent } from '../../addons/follow-button/follow-button.component';
 import { ShareButtonsComponent } from '../../addons/share-buttons/share-buttons.component';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -52,7 +52,6 @@ function aHilo(c: TemaComentario): ComentarioHilo {
         RouterLink,
         UserPopoverDirective,
         UserAvatarComponent,
-        NgStyle,
         FollowButtonComponent,
         ShareButtonsComponent,
         MatTooltip,

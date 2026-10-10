@@ -1,0 +1,81 @@
+<section class="metricas" aria-labelledby="metricas-titulo">
+  <header class="metricas__cabecera">
+    <h2 id="metricas-titulo" class="metricas__titulo">Rendimiento del API</h2>
+    <div class="metricas__acciones" role="group" aria-label="Ventana de tiempo">
+      @for (v of ventanas; track v) {
+        <button type="button" class="btn btn-sm" [class.btn-primary]="minutos() === v" [class.btn-outline-secondary]="minutos() !== v"
+          [attr.aria-pressed]="minutos() === v" (click)="cambiarVentana(v)">
+          {{ v }} min
+        </button>
+      }
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="cargar()" [disabled]="cargando()" aria-label="Actualizar métricas">
+        <i class="ti ti-refresh" aria-hidden="true"></i>
+      </button>
+    </div>
+  </header>
+
+  @if (metricas(); as m) {
+    <div class="metricas__stats">
+      <div class="metricas__stat">
+        <span class="metricas__valor">{{ m.peticionesPorMinuto | number: '1.0-1' }}</span>
+        <span class="metricas__label">Peticiones / min</span>
+      </div>
+      <div class="metricas__stat" [class.metricas__stat--alerta]="m.tasaError >= 0.05">
+        <span class="metricas__valor">{{ m.tasaError | percent: '1.0-1' }}</span>
+        <span class="metricas__label">Errores 5xx ({{ m.errores }})</span>
+      </div>
+      <div class="metricas__stat">
+        <span class="metricas__valor">{{ m.p50Ms | number: '1.0-0' }} ms</span>
+        <span class="metricas__label">Latencia p50</span>
+      </div>
+      <div class="metricas__stat" [class.metricas__stat--alerta]="m.p95Ms >= umbralLentoMs">
+        <span class="metricas__valor">{{ m.p95Ms | number: '1.0-0' }} ms</span>
+        <span class="metricas__label">Latencia p95</span>
+      </div>
+    </div>
+
+    @if (m.peticiones === 0) {
+      <p class="text-muted mb-0">Sin peticiones en los últimos {{ m.minutos }} minutos (las métricas se reinician con el API).</p>
+    } @else {
+      <div class="metricas__tablas">
+        <div>
+          <h3 class="metricas__subtitulo">Más lentos (p95)</h3>
+          <table class="table table-sm align-middle mb-0">
+            <thead><tr><th scope="col">Endpoint</th><th scope="col" class="text-end">Pet.</th><th scope="col" class="text-end">Prom.</th><th scope="col" class="text-end">p95</th></tr></thead>
+            <tbody>
+              @for (r of m.masLentas; track r.ruta) {
+                <tr [class.table-warning]="r.p95Ms >= umbralLentoMs">
+                  <td class="metricas__ruta">{{ r.ruta }}</td>
+                  <td class="text-end">{{ r.peticiones }}</td>
+                  <td class="text-end">{{ r.promedioMs | number: '1.0-0' }} ms</td>
+                  <td class="text-end">{{ r.p95Ms | number: '1.0-0' }} ms</td>
+                </tr>
+              } @empty {
+                <tr><td colspan="4" class="text-muted">Sin datos suficientes.</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 class="metricas__subtitulo">Con errores 5xx</h3>
+          <table class="table table-sm align-middle mb-0">
+            <thead><tr><th scope="col">Endpoint</th><th scope="col" class="text-end">Pet.</th><th scope="col" class="text-end">Errores</th></tr></thead>
+            <tbody>
+              @for (r of m.conErrores; track r.ruta) {
+                <tr class="table-danger">
+                  <td class="metricas__ruta">{{ r.ruta }}</td>
+                  <td class="text-end">{{ r.peticiones }}</td>
+                  <td class="text-end">{{ r.errores }}</td>
+                </tr>
+              } @empty {
+                <tr><td colspan="3" class="text-muted">Ningún error del servidor. 🎉</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+  } @else if (cargando()) {
+    <p class="text-muted mb-0">Cargando métricas…</p>
+  }
+</section>

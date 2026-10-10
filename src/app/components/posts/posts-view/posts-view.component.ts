@@ -13,7 +13,7 @@ import { PostDetalle } from 'src/app/models/posts/post-vm.model';
 import { PerfilUsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
-import { NgStyle, DecimalPipe, DatePipe, DOCUMENT } from '@angular/common';
+import { DecimalPipe, DatePipe, DOCUMENT } from '@angular/common';
 import { FollowButtonComponent } from '../../addons/follow-button/follow-button.component';
 import { PostMoreFromOPComponent } from '../post-more-from-op/post-more-from-op.component';
 import { PostRelatedPostsComponent } from '../post-related-posts/post-related-posts.component';
@@ -36,7 +36,6 @@ import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsua
         RouterLink,
         UserPopoverDirective,
         UserAvatarComponent,
-        NgStyle,
         FollowButtonComponent,
         PostMoreFromOPComponent,
         PostRelatedPostsComponent,
