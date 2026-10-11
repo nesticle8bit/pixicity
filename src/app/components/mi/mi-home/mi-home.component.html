@@ -56,24 +56,7 @@
           @for (item of items(); track claveItem(item)) {
           <li>
             @if (item.tipo === 'post' && item.post; as post) {
-            <article class="mi-post">
-              <p class="mi-post__quien">
-                <app-user-avatar [avatar]="post.autor.avatar" [userName]="post.autor.userName" [width]="22" [height]="22" />
-                <a [routerLink]="['/perfil', post.autor.userName]">{{ '@' }}{{ post.autor.userName }}</a>
-                publicó un post · <time [attr.datetime]="item.fecha">{{ item.fecha | timeAgo }}</time>
-              </p>
-              <a class="mi-post__card" [routerLink]="['/posts', post.categoriaSeo, post.id, post.url]">
-                <img src="/assets/images/categorias/{{ post.categoriaIcono }}" alt="" width="20" height="20" loading="lazy" />
-                <span class="mi-post__cuerpo">
-                  <span class="mi-post__titulo">{{ post.titulo }}</span>
-                  <span class="mi-post__meta">
-                    {{ post.categoriaNombre }} · <i class="ti ti-plus" aria-hidden="true"></i>{{ post.puntos }} puntos ·
-                    <i class="ti ti-messages" aria-hidden="true"></i>{{ post.comentarios }} comentarios
-                  </span>
-                </span>
-                <i class="ti ti-chevron-right mi-post__ir" aria-hidden="true"></i>
-              </a>
-            </article>
+            <app-post-card [post]="post" [fecha]="item.fecha" />
             } @else if (item.shout; as shout) {
             <app-shout-card [shout]="shout" [compartidoPor]="item.tipo === 'reshout' ? item.compartidoPor : null" />
             }
@@ -101,24 +84,10 @@
 
     <aside class="d-none d-md-flex col-md-4 mi-lateral" aria-label="Tu perfil y sugerencias">
       @if (resumen(); as yo) {
-      <section class="mi-card mi-perfil">
-        <a [routerLink]="['/perfil', yo.userName]" class="mi-perfil__quien">
-          <app-user-avatar [avatar]="yo.avatar" [userName]="yo.userName" [width]="56" [height]="56" />
-          <span>
-            <span class="mi-perfil__nombre">{{ '@' }}{{ yo.userName }}</span>
-            <span class="mi-perfil__rango">
-              {{ yo.rango ? yo.rango + ' · ' : '' }}{{ yo.puntos | number }} puntos
-            </span>
-          </span>
-        </a>
-        <dl class="mi-perfil__stats">
-          <div><dt>Seguidores</dt><dd>{{ yo.seguidores | number }}</dd></div>
-          <div><dt>Siguiendo</dt><dd>{{ yo.siguiendo | number }}</dd></div>
-          <div><dt>Shouts</dt><dd>{{ yo.shouts | number }}</dd></div>
-          <div><dt>Posts</dt><dd>{{ yo.posts | number }}</dd></div>
-        </dl>
-      </section>
+      <app-post-original-poster-info [userName]="yo.userName" />
       }
+
+      <ads-by-type [type]="'300x250'"></ads-by-type>
 
       <ng-container [ngTemplateOutlet]="sugerenciasTpl" />
     </aside>

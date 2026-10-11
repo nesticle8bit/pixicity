@@ -1,0 +1,41 @@
+<article class="sc">
+  <a [routerLink]="['/perfil', autor()]" class="sc__avatar" [appUserPopover]="autor()" tabindex="-1" aria-hidden="true">
+    <app-user-avatar [avatar]="post().autor.avatar" [userName]="autor()" [width]="48" [height]="48" />
+  </a>
+
+  <div class="sc-bubble">
+    <span class="sc-bubble__tail" aria-hidden="true"></span>
+
+    <header class="sc-bubble__head">
+      <span class="sc-bubble__quien">
+        <a [routerLink]="['/perfil', autor()]" class="sc-bubble__user" [appUserPopover]="autor()">{{ '@' }}{{ autor() }}</a>
+        <span class="sc-bubble__accion">publicó un post</span>
+      </span>
+      <a class="sc-bubble__time" [routerLink]="enlace()"
+        [matTooltip]="(fecha() | date: 'EEEE d \'de\' MMMM \'a las\' h:mm \', año\' y') ?? ''">
+        <time [attr.datetime]="fecha()">{{ fecha() | date: 'd MMM, h:mm a' }}</time>
+      </a>
+    </header>
+
+    <a class="pc-post" [routerLink]="enlace()">
+      <img class="pc-post__icono" src="/assets/images/categorias/{{ post().categoriaIcono }}" alt="" width="24" height="24"
+        loading="lazy" />
+      <span class="pc-post__cuerpo">
+        <span class="pc-post__titulo">{{ post().titulo }}</span>
+        <span class="pc-post__categoria">{{ post().categoriaNombre }}</span>
+      </span>
+      <i class="ti ti-chevron-right pc-post__ir" aria-hidden="true"></i>
+    </a>
+
+    <footer class="sc-bubble__footer">
+      <a class="sc-action" [routerLink]="enlace()" matTooltip="Comentar"
+        [attr.aria-label]="'Comentar (' + post().comentarios + ' comentarios)'">
+        <i class="ti ti-messages" aria-hidden="true"></i> {{ post().comentarios }}
+      </a>
+      <span class="sc-action sc-action--dato" matTooltip="Puntos">
+        <i class="ti ti-plus" aria-hidden="true"></i>
+        <span class="visually-hidden">Puntos:</span> {{ post().puntos }}
+      </span>
+    </footer>
+  </div>
+</article>

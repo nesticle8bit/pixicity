@@ -11,9 +11,11 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
 import { SEOService } from 'src/app/services/shared/seo.service';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { CargandoComponent } from '../../shared/cargando/cargando.component';
+import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { PostOriginalPosterInfoComponent } from '../../posts/post-original-poster-info/post-original-poster-info.component';
+import { PostCardComponent } from '../../shared/shouts/post-card/post-card.component';
 import { ShoutCardComponent } from '../../shared/shouts/shout-card/shout-card.component';
 import { ShoutComposerComponent } from '../../shared/shouts/shout-composer/shout-composer.component';
-import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 
 const POR_PAGINA = 15;
 
@@ -32,9 +34,11 @@ const POR_PAGINA = 15;
     NgTemplateOutlet,
     UserAvatarComponent,
     CargandoComponent,
+    AdsByTypeComponent,
+    PostOriginalPosterInfoComponent,
+    PostCardComponent,
     ShoutCardComponent,
     ShoutComposerComponent,
-    TimeAgoPipe,
   ],
 })
 export class MiHomeComponent implements OnDestroy {
@@ -178,7 +182,6 @@ export class MiHomeComponent implements OnDestroy {
 
   /** Recarga el muro desde arriba (después de publicar). */
   alPublicar(): void {
-    this.resumen.update((r) => (r ? { ...r, shouts: r.shouts + 1 } : r));
     if (this.alcance() !== 'siguiendo') {
       this.cambiarAlcance('siguiendo');
     } else {
@@ -196,7 +199,6 @@ export class MiHomeComponent implements OnDestroy {
         next: () => {
           const siguiendo = !usuario.siguiendo;
           this.actualizarSugerencia(usuario.userName, { siguiendo, procesando: false });
-          this.resumen.update((r) => (r ? { ...r, siguiendo: r.siguiendo + (siguiendo ? 1 : -1) } : r));
           // Sus shouts y posts entran (o salen) del muro.
           if (this.alcance() === 'siguiendo') this.pedir.next({ reiniciar: true });
         },

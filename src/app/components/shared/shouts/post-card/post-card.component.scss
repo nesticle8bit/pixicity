@@ -1,0 +1,67 @@
+@use '../burbuja';
+
+:host { display: block; }
+
+// Vista previa del post dentro del globo (en el lugar del texto y el adjunto de un shout).
+.pc-post {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+  padding: 10px 12px;
+  border: 1px solid #e9edf0;
+  border-left: 3px solid burbuja.$marca;
+  border-radius: 10px;
+  background: #f7f9fb;
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.12s ease;
+
+  &:hover {
+    background: #eef5f9;
+
+    .pc-post__titulo { color: burbuja.$marca; }
+    .pc-post__ir { transform: translateX(2px); color: burbuja.$marca; }
+  }
+
+  &:focus-visible {
+    outline: 2px solid burbuja.$marca;
+    outline-offset: 2px;
+  }
+
+  &__icono { flex: none; }
+
+  &__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__titulo {
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #1f2a33;
+    overflow-wrap: anywhere;
+    transition: color 0.12s ease;
+  }
+
+  &__categoria {
+    font-size: 0.76rem;
+    color: burbuja.$tenue;
+  }
+
+  &__ir {
+    flex: none;
+    color: burbuja.$tenue;
+    transition: transform 0.12s ease, color 0.12s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-post,
+  .pc-post__titulo,
+  .pc-post__ir { transition: none; }
+}
