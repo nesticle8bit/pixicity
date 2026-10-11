@@ -179,7 +179,10 @@ export class RegisterComponent implements OnInit {
 
     this.securityService.registerUser(user).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
-        this.notificationService.success('Se ha creado un usuario correctamente', 'Guardado');
+        this.notificationService.success(
+          `Te enviamos un correo a ${user.email} para confirmar tu cuenta. Ya puedes iniciar sesión.`,
+          '¡Cuenta creada!',
+        );
         this.router.navigate(['/login']);
       }
     });

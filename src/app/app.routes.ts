@@ -42,6 +42,11 @@ export const routes: Routes = [
     canActivate: [AuthLoggedUserGuard],
   },
   {
+    path: 'confirmar-email',
+    loadComponent: () =>
+      import('./components/pages/confirmar-email/confirmar-email.component').then((m) => m.ConfirmarEmailComponent),
+  },
+  {
     path: 'cuenta',
     loadChildren: () =>
       import('./modules/cuenta/cuenta.module').then((m) => m.CuentaModule),

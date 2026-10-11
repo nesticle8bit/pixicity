@@ -238,6 +238,13 @@ export class AccountComponent implements OnInit {
     this.securityService.updateUsuario(cuenta).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.notificationService.success('La información de la cuenta ha sido actualizado correctamente', 'Actualizado');
+        // Si cambió el correo hay que confirmarlo de nuevo: el API ya envió el enlace a la dirección nueva.
+        this.securityService.getEstadoEmail().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((estado) => {
+          this.securityService.marcarEmailConfirmado(estado.emailConfirmado);
+          if (!estado.emailConfirmado) {
+            this.notificationService.info(`Te enviamos un enlace a ${estado.email} para confirmar el correo nuevo.`, 'Correo');
+          }
+        });
       }
     });
   }

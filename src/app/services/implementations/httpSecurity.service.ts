@@ -268,6 +268,44 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  confirmarEmail(token: string): Observable<{ userName: string }> {
+    return this.http
+      .post<ApiResponse<{ userName: string }>>(`${environment.api}/api/usuarios/confirmarEmail`, { token })
+      .pipe(
+        map((r) => {
+          if (r.status === 200) return r.data!;
+          throw new Error(r.errors?.join(', ') || 'No se pudo confirmar el correo');
+        }),
+      );
+  }
+
+  reenviarConfirmacion(): Observable<boolean> {
+    return this.http.post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/reenviarConfirmacion`, {}).pipe(
+      map((r) => {
+        if (r.status === 200) return true;
+        this.notificationService.warning(r.errors.join(', '), 'Correo');
+        return false;
+      }),
+    );
+  }
+
+  getEstadoEmail(): Observable<{ emailConfirmado: boolean; email: string }> {
+    return this.http
+      .get<ApiResponse<{ emailConfirmado: boolean; email: string }>>(`${environment.api}/api/usuarios/getEstadoEmail`)
+      .pipe(
+        map((r) => {
+          if (r.status === 200) return r.data!;
+          throw new Error(r.errors?.join(', ') ?? 'Error');
+        }),
+      );
+  }
+
+  marcarEmailConfirmado(confirmado: boolean): void {
+    const actual = this.currentUserSubject.value;
+    if (!actual?.usuario || actual.usuario.emailConfirmado === confirmado) return;
+    this.setUserToLocalStorage({ ...actual, usuario: { ...actual.usuario, emailConfirmado: confirmado } });
+  }
+
   setUserToLocalStorage(obj: JwtUserModel): void {
     localStorage.setItem('taringas', JSON.stringify(obj));
     this.currentUserSubject.next(obj);

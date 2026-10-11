@@ -113,6 +113,10 @@ const SIN_LOADER = [
   'shouts/alternarFavorito',
   'shouts/alternarReshout',
   'shouts/getReshouts',
+  // Confirmación de correo: la página y el aviso muestran su propio estado.
+  'usuarios/confirmarEmail',
+  'usuarios/reenviarConfirmacion',
+  'usuarios/getEstadoEmail',
   // /mi tiene sus propios indicadores (muro, resumen y sugerencias).
   'mi/',
 ].map((ruta) => `${environment.api}/api/${ruta}`);

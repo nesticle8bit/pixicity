@@ -15,6 +15,7 @@ import { MainMenuComponent } from './components/main/main-menu/main-menu.compone
 import { MainSubmenuComponent } from './components/main/main-submenu/main-submenu.component';
 import { MainUltimasNoticiasComponent } from './components/main/main-ultimas-noticias/main-ultimas-noticias.component';
 import { MainFooterComponent } from './components/main/main-footer/main-footer.component';
+import { AvisoEmailComponent } from './components/shared/aviso-email/aviso-email.component';
 import { SsrSalud } from './shared/helpers/ssr-salud';
 
 /** Tarjeta social del sitio (1200x630) para páginas sin imagen propia. */
@@ -31,6 +32,7 @@ const DEFAULT_OG_IMAGE = '/assets/images/og-image.jpg';
         MainMenuComponent,
         MainSubmenuComponent,
         MainUltimasNoticiasComponent,
+        AvisoEmailComponent,
         NgStyle,
         RouterOutlet,
         MainFooterComponent,

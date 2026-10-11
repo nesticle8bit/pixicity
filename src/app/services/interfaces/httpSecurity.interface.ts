@@ -30,4 +30,10 @@ export abstract class IHttpSecurityService {
   abstract getAdminsList(): Observable<UsuarioViewModel[]>;
   abstract removeAvatar(usuarioId: number): Observable<boolean>;
   abstract removeUsuario(usuarioId: number): Observable<boolean>;
+  /** Confirma el correo con el token del enlace. Devuelve el usuario confirmado; error con el motivo si no es válido. */
+  abstract confirmarEmail(token: string): Observable<{ userName: string }>;
+  abstract reenviarConfirmacion(): Observable<boolean>;
+  abstract getEstadoEmail(): Observable<{ emailConfirmado: boolean; email: string }>;
+  /** Actualiza el estado del correo en la sesión guardada (muestra u oculta el aviso de confirmar). */
+  abstract marcarEmailConfirmado(confirmado: boolean): void;
 }

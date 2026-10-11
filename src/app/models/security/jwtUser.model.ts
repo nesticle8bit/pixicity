@@ -5,6 +5,8 @@ export interface UsuarioSesion {
   userName?: string;
   rango?: string;
   avatar?: string | null;
+  /** false = falta confirmar el correo (puede leer, no publicar). undefined en sesiones anteriores = confirmado. */
+  emailConfirmado?: boolean;
 }
 
 export class JwtUserModel {

@@ -39,6 +39,12 @@ export class ErrorInterceptor implements HttpInterceptor {
           return this.renovarYReintentar(request, next);
         }
 
+        // El API rechazó una escritura porque falta confirmar el correo: se muestra el aviso para reenviarlo
+        // (la sesión pudo guardarse antes, o el usuario cambió su correo en otra pestaña).
+        if (err.status === 403 && (err.error as { data?: { error?: string } })?.data?.error === 'email_sin_confirmar') {
+          this.securityService.marcarEmailConfirmado(false);
+        }
+
         return this.entregar(err);
       })
     );

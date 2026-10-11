@@ -422,6 +422,47 @@ test('mi: muestra el muro mezclado, carga más, comparte y sigue a una sugerenci
   await expect.poll(() => pedidos.at(-1)?.url.searchParams.get('alcance')).toBe('todos');
 });
 
+test('correo sin confirmar: el aviso reenvía el enlace y el enlace del correo confirma la cuenta', async ({ page }) => {
+  const sesion = {
+    usuario: { id: 'MQ==', userName: 'lector_tres', rango: 'Usuario', avatar: '', emailConfirmado: false },
+    token: `Bearer ${jwt('lector_tres')}`,
+    refreshToken: 'r',
+  };
+  await page.addInitScript((s) => localStorage.setItem('taringas', s), JSON.stringify(sesion));
+  await page.route(/\/api\/usuarios\/getEstadoEmail/i, (r) => r.fulfill(ok({ emailConfirmado: false, email: 'lector@correo.com' })));
+  let reenvios = 0;
+  await page.route(/\/api\/usuarios\/reenviarConfirmacion/i, (r) => (reenvios++, r.fulfill(ok(true))));
+  let tokenEnviado = '';
+  await page.route(/\/api\/usuarios\/confirmarEmail/i, (r) => {
+    tokenEnviado = r.request().postDataJSON().token;
+    return r.fulfill(ok({ userName: 'lector_tres' }));
+  });
+
+  await page.goto('/');
+  const aviso = page.getByRole('status').filter({ hasText: 'Confirma tu correo' });
+  await expect(aviso).toContainText('lector@correo.com');
+  await aviso.getByRole('button', { name: 'Reenviar correo' }).click();
+  await expect(aviso.getByRole('button', { name: 'Enviado' })).toBeDisabled();
+  expect(reenvios).toBe(1);
+
+  await page.goto('/confirmar-email?token=abc123');
+  await expect(page.getByRole('heading', { name: '¡Correo confirmado!' })).toBeVisible();
+  expect(tokenEnviado).toBe('abc123');
+  // La sesión queda confirmada: el aviso desaparece.
+  await expect(page.getByText('Confirma tu correo para poder publicar.')).toBeHidden();
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('taringas')!).usuario.emailConfirmado)).toBe(true);
+});
+
+test('confirmar correo: un enlace vencido explica el motivo', async ({ page }) => {
+  await page.route(/\/api\/usuarios\/confirmarEmail/i, (r) =>
+    r.fulfill({ status: 400, json: { status: 400, errors: ['El enlace no es válido o ya venció. Pide uno nuevo desde tu cuenta.'], data: null } }));
+
+  await page.goto('/confirmar-email?token=viejo');
+
+  await expect(page.getByRole('heading', { name: 'No pudimos confirmar tu correo' })).toBeVisible();
+  await expect(page.getByText('El enlace no es válido o ya venció.')).toBeVisible();
+});
+
 test('editor de posts y shouts: el botón de emojis inserta en el cursor', async ({ page }) => {
   await conSesion(page);
   await page.goto('/crear/post');
