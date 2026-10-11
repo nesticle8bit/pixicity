@@ -49,9 +49,17 @@ export class HttpSecurityService implements IHttpSecurityService {
     }
   }
 
-  registerUser(user: UserModel): Observable<number> {
+  getCaptchaSiteKey(): Observable<string | null> {
+    return this.http.get<ApiResponse<string | null>>(`${environment.api}/api/usuarios/getCaptchaSiteKey`).pipe(
+      map((r) => (r.status === 200 ? r.data ?? null : null)),
+      catchError(() => of(null)),
+    );
+  }
+
+  registerUser(user: UserModel, captcha?: string): Observable<number> {
+    const headers = captcha ? new HttpHeaders({ 'X-Captcha': captcha }) : undefined;
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/usuarios/registrarUsuario`, user)
+      .post<ApiResponse<number>>(`${environment.api}/api/usuarios/registrarUsuario`, user, { headers })
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -284,6 +292,44 @@ export class HttpSecurityService implements IHttpSecurityService {
       map((r) => {
         if (r.status === 200) return true;
         this.notificationService.warning(r.errors.join(', '), 'Correo');
+        return false;
+      }),
+    );
+  }
+
+  solicitarRestablecimiento(email: string): Observable<boolean> {
+    return this.http.post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/solicitarRestablecimiento`, { email }).pipe(
+      map((r) => {
+        if (r.status === 200) return true;
+        throw new Error(r.errors?.join(', ') || 'No se pudo enviar el correo');
+      }),
+    );
+  }
+
+  restablecerPassword(token: string, password: string): Observable<{ userName: string }> {
+    return this.http
+      .post<ApiResponse<{ userName: string }>>(`${environment.api}/api/usuarios/restablecerPassword`, { token, password })
+      .pipe(
+        map((r) => {
+          if (r.status === 200) return r.data!;
+          throw new Error(r.errors?.join(', ') || 'No se pudo cambiar la contraseña');
+        }),
+      );
+  }
+
+  reenviarConfirmacionAdmin(usuarioId: number): Observable<boolean> {
+    return this.accionAdminEmail('reenviarConfirmacionAdmin', usuarioId);
+  }
+
+  confirmarEmailAdmin(usuarioId: number): Observable<boolean> {
+    return this.accionAdminEmail('confirmarEmailAdmin', usuarioId);
+  }
+
+  private accionAdminEmail(accion: string, usuarioId: number): Observable<boolean> {
+    return this.http.post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/${accion}?usuarioId=${usuarioId}`, {}).pipe(
+      map((r) => {
+        if (r.status === 200) return true;
+        this.notificationService.error(r.errors.join(', '), 'Error');
         return false;
       }),
     );

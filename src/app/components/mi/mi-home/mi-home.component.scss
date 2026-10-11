@@ -241,7 +241,85 @@ $fondo-suave: #f4f8fa;
 }
 
 .mi-sugerencias-movil {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin-bottom: 20px;
+}
+
+.mi__quitar-tag {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-left: 4px;
+  border: 0;
+  border-radius: 50%;
+  background: #eef2f5;
+  color: $tenue;
+  font-size: 0.9rem;
+  vertical-align: middle;
+  cursor: pointer;
+
+  &:hover { background: #e2e8ec; color: $texto; }
+  &:focus-visible { outline: 2px solid $marca; outline-offset: 2px; }
+}
+
+// "Hay N publicaciones nuevas": llegan en vivo y no se insertan solas para no mover lo que se está leyendo.
+.mi__nuevos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 9px 14px;
+  border: 1px solid rgba($marca, 0.35);
+  border-radius: 999px;
+  background: #e8f3f9;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: $marca;
+  cursor: pointer;
+
+  &:hover { background: #dbedf6; }
+  &:focus-visible { outline: 2px solid $marca; outline-offset: 2px; }
+}
+
+.mi-tendencias {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mi-tendencia {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  text-decoration: none;
+
+  &:hover, &.is-activa { background: $fondo-suave; }
+  &:focus-visible { outline: 2px solid $marca; outline-offset: 1px; }
+
+  &__tag {
+    font-weight: 700;
+    color: $marca;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__num {
+    flex: none;
+    font-size: 0.75rem;
+    color: $tenue;
+  }
 }
 
 @media (max-width: 575.98px) {

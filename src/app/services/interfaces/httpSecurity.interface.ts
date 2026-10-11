@@ -17,7 +17,9 @@ export abstract class IHttpSecurityService {
   abstract getSesiones(filtro?: AdminFiltro): Observable<PaginatedData<unknown>>;
   abstract deleteSessionById(sessionId: number): Observable<boolean>;
   abstract setUserToLocalStorage(obj: any): any;
-  abstract registerUser(user: UserModel): Observable<number>;
+  abstract registerUser(user: UserModel, captcha?: string): Observable<number>;
+  /** Clave pública del captcha del registro; null si el API no lo pide. Nunca falla. */
+  abstract getCaptchaSiteKey(): Observable<string | null>;
   abstract loginUser(user: { userName: string; password: string }): Observable<LoginResponse>;
   abstract refreshAccessToken(): Observable<string>;
   abstract logout(): any;
@@ -33,7 +35,14 @@ export abstract class IHttpSecurityService {
   /** Confirma el correo con el token del enlace. Devuelve el usuario confirmado; error con el motivo si no es válido. */
   abstract confirmarEmail(token: string): Observable<{ userName: string }>;
   abstract reenviarConfirmacion(): Observable<boolean>;
-  abstract getEstadoEmail(): Observable<{ emailConfirmado: boolean; email: string }>;
+  /** "Olvidé mi contraseña": siempre responde igual, exista o no la cuenta. */
+  abstract solicitarRestablecimiento(email: string): Observable<boolean>;
+  /** Error con el motivo si el enlace no sirve o la contraseña no cumple. */
+  abstract restablecerPassword(token: string, password: string): Observable<{ userName: string }>;
+  /** Admin: reenvía la confirmación / marca el correo como confirmado. Muestran el error del API y devuelven false. */
+  abstract reenviarConfirmacionAdmin(usuarioId: number): Observable<boolean>;
+  abstract confirmarEmailAdmin(usuarioId: number): Observable<boolean>;
+  abstract getEstadoEmail():Observable<{ emailConfirmado: boolean; email: string }>;
   /** Actualiza el estado del correo en la sesión guardada (muestra u oculta el aviso de confirmar). */
   abstract marcarEmailConfirmado(confirmado: boolean): void;
 }

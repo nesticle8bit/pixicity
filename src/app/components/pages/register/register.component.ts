@@ -1,4 +1,5 @@
-import { Component, DestroyRef, inject, OnInit, input } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, input, signal, viewChild } from '@angular/core';
+import { TurnstileComponent } from '../../addons/turnstile/turnstile.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -21,7 +22,7 @@ import { MatButton } from '@angular/material/button';
     selector: 'app-register',
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
-    imports: [NgClass, FormsModule, ReactiveFormsModule, SelectAutocompleteComponent, SelectOptionDirective, SelectLabelDirective, MatCheckbox, MatButton, RouterLink]
+    imports: [NgClass, FormsModule, ReactiveFormsModule, SelectAutocompleteComponent, SelectOptionDirective, SelectLabelDirective, MatCheckbox, MatButton, RouterLink, TurnstileComponent]
 })
 export class RegisterComponent implements OnInit {
   private parametrosService = inject(IHttpParametrosService);
@@ -40,6 +41,9 @@ export class RegisterComponent implements OnInit {
 }>();
   public configuracion?: ConfiguracionModel;
   public formGroup: FormGroup;
+  /** Clave pública de Turnstile; null = el API no pide captcha. */
+  readonly captchaSiteKey = signal<string | null>(null);
+  private readonly captcha = viewChild<TurnstileComponent>('captcha');
 
   public dias: number[] = [];
   public meses: { label: string; value: string }[] = [
@@ -122,7 +126,8 @@ export class RegisterComponent implements OnInit {
       paisId: [undefined, Validators.required],
       estadoId: [undefined, Validators.required],
       termsConditions: [false, Validators.requiredTrue],
-      // captcha: ['', Validators.required],
+      // Obligatorio solo si el API tiene captcha configurado (ver getCaptchaSiteKey).
+      captcha: [''],
     });
   }
 
@@ -145,6 +150,14 @@ export class RegisterComponent implements OnInit {
 
     this.getPaises();
     this.getConfiguracion();
+
+    this.securityService.getCaptchaSiteKey().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((clave) => {
+      this.captchaSiteKey.set(clave);
+      if (clave) {
+        this.formGroup.controls['captcha'].setValidators(Validators.required);
+        this.formGroup.controls['captcha'].updateValueAndValidity();
+      }
+    });
   }
 
   getConfiguracion(): void {
@@ -174,17 +187,20 @@ export class RegisterComponent implements OnInit {
   }
 
   registerUser(): void {
-    const user: UserModel = Object.assign({}, this.formGroup.value);
-    // user.fechaNacimiento = `${user.dia}/${user.mes}/${user.año}`;
+    const { captcha, ...user } = this.formGroup.value as UserModel & { captcha: string };
 
-    this.securityService.registerUser(user).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      if (response) {
-        this.notificationService.success(
-          `Te enviamos un correo a ${user.email} para confirmar tu cuenta. Ya puedes iniciar sesión.`,
-          '¡Cuenta creada!',
-        );
-        this.router.navigate(['/login']);
-      }
+    this.securityService.registerUser(user as UserModel, captcha).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (response) => {
+        if (response) {
+          this.notificationService.success(
+            `Te enviamos un correo a ${user.email} para confirmar tu cuenta. Ya puedes iniciar sesión.`,
+            '¡Cuenta creada!',
+          );
+          this.router.navigate(['/login']);
+        }
+      },
+      // Cada token de captcha sirve una sola vez: tras un error (usuario repetido, etc.) se pide otro.
+      error: () => this.captcha()?.reiniciar(),
     });
   }
 

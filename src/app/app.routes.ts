@@ -47,6 +47,16 @@ export const routes: Routes = [
       import('./components/pages/confirmar-email/confirmar-email.component').then((m) => m.ConfirmarEmailComponent),
   },
   {
+    path: 'olvide-password',
+    loadComponent: () =>
+      import('./components/pages/restablecer-password/olvide-password.component').then((m) => m.OlvidePasswordComponent),
+  },
+  {
+    path: 'restablecer-password',
+    loadComponent: () =>
+      import('./components/pages/restablecer-password/restablecer-password.component').then((m) => m.RestablecerPasswordComponent),
+  },
+  {
     path: 'cuenta',
     loadChildren: () =>
       import('./modules/cuenta/cuenta.module').then((m) => m.CuentaModule),

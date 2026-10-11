@@ -1,0 +1,84 @@
+// Tarjeta centrada de las páginas de cuenta sin sesión (olvidé / restablecer contraseña).
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 420px;
+  margin: 48px auto;
+  padding: 28px 24px;
+  border: 1px solid #e3e9ed;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.tarjeta__titulo {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #26323a;
+}
+
+.tarjeta__texto {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #5d6b75;
+}
+
+.tarjeta__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #26323a;
+
+  input {
+    padding: 9px 12px;
+    border: 1px solid #c9d3da;
+    border-radius: 8px;
+    font: inherit;
+    font-weight: 400;
+
+    &:focus {
+      outline: none;
+      border-color: #006595;
+      box-shadow: 0 0 0 3px rgba(0, 101, 149, 0.15);
+    }
+  }
+}
+
+.tarjeta__error {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #b3261e;
+}
+
+.tarjeta__boton {
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #006595;
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover:not(:disabled) { background: #00527a; color: #fff; }
+  &:disabled { opacity: 0.6; cursor: default; }
+  &:focus-visible { outline: 2px solid #006595; outline-offset: 2px; }
+}
+
+.tarjeta__enlace {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #00527a;
+  text-align: center;
+}
+
+.tarjeta__icono {
+  font-size: 2.6rem;
+  color: #1e7f4f;
+  text-align: center;
+}

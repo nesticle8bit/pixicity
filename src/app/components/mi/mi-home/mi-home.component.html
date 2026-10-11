@@ -2,16 +2,25 @@
   <div class="row">
     <div class="col-12 col-md-8 mi">
       <header class="mi__head">
+        @if (tag(); as t) {
+        <h1 class="mi__titulo">
+          #{{ t }}
+          <button type="button" class="mi__quitar-tag" (click)="quitarTag()" aria-label="Quitar el filtro de hashtag">
+            <i class="ti ti-x" aria-hidden="true"></i>
+          </button>
+        </h1>
+        } @else {
         <h1 class="mi__titulo">Mi</h1>
+        }
 
         <div class="mi__tabs" role="tablist" aria-label="Qué mostrar" (keydown)="teclaPestanas($event)">
           <button type="button" role="tab" id="mi-tab-siguiendo" class="mi__tab" aria-controls="mi-muro"
-            [class.is-activa]="alcance() === 'siguiendo'" [attr.aria-selected]="alcance() === 'siguiendo'"
+            [class.is-activa]="!tag() && alcance() === 'siguiendo'" [attr.aria-selected]="!tag() && alcance() === 'siguiendo'"
             [attr.tabindex]="alcance() === 'siguiendo' ? 0 : -1" (click)="cambiarAlcance('siguiendo')">
             <i class="ti ti-users" aria-hidden="true"></i> Siguiendo
           </button>
           <button type="button" role="tab" id="mi-tab-todos" class="mi__tab" aria-controls="mi-muro"
-            [class.is-activa]="alcance() === 'todos'" [attr.aria-selected]="alcance() === 'todos'"
+            [class.is-activa]="!tag() && alcance() === 'todos'" [attr.aria-selected]="!tag() && alcance() === 'todos'"
             [attr.tabindex]="alcance() === 'todos' ? 0 : -1" (click)="cambiarAlcance('todos')">
             <i class="ti ti-world" aria-hidden="true"></i> Novedades
           </button>
@@ -25,7 +34,15 @@
       <!-- En móvil el lateral no se muestra (con el muro infinito quedaría inalcanzable): las sugerencias van acá. -->
       <div class="d-md-none mi-sugerencias-movil">
         <ng-container [ngTemplateOutlet]="sugerenciasTpl" />
+        <ng-container [ngTemplateOutlet]="tendenciasTpl" />
       </div>
+
+      @if (nuevos() > 0) {
+      <button type="button" class="mi__nuevos" (click)="verNuevos()" aria-live="polite">
+        <i class="ti ti-arrow-up" aria-hidden="true"></i>
+        {{ nuevos() === 1 ? 'Hay 1 publicación nueva' : 'Hay ' + nuevos() + ' publicaciones nuevas' }}
+      </button>
+      }
 
       <section id="mi-muro" role="tabpanel" [attr.aria-labelledby]="'mi-tab-' + alcance()"
         [attr.aria-busy]="cargando() || cargandoMas()">
@@ -89,6 +106,8 @@
 
       <ads-by-type [type]="'300x250'"></ads-by-type>
 
+      <ng-container [ngTemplateOutlet]="tendenciasTpl" />
+
       <ng-container [ngTemplateOutlet]="sugerenciasTpl" />
     </aside>
   </div>
@@ -117,5 +136,23 @@
           }
         </ul>
       </section>
+  }
+</ng-template>
+
+<ng-template #tendenciasTpl>
+  @if (tendencias().length) {
+  <section class="mi-card">
+    <h2 class="mi-card__titulo">Tendencias</h2>
+    <ul class="mi-tendencias">
+      @for (t of tendencias(); track t.tag) {
+      <li>
+        <a routerLink="/mi" [queryParams]="{ tag: t.tag }" class="mi-tendencia" [class.is-activa]="tag() === t.tag">
+          <span class="mi-tendencia__tag">#{{ t.tag }}</span>
+          <span class="mi-tendencia__num">{{ t.shouts | number }} {{ t.shouts === 1 ? 'shout' : 'shouts' }}</span>
+        </a>
+      </li>
+      }
+    </ul>
+  </section>
   }
 </ng-template>

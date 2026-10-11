@@ -117,6 +117,9 @@ const SIN_LOADER = [
   'usuarios/confirmarEmail',
   'usuarios/reenviarConfirmacion',
   'usuarios/getEstadoEmail',
+  'usuarios/solicitarRestablecimiento',
+  'usuarios/restablecerPassword',
+  'usuarios/getCaptchaSiteKey',
   // /mi tiene sus propios indicadores (muro, resumen y sugerencias).
   'mi/',
 ].map((ruta) => `${environment.api}/api/${ruta}`);

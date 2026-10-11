@@ -2309,13 +2309,14 @@ span.positivo {
 }
 
 // Variantes de color. Todas fijan el color del texto: sin esto un <a class="boton rojo"> se veía como enlace azul sin fondo.
+// Contraste AA (≥ 4.5:1 con el texto blanco) también en hover: el hover oscurece; antes aclaraba y perdía contraste.
 .boton.azul {
-  background: #2594ef;
+  background: #0b6ea5;
   color: #fff;
 }
 
 .boton.azul:hover {
-  background: #46acff;
+  background: #095a87;
 }
 
 .boton.rojo {
@@ -2323,34 +2324,34 @@ span.positivo {
   color: #fff;
 
   &:hover {
-    background: #d9503f;
+    background: #a93226;
   }
 }
 
 .boton.verde {
-  background: #22b447;
+  background: #1e7f4f;
   color: #fff;
 
   &:hover {
-    background: #2fcb55;
+    background: #18693f;
   }
 }
 
 .boton.gris {
-  background: #8a9299;
+  background: #5f6b74;
   color: #fff;
 
   &:hover {
-    background: #9ba2a8;
+    background: #4f5a62;
   }
 }
 
 .boton.accent {
-  background: #e67e22;
+  background: #b45309;
   color: #fff;
 
   &:hover {
-    background: #f08c33;
+    background: #9a4508;
   }
 }
 
@@ -2359,7 +2360,7 @@ span.positivo {
   color: #686868;
 
   &:hover {
-    color: #8a8a8a;
+    color: #4a4a4a;
   }
 }
 

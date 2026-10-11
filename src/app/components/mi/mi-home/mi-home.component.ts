@@ -4,7 +4,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { catchError, EMPTY, Subject, switchMap, tap } from 'rxjs';
-import { AlcanceMuro, MiResumen, MuroItem, SugerenciaUsuario } from 'src/app/models/mi/mi-vm.model';
+import { AlcanceMuro, MiResumen, MuroItem, SugerenciaUsuario, Tendencia } from 'src/app/models/mi/mi-vm.model';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { IHttpMiService } from 'src/app/services/interfaces/httpMi.interface';
 import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -57,6 +59,12 @@ export class MiHomeComponent implements OnDestroy {
   readonly cargandoMas = signal(false);
   readonly error = signal(false);
 
+  /** #hashtag elegido (?tag=...): muestra los shouts del sitio con ese tag en vez de las pestañas. */
+  readonly tag = signal<string | null>(null);
+  readonly tendencias = signal<Tendencia[]>([]);
+  /** Shouts nuevos de gente que sigo, llegados en vivo desde que cargó el muro. */
+  readonly nuevos = signal(0);
+
   readonly resumen = signal<MiResumen | null>(null);
   readonly sugerencias = signal<(SugerenciaUsuario & { siguiendo?: boolean; procesando?: boolean })[]>([]);
 
@@ -87,6 +95,7 @@ export class MiHomeComponent implements OnDestroy {
         tap(({ reiniciar }) => {
           this.error.set(false);
           if (reiniciar) {
+            this.nuevos.set(0);
             this.cargando.set(true);
             this.items.set([]);
             this.siguiente.set(null);
@@ -95,7 +104,7 @@ export class MiHomeComponent implements OnDestroy {
           }
         }),
         switchMap(({ reiniciar }) =>
-          this.miService.getMuro(this.alcance(), reiniciar ? null : this.siguiente(), POR_PAGINA).pipe(
+          this.miService.getMuro(this.alcance(), reiniciar ? null : this.siguiente(), POR_PAGINA, this.tag()).pipe(
             catchError(() => {
               this.error.set(true);
               this.cargando.set(false);
@@ -116,11 +125,21 @@ export class MiHomeComponent implements OnDestroy {
 
     this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((q) => {
       this.alcance.set(q.get('ver') === 'novedades' ? 'todos' : 'siguiendo');
+      this.tag.set(q.get('tag')?.replace(/^#/, '').toLowerCase() || null);
       this.pedir.next({ reiniciar: true });
     });
 
     this.miService.getResumen().pipe(takeUntilDestroyed()).subscribe((r) => this.resumen.set(r));
     this.miService.getSugerencias(5).pipe(takeUntilDestroyed()).subscribe((s) => this.sugerencias.set(s));
+    this.miService.getTendencias(8).pipe(takeUntilDestroyed()).subscribe((t) => this.tendencias.set(t));
+
+    // Shout nuevo de alguien que sigo: no se mete en la lista (movería lo que estoy leyendo), se ofrece "ver nuevos".
+    const signalr = inject(SignalrService);
+    const token = inject(IHttpSecurityService).getCurrentUser()?.token;
+    if (token) void signalr.start(token);
+    signalr.shoutNuevo$.pipe(takeUntilDestroyed()).subscribe(() => {
+      if (this.alcance() === 'siguiendo' && !this.tag()) this.nuevos.update((n) => n + 1);
+    });
 
     // Al acercarse al final de la lista carga la página siguiente (el botón "Cargar más" queda como respaldo).
     afterNextRender(() => {
@@ -154,12 +173,21 @@ export class MiHomeComponent implements OnDestroy {
   }
 
   cambiarAlcance(alcance: AlcanceMuro): void {
-    if (alcance === this.alcance()) return;
+    if (alcance === this.alcance() && !this.tag()) return;
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { ver: alcance === 'todos' ? 'novedades' : null },
+      queryParams: { ver: alcance === 'todos' ? 'novedades' : null, tag: null },
       replaceUrl: true,
     });
+  }
+
+  quitarTag(): void {
+    this.router.navigate([], { relativeTo: this.route, queryParams: { tag: null }, queryParamsHandling: 'merge' });
+  }
+
+  verNuevos(): void {
+    this.pedir.next({ reiniciar: true });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   /** Flechas izquierda/derecha entre pestañas (patrón ARIA de tabs). */

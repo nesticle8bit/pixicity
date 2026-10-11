@@ -45,6 +45,21 @@ async function abrirMonitor(page: Page): Promise<URL[]> {
   return pedidos;
 }
 
+/** Espera a que no lleguen pedidos nuevos durante un rato: un pedido con espera (debounce) puede llegar tarde. */
+async function esperarQuieto(pedidos: URL[], ms = 600): Promise<void> {
+  let anterior = -1;
+  await expect
+    .poll(
+      () => {
+        const quieto = pedidos.length === anterior;
+        anterior = pedidos.length;
+        return quieto;
+      },
+      { intervals: [ms] },
+    )
+    .toBe(true);
+}
+
 test('lista con dos columnas y aplica búsqueda, estado, periodo y tipos', async ({ page }, info) => {
   const pedidos = await abrirMonitor(page);
   const ultimo = () => pedidos[pedidos.length - 1].searchParams;
@@ -70,6 +85,7 @@ test('lista con dos columnas y aplica búsqueda, estado, periodo y tipos', async
   expect(ultimo().get('tipos')).toContain('Comentario');
 
   // Ninguno: no se llama al API y se avisa.
+  await esperarQuieto(pedidos);
   const antes = pedidos.length;
   await page.getByRole('button', { name: 'Ninguno' }).click();
   await expect(page.getByText('Marca al menos un tipo')).toBeVisible();

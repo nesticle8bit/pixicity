@@ -10,6 +10,10 @@ export interface MonitorViewModel {
   postId?: number;
   /** Comentario que originó el aviso: el enlace lleva a #comentario-{id}. */
   comentarioId?: number | null;
+  /** Shout del aviso (me gusta, compartido, comentario o mención en un shout). */
+  shoutId?: number | null;
+  /** Autor del shout, para enlazar a /shouts/{autor}/{id}. */
+  shoutAutor?: string | null;
   tipoString: string;
   // null en avisos del sistema (p. ej. moderación).
   usuarioQueHaceAccion: UsuarioViewModel | null;

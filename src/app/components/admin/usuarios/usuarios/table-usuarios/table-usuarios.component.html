@@ -44,6 +44,11 @@
           </td>
           <td>
             <span class="text-primary">{{usuario.email}}</span>
+            @if (!usuario.emailConfirmado) {
+              <span class="badge bg-warning text-dark ms-1" matTooltip="Todavía no confirmó su correo: puede leer pero no publicar">
+                Sin confirmar
+              </span>
+            }
           </td>
           <td>
             {{usuario.genero}}
@@ -106,6 +111,16 @@
               <mat-icon>image_not_supported</mat-icon>
               Eliminar Imagen de Perfil
             </button>
+            @if (!usuario.emailConfirmado && !usuario.eliminado) {
+              <button type="button" mat-menu-item (click)="reenviarConfirmacion(usuario)">
+                <mat-icon>mark_email_unread</mat-icon>
+                Reenviar correo de confirmación
+              </button>
+              <button type="button" mat-menu-item (click)="confirmarEmail(usuario)">
+                <mat-icon>mark_email_read</mat-icon>
+                Marcar correo como confirmado
+              </button>
+            }
             @if (!usuario.baneado && !usuario.eliminado) {
               <button type="button" mat-menu-item (click)="enviarMP(usuario)"
                 >

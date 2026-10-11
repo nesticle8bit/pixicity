@@ -19,6 +19,7 @@ import { ShoutsCommentsComponent } from '../shouts-comments/shouts-comments.comp
 import { PostOriginalPosterInfoComponent } from '../../../posts/post-original-poster-info/post-original-poster-info.component';
 import { MatButton } from '@angular/material/button';
 import { DatePipe, DOCUMENT } from '@angular/common';
+import { TextoEnlazadoComponent } from '../../../shared/shouts/texto-enlazado/texto-enlazado.component';
 
 type Marca = 'meGusta' | 'favorito' | 'reshouteado';
 
@@ -42,6 +43,7 @@ const SIN_SESION: Record<Marca, string> = {
     PostOriginalPosterInfoComponent,
     MatButton,
     DatePipe,
+    TextoEnlazadoComponent,
   ],
 })
 export class ShoutsViewComponent implements OnInit {

@@ -65,10 +65,11 @@ export class TableUsuariosComponent implements OnInit {
     fechas: true,
     estado: true,
     orden: true,
-    tipoLabel: 'Baneo',
+    tipoLabel: 'Cuenta',
     tipos: [
       { valor: 'baneados', label: 'Baneados' },
       { valor: 'sin-banear', label: 'Sin banear' },
+      { valor: 'sin-confirmar', label: 'Correo sin confirmar' },
     ],
   };
 
@@ -160,6 +161,22 @@ export class TableUsuariosComponent implements OnInit {
         }
       });
     }
+  }
+
+  reenviarConfirmacion(usuario: UsuarioAdminViewModel): void {
+    this.securityService.reenviarConfirmacionAdmin(usuario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok) => {
+      if (ok) this.notificationService.success(`Le enviamos un enlace nuevo a ${usuario.email}`, 'Correo');
+    });
+  }
+
+  confirmarEmail(usuario: UsuarioAdminViewModel): void {
+    if (!this.notificationService.confirm(`¿Marcar el correo de ${usuario.userName} como confirmado sin que abra el enlace?`)) return;
+    this.securityService.confirmarEmailAdmin(usuario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok) => {
+      if (ok) {
+        usuario.emailConfirmado = true;
+        this.notificationService.success(`${usuario.userName} ya puede publicar`, 'Correo confirmado');
+      }
+    });
   }
 
   enviarMP(usuario: UsuarioAdminViewModel): void {

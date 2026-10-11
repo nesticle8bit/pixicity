@@ -28,6 +28,7 @@ export class SignalrService {
   private mensajeSubject = new Subject<MensajeEnVivo>();
   private mensajesLeidosSubject = new Subject<EventoDeUsuario>();
   private escribiendoSubject = new Subject<EventoDeUsuario>();
+  private shoutNuevoSubject = new Subject<{ shoutId: number; autor: string }>();
   private handlersBound = false;
 
   /** Qué grupos volver a pedir al reconectar. */
@@ -46,6 +47,8 @@ export class SignalrService {
   public mensajesLeidos$: Observable<EventoDeUsuario> = this.mensajesLeidosSubject.asObservable();
   // El otro usuario está escribiéndome.
   public escribiendo$: Observable<EventoDeUsuario> = this.escribiendoSubject.asObservable();
+  // Alguien que sigo publicó un shout (el muro de /mi ofrece "ver nuevos").
+  public shoutNuevo$: Observable<{ shoutId: number; autor: string }> = this.shoutNuevoSubject.asObservable();
 
   // Inicia la conexión y se suscribe a los grupos del usuario. Idempotente.
   async start(token: string): Promise<void> {
@@ -102,6 +105,7 @@ export class SignalrService {
       this.connection.on('mensaje', (payload: MensajeEnVivo) => this.mensajeSubject.next(payload));
       this.connection.on('mensajesLeidos', (payload: EventoDeUsuario) => this.mensajesLeidosSubject.next(payload));
       this.connection.on('escribiendo', (payload: EventoDeUsuario) => this.escribiendoSubject.next(payload));
+      this.connection.on('shoutNuevo', (payload: { shoutId: number; autor: string }) => this.shoutNuevoSubject.next(payload));
       // Un solo manejador de reconexión: antes cada start()/startEnVivo() agregaba uno más.
       this.connection.onreconnected(() => this.alReconectar());
       this.handlersBound = true;

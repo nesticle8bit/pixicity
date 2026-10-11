@@ -11,6 +11,7 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
 import { UserPopoverDirective } from 'src/app/shared/directives/userPopover.directive';
 import { ShoutMediaComponent } from '../../../addons/shout-media/shout-media.component';
 import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.component';
+import { TextoEnlazadoComponent } from '../texto-enlazado/texto-enlazado.component';
 
 type Marca = 'meGusta' | 'favorito' | 'reshouteado';
 type Total = 'meGustas' | 'favoritos' | 'reshouts';
@@ -34,7 +35,7 @@ const SIN_INTERACCIONES: ShoutInteracciones = {
   templateUrl: './shout-card.component.html',
   styleUrl: './shout-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, UserPopoverDirective, UserAvatarComponent, MatTooltip, ShoutMediaComponent, DatePipe],
+  imports: [RouterLink, UserPopoverDirective, UserAvatarComponent, MatTooltip, ShoutMediaComponent, DatePipe, TextoEnlazadoComponent],
 })
 export class ShoutCardComponent {
   private readonly perfilService = inject(IHttpPerfilService);

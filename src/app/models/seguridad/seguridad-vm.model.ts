@@ -33,6 +33,7 @@ export interface UsuarioAdminViewModel {
   fechaRegistro: string;
   userName: string;
   email: string;
+  emailConfirmado: boolean;
   genero: string | null;
   puntos: number;
   ultimaConexion: string | null;

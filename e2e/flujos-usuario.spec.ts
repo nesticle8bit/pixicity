@@ -207,7 +207,9 @@ test('comentarios: @menciones sugiere usuarios y Enter completa el nombre', asyn
   await page.goto(`/posts/${POST.categoria.seo}/${POST.id}/${POST.url}`);
   const campo = page.getByLabel('Escribe un comentario');
   await campo.click();
-  await campo.pressSequentially('Gracias @aut');
+  // De una vez: tecla por tecla, con la máquina cargada, las teclas se separaban más que la espera (200 ms) y salían
+  // consultas de más. Que no se consulte en cada tecla lo prueba menciones.directive.spec con tiempo simulado.
+  await campo.fill('Gracias @aut');
 
   const lista = page.getByRole('listbox', { name: 'Usuarios para mencionar' });
   await expect(lista.getByRole('option')).toHaveCount(2);
@@ -219,8 +221,7 @@ test('comentarios: @menciones sugiere usuarios y Enter completa el nombre', asyn
 
   await expect(campo).toHaveValue('Gracias @autor_demo ');
   await expect(lista).toBeHidden();
-  expect(consultas.at(-1)).toBe('aut'); // con espera: no una consulta por tecla
-  expect(consultas.length).toBeLessThanOrEqual(2);
+  expect(consultas).toEqual(['aut']); // con espera: una sola consulta, no una por tecla
 
   // El texto completado llega al modelo: el botón Comentar se habilita y envía ese texto.
   await expect(page.getByRole('button', { name: 'Comentar' })).toBeEnabled();
@@ -461,6 +462,33 @@ test('confirmar correo: un enlace vencido explica el motivo', async ({ page }) =
 
   await expect(page.getByRole('heading', { name: 'No pudimos confirmar tu correo' })).toBeVisible();
   await expect(page.getByText('El enlace no es válido o ya venció.')).toBeVisible();
+});
+
+test('olvidé mi contraseña: pide el enlace y el enlace permite elegir una nueva', async ({ page }) => {
+  let pedido: Record<string, unknown> | undefined;
+  await page.route(/\/api\/usuarios\/solicitarRestablecimiento/i, (r) => ((pedido = r.request().postDataJSON()), r.fulfill(ok(true))));
+  let restablecido: Record<string, unknown> | undefined;
+  await page.route(/\/api\/usuarios\/restablecerPassword/i, (r) => ((restablecido = r.request().postDataJSON()), r.fulfill(ok({ userName: 'ana' }))));
+
+  await page.goto('/login');
+  await page.getByRole('link', { name: '¿Olvidaste tu contraseña?' }).click();
+  await expect(page.getByRole('heading', { name: '¿Olvidaste tu contraseña?' })).toBeVisible();
+  await page.getByLabel('Correo electrónico').fill('ana@correo.com');
+  await page.getByRole('button', { name: 'Enviar enlace' }).click();
+  await expect(page.getByRole('heading', { name: 'Revisa tu correo' })).toBeVisible();
+  expect(pedido).toEqual({ email: 'ana@correo.com' });
+
+  await page.goto('/restablecer-password?token=tok123');
+  await page.getByLabel('Contraseña nueva').fill('clave-nueva');
+  await page.getByLabel('Repite la contraseña').fill('otra-cosa');
+  await page.getByRole('button', { name: 'Cambiar contraseña' }).click();
+  await expect(page.getByRole('alert').filter({ hasText: 'Las contraseñas no coinciden.' })).toBeVisible();
+  expect(restablecido).toBeUndefined();
+
+  await page.getByLabel('Repite la contraseña').fill('clave-nueva');
+  await page.getByRole('button', { name: 'Cambiar contraseña' }).click();
+  await expect(page.getByRole('heading', { name: '¡Contraseña cambiada!' })).toBeVisible();
+  expect(restablecido).toEqual({ token: 'tok123', password: 'clave-nueva' });
 });
 
 test('editor de posts y shouts: el botón de emojis inserta en el cursor', async ({ page }) => {

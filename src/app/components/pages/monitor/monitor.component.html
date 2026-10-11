@@ -74,6 +74,8 @@
                 title="{{notificacion.post.titulo}}">
                 {{notificacion.post.titulo}}
               </a>
+              } @else if (notificacion.shoutId && notificacion.shoutAutor) {
+              <a [routerLink]="['/shouts', notificacion.shoutAutor, notificacion.shoutId]">Ver shout</a>
               }
             </div>
           </div>

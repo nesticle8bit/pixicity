@@ -41,6 +41,12 @@ export interface MiResumen {
   posts: number;
 }
 
+export interface Tendencia {
+  /** Sin el "#". */
+  tag: string;
+  shouts: number;
+}
+
 export interface SugerenciaUsuario {
   userName: string;
   avatar: string | null;
