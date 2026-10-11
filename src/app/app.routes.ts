@@ -43,7 +43,8 @@ export const routes: Routes = [
   },
   {
     path: 'cuenta',
-    loadChildren: () => import('./modules/cuenta/cuenta.module').then((m) => m.CuentaModule),
+    loadChildren: () =>
+      import('./modules/cuenta/cuenta.module').then((m) => m.CuentaModule),
   },
   { path: 'en-vivo', component: EnVivoComponent },
   { path: 'perfil/:userName', component: PerfilComponent },
@@ -75,7 +76,10 @@ export const routes: Routes = [
   },
   {
     path: 'mensajes',
-    loadChildren: () => import('./modules/mensajes/mensajes.module').then((m) => m.MensajesModule),
+    loadChildren: () =>
+      import('./modules/mensajes/mensajes.module').then(
+        (m) => m.MensajesModule,
+      ),
   },
   {
     path: 'mod-history',
@@ -102,7 +106,8 @@ export const routes: Routes = [
   },
   {
     path: 'fotos',
-    loadChildren: () => import('./modules/fotos/fotos.module').then((m) => m.FotosModule),
+    loadChildren: () =>
+      import('./modules/fotos/fotos.module').then((m) => m.FotosModule),
   },
   // Ruta anterior de crear foto: se conserva para no romper enlaces guardados.
   { path: 'crear/foto', redirectTo: 'fotos/crear', pathMatch: 'full' },
@@ -129,7 +134,9 @@ export const routes: Routes = [
   {
     path: 'comunidades',
     loadChildren: () =>
-      import('./modules/comunidades/comunidades.module').then((m) => m.ComunidadesModule),
+      import('./modules/comunidades/comunidades.module').then(
+        (m) => m.ComunidadesModule,
+      ),
   },
 
   // '*' no es un comodin valido en Angular (es '**'): con el anterior las URLs

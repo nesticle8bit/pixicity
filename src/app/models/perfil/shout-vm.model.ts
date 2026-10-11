@@ -46,6 +46,20 @@ export interface ShoutComentarioViewModel {
   denunciasPendientes: number;
 }
 
+/** Contadores de un shout y lo que hizo el usuario actual (false sin sesión). */
+export interface ShoutInteracciones {
+  meGustas: number;
+  favoritos: number;
+  meGusta: boolean;
+  favorito: boolean;
+}
+
+/** Respuesta de alternar un me gusta o favorito: total nuevo y si quedó marcado. */
+export interface ShoutReaccion {
+  total: number;
+  activo: boolean;
+}
+
 export interface ShoutComentarioVoto {
   total: number;
   miVoto: number;

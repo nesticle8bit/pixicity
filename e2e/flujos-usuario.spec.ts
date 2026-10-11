@@ -259,6 +259,33 @@ test('comentarios: el formulario muestra mi avatar y las respuestas también tie
   await expect(page.getByRole('button', { name: 'Responder', exact: true }).last()).toBeEnabled();
 });
 
+test('shouts: me gusta y favorito se alternan y el botón de comentarios lleva al campo', async ({ page }) => {
+  await conSesion(page);
+  await page.route(/\/api\/shouts\/getShoutById/i, (r) =>
+    r.fulfill(ok({ id: 9, comentario: 'Shout de prueba', tipo: 'Texto', url: '', fechaRegistro: '2026-10-01T12:00:00Z', avatar: { userName: AUTOR } })));
+  await page.route(/\/api\/shouts\/getShoutInteracciones/i, (r) => r.fulfill(ok({ meGustas: 2, favoritos: 0, meGusta: false, favorito: false })));
+  await page.route(/\/api\/shouts\/getComentariosByShoutId/i, (r) => r.fulfill(ok([])));
+  const pedidos: string[] = [];
+  await page.route(/\/api\/shouts\/alternar(MeGusta|Favorito)/i, (r) => {
+    const tipo = /megusta/i.test(r.request().url()) ? 'meGusta' : 'favorito';
+    pedidos.push(tipo);
+    return r.fulfill(ok(tipo === 'meGusta' ? { total: 3, activo: true } : { total: 1, activo: true }));
+  });
+
+  await page.goto(`/shouts/${AUTOR}/9`);
+  const meGusta = page.getByRole('button', { name: 'Me gusta (2)' });
+  await expect(meGusta).toHaveAttribute('aria-pressed', 'false');
+  await meGusta.click();
+  await expect(page.getByRole('button', { name: 'Me gusta (3)' })).toHaveAttribute('aria-pressed', 'true');
+
+  await page.getByRole('button', { name: 'Favorito (0)' }).click();
+  await expect(page.getByRole('button', { name: 'Favorito (1)' })).toHaveAttribute('aria-pressed', 'true');
+  expect(pedidos).toEqual(['meGusta', 'favorito']);
+
+  await page.getByRole('button', { name: /^Comentar/ }).click();
+  await expect(page.getByLabel('Escribe un comentario')).toBeFocused();
+});
+
 test('editor de posts y shouts: el botón de emojis inserta en el cursor', async ({ page }) => {
   await conSesion(page);
   await page.goto('/crear/post');

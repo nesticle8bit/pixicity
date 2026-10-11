@@ -1,6 +1,6 @@
 <!-- <app-main-profile-menu></app-main-profile-menu> -->
 
-<div class="container">
+<div class="container container--home">
   <div class="row">
     @if (shout) {
     <div class="col-12 col-sm-9">
@@ -8,18 +8,20 @@
         <div class="row">
           <div class="col-12 p-3 pt-1">
             <div class="titulaw">
-              <h2>{{shout?.fechaRegistro | date:'long'}}</h2>
+              <h2>
+                {{shout?.fechaRegistro | date:'long'}}
+              </h2>
             </div>
 
             <div class="sv-shout">
               <a [routerLink]="['/perfil/' + shout?.avatar.userName]" class="sv-shout__avatar"
                 [appUserPopover]="shout.avatar.userName">
-                <app-user-avatar [avatar]="shout?.avatar?.avatar" [userName]="shout?.avatar.userName"
-                  [width]="52" [height]="52"></app-user-avatar>
+
+                <app-user-avatar [avatar]="shout?.avatar?.avatar" [userName]="shout?.avatar.userName" [width]="52"
+                  [height]="52"></app-user-avatar>
               </a>
 
-              <!-- La nube / globo de diálogo del shout -->
-              <div class="sv-bubble">
+              <div class="sv-bubble mb-3">
                 <span class="sv-bubble__tail"></span>
 
                 <header class="sv-bubble__head">
@@ -31,30 +33,51 @@
                   </span>
                 </header>
 
-                <p class="sv-bubble__body">{{shout.comentario}}</p>
+                <p class="sv-bubble__body">
+                  {{shout.comentario}}
+                </p>
 
                 <app-shout-media [url]="shout.url" [tipo]="shout.tipo" [mediaTitulo]="shout.mediaTitulo"
                   [mediaImagen]="shout.mediaImagen" [mediaDescripcion]="shout.mediaDescripcion"></app-shout-media>
 
                 <footer class="sv-bubble__footer">
                   <a class="sv-action sv-action--open"
-                    (click)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id)" role="button" tabindex="0" (keydown.enter)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id)" (keydown.space)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id); $event.preventDefault()">
+                    (click)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id)" role="button"
+                    tabindex="0"
+                    (keydown.enter)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id)"
+                    (keydown.space)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id); $event.preventDefault()">
                     <i class="ti ti-link"></i> Copiar URL
                   </a>
-                  <span class="sv-action" matTooltip="Comentarios">
-                    <i class="ti ti-messages"></i> {{shoutsComments?.totalComentarios || 0}}
-                  </span>
-                  <span class="sv-action" matTooltip="Favoritos">
-                    <i class="ti ti-star"></i> 0
-                  </span>
-                  <span class="sv-action" matTooltip="Me gusta">
-                    <i class="ti ti-thumb-up"></i> 0
-                  </span>
+
+                  <button type="button" class="sv-action" (click)="irAComentar()" matTooltip="Comentar"
+                    [attr.aria-label]="'Comentar (' + (shoutsComments?.totalComentarios || 0) + ' comentarios)'">
+                    <i class="ti ti-messages" aria-hidden="true"></i> {{shoutsComments?.totalComentarios || 0}}
+                  </button>
+
+                  <button type="button" class="sv-action sv-action--favorito" [class.is-activo]="interacciones().favorito"
+                    [attr.aria-pressed]="interacciones().favorito" [disabled]="enviando() === 'favorito'"
+                    (click)="alternarFavorito()"
+                    [matTooltip]="interacciones().favorito ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+                    [attr.aria-label]="'Favorito (' + interacciones().favoritos + ')'">
+                    <i class="ti" [class.ti-star]="!interacciones().favorito" [class.ti-star-filled]="interacciones().favorito"
+                      aria-hidden="true"></i> {{interacciones().favoritos}}
+                  </button>
+
+                  <button type="button" class="sv-action sv-action--megusta" [class.is-activo]="interacciones().meGusta"
+                    [attr.aria-pressed]="interacciones().meGusta" [disabled]="enviando() === 'meGusta'"
+                    (click)="alternarMeGusta()"
+                    [matTooltip]="interacciones().meGusta ? 'Ya no me gusta' : 'Me gusta'"
+                    [attr.aria-label]="'Me gusta (' + interacciones().meGustas + ')'">
+                    <i class="ti" [class.ti-thumb-up]="!interacciones().meGusta"
+                      [class.ti-thumb-up-filled]="interacciones().meGusta" aria-hidden="true"></i> {{interacciones().meGustas}}
+                  </button>
                 </footer>
               </div>
             </div>
 
-            <app-shouts-comments #shoutsComments [shout]="shout"></app-shouts-comments>
+            <div id="shout-comentarios">
+              <app-shouts-comments #shoutsComments [shout]="shout"></app-shouts-comments>
+            </div>
           </div>
         </div>
       </div>
@@ -69,8 +92,10 @@
         <div class="titulaw">
           <h2>Herramientas</h2>
         </div>
+
         <div class="row">
-          <div class="col-12 col-sm-12 d-grid gap-2 text-end" (click)="eliminarShout()" role="button" tabindex="0" (keydown.enter)="eliminarShout()" (keydown.space)="eliminarShout(); $event.preventDefault()">
+          <div class="col-12 col-sm-12 d-grid gap-2 text-end" (click)="eliminarShout()" role="button" tabindex="0"
+            (keydown.enter)="eliminarShout()" (keydown.space)="eliminarShout(); $event.preventDefault()">
             <button mat-flat-button color="danger">
               <i class="ti ti-trash"></i> Eliminar Shout
             </button>
@@ -85,6 +110,7 @@
         <div class="titulaw">
           <h2>Compartido por</h2>
         </div>
+
         <div class="row">
           <div class="col-12">
             <div class="alert alert-warning">

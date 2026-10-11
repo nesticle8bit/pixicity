@@ -9,7 +9,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { ShoutAdmin, ShoutComentarioViewModel, ShoutComentarioVoto, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
+import { ShoutAdmin, ShoutComentarioViewModel, ShoutComentarioVoto, ShoutInteracciones, ShoutReaccion, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
 
 @Injectable()
 export class HttpPerfilService implements IHttpPerfilService {
@@ -182,6 +182,27 @@ export class HttpPerfilService implements IHttpPerfilService {
   denunciarShoutComentario(comentarioId: number, motivo: string): Observable<boolean> {
     return this.http
       .post<ApiResponse<boolean>>(`${environment.api}/api/shouts/denunciarShoutComentario?comentarioId=${comentarioId}`, { motivo })
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getShoutInteracciones(shoutId: number): Observable<ShoutInteracciones> {
+    return this.http
+      .get<ApiResponse<ShoutInteracciones>>(`${environment.api}/api/shouts/getShoutInteracciones?shoutId=${shoutId}`)
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  alternarMeGustaShout(shoutId: number): Observable<ShoutReaccion> {
+    return this.http
+      .post<ApiResponse<ShoutReaccion>>(`${environment.api}/api/shouts/alternarMeGusta?shoutId=${shoutId}`, {})
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  alternarFavoritoShout(shoutId: number): Observable<ShoutReaccion> {
+    return this.http
+      .post<ApiResponse<ShoutReaccion>>(`${environment.api}/api/shouts/alternarFavorito?shoutId=${shoutId}`, {})
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }

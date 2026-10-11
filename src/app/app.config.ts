@@ -103,6 +103,10 @@ const SIN_LOADER = [
   'fotos/GetFotos',
   'fotos/GetComentariosByFotoId',
   'shouts/getComentariosByShoutId',
+  // Me gusta / favoritos de shouts: el botón responde al instante y el overlay lo taparía.
+  'shouts/getShoutInteracciones',
+  'shouts/alternarMeGusta',
+  'shouts/alternarFavorito',
 ].map((ruta) => `${environment.api}/api/${ruta}`);
 
 export const appConfig: ApplicationConfig = {

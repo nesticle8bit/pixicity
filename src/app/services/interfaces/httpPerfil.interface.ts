@@ -2,7 +2,7 @@ import { AdminFiltro } from 'src/app/models/admin/admin-filtro.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
-import { ShoutAdmin, ShoutComentarioViewModel, ShoutComentarioVoto, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
+import { ShoutAdmin, ShoutComentarioViewModel, ShoutComentarioVoto, ShoutInteracciones, ShoutReaccion, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
 
 @Injectable()
 export abstract class IHttpPerfilService {
@@ -20,4 +20,7 @@ export abstract class IHttpPerfilService {
   abstract editarShoutComentario(comentarioId: number, contenido: string): Observable<boolean>;
   abstract fijarShoutComentario(comentarioId: number): Observable<boolean>;
   abstract denunciarShoutComentario(comentarioId: number, motivo: string): Observable<boolean>;
+  abstract getShoutInteracciones(shoutId: number): Observable<ShoutInteracciones>;
+  abstract alternarMeGustaShout(shoutId: number): Observable<ShoutReaccion>;
+  abstract alternarFavoritoShout(shoutId: number): Observable<ShoutReaccion>;
 }
