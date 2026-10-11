@@ -57,6 +57,20 @@ export interface ComentarioViewModel {
   rango?: { id: number; nombre: string; icono: string | null; color: string | null } | null;
 }
 
+/** Fila de /favoritos (proyección liviana: sin el contenido del post). */
+export interface FavoritoPostLista {
+  id: number;
+  fechaRegistro: string;
+  postId: number;
+  titulo: string;
+  url: string;
+  postFechaRegistro: string;
+  puntos: number;
+  comentarios: number;
+  autor: string;
+  categoria: { id: number; nombre: string; icono: string; seo: string };
+}
+
 export interface FavoritosViewModel {
   id: number;
   fechaRegistro: string;

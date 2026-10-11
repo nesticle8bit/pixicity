@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { AfiliacionModel } from 'src/app/models/general/afiliacion.model';
 import { DashboardResumen, MetricasApi } from 'src/app/models/admin/dashboard.model';
 import { PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
-import { FavoritosViewModel } from 'src/app/models/posts/post-vm.model';
+import { FavoritoPostLista } from 'src/app/models/posts/post-vm.model';
 import { EstadisticasViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 
 @Injectable()
@@ -17,7 +17,12 @@ export abstract class IHttpGeneralService {
   abstract getMetricasApi(minutos: number): Observable<MetricasApi>;
   abstract getAfiliados(filtro?: AdminFiltro): Observable<PaginatedData<AfiliadoAdmin>>;
   abstract saveAfiliacion(afiliacion: AfiliacionModel): Observable<number>;
-  abstract getFavoritosByUser(search: string, categoriaId: number): Observable<PaginatedWithCategorias<FavoritosViewModel, 'favoritos'>>;
+  abstract getFavoritosByUser(
+    search: string,
+    categoriaId: number,
+    page: number,
+    pageCount: number,
+  ): Observable<PaginatedWithCategorias<FavoritoPostLista, 'favoritos'>>;
   abstract getConfiguracion(): Observable<ConfiguracionModel>;
   abstract updateConfiguracion(configuracion: Partial<ConfiguracionModel>): Observable<boolean>;
   abstract updateAds(configuration: Partial<ConfiguracionModel>): Observable<boolean>;

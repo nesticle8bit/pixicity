@@ -1,11 +1,11 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (130).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (131).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2?v=0b2a771988") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=50a1c08c52") format("woff2");
 }
 
 @font-face {
@@ -127,6 +127,7 @@
 .ti-rocket:before { content: "\ec45"; }
 .ti-rotate-clockwise:before { content: "\eb15"; }
 .ti-search:before { content: "\eb1c"; }
+.ti-search-off:before { content: "\f19c"; }
 .ti-send:before { content: "\eb1e"; }
 .ti-settings:before { content: "\eb20"; }
 .ti-share:before { content: "\eb21"; }

@@ -22,5 +22,5 @@ export type PaginatedData<T, K extends string = 'data'> = { [P in K]: T[] } & {
 
 /** Listas filtrables por categoría (borradores, favoritos): además de la página traen el conteo por categoría. */
 export type PaginatedWithCategorias<T, K extends string = 'data'> = PaginatedData<T, K> & {
-  categorias: { categoria: { id: number; icono: string; nombre: string }; count: number }[];
+  categorias: { categoria: { id: number; icono: string; nombre: string; seo?: string }; count: number }[];
 };

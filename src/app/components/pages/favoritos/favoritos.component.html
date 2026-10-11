@@ -1,116 +1,175 @@
-<div [formGroup]="formGroup" class="container container--home">
+<div class="container container--home">
   <div class="row">
-    <div class="col-12 col-sm-6 col-md-9">
-      <h6 class="main-title">
-        <span>Mis posts favoritos</span>
+    <div class="col-12 col-md-9 fav">
+      <header class="fav__head">
+        <h1 class="fav__titulo"><i class="ti ti-star-filled" aria-hidden="true"></i> Mis favoritos</h1>
 
-        <input type="text" id="favoritos-search" aria-label="Buscar en mis favoritos" autocomplete="off" formControlName="search"
-          (keyup)="getFavoritos(0)" />
-        </h6>
+        <div class="fav__tabs" role="tablist" aria-label="Tipo de favorito" (keydown)="teclaPestanas($event)">
+          <button type="button" role="tab" id="favoritos-tab-posts" class="fav__tab" aria-controls="favoritos-panel"
+            [class.is-activa]="pestana() === 'posts'" [attr.aria-selected]="pestana() === 'posts'"
+            [attr.tabindex]="pestana() === 'posts' ? 0 : -1" (click)="cambiarPestana('posts')">
+            <i class="ti ti-file-text" aria-hidden="true"></i> Posts
+            @if (totalPosts() !== null) {
+            <span class="fav__tab-num">{{ totalGeneralPosts() }}</span>
+            }
+          </button>
+          <button type="button" role="tab" id="favoritos-tab-shouts" class="fav__tab" aria-controls="favoritos-panel"
+            [class.is-activa]="pestana() === 'shouts'" [attr.aria-selected]="pestana() === 'shouts'"
+            [attr.tabindex]="pestana() === 'shouts' ? 0 : -1" (click)="cambiarPestana('shouts')">
+            <i class="ti ti-messages" aria-hidden="true"></i> Shouts
+            @if (totalShouts() !== null) {
+            <span class="fav__tab-num">{{ totalShouts() }}</span>
+            }
+          </button>
+        </div>
+      </header>
 
-        @if (favoritos.length < 1) {
-          <div class="nada-gris my-3">
-            No agregaste ningún post a favoritos todavía
+      <section id="favoritos-panel" role="tabpanel"
+        [attr.aria-labelledby]="'favoritos-tab-' + pestana()">
+        @if (pestana() === 'posts') {
+        <div class="fav__filtros">
+          <div class="fav__buscar">
+            <i class="ti ti-search" aria-hidden="true"></i>
+            <input type="search" id="favoritos-search" [formControl]="busqueda" placeholder="Buscar por título…"
+              aria-label="Buscar en mis favoritos" autocomplete="off" />
+            @if (busqueda.value) {
+            <button type="button" class="fav__limpiar" (click)="limpiarBusqueda()" aria-label="Limpiar búsqueda">
+              <i class="ti ti-x" aria-hidden="true"></i>
+            </button>
+            }
           </div>
-        }
 
-        @if (favoritos.length > 0) {
-          <div class="table-responsive mt-3">
-            <table class="table table-sm table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>Título</th>
-                  <th>Creado</th>
-                  <th>Guardado</th>
-                  <th>Puntos</th>
-                  <th>Comentarios</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (favorito of favoritos; track favorito) {
-                  <tr [ngClass]="{'row-deleted': favorito.deleted}">
-                    <td>
-                      <a [routerLink]="['/posts/' + favorito.post.categoria.seo + '/' + favorito.post.id + '/' + favorito.post.url]"
-                        title="{{favorito.post.titulo}}">
-                        <img src="/assets/images/categorias/{{favorito.post.categoria.icono}}"
-                          title="{{favorito.post.categoria.nombre}}"
-                          alt="{{favorito.post.categoria.nombre}}" loading="lazy"/>
-                          {{favorito.post.titulo}}
-                        </a>
-                      </td>
-                      <td>
-                        {{favorito.post.fechaRegistro | timeAgo}}
-                      </td>
-                      <td>
-                        {{favorito.fechaRegistro | timeAgo}}
-                      </td>
-                      <td>
-                        0
-                      </td>
-                      <td>
-                        9
-                      </td>
-                      <td class="text-center" width="30px">
-                        <a (click)="deleteFavorito(favorito)" role="button" tabindex="0" (keydown.enter)="deleteFavorito(favorito)" (keydown.space)="deleteFavorito(favorito); $event.preventDefault()">
-                          @if (!favorito.deleted) {
-                            <img loading="lazy" decoding="async" src="/assets/images/icons/cross.png" alt="Eliminar" #tooltip="matTooltip"
-                              matTooltip="Eliminar" aria-label="Eliminar" [matTooltipPosition]="'above'"
-                              />
-                          }
-                          @if (favorito.deleted) {
-                            <img loading="lazy" decoding="async" src="/assets/images/icons/reload.png" alt="Recuperar" #tooltip="matTooltip"
-                              matTooltip="Recuperar" aria-label="Recuperar" [matTooltipPosition]="'above'"
-                              />
-                          }
-                        </a>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-          }
-
-          @if (favoritos.length > 0) {
-            <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" (page)="pageChange($event)"
-              >
-            </mat-paginator>
+          @if (categorias().length > 1) {
+          <div class="fav__chips" role="group" aria-label="Filtrar por categoría">
+            <button type="button" class="fav__chip" [class.is-activa]="categoriaId() === 0"
+              [attr.aria-pressed]="categoriaId() === 0" (click)="filtrarCategoria(0)">
+              Todas <span class="fav__chip-num">{{ totalGeneralPosts() }}</span>
+            </button>
+            @for (c of categorias(); track c.categoria.id) {
+            <button type="button" class="fav__chip" [class.is-activa]="categoriaId() === c.categoria.id"
+              [attr.aria-pressed]="categoriaId() === c.categoria.id" (click)="filtrarCategoria(c.categoria.id)">
+              <img src="/assets/images/categorias/{{ c.categoria.icono }}" alt="" width="16" height="16" loading="lazy" />
+              {{ c.categoria.nombre }} <span class="fav__chip-num">{{ c.count }}</span>
+            </button>
+            }
+          </div>
           }
         </div>
 
-        <form class="col-12 col-sm-6 col-md-3">
-          <h6 class="main-title">
-            <span>Categorías</span>
-          </h6>
+        @if (cargandoPosts() && totalPosts() === null) {
+        <div class="fav__cargando"><app-cargando tamano="lg" texto="Cargando favoritos…" /></div>
+        } @else if (posts().length === 0) {
+        @if (busqueda.value.trim() || categoriaId()) {
+        <div class="fav__vacio">
+          <i class="ti ti-search-off" aria-hidden="true"></i>
+          <p>Ningún favorito coincide con el filtro.</p>
+          <button type="button" class="boton azul" (click)="limpiarBusqueda(); filtrarCategoria(0)">Ver todos</button>
+        </div>
+        } @else {
+        <div class="fav__vacio">
+          <i class="ti ti-star" aria-hidden="true"></i>
+          <p>Todavía no guardaste ningún post.</p>
+          <span class="fav__vacio-ayuda">Usa <strong>Agregar a favoritos</strong> en cualquier post para encontrarlo después acá.</span>
+          <a routerLink="/" class="boton azul">Explorar posts</a>
+        </div>
+        }
+        } @else {
+        <ul class="fav__lista" [class.is-cargando]="cargandoPosts()" [attr.aria-busy]="cargandoPosts()">
+          @for (f of posts(); track f.id) {
+          <li class="fav-item" [class.is-quitado]="f.quitado">
+            <img class="fav-item__icono" src="/assets/images/categorias/{{ f.categoria.icono }}" [alt]="f.categoria.nombre"
+              [matTooltip]="f.categoria.nombre" width="20" height="20" loading="lazy" />
 
-          <table class="table table-sm table-striped table-hover">
-            <tbody>
-              @for (categoria of categorias; track categoria) {
-                <tr>
-                  <td>
-                    <a (click)="filterByCategory(categoria)"
-                      title="{{categoria.categoria.nombre}}" role="button" tabindex="0" (keydown.enter)="filterByCategory(categoria)" (keydown.space)="filterByCategory(categoria); $event.preventDefault()">
-                      <img src="/assets/images/categorias/{{categoria.categoria.icono}}"
-                        alt="{{categoria.categoria.nombre}}" loading="lazy"/>
-                        {{categoria.categoria.nombre}} <span
-                      class="badge bg-secondary float-end">{{categoria.count}}</span>
-                    </a>
-                  </td>
-                </tr>
-              }
+            <div class="fav-item__cuerpo">
+              <a class="fav-item__titulo" [routerLink]="['/posts', f.categoria.seo, f.postId, f.url]">{{ f.titulo }}</a>
+              <div class="fav-item__meta">
+                <span>por <a [routerLink]="['/perfil', f.autor]">{{ f.autor }}</a></span>
+                <span>publicado {{ f.postFechaRegistro | timeAgo }}</span>
+                <span>guardado {{ f.fechaRegistro | timeAgo }}</span>
+              </div>
+            </div>
 
-              <tr>
-                <td>
-                  <a (click)="getFavoritos(0)" role="button" tabindex="0" (keydown.enter)="getFavoritos(0)" (keydown.space)="getFavoritos(0); $event.preventDefault()">
-                    Todos
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <div class="fav-item__stats">
+              <span [matTooltip]="f.puntos + ' puntos'"><i class="ti ti-plus" aria-hidden="true"></i>
+                <span class="visually-hidden">Puntos:</span> {{ f.puntos }}</span>
+              <span [matTooltip]="f.comentarios + ' comentarios'"><i class="ti ti-messages" aria-hidden="true"></i>
+                <span class="visually-hidden">Comentarios:</span> {{ f.comentarios }}</span>
+            </div>
 
-          <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
-        </form>
-      </div>
+            @if (f.quitado) {
+            <button type="button" class="fav-item__deshacer" (click)="alternarPost(f)" [disabled]="f.procesando">
+              <i class="ti ti-arrow-back-up" aria-hidden="true"></i> Deshacer
+            </button>
+            } @else {
+            <button type="button" class="fav-item__quitar" (click)="alternarPost(f)" [disabled]="f.procesando"
+              matTooltip="Quitar de favoritos" [attr.aria-label]="'Quitar de favoritos: ' + f.titulo">
+              <i class="ti ti-trash" aria-hidden="true"></i>
+            </button>
+            }
+          </li>
+          }
+        </ul>
+
+        @if ((totalPosts() ?? 0) > porPagina) {
+        <mat-paginator [length]="totalPosts()" [pageSize]="porPagina" [pageIndex]="paginaPosts()" [hidePageSize]="true"
+          (page)="cambiarPaginaPosts($event)" aria-label="Páginas de favoritos" />
+        }
+        }
+        } @else {
+        @if (cargandoShouts() && totalShouts() === null) {
+        <div class="fav__cargando"><app-cargando tamano="lg" texto="Cargando shouts…" /></div>
+        } @else if (shouts().length === 0) {
+        <div class="fav__vacio">
+          <i class="ti ti-messages" aria-hidden="true"></i>
+          <p>Todavía no guardaste ningún shout.</p>
+          <span class="fav__vacio-ayuda">Toca la <i class="ti ti-star" aria-hidden="true"></i> en un shout para guardarlo acá.</span>
+        </div>
+        } @else {
+        <ul class="fav__lista" [class.is-cargando]="cargandoShouts()" [attr.aria-busy]="cargandoShouts()">
+          @for (s of shouts(); track s.id) {
+          <li class="fav-item fav-item--shout" [class.is-quitado]="s.quitado">
+            <a class="fav-item__avatar" [routerLink]="['/perfil', s.avatar?.userName]" tabindex="-1" aria-hidden="true">
+              <app-user-avatar [avatar]="s.avatar?.avatar" [userName]="s.avatar?.userName" [width]="36" [height]="36" />
+            </a>
+
+            <div class="fav-item__cuerpo">
+              <div class="fav-item__meta fav-item__meta--arriba">
+                <a class="fav-item__usuario" [routerLink]="['/perfil', s.avatar?.userName]">{{ '@' }}{{ s.avatar?.userName }}</a>
+                <span>{{ s.fechaRegistro | timeAgo }}</span>
+                @if (s.tipo && s.tipo !== 'Texto') {
+                <span class="fav-item__tipo">{{ s.tipo }}</span>
+                }
+              </div>
+              <a class="fav-item__texto" [routerLink]="['/shouts', s.avatar?.userName, s.id]">
+                {{ s.comentario || s.mediaTitulo || 'Ver shout' }}
+              </a>
+            </div>
+
+            @if (s.quitado) {
+            <button type="button" class="fav-item__deshacer" (click)="alternarShout(s)" [disabled]="s.procesando">
+              <i class="ti ti-arrow-back-up" aria-hidden="true"></i> Deshacer
+            </button>
+            } @else {
+            <button type="button" class="fav-item__quitar" (click)="alternarShout(s)" [disabled]="s.procesando"
+              matTooltip="Quitar de favoritos" [attr.aria-label]="'Quitar de favoritos el shout de ' + s.avatar?.userName">
+              <i class="ti ti-trash" aria-hidden="true"></i>
+            </button>
+            }
+          </li>
+          }
+        </ul>
+
+        @if ((totalShouts() ?? 0) > porPagina) {
+        <mat-paginator [length]="totalShouts()" [pageSize]="porPagina" [pageIndex]="paginaShouts()" [hidePageSize]="true"
+          (page)="cambiarPaginaShouts($event)" aria-label="Páginas de shouts favoritos" />
+        }
+        }
+        }
+      </section>
     </div>
+
+    <aside class="col-12 col-md-3 mt-3 mt-md-0">
+      <ads-by-type class="my-3" [type]="'300x250'"></ads-by-type>
+    </aside>
+  </div>
+</div>

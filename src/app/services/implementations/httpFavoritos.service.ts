@@ -35,9 +35,9 @@ export class HttpFavoritosService implements IHttpFavoritosService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  deleteFavorito(favoritoId: number): Observable<boolean> {
+  deleteFavorito(favoritoId: number): Observable<{ favoritoId: number; eliminado: boolean }> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/favoritos/deleteFavorito?favoritoId=${favoritoId}`)
+      .delete<ApiResponse<{ favoritoId: number; eliminado: boolean }>>(`${environment.api}/api/favoritos/deleteFavorito?favoritoId=${favoritoId}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

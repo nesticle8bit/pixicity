@@ -206,4 +206,13 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
+
+  getShoutsFavoritos(page: number, pageCount: number): Observable<PaginatedData<ShoutViewModel, 'shouts'>> {
+    return this.http
+      .get<ApiResponse<PaginatedData<ShoutViewModel, 'shouts'>>>(
+        `${environment.api}/api/shouts/getShoutsFavoritos?page=${page}&pageCount=${pageCount}`,
+      )
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
 }

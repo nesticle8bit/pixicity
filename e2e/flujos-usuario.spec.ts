@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, Page, test } from '@playwright/test';
 import { AUTOR, FOTO, POST, simularApi } from './api-simulada';
 
@@ -284,6 +285,69 @@ test('shouts: me gusta y favorito se alternan y el botón de comentarios lleva a
 
   await page.getByRole('button', { name: /^Comentar/ }).click();
   await expect(page.getByLabel('Escribe un comentario')).toBeFocused();
+});
+
+test('favoritos: busca, filtra por categoría, quita con deshacer y lista los shouts guardados', async ({ page }) => {
+  await conSesion(page);
+  const fila = (id: number, titulo: string, categoria: { id: number; nombre: string; icono: string; seo: string }) => ({
+    id, fechaRegistro: '2026-10-09T12:00:00Z', postId: 100 + id, titulo, url: titulo.toLowerCase().replace(/ /g, '-'),
+    postFechaRegistro: '2026-09-01T12:00:00Z', puntos: 12, comentarios: 4, autor: AUTOR, categoria,
+  });
+  const linux = { id: 1, nombre: 'Linux', icono: 'linux.png', seo: 'linux' };
+  const juegos = { id: 2, nombre: 'Juegos', icono: 'juegos.png', seo: 'juegos' };
+  const consultas: URLSearchParams[] = [];
+  await page.route(/\/api\/favoritos\/getFavoritos/i, (r) => {
+    const q = new URL(r.request().url()).searchParams;
+    consultas.push(q);
+    const todos = [fila(1, 'Instalar Arch paso a paso', linux), fila(2, 'Mejores juegos del año', juegos)];
+    const lista = todos.filter((f) => (q.get('categoriaId') === '0' || String(f.categoria.id) === q.get('categoriaId'))
+      && f.titulo.toLowerCase().includes((q.get('query') ?? '').toLowerCase()));
+    return r.fulfill(ok({
+      favoritos: lista,
+      categorias: [{ categoria: linux, count: 1 }, { categoria: juegos, count: 1 }],
+      pagination: { totalCount: lista.length, pageSize: 10, currentPage: 1, totalPages: 1 },
+    }));
+  });
+  const quitados: string[] = [];
+  await page.route(/\/api\/favoritos\/deleteFavorito/i, (r) => {
+    const id = new URL(r.request().url()).searchParams.get('favoritoId')!;
+    const eliminado = !quitados.includes(id);
+    eliminado ? quitados.push(id) : quitados.splice(quitados.indexOf(id), 1);
+    return r.fulfill(ok({ favoritoId: +id, eliminado }));
+  });
+  await page.route(/\/api\/shouts\/getShoutsFavoritos/i, (r) => r.fulfill(ok({
+    shouts: [{ id: 9, comentario: 'Un shout guardado', tipo: 'Texto', fechaRegistro: '2026-10-01T12:00:00Z', avatar: { userName: AUTOR, avatar: null } }],
+    pagination: { totalCount: 1, pageSize: 10, currentPage: 1, totalPages: 1 },
+  })));
+
+  await page.goto('/favoritos');
+  await expect(page.getByRole('link', { name: 'Instalar Arch paso a paso' })).toBeVisible();
+  await expect(page.getByRole('tab', { name: /Posts/ })).toHaveAttribute('aria-selected', 'true');
+
+  const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).options({ iframes: false }).include('.fav').analyze();
+  expect(axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ') + ' ' + n.failureSummary).join(' | ')}`)).toEqual([]);
+
+  await page.getByRole('button', { name: /^Juegos/ }).click();
+  await expect(page.getByRole('link', { name: 'Instalar Arch paso a paso' })).toBeHidden();
+  await expect(page.getByRole('button', { name: /^Juegos/ })).toHaveAttribute('aria-pressed', 'true');
+
+  await page.getByRole('button', { name: /^Todas/ }).click();
+  await page.getByLabel('Buscar en mis favoritos').fill('arch');
+  await expect(page.getByRole('link', { name: 'Mejores juegos del año' })).toBeHidden();
+  expect(consultas.at(-1)?.get('query')).toBe('arch'); // con espera: no una consulta por tecla
+  expect(consultas.filter((q) => q.get('query')).length).toBe(1);
+
+  await page.getByRole('button', { name: 'Quitar de favoritos: Instalar Arch paso a paso' }).click();
+  const deshacer = page.getByRole('button', { name: 'Deshacer' });
+  await expect(deshacer).toBeVisible();
+  expect(quitados).toEqual(['1']);
+  await deshacer.click();
+  await expect(page.getByRole('button', { name: 'Quitar de favoritos: Instalar Arch paso a paso' })).toBeVisible();
+  expect(quitados).toEqual([]);
+
+  await page.getByRole('tab', { name: /Shouts/ }).click();
+  await expect(page).toHaveURL(/\?tipo=shouts/);
+  await expect(page.getByRole('link', { name: 'Un shout guardado' })).toHaveAttribute('href', `/shouts/${AUTOR}/9`);
 });
 
 test('editor de posts y shouts: el botón de emojis inserta en el cursor', async ({ page }) => {

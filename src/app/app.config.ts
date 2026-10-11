@@ -68,6 +68,8 @@ registerLocaleData(localeEs, 'es');
 const SIN_LOADER = [
   'favoritos/getFavoritos',
   'favoritos/getLastFavoritos',
+  'favoritos/deleteFavorito',
+  'shouts/getShoutsFavoritos',
   'monitors/getLastNotificaciones',
   'mensajes/getLastMensajes',
   'comentarios/getComentariosRecientes',

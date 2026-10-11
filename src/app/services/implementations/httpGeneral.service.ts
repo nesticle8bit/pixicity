@@ -13,7 +13,7 @@ import { NotificationService } from '../shared/notification.service';
 import { PaginationService } from '../shared/pagination.service';
 import { ApiResponse, PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
 import { EstadisticasViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
-import { FavoritosViewModel } from 'src/app/models/posts/post-vm.model';
+import { FavoritoPostLista } from 'src/app/models/posts/post-vm.model';
 import { DashboardResumen, MetricasApi } from 'src/app/models/admin/dashboard.model';
 
 @Injectable()
@@ -111,10 +111,15 @@ export class HttpGeneralService implements IHttpGeneralService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getFavoritosByUser(search: string, categoriaId: number): Observable<PaginatedWithCategorias<FavoritosViewModel, 'favoritos'>> {
+  getFavoritosByUser(
+    search: string,
+    categoriaId: number,
+    page: number,
+    pageCount: number,
+  ): Observable<PaginatedWithCategorias<FavoritoPostLista, 'favoritos'>> {
     return this.http
-      .get<ApiResponse<PaginatedWithCategorias<FavoritosViewModel, 'favoritos'>>>(
-        `${environment.api}/api/favoritos/getFavoritos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}&categoriaId=${categoriaId}`,
+      .get<ApiResponse<PaginatedWithCategorias<FavoritoPostLista, 'favoritos'>>>(
+        `${environment.api}/api/favoritos/getFavoritos?page=${page}&pageCount=${pageCount}&query=${encodeURIComponent(search ?? '')}&categoriaId=${categoriaId}`,
       )
       .pipe(
         map((response) => {
