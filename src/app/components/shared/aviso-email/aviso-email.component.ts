@@ -15,8 +15,8 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   imports: [RouterLink],
   template: `
     @if (visible()) {
-    <div class="aviso-email" role="status">
-      <div class="container aviso-email__contenido">
+    <div class="aviso-email container" role="status">
+      <div class="aviso-email__contenido">
         <i class="ti ti-mail-exclamation aviso-email__icono" aria-hidden="true"></i>
         <p class="aviso-email__texto">
           <strong>Confirma tu correo para poder publicar.</strong>
@@ -33,9 +33,12 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
     }
   `,
   styles: `
+    /* Mismo ancho y bordes laterales que la barra de noticias (app-main-ultimas-noticias). */
     .aviso-email {
       background: #fff8e6;
       border-bottom: 1px solid #f1d58a;
+      border-left: 1px solid #ccc;
+      border-right: 1px solid #ccc;
       color: #4a3a12;
     }
     .aviso-email__contenido {
@@ -43,8 +46,7 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
       align-items: center;
       gap: 10px 14px;
       flex-wrap: wrap;
-      padding-top: 10px;
-      padding-bottom: 10px;
+      padding: 10px 0;
     }
     .aviso-email__icono { font-size: 1.4rem; color: #9a6b00; }
     .aviso-email__texto { flex: 1; min-width: 220px; margin: 0; font-size: 0.86rem; line-height: 1.4; }
