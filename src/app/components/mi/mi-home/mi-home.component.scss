@@ -1,0 +1,388 @@
+$marca: #006595;
+$texto: #26323a;
+$tenue: #5d6b75;
+$borde: #e3e9ed;
+$fondo-suave: #f4f8fa;
+
+.mi {
+  padding-top: 12px;
+  padding-bottom: 32px;
+}
+
+.mi__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px 16px;
+  border-bottom: 1px solid $borde;
+  margin-bottom: 14px;
+}
+
+.mi__titulo {
+  margin: 0 0 10px;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: $texto;
+}
+
+.mi__tabs { display: flex; gap: 4px; }
+
+.mi__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  margin-bottom: -1px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: $tenue;
+  cursor: pointer;
+  transition: color 0.12s ease, border-color 0.12s ease;
+
+  &:hover { color: $marca; }
+
+  &.is-activa {
+    color: $marca;
+    border-bottom-color: $marca;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $marca;
+    outline-offset: -2px;
+    border-radius: 6px 6px 0 0;
+  }
+}
+
+.mi__composer {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.mi__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mi__estado {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0;
+}
+
+.mi__vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 40px 16px;
+  border: 1px dashed $borde;
+  border-radius: 12px;
+  text-align: center;
+  color: $tenue;
+
+  > i { font-size: 2.2rem; color: #c3ced5; }
+
+  p { margin: 0; font-weight: 600; color: $texto; }
+
+  .mi-boton { margin-top: 8px; }
+}
+
+.mi__vacio-ayuda { font-size: 0.85rem; }
+
+.mi__mas {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0 0;
+}
+
+.mi__fin {
+  margin: 24px 0 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: $tenue;
+}
+
+// Botones propios: los globales (.boton.azul / .gris) no llegan al contraste AA.
+.mi-boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border: 1px solid $marca;
+  border-radius: 8px;
+  background: $marca;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.12s ease;
+
+  &:hover { background: #00527a; }
+
+  &:focus-visible {
+    outline: 2px solid $marca;
+    outline-offset: 2px;
+  }
+
+  &--suave {
+    background: #fff;
+    color: $marca;
+
+    &:hover { background: $fondo-suave; }
+  }
+}
+
+// Post nuevo de alguien que sigues
+.mi-post__quien {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 6px;
+  font-size: 0.78rem;
+  color: $tenue;
+
+  ::ng-deep img { border-radius: 50%; }
+
+  a {
+    font-weight: 700;
+    color: $texto;
+    text-decoration: none;
+
+    &:hover { color: $marca; text-decoration: underline; }
+  }
+}
+
+.mi-post__card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid #e9edf0;
+  border-left: 3px solid $marca;
+  border-radius: 12px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
+  transition: box-shadow 0.15s ease;
+
+  &:hover {
+    box-shadow: 0 6px 18px rgba(16, 24, 40, 0.08);
+
+    .mi-post__titulo { color: $marca; }
+    .mi-post__ir { transform: translateX(2px); color: $marca; }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $marca;
+    outline-offset: 2px;
+  }
+
+  img { flex: none; }
+}
+
+.mi-post__cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.mi-post__titulo {
+  font-weight: 700;
+  color: $texto;
+  overflow-wrap: anywhere;
+  transition: color 0.12s ease;
+}
+
+.mi-post__meta {
+  font-size: 0.76rem;
+  color: $tenue;
+
+  i { margin-right: 2px; }
+}
+
+.mi-post__ir {
+  flex: none;
+  color: #9aa7b0;
+  transition: transform 0.12s ease, color 0.12s ease;
+}
+
+// Lateral
+.mi-lateral {
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mi-card {
+  padding: 16px;
+  border: 1px solid $borde;
+  border-radius: 12px;
+  background: #fff;
+
+  &__titulo {
+    margin: 0 0 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: $texto;
+  }
+}
+
+.mi-perfil__quien {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+
+  ::ng-deep img { border-radius: 50%; }
+
+  &:hover .mi-perfil__nombre { text-decoration: underline; }
+}
+
+.mi-perfil__nombre {
+  display: block;
+  font-weight: 800;
+  color: $marca;
+  overflow-wrap: anywhere;
+}
+
+.mi-perfil__rango {
+  display: block;
+  font-size: 0.78rem;
+  color: $tenue;
+}
+
+.mi-perfil__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+  margin: 14px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid $borde;
+  text-align: center;
+
+  dt {
+    order: 2;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: $tenue;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  dd {
+    order: 1;
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: $texto;
+  }
+
+  > div { display: flex; flex-direction: column; min-width: 0; }
+}
+
+.mi-sugerencias {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mi-sugerencia {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  &__quien {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+
+    ::ng-deep img { border-radius: 50%; }
+
+    &:hover .mi-sugerencia__nombre { color: $marca; text-decoration: underline; }
+  }
+
+  &__nombre {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: $texto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__meta {
+    display: block;
+    font-size: 0.72rem;
+    color: $tenue;
+  }
+}
+
+.mi-seguir {
+  flex: none;
+  min-width: 82px;
+  padding: 5px 12px;
+  border: 1px solid $marca;
+  border-radius: 999px;
+  background: $marca;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+
+  &:hover:not(:disabled) { background: #00527a; }
+
+  &.is-siguiendo {
+    background: #fff;
+    color: $marca;
+
+    &:hover:not(:disabled) { border-color: #c62828; color: #c62828; background: #fff; }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $marca;
+    outline-offset: 2px;
+  }
+
+  &:disabled { cursor: progress; opacity: 0.6; }
+}
+
+.mi-sugerencias-movil {
+  margin-bottom: 20px;
+}
+
+@media (max-width: 575.98px) {
+  .mi__tabs { width: 100%; }
+  .mi__tab { flex: 1; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mi-post__card,
+  .mi-post__ir,
+  .mi__tab,
+  .mi-seguir { transition: none; }
+}

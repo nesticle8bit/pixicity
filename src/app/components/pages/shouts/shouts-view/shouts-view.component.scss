@@ -119,6 +119,14 @@
     &:hover { background: #fdf6e7; color: #975a16; }
   }
 
+  &--reshout.is-activo {
+    color: #1e7f4f;
+
+    &:hover { background: #e8f5ee; color: #1e7f4f; }
+  }
+
+  &--reshout:disabled { opacity: 0.55; cursor: default; }
+
   &--megusta.is-activo {
     color: #006595;
 
@@ -132,6 +140,28 @@
     margin-right: auto;
 
     &:hover { background: rgba(0, 133, 196, 0.1); }
+  }
+}
+
+.sv-compartido {
+  &__lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    a { display: block; line-height: 0; }
+
+    ::ng-deep img { border-radius: 50%; }
+  }
+
+  &__mas,
+  &__vacio {
+    margin: 8px 0 0;
+    font-size: 0.82rem;
+    color: #5d6b75;
   }
 }
 

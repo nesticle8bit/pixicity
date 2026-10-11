@@ -1,0 +1,68 @@
+@if (compartidoPor(); as por) {
+<p class="sc-compartido">
+  <i class="ti ti-repeat" aria-hidden="true"></i>
+  <a [routerLink]="['/perfil', por.userName]" [appUserPopover]="por.userName">{{ '@' }}{{ por.userName }}</a> compartió
+</p>
+}
+
+<article class="sc">
+  <a [routerLink]="['/perfil', autor()]" class="sc__avatar" [appUserPopover]="autor()" tabindex="-1" aria-hidden="true">
+    <app-user-avatar [avatar]="shout().avatar?.avatar" [userName]="autor()" [width]="48" [height]="48" />
+  </a>
+
+  <div class="sc-bubble">
+    <span class="sc-bubble__tail" aria-hidden="true"></span>
+
+    <header class="sc-bubble__head">
+      <span class="sc-bubble__quien">
+        <a [routerLink]="['/perfil', autor()]" class="sc-bubble__user" [appUserPopover]="autor()">{{ '@' }}{{ autor() }}</a>
+        @if (muroAjeno(); as perfil) {
+        <i class="ti ti-chevron-right" aria-label="en el muro de"></i>
+        <a [routerLink]="['/perfil', perfil]" class="sc-bubble__user sc-bubble__user--perfil">{{ '@' }}{{ perfil }}</a>
+        }
+      </span>
+      <a class="sc-bubble__time" [routerLink]="enlace()"
+        [matTooltip]="(shout().fechaRegistro | date: 'EEEE d \'de\' MMMM \'a las\' h:mm \', año\' y') ?? ''">
+        <time [attr.datetime]="shout().fechaRegistro">{{ shout().fechaRegistro | date: 'd MMM, h:mm a' }}</time>
+      </a>
+    </header>
+
+    @if (shout().comentario) {
+    <p class="sc-bubble__body">{{ shout().comentario }}</p>
+    }
+
+    <app-shout-media [url]="shout().url" [tipo]="shout().tipo" [mediaTitulo]="shout().mediaTitulo"
+      [mediaImagen]="shout().mediaImagen" [mediaDescripcion]="shout().mediaDescripcion" />
+
+    <footer class="sc-bubble__footer">
+      <a class="sc-action" [routerLink]="enlace()" matTooltip="Comentar"
+        [attr.aria-label]="'Comentar (' + (interacciones().comentarios ?? 0) + ' comentarios)'">
+        <i class="ti ti-messages" aria-hidden="true"></i> {{ interacciones().comentarios ?? 0 }}
+      </a>
+
+      <button type="button" class="sc-action sc-action--reshout" [class.is-activo]="interacciones().reshouteado"
+        [attr.aria-pressed]="interacciones().reshouteado" [disabled]="esMio() || enviando() === 'reshouteado'"
+        (click)="alternarReshout()"
+        [matTooltip]="esMio() ? 'No puedes compartir tu propio shout' : interacciones().reshouteado ? 'Dejar de compartir' : 'Compartir en mi muro'"
+        [attr.aria-label]="'Compartir (' + (interacciones().reshouts ?? 0) + ')'">
+        <i class="ti ti-repeat" aria-hidden="true"></i> {{ interacciones().reshouts ?? 0 }}
+      </button>
+
+      <button type="button" class="sc-action sc-action--favorito" [class.is-activo]="interacciones().favorito"
+        [attr.aria-pressed]="interacciones().favorito" [disabled]="enviando() === 'favorito'" (click)="alternarFavorito()"
+        [matTooltip]="interacciones().favorito ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+        [attr.aria-label]="'Favorito (' + interacciones().favoritos + ')'">
+        <i class="ti" [class.ti-star]="!interacciones().favorito" [class.ti-star-filled]="interacciones().favorito"
+          aria-hidden="true"></i> {{ interacciones().favoritos }}
+      </button>
+
+      <button type="button" class="sc-action sc-action--megusta" [class.is-activo]="interacciones().meGusta"
+        [attr.aria-pressed]="interacciones().meGusta" [disabled]="enviando() === 'meGusta'" (click)="alternarMeGusta()"
+        [matTooltip]="interacciones().meGusta ? 'Ya no me gusta' : 'Me gusta'"
+        [attr.aria-label]="'Me gusta (' + interacciones().meGustas + ')'">
+        <i class="ti" [class.ti-thumb-up]="!interacciones().meGusta" [class.ti-thumb-up-filled]="interacciones().meGusta"
+          aria-hidden="true"></i> {{ interacciones().meGustas }}
+      </button>
+    </footer>
+  </div>
+</article>

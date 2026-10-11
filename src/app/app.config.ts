@@ -48,6 +48,8 @@ import { IHttpModeracionService } from './services/interfaces/httpModeracion.int
 import { IHttpNoticiasService } from './services/interfaces/httpNoticias.interface';
 import { IHttpParametrosService } from './services/interfaces/httpParametros.interface';
 import { IHttpPerfilService } from './services/interfaces/httpPerfil.interface';
+import { IHttpMiService } from './services/interfaces/httpMi.interface';
+import { HttpMiService } from './services/implementations/httpMi.service';
 import { IHttpPostsService } from './services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from './services/interfaces/httpSecurity.interface';
 import { IHttpWebService } from './services/interfaces/httpWeb.interface';
@@ -109,6 +111,10 @@ const SIN_LOADER = [
   'shouts/getShoutInteracciones',
   'shouts/alternarMeGusta',
   'shouts/alternarFavorito',
+  'shouts/alternarReshout',
+  'shouts/getReshouts',
+  // /mi tiene sus propios indicadores (muro, resumen y sugerencias).
+  'mi/',
 ].map((ruta) => `${environment.api}/api/${ruta}`);
 
 export const appConfig: ApplicationConfig = {
@@ -143,6 +149,7 @@ export const appConfig: ApplicationConfig = {
     { provide: IHttpAppLogsService, useClass: HttpAppLogsService },
     { provide: IHttpWebService, useClass: HttpWebService },
     { provide: IHttpPerfilService, useClass: HttpPerfilService },
+    { provide: IHttpMiService, useClass: HttpMiService },
     { provide: IHttpNoticiasService, useClass: HttpNoticiasService },
     { provide: IHttpMensajesService, useClass: HttpMensajesService },
     { provide: IHttpFotosService, useClass: HttpFotosService },

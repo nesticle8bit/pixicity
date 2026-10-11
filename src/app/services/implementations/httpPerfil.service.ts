@@ -215,4 +215,20 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
+
+  alternarReshoutShout(shoutId: number): Observable<ShoutReaccion> {
+    return this.http
+      .post<ApiResponse<ShoutReaccion>>(`${environment.api}/api/shouts/alternarReshout?shoutId=${shoutId}`, {})
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getReshouts(shoutId: number, cantidad = 12): Observable<{ usuarios: { userName: string; avatar: string | null }[]; total: number }> {
+    return this.http
+      .get<ApiResponse<{ usuarios: { userName: string; avatar: string | null }[]; total: number }>>(
+        `${environment.api}/api/shouts/getReshouts?shoutId=${shoutId}&cantidad=${cantidad}`,
+      )
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
 }

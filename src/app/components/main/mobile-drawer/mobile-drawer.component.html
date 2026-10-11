@@ -31,6 +31,10 @@
       </form>
 
       <nav class="drawer__quick" aria-label="Accesos rápidos">
+        <a [routerLink]="['/mi']" (click)="nav.close()">
+          <i class="ti ti-home-heart" aria-hidden="true"></i>
+          <span>Mi</span>
+        </a>
         <a [routerLink]="['/monitor']" (click)="nav.close()">
           <i class="ti ti-eye"></i>
           <span>Monitor</span>

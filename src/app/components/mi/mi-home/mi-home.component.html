@@ -1,3 +1,152 @@
 <div class="container container--home">
-    
+  <div class="row">
+    <div class="col-12 col-md-8 mi">
+      <header class="mi__head">
+        <h1 class="mi__titulo">Mi</h1>
+
+        <div class="mi__tabs" role="tablist" aria-label="Qué mostrar" (keydown)="teclaPestanas($event)">
+          <button type="button" role="tab" id="mi-tab-siguiendo" class="mi__tab" aria-controls="mi-muro"
+            [class.is-activa]="alcance() === 'siguiendo'" [attr.aria-selected]="alcance() === 'siguiendo'"
+            [attr.tabindex]="alcance() === 'siguiendo' ? 0 : -1" (click)="cambiarAlcance('siguiendo')">
+            <i class="ti ti-users" aria-hidden="true"></i> Siguiendo
+          </button>
+          <button type="button" role="tab" id="mi-tab-todos" class="mi__tab" aria-controls="mi-muro"
+            [class.is-activa]="alcance() === 'todos'" [attr.aria-selected]="alcance() === 'todos'"
+            [attr.tabindex]="alcance() === 'todos' ? 0 : -1" (click)="cambiarAlcance('todos')">
+            <i class="ti ti-world" aria-hidden="true"></i> Novedades
+          </button>
+        </div>
+      </header>
+
+      @if (resumen(); as yo) {
+      <app-shout-composer class="mi__composer" [perfilId]="yo.id" (publicado)="alPublicar()" />
+      }
+
+      <!-- En móvil el lateral no se muestra (con el muro infinito quedaría inalcanzable): las sugerencias van acá. -->
+      <div class="d-md-none mi-sugerencias-movil">
+        <ng-container [ngTemplateOutlet]="sugerenciasTpl" />
+      </div>
+
+      <section id="mi-muro" role="tabpanel" [attr.aria-labelledby]="'mi-tab-' + alcance()"
+        [attr.aria-busy]="cargando() || cargandoMas()">
+        @if (cargando()) {
+        <div class="mi__estado"><app-cargando tamano="lg" texto="Cargando tu muro…" /></div>
+        } @else if (error() && items().length === 0) {
+        <div class="mi__vacio">
+          <i class="ti ti-cloud-off" aria-hidden="true"></i>
+          <p>No se pudo cargar el muro.</p>
+          <button type="button" class="mi-boton" (click)="reintentar()">Reintentar</button>
+        </div>
+        } @else if (items().length === 0) {
+        @if (alcance() === 'siguiendo') {
+        <div class="mi__vacio">
+          <i class="ti ti-users" aria-hidden="true"></i>
+          <p>Tu muro está vacío.</p>
+          <span class="mi__vacio-ayuda">Publica tu primer shout o sigue a alguien para ver lo que comparte.</span>
+          <button type="button" class="mi-boton" (click)="cambiarAlcance('todos')">Ver novedades</button>
+        </div>
+        } @else {
+        <div class="mi__vacio">
+          <i class="ti ti-message-2-off" aria-hidden="true"></i>
+          <p>Todavía no hay shouts en el sitio.</p>
+        </div>
+        }
+        } @else {
+        <ol class="mi__lista">
+          @for (item of items(); track claveItem(item)) {
+          <li>
+            @if (item.tipo === 'post' && item.post; as post) {
+            <article class="mi-post">
+              <p class="mi-post__quien">
+                <app-user-avatar [avatar]="post.autor.avatar" [userName]="post.autor.userName" [width]="22" [height]="22" />
+                <a [routerLink]="['/perfil', post.autor.userName]">{{ '@' }}{{ post.autor.userName }}</a>
+                publicó un post · <time [attr.datetime]="item.fecha">{{ item.fecha | timeAgo }}</time>
+              </p>
+              <a class="mi-post__card" [routerLink]="['/posts', post.categoriaSeo, post.id, post.url]">
+                <img src="/assets/images/categorias/{{ post.categoriaIcono }}" alt="" width="20" height="20" loading="lazy" />
+                <span class="mi-post__cuerpo">
+                  <span class="mi-post__titulo">{{ post.titulo }}</span>
+                  <span class="mi-post__meta">
+                    {{ post.categoriaNombre }} · <i class="ti ti-plus" aria-hidden="true"></i>{{ post.puntos }} puntos ·
+                    <i class="ti ti-messages" aria-hidden="true"></i>{{ post.comentarios }} comentarios
+                  </span>
+                </span>
+                <i class="ti ti-chevron-right mi-post__ir" aria-hidden="true"></i>
+              </a>
+            </article>
+            } @else if (item.shout; as shout) {
+            <app-shout-card [shout]="shout" [compartidoPor]="item.tipo === 'reshout' ? item.compartidoPor : null" />
+            }
+          </li>
+          }
+        </ol>
+
+        @if (siguiente()) {
+        <div class="mi__mas">
+          @if (cargandoMas()) {
+          <app-cargando texto="Cargando más…" />
+          } @else if (error()) {
+          <button type="button" class="mi-boton mi-boton--suave" (click)="reintentar()">No se pudo cargar. Reintentar</button>
+          } @else {
+          <button type="button" class="mi-boton mi-boton--suave" (click)="cargarMas()">Cargar más</button>
+          }
+        </div>
+        } @else {
+        <p class="mi__fin">No hay más publicaciones.</p>
+        }
+        }
+      </section>
+      <div #finDeLista aria-hidden="true"></div>
+    </div>
+
+    <aside class="d-none d-md-flex col-md-4 mi-lateral" aria-label="Tu perfil y sugerencias">
+      @if (resumen(); as yo) {
+      <section class="mi-card mi-perfil">
+        <a [routerLink]="['/perfil', yo.userName]" class="mi-perfil__quien">
+          <app-user-avatar [avatar]="yo.avatar" [userName]="yo.userName" [width]="56" [height]="56" />
+          <span>
+            <span class="mi-perfil__nombre">{{ '@' }}{{ yo.userName }}</span>
+            <span class="mi-perfil__rango">
+              {{ yo.rango ? yo.rango + ' · ' : '' }}{{ yo.puntos | number }} puntos
+            </span>
+          </span>
+        </a>
+        <dl class="mi-perfil__stats">
+          <div><dt>Seguidores</dt><dd>{{ yo.seguidores | number }}</dd></div>
+          <div><dt>Siguiendo</dt><dd>{{ yo.siguiendo | number }}</dd></div>
+          <div><dt>Shouts</dt><dd>{{ yo.shouts | number }}</dd></div>
+          <div><dt>Posts</dt><dd>{{ yo.posts | number }}</dd></div>
+        </dl>
+      </section>
+      }
+
+      <ng-container [ngTemplateOutlet]="sugerenciasTpl" />
+    </aside>
+  </div>
 </div>
+
+<ng-template #sugerenciasTpl>
+  @if (sugerencias().length) {
+      <section class="mi-card">
+        <h2 class="mi-card__titulo">A quién seguir</h2>
+        <ul class="mi-sugerencias">
+          @for (s of sugerencias(); track s.userName) {
+          <li class="mi-sugerencia">
+            <a [routerLink]="['/perfil', s.userName]" class="mi-sugerencia__quien">
+              <app-user-avatar [avatar]="s.avatar" [userName]="s.userName" [width]="36" [height]="36" />
+              <span>
+                <span class="mi-sugerencia__nombre">{{ '@' }}{{ s.userName }}</span>
+                <span class="mi-sugerencia__meta">{{ s.seguidores | number }} {{ s.seguidores === 1 ? 'seguidor' : 'seguidores' }}</span>
+              </span>
+            </a>
+            <button type="button" class="mi-seguir" [class.is-siguiendo]="s.siguiendo" [disabled]="s.procesando"
+              [attr.aria-pressed]="!!s.siguiendo" [attr.aria-label]="(s.siguiendo ? 'Dejar de seguir a ' : 'Seguir a ') + s.userName"
+              [matTooltip]="s.siguiendo ? 'Dejar de seguir' : ''" (click)="seguir(s)">
+              {{ s.siguiendo ? 'Siguiendo' : 'Seguir' }}
+            </button>
+          </li>
+          }
+        </ul>
+      </section>
+  }
+</ng-template>

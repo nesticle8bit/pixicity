@@ -11,6 +11,10 @@ export interface ShoutViewModel {
   mediaDescripcion: string | null;
   /** Autor del shout. */
   avatar: { userName: string; avatar: string | null } | null;
+  /** Dueño del muro donde se publicó (solo en el muro de /mi). */
+  perfil?: { userName: string; avatar: string | null } | null;
+  /** Contadores y lo que hizo el usuario actual (listas del perfil y de /mi). */
+  interacciones?: ShoutInteracciones | null;
   fechaRegistro: string;
 }
 
@@ -52,6 +56,9 @@ export interface ShoutInteracciones {
   favoritos: number;
   meGusta: boolean;
   favorito: boolean;
+  comentarios?: number;
+  reshouts?: number;
+  reshouteado?: boolean;
 }
 
 /** Respuesta de alternar un me gusta o favorito: total nuevo y si quedó marcado. */

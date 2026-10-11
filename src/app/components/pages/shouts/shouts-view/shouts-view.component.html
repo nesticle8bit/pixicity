@@ -54,6 +54,14 @@
                     <i class="ti ti-messages" aria-hidden="true"></i> {{shoutsComments?.totalComentarios || 0}}
                   </button>
 
+                  <button type="button" class="sv-action sv-action--reshout" [class.is-activo]="interacciones().reshouteado"
+                    [attr.aria-pressed]="interacciones().reshouteado" [disabled]="esMio || enviando() === 'reshouteado'"
+                    (click)="alternarReshout()"
+                    [matTooltip]="esMio ? 'No puedes compartir tu propio shout' : interacciones().reshouteado ? 'Dejar de compartir' : 'Compartir en mi muro'"
+                    [attr.aria-label]="'Compartir (' + (interacciones().reshouts ?? 0) + ')'">
+                    <i class="ti ti-repeat" aria-hidden="true"></i> {{interacciones().reshouts ?? 0}}
+                  </button>
+
                   <button type="button" class="sv-action sv-action--favorito" [class.is-activo]="interacciones().favorito"
                     [attr.aria-pressed]="interacciones().favorito" [disabled]="enviando() === 'favorito'"
                     (click)="alternarFavorito()"
@@ -104,22 +112,28 @@
       </section>
       }
 
-      @if (shout.avatar.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador'
-      || currentUser?.usuario?.rango === 'Moderador') {
-      <section class="my-3">
+      <section class="my-3 sv-compartido" aria-labelledby="sv-compartido-titulo">
         <div class="titulaw">
-          <h2>Compartido por</h2>
+          <h2 id="sv-compartido-titulo">Compartido por</h2>
         </div>
 
-        <div class="row">
-          <div class="col-12">
-            <div class="alert alert-warning">
-              😶‍🌫️ Nadie ha compartido este shout
-            </div>
-          </div>
-        </div>
+        @if (compartidoPor().total > 0) {
+        <ul class="sv-compartido__lista">
+          @for (u of compartidoPor().usuarios; track u.userName) {
+          <li>
+            <a [routerLink]="['/perfil', u.userName]" [appUserPopover]="u.userName" [attr.aria-label]="u.userName">
+              <app-user-avatar [avatar]="u.avatar" [userName]="u.userName" [width]="36" [height]="36" />
+            </a>
+          </li>
+          }
+        </ul>
+        @if (compartidoPor().total > compartidoPor().usuarios.length) {
+        <p class="sv-compartido__mas">y {{ compartidoPor().total - compartidoPor().usuarios.length }} más</p>
+        }
+        } @else {
+        <p class="sv-compartido__vacio">Nadie compartió este shout todavía.</p>
+        }
       </section>
-      }
     </div>
     }
   </div>

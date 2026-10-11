@@ -20,6 +20,14 @@ import { PostOriginalPosterInfoComponent } from '../../../posts/post-original-po
 import { MatButton } from '@angular/material/button';
 import { DatePipe, DOCUMENT } from '@angular/common';
 
+type Marca = 'meGusta' | 'favorito' | 'reshouteado';
+
+const SIN_SESION: Record<Marca, string> = {
+  meGusta: 'Inicia sesión para dar me gusta',
+  favorito: 'Inicia sesión para guardar en favoritos',
+  reshouteado: 'Inicia sesión para compartir',
+};
+
 @Component({
   selector: 'app-shouts-view',
   templateUrl: './shouts-view.component.html',
@@ -53,9 +61,21 @@ export class ShoutsViewComponent implements OnInit {
   public currentUser?: JwtUserModel;
   public shout: any;
 
-  readonly interacciones = signal<ShoutInteracciones>({ meGustas: 0, favoritos: 0, meGusta: false, favorito: false });
+  readonly interacciones = signal<ShoutInteracciones>({
+    meGustas: 0,
+    favoritos: 0,
+    meGusta: false,
+    favorito: false,
+    reshouts: 0,
+    reshouteado: false,
+  });
+  /** "Compartido por": los últimos que lo compartieron en su muro. */
+  readonly compartidoPor = signal<{ usuarios: { userName: string; avatar: string | null }[]; total: number }>({
+    usuarios: [],
+    total: 0,
+  });
   /** Un pedido a la vez: un segundo clic antes de la respuesta desharía el primero. */
-  readonly enviando = signal<'meGusta' | 'favorito' | null>(null);
+  readonly enviando = signal<Marca | null>(null);
 
   constructor() {
     this.displayService.setDisplay({
@@ -97,6 +117,7 @@ export class ShoutsViewComponent implements OnInit {
             .getShoutInteracciones(shoutId)
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((i) => this.interacciones.set(i));
+          this.cargarCompartidoPor(shoutId);
 
           const texto = (this.shout.contenido || '')
             .replace(/<[^>]*>/g, ' ')
@@ -142,30 +163,46 @@ export class ShoutsViewComponent implements OnInit {
     this.alternar('favorito', 'favoritos', (id) => this.perfilService.alternarFavoritoShout(id));
   }
 
+  alternarReshout(): void {
+    this.alternar('reshouteado', 'reshouts', (id) => this.perfilService.alternarReshoutShout(id), () =>
+      this.cargarCompartidoPor(this.shout.id),
+    );
+  }
+
+  get esMio(): boolean {
+    return !!this.currentUser?.usuario && this.shout?.avatar?.userName === this.currentUser.usuario.userName;
+  }
+
+  private cargarCompartidoPor(shoutId: number): void {
+    this.perfilService
+      .getReshouts(shoutId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((r) => this.compartidoPor.set(r));
+  }
+
   /** Cambia el botón al instante; si el API falla vuelve al estado anterior. */
   private alternar(
-    marca: 'meGusta' | 'favorito',
-    total: 'meGustas' | 'favoritos',
+    marca: Marca,
+    total: 'meGustas' | 'favoritos' | 'reshouts',
     pedido: (shoutId: number) => Observable<ShoutReaccion>,
+    alTerminar?: () => void,
   ): void {
     if (!this.currentUser?.usuario) {
-      this.notificationService.warning(
-        marca === 'meGusta' ? 'Inicia sesión para dar me gusta' : 'Inicia sesión para guardar en favoritos',
-        'Shouts',
-      );
+      this.notificationService.warning(SIN_SESION[marca], 'Shouts');
       return;
     }
     if (this.enviando()) return;
 
     const antes = this.interacciones();
     const activo = !antes[marca];
-    this.interacciones.set({ ...antes, [marca]: activo, [total]: Math.max(0, antes[total] + (activo ? 1 : -1)) });
+    this.interacciones.set({ ...antes, [marca]: activo, [total]: Math.max(0, (antes[total] ?? 0) + (activo ? 1 : -1)) });
     this.enviando.set(marca);
 
     pedido(this.shout.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (r) => {
         this.interacciones.update((i) => ({ ...i, [marca]: r.activo, [total]: r.total }));
         this.enviando.set(null);
+        alTerminar?.();
       },
       error: () => {
         this.interacciones.set(antes);

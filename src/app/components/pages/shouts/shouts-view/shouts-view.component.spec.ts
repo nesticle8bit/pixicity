@@ -20,7 +20,10 @@ describe('ShoutsViewComponent: me gusta y favoritos', () => {
       'getShoutInteracciones',
       'alternarMeGustaShout',
       'alternarFavoritoShout',
+      'alternarReshoutShout',
+      'getReshouts',
     ]);
+    perfil.getReshouts.and.returnValue(of({ usuarios: [], total: 0 }));
     perfil.getShoutById.and.returnValue(of({ id: 5, comentario: 'hola', avatar: { userName: 'ana' } } as any));
     perfil.getShoutInteracciones.and.returnValue(of({ meGustas: 3, favoritos: 1, meGusta: false, favorito: true }));
     avisos = jasmine.createSpyObj('NotificationService', ['warning', 'success', 'confirm']);
@@ -73,6 +76,18 @@ describe('ShoutsViewComponent: me gusta y favoritos', () => {
     c.alternarFavorito();
 
     expect(c.interacciones()).toEqual({ meGustas: 3, favoritos: 1, meGusta: false, favorito: true });
+  });
+
+  it('compartir: no deja compartir el propio shout y recarga "Compartido por" al compartir uno ajeno', () => {
+    const c = crear(true);
+    expect(c.esMio).toBeFalse(); // el shout es de "ana", la sesión es "yo"
+    perfil.alternarReshoutShout.and.returnValue(of({ total: 1, activo: true }));
+    perfil.getReshouts.and.returnValue(of({ usuarios: [{ userName: 'yo', avatar: null }], total: 1 }));
+
+    c.alternarReshout();
+
+    expect(c.interacciones()).toEqual(jasmine.objectContaining({ reshouteado: true, reshouts: 1 }));
+    expect(c.compartidoPor().total).toBe(1);
   });
 
   it('sin sesión avisa y no llama al API', () => {

@@ -23,5 +23,7 @@ export abstract class IHttpPerfilService {
   abstract getShoutInteracciones(shoutId: number): Observable<ShoutInteracciones>;
   abstract alternarMeGustaShout(shoutId: number): Observable<ShoutReaccion>;
   abstract alternarFavoritoShout(shoutId: number): Observable<ShoutReaccion>;
+  abstract alternarReshoutShout(shoutId: number): Observable<ShoutReaccion>;
+  abstract getReshouts(shoutId: number, cantidad?: number): Observable<{ usuarios: { userName: string; avatar: string | null }[]; total: number }>;
   abstract getShoutsFavoritos(page: number, pageCount: number): Observable<PaginatedData<ShoutViewModel, 'shouts'>>;
 }

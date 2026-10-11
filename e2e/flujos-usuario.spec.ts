@@ -350,6 +350,75 @@ test('favoritos: busca, filtra por categoría, quita con deshacer y lista los sh
   await expect(page.getByRole('link', { name: 'Un shout guardado' })).toHaveAttribute('href', `/shouts/${AUTOR}/9`);
 });
 
+/** Muro simulado de /mi: página 1 con un reshout, un post y un shout; página 2 con un shout propio. */
+async function simularMi(page: Page) {
+  const shout = (id: number, autor: string, texto: string, extra: object = {}) => ({
+    id, comentario: texto, tipo: 'Texto', url: '', fechaRegistro: '2026-10-09T12:00:00Z',
+    avatar: { userName: autor, avatar: null }, perfil: { userName: autor, avatar: null },
+    interacciones: { meGustas: 1, favoritos: 0, comentarios: 3, reshouts: 2, meGusta: false, favorito: false, reshouteado: false },
+    ...extra,
+  });
+  const pedidos: { url: URL; metodo: string }[] = [];
+  await page.route(/\/api\/mi\/getMuro/i, (r) => {
+    const url = new URL(r.request().url());
+    pedidos.push({ url, metodo: 'GET' });
+    if (url.searchParams.get('antes')) {
+      return r.fulfill(ok({ items: [{ tipo: 'shout', fecha: '2026-10-01T10:00:00Z', shout: shout(4, 'lector_tres', 'Mi primer shout'), compartidoPor: null, post: null }], siguiente: null }));
+    }
+    return r.fulfill(ok({
+      items: [
+        { tipo: 'reshout', fecha: '2026-10-10T10:00:00Z', shout: shout(1, 'ajeno', 'Shout compartido'), compartidoPor: { userName: AUTOR, avatar: null }, post: null },
+        { tipo: 'post', fecha: '2026-10-09T10:00:00Z', shout: null, compartidoPor: null,
+          post: { id: 77, titulo: 'Post de alguien que sigo', url: 'post-de-alguien-que-sigo', puntos: 5, comentarios: 2, autor: { userName: AUTOR, avatar: null },
+            categoriaNombre: 'Linux', categoriaIcono: 'linux.png', categoriaSeo: 'linux' } },
+        { tipo: 'shout', fecha: '2026-10-08T10:00:00Z', shout: shout(2, AUTOR, 'Hola desde el muro'), compartidoPor: null, post: null },
+      ],
+      siguiente: '2026-10-08T10:00:00Z',
+    }));
+  });
+  await page.route(/\/api\/mi\/getResumen/i, (r) => r.fulfill(ok({ id: 1, userName: 'lector_tres', avatar: null, rango: 'Novato', puntos: 120, seguidores: 4, siguiendo: 1, shouts: 1, posts: 0 })));
+  await page.route(/\/api\/mi\/getSugerencias/i, (r) => r.fulfill(ok([{ userName: 'popular', avatar: null, seguidores: 30 }])));
+  return pedidos;
+}
+
+test('mi: muestra el muro mezclado, carga más, comparte y sigue a una sugerencia', async ({ page }) => {
+  await conSesion(page);
+  const pedidos = await simularMi(page);
+  const acciones: string[] = [];
+  await page.route(/\/api\/shouts\/alternarReshout/i, (r) => (acciones.push('reshout'), r.fulfill(ok({ total: 3, activo: true }))));
+  await page.route(/\/api\/usuarios\/seguirUsuario/i, (r) => (acciones.push('seguir:' + r.request().postDataJSON().userName), r.fulfill(ok(1))));
+
+  await page.goto('/mi');
+  await expect(page.getByText('compartió')).toBeVisible();
+  await expect(page.getByRole('link', { name: /Post de alguien que sigo/ })).toHaveAttribute('href', '/posts/linux/77/post-de-alguien-que-sigo');
+  await expect(page.getByText('Hola desde el muro')).toBeVisible();
+  await expect(page.getByLabel('¿Qué estás pensando?')).toBeVisible();
+
+  const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).options({ iframes: false }).include('.mi').include('.mi-lateral').analyze();
+  expect(axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`)).toEqual([]);
+
+  // La página siguiente se pide sola al acercarse al final de la lista.
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await expect(page.getByText('Mi primer shout')).toBeVisible();
+  await expect(page.getByText('No hay más publicaciones.')).toBeVisible();
+  expect(pedidos.at(-1)?.url.searchParams.get('antes')).toBe('2026-10-08T10:00:00Z');
+  // El shout propio no se puede compartir.
+  await expect(page.getByRole('button', { name: 'Compartir (2)' }).last()).toBeDisabled();
+
+  await page.getByRole('button', { name: 'Compartir (2)' }).first().click();
+  await expect(page.getByRole('button', { name: 'Compartir (3)' })).toHaveAttribute('aria-pressed', 'true');
+
+  await page.getByRole('button', { name: 'Seguir a popular' }).click();
+  await expect(page.getByRole('button', { name: 'Dejar de seguir a popular' })).toBeVisible();
+  expect(acciones).toEqual(['reshout', 'seguir:popular']);
+  // Seguir a alguien recarga el muro desde arriba.
+  await expect.poll(() => pedidos.filter((p) => !p.url.searchParams.get('antes')).length).toBe(2);
+
+  await page.getByRole('tab', { name: 'Novedades' }).click();
+  await expect(page).toHaveURL(/\?ver=novedades/);
+  await expect.poll(() => pedidos.at(-1)?.url.searchParams.get('alcance')).toBe('todos');
+});
+
 test('editor de posts y shouts: el botón de emojis inserta en el cursor', async ({ page }) => {
   await conSesion(page);
   await page.goto('/crear/post');

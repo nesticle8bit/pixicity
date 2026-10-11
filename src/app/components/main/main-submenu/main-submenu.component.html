@@ -43,11 +43,20 @@
       } @else {
       <!-- Submenú general -->
       <ul class="list-unstyled list-inline mb-0 py-2">
-        <li class="list-inline-item sub-menu--item sub-menu--item--active">
+        <li class="list-inline-item sub-menu--item" routerLinkActive="sub-menu--item--active"
+          [routerLinkActiveOptions]="{exact: true}">
           <a [routerLink]="['/']">
             <span>Inicio</span>
           </a>
         </li>
+        @if (currentUser?.usuario) {
+        <li class="list-inline-item sub-menu--item" routerLinkActive="sub-menu--item--active">
+          <a [routerLink]="['/mi']">
+            <i class="ti ti-home-heart" aria-hidden="true"></i>
+            <span style="margin-left: 2px;">Mi</span>
+          </a>
+        </li>
+        }
         <li class="list-inline-item sub-menu--item">
           <a [routerLink]="['/buscar']">
             <i class="ti ti-search"></i>
