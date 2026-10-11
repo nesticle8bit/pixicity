@@ -1,8 +1,9 @@
 @use '../burbuja';
 
-:host { display: block; }
+:host {
+  display: block;
+}
 
-// Vista previa del post dentro del globo (en el lugar del texto y el adjunto de un shout).
 .pc-post {
   display: flex;
   align-items: center;
@@ -10,7 +11,7 @@
   margin-top: 4px;
   padding: 10px 12px;
   border: 1px solid #e9edf0;
-  border-left: 3px solid burbuja.$marca;
+  // border-left: 3px solid burbuja.$marca;
   border-radius: 10px;
   background: #f7f9fb;
   color: inherit;
@@ -20,8 +21,14 @@
   &:hover {
     background: #eef5f9;
 
-    .pc-post__titulo { color: burbuja.$marca; }
-    .pc-post__ir { transform: translateX(2px); color: burbuja.$marca; }
+    .pc-post__titulo {
+      color: burbuja.$marca;
+    }
+
+    .pc-post__ir {
+      transform: translateX(2px);
+      color: burbuja.$marca;
+    }
   }
 
   &:focus-visible {
@@ -29,7 +36,9 @@
     outline-offset: 2px;
   }
 
-  &__icono { flex: none; }
+  &__icono {
+    flex: none;
+  }
 
   &__cuerpo {
     display: flex;
@@ -61,7 +70,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .pc-post,
   .pc-post__titulo,
-  .pc-post__ir { transition: none; }
+  .pc-post__ir {
+    transition: none;
+  }
 }
