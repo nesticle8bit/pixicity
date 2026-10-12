@@ -115,7 +115,7 @@
 
   @if (imgFrame) {
   <div class="rich-editor__img-frame" [style.top.px]="imgFrame.top" [style.left.px]="imgFrame.left"
-    [style.width.px]="imgFrame.width" [style.height.px]="imgFrame.height" (mousedown)="$event.preventDefault()">
+    [style.width.px]="imgFrame.width" [style.height.px]="imgFrame.height" [style.clip-path]="imgFrame.clip" (mousedown)="$event.preventDefault()">
     @for (corner of imgCorners; track corner) {
     <span [class]="'handle handle--' + corner" (pointerdown)="startImgResize($event, corner)"
       (pointermove)="moveImgResize($event)" (pointerup)="endImgResize($event)"

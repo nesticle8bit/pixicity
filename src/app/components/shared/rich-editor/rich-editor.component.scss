@@ -661,7 +661,7 @@
 // Marco de la imagen seleccionada con puntos para redimensionar
 .rich-editor__img-frame {
   position: absolute;
-  z-index: 5;
+  z-index: 2; // como el bubble: debajo de la toolbar fija y sus menús
   box-sizing: border-box;
   border: 2px solid var(--re-accent);
   border-radius: 4px;

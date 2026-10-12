@@ -160,7 +160,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   activeMarks = new Set<InlineMark>();
 
   // Imagen seleccionada: marco con puntos para redimensionar (coordenadas relativas al wrapper)
-  imgFrame: { top: number; left: number; width: number; height: number; label: string } | null = null;
+  imgFrame: { top: number; left: number; width: number; height: number; label: string; clip: string | null } | null = null;
   readonly imgCorners = ['nw', 'ne', 'sw', 'se'] as const;
   private selectedImg: HTMLImageElement | null = null;
   private imgDrag: { startX: number; startWidth: number; dir: 1 | -1 } | null = null;
@@ -745,13 +745,30 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     }
     const wrap = this.wrapperEl().nativeElement.getBoundingClientRect();
     const rect = img.getBoundingClientRect();
+
+    // Solo la parte visible del área editable: no se dibuja sobre la toolbar fija,
+    // el header de la página ni fuera del scroll propio del editor
+    const content = this.editor.getBoundingClientRect();
+    const toolbarBottom = this.toolbarEl().nativeElement.getBoundingClientRect().bottom;
+    const visibleTop = Math.max(content.top, toolbarBottom, 0);
+    const visibleBottom = Math.min(content.bottom, window.innerHeight);
+    if (rect.bottom <= visibleTop || rect.top >= visibleBottom) {
+      this.imgFrame = null;
+      this.cdr.markForCheck();
+      return;
+    }
+
     const width = Math.round(rect.width);
+    const clipTop = Math.max(0, visibleTop - rect.top);
+    const clipBottom = Math.max(0, rect.bottom - visibleBottom);
     this.imgFrame = {
       top: rect.top - wrap.top,
       left: rect.left - wrap.left,
       width,
       height: rect.height,
       label: img.hasAttribute('width') ? `${width} px` : `${width} px (auto)`,
+      // Margen para que los puntos de las esquinas no se corten cuando todo es visible
+      clip: clipTop || clipBottom ? `inset(${clipTop}px -8px ${clipBottom}px -8px)` : null,
     };
     this.cdr.markForCheck();
   }
