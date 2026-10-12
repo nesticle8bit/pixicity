@@ -27,7 +27,7 @@
       <div class="rich-editor__dropdown">
         <button type="button" class="btn-dropdown" [title]="item.title" [attr.aria-label]="item.title"
           aria-haspopup="true" [attr.aria-expanded]="openMenu === item.menu" [class.open]="openMenu === item.menu"
-          [disabled]="disabled" (click)="toggleMenu(item.menu)">
+          [disabled]="disabled || sourceMode" (click)="toggleMenu(item.menu)">
           <mat-icon>{{ item.icon }}</mat-icon>
           <mat-icon class="arrow">arrow_drop_down</mat-icon>
         </button>
@@ -65,7 +65,7 @@
       } @else {
       <button type="button" [title]="item.title" [attr.aria-label]="item.title"
         [class.active]="!!item.mark && activeMarks.has(item.mark)"
-        [attr.aria-pressed]="item.mark ? activeMarks.has(item.mark) : null" [disabled]="disabled"
+        [attr.aria-pressed]="item.mark ? activeMarks.has(item.mark) : null" [disabled]="disabled || sourceMode"
         (click)="item.run()">
         <mat-icon>{{ item.icon }}</mat-icon>
       </button>
@@ -73,6 +73,14 @@
       }
     </div>
     }
+
+    <!-- Alterna entre el editor visual y el HTML fuente -->
+    <button type="button" class="rich-editor__source-toggle" [class.active]="sourceMode"
+      [title]="sourceMode ? 'Volver al editor visual' : 'Ver código HTML'"
+      [attr.aria-label]="sourceMode ? 'Volver al editor visual' : 'Ver código HTML'" [attr.aria-pressed]="sourceMode"
+      [disabled]="disabled" (click)="toggleSource()">
+      <mat-icon>{{ sourceMode ? 'visibility' : 'data_object' }}</mat-icon>
+    </button>
 
     <!-- Móvil: muestra/oculta los grupos secundarios -->
     <button type="button" class="rich-editor__more" [title]="showMore ? 'Menos opciones' : 'Más opciones'"
@@ -91,13 +99,36 @@
   <input #fileInputEl type="file" hidden multiple accept="image/jpeg,image/png,image/gif,image/webp"
     (change)="onFilesChosen(fileInputEl)" />
 
-  <div #editorEl class="rich-editor__content" [class.is-empty]="isEmpty" role="textbox" aria-multiline="true"
+  @if (sourceMode) {
+  <textarea class="rich-editor__source" spellcheck="false" aria-label="Código HTML" [value]="sourceHtml"
+    [disabled]="disabled" (input)="onSourceInput($event)" (blur)="onBlur()"></textarea>
+  }
+
+  <div #editorEl class="rich-editor__content" [hidden]="sourceMode" [class.is-empty]="isEmpty" role="textbox" aria-multiline="true"
     [attr.contenteditable]="disabled ? 'false' : 'true'" [attr.aria-disabled]="disabled"
     [attr.aria-placeholder]="placeholder()" [attr.data-placeholder]="placeholder()" (input)="onInput()"
+    (click)="onEditorClick($event)"
     (blur)="onBlur()" (keydown)="onKeydown($event)" (paste)="onPaste($event)" (dragstart)="onDragStart()"
     (dragend)="onDragEnd()" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
     (drop)="onDrop($event)">
   </div>
+
+  @if (imgFrame) {
+  <div class="rich-editor__img-frame" [style.top.px]="imgFrame.top" [style.left.px]="imgFrame.left"
+    [style.width.px]="imgFrame.width" [style.height.px]="imgFrame.height" (mousedown)="$event.preventDefault()">
+    @for (corner of imgCorners; track corner) {
+    <span [class]="'handle handle--' + corner" (pointerdown)="startImgResize($event, corner)"
+      (pointermove)="moveImgResize($event)" (pointerup)="endImgResize($event)"
+      (pointercancel)="endImgResize($event)"></span>
+    }
+    <span class="info">
+      {{ imgFrame.label }}
+      <button type="button" title="Ancho completo" (click)="setImgWidth('full')">100%</button>
+      <button type="button" title="Mitad del ancho" (click)="setImgWidth('half')">50%</button>
+      <button type="button" title="Tamaño automático" (click)="setImgWidth(null)">Auto</button>
+    </span>
+  </div>
+  }
 
   <div #bubbleEl class="rich-editor__bubble" [class.is-visible]="!!bubbleMode" [class.is-below]="bubbleBelow"
     [style.top.px]="bubbleTop" [style.left.px]="bubbleLeft" [style.--arrow-x]="bubbleArrowX + 'px'"

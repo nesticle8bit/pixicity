@@ -254,6 +254,31 @@
   }
 
   //  Área editable
+  // Vista de código HTML
+  &__source {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 320px;
+    max-height: 800px;
+    padding: 12px 16px;
+    border: 0;
+    outline: none;
+    resize: vertical;
+    background: transparent;
+    color: var(--re-text);
+    font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    tab-size: 2;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  &__content[hidden] {
+    display: none;
+  }
+
   &__content {
     position: relative;
     min-height: 180px;
@@ -336,25 +361,28 @@
       border-radius: 4px;
     }
 
-    // Imagen redimensionable: el span lleva el handle de resize nativo
+    // Sin tamaño elegido, las imágenes no estiran el editor
+    img:not([width]) {
+      max-height: 420px;
+    }
+
+    // Imagen como bloque atómico; al hacer clic se muestra el marco de resize
     .img-resizable {
       display: inline-block;
       position: relative;
-      resize: both;
-      overflow: hidden;
       max-width: 100%;
       line-height: 0;
       border-radius: 4px;
+      cursor: pointer;
 
       &:hover {
         outline: 1px dashed var(--re-accent);
       }
 
       img {
-        width: 100%;
-        height: 100%;
-        max-width: none;
         display: block;
+        max-width: 100%;
+        height: auto;
         pointer-events: none; // los clics van al span, no a la imagen
       }
     }
@@ -627,5 +655,64 @@
   .rich-editor__content .rich-editor__uploading {
     transition: none;
     animation: none;
+  }
+}
+
+// Marco de la imagen seleccionada con puntos para redimensionar
+.rich-editor__img-frame {
+  position: absolute;
+  z-index: 5;
+  box-sizing: border-box;
+  border: 2px solid var(--re-accent);
+  border-radius: 4px;
+  pointer-events: none;
+
+  .handle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    box-sizing: border-box;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: var(--re-accent);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+    pointer-events: auto;
+    touch-action: none;
+
+    &--nw { top: -7px; left: -7px; cursor: nwse-resize; }
+    &--ne { top: -7px; right: -7px; cursor: nesw-resize; }
+    &--sw { bottom: -7px; left: -7px; cursor: nesw-resize; }
+    &--se { bottom: -7px; right: -7px; cursor: nwse-resize; }
+  }
+
+  .info {
+    position: absolute;
+    left: 50%;
+    bottom: 8px;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 4px 2px 8px;
+    border-radius: 4px;
+    background: var(--re-bubble-bg);
+    color: var(--re-bubble-text);
+    font-size: 12px;
+    line-height: 20px;
+    white-space: nowrap;
+    pointer-events: auto;
+
+    button {
+      padding: 0 6px;
+      border: 0;
+      border-radius: 3px;
+      background: transparent;
+      color: inherit;
+      font-size: 12px;
+      line-height: 20px;
+      cursor: pointer;
+
+      &:hover { background: var(--re-bubble-hover); }
+    }
   }
 }

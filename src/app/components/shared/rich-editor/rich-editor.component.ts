@@ -159,6 +159,16 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   uploads = 0;
   activeMarks = new Set<InlineMark>();
 
+  // Imagen seleccionada: marco con puntos para redimensionar (coordenadas relativas al wrapper)
+  imgFrame: { top: number; left: number; width: number; height: number; label: string } | null = null;
+  readonly imgCorners = ['nw', 'ne', 'sw', 'se'] as const;
+  private selectedImg: HTMLImageElement | null = null;
+  private imgDrag: { startX: number; startWidth: number; dir: 1 | -1 } | null = null;
+
+  // Vista de código: se edita el HTML en un textarea y se vuelca al editor al salir
+  sourceMode = false;
+  sourceHtml = '';
+
   //  Bubble (Notion-style): formato de la selección, vista previa o edición de enlace
   bubbleMode: BubbleMode | null = null;
   showBubbleColors = false;
@@ -264,10 +274,13 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   // Reposiciona el bubble en cualquier scroll (ventana, diálogo o el propio editor)
   private scrollFrame = 0;
   private readonly onAnyScroll = () => {
-    if (!this.bubbleMode || this.scrollFrame) return;
+    if ((!this.bubbleMode && !this.selectedImg) || this.scrollFrame) return;
     this.scrollFrame = requestAnimationFrame(() => {
       this.scrollFrame = 0;
-      this.zone.run(() => this.repositionBubble());
+      this.zone.run(() => {
+        this.repositionBubble();
+        this.positionImgFrame();
+      });
     });
   };
 
@@ -300,6 +313,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     const html = value || '';
     if (this.initialized && this.editorEl()) {
       this.setContent(html);
+      if (this.sourceMode) this.sourceHtml = this.formatSource(this.lastEmitted ?? '');
     } else {
       this.pendingValue = html;
     }
@@ -323,7 +337,9 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   }
 
   private setContent(html: string): void {
+    this.deselectImg();
     this.editor.innerHTML = html;
+    this.migrateImageSizes();
     this.normalizeTrailing();
     this.lastEmitted = serializeHtml(this.editor);
     this.isEmpty = !this.lastEmitted;
@@ -343,6 +359,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   //  Eventos del área editable
 
   onInput(): void {
+    this.deselectImg();
     this.emit();
     clearTimeout(this.snapshotTimer);
     this.snapshotTimer = setTimeout(() => this.recordHistory(), 350);
@@ -354,6 +371,20 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
 
   onKeydown(event: KeyboardEvent): void {
     if (event.isComposing || this.disabled) return;
+
+    // Con una imagen seleccionada: Supr/Retroceso la borran, Escape la deselecciona
+    if (this.selectedImg) {
+      if (event.key === 'Delete' || event.key === 'Backspace') {
+        event.preventDefault();
+        const img = this.selectedImg;
+        this.deselectImg();
+        (img.closest('.img-resizable') ?? img).remove();
+        this.normalizeTrailing();
+        this.afterChange();
+        return;
+      }
+      this.deselectImg();
+    }
 
     if (event.ctrlKey || event.metaKey) {
       const key = event.key.toLowerCase();
@@ -638,6 +669,150 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.formatRange(range, (block, s, e) => this.reformat(block, s, e, match, unwrapNode));
   }
 
+  //  Redimensionar imágenes
+
+  onEditorClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement | null;
+    const wrap = target?.closest?.('.img-resizable');
+    const img = target instanceof HTMLImageElement ? target : wrap?.querySelector('img') ?? null;
+    if (this.disabled || !img || !this.editor.contains(img)) {
+      this.deselectImg();
+      return;
+    }
+    this.selectedImg = img;
+    this.hideBubble();
+    this.positionImgFrame();
+  }
+
+  startImgResize(event: PointerEvent, corner: 'nw' | 'ne' | 'sw' | 'se'): void {
+    if (!this.selectedImg) return;
+    event.preventDefault();
+    (event.target as HTMLElement).setPointerCapture(event.pointerId);
+    this.imgDrag = {
+      startX: event.clientX,
+      startWidth: this.selectedImg.getBoundingClientRect().width,
+      dir: corner.endsWith('e') ? 1 : -1,
+    };
+  }
+
+  moveImgResize(event: PointerEvent): void {
+    if (!this.imgDrag || !this.selectedImg) return;
+    const width = this.imgDrag.startWidth + (event.clientX - this.imgDrag.startX) * this.imgDrag.dir;
+    this.applyImgWidth(Math.min(Math.max(width, 40), this.maxImgWidth()));
+  }
+
+  endImgResize(event: PointerEvent): void {
+    if (!this.imgDrag) return;
+    this.imgDrag = null;
+    (event.target as HTMLElement).releasePointerCapture?.(event.pointerId);
+    this.commitImg();
+  }
+
+  setImgWidth(size: 'full' | 'half' | null): void {
+    if (!this.selectedImg) return;
+    if (size === null) this.applyImgWidth(null);
+    else this.applyImgWidth(size === 'full' ? this.maxImgWidth() : this.maxImgWidth() / 2);
+    this.commitImg();
+  }
+
+  private applyImgWidth(width: number | null): void {
+    const img = this.selectedImg!;
+    if (width === null) img.removeAttribute('width');
+    else img.setAttribute('width', `${Math.round(width)}`);
+    img.removeAttribute('height');
+    img.style.width = '';
+    img.style.height = '';
+    this.positionImgFrame();
+  }
+
+  private commitImg(): void {
+    this.emit();
+    this.recordHistory();
+    this.positionImgFrame();
+  }
+
+  // Ancho útil del área editable (sin el padding)
+  private maxImgWidth(): number {
+    const style = getComputedStyle(this.editor);
+    return this.editor.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+  }
+
+  private positionImgFrame(): void {
+    const img = this.selectedImg;
+    if (!img?.isConnected) {
+      this.deselectImg();
+      return;
+    }
+    const wrap = this.wrapperEl().nativeElement.getBoundingClientRect();
+    const rect = img.getBoundingClientRect();
+    const width = Math.round(rect.width);
+    this.imgFrame = {
+      top: rect.top - wrap.top,
+      left: rect.left - wrap.left,
+      width,
+      height: rect.height,
+      label: img.hasAttribute('width') ? `${width} px` : `${width} px (auto)`,
+    };
+    this.cdr.markForCheck();
+  }
+
+  private deselectImg(): void {
+    if (!this.selectedImg && !this.imgFrame) return;
+    this.selectedImg = null;
+    this.imgDrag = null;
+    this.imgFrame = null;
+    this.cdr.markForCheck();
+  }
+
+  // Posts viejos: el tamaño quedaba en el style del span (resize nativo); se pasa a la imagen
+  private migrateImageSizes(): void {
+    this.editor.querySelectorAll<HTMLElement>('.img-resizable').forEach((wrap) => {
+      const width = parseFloat(wrap.style.width);
+      const img = wrap.querySelector('img');
+      if (img && width && !img.hasAttribute('width')) img.setAttribute('width', `${Math.round(width)}`);
+      wrap.style.width = '';
+      wrap.style.height = '';
+      if (!wrap.getAttribute('style')) wrap.removeAttribute('style');
+    });
+  }
+
+  toggleSource(): void {
+    this.openMenu = null;
+    this.deselectImg();
+    this.hideBubble();
+    if (!this.sourceMode) {
+      this.sourceHtml = this.formatSource(serializeHtml(this.editor));
+      this.sourceMode = true;
+      return;
+    }
+    // Al volver se reinterpreta el HTML (el navegador corrige etiquetas mal cerradas)
+    this.sourceMode = false;
+    this.editor.innerHTML = this.sourceHtml.trim();
+    this.migrateImageSizes();
+    this.normalizeTrailing();
+    this.emit();
+    this.recordHistory();
+    this.placeCaretEnd();
+    this.cdr.markForCheck();
+  }
+
+  onSourceInput(event: Event): void {
+    this.sourceHtml = (event.target as HTMLTextAreaElement).value;
+    const value = this.sourceHtml.trim();
+    this.isEmpty = !value;
+    if (value === this.lastEmitted) return;
+    this.lastEmitted = value;
+    this.onChange(value);
+  }
+
+  // Un bloque por línea para que el HTML sea legible (no toca el interior de <pre>)
+  private formatSource(html: string): string {
+    return html
+      .replace(/(<\/(?:p|h[1-6]|ul|ol|li|blockquote|pre|div)>|<hr\s*\/?>)(?!\n)/gi, '$1\n')
+      .replace(/(<(?:ul|ol)(?:\s[^>]*)?>)(?!\n)/gi, '$1\n')
+      .trim();
+  }
+
   undo(): void {
     if (this.historyIndex <= 0) return;
     this.historyIndex--;
@@ -677,10 +852,14 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   @HostListener('window:resize')
   onViewportChange(): void {
     this.repositionBubble();
+    if (this.selectedImg) this.positionImgFrame();
   }
 
   @HostListener('document:mousedown', ['$event.target'])
   onDocMouseDown(target: EventTarget | null): void {
+    if (this.selectedImg && target instanceof Node && !this.host.nativeElement.contains(target)) {
+      this.deselectImg();
+    }
     if (this.bubbleMode && target instanceof Node && !this.host.nativeElement.contains(target)) {
       this.hideBubble();
     }
@@ -1452,6 +1631,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
 
   private restoreHistory(): void {
     const entry = this.history[this.historyIndex];
+    this.deselectImg();
     this.editor.innerHTML = entry?.html ?? '';
     this.emit();
     this.hideBubble();
