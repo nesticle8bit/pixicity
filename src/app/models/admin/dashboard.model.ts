@@ -77,6 +77,23 @@ export interface DashboardResumen {
   ultimosPosts: DashboardPost[];
   topPostsSemana: DashboardPost[];
   actividad: DashboardActividad[];
+
+  /** Registrados en los últimos 30 días y cuántos confirmaron el correo. */
+  registrados30: number;
+  confirmados30: number;
+
+  /** Errores sin resolver de las últimas 24 h; null si quien mira no es administrador. */
+  errores24h: number | null;
+  erroresRecientes: DashboardError[];
+}
+
+/** Errores iguales (misma huella) agrupados. */
+export interface DashboardError {
+  huella: string;
+  origen: string;
+  mensaje: string;
+  cantidad: number;
+  ultimo: string;
 }
 
 /** Rendimiento de un endpoint del API (ver RequestMetrics en el backend). */

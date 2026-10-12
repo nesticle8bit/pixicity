@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+import { provideRouter } from '@angular/router';
 import { SIN_PERFIL } from 'src/app/models/seguridad/seguridad-vm.model';
 import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
 import { ProfileActivityComponent } from './profile-activity.component';
@@ -30,5 +31,25 @@ describe('ProfileActivityComponent', () => {
     c.user = { id: 9, userName: 'juan' };
 
     expect(getActividad).toHaveBeenCalledOnceWith(9, '');
+  });
+
+  it('pinta el título como texto: un título con HTML no se interpreta', () => {
+    getActividad.and.returnValue(
+      of({
+        hoy: [{ id: 1, fechaRegistro: new Date().toISOString(), tipoActividad: 1, accion: 'Creó un nuevo post', titulo: '<img src=x onerror=alert(1)>', url: '/posts/a/1/b' }],
+        ayer: [],
+        semana: [],
+        mes: [],
+      })
+    );
+    TestBed.configureTestingModule({ providers: [provideRouter([])] });
+    const fixture = TestBed.createComponent(ProfileActivityComponent);
+
+    fixture.componentInstance.user = { id: 9, userName: 'juan' };
+    fixture.detectChanges();
+
+    const enlace: HTMLAnchorElement = fixture.nativeElement.querySelector('article a');
+    expect(enlace.textContent).toContain('<img src=x onerror=alert(1)>');
+    expect(enlace.querySelector('img')).toBeNull();
   });
 });

@@ -1,0 +1,31 @@
+$marca: #006595;
+$tenue: #5d6b75;
+
+// Mismo estilo que la sección de verificación en dos pasos.
+.md {
+  max-width: 560px;
+  padding: 16px 4px;
+}
+
+.md__texto {
+  margin: 0 0 12px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: $tenue;
+}
+
+.md__boton {
+  padding: 7px 16px;
+  border: 1px solid $marca;
+  border-radius: 8px;
+  background: $marca;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+
+  &:hover:not(:disabled) { background: #00527a; }
+  &:disabled { opacity: 0.6; cursor: default; }
+  &:focus-visible { outline: 2px solid $marca; outline-offset: 2px; }
+}

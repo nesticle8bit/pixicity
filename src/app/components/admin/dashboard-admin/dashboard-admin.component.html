@@ -180,6 +180,45 @@
         </ul>
       </section>
 
+      <!-- Registros y confirmación de correo -->
+      <section class="adm-card mt-3">
+        <header class="adm-card__head">
+          <h2><mat-icon>mark_email_read</mat-icon> Registros (30 días)</h2>
+        </header>
+
+        <ul class="adm-kv">
+          <li><span>Nuevos usuarios</span><strong>{{resumen.registrados30 | number}}</strong></li>
+          <li><span>Confirmaron el correo</span><strong>{{resumen.confirmados30 | number}}</strong></li>
+          <li>
+            <span>Tasa de confirmación</span>
+            <strong>{{ resumen.registrados30 ? ((resumen.confirmados30 / resumen.registrados30) | percent:'1.0-0') : '—' }}</strong>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Errores recientes (solo administradores) -->
+      @if (resumen.errores24h !== null && resumen.errores24h !== undefined) {
+        <section class="adm-card mt-3">
+          <header class="adm-card__head">
+            <h2><mat-icon>bug_report</mat-icon> Errores (24 h): {{resumen.errores24h | number}}</h2>
+            <a class="adm-card__link" [routerLink]="['/administracion/logs']">Ver logs</a>
+          </header>
+
+          @if (resumen.erroresRecientes.length === 0) {
+            <div class="adm-empty"><mat-icon>check_circle</mat-icon><p>Sin errores sin resolver.</p></div>
+          } @else {
+            <ol class="adm-top">
+              @for (error of resumen.erroresRecientes; track error.huella) {
+                <li>
+                  <span class="adm-top__rank">{{error.cantidad}}×</span>
+                  <span class="adm-error__msg" [title]="error.mensaje">[{{error.origen}}] {{error.mensaje}}</span>
+                </li>
+              }
+            </ol>
+          }
+        </section>
+      }
+
       <!-- Top de la semana -->
       <section class="adm-card mt-3">
         <header class="adm-card__head">

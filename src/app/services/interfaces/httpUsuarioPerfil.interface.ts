@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
-import { ActividadViewModel } from 'src/app/models/logs/logs-vm.model';
+import { ActividadLogsViewModel } from 'src/app/models/logs/logs-vm.model';
 import { PerfilInfoResponse, PerfilUsuarioViewModel, SeguidoresResponse, UsuarioAvatarViewModel, UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 
 /** Perfil de usuarios: info pública, perfil extendido, seguidores, avatar, fondo, actividad y estado en línea. */
@@ -20,7 +20,9 @@ export abstract class IHttpUsuarioPerfilService {
   abstract getPerfilInfoByUserId(userId: number): Observable<PerfilUsuarioViewModel>;
   abstract getSocialMediaByUsuarioId(usuarioId: number): Observable<unknown>;
   abstract changeAvatar(file: Blob): Observable<string>;
-  abstract getActividadUsuario(usuarioId: number, tipoActividad: number): Observable<ActividadViewModel[]>;
+  abstract getActividadUsuario(usuarioId: number, tipoActividad: number): Observable<ActividadLogsViewModel>;
+  /** Archivo JSON con todos los datos propios del usuario actual. */
+  abstract exportarMisDatos(): Observable<Blob>;
   abstract changeBackgroundProfile(obj: { imageUrl: string }): Observable<boolean>;
   abstract getUserStatus(userName: string): Observable<number | null>;
 }

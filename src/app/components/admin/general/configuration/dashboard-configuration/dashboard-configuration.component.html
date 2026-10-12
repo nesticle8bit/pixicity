@@ -84,7 +84,14 @@
 
             <br>
             <label>Mensaje</label>
-            <textarea id="dashboard-configuration-welcomeMessage" class="form-control" formControlName="welcomeMessage" rows="3"></textarea>
+            <textarea id="dashboard-configuration-welcomeMessage" class="form-control" formControlName="welcomeMessage" rows="3" aria-describedby="dashboard-configuration-welcomeVariables"></textarea>
+            <small id="dashboard-configuration-welcomeVariables" class="text-muted">
+              Puedes usar <code>{{ '{' }}usuario{{ '}' }}</code> (nombre del usuario nuevo) y <code>{{ '{' }}sitio{{ '}' }}</code> (nombre del sitio).
+            </small>
+
+            <div class="mt-2">
+              <mat-slide-toggle formControlName="welcomeMensajePrivado" color="primary">Enviarla también como mensaje privado</mat-slide-toggle>
+            </div>
 
             @if (formGroup.value.welcomeActivated) {
               @if (faltaBienvenida) {
@@ -94,7 +101,7 @@
                   <small class="text-muted">Vista previa: así lo verá el usuario nuevo en su perfil</small>
                   <div class="bienvenida-preview__shout">
                     <strong>{{ remitenteBienvenida?.userName }}</strong>
-                    <p class="mb-0">{{ formGroup.value.welcomeMessage }}</p>
+                    <p class="mb-0">{{ mensajeBienvenidaEjemplo }}</p>
                   </div>
                 </div>
               }

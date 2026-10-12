@@ -1,0 +1,15 @@
+<section class="md">
+  <p class="md__texto">
+    Descarga una copia de todo lo que guardamos sobre ti: datos de la cuenta y del perfil, tus posts, comentarios,
+    shouts y fotos (también los eliminados), tus mensajes privados, favoritos, a quién sigues, quién te sigue y tus
+    últimas sesiones. Nunca incluye tu contraseña ni los datos de la verificación en dos pasos.
+  </p>
+
+  @if (error()) {
+    <div class="alert alert-danger" role="alert">{{ error() }}</div>
+  }
+
+  <button type="button" class="md__boton" (click)="descargar()" [disabled]="descargando()">
+    {{ descargando() ? 'Preparando…' : 'Descargar mis datos (JSON)' }}
+  </button>
+</section>

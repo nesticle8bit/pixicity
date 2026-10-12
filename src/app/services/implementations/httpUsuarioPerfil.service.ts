@@ -8,7 +8,7 @@ import { Injectable, inject } from '@angular/core';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
 import { PerfilInfoResponse, PerfilUsuarioViewModel, SeguidoresResponse, UsuarioAvatarViewModel, UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
-import { ActividadViewModel } from 'src/app/models/logs/logs-vm.model';
+import { ActividadLogsViewModel } from 'src/app/models/logs/logs-vm.model';
 import { IHttpUsuarioPerfilService } from '../interfaces/httpUsuarioPerfil.interface';
 
 /** Perfil de usuarios: info pública, perfil extendido, seguidores, avatar, fondo, actividad y estado en línea. */
@@ -222,9 +222,13 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getActividadUsuario(usuarioId: number, tipoActividad: number): Observable<ActividadViewModel[]> {
+  exportarMisDatos(): Observable<Blob> {
+    return this.http.get(`${environment.api}/api/usuarios/exportarMisDatos`, { responseType: 'blob' });
+  }
+
+  getActividadUsuario(usuarioId: number, tipoActividad: number): Observable<ActividadLogsViewModel> {
     return this.http
-      .get<ApiResponse<ActividadViewModel[]>>(
+      .get<ApiResponse<ActividadLogsViewModel>>(
         `${environment.api}/api/usuarios/getActividadUsuario?usuarioId=${usuarioId}&tipoActividad=${tipoActividad}`
       )
       .pipe(

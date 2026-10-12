@@ -33,11 +33,25 @@ export interface StatsViewModel {
   messages: number;
 }
 
+/** Una línea de "Última actividad" del perfil. Todo son datos: se pintan con interpolación, nunca con innerHTML. */
 export interface ActividadViewModel {
   id: number;
   fechaRegistro: string;
-  tipoString: string;
-  mensaje: string;
-  userName: string;
-  avatar: string;
+  tipoActividad: number;
+  accion: string;
+  /** Puntos o voto (+/-), si aplica. */
+  detalle?: string | null;
+  /** Título del post o nombre del usuario; null si ya no existe. */
+  titulo?: string | null;
+  url?: string | null;
+  /** Avatar del usuario seguido. */
+  avatar?: string | null;
+}
+
+/** Respuesta de /api/usuarios/getActividadUsuario: actividad agrupada por antigüedad. */
+export interface ActividadLogsViewModel {
+  hoy: ActividadViewModel[];
+  ayer: ActividadViewModel[];
+  semana: ActividadViewModel[];
+  mes: ActividadViewModel[];
 }

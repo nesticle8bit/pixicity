@@ -19,8 +19,9 @@ import { AccountBloqueadosComponent } from './account-bloqueados/account-bloquea
 import { AccountPasswordComponent } from './account-password/account-password.component';
 import { AccountDosFactoresComponent } from './account-dos-factores/account-dos-factores.component';
 import { AccountNotificacionesComponent } from './account-notificaciones/account-notificaciones.component';
+import { AccountMisDatosComponent } from './account-mis-datos/account-mis-datos.component';
 
-export type SeccionCuenta = 'datos' | 'perfil' | 'personalizacion' | 'password' | 'dos-factores' | 'bloqueados' | 'notificaciones';
+export type SeccionCuenta = 'datos' | 'perfil' | 'personalizacion' | 'password' | 'dos-factores' | 'bloqueados' | 'notificaciones' | 'mis-datos';
 
 interface Seccion {
   id: SeccionCuenta;
@@ -51,6 +52,7 @@ export const GRUPOS_CUENTA: { nombre: string; secciones: Seccion[] }[] = [
     nombre: 'Preferencias',
     secciones: [
       { id: 'notificaciones', label: 'Notificaciones', icono: 'notifications', descripcion: 'Elige qué avisos llegan a tu campana.' },
+      { id: 'mis-datos', label: 'Mis datos', icono: 'download', descripcion: 'Descarga una copia de todo lo que guardamos sobre ti.' },
     ],
   },
 ];
@@ -76,6 +78,7 @@ const FONDO_VALIDO = /^https?:\/\/\S+\.(jpe?g|png)(\?\S*)?$/i;
     AccountPasswordComponent,
     AccountDosFactoresComponent,
     AccountNotificacionesComponent,
+    AccountMisDatosComponent,
 ],
 })
 export class AccountComponent implements OnInit {

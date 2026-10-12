@@ -4,7 +4,7 @@
   <strong class="float-end">
     <select class="form-select form-select-xs" formControlName="tipoActividad" aria-label="Filtrar actividad por tipo" (change)="getActividadUsuario()">
       <option value="" selected>Todas</option>
-      @for (tipo of tipoActividades; track tipo) {
+      @for (tipo of tipoActividades; track tipo.value) {
         <option value="{{tipo.value}}">{{tipo.key}}</option>
       }
     </select>
@@ -12,79 +12,39 @@
 </h6>
 
 <article class="mt-1">
-  @if (actividad?.hoy?.length > 0) {
-    <ul>
-      <li class="sep">
-        <h4>Hoy</h4>
-      </li>
-      @for (actividad of actividad?.hoy; track actividad) {
-        <li>
-          <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
-          </addons-tipo-actividad-icon>
-          <span [innerHTML]="actividad.texto"></span>
-          <aside class="float-end">
-            <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
-          </aside>
-          <div class="clearfix"></div>
+  @for (grupo of grupos; track grupo.titulo) {
+    @if (grupo.items.length > 0) {
+      <ul>
+        <li class="sep">
+          <h4>{{grupo.titulo}}</h4>
         </li>
-      }
-    </ul>
-  }
-
-  @if (actividad?.ayer?.length > 0) {
-    <ul>
-      <li class="sep">
-        <h4>Ayer</h4>
-      </li>
-      @for (actividad of actividad?.ayer; track actividad) {
-        <li>
-          <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
-          </addons-tipo-actividad-icon>
-          <span [innerHTML]="actividad.texto"></span>
-          <aside class="float-end">
-            <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
-          </aside>
-          <div class="clearfix"></div>
-        </li>
-      }
-    </ul>
-  }
-
-  @if (actividad?.semana?.length > 0) {
-    <ul>
-      <li class="sep">
-        <h4>Semanas Anteriores</h4>
-      </li>
-      @for (actividad of actividad?.semana; track actividad) {
-        <li>
-          <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
-          </addons-tipo-actividad-icon>
-          <span [innerHTML]="actividad.texto"></span>
-          <aside class="float-end">
-            <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
-          </aside>
-          <div class="clearfix"></div>
-        </li>
-      }
-    </ul>
-  }
-
-  @if (actividad?.mes?.length > 0) {
-    <ul>
-      <li class="sep">
-        <h4>Actividad más antigua</h4>
-      </li>
-      @for (actividad of actividad?.mes; track actividad) {
-        <li>
-          <addons-tipo-actividad-icon class="me-1" [tipoActividad]="actividad.tipoActividad">
-          </addons-tipo-actividad-icon>
-          <span [innerHTML]="actividad.texto"></span>
-          <aside class="float-end">
-            <span class="text-muted">{{actividad.fechaRegistro | timeAgo}}</span>
-          </aside>
-          <div class="clearfix"></div>
-        </li>
-      }
-    </ul>
+        @for (item of grupo.items; track item.id) {
+          <li>
+            <addons-tipo-actividad-icon class="me-1" [tipoActividad]="item.tipoActividad">
+            </addons-tipo-actividad-icon>
+            <span>
+              {{item.accion}}
+              @if (item.detalle) {
+                (<strong>{{item.detalle}}</strong>)
+              }
+              @if (item.url) {
+                <a [routerLink]="item.url">
+                  @if (item.avatar) {
+                    <img class="img-fluid" height="16" width="16" [src]="item.avatar" alt="" />
+                  }
+                  {{item.titulo}}
+                </a>
+              } @else {
+                <em>Este post ya no existe en la comunidad</em>
+              }
+            </span>
+            <aside class="float-end">
+              <span class="text-muted">{{item.fechaRegistro | timeAgo}}</span>
+            </aside>
+            <div class="clearfix"></div>
+          </li>
+        }
+      </ul>
+    }
   }
 </article>

@@ -14,7 +14,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { AdminSparklineComponent } from '../shared/admin-sparkline/admin-sparkline.component';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
-import { NgStyle, LowerCasePipe, DecimalPipe, DatePipe } from '@angular/common';
+import { NgStyle, LowerCasePipe, DecimalPipe, DatePipe, PercentPipe } from '@angular/common';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 
 interface KpiCard {
@@ -47,6 +47,7 @@ interface AccesoRapido {
         NgStyle,
         LowerCasePipe,
         DecimalPipe,
+        PercentPipe,
         DatePipe,
         TimeAgoPipe,
     ],

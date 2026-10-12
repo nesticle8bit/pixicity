@@ -7,6 +7,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { TipoActividadIconComponent } from '../../addons/tipo-actividad-icon/tipo-actividad-icon.component';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
+import { RouterLink } from '@angular/router';
+import { ActividadViewModel } from 'src/app/models/logs/logs-vm.model';
 
 @Component({
     selector: 'app-profile-activity',
@@ -17,6 +19,7 @@ import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsua
         ReactiveFormsModule,
         TipoActividadIconComponent,
         TimeAgoPipe,
+        RouterLink,
     ],
 })
 export class ProfileActivityComponent implements OnInit {
@@ -42,8 +45,8 @@ export class ProfileActivityComponent implements OnInit {
   }
 
   public formGroup: FormGroup;
-  public actividad: any;
-  public tipoActividades: any = [
+  public grupos: { titulo: string; items: ActividadViewModel[] }[] = [];
+  public tipoActividades: { key: string; value: number }[] = [
     {
       key: 'Post Nuevo',
       value: 1,
@@ -111,7 +114,12 @@ export class ProfileActivityComponent implements OnInit {
       .getActividadUsuario(this.user.id, this.formGroup.value.tipoActividad)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
-        this.actividad = response;
+        this.grupos = [
+          { titulo: 'Hoy', items: response?.hoy ?? [] },
+          { titulo: 'Ayer', items: response?.ayer ?? [] },
+          { titulo: 'Semanas Anteriores', items: response?.semana ?? [] },
+          { titulo: 'Actividad más antigua', items: response?.mes ?? [] },
+        ];
       });
   }
 }

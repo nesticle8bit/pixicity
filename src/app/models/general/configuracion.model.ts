@@ -22,7 +22,10 @@ export interface ConfiguracionModel {
   recordOnlineTime: string;
   welcomeUserId: number | null;
   welcomeActivated: boolean;
+  /** Admite {usuario} y {sitio}. */
   welcomeMessage: string;
+  /** Además del shout, mandarla como mensaje privado. */
+  welcomeMensajePrivado: boolean;
   footer: string;
 }
 

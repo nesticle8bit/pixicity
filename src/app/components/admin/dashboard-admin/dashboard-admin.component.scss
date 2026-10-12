@@ -487,6 +487,15 @@ $alert: #c0392b;
 
       &:hover { color: $main; }
     }
+
+    .adm-error__msg {
+      flex: 1;
+      min-width: 0;
+      color: $ink;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
   &__rank {

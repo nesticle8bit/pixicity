@@ -47,6 +47,7 @@ export class DashboardConfigurationComponent implements OnInit {
       welcomeUserId: 0,
       welcomeActivated: false,
       welcomeMessage: '',
+      welcomeMensajePrivado: false,
       footer: ''
     });
   }
@@ -72,6 +73,7 @@ export class DashboardConfigurationComponent implements OnInit {
           welcomeUserId: configuracion.welcomeUserId,
           welcomeActivated: configuracion.welcomeActivated,
           welcomeMessage: configuracion.welcomeMessage,
+          welcomeMensajePrivado: configuracion.welcomeMensajePrivado ?? false,
           footer: configuracion.footer,
         });
 
@@ -92,6 +94,12 @@ export class DashboardConfigurationComponent implements OnInit {
           this.notificationService.success('La información de la configuración del sitio ha sido actualizado correctamente', 'Actualizado');
         }
       });
+  }
+
+  /** El mensaje con las variables reemplazadas por un ejemplo (el API hace lo mismo al registrar). */
+  get mensajeBienvenidaEjemplo(): string {
+    const sitio = this.formGroup.value.siteName || 'el sitio';
+    return (this.formGroup.value.welcomeMessage ?? '').replace(/\{usuario\}/gi, 'NuevoUsuario').replace(/\{sitio\}/gi, sitio);
   }
 
   get remitenteBienvenida(): AdminResumen | undefined {
