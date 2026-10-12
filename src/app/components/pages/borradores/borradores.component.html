@@ -1,11 +1,11 @@
 <div [formGroup]="formGroup" class="container container--home">
   <div class="row">
     <div class="col-12 col-sm-6 col-md-9">
-      <h6 class="main-title">
+      <h2 class="main-title">
         <span>Borradores</span>
         <input type="text" id="borradores-search" aria-label="Buscar en mis borradores" autocomplete="off" formControlName="search"
           (keyup)="getBorradores(0)" />
-        </h6>
+        </h2>
 
         @if (borradores.length < 1) {
           <div class="nada-gris my-3">
@@ -66,9 +66,9 @@
         </div>
 
         <div class="col-12 col-sm-6 col-md-3">
-          <h6 class="main-title">
+          <h2 class="main-title">
             <span>Categorías</span>
-          </h6>
+          </h2>
 
           <table class="table table-sm table-striped table-hover">
             <tbody>

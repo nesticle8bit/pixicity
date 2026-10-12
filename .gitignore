@@ -49,3 +49,7 @@ src/taringa.scss
 # Playwright
 /test-results
 /playwright-report
+
+# Lighthouse CI (npx @lhci/cli autorun)
+/.lighthouseci
+/lighthouse-report

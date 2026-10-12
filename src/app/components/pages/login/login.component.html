@@ -12,6 +12,27 @@
         <span class="w200">Identificarme</span>
       </div>
 
+      @if (desafio2FA) {
+      <form (ngSubmit)="enviarCodigo2FA()" class="login_box mx-auto">
+        @if (error) {
+          <div class="alert alert-danger p-3 mb-3" role="alert"><span class="font-w-700">{{error}}</span></div>
+        }
+        <p>Tu cuenta tiene verificación en dos pasos. Escribe el código de 6 dígitos de tu app de autenticación,
+          o uno de tus códigos de recuperación.</p>
+        <div class="mb-3">
+          <label for="codigo-2fa">Código de verificación</label>
+          <input id="codigo-2fa" type="text" name="codigo2FA" [(ngModel)]="codigo2FA" class="form-control mx-auto"
+            autocomplete="one-time-code" inputmode="text" maxlength="11" />
+        </div>
+        <div class="dot--ccc">
+          <input type="submit" class="submit-btn" [value]="verificando2FA ? 'Verificando…' : 'Verificar'"
+            [disabled]="!codigo2FA.trim() || verificando2FA">
+        </div>
+        <p class="text-center mt-2 mb-0">
+          <button type="button" class="btn btn-link p-0" (click)="cancelar2FA()">Volver</button>
+        </p>
+      </form>
+      } @else {
       <form [formGroup]="loginForm" (ngSubmit)="login()" class="login_box mx-auto">
         @if (error) {
           <div class="alert alert-danger p-3 mb-3">
@@ -57,12 +78,13 @@
           <a routerLink="/olvide-password" class="olvide-password">¿Olvidaste tu contraseña?</a>
         </p>
       </form>
+      }
     </div>
 
     @if (!hide()?.sidebar) {
       <div class="col-12 col-sm-4">
         <div class="text-center">
-          <img loading="lazy" decoding="async" src="/assets/images/login-bg.gif" alt="">
+          <img loading="lazy" decoding="async" src="/assets/images/login-bg.gif" alt="" width="300" height="247">
           <div class="dot--ccc mt-0">
             <span class="w200">¿No tienes cuenta?</span>
           </div>

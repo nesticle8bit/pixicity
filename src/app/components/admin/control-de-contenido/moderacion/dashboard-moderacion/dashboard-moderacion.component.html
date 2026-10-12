@@ -55,6 +55,8 @@
               </span>
               @if (reporte.contenidoEliminado) {
                 <span class="badge bg-secondary ms-1">borrado</span>
+              } @else if (enlaceShout(reporte); as enlace) {
+                <a class="ms-1" [routerLink]="enlace" target="_blank">ver shout</a>
               }
             </td>
             <td>{{reporte.autorUserName || '—'}}</td>

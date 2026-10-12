@@ -23,6 +23,8 @@ import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.compon
 import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
 import { DecimalPipe, DatePipe } from '@angular/common';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
+import { ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
+import { ShoutCardComponent } from '../../shared/shouts/shout-card/shout-card.component';
 
 const CLAVE_RECIENTES = 'busquedas-recientes';
 const MAX_RECIENTES = 8;
@@ -59,6 +61,7 @@ interface EstadoBusqueda {
         DecimalPipe,
         DatePipe,
         TimeAgoPipe,
+        ShoutCardComponent,
     ],
 })
 export class SearchComponent implements OnInit {
@@ -153,6 +156,7 @@ export class SearchComponent implements OnInit {
           }
 
           this.guardarReciente(this.estado.q);
+          this.cargarShouts(this.estado.q);
           this.cargando = true;
           this.error = false;
           return this.postService
@@ -171,6 +175,32 @@ export class SearchComponent implements OnInit {
         this.terminos = r?.terminos ?? [];
         this.totalCount = r?.pagination?.totalCount ?? 0;
       });
+  }
+
+  /** Shouts que coinciden: van en un bloque aparte arriba de los posts (solo en la primera página). */
+  public shouts: ShoutViewModel[] = [];
+  public totalShouts = 0;
+  private ultimaBusquedaShouts = '';
+
+  private cargarShouts(q: string): void {
+    if (q === this.ultimaBusquedaShouts) return;
+    this.ultimaBusquedaShouts = q;
+    this.shouts = [];
+    this.totalShouts = 0;
+    this.postService
+      .buscarShouts(q, 3)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((r) => {
+        if (q !== this.ultimaBusquedaShouts) return;
+        this.shouts = r.shouts;
+        this.totalShouts = r.total;
+      });
+  }
+
+  /** "#rock" → "rock" (para enlazar al muro filtrado); null si la búsqueda no es un hashtag. */
+  get hashtagBuscado(): string | null {
+    const m = /^#([\p{L}\p{N}_]{2,40})$/u.exec(this.estado.q.trim());
+    return m ? m[1].toLowerCase() : null;
   }
 
   private valido<T extends string>(valor: string | null, permitidos: T[], porDefecto: T): T {

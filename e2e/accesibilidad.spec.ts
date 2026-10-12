@@ -7,7 +7,14 @@ import { AUTOR, FOTO, POST, TEMA, simularApi } from './api-simulada';
  * críticas; las moderadas/menores se listan en el reporte sin romper el build.
  */
 
-const paginas = [
+const b64 = (o: object) => Buffer.from(JSON.stringify(o)).toString('base64url');
+/** Sesión simulada (usuario o administrador) para revisar las páginas que piden iniciar sesión. */
+function sesion(rango: 'Usuario' | 'Administrador') {
+  const jwt = `${b64({ alg: 'HS256', typ: 'JWT' })}.${b64({ exp: 4102444800, unique_name: 'lector_tres', role: rango })}.firma`;
+  return JSON.stringify({ usuario: { id: 'MQ==', userName: 'lector_tres', rango, avatar: '' }, token: `Bearer ${jwt}`, refreshToken: 'r' });
+}
+
+const paginas: { nombre: string; ruta: string; espera?: string; rango?: 'Usuario' | 'Administrador' }[] = [
   { nombre: 'portada', ruta: '/' },
   { nombre: 'post', ruta: `/posts/${POST.categoria.seo}/${POST.id}/${POST.url}`, espera: 'h1.detail-main-title' },
   { nombre: 'tema', ruta: `/comunidades/${TEMA.comunidad.nombreCorto}/tema/${TEMA.id}/${TEMA.url}`, espera: 'h1.detail-main-title' },
@@ -15,6 +22,14 @@ const paginas = [
   { nombre: 'login', ruta: '/login' },
   { nombre: 'registro', ruta: '/registro' },
   { nombre: 'buscar', ruta: '/buscar' },
+  { nombre: 'olvidé mi contraseña', ruta: '/olvide-password' },
+  { nombre: 'perfil', ruta: `/perfil/${AUTOR}` },
+  { nombre: 'mi', ruta: '/mi', rango: 'Usuario' },
+  { nombre: 'favoritos', ruta: '/favoritos', rango: 'Usuario' },
+  { nombre: 'monitor', ruta: '/monitor', rango: 'Usuario' },
+  { nombre: 'mensajes', ruta: '/mensajes', rango: 'Usuario' },
+  { nombre: 'cuenta', ruta: '/cuenta', rango: 'Usuario' },
+  { nombre: 'administración', ruta: '/administracion', rango: 'Administrador' },
 ];
 
 test.beforeEach(async ({ page }) => {
@@ -24,6 +39,7 @@ test.beforeEach(async ({ page }) => {
 for (const p of paginas) {
   test.setTimeout(60_000);
   test(`sin violaciones graves de accesibilidad: ${p.nombre}`, async ({ page }, testInfo) => {
+    if (p.rango) await page.addInitScript((s) => localStorage.setItem('taringas', s), sesion(p.rango));
     await page.goto(p.ruta);
     if (p.espera) {
       await page.locator(p.espera).waitFor();

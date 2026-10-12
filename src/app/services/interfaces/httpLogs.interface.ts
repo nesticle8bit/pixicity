@@ -12,4 +12,7 @@ export abstract class IHttpLogsService {
   abstract getStats(): Observable<StatsViewModel>;
   abstract getMonitorsAdmin(filtro?: AdminFiltro): Observable<PaginatedData<MonitorViewModel>>;
   abstract deleteNotificacion(id: number): Observable<boolean>;
+  /** Tipos de aviso que el usuario puede apagar y si están activos. */
+  abstract getPreferencias(): Observable<{ tipo: string; activa: boolean }[]>;
+  abstract setPreferencia(tipo: string, activa: boolean): Observable<boolean>;
 }

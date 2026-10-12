@@ -16,6 +16,8 @@ export interface ShoutViewModel {
   /** Contadores y lo que hizo el usuario actual (listas del perfil y de /mi). */
   interacciones?: ShoutInteracciones | null;
   fechaRegistro: string;
+  /** Última edición del autor (null si nunca se editó). */
+  fechaActualiza?: string | null;
 }
 
 /** Shout en el listado del panel admin (forma propia de GetShoutsAdmin). */

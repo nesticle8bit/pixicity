@@ -1,0 +1,106 @@
+$marca: #006595;
+$tenue: #5d6b75;
+
+.df {
+  max-width: 560px;
+  padding: 16px 4px;
+}
+
+.df__titulo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 16px 0 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #26323a;
+
+  i { color: #1e7f4f; }
+}
+
+.df__texto {
+  margin: 0 0 12px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: $tenue;
+}
+
+.df__clave {
+  display: inline-block;
+  margin: 0 0 8px;
+  padding: 10px 14px;
+  border: 1px dashed #b9c6ce;
+  border-radius: 8px;
+  background: #f4f8fa;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  color: #26323a;
+  user-select: all;
+}
+
+.df__fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.df__codigo {
+  width: 130px;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  text-align: center;
+}
+
+.df__codigos {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 6px 24px;
+  margin: 0 0 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #f4f8fa;
+  list-style: none;
+  font-family: ui-monospace, Consolas, monospace;
+}
+
+.df__desactivar {
+  display: grid;
+  gap: 6px;
+  max-width: 280px;
+
+  label { font-size: 0.85rem; font-weight: 700; }
+  .df__boton { margin-top: 6px; justify-self: start; }
+}
+
+.df__boton {
+  padding: 7px 16px;
+  border: 1px solid $marca;
+  border-radius: 8px;
+  background: $marca;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+
+  &:hover:not(:disabled) { background: #00527a; }
+  &:disabled { opacity: 0.6; cursor: default; }
+  &:focus-visible { outline: 2px solid $marca; outline-offset: 2px; }
+
+  &--suave {
+    background: #fff;
+    color: $marca;
+
+    &:hover:not(:disabled) { background: #f4f8fa; }
+  }
+
+  &--peligro {
+    border-color: #b3261e;
+    background: #b3261e;
+
+    &:hover:not(:disabled) { background: #8f1f18; }
+  }
+}

@@ -12,6 +12,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-dashboard-moderacion',
@@ -27,6 +28,7 @@ import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
         MatIcon,
         MatPaginator,
         TimeAgoPipe,
+        RouterLink,
     ],
 })
 export class DashboardModeracionComponent implements OnInit {
@@ -55,7 +57,13 @@ export class DashboardModeracionComponent implements OnInit {
     { id: 3, nombre: 'Comentarios de comunidad' },
     { id: 4, nombre: 'Comentarios de shout' },
     { id: 5, nombre: 'Comentarios de foto' },
+    { id: 6, nombre: 'Shouts' },
   ];
+
+  /** Tipo 6 (shout): el API manda en contextoUrl el autor, para enlazar a /shouts/{autor}/{id}. */
+  enlaceShout(reporte: { tipoContenido: number; contenidoId: number; contextoUrl?: string | null }): string[] | null {
+    return reporte.tipoContenido === 6 && reporte.contextoUrl ? ['/shouts', reporte.contextoUrl, String(reporte.contenidoId)] : null;
+  }
 
   constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 25, length: 0 });

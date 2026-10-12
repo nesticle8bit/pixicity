@@ -4,3 +4,5 @@ dist
 e2e
 test-results
 playwright-report
+.lighthouseci
+lighthouse-report

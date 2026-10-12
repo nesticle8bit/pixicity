@@ -43,5 +43,11 @@ export interface LoginBaneado {
   baneadoPermanente?: boolean;
 }
 
-/** Resultado de /usuarios/login: la sesión, el texto 'error' (credenciales incorrectas) o una suspensión. */
-export type LoginResponse = JwtUserModel | 'error' | LoginBaneado;
+/** Contraseña correcta, pero la cuenta tiene verificación en dos pasos: falta el código (usuarios/login2FA). */
+export interface LoginRequiere2FA {
+  requiere2FA: true;
+  desafio: string;
+}
+
+/** Resultado de /usuarios/login: la sesión, el texto 'error' (credenciales incorrectas), una suspensión o el pedido de código. */
+export type LoginResponse = JwtUserModel | 'error' | LoginBaneado | LoginRequiere2FA;

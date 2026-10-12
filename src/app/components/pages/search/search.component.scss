@@ -797,3 +797,44 @@ $mark: #fff1a8;
     cursor: pointer;
   }
 }
+
+// Shouts que coinciden, en un bloque arriba de los posts.
+.bq-shouts {
+  margin-bottom: 20px;
+  padding: 14px;
+  border: 1px solid #e3e9ed;
+  border-radius: 12px;
+  background: #f7f9fb;
+
+  &__titulo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #26323a;
+  }
+
+  &__total {
+    padding: 1px 7px;
+    border-radius: 10px;
+    background: #e3ecf1;
+    font-size: 0.75rem;
+    color: #5d6b75;
+  }
+
+  &__lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__mas {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #006595;
+  }
+}

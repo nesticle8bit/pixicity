@@ -19,6 +19,8 @@ import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsua
 import { AccountPerfilComponent } from './account-perfil/account-perfil.component';
 import { AccountBloqueadosComponent } from './account-bloqueados/account-bloqueados.component';
 import { AccountPasswordComponent } from './account-password/account-password.component';
+import { AccountDosFactoresComponent } from './account-dos-factores/account-dos-factores.component';
+import { AccountNotificacionesComponent } from './account-notificaciones/account-notificaciones.component';
 
 @Component({
     selector: 'app-account',
@@ -43,6 +45,8 @@ import { AccountPasswordComponent } from './account-password/account-password.co
     AccountPerfilComponent,
     AccountBloqueadosComponent,
     AccountPasswordComponent,
+    AccountDosFactoresComponent,
+    AccountNotificacionesComponent,
 ],
 })
 export class AccountComponent implements OnInit {

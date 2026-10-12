@@ -117,6 +117,23 @@
       </div>
       }
 
+      @if (shouts.length && estado.pagina === 1) {
+      <section class="bq-shouts" aria-labelledby="bq-shouts-titulo">
+        <h2 id="bq-shouts-titulo" class="bq-shouts__titulo">
+          <i class="ti ti-messages" aria-hidden="true"></i> Shouts
+          <span class="bq-shouts__total">{{ totalShouts | number }}</span>
+        </h2>
+        <div class="bq-shouts__lista">
+          @for (s of shouts; track s.id) {
+          <app-shout-card [shout]="s" />
+          }
+        </div>
+        @if (hashtagBuscado; as tag) {
+        <a class="bq-shouts__mas" routerLink="/mi" [queryParams]="{ tag }">Ver todos los shouts con #{{ tag }}</a>
+        }
+      </section>
+      }
+
       @if (cargando && !resultados.length) {
       <div class="bq-lista" aria-hidden="true">
         @for (s of esqueletos; track s) {

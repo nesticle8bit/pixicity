@@ -1,4 +1,4 @@
-<h6 class="main-title">
+<h2 class="main-title">
   <span>Comentarios recientes</span>
 
   <div class="float-end">
@@ -8,7 +8,7 @@
       aria-label="Actualizar comentarios" (keydown.enter)="actualizar.emit()"
       (keydown.space)="actualizar.emit(); $event.preventDefault()">
   </div>
-</h6>
+</h2>
 
 @if (!comentarios()?.length) {
 <section>

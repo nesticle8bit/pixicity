@@ -1,0 +1,70 @@
+<section class="df">
+  @if (error()) {
+  <div class="alert alert-danger" role="alert">{{ error() }}</div>
+  }
+
+  @switch (paso()) {
+  @case ('cargando') {
+  <p class="df__texto">Cargando…</p>
+  }
+
+  @case ('inactivo') {
+  <h3 class="df__titulo">Protege tu cuenta con un segundo paso</h3>
+  <p class="df__texto">
+    Además de la contraseña, al iniciar sesión te pediremos un código de 6 dígitos que genera una app en tu celular
+    (Google Authenticator, Microsoft Authenticator, Authy…). Aunque alguien consiga tu contraseña, no podrá entrar.
+  </p>
+  <button type="button" class="df__boton" (click)="empezar()" [disabled]="enviando()">Activar</button>
+  }
+
+  @case ('configurando') {
+  <h3 class="df__titulo">1. Agrega Taringa! a tu app</h3>
+  <p class="df__texto">
+    En la app elige <strong>agregar cuenta → ingresar una clave</strong> y escribe esta clave (tipo: basada en el tiempo).
+    Si estás en el celular, toca <a [href]="uri()">abrir en la app</a>.
+  </p>
+  <p class="df__clave" aria-label="Clave para la app">{{ secretoAgrupado() }}</p>
+
+  <h3 class="df__titulo">2. Escribe el código que muestra la app</h3>
+  <form class="df__fila" (ngSubmit)="activar()">
+    <label class="visually-hidden" for="df-codigo">Código de 6 dígitos</label>
+    <input id="df-codigo" name="codigo" [(ngModel)]="codigo" inputmode="numeric" autocomplete="one-time-code"
+      maxlength="6" placeholder="123456" class="form-control df__codigo" />
+    <button type="submit" class="df__boton" [disabled]="codigo.trim().length !== 6 || enviando()">Confirmar</button>
+  </form>
+  }
+
+  @case ('codigos') {
+  <h3 class="df__titulo">Guarda tus códigos de recuperación</h3>
+  <p class="df__texto">
+    Si pierdes el celular, cada uno de estos códigos te deja entrar <strong>una sola vez</strong>. Guárdalos en un lugar
+    seguro: no los volveremos a mostrar.
+  </p>
+  <ul class="df__codigos">
+    @for (c of codigosRecuperacion(); track c) {
+    <li>{{ c }}</li>
+    }
+  </ul>
+  <div class="df__fila">
+    <button type="button" class="df__boton df__boton--suave" (click)="copiarCodigos()">Copiar</button>
+    <button type="button" class="df__boton" (click)="terminar()">Ya los guardé</button>
+  </div>
+  }
+
+  @case ('activo') {
+  <h3 class="df__titulo"><i class="ti ti-shield-check" aria-hidden="true"></i> La verificación en dos pasos está activa</h3>
+  <p class="df__texto">Para desactivarla escribe tu contraseña y un código de la app (o uno de recuperación).</p>
+  <form class="df__desactivar" (ngSubmit)="desactivar()">
+    <label for="df-password">Contraseña</label>
+    <input id="df-password" type="password" name="password" [(ngModel)]="password" autocomplete="current-password"
+      class="form-control" />
+    <label for="df-codigo-off">Código</label>
+    <input id="df-codigo-off" name="codigo" [(ngModel)]="codigo" autocomplete="one-time-code" maxlength="11"
+      class="form-control" />
+    <button type="submit" class="df__boton df__boton--peligro" [disabled]="!password || !codigo.trim() || enviando()">
+      Desactivar
+    </button>
+  </form>
+  }
+  }
+</section>

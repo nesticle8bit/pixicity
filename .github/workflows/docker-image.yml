@@ -48,6 +48,19 @@ jobs:
         npx playwright install --with-deps chromium
         npm run e2e
 
+    # Lighthouse sobre el build (lighthouserc.json): corta si baja la accesibilidad o el contenido se desplaza al
+    # cargar (CLS); rendimiento, peso y LCP solo avisan (sin API real los números son orientativos).
+    - name: Lighthouse
+      run: npx --yes @lhci/cli@0.14.0 autorun
+
+    - name: Lighthouse report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: lighthouse-report
+        path: lighthouse-report
+        if-no-files-found: ignore
+
   docker:
 
     needs: test

@@ -1,9 +1,9 @@
 <section class="container container--home">
   <div class="row">
     <div class="col-12 col-sm-6 col-md-9">
-      <h6 class="main-title">
+      <h2 class="main-title">
         <span>Usuarios</span>
-      </h6>
+      </h2>
 
       @if (usuarios?.length < 1) {
         <div class="nada-gris" style="margin: 5px 10px 0 0;">
@@ -80,9 +80,9 @@
 
         <div class="dotted-border--left col-12 col-sm-6 col-md-3">
           <form [formGroup]="formGroup" (ngSubmit)="getUsuarios()">
-            <h6 class="main-title">
+            <h2 class="main-title">
               <span>Filtrar</span>
-            </h6>
+            </h2>
 
             <section class="mt-3">
               <h3 class="pixicity-title">

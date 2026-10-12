@@ -20,6 +20,9 @@ export abstract class IHttpPerfilService {
   abstract editarShoutComentario(comentarioId: number, contenido: string): Observable<boolean>;
   abstract fijarShoutComentario(comentarioId: number): Observable<boolean>;
   abstract denunciarShoutComentario(comentarioId: number, motivo: string): Observable<boolean>;
+  abstract denunciarShout(shoutId: number, motivo: string): Observable<boolean>;
+  /** Solo el autor y durante los primeros 15 minutos; error con el motivo si no se puede. */
+  abstract editarShout(shoutId: number, contenido: string): Observable<boolean>;
   abstract getShoutInteracciones(shoutId: number): Observable<ShoutInteracciones>;
   abstract alternarMeGustaShout(shoutId: number): Observable<ShoutReaccion>;
   abstract alternarFavoritoShout(shoutId: number): Observable<ShoutReaccion>;

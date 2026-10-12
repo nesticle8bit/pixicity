@@ -191,6 +191,22 @@
 
                 <app-account-password></app-account-password>
                     </mat-tab>
+
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon>verified_user</mat-icon>
+                  Verificación en dos pasos
+                </ng-template>
+                <app-account-dos-factores />
+              </mat-tab>
+
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon>notifications</mat-icon>
+                  Notificaciones
+                </ng-template>
+                <app-account-notificaciones />
+              </mat-tab>
                   </mat-tab-group>
                 </div>
               </div>

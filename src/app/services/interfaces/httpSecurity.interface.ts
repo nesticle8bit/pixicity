@@ -22,6 +22,12 @@ export abstract class IHttpSecurityService {
   abstract getCaptchaSiteKey(): Observable<string | null>;
   abstract loginUser(user: { userName: string; password: string }): Observable<LoginResponse>;
   abstract refreshAccessToken(): Observable<string>;
+  /** Segundo paso del login: código de la app o de recuperación. Error con el motivo si no sirve. */
+  abstract login2FA(desafio: string, codigo: string): Observable<JwtUserModel>;
+  abstract getEstado2FA(): Observable<{ activo: boolean }>;
+  abstract configurar2FA(): Observable<{ secreto: string; uri: string }>;
+  abstract activar2FA(codigo: string): Observable<{ codigosRecuperacion: string[] }>;
+  abstract desactivar2FA(password: string, codigo: string): Observable<boolean>;
   abstract logout(): any;
   abstract changePassword(obj: { currentPassword: string; newPassword: string }): Observable<boolean>;
   abstract updateUsuario(usuario: UsuarioViewModel): Observable<boolean>;

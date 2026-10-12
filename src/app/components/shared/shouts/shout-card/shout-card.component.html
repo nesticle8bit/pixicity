@@ -24,17 +24,38 @@
       <a class="sc-bubble__time" [routerLink]="enlace()"
         [matTooltip]="(shout().fechaRegistro | date: 'EEEE d \'de\' MMMM \'a las\' h:mm \', año\' y') ?? ''">
         <time [attr.datetime]="shout().fechaRegistro">{{ shout().fechaRegistro | date: 'd MMM, h:mm a' }}</time>
+        @if (editado()) { <span class="sc-bubble__editado">· editado</span> }
       </a>
     </header>
 
-    @if (shout().comentario) {
-    <p class="sc-bubble__body"><app-texto-enlazado [texto]="shout().comentario" /></p>
+    @if (editando()) {
+    <form class="sc-edicion" (ngSubmit)="guardarEdicion()">
+      <textarea name="textoEdicion" [(ngModel)]="textoEdicion" rows="3" maxlength="2000" aria-label="Editar shout"></textarea>
+      <div class="sc-edicion__acciones">
+        <button type="button" class="sc-action" (click)="editando.set(false)">Cancelar</button>
+        <button type="submit" class="sc-edicion__guardar" [disabled]="!textoEdicion.trim() || guardandoEdicion()">
+          {{ guardandoEdicion() ? 'Guardando…' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+    } @else if (texto()) {
+    <p class="sc-bubble__body"><app-texto-enlazado [texto]="texto()" /></p>
     }
 
     <app-shout-media [url]="shout().url" [tipo]="shout().tipo" [mediaTitulo]="shout().mediaTitulo"
       [mediaImagen]="shout().mediaImagen" [mediaDescripcion]="shout().mediaDescripcion" />
 
     <footer class="sc-bubble__footer">
+      @if (puedeEditar() && !editando()) {
+      <button type="button" class="sc-action sc-action--secundaria" (click)="empezarEdicion()" matTooltip="Puedes editarlo durante 15 minutos">
+        <i class="ti ti-pencil" aria-hidden="true"></i> Editar
+      </button>
+      } @else if (!esMio()) {
+      <button type="button" class="sc-action sc-action--secundaria" (click)="denunciar()" matTooltip="Denunciar"
+        aria-label="Denunciar shout">
+        <i class="ti ti-flag" aria-hidden="true"></i>
+      </button>
+      }
       <a class="sc-action" [routerLink]="enlace()" matTooltip="Comentar"
         [attr.aria-label]="'Comentar (' + (interacciones().comentarios ?? 0) + ' comentarios)'">
         <i class="ti ti-messages" aria-hidden="true"></i> {{ interacciones().comentarios ?? 0 }}

@@ -1,10 +1,11 @@
-<h6 class="main-title">
+<h2 class="main-title">
   <span>TOP's Posts</span>
   <app-top-times-selector (selectedDate)="dateChanges($event)"></app-top-times-selector>
-</h6>
+</h2>
 
 @if (topPosts.length < 1) {
-  <section [ngClass]="{'opacity-50': loading}">
+  <!-- Sin opacidad al cargar: el texto atenuado no cumplía el contraste mínimo. -->
+  <section [attr.aria-busy]="loading">
     <div class="alert alert-warning">
       😳 <strong>Aún no se han encontrado top de posts en Taringa!</strong>
     </div>

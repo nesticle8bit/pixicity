@@ -1,4 +1,4 @@
-<h6 class="main-title mb-2">
+<h2 class="main-title mb-2">
   <span>Top Fotos</span>
 
   <div class="float-end">
@@ -7,7 +7,7 @@
       [matTooltip]="paused ? 'Reanudar' : 'Pausar'" style="background: #fff; padding-left: 5px"
       (click)="togglePause()" alt="" role="button" tabindex="0" [attr.aria-label]="paused ? 'Reanudar' : 'Pausar'" (keydown.enter)="togglePause()" (keydown.space)="togglePause(); $event.preventDefault()">
   </div>
-</h6>
+</h2>
 
 @if (loading) {
 <div class="carousel-skeleton"></div>

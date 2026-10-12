@@ -66,7 +66,7 @@ import { SEOService } from 'src/app/services/shared/seo.service';
 
         <div class="col-12 col-sm-4">
           <div class="text-center">
-            <img loading="lazy" decoding="async" src="/assets/images/login-bg.gif" alt="">
+            <img loading="lazy" decoding="async" src="/assets/images/login-bg.gif" alt="" width="300" height="247">
             <div class="dot--ccc mt-0">
               <span class="w200">¿Ya la recordaste?</span>
             </div>

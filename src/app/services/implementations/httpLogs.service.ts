@@ -129,4 +129,16 @@ export class HttpLogsService implements IHttpLogsService {
       )
       .pipe(catchError(this.helper.errorHandler));
   }
+
+  getPreferencias(): Observable<{ tipo: string; activa: boolean }[]> {
+    return this.http
+      .get<ApiResponse<{ tipo: string; activa: boolean }[]>>(`${environment.api}/api/monitors/getPreferencias`)
+      .pipe(map((r) => r.data ?? []));
+  }
+
+  setPreferencia(tipo: string, activa: boolean): Observable<boolean> {
+    return this.http
+      .post<ApiResponse<boolean>>(`${environment.api}/api/monitors/setPreferencia?tipo=${encodeURIComponent(tipo)}&activa=${activa}`, {})
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') || 'No se pudo guardar'); }));
+  }
 }

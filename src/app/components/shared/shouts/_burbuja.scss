@@ -112,6 +112,11 @@ $reshout: #1e7f4f;
     &:hover { color: $marca; text-decoration: underline; }
   }
 
+  &__editado {
+    margin-left: 4px;
+    font-style: italic;
+  }
+
   &__body {
     margin: 0;
     font-size: 0.92rem;
@@ -178,6 +183,9 @@ $reshout: #1e7f4f;
     &:hover:not(:disabled) { background: #e6f1f7; }
   }
 
+  /* Editar / denunciar: a la izquierda, separadas de las reacciones. */
+  &--secundaria { margin-right: auto; }
+
   /* Dato sin acción (p. ej. los puntos de un post): mismo aspecto, sin hover. */
   &--dato {
     cursor: default;
@@ -186,6 +194,42 @@ $reshout: #1e7f4f;
   }
 
   &.is-activo i { animation: sc-pop 0.25s ease-out; }
+}
+
+.sc-edicion {
+  textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #c9d3da;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 0.92rem;
+    resize: vertical;
+
+    &:focus { outline: none; border-color: $marca; box-shadow: 0 0 0 3px rgba(0, 101, 149, 0.15); }
+  }
+
+  &__acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  &__guardar {
+    padding: 5px 14px;
+    border: 0;
+    border-radius: 8px;
+    background: $marca;
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+
+    &:disabled { opacity: 0.6; cursor: default; }
+    &:focus-visible { outline: 2px solid $marca; outline-offset: 2px; }
+  }
 }
 
 @keyframes sc-pop {

@@ -258,11 +258,17 @@ header {
   }
 }
 
+// Títulos de sección. Son <h2> (antes <h6>: el orden de encabezados saltaba de h1 a h6); el tamaño lo fija esta
+// clase, no la etiqueta, para que se vean igual que antes.
 .main-title {
   background: url('/assets/images/dotccc.gif') center repeat-x;
   position: relative;
   height: 19px;
+  margin-top: 0;
   margin-bottom: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.2;
 }
 
 .main-title span {
@@ -337,7 +343,7 @@ input.bbboton {
   padding: 0;
   margin: 0;
   background: url('/assets/images/magn.gif') center 8px no-repeat #fff;
-  width: 20px;
+  width: 24px; // mínimo táctil (WCAG 2.5.8)
   height: 28px;
   border: 0;
   border-radius: 22px;

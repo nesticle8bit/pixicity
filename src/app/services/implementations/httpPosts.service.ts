@@ -1,3 +1,4 @@
+import { ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
 import { PostAdmin } from 'src/app/models/admin/filas-admin.model';
 import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
 import { environment } from 'src/environments/environment';
@@ -6,7 +7,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { BusquedaPostsFiltro, BusquedaPostsResultado } from 'src/app/models/posts/busqueda.model';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { IHttpPostsService } from '../interfaces/httpPosts.interface';
 import { PaginationService } from '../shared/pagination.service';
@@ -351,6 +352,16 @@ export class HttpPostsService implements IHttpPostsService {
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
+  }
+
+  buscarShouts(q: string, cantidad = 3): Observable<{ shouts: ShoutViewModel[]; total: number }> {
+    const params = new HttpParams().set('q', q).set('cantidad', cantidad);
+    return this.http
+      .get<ApiResponse<{ shouts: ShoutViewModel[]; total: number }>>(`${environment.api}/api/busqueda/shouts`, { params })
+      .pipe(
+        map((r) => (r.status === 200 && r.data ? r.data : { shouts: [], total: 0 })),
+        catchError(() => of({ shouts: [], total: 0 })),
+      );
   }
 
   buscarPosts(filtro: BusquedaPostsFiltro): Observable<BusquedaPostsResultado> {

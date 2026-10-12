@@ -89,6 +89,38 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  /** POST que devuelve data o lanza un Error con el mensaje del API (para mostrarlo en el formulario). */
+  private postConError<T>(ruta: string, cuerpo: unknown, porDefecto: string): Observable<T> {
+    return this.http.post<ApiResponse<T>>(`${environment.api}/api/usuarios/${ruta}`, cuerpo).pipe(
+      map((r) => {
+        if (r.status === 200) return r.data!;
+        throw new Error(r.errors?.join(', ') || porDefecto);
+      }),
+    );
+  }
+
+  login2FA(desafio: string, codigo: string): Observable<JwtUserModel> {
+    return this.postConError<JwtUserModel>('login2FA', { desafio, codigo }, 'El código no es correcto');
+  }
+
+  getEstado2FA(): Observable<{ activo: boolean }> {
+    return this.http
+      .get<ApiResponse<{ activo: boolean }>>(`${environment.api}/api/usuarios/getEstado2FA`)
+      .pipe(map((r) => r.data ?? { activo: false }));
+  }
+
+  configurar2FA(): Observable<{ secreto: string; uri: string }> {
+    return this.postConError('configurar2FA', {}, 'No se pudo generar la clave');
+  }
+
+  activar2FA(codigo: string): Observable<{ codigosRecuperacion: string[] }> {
+    return this.postConError('activar2FA', { codigo }, 'El código no es correcto');
+  }
+
+  desactivar2FA(password: string, codigo: string): Observable<boolean> {
+    return this.postConError('desactivar2FA', { password, codigo }, 'No se pudo desactivar');
+  }
+
   private refreshEnCurso: Observable<string> | null = null;
 
   // Intercambia el refresh token por un nuevo access token (rotación) y actualiza el storage.

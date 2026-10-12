@@ -6,6 +6,7 @@ import { Router, RouterLink } from '@angular/router';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NgClass, DatePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
+import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 
 @Component({
     selector: 'app-login',
@@ -34,6 +35,10 @@ export class LoginComponent implements OnInit {
 
   public loginForm: FormGroup;
   public error: string = '';
+  /** Con valor: la contraseña fue correcta y falta el código de verificación en dos pasos. */
+  public desafio2FA = '';
+  public codigo2FA = '';
+  public verificando2FA = false;
   public baneo: any = {
     title: 'La cuenta se encuentra deshabilitada',
     causa: '',
@@ -96,10 +101,46 @@ export class LoginComponent implements OnInit {
         return;
       }
 
-      this.securityService.setUserToLocalStorage(value);
-      const volverA = this.volverA();
-      window.location.href = esRutaInterna(volverA) ? volverA! : '';
+      if ('requiere2FA' in value) {
+        this.desafio2FA = value.desafio;
+        this.codigo2FA = '';
+        setTimeout(() => document.getElementById('codigo-2fa')?.focus());
+        return;
+      }
+
+      this.entrar(value);
     });
+  }
+
+  /** Segundo paso: el código de la app de autenticación (o uno de recuperación). */
+  enviarCodigo2FA(): void {
+    const codigo = this.codigo2FA.trim();
+    if (!this.desafio2FA || !codigo || this.verificando2FA) return;
+    this.verificando2FA = true;
+    this.error = '';
+    this.securityService
+      .login2FA(this.desafio2FA, codigo)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (sesion) => this.entrar(sesion),
+        error: (e: unknown) => {
+          this.verificando2FA = false;
+          this.error = e instanceof Error ? e.message : 'El código no es correcto';
+          // Venció o hubo demasiados intentos: hay que volver a poner la contraseña.
+          if (/vuelve a iniciar sesión/i.test(this.error)) this.desafio2FA = '';
+        },
+      });
+  }
+
+  cancelar2FA(): void {
+    this.desafio2FA = '';
+    this.error = '';
+  }
+
+  private entrar(sesion: JwtUserModel): void {
+    this.securityService.setUserToLocalStorage(sesion);
+    const volverA = this.volverA();
+    window.location.href = esRutaInterna(volverA) ? volverA! : '';
   }
 }
 

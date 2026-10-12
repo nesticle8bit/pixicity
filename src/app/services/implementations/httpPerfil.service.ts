@@ -207,6 +207,18 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  denunciarShout(shoutId: number, motivo: string): Observable<boolean> {
+    return this.http
+      .post<ApiResponse<boolean>>(`${environment.api}/api/shouts/denunciarShout?shoutId=${shoutId}`, { motivo })
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') || 'No se pudo enviar la denuncia'); }));
+  }
+
+  editarShout(shoutId: number, contenido: string): Observable<boolean> {
+    return this.http
+      .post<ApiResponse<boolean>>(`${environment.api}/api/shouts/editarShout?shoutId=${shoutId}`, { contenido })
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') || 'No se pudo editar el shout'); }));
+  }
+
   getShoutsFavoritos(page: number, pageCount: number): Observable<PaginatedData<ShoutViewModel, 'shouts'>> {
     return this.http
       .get<ApiResponse<PaginatedData<ShoutViewModel, 'shouts'>>>(

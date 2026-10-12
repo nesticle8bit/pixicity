@@ -491,6 +491,36 @@ test('olvidé mi contraseña: pide el enlace y el enlace permite elegir una nuev
   expect(restablecido).toEqual({ token: 'tok123', password: 'clave-nueva' });
 });
 
+test('login con verificación en dos pasos: pide el código y recién después entra', async ({ page }) => {
+  await page.route(/\/api\/usuarios\/login$/i, (r) => r.fulfill(ok({ requiere2FA: true, desafio: 'des-123' })));
+  const codigos: string[] = [];
+  await page.route(/\/api\/usuarios\/login2FA/i, (r) => {
+    const { desafio, codigo } = r.request().postDataJSON();
+    codigos.push(`${desafio}:${codigo}`);
+    if (codigo === '000000') return r.fulfill({ status: 400, json: { status: 400, errors: ['El código no es correcto'], data: null } });
+    return r.fulfill(ok({ usuario: { id: 'MQ==', userName: 'lector_tres', rango: 'Usuario', avatar: '' }, token: `Bearer ${jwt('lector_tres')}`, refreshToken: 'r' }));
+  });
+
+  await page.goto('/login');
+  await page.getByLabel('Nombre de Usuario').fill('lector_tres');
+  await page.getByLabel('Contraseña').fill('clave');
+  await page.getByRole('button', { name: 'Iniciar Sesión' }).click();
+
+  const codigo = page.getByLabel('Código de verificación');
+  await expect(codigo).toBeFocused();
+  await codigo.fill('000000');
+  await page.getByRole('button', { name: 'Verificar' }).click();
+  await expect(page.getByRole('alert').filter({ hasText: 'El código no es correcto' })).toBeVisible();
+  expect(await page.evaluate(() => localStorage.getItem('taringas'))).toBeNull();
+
+  await codigo.fill('123456');
+  await page.getByRole('button', { name: 'Verificar' }).click();
+  // Al entrar la app recarga en el inicio: se espera esa navegación antes de leer la sesión guardada.
+  await page.waitForURL((u) => u.pathname === '/');
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('taringas') ?? '{}').usuario?.userName)).toBe('lector_tres');
+  expect(codigos).toEqual(['des-123:000000', 'des-123:123456']);
+});
+
 test('editor de posts y shouts: el botón de emojis inserta en el cursor', async ({ page }) => {
   await conSesion(page);
   await page.goto('/crear/post');
