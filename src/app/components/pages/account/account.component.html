@@ -1,227 +1,176 @@
-<section class="container container--home">
-  <div class="row">
-    <div class="col-12 col-sm-9 p-3">
-      <div class="ladoi">
-        <div class="mb-3">
-          <mat-tab-group>
-            <mat-tab>
-              <ng-template mat-tab-label>
-                <mat-icon>account_circle</mat-icon>
-                Cuenta
-              </ng-template>
+<section class="container container--home cuenta">
+  <!-- Cabecera: fondo de perfil (preview en vivo), avatar editable y estado del correo -->
+  <header class="cuenta__hero">
+    <div class="cuenta__banner" [style.background-image]="fondoCss()">
+      @if (!fondoCss()) {
+        <span class="cuenta__banner-vacio">Sin fondo de perfil</span>
+      }
+    </div>
 
-              <form [formGroup]="formGroupCuenta" (ngSubmit)="updateUsuario()" class="form-container">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="mb-3 row">
-                        <div class="col-sm-2 text-end">
-                          <label class="col-form-label" for="account-email">
-                            E-Mail
-                          </label>
-                        </div>
+    <div class="cuenta__identidad">
+      <button type="button" class="cuenta__avatar" (click)="changeAvatar()" aria-label="Cambiar avatar">
+        <app-user-avatar [avatar]="formGroupCuenta.value.avatar" [userName]="formGroupCuenta.value.userName" [height]="96" [width]="96"></app-user-avatar>
+        <span class="cuenta__avatar-editar"><mat-icon>photo_camera</mat-icon></span>
+      </button>
 
-                        <div class="col-sm-10">
-                          <input id="account-email" type="text"
-                            [ngClass]="{'form-control-plaintext': changeEmailStatus === false, 'form-control': changeEmailStatus === true}"
-                            formControlName="email" />
-                            <strong>
-                              @if (!changeEmailStatus) {
-                                <a (click)="changeEmail()"
-                                  role="button" tabindex="0" (keydown.enter)="changeEmail()" (keydown.space)="changeEmail(); $event.preventDefault()">
-                                  (Cambiar)
-                                </a>
-                              }
-                            </strong>
-                          </div>
-                        </div>
+      <div class="cuenta__datos">
+        <h1 class="cuenta__nombre">{{ formGroupCuenta.value.userName || '…' }}</h1>
+        <div class="cuenta__email">
+          <mat-icon>mail</mat-icon>
+          <span>{{ emailActual() || '…' }}</span>
+          @if (emailConfirmado() === true) {
+            <span class="cuenta__badge cuenta__badge--ok"><mat-icon>verified</mat-icon> Confirmado</span>
+          } @else if (emailConfirmado() === false) {
+            <span class="cuenta__badge cuenta__badge--pendiente"><mat-icon>schedule</mat-icon> Sin confirmar</span>
+            <button type="button" class="cuenta__link" (click)="reenviarConfirmacion()" [disabled]="reenviando()">
+              Reenviar enlace
+            </button>
+          }
+        </div>
+      </div>
 
-                        <div class="mb-3 row">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label" for="account-profileBackground">
-                              País
-                            </label>
-                          </div>
+      @if (formGroupCuenta.value.userName) {
+        <a mat-stroked-button class="cuenta__ver-perfil" [routerLink]="['/perfil', formGroupCuenta.value.userName]">
+          <mat-icon>visibility</mat-icon> Ver mi perfil
+        </a>
+      }
+    </div>
+  </header>
 
-                          <div class="col-sm-10">
-                            <app-select [items]="paises" formControlName="paisId"
-                              bindLabel="nombre" bindValue="id"
-                            (change)="cambiarPais($event?.id)"></app-select>
-                          </div>
-                        </div>
+  <div class="cuenta__layout">
+    <nav class="cuenta__nav" aria-label="Secciones de la cuenta">
+      @for (grupo of grupos; track grupo.nombre) {
+        <div class="cuenta__nav-grupo">
+          <span class="cuenta__nav-titulo">{{ grupo.nombre }}</span>
+          @for (s of grupo.secciones; track s.id) {
+            <a class="cuenta__nav-item" [class.activo]="seccion() === s.id"
+              [routerLink]="[]" [queryParams]="{ seccion: s.id }" replaceUrl
+              [attr.aria-current]="seccion() === s.id ? 'page' : null">
+              <mat-icon>{{ s.icono }}</mat-icon>
+              <span>{{ s.label }}</span>
+            </a>
+          }
+        </div>
+      }
+    </nav>
 
-                        <div class="mb-3 row">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Estado
-                            </label>
-                          </div>
+    <main class="cuenta__panel">
+      <div class="cuenta__panel-cabecera">
+        <mat-icon>{{ seccionActual().icono }}</mat-icon>
+        <div>
+          <h2>{{ seccionActual().label }}</h2>
+          <p>{{ seccionActual().descripcion }}</p>
+        </div>
+      </div>
 
-                          <div class="col-sm-10">
-                            <app-select [items]="estados" bindLabel="nombre"
-                            formControlName="estadoId" bindValue="id"></app-select>
-                          </div>
-                        </div>
+      <div class="cuenta__panel-cuerpo">
+        @switch (seccion()) {
+          @case ('datos') {
+            <form [formGroup]="formGroupCuenta" (ngSubmit)="updateUsuario()" class="cuenta__form">
+              <div class="campo">
+                <label for="account-email">Correo electrónico</label>
+                <div class="campo__fila">
+                  <input id="account-email" type="email" class="form-control" formControlName="email"
+                    [readonly]="!changeEmailStatus" [class.campo__solo-lectura]="!changeEmailStatus" />
+                  <button type="button" mat-stroked-button (click)="changeEmail()">
+                    {{ changeEmailStatus ? 'Cancelar' : 'Cambiar' }}
+                  </button>
+                </div>
+                @if (changeEmailStatus) {
+                  <small class="campo__ayuda">Te enviaremos un enlace a la dirección nueva para confirmarla.</small>
+                }
+                @if (formGroupCuenta.controls['email'].invalid) {
+                  <small class="campo__error">Escribe un correo válido.</small>
+                }
+              </div>
 
-                        <div class="mb-3 row">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Género
-                            </label>
-                          </div>
+              <div class="cuenta__grid">
+                <div class="campo">
+                  <label>País</label>
+                  <app-select [items]="paises" formControlName="paisId" bindLabel="nombre" bindValue="id"
+                    (change)="cambiarPais($event?.id)"></app-select>
+                </div>
 
-                          <div class="col-sm-10">
-                            <app-select [items]="generos" formControlName="genero"
-                            bindLabel="label" bindValue="value"></app-select>
-                          </div>
-                        </div>
+                <div class="campo">
+                  <label>Estado / región</label>
+                  <app-select [items]="estados" formControlName="estadoId" bindLabel="nombre" bindValue="id"></app-select>
+                </div>
 
-                        <div class="mb-3 row">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Nacimiento
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <div class="row">
-                              <div class="col-12 col-sm-4">
-                                <label>Día</label>
-                                <app-select [items]="dias" formControlName="dia"></app-select>
-                              </div>
-
-                              <div class="col-12 col-sm-4">
-                                <label>Mes</label>
-                                <app-select [items]="meses" formControlName="mes"
-                                bindLabel="label" bindValue="value"></app-select>
-                              </div>
-
-                              <div class="col-12 col-sm-4">
-                                <label>Año</label>
-                                <app-select [items]="years" formControlName="año">
-                                </app-select>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="form-container--footer text-center">
-                    <button mat-flat-button color="primary" type="submit">
-                      <mat-icon>save</mat-icon> Guardar
-                    </button>
-                  </div>
-                </form>
-              </mat-tab>
-
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <mat-icon>account_box</mat-icon>
-                  Perfil
-                </ng-template>
-
-                <app-account-perfil [perfil]="perfilActual"></app-account-perfil>
-              </mat-tab>
-
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <mat-icon>format_paint</mat-icon>
-                  Personalización
-                </ng-template>
-
-                <form [formGroup]="formGroupPersonalizacion" class="mb-3" (ngSubmit)="saveFormGroupPersonalizacion()">
-                  <mat-accordion class="accordion-bg">
-                    <mat-expansion-panel class="mb-2" [expanded]="true">
-                      <mat-expansion-panel-header class="accordion-panel">
-                        <mat-panel-title>
-                          Perfil
-                        </mat-panel-title>
-
-                        <mat-panel-description>
-                          &nbsp;
-                          <mat-icon>account_circle</mat-icon>
-                        </mat-panel-description>
-                      </mat-expansion-panel-header>
-
-                      <section class="container">
-                        <div class="mb-3 mt-2 row field">
-                          <div class="col-sm-2 text-end">
-                            <label class="col-form-label">
-                              Fondo de perfil
-                            </label>
-                          </div>
-
-                          <div class="col-sm-10">
-                            <input id="account-profileBackground" type="text" class="form-control" placeholder="URL de la imagen" formControlName="profileBackground" />
-                            <div class="form-text">Sólo se aceptarán imágenes que tengan el formato (.jpg, .jpeg o .png) </div>
-                          </div>
-                        </div>
-                      </section>
-
-                      <div class="form-container--footer text-center">
-                        <button class="me-2" mat-flat-button color="primary" type="submit">
-                          <mat-icon>save</mat-icon> Guardar
-                        </button>
-
-                        <!-- <button mat-flat-button type="button" (click)="currentStep = currentStep + 1">
-                        Siguiente <mat-icon>navigate_next</mat-icon>
-                      </button> -->
-                    </div>
-                  </mat-expansion-panel>
-                </mat-accordion>
-              </form>
-            </mat-tab>
-
-            <mat-tab>
-              <ng-template mat-tab-label>
-                <mat-icon>block</mat-icon>
-                Bloqueados
-              </ng-template>
-
-              <app-account-bloqueados></app-account-bloqueados>
-              </mat-tab>
-
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <mat-icon>password</mat-icon>
-                  Cambiar contraseña
-                </ng-template>
-
-                <app-account-password></app-account-password>
-                    </mat-tab>
-
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <mat-icon>verified_user</mat-icon>
-                  Verificación en dos pasos
-                </ng-template>
-                <app-account-dos-factores />
-              </mat-tab>
-
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <mat-icon>notifications</mat-icon>
-                  Notificaciones
-                </ng-template>
-                <app-account-notificaciones />
-              </mat-tab>
-                  </mat-tab-group>
+                <div class="campo">
+                  <label>Género</label>
+                  <app-select [items]="generos" formControlName="genero" bindLabel="label" bindValue="value"></app-select>
                 </div>
               </div>
-            </div>
 
-            <div class="dotted-border--left col-12 col-sm-3 text-center">
-              <h6>Mi Avatar</h6>
+              <fieldset class="campo">
+                <legend>Fecha de nacimiento</legend>
+                <div class="cuenta__grid cuenta__grid--fecha">
+                  <app-select [items]="dias" formControlName="dia" placeholder="Día"></app-select>
+                  <app-select [items]="meses" formControlName="mes" bindLabel="label" bindValue="value" placeholder="Mes"></app-select>
+                  <app-select [items]="years" formControlName="año" placeholder="Año"></app-select>
+                </div>
+              </fieldset>
 
-              <app-user-avatar [avatar]="formGroupCuenta.value.avatar" [userName]="formGroupCuenta.value.userName" [height]="200"></app-user-avatar>
-
-              <br>
-
-                <button class="mt-3 col-9" (click)="changeAvatar()" mat-flat-button color="primary">
-                  Editar
+              <div class="cuenta__acciones" [class.cuenta__acciones--sucio]="formGroupCuenta.dirty">
+                @if (formGroupCuenta.dirty) {
+                  <span>Tienes cambios sin guardar</span>
+                  <button type="button" mat-button (click)="descartarCuenta()">Descartar</button>
+                }
+                <button mat-flat-button color="primary" type="submit"
+                  [disabled]="formGroupCuenta.invalid || formGroupCuenta.pristine || guardando()">
+                  <mat-icon>save</mat-icon> Guardar cambios
                 </button>
               </div>
-            </div>
-          </section>
+            </form>
+          }
+
+          @case ('perfil') {
+            <app-account-perfil [perfil]="perfilActual"></app-account-perfil>
+          }
+
+          @case ('personalizacion') {
+            <form [formGroup]="formGroupPersonalizacion" (ngSubmit)="saveFormGroupPersonalizacion()" class="cuenta__form">
+              <div class="campo">
+                <label for="account-profileBackground">Fondo de perfil</label>
+                <input id="account-profileBackground" type="url" class="form-control"
+                  placeholder="https://…/imagen.jpg" formControlName="profileBackground" />
+                <small class="campo__ayuda">URL de una imagen .jpg, .jpeg o .png. La vista previa aparece arriba mientras escribes.</small>
+                @if (formGroupPersonalizacion.controls['profileBackground'].invalid) {
+                  <small class="campo__error">La URL debe terminar en .jpg, .jpeg o .png.</small>
+                }
+              </div>
+
+              <div class="cuenta__acciones" [class.cuenta__acciones--sucio]="formGroupPersonalizacion.dirty">
+                @if (formGroupPersonalizacion.value.profileBackground) {
+                  <button type="button" mat-button (click)="quitarFondo()">
+                    <mat-icon>hide_image</mat-icon> Quitar fondo
+                  </button>
+                }
+                <button mat-flat-button color="primary" type="submit"
+                  [disabled]="formGroupPersonalizacion.invalid || formGroupPersonalizacion.pristine">
+                  <mat-icon>save</mat-icon> Guardar
+                </button>
+              </div>
+            </form>
+          }
+
+          @case ('password') {
+            <app-account-password></app-account-password>
+          }
+
+          @case ('dos-factores') {
+            <app-account-dos-factores />
+          }
+
+          @case ('bloqueados') {
+            <app-account-bloqueados></app-account-bloqueados>
+          }
+
+          @case ('notificaciones') {
+            <app-account-notificaciones />
+          }
+        }
+      </div>
+    </main>
+  </div>
+</section>

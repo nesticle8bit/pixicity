@@ -23,7 +23,7 @@ export const passwordsIguales: ValidatorFn = (group: AbstractControl): Validatio
 @Component({
   selector: 'app-account-password',
   templateUrl: './account-password.component.html',
-  styleUrls: ['../account.component.scss'],
+  styleUrls: ['./account-password.component.scss'],
   imports: [ReactiveFormsModule, MatButton, MatIcon, MatError],
 })
 export class AccountPasswordComponent {
@@ -31,6 +31,8 @@ export class AccountPasswordComponent {
   private notificationService = inject(NotificationService);
   private formBuilder = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
+
+  public mostrar = false;
 
   public formGroupCambiarContrasena = this.formBuilder.group(
     {

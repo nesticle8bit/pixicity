@@ -1,22 +1,378 @@
-.accordion-bg .mat-expansion-panel-header-title,
-.accordion-bg .mat-expansion-panel-header-description {
-  flex-basis: 0;
+$marca: #006595;
+$marca-suave: #e6f1f7;
+$texto: #26323a;
+$tenue: #5d6b75;
+$borde: #dde3e8;
+$superficie: #fff;
+$radio: 12px;
+
+.cuenta {
+  padding-top: 16px;
+  padding-bottom: 32px;
+  color: $texto;
 }
 
-.accordion-bg .mat-expansion-panel-header-description {
-  justify-content: space-between;
+// --- Cabecera ---------------------------------------------------------------
+
+.cuenta__hero {
+  background: $superficie;
+  border: 1px solid $borde;
+  border-radius: $radio;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.cuenta__banner {
+  height: 150px;
+  background: linear-gradient(120deg, #0b6ea5 0%, #004160 100%) center / cover no-repeat;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 10px 14px;
+  transition: background-image 0.2s;
+}
+
+.cuenta__banner-vacio {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.cuenta__identidad {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  padding: 0 20px 16px;
+  margin-top: -44px;
+  flex-wrap: wrap;
+}
+
+.cuenta__avatar {
+  position: relative;
+  flex: none;
+  width: 104px;
+  height: 104px;
+  padding: 0;
+  border: 4px solid $superficie;
+  border-radius: 50%;
+  overflow: hidden;
+  background: $superficie;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  ::ng-deep img {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
+.cuenta__avatar-editar {
+  position: absolute;
+  inset: 0;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.15s;
 }
 
-.accordion-bg .mat-form-field + .mat-form-field {
-  margin-left: 8px;
+.cuenta__avatar:hover .cuenta__avatar-editar,
+.cuenta__avatar:focus-visible .cuenta__avatar-editar {
+  opacity: 1;
 }
 
-// .accordion-panel {
-//   background-color: #ccc;
-// }
+@media (hover: none) {
+  // En táctil no hay hover: se deja una pista fija en la esquina.
+  .cuenta__avatar-editar {
+    opacity: 1;
+    inset: auto 0 0 0;
+    height: 30px;
 
-.field {
-  border-bottom: 1px dotted #CCC;
-  padding: 15px 0;
+    mat-icon { font-size: 18px; width: 18px; height: 18px; }
+  }
+}
+
+.cuenta__datos {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding-bottom: 4px;
+}
+
+.cuenta__nombre {
+  margin: 0 0 4px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  word-break: break-word;
+}
+
+.cuenta__email {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: $tenue;
+
+  > mat-icon { font-size: 18px; width: 18px; height: 18px; }
+}
+
+.cuenta__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+
+  &--ok { background: #e3f4ea; color: #1e7f4f; }
+  &--pendiente { background: #fff4e0; color: #9a5b00; }
+}
+
+.cuenta__link {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: $marca;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+
+  &:hover { text-decoration: underline; }
+  &:disabled { opacity: 0.5; cursor: default; }
+}
+
+.cuenta__ver-perfil {
+  margin-bottom: 4px;
+}
+
+// --- Layout -----------------------------------------------------------------
+
+.cuenta__layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.cuenta__nav {
+  position: sticky;
+  top: 70px;
+  background: $superficie;
+  border: 1px solid $borde;
+  border-radius: $radio;
+  padding: 8px;
+}
+
+.cuenta__nav-grupo + .cuenta__nav-grupo {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid $borde;
+}
+
+.cuenta__nav-titulo {
+  display: block;
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $tenue;
+}
+
+.cuenta__nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: $texto;
+  font-weight: 400;
+  font-size: 0.9rem;
+  transition: background 0.12s;
+
+  mat-icon { font-size: 20px; width: 20px; height: 20px; color: $tenue; }
+
+  &:hover { background: #f3f6f8; }
+
+  &.activo {
+    background: $marca-suave;
+    color: $marca;
+    font-weight: 700;
+
+    mat-icon { color: $marca; }
+  }
+}
+
+.cuenta__panel {
+  background: $superficie;
+  border: 1px solid $borde;
+  border-radius: $radio;
+  min-height: 360px;
+}
+
+.cuenta__panel-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid $borde;
+
+  > mat-icon {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 10px;
+    background: $marca-suave;
+    color: $marca;
+  }
+
+  h2 { margin: 0; font-size: 1.15rem; font-weight: 700; }
+  p { margin: 2px 0 0; font-size: 0.85rem; color: $tenue; }
+}
+
+.cuenta__panel-cuerpo {
+  padding: 16px 20px 20px;
+}
+
+// --- Formularios ------------------------------------------------------------
+
+.cuenta__form {
+  max-width: 640px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+
+  > label,
+  > legend {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: $texto;
+    margin: 0;
+    float: none;
+    width: auto;
+  }
+}
+
+.campo__fila {
+  display: flex;
+  gap: 8px;
+
+  input { flex: 1; min-width: 0; }
+}
+
+.campo__solo-lectura {
+  background: #f6f8f9;
+  color: $tenue;
+}
+
+.campo__ayuda { color: $tenue; font-size: 0.78rem; }
+.campo__error { color: #b3261e; font-size: 0.78rem; }
+
+.cuenta__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0 16px;
+
+  &--fecha {
+    grid-template-columns: 1fr 1.6fr 1.2fr;
+    gap: 8px;
+  }
+}
+
+.cuenta__acciones {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid $borde;
+
+  > span {
+    margin-right: auto;
+    font-size: 0.82rem;
+    color: #9a5b00;
+  }
+
+  // Con cambios pendientes la barra se queda visible al hacer scroll.
+  &--sucio {
+    position: sticky;
+    bottom: 0;
+    background: $superficie;
+    padding-bottom: 8px;
+  }
+}
+
+// --- Móvil ------------------------------------------------------------------
+
+@media (max-width: 767.98px) {
+  .cuenta__banner { height: 110px; }
+
+  .cuenta__identidad {
+    padding: 0 16px 14px;
+    margin-top: -36px;
+  }
+
+  .cuenta__ver-perfil { width: 100%; }
+
+  .cuenta__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  // La navegación pasa a una fila de chips desplazable.
+  .cuenta__nav {
+    position: static;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 6px;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  .cuenta__nav-grupo {
+    display: contents;
+  }
+
+  .cuenta__nav-titulo { display: none; }
+
+  .cuenta__nav-item {
+    flex: none;
+    white-space: nowrap;
+    padding: 6px 12px;
+    border: 1px solid $borde;
+    border-radius: 999px;
+
+    &.activo { border-color: $marca; }
+  }
+
+  .cuenta__panel-cabecera,
+  .cuenta__panel-cuerpo {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .cuenta__grid--fecha {
+    grid-template-columns: 1fr 1fr;
+
+    > :last-child { grid-column: span 2; }
+  }
 }

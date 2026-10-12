@@ -1,4 +1,5 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,12 +9,9 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { UsuarioPerfilViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { EstadoViewModel, PaisViewModel } from 'src/app/models/parametros/parametros-vm.model';
 import { NotificationService } from 'src/app/services/shared/notification.service';
-import { MatTabGroup, MatTab, MatTabLabel } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
-import { NgClass } from '@angular/common';
 import { SelectAutocompleteComponent } from '../../shared/select-autocomplete/select-autocomplete.component';
-import { MatButton } from '@angular/material/button';
-import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import { MatAnchor, MatButton } from '@angular/material/button';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 import { AccountPerfilComponent } from './account-perfil/account-perfil.component';
@@ -22,25 +20,56 @@ import { AccountPasswordComponent } from './account-password/account-password.co
 import { AccountDosFactoresComponent } from './account-dos-factores/account-dos-factores.component';
 import { AccountNotificacionesComponent } from './account-notificaciones/account-notificaciones.component';
 
+export type SeccionCuenta = 'datos' | 'perfil' | 'personalizacion' | 'password' | 'dos-factores' | 'bloqueados' | 'notificaciones';
+
+interface Seccion {
+  id: SeccionCuenta;
+  label: string;
+  icono: string;
+  descripcion: string;
+}
+
+/** Navegación de /cuenta; la sección activa vive en ?seccion= para poder enlazarla directo. */
+export const GRUPOS_CUENTA: { nombre: string; secciones: Seccion[] }[] = [
+  {
+    nombre: 'Cuenta',
+    secciones: [
+      { id: 'datos', label: 'Datos de la cuenta', icono: 'account_circle', descripcion: 'Correo, ubicación y datos personales.' },
+      { id: 'perfil', label: 'Perfil', icono: 'badge', descripcion: 'Lo que otros ven sobre ti en tu perfil público.' },
+      { id: 'personalizacion', label: 'Personalización', icono: 'palette', descripcion: 'Dale tu estilo al fondo de tu perfil.' },
+    ],
+  },
+  {
+    nombre: 'Seguridad',
+    secciones: [
+      { id: 'password', label: 'Contraseña', icono: 'password', descripcion: 'Cambia tu contraseña de acceso.' },
+      { id: 'dos-factores', label: 'Verificación en dos pasos', icono: 'verified_user', descripcion: 'Protege tu cuenta con un código extra al iniciar sesión.' },
+      { id: 'bloqueados', label: 'Usuarios bloqueados', icono: 'block', descripcion: 'Personas que no pueden interactuar contigo.' },
+    ],
+  },
+  {
+    nombre: 'Preferencias',
+    secciones: [
+      { id: 'notificaciones', label: 'Notificaciones', icono: 'notifications', descripcion: 'Elige qué avisos llegan a tu campana.' },
+    ],
+  },
+];
+
+const SECCIONES = GRUPOS_CUENTA.flatMap((g) => g.secciones);
+const FONDO_VALIDO = /^https?:\/\/\S+\.(jpe?g|png)(\?\S*)?$/i;
+
 @Component({
     selector: 'app-account',
     templateUrl: './account.component.html',
     styleUrls: ['./account.component.scss'],
     imports: [
-    MatTabGroup,
-    MatTab,
-    MatTabLabel,
     MatIcon,
     FormsModule,
     ReactiveFormsModule,
-    NgClass,
+    RouterLink,
     SelectAutocompleteComponent,
     MatButton,
-    MatAccordion,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
-    MatExpansionPanelTitle,
-    MatExpansionPanelDescription,
+    MatAnchor,
     UserAvatarComponent,
     AccountPerfilComponent,
     AccountBloqueadosComponent,
@@ -56,11 +85,27 @@ export class AccountComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private dialog = inject(MatDialog);
   private notificationService = inject(NotificationService);
+  private route = inject(ActivatedRoute);
 
   private readonly destroyRef = inject(DestroyRef);
 
+  public readonly grupos = GRUPOS_CUENTA;
+  public readonly seccion = signal<SeccionCuenta>('datos');
+  public readonly seccionActual = computed(() => SECCIONES.find((s) => s.id === this.seccion()) ?? SECCIONES[0]);
+
+  public readonly emailActual = signal<string>('');
+  public readonly emailConfirmado = signal<boolean | null>(null);
+  public readonly reenviando = signal(false);
+  public readonly guardando = signal(false);
+  private readonly fondo = signal<string>('');
+  /** Fondo para la cabecera: solo URLs válidas, sin comillas/paréntesis que rompan el url(). */
+  public readonly fondoCss = computed(() => {
+    const url = this.fondo().trim();
+    return FONDO_VALIDO.test(url) ? `url("${url.replace(/["()\\]/g, '')}")` : '';
+  });
+
   public changeEmailStatus: boolean = false;
-  public currentStep: number = 0;
+  private valoresCuentaOriginales: Record<string, unknown> | null = null;
   public paises: PaisViewModel[] = [];
   public estados: EstadoViewModel[] = [];
   public generos: { value: number; label: string }[] = [
@@ -151,7 +196,16 @@ export class AccountComponent implements OnInit {
     });
 
     this.formGroupPersonalizacion = this.formBuilder.group({
-      profileBackground: ''
+      profileBackground: ['', Validators.pattern(FONDO_VALIDO)],
+    });
+
+    this.formGroupPersonalizacion.controls['profileBackground'].valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((v: string | null) => this.fondo.set(v ?? ''));
+
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      const id = params.get('seccion');
+      this.seccion.set(SECCIONES.some((s) => s.id === id) ? (id as SeccionCuenta) : 'datos');
     });
 
     this.getCurrentPerfilInfo();
@@ -161,9 +215,7 @@ export class AccountComponent implements OnInit {
     this.usuarioPerfilService.getCurrentPerfilInfo().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.perfilActual = response.perfil ?? null;
-        this.formGroupPersonalizacion.patchValue({
-          profileBackground: response.background
-        });
+        this.formGroupPersonalizacion.reset({ profileBackground: response.background ?? '' });
       }
     });
   }
@@ -172,6 +224,28 @@ export class AccountComponent implements OnInit {
     this.getCurrentUser();
     this.getPaises();
     this.initFechas();
+    this.getEstadoEmail();
+  }
+
+  getEstadoEmail(): void {
+    this.securityService.getEstadoEmail().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((estado) => {
+      this.emailActual.set(estado.email);
+      this.emailConfirmado.set(estado.emailConfirmado);
+      this.securityService.marcarEmailConfirmado(estado.emailConfirmado);
+    });
+  }
+
+  reenviarConfirmacion(): void {
+    this.reenviando.set(true);
+    this.securityService.reenviarConfirmacion().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (ok) => {
+        this.reenviando.set(false);
+        if (ok) {
+          this.notificationService.info(`Te enviamos un enlace a ${this.emailActual()}.`, 'Correo');
+        }
+      },
+      error: () => this.reenviando.set(false),
+    });
   }
 
   getCurrentUser(): void {
@@ -179,7 +253,10 @@ export class AccountComponent implements OnInit {
       if (value) {
         const fechaNacimiento = value.fechaNacimiento?.split('/') ?? [];
 
-        this.formGroupCuenta.patchValue({
+        if (!this.emailActual()) {
+          this.emailActual.set(value.email ?? '');
+        }
+        this.formGroupCuenta.reset({
           avatar: value.avatar,
           userName: value.userName,
           email: value.email,
@@ -190,6 +267,7 @@ export class AccountComponent implements OnInit {
           mes: fechaNacimiento[1],
           año: fechaNacimiento[2],
         });
+        this.valoresCuentaOriginales = this.formGroupCuenta.getRawValue();
 
         if (value?.paisId) {
           this.getEstadosByPais(value.paisId);
@@ -233,23 +311,57 @@ export class AccountComponent implements OnInit {
 
   changeEmail(): void {
     this.changeEmailStatus = !this.changeEmailStatus;
+    // Cancelar devuelve el correo original.
+    if (!this.changeEmailStatus && this.valoresCuentaOriginales) {
+      this.formGroupCuenta.controls['email'].reset(this.valoresCuentaOriginales['email']);
+    }
+  }
+
+  descartarCuenta(): void {
+    if (!this.valoresCuentaOriginales) {
+      return;
+    }
+    this.changeEmailStatus = false;
+    const paisOriginal = this.valoresCuentaOriginales['paisId'] as number | undefined;
+    if (paisOriginal !== this.formGroupCuenta.value.paisId) {
+      this.estados = [];
+      this.getEstadosByPais(paisOriginal);
+    }
+    this.formGroupCuenta.reset(this.valoresCuentaOriginales);
+  }
+
+  quitarFondo(): void {
+    const control = this.formGroupPersonalizacion.controls['profileBackground'];
+    control.setValue('');
+    control.markAsDirty();
   }
 
   updateUsuario(): void {
     const cuenta = Object.assign({}, this.formGroupCuenta.value);
     cuenta.fechaNacimiento = `${cuenta.dia}/${cuenta.mes}/${cuenta.año}`;
 
-    this.securityService.updateUsuario(cuenta).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      if (response) {
-        this.notificationService.success('La información de la cuenta ha sido actualizado correctamente', 'Actualizado');
+    this.guardando.set(true);
+    this.securityService.updateUsuario(cuenta).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      error: () => this.guardando.set(false),
+      next: (response) => {
+        this.guardando.set(false);
+        if (!response) {
+          return;
+        }
+        this.changeEmailStatus = false;
+        this.valoresCuentaOriginales = this.formGroupCuenta.getRawValue();
+        this.formGroupCuenta.markAsPristine();
+        this.notificationService.success('La información de la cuenta ha sido actualizada correctamente', 'Actualizado');
         // Si cambió el correo hay que confirmarlo de nuevo: el API ya envió el enlace a la dirección nueva.
         this.securityService.getEstadoEmail().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((estado) => {
           this.securityService.marcarEmailConfirmado(estado.emailConfirmado);
+          this.emailActual.set(estado.email);
+          this.emailConfirmado.set(estado.emailConfirmado);
           if (!estado.emailConfirmado) {
             this.notificationService.info(`Te enviamos un enlace a ${estado.email} para confirmar el correo nuevo.`, 'Correo');
           }
         });
-      }
+      },
     });
   }
 
@@ -261,9 +373,10 @@ export class AccountComponent implements OnInit {
 
     dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       if (value) {
-        this.formGroupCuenta.patchValue({
-          avatar: value,
-        });
+        this.formGroupCuenta.patchValue({ avatar: value });
+        if (this.valoresCuentaOriginales) {
+          this.valoresCuentaOriginales['avatar'] = value;
+        }
 
         const currentUser = this.securityService.getCurrentUser();
         if (currentUser.usuario) {
@@ -278,7 +391,8 @@ export class AccountComponent implements OnInit {
     const personalization = Object.assign({}, this.formGroupPersonalizacion.value);
 
     this.usuarioPerfilService.changeBackgroundProfile(personalization).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.notificationService.success('El background de tu perfil ha sido actualizado correctamente', 'Actualizado');
+      this.formGroupPersonalizacion.markAsPristine();
+      this.notificationService.success('El fondo de tu perfil ha sido actualizado correctamente', 'Actualizado');
     });
   }
 }

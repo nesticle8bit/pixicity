@@ -32,7 +32,7 @@ import {
 @Component({
   selector: 'app-account-perfil',
   templateUrl: './account-perfil.component.html',
-  styleUrls: ['../account.component.scss'],
+  styleUrls: ['./account-perfil.component.scss'],
   imports: [
     ReactiveFormsModule,
     MatAccordion,

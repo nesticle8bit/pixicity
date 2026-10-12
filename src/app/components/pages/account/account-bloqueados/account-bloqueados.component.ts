@@ -12,6 +12,7 @@ import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.com
 @Component({
   selector: 'app-account-bloqueados',
   templateUrl: './account-bloqueados.component.html',
+  styleUrls: ['./account-bloqueados.component.scss'],
   imports: [RouterLink, MatButton, MatIcon, UserAvatarComponent],
 })
 export class AccountBloqueadosComponent implements OnInit {
