@@ -1,4 +1,4 @@
-import { UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { AdminResumen } from 'src/app/models/seguridad/seguridad-vm.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -32,7 +32,7 @@ export class DashboardConfigurationComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
-  public administradores: UsuarioViewModel[] = [];
+  public administradores: AdminResumen[] = [];
 
   constructor() {
     this.formGroup = this.formBuilder.group({
@@ -92,6 +92,19 @@ export class DashboardConfigurationComponent implements OnInit {
           this.notificationService.success('La información de la configuración del sitio ha sido actualizado correctamente', 'Actualizado');
         }
       });
+  }
+
+  get remitenteBienvenida(): AdminResumen | undefined {
+    const id = this.formGroup.value.welcomeUserId;
+    return this.administradores.find((admin) => admin.id === id);
+  }
+
+  /** Lo que impide enviar la bienvenida (el API también lo valida al guardar). */
+  get faltaBienvenida(): string | null {
+    if (!this.formGroup.value.welcomeUserId) return 'Elige el usuario que dará la bienvenida.';
+    if (!this.formGroup.value.welcomeMessage?.trim()) return 'Escribe el mensaje de bienvenida.';
+    if (this.administradores.length && !this.remitenteBienvenida) return 'El usuario elegido ya no es administrador o fue eliminado.';
+    return null;
   }
 
   getAdmins(): void {

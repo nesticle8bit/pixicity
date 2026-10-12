@@ -7,3 +7,12 @@
         color: rgb(160, 160, 160);
     }
 }
+
+.bienvenida-preview__shout {
+    margin-top: 4px;
+    padding: 8px 12px;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 12px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}

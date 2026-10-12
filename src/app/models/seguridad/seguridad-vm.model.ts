@@ -13,6 +13,12 @@ export interface UsuarioAvatarViewModel {
   avatar: string;
 }
 
+/** Lo que devuelve /api/usuarios/getAdmins. */
+export interface AdminResumen {
+  id: number;
+  userName: string;
+}
+
 export interface UsuarioViewModel {
   avatar: string;
   userName: string;

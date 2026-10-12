@@ -85,6 +85,20 @@
             <br>
             <label>Mensaje</label>
             <textarea id="dashboard-configuration-welcomeMessage" class="form-control" formControlName="welcomeMessage" rows="3"></textarea>
+
+            @if (formGroup.value.welcomeActivated) {
+              @if (faltaBienvenida) {
+                <div class="alert alert-warning mt-2 mb-0" role="alert">{{ faltaBienvenida }}</div>
+              } @else {
+                <div class="bienvenida-preview mt-2" aria-label="Vista previa de la bienvenida">
+                  <small class="text-muted">Vista previa: así lo verá el usuario nuevo en su perfil</small>
+                  <div class="bienvenida-preview__shout">
+                    <strong>{{ remitenteBienvenida?.userName }}</strong>
+                    <p class="mb-0">{{ formGroup.value.welcomeMessage }}</p>
+                  </div>
+                </div>
+              }
+            }
         </div>
     </div>
 

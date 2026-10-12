@@ -13,7 +13,7 @@ import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { PerfilUsuarioViewModel, UsuarioAdminViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { AdminResumen, PerfilUsuarioViewModel, UsuarioAdminViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { enNavegador } from '../../shared/helpers/plataforma';
 @Injectable()
 export class HttpSecurityService implements IHttpSecurityService {
@@ -496,9 +496,9 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getAdminsList(): Observable<UsuarioViewModel[]> {
+  getAdminsList(): Observable<AdminResumen[]> {
     return this.http
-      .get<ApiResponse<UsuarioViewModel[]>>(`${environment.api}/api/usuarios/getAdmins`)
+      .get<ApiResponse<AdminResumen[]>>(`${environment.api}/api/usuarios/getAdmins`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

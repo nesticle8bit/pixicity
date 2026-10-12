@@ -5,7 +5,7 @@ import { UserModel } from 'src/app/models/security/user.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
-import { PerfilUsuarioViewModel, UsuarioAdminViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { AdminResumen, PerfilUsuarioViewModel, UsuarioAdminViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 @Injectable()
 export abstract class IHttpSecurityService {
   abstract getCurrentUser(): JwtUserModel;
@@ -35,7 +35,7 @@ export abstract class IHttpSecurityService {
   abstract changeAvatarAdmin(file: Blob, usuarioId: number): Observable<string>;
   abstract getLastRegisteredUsers(): Observable<UsuarioViewModel[]>;
   abstract sessionOnlineUser(): Observable<boolean>;
-  abstract getAdminsList(): Observable<UsuarioViewModel[]>;
+  abstract getAdminsList(): Observable<AdminResumen[]>;
   abstract removeAvatar(usuarioId: number): Observable<boolean>;
   abstract removeUsuario(usuarioId: number): Observable<boolean>;
   /** Confirma el correo con el token del enlace. Devuelve el usuario confirmado; error con el motivo si no es válido. */
