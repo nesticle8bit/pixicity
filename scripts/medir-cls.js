@@ -20,7 +20,7 @@ const RUTAS = [
   '/comunidades/comunismo/tema/1/%C2%BFque-es-el-comunismo%3F',
   '/perfil/Gorgoroth',
   '/fotos',
-  '/fotos/Gorgoroth/18/zelda-ocarine-of-time---digital-wallpaper',
+  '/fotos/Gorgoroth/18/zelda-ocarine-of-timedigital-wallpaper',
 ];
 
 (async () => {

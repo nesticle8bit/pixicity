@@ -229,7 +229,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       { icon: 'format_align_justify', title: 'Justificar', run: () => this.applyAlign('justify') },
     ] },
     { secondary: true, items: [
-      { icon: 'horizontal_rule', title: 'Línea horizontal (--- espacio)', run: () => this.horizontalRule() },
+      { icon: 'horizontal_rule', title: 'Línea horizontal ( espacio)', run: () => this.horizontalRule() },
       { icon: 'format_clear', title: 'Eliminar formato', run: () => this.removeFormat() },
     ] },
     { secondary: true, items: [

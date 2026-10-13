@@ -2,7 +2,7 @@
  * Formas de las respuestas de /api/comunidades (ver ComunidadesController). Las fechas llegan como texto ISO en UTC.
  */
 
-// ---------------------------------------------------------------- taxonomía
+// - taxonomía
 
 export interface ComunidadSubCategoria {
   id: number;
@@ -32,7 +32,7 @@ export interface ComunidadSubCategoriaGuardar {
   orden: number;
 }
 
-// ---------------------------------------------------------------- comunidades
+// - comunidades
 
 /** Tarjeta de comunidad en listados y en "top comunidades". */
 export interface ComunidadCard {
@@ -102,7 +102,7 @@ export interface ComunidadesEstadisticas {
   totalComentarios: number;
 }
 
-// ---------------------------------------------------------------- temas
+// - temas
 
 export interface TemaListado {
   id: number;
@@ -184,7 +184,7 @@ export interface ResultadoVoto {
   miVoto: number;
 }
 
-// ---------------------------------------------------------------- widgets
+// - widgets
 
 export interface TemaTop {
   id: number;
@@ -228,7 +228,7 @@ export interface ComentarioReciente {
   comunidadSlug?: string | null;
 }
 
-// ---------------------------------------------------------------- filtros
+// - filtros
 
 export interface BusquedaPaginada {
   page?: number;

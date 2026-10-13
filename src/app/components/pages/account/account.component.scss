@@ -12,7 +12,7 @@ $radio: 12px;
   color: $texto;
 }
 
-// --- Cabecera ---------------------------------------------------------------
+//  Cabecera
 
 .cuenta__hero {
   background: $superficie;
@@ -181,7 +181,7 @@ $radio: 12px;
   margin-bottom: 4px;
 }
 
-// --- Layout -----------------------------------------------------------------
+//  Layout --
 
 .cuenta__layout {
   display: grid;
@@ -273,7 +273,7 @@ $radio: 12px;
   padding: 16px 20px 20px;
 }
 
-// --- Formularios ------------------------------------------------------------
+//  Formularios
 
 .cuenta__form {
   max-width: 640px;
@@ -314,7 +314,7 @@ $radio: 12px;
 .campo__ayuda { color: $tenue; font-size: 0.78rem; }
 .campo__error { color: #b3261e; font-size: 0.78rem; }
 
-// --- Personalización: banner y fondo de página ---------------------------
+//  Personalización: banner y fondo de página
 
 .fondo-grupo {
   margin: 0 0 20px;
@@ -427,7 +427,7 @@ $radio: 12px;
   }
 }
 
-// --- Móvil ------------------------------------------------------------------
+//  Móvil
 
 @media (max-width: 767.98px) {
   .cuenta__banner { height: 120px; }

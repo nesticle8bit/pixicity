@@ -18,7 +18,7 @@
   color: p.$texto;
 }
 
-// --- Cabecera ---------------------------------------------------------------
+//  Cabecera
 
 .pf-hero {
   @include p.tarjeta;
@@ -210,7 +210,7 @@
   overflow-wrap: anywhere;
 }
 
-// --- Números ----------------------------------------------------------------
+//  Números -
 
 .pf-stats {
   display: grid;
@@ -265,7 +265,7 @@
   }
 }
 
-// --- Moderación -------------------------------------------------------------
+//  Moderación -
 
 .pf-hero__staff {
   display: flex;
@@ -286,7 +286,7 @@
   color: #8a5a00;
 }
 
-// --- Pestañas ---------------------------------------------------------------
+//  Pestañas
 
 .pf-tabs {
   display: flex;
@@ -331,7 +331,7 @@
 
 @include p.piezas-pestana;
 
-// --- Lateral ----------------------------------------------------------------
+//  Lateral -
 
 .pf-lateral {
   display: flex;
@@ -344,7 +344,7 @@
   text-align: center;
 }
 
-// --- Perfil inexistente -----------------------------------------------------
+//  Perfil inexistente --
 
 .pf-vacio-pagina {
   @include p.vacio;
@@ -372,7 +372,7 @@
   &:hover { background: #00527a; color: #fff; }
 }
 
-// --- Móvil ------------------------------------------------------------------
+//  Móvil
 
 @media (max-width: 767.98px) {
   .pf-hero__banner { height: 120px; }
