@@ -6,15 +6,16 @@ import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgClass } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
+import { PostViewModel } from 'src/app/models/posts/post-vm.model';
 
 @Component({
     selector: 'app-profile-posts',
     templateUrl: './profile-posts.component.html',
     styleUrls: ['./profile-posts.component.scss'],
     imports: [
-        NgClass,
+        DecimalPipe,
         RouterLink,
         MatPaginator,
         TimeAgoPipe,
@@ -45,8 +46,9 @@ export class ProfilePostsComponent implements OnInit {
     return this._user;
   }
 
-  public posts: any[] = [];
+  public posts: PostViewModel[] = [];
   public totalCount: number = 0;
+  public cargado = false;
   public pageIndex: number = 0;
 
   private iniciado = false;
@@ -94,8 +96,9 @@ export class ProfilePostsComponent implements OnInit {
       .getPostsByUserId(this.user.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
-        this.posts = response.data;
-        this.totalCount = response.pagination.totalCount;
+        this.posts = response?.data ?? [];
+        this.totalCount = response?.pagination?.totalCount ?? 0;
+        this.cargado = true;
       });
   }
 

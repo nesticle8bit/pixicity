@@ -1,0 +1,47 @@
+@use '../perfil' as p;
+
+@include p.piezas-pestana;
+
+// Zebra, igual que en Posts y Actividad.
+.pf-lista li:nth-child(even) .comentario { background: p.$fondo-suave; }
+.pf-lista li .comentario:hover { background: p.$marca-suave; }
+
+.comentario {
+  @include p.fila;
+  align-items: flex-start;
+}
+
+.comentario__categoria {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+}
+
+.comentario__cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+// Hasta dos líneas del comentario.
+.comentario__texto {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: p.$texto;
+  overflow-wrap: anywhere;
+}
+
+.comentario__meta {
+  @include p.truncar;
+  font-size: 0.78rem;
+  color: p.$tenue;
+
+  strong { font-weight: 600; }
+}
+
+.comentario:hover .comentario__meta strong { color: p.$marca; }

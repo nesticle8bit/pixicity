@@ -1,0 +1,61 @@
+@use '../../../profile/perfil' as p;
+
+.pf-card {
+  @include p.tarjeta;
+  padding: 14px;
+}
+
+.pf-card__titulo {
+  @include p.titulo;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+}
+
+.seguidores {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: block;
+    border-radius: 50%;
+
+    &:focus-visible { outline: 2px solid p.$marca; outline-offset: 2px; }
+  }
+
+  ::ng-deep img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: transform 0.12s;
+  }
+
+  a:hover ::ng-deep img { transform: scale(1.06); }
+}
+
+.seguidores__vacio {
+  margin: 0;
+  font-size: 0.85rem;
+  color: p.$tenue;
+}
+
+.seguidores__todos {
+  width: 100%;
+  margin-top: 12px;
+  padding: 6px;
+  border: 1px solid p.$borde;
+  border-radius: 8px;
+  background: p.$superficie;
+  color: p.$marca;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover { background: p.$marca-suave; }
+  &:focus-visible { outline: 2px solid p.$marca; outline-offset: 2px; }
+}

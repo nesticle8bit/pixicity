@@ -8,12 +8,10 @@ import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.mo
 import { BloqueoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
-import { MainProfileMenuComponent } from '../../main/main-profile-menu/main-profile-menu.component';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
-import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { GenreIconComponent } from '../../addons/genre-icon/genre-icon.component';
 import { CountryFlagComponent } from '../../addons/country-flag/country-flag.component';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -22,7 +20,7 @@ import { SendMessageButtonComponent } from '../../addons/send-message-button/sen
 import { BanearUsuarioComponent } from '../../admin/usuarios/usuarios/banear-usuario/banear-usuario.component';
 import { ChangeRangoComponent } from '../../admin/usuarios/rangos/change-rango/change-rango.component';
 import { ChangeAvatarComponent } from '../../admin/usuarios/usuarios/change-avatar/change-avatar.component';
-import { NgStyle, DatePipe, DOCUMENT } from '@angular/common';
+import { NgStyle, DatePipe, DecimalPipe, DOCUMENT } from '@angular/common';
 import { UserOnlineStatusComponent } from '../../addons/user-online-status/user-online-status.component';
 import { ProfileActivityComponent } from '../../profile/profile-activity/profile-activity.component';
 import { ProfileShoutsComponent } from '../../profile/profile-shouts/profile-shouts.component';
@@ -31,19 +29,31 @@ import { ProfileCommentsComponent } from '../../profile/profile-comments/profile
 import { ProfileFollowsComponent } from '../../profile/profile-follows/profile-follows.component';
 import { ProfileInformationComponent } from '../../profile/profile-information/profile-information.component';
 import { PerfilSocialMediaButtonsComponent } from './perfil-social-media-buttons/perfil-social-media-buttons.component';
-import { PerfilUserMedalsComponent } from './perfil-user-medals/perfil-user-medals.component';
 import { PerfilUserFollowersComponent } from './perfil-user-followers/perfil-user-followers.component';
 import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+
+export type PestanaPerfil = 'shouts' | 'activity' | 'posts' | 'comments' | 'followers' | 'following' | 'information';
+
+/** Pestañas del perfil. La activa vive en ?tab= (salvo el muro, que es la de inicio) para poder enlazarla. */
+export const PESTANAS_PERFIL: { id: PestanaPerfil; label: string; icono: string }[] = [
+  { id: 'shouts', label: 'Muro', icono: 'ti-message-circle' },
+  { id: 'activity', label: 'Actividad', icono: 'ti-antenna' },
+  { id: 'posts', label: 'Posts', icono: 'ti-file-text' },
+  { id: 'comments', label: 'Comentarios', icono: 'ti-message-dots' },
+  { id: 'followers', label: 'Seguidores', icono: 'ti-users' },
+  { id: 'following', label: 'Siguiendo', icono: 'ti-user-check' },
+  { id: 'information', label: 'Información', icono: 'ti-info-circle' },
+];
+
+const PESTANA_INICIAL: PestanaPerfil = 'shouts';
 
 @Component({
     selector: 'app-perfil',
     templateUrl: './perfil.component.html',
     styleUrls: ['./perfil.component.scss'],
     imports: [
-        MainProfileMenuComponent,
         RouterLink,
         UserAvatarComponent,
-        UserPopoverDirective,
         GenreIconComponent,
         CountryFlagComponent,
         MatTooltip,
@@ -61,15 +71,16 @@ import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component'
         ProfileFollowsComponent,
         ProfileInformationComponent,
         PerfilSocialMediaButtonsComponent,
-        PerfilUserMedalsComponent,
         PerfilUserFollowersComponent,
         AdsByTypeComponent,
         DatePipe,
+        DecimalPipe,
     ],
 })
 export class PerfilComponent implements OnInit {
   private readonly documento = inject(DOCUMENT);
   private activatedRoute = inject(ActivatedRoute);
+  private router = inject(Router);
   private securityService = inject(IHttpSecurityService);
   private bloqueosService = inject(IHttpBloqueosService);
   private notificationService = inject(NotificationService);
@@ -82,15 +93,72 @@ export class PerfilComponent implements OnInit {
   /** Dueño del perfil: vacío hasta que llega del API (la plantilla lo lee desde el primer render). */
   public currentUser: PerfilUsuarioViewModel = PERFIL_VACIO;
   public loggedUser: JwtUserModel = this.securityService.getCurrentUser();
-  public currentSelection = 'shouts';
+  public cargando = true;
+  public noEncontrado = false;
+  public currentSelection: PestanaPerfil = PESTANA_INICIAL;
   public bloqueoActivo: BloqueoViewModel | null = null;
+
+  readonly pestanas = PESTANAS_PERFIL;
 
   constructor() {
     this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
       this.getUserByUserName(values.get('userName') ?? '');
     });
 
+    // La pestaña sale de la URL: así los contadores, el menú y el botón atrás siempre coinciden.
+    this.activatedRoute.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      const tab = params.get('tab') as PestanaPerfil | null;
+      this.currentSelection = tab && PESTANAS_PERFIL.some((p) => p.id === tab) ? tab : PESTANA_INICIAL;
+    });
+
     this.loggedUser = this.securityService.getCurrentUser();
+  }
+
+  /** Quien mira es otro usuario con sesión (puede seguir, escribir o bloquear). */
+  get esAjeno(): boolean {
+    return !!this.loggedUser.usuario && this.loggedUser.usuario.userName !== this.currentUser.userName;
+  }
+
+  /** Quien mira es staff: se muestran las herramientas de moderación (cada una valida su propio permiso). */
+  get esStaff(): boolean {
+    const rango = this.loggedUser.usuario?.rango;
+    return rango === 'Administrador' || rango === 'Moderador';
+  }
+
+  get nombreVisible(): string {
+    return this.currentUser.completeName?.trim() || this.currentUser.userName;
+  }
+
+  /** Imagen del banner: el "fondo de perfil" que el usuario eligió en /cuenta (allí se previsualiza como banner). */
+  get bannerCss(): string | null {
+    return this.currentUser.profileBackground ? `url("${this.currentUser.profileBackground}")` : null;
+  }
+
+  /** Cambia de pestaña dejando rastro en la URL; ?page= es de los posts y no se arrastra a otras pestañas. */
+  seleccionar(tab: PestanaPerfil): void {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: { tab: tab === PESTANA_INICIAL ? null : tab, page: null },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  /** Flechas, Inicio y Fin mueven el foco entre pestañas (patrón de tabs de WAI-ARIA). */
+  teclaPestana(evento: KeyboardEvent, actual: PestanaPerfil): void {
+    const i = PESTANAS_PERFIL.findIndex((p) => p.id === actual);
+    const destinos: Record<string, number> = {
+      ArrowRight: (i + 1) % PESTANAS_PERFIL.length,
+      ArrowLeft: (i - 1 + PESTANAS_PERFIL.length) % PESTANAS_PERFIL.length,
+      Home: 0,
+      End: PESTANAS_PERFIL.length - 1,
+    };
+    const destino = destinos[evento.key];
+    if (destino === undefined) return;
+
+    evento.preventDefault();
+    const tab = PESTANAS_PERFIL[destino].id;
+    this.seleccionar(tab);
+    this.documento.getElementById(`perfil-tab-${tab}`)?.focus();
   }
 
   ngOnInit(): void {
@@ -98,6 +166,10 @@ export class PerfilComponent implements OnInit {
   }
 
   getUserByUserName(userName: string): void {
+    this.cargando = true;
+    this.noEncontrado = false;
+    this.bloqueoActivo = null;
+
     this.securityService.getUserByUserName(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       // El API responde con error (400) cuando el usuario no existe.
       error: () => this.perfilNoEncontrado(),
@@ -108,8 +180,7 @@ export class PerfilComponent implements OnInit {
         }
 
         this.currentUser = value;
-        this.display.background = this.currentUser.profileBackground;
-        this.displayService.setDisplay(this.display);
+        this.cargando = false;
 
         this.seoService.setSEO({
           title: `${this.currentUser.userName} - Perfil`,
@@ -155,6 +226,9 @@ export class PerfilComponent implements OnInit {
 
   /** Perfil inexistente: 404 real para que Google no lo tome como soft 404. */
   private perfilNoEncontrado(): void {
+    this.cargando = false;
+    this.noEncontrado = true;
+    this.currentUser = PERFIL_VACIO;
     this.seoService.setSEO({
       title: 'Perfil no encontrado',
       description: 'Este usuario no existe o fue dado de baja.',
@@ -192,9 +266,5 @@ export class PerfilComponent implements OnInit {
       },
       error: () => {}
     });
-  }
-
-  selectedChanged(value: string): void {
-    this.currentSelection = value;
   }
 }

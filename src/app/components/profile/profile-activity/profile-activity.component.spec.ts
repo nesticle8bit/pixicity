@@ -48,7 +48,7 @@ describe('ProfileActivityComponent', () => {
     fixture.componentInstance.user = { id: 9, userName: 'juan' };
     fixture.detectChanges();
 
-    const enlace: HTMLAnchorElement = fixture.nativeElement.querySelector('article a');
+    const enlace: HTMLAnchorElement = fixture.nativeElement.querySelector('.actividad__texto a');
     expect(enlace.textContent).toContain('<img src=x onerror=alert(1)>');
     expect(enlace.querySelector('img')).toBeNull();
   });

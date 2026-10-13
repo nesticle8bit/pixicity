@@ -8,6 +8,7 @@ import { RouterLink } from '@angular/router';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { FollowButtonComponent } from '../../addons/follow-button/follow-button.component';
 import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
+import { DecimalPipe } from '@angular/common';
 
 /** Lista paginada de seguidores del usuario o de usuarios que sigue. */
 @Component({
@@ -20,6 +21,7 @@ import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsua
         UserPopoverDirective,
         FollowButtonComponent,
         MatPaginator,
+        DecimalPipe,
     ],
 })
 export class ProfileFollowsComponent implements OnChanges {
@@ -33,6 +35,7 @@ export class ProfileFollowsComponent implements OnChanges {
 
   public usuarios: any[] = [];
   public totalCount: number = 0;
+  public cargado = false;
 
   constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
@@ -52,6 +55,7 @@ export class ProfileFollowsComponent implements OnChanges {
     request.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.usuarios = response?.data ?? [];
       this.totalCount = response?.pagination?.totalCount ?? 0;
+      this.cargado = true;
     });
   }
 

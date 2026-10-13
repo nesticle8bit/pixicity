@@ -27,9 +27,8 @@ export class HttpSecurityService implements IHttpSecurityService {
   private currentUserSubject: BehaviorSubject<JwtUserModel>;
 
   constructor() {
-    this.currentUserSubject = new BehaviorSubject<JwtUserModel>(
-      JSON.parse(localStorage.getItem('taringas') || '{}')
-    );
+    // readStoredUser tolera el servidor (SSR / ng serve), donde no hay localStorage.
+    this.currentUserSubject = new BehaviorSubject<JwtUserModel>(this.readStoredUser());
     this.currentUser = this.currentUserSubject.asObservable();
 
     // Otra pestaña que renueva el token rota el refresh token: sin sincronizar, esta pestaña

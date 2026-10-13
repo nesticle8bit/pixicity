@@ -46,6 +46,11 @@ export class ProfileActivityComponent implements OnInit {
 
   public formGroup: FormGroup;
   public grupos: { titulo: string; items: ActividadViewModel[] }[] = [];
+  public cargado = false;
+
+  get hayActividad(): boolean {
+    return this.grupos.some((g) => g.items.length > 0);
+  }
   public tipoActividades: { key: string; value: number }[] = [
     {
       key: 'Post Nuevo',
@@ -120,6 +125,7 @@ export class ProfileActivityComponent implements OnInit {
           { titulo: 'Semanas Anteriores', items: response?.semana ?? [] },
           { titulo: 'Actividad más antigua', items: response?.mes ?? [] },
         ];
+        this.cargado = true;
       });
   }
 }

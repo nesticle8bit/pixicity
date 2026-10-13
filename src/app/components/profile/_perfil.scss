@@ -1,0 +1,125 @@
+// Piezas visuales compartidas por /perfil/:usuario y sus pestañas. Mismos tokens que /cuenta para que el perfil
+// público y la configuración se vean como una sola cosa.
+
+$marca: #006595;
+$marca-suave: #e6f1f7;
+$texto: #26323a;
+$tenue: #5d6b75;
+$borde: #dde3e8;
+$fondo-suave: #f6f8fa;
+$superficie: #fff;
+$radio: 12px;
+
+// Tarjeta base.
+@mixin tarjeta {
+  background: $superficie;
+  border: 1px solid $borde;
+  border-radius: $radio;
+}
+
+// Título de sección dentro de una pestaña o tarjeta.
+@mixin titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: $texto;
+
+  small {
+    margin-left: auto;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: $tenue;
+  }
+}
+
+// Estado vacío: el mismo en todas las pestañas.
+@mixin vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 32px 16px;
+  text-align: center;
+  color: $tenue;
+  background: $fondo-suave;
+  border: 1px dashed $borde;
+  border-radius: $radio;
+
+  i {
+    font-size: 2rem;
+    color: #a9b6bf;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}
+
+// Fila de una lista (posts, comentarios, personas): enlace a todo lo ancho con hover suave.
+@mixin fila {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: $texto;
+  text-decoration: none;
+  transition: background-color 0.12s;
+
+  &:hover {
+    background: $fondo-suave;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $marca;
+    outline-offset: 1px;
+  }
+}
+
+// Las piezas que repite cada pestaña (los estilos de Angular son por componente: cada una las incluye).
+@mixin piezas-pestana {
+  :host { display: block; }
+
+  .pf-titulo { @include titulo; }
+  .pf-vacio { @include vacio; }
+
+  .pf-lista {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    @include tarjeta;
+  }
+
+  .pf-cargando {
+    display: grid;
+    gap: 12px;
+
+    span {
+      height: 64px;
+      border-radius: $radio;
+      background: linear-gradient(90deg, #eef2f5 25%, #f7f9fb 50%, #eef2f5 75%) 0 0 / 200% 100%;
+      animation: pf-brillo 1.2s infinite linear;
+    }
+  }
+
+  @keyframes pf-brillo {
+    to { background-position: -200% 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pf-cargando span { animation: none; }
+  }
+}
+
+@mixin truncar {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

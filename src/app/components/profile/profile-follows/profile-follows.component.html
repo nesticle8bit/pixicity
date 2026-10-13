@@ -1,52 +1,43 @@
-@if (usuarios.length < 1) {
-  <div class="alert alert-warning mt-3">
+<h2 class="pf-titulo">
+  {{ tipo() === 'siguiendo' ? 'Siguiendo' : 'Seguidores' }} <small>{{ totalCount | number }}</small>
+</h2>
+
+@if (!cargado) {
+  <div class="pf-cargando" aria-hidden="true"><span></span><span></span></div>
+} @else if (usuarios.length === 0) {
+  <div class="pf-vacio">
+    <i class="ti ti-users" aria-hidden="true"></i>
     @if (tipo() === 'siguiendo') {
-      👾 <strong>El usuario {{user().userName}} no ha comenzado a seguir usuarios en la comunidad</strong>
+      <p><strong>{{ user()?.userName }}</strong> todavía no sigue a nadie.</p>
     } @else {
-      😊 <strong>El usuario {{user().userName}} no tiene seguidores, pero pronto los tendrá.</strong>
+      <p><strong>{{ user()?.userName }}</strong> todavía no tiene seguidores.</p>
     }
   </div>
 } @else {
-  <div class="mt-3">
-    <h2 class="main-title my-2">
-      <span>
-        {{tipo() === 'siguiendo' ? 'Usuarios que sigue ' + user().userName : 'Últimos seguidores del usuario ' + user().userName}}
-      </span>
-    </h2>
+  <ul class="personas">
+    @for (usuario of usuarios; track usuario.userName) {
+      <li class="persona">
+        <a class="persona__enlace" [routerLink]="['/perfil', usuario.userName]" [appUserPopover]="usuario.userName">
+          <app-user-avatar [avatar]="usuario.avatar" [userName]="usuario.userName" [height]="48" [width]="48"></app-user-avatar>
+          <span class="persona__datos">
+            <strong class="persona__nombre">{{ usuario.userName }}</strong>
+            <span class="persona__meta">
+              @if (usuario.pais?.iso2) {
+                <img [src]="'/assets/images/flags/' + usuario.pais.iso2 + '.png'" [alt]="usuario.pais?.nombre ?? ''" width="16" height="11" loading="lazy" />
+              }
+              {{ (usuario.puntos ?? 0) | number }} puntos
+            </span>
+          </span>
+        </a>
+        <app-follow-button class="persona__seguir" [userName]="usuario.userName" [icon]="true"></app-follow-button>
+      </li>
+    }
+  </ul>
 
-    <div class="container-fluid">
-      @for (usuario of usuarios; track usuario.userName) {
-        <section class="row user-list">
-          <div class="col-12 col-sm-12 col-md-9">
-            <div class="d-flex">
-              <div class="flex-shrink-0">
-                <app-user-avatar class="mb-1" [avatar]="usuario.avatar" [userName]="usuario.userName" [height]="40">
-                </app-user-avatar>
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <strong>
-                  <a [routerLink]="['/perfil', usuario.userName]" [appUserPopover]="usuario.userName">
-                    {{usuario.userName}}
-                  </a>
-                </strong>
-                <br>
-                <small class="text-muted">
-                  <img src="/assets/images/flags/{{usuario.pais?.iso2}}.png" style="margin: -3px 10px 0 0;" alt=""
-                    aria-hidden="true" loading="lazy">
-                  <strong>Puntos</strong>: {{usuario.puntos}}
-                </small>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-12 col-md-3 my-auto">
-            <app-follow-button [userName]="usuario.userName" [icon]="true"></app-follow-button>
-          </div>
-        </section>
-      }
-    </div>
-
+  @if (totalCount > paginationService.pageCount) {
     <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
-      [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
+      [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)"
+      aria-label="Páginas de usuarios">
     </mat-paginator>
-  </div>
+  }
 }

@@ -1,10 +1,393 @@
-.btn-gris {
-    padding: 5px 9px 1px 9px;
+@use '../../profile/perfil' as p;
+
+.pf {
+  padding-top: 16px;
+  padding-bottom: 32px;
+  color: p.$texto;
 }
 
-.alert-secondary {
-    background-color: rgb(226 227 229 / 32%);
-    border-color: rgb(233 233 233);
-    padding: 0.5rem;
-    color: #858585;
+// --- Cabecera ---------------------------------------------------------------
+
+.pf-hero {
+  @include p.tarjeta;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.pf-hero__banner {
+  height: 170px;
+  background: linear-gradient(120deg, #0b6ea5 0%, #004160 100%) center / cover no-repeat;
+}
+
+.pf-hero__cuerpo {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 0 20px;
+  margin-top: -48px;
+}
+
+.pf-hero__avatar {
+  position: relative;
+  flex: none;
+  width: 120px;
+  height: 120px;
+  border: 4px solid p.$superficie;
+  border-radius: 50%;
+  background: p.$superficie;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+
+  ::ng-deep img {
+    width: 112px;
+    height: 112px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
+// El punto verde/gris de en línea, sobre el borde del avatar.
+.pf-hero__online {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+
+  ::ng-deep .vctip {
+    display: block;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    border: 3px solid p.$superficie;
+    border-radius: 50%;
+  }
+}
+
+.pf-hero__identidad {
+  flex: 1 1 260px;
+  min-width: 0;
+  padding-top: 56px; // deja el texto bajo el banner, junto al avatar
+}
+
+.pf-hero__nombre {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.pf-hero__usuario {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+  font-size: 0.92rem;
+  color: p.$tenue;
+}
+
+.pf-rango {
+  --rango: #{p.$marca};
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 10px 1px 6px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--rango) 35%, transparent);
+  background: color-mix(in srgb, var(--rango) 10%, #fff);
+  color: var(--rango);
+  font-size: 0.78rem;
+  font-weight: 700;
+
+  img {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.pf-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  color: p.$tenue;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+}
+
+.pf-hero__acciones {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 4px;
+
+  // Los botones de seguir y MP usan clases globales viejas (bverde/bazul/bgris): aquí se ven como botones actuales,
+  // sin tocar el resto del sitio.
+  ::ng-deep a.bverde,
+  ::ng-deep a.bazul,
+  ::ng-deep a.bgris {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 1px solid p.$marca;
+    background: p.$marca;
+    color: #fff !important;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: none;
+    text-shadow: none;
+    box-shadow: none;
+    cursor: pointer;
+
+    &:hover { background: #00527a; }
+    &:focus-visible { outline: 2px solid p.$marca; outline-offset: 2px; }
+  }
+
+  ::ng-deep a.bazul,
+  ::ng-deep a.bgris {
+    background: p.$superficie;
+    color: p.$marca !important;
+
+    &:hover { background: p.$marca-suave; }
+  }
+}
+
+.pf-icono-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid p.$borde;
+  border-radius: 50%;
+  background: p.$superficie;
+  color: p.$tenue;
+  font-size: 1.1rem;
+  cursor: pointer;
+
+  &:hover { color: #b3261e; border-color: #e4b6b2; background: #fdf2f1; }
+  &:focus-visible { outline: 2px solid p.$marca; outline-offset: 2px; }
+
+  &--activo {
+    color: #b3261e;
+    border-color: #e4b6b2;
+    background: #fdf2f1;
+  }
+}
+
+.pf-hero__mensaje {
+  margin: 14px 20px 0;
+  padding: 10px 14px;
+  border-left: 3px solid p.$marca;
+  border-radius: 0 8px 8px 0;
+  background: p.$fondo-suave;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: p.$texto;
+  overflow-wrap: anywhere;
+}
+
+// --- Números ----------------------------------------------------------------
+
+.pf-stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid p.$borde;
+
+  li + li { border-left: 1px solid p.$borde; }
+}
+
+.pf-stats__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 12px 4px;
+  border: 0;
+  background: none;
+  color: p.$texto;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.12s;
+
+  strong {
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  span {
+    font-size: 0.75rem;
+    color: p.$tenue;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &:hover { background: p.$fondo-suave; }
+  &:focus-visible { outline: 2px solid p.$marca; outline-offset: -2px; }
+
+  &.activo {
+    box-shadow: inset 0 -3px 0 p.$marca;
+
+    strong { color: p.$marca; }
+  }
+
+  &--fijo {
+    cursor: default;
+
+    &:hover { background: none; }
+  }
+}
+
+// --- Moderación -------------------------------------------------------------
+
+.pf-hero__staff {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 10px 20px;
+  border-top: 1px dashed p.$borde;
+  background: #fffaf0;
+  font-size: 0.85rem;
+}
+
+.pf-hero__staff-titulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+  color: #8a5a00;
+}
+
+// --- Pestañas ---------------------------------------------------------------
+
+.pf-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  @include p.tarjeta;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.pf-tabs__tab {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: p.$tenue;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover { background: p.$fondo-suave; color: p.$texto; }
+  &:focus-visible { outline: 2px solid p.$marca; outline-offset: -2px; }
+
+  &[aria-selected='true'] {
+    background: p.$marca-suave;
+    color: p.$marca;
+  }
+}
+
+.pf-panel {
+  min-height: 240px;
+}
+
+@include p.piezas-pestana;
+
+// --- Lateral ----------------------------------------------------------------
+
+.pf-lateral {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pf-lateral__ads {
+  display: block;
+  text-align: center;
+}
+
+// --- Perfil inexistente -----------------------------------------------------
+
+.pf-vacio-pagina {
+  @include p.vacio;
+  margin: 32px auto;
+  max-width: 520px;
+  padding: 48px 24px;
+
+  h1 {
+    margin: 4px 0 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: p.$texto;
+  }
+}
+
+.pf-boton {
+  margin-top: 8px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: p.$marca;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover { background: #00527a; color: #fff; }
+}
+
+// --- Móvil ------------------------------------------------------------------
+
+@media (max-width: 767.98px) {
+  .pf-hero__banner { height: 120px; }
+
+  .pf-hero__cuerpo {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 16px;
+    margin-top: -56px;
+  }
+
+  .pf-hero__identidad { padding-top: 0; flex-basis: auto; }
+  .pf-hero__usuario,
+  .pf-hero__meta { justify-content: center; }
+  .pf-hero__acciones { padding-bottom: 0; }
+  .pf-hero__mensaje { margin: 14px 16px 0; }
+
+  // 5 números no caben en una fila de teléfono: 3 + 2.
+  .pf-stats {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+
+    li { grid-column: span 2; border-left: 0 !important; border-top: 1px solid p.$borde; }
+    li:nth-child(-n + 3) { border-top: 0; }
+    li:nth-child(n + 4) { grid-column: span 3; }
+    li:not(:nth-child(3n + 1)):not(:nth-child(4)) { border-left: 1px solid p.$borde !important; }
+  }
+
+  .pf-stats__item { padding: 10px 4px; }
+  .pf-hero__staff { padding: 10px 16px; }
 }

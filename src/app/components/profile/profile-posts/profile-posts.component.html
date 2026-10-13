@@ -1,51 +1,48 @@
-<h2 class="main-title my-2">
-  <span>Últimos posts creados</span>
+<h2 class="pf-titulo">
+  Posts <small>{{ totalCount | number }}</small>
 </h2>
 
-@if (posts.length < 1) {
-  <div class="alert alert-warning">
-    🐱‍💻 <strong>El usuario {{user.userName}} no ha publicado ningun post hasta el momento.</strong>
+@if (!cargado) {
+  <div class="pf-cargando" aria-hidden="true"><span></span><span></span><span></span></div>
+} @else if (posts.length === 0) {
+  <div class="pf-vacio">
+    <i class="ti ti-file-off" aria-hidden="true"></i>
+    <p><strong>{{ user.userName }}</strong> todavía no publicó ningún post.</p>
   </div>
-}
+} @else {
+  <ul class="pf-lista">
+    @for (post of posts; track post.id) {
+      <li>
+        <a class="post" [class.post--eliminado]="$any(post).eliminado"
+          [routerLink]="['/posts', post.categoria.seo, post.id, post.url]">
+          <img class="post__categoria" [src]="'/assets/images/categorias/' + post.categoria.icono"
+            [alt]="post.categoria.nombre" [title]="post.categoria.nombre" width="16" height="16" loading="lazy" />
+          <span class="post__cuerpo">
+            <span class="post__titulo">{{ post.titulo }}</span>
+            <span class="post__meta">
+              {{ post.categoria.nombre }} · {{ post.fechaRegistro | timeAgo }}
+            </span>
+          </span>
+          <span class="post__numeros">
+            <span title="Puntos"><i class="ti ti-star" aria-hidden="true"></i> {{ post.puntos | number }}</span>
+            <span title="Comentarios"><i class="ti ti-message-dots" aria-hidden="true"></i> {{ post.comentarios | number }}</span>
+            @if (post.visitantes) {
+              <span title="Visitas"><i class="ti ti-eye" aria-hidden="true"></i> {{ post.visitantes | number }}</span>
+            }
+          </span>
+        </a>
+      </li>
+    }
+  </ul>
 
-@if (posts.length > 0) {
-  <div class="table-responsive">
-    <table class="table table-sm table-striped table-hover">
-      <thead>
-        <tr>
-          <th>Título</th>
-          <th>Puntos</th>
-          <th>Creado</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (post of posts; track post; let i = $index) {
-          <tr [ngClass]="{'row-deleted': post.eliminado}">
-            <td>
-              <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
-                title="{{post.titulo}}">
-                <img src="/assets/images/categorias/{{post.categoria.icono}}" title="{{post.categoria.nombre}}"
-                  alt="{{post.categoria.nombre}}" loading="lazy"/>
-                  {{post.titulo}}
-                </a>
-              </td>
-              <td>
-                {{post.puntos}}
-              </td>
-              <td>
-                {{post.fechaRegistro | timeAgo}}
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+  @if (totalCount > paginationService.pageCount) {
+    <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" [pageIndex]="pageIndex"
+      [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)"
+      aria-label="Páginas de posts">
+    </mat-paginator>
   }
 
-  <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" [pageIndex]="pageIndex"
-    [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
-  </mat-paginator>
-
+  <!-- Enlaces reales a cada página: los buscadores no usan el paginador -->
   @if (totalPaginas.length > 1) {
     <nav class="seo-pagination" aria-label="Paginación de posts">
       @for (p of totalPaginas; track p) {
@@ -54,3 +51,4 @@
       }
     </nav>
   }
+}

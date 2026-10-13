@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { PERFIL_VACIO, PerfilUsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { IHttpBloqueosService } from 'src/app/services/interfaces/httpBloqueos.interface';
@@ -12,15 +12,21 @@ import { PerfilComponent } from './perfil.component';
 describe('PerfilComponent', () => {
   let setSEO: jasmine.Spy;
   let getBloqueo: jasmine.Spy;
+  let navigate: jasmine.Spy;
 
   const perfil: PerfilUsuarioViewModel = { ...PERFIL_VACIO, id: 7, userName: 'juan', postsCount: 12, seguidoresCount: 30 };
 
-  function crear(sesion: string | null, respuesta = of(perfil)): PerfilComponent {
+  function crear(sesion: string | null, respuesta = of(perfil), tab: string | null = null): PerfilComponent {
     setSEO = jasmine.createSpy('setSEO');
+    navigate = jasmine.createSpy('navigate');
     getBloqueo = jasmine.createSpy('getBloqueoContraPerfil').and.returnValue(of(null));
     TestBed.configureTestingModule({
       providers: [
-        { provide: ActivatedRoute, useValue: { paramMap: of(convertToParamMap({ userName: 'juan' })) } },
+        {
+          provide: ActivatedRoute,
+          useValue: { paramMap: of(convertToParamMap({ userName: 'juan' })), queryParamMap: of(convertToParamMap(tab ? { tab } : {})) },
+        },
+        { provide: Router, useValue: { navigate } },
         {
           provide: IHttpSecurityService,
           useValue: {
@@ -61,5 +67,29 @@ describe('PerfilComponent', () => {
     TestBed.resetTestingModule();
     crear('otra');
     expect(getBloqueo).toHaveBeenCalledOnceWith('juan');
+  });
+
+  it('la pestaña sale de ?tab= (así contadores y pestañas siempre coinciden); una desconocida cae al muro', () => {
+    expect(crear(null, of(perfil), 'posts').currentSelection).toBe('posts');
+
+    TestBed.resetTestingModule();
+    expect(crear(null, of(perfil), 'medallas').currentSelection).toBe('shouts');
+  });
+
+  it('cambiar de pestaña la guarda en la URL y descarta la página de posts', () => {
+    const c = crear(null);
+
+    c.seleccionar('followers');
+    expect(navigate.calls.mostRecent().args[1].queryParams).toEqual({ tab: 'followers', page: null });
+
+    c.seleccionar('shouts');
+    expect(navigate.calls.mostRecent().args[1].queryParams).toEqual({ tab: null, page: null });
+  });
+
+  it('perfil inexistente: muestra el aviso en vez de la cabecera vacía', () => {
+    const c = crear(null, throwError(() => new Error('400')));
+
+    expect(c.noEncontrado).toBeTrue();
+    expect(c.cargando).toBeFalse();
   });
 });

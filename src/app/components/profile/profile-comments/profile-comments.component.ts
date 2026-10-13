@@ -1,34 +1,27 @@
 import { Subscription } from 'rxjs';
 import { PerfilRef, SIN_PERFIL } from 'src/app/models/seguridad/seguridad-vm.model';
-import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
-import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
-import { MatTooltip } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
+import { DecimalPipe } from '@angular/common';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
-import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 import { IHttpComentariosPostService } from '../../../services/interfaces/httpComentariosPost.interface';
+import { ComentarioViewModel } from 'src/app/models/posts/post-vm.model';
 
+/** Pestaña Comentarios del perfil: los últimos comentarios en posts, con enlace directo a cada uno. */
 @Component({
-    selector: 'app-profile-comments',
-    templateUrl: './profile-comments.component.html',
-    styleUrls: ['./profile-comments.component.scss'],
-    imports: [
-        MatTooltip,
-        RouterLink,
-        MatPaginator,
-        TimeAgoPipe,
-        TruncatePipe,
-    ],
+  selector: 'app-profile-comments',
+  templateUrl: './profile-comments.component.html',
+  styleUrls: ['./profile-comments.component.scss'],
+  imports: [RouterLink, MatPaginator, TimeAgoPipe, DecimalPipe],
 })
-export class ProfileCommentsComponent implements OnInit {
+export class ProfileCommentsComponent {
   paginationService = inject(PaginationService);
   private comentariosPostService = inject(IHttpComentariosPostService);
-
   private readonly destroyRef = inject(DestroyRef);
-  private cargaGetCommentsByUserId?: Subscription;
+  private carga?: Subscription;
 
   private _user: PerfilRef = SIN_PERFIL;
 
@@ -45,14 +38,18 @@ export class ProfileCommentsComponent implements OnInit {
     return this._user;
   }
 
-  public comments: any[] = [];
-  public totalCount: number = 0;
+  public comments: ComentarioViewModel[] = [];
+  public totalCount = 0;
+  public cargado = false;
 
   constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
   }
 
-  ngOnInit(): void {}
+  /** El contenido guardado puede traer HTML (formato, menciones): el extracto es solo texto. */
+  extracto(contenido: string): string {
+    return (contenido ?? '').replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+  }
 
   getCommentsByUserId(): void {
     if (!this.user.id) {
@@ -60,13 +57,16 @@ export class ProfileCommentsComponent implements OnInit {
     }
 
     // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
-
-    this.cargaGetCommentsByUserId?.unsubscribe();
-
-    this.cargaGetCommentsByUserId = this.comentariosPostService.getComentariosByUserId(this.user.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      this.comments = response?.data;
-      this.totalCount = response?.pagination?.totalCount;
-    });
+    this.carga?.unsubscribe();
+    this.carga = this.comentariosPostService
+      .getComentariosByUserId(this.user.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((response) => {
+        // Sin el post (borrado) no hay a dónde enlazar.
+        this.comments = (response?.data ?? []).filter((c) => !!c.post?.categoria);
+        this.totalCount = response?.pagination?.totalCount ?? 0;
+        this.cargado = true;
+      });
   }
 
   pageChange(event: PageEvent): void {

@@ -1,5 +1,7 @@
+<h2 class="visually-hidden">Muro</h2>
+
 @if (user.id) {
-<app-shout-composer class="mt-3" [perfilId]="user.id" (publicado)="alPublicar()" />
+<app-shout-composer class="muro__composer" [perfilId]="user.id" (publicado)="alPublicar()" />
 }
 
 <app-profile-shouts-wall [user]="user" [load]="reloadShouts"></app-profile-shouts-wall>

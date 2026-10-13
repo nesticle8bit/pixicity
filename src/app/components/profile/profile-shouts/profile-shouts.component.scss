@@ -1,7 +1,8 @@
-:host {
-  display: block;
-}
+@use '../perfil' as p;
 
-app-shout-composer {
+@include p.piezas-pestana;
+
+.muro__composer {
   display: block;
+  margin-bottom: 16px;
 }

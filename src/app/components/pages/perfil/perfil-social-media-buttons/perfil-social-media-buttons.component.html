@@ -1,59 +1,16 @@
-<h2 class="main-title my-2">
-  <span>Redes sociales</span>
-</h2>
-
-<div class="row mb-4">
-  <div class="col-12">
-    @if (!socialMedia?.instagram && !socialMedia?.facebook && !socialMedia?.twitter && !socialMedia?.youtube && !socialMedia?.tiktok) {
-      <div class="alert alert-warning"
-        >
-        🗃️ <strong>La información de sus redes sociales se encuentra vacía</strong>
-      </div>
-    }
-  </div>
-
-  @if (socialMedia?.instagram) {
-    <div class="col-12 col-sm-12 col-md-2">
-      <a href="https://instagram.com/{{socialMedia?.instagram}}" target="_blank" rel="noopener noreferrer"
-        matTooltip="Instagram: {{socialMedia?.instagram}}">
-        <i class="ti ti-brand-instagram text-rose"></i>
-      </a>
-    </div>
-  }
-
-  @if (socialMedia?.facebook) {
-    <div class="col-12 col-sm-12 col-md-2">
-      <a href="https://facebook.com/{{socialMedia?.facebook}}" target="_blank" rel="noopener noreferrer"
-        matTooltip="Facebook: {{socialMedia?.facebook}}">
-        <i class="ti ti-brand-facebook facebook"></i>
-      </a>
-    </div>
-  }
-
-  @if (socialMedia?.twitter) {
-    <div class="col-12 col-sm-12 col-md-2">
-      <a href="https://twitter.com/{{socialMedia?.twitter}}" target="_blank" rel="noopener noreferrer"
-        matTooltip="Twitter: {{socialMedia?.twitter}}">
-        <i class="ti ti-brand-twitter twitter"></i>
-      </a>
-    </div>
-  }
-
-  @if (socialMedia?.youtube) {
-    <div class="col-12 col-sm-12 col-md-2">
-      <a href="https://youtube.com/{{socialMedia?.youtube}}" target="_blank" rel="noopener noreferrer"
-        matTooltip="Youtube: {{socialMedia?.youtube}}">
-        <i class="ti ti-brand-youtube youtube"></i>
-      </a>
-    </div>
-  }
-
-  @if (socialMedia?.tiktok) {
-    <div class="col-12 col-sm-12 col-md-2">
-      <a href="https://tiktok.com/{{socialMedia?.tiktok}}" target="_blank" rel="noopener noreferrer"
-        matTooltip="Tiktok: {{socialMedia?.tiktok}}">
-        <i class="ti ti-brand-tiktok tiktok"></i>
-      </a>
-    </div>
-  }
-</div>
+@if (redes.length > 0) {
+  <section class="pf-card" aria-labelledby="perfil-redes-titulo">
+    <h2 class="pf-card__titulo" id="perfil-redes-titulo">Redes sociales</h2>
+    <ul class="redes">
+      @for (red of redes; track red.nombre) {
+        <li>
+          <a class="redes__enlace" [href]="red.url" target="_blank" rel="noopener noreferrer nofollow">
+            <i class="ti {{ red.icono }}" aria-hidden="true"></i>
+            <span class="redes__nombre">{{ red.nombre }}</span>
+            <span class="redes__usuario">{{ red.usuario }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </section>
+}

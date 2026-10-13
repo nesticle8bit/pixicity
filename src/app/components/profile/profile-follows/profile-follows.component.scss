@@ -1,12 +1,89 @@
-.user-list {
-    border-bottom: 1px dashed #ddd;
-    padding: 10px 0;
+@use '../perfil' as p;
 
-    &:nth-child(even) {
-        background-color: rgb(247 247 247);
-    }
+@include p.piezas-pestana;
 
-    &:last-child {
-        border-bottom: none;
-    }
+.personas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.persona {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  @include p.tarjeta;
+}
+
+.persona__enlace {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  color: p.$texto;
+  text-decoration: none;
+  border-radius: 8px;
+
+  &:focus-visible { outline: 2px solid p.$marca; outline-offset: 2px; }
+
+  ::ng-deep img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
+.persona__datos {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.persona__nombre {
+  @include p.truncar;
+}
+
+.persona__enlace:hover .persona__nombre { color: p.$marca; }
+
+.persona__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: p.$tenue;
+
+  img { width: 16px; height: 11px; }
+}
+
+// El botón de seguir usa clases globales viejas: aquí se ve como un botón chico actual.
+.persona__seguir {
+  flex: none;
+
+  ::ng-deep a.bverde,
+  ::ng-deep a.bgris {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid p.$marca;
+    background: p.$marca;
+    color: #fff !important;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-shadow: none;
+    box-shadow: none;
+    cursor: pointer;
+  }
+
+  ::ng-deep a.bgris {
+    background: p.$superficie;
+    color: p.$marca !important;
+  }
 }

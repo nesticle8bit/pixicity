@@ -1,50 +1,51 @@
-<h6 [formGroup]="formGroup" class="main-title my-2">
-  <span>Última actividad de {{user.userName}}</span>
+<h2 class="pf-titulo" [formGroup]="formGroup">
+  Actividad
+  <label class="visually-hidden" for="perfil-actividad-tipo">Filtrar actividad por tipo</label>
+  <select id="perfil-actividad-tipo" class="actividad__filtro" formControlName="tipoActividad" (change)="getActividadUsuario()">
+    <option value="">Todas</option>
+    @for (tipo of tipoActividades; track tipo.value) {
+      <option [value]="tipo.value">{{ tipo.key }}</option>
+    }
+  </select>
+</h2>
 
-  <strong class="float-end">
-    <select class="form-select form-select-xs" formControlName="tipoActividad" aria-label="Filtrar actividad por tipo" (change)="getActividadUsuario()">
-      <option value="" selected>Todas</option>
-      @for (tipo of tipoActividades; track tipo.value) {
-        <option value="{{tipo.value}}">{{tipo.key}}</option>
-      }
-    </select>
-  </strong>
-</h6>
-
-<article class="mt-1">
+@if (!cargado) {
+  <div class="pf-cargando" aria-hidden="true"><span></span><span></span></div>
+} @else if (!hayActividad) {
+  <div class="pf-vacio">
+    <i class="ti ti-antenna-off" aria-hidden="true"></i>
+    <p>No hay actividad reciente de <strong>{{ user.userName }}</strong>.</p>
+  </div>
+} @else {
   @for (grupo of grupos; track grupo.titulo) {
     @if (grupo.items.length > 0) {
-      <ul>
-        <li class="sep">
-          <h4>{{grupo.titulo}}</h4>
-        </li>
-        @for (item of grupo.items; track item.id) {
-          <li>
-            <addons-tipo-actividad-icon class="me-1" [tipoActividad]="item.tipoActividad">
-            </addons-tipo-actividad-icon>
-            <span>
-              {{item.accion}}
-              @if (item.detalle) {
-                (<strong>{{item.detalle}}</strong>)
-              }
-              @if (item.url) {
-                <a [routerLink]="item.url">
-                  @if (item.avatar) {
-                    <img class="img-fluid" height="16" width="16" [src]="item.avatar" alt="" />
-                  }
-                  {{item.titulo}}
-                </a>
-              } @else {
-                <em>Este post ya no existe en la comunidad</em>
-              }
-            </span>
-            <aside class="float-end">
-              <span class="text-muted">{{item.fechaRegistro | timeAgo}}</span>
-            </aside>
-            <div class="clearfix"></div>
-          </li>
-        }
-      </ul>
+      <section class="actividad__grupo">
+        <h3 class="actividad__dia">{{ grupo.titulo }}</h3>
+        <ul class="pf-lista">
+          @for (item of grupo.items; track item.id) {
+            <li class="actividad__item">
+              <addons-tipo-actividad-icon class="actividad__icono" [tipoActividad]="item.tipoActividad"></addons-tipo-actividad-icon>
+              <span class="actividad__texto">
+                {{ item.accion }}
+                @if (item.detalle) {
+                  (<strong>{{ item.detalle }}</strong>)
+                }
+                @if (item.url) {
+                  <a [routerLink]="item.url">
+                    @if (item.avatar) {
+                      <img class="actividad__avatar" height="16" width="16" [src]="item.avatar" alt="" />
+                    }
+                    {{ item.titulo }}
+                  </a>
+                } @else {
+                  <em>Este post ya no existe en la comunidad</em>
+                }
+              </span>
+              <time class="actividad__fecha" [attr.datetime]="item.fechaRegistro">{{ item.fechaRegistro | timeAgo }}</time>
+            </li>
+          }
+        </ul>
+      </section>
     }
   }
-</article>
+}

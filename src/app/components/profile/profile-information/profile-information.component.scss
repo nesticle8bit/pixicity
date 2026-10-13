@@ -1,37 +1,55 @@
-ul {
-    list-style: disc inside;
+@use '../perfil' as p;
+
+@include p.piezas-pestana;
+
+// Una sola lista continua, como el perfil clásico: franjas por sección y filas etiqueta / valor.
+.info {
+  border-top: 1px solid p.$borde;
 }
 
-li {
-    font-size: 12px;
-    padding: 10px;
-    border-bottom: 1px dotted #CCC;
+.info__titulo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 8px 10px;
+  background: p.$fondo-suave;
+  border-bottom: 1px solid p.$borde;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: p.$marca;
+}
 
-    &.sep {
-        background: #F7F7F7;
-    }
+.info__datos {
+  margin: 0;
+}
 
-    & h4 {
-        color: #F60;
-        margin: 0;
-        font-style: italic;
-        font-family: Georgia;
-        font-size: 1.2em;
-        line-height: 1.25;
-    }
+.info__dato {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 12px;
+  padding: 9px 10px;
+  border-bottom: 1px dotted #ccd5db;
+  font-size: 0.88rem;
 
-    & label {
-        vertical-align: top;
-        color: #666;
-        display: inline-block;
-        font-weight: 700;
-        width: 170px;
-        padding: 2px;
-    }
+  dt {
+    font-weight: 700;
+    color: p.$tenue;
+  }
 
-    & strong {
-        display: inline-block;
-        width: 400px;
-        color: #222;
-    }
+  dd {
+    margin: 0;
+    color: p.$texto;
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+  }
+
+  a { color: p.$marca; }
+}
+
+@media (max-width: 575.98px) {
+  .info__dato {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
 }

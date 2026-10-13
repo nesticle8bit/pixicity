@@ -1,19 +1,43 @@
-i.ti {
-    font-size: 1.3rem;
+@use '../../../profile/perfil' as p;
+
+.pf-card {
+  @include p.tarjeta;
+  padding: 14px;
 }
 
-.facebook {
-    color: #3b5998;
+.pf-card__titulo {
+  @include p.titulo;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
 }
 
-.twitter {
-    color: #00acee;
+.redes {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.youtube {
-    color: #b2071d;
+.redes__enlace {
+  @include p.fila;
+  padding: 8px;
+  gap: 10px;
+
+  i {
+    font-size: 1.25rem;
+    color: p.$marca;
+  }
 }
 
-.tiktok {
-    color: #1f1f1f;
+.redes__nombre {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.redes__usuario {
+  @include p.truncar;
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: p.$tenue;
 }
