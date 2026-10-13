@@ -50,11 +50,12 @@
   background: p.$superficie;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 
+  // !important: la imagen trae la utilidad .rounded de Bootstrap, que fija su radio con !important.
   ::ng-deep img {
     width: 112px;
     height: 112px;
     object-fit: cover;
-    border-radius: 50%;
+    border-radius: 50% !important;
   }
 }
 
