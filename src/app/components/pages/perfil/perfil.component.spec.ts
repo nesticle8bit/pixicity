@@ -13,6 +13,7 @@ describe('PerfilComponent', () => {
   let setSEO: jasmine.Spy;
   let getBloqueo: jasmine.Spy;
   let navigate: jasmine.Spy;
+  let setDisplay: jasmine.Spy;
 
   const perfil: PerfilUsuarioViewModel = { ...PERFIL_VACIO, id: 7, userName: 'juan', postsCount: 12, seguidoresCount: 30 };
 
@@ -36,7 +37,7 @@ describe('PerfilComponent', () => {
         },
         { provide: IHttpBloqueosService, useValue: { getBloqueoContraPerfil: getBloqueo } },
         { provide: NotificationService, useValue: jasmine.createSpyObj('NotificationService', ['success']) },
-        { provide: DisplayComponentService, useValue: { setDisplay: () => {} } },
+        { provide: DisplayComponentService, useValue: { setDisplay: (setDisplay = jasmine.createSpy('setDisplay')) } },
         { provide: SEOService, useValue: { setSEO } },
       ],
     });
@@ -95,6 +96,16 @@ describe('PerfilComponent', () => {
 
     TestBed.resetTestingModule();
     expect(crear(null, of({ ...perfil, profilePageBackground: null })).fondoPaginaCss).toBeNull();
+  });
+
+  it('publica el fondo de página para toda la página (incluida la barra de noticias) y lo quita al salir', () => {
+    crear(null, of({ ...perfil, profilePageBackground: 'https://x/patron.png', profilePageBackgroundRepeat: 'repeat-y' }));
+
+    expect(setDisplay.calls.mostRecent().args[0]).toEqual(jasmine.objectContaining({ background: 'https://x/patron.png', backgroundRepeat: 'repeat-y' }));
+
+    // Al destruir el perfil (navegar a otra página) el fondo no debe quedar puesto.
+    TestBed.resetTestingModule();
+    expect(setDisplay.calls.mostRecent().args[0]).toEqual(jasmine.objectContaining({ background: '' }));
   });
 
   it('perfil inexistente: muestra el aviso en vez de la cabecera vacía', () => {

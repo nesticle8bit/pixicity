@@ -2,7 +2,7 @@ import { environment } from 'src/environments/environment';
 import { DisplayComponentService } from './services/shared/displayComponents.service';
 import { DisplayComponentModel } from './models/shared/displayComponent.model';
 import { Component, DestroyRef, EventEmitter, inject, Output, PLATFORM_ID, RESPONSE_INIT } from '@angular/core';
-import { DOCUMENT, isPlatformBrowser, NgStyle } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { SEOService } from './services/shared/seo.service';
@@ -33,7 +33,6 @@ const DEFAULT_OG_IMAGE = '/assets/images/og-image.jpg';
         MainSubmenuComponent,
         MainUltimasNoticiasComponent,
         AvisoEmailComponent,
-        NgStyle,
         RouterOutlet,
         MainFooterComponent,
     ],
@@ -61,6 +60,12 @@ export class AppComponent {
     submenu: true,
     background: '',
   };
+
+  /** url("…") del fondo de página, sin caracteres que cierren el url() (la URL la escribe un usuario). */
+  get fondoPaginaCss(): string | null {
+    const url = (this.displayComponent.background ?? '').trim().replace(/["()\\]/g, '');
+    return /^https?:\/\//i.test(url) ? `url("${url}")` : null;
+  }
 
   constructor() {
     this.displayComponentService

@@ -83,9 +83,8 @@ function urlCss(url: string | null | undefined): string | null {
         DecimalPipe,
     ],
     host: {
-      // Fondo de página que eligió el usuario (mosaico detrás de todo el contenido del perfil).
-      '[style.background-image]': 'fondoPaginaCss',
-      '[style.background-repeat]': 'fondoPaginaCss ? (currentUser.profilePageBackgroundRepeat || "repeat") : null',
+      // El fondo de página lo pinta app.component (desde la barra de noticias hasta el pie); aquí solo se marca
+      // para darle contraste a los títulos de las pestañas.
       '[class.pf-con-fondo]': '!!fondoPaginaCss',
     },
 })
@@ -113,6 +112,9 @@ export class PerfilComponent implements OnInit {
   readonly pestanas = PESTANAS_PERFIL;
 
   constructor() {
+    // El fondo de página es del perfil: al salir se quita (no todas las páginas llaman a setDisplay y quedaría puesto).
+    this.destroyRef.onDestroy(() => this.displayService.setDisplay({ ...this.display, background: '', backgroundRepeat: undefined }));
+
     this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
       this.getUserByUserName(values.get('userName') ?? '');
     });
@@ -199,6 +201,14 @@ export class PerfilComponent implements OnInit {
         this.currentUser = value;
         this.cargando = false;
 
+        // Fondo de página del usuario (app.component lo limpia de caracteres peligrosos y lo pinta).
+        this.display = {
+          ...this.display,
+          background: this.fondoPaginaCss ? (value.profilePageBackground ?? '') : '',
+          backgroundRepeat: value.profilePageBackgroundRepeat ?? 'repeat',
+        };
+        this.displayService.setDisplay(this.display);
+
         this.seoService.setSEO({
           title: `${this.currentUser.userName} - Perfil`,
           description: `Perfil de ${this.currentUser.userName} en Taringa. Mira sus posts, shouts, seguidores y actividad en la comunidad.`,
@@ -246,6 +256,9 @@ export class PerfilComponent implements OnInit {
     this.cargando = false;
     this.noEncontrado = true;
     this.currentUser = PERFIL_VACIO;
+    // Si se llega desde otro perfil con fondo, no debe quedar puesto.
+    this.display = { ...this.display, background: '', backgroundRepeat: undefined };
+    this.displayService.setDisplay(this.display);
     this.seoService.setSEO({
       title: 'Perfil no encontrado',
       description: 'Este usuario no existe o fue dado de baja.',

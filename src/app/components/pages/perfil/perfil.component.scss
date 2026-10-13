@@ -1,9 +1,7 @@
 @use '../../profile/perfil' as p;
 
-// El fondo de página (si lo hay) va en el propio app-perfil: cubre todo el ancho detrás del contenido.
 :host {
   display: block;
-  background-position: top center;
 }
 
 // Con fondo propio, el título "Muro"/"Posts"… queda sobre la imagen: se le da una pastilla para que se lea.

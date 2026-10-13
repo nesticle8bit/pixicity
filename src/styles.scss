@@ -104,6 +104,7 @@ ol li {
 
 // Respeta "reducir movimiento" del sistema operativo.
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -332,7 +333,7 @@ input.bbcuerpo {
   background: #fff;
   padding: 5px;
   border: 0;
-  width: 202px;
+  width: 195px;
   height: 29px;
   border-radius: 18px;
   line-height: 1;

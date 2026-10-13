@@ -3,7 +3,10 @@ export class DisplayComponentModel {
   footer: boolean;
   searchFooter: boolean;
   submenu: boolean;
+  /** URL del fondo de página (sin url(...)); vacía = sin fondo. */
   background: string;
+  /** background-repeat del fondo de página. Opcional: sin valor se repite en mosaico. */
+  backgroundRepeat?: 'repeat' | 'repeat-x' | 'repeat-y' | 'no-repeat';
 
   constructor(
     mainMenu: boolean,

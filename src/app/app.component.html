@@ -10,11 +10,14 @@
   <main-menu></main-menu>
 }
 <main-submenu />
-<app-main-ultimas-noticias />
-<app-aviso-email />
 
+<!-- Fondo de página (p. ej. el que eligió un usuario para su perfil): desde la barra de noticias hasta el pie,
+     así no queda una franja gris a los lados de la barra. -->
+<div class="fondo-pagina" [style.background-image]="fondoPaginaCss"
+  [style.background-repeat]="fondoPaginaCss ? (displayComponent.backgroundRepeat || 'repeat') : null">
+  <app-main-ultimas-noticias />
+  <app-aviso-email />
 
-<div [ngStyle]="{'background': displayComponent.background ? 'url(' + displayComponent.background +')' : ''}">
   <main id="contenido-principal" tabindex="-1">
     <router-outlet></router-outlet>
   </main>
