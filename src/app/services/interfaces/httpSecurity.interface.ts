@@ -5,12 +5,12 @@ import { UserModel } from 'src/app/models/security/user.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
-import { AdminResumen, PerfilUsuarioViewModel, UsuarioAdminViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { AdminResumen, PerfilUsuarioViewModel, UsuarioAdminViewModel, UsuarioListadoViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 @Injectable()
 export abstract class IHttpSecurityService {
   abstract getCurrentUser(): JwtUserModel;
   abstract getCurrentUserAsObservable(): Observable<JwtUserModel>;
-  abstract getUsuarios(search: UsuarioSearchFilter): Observable<PaginatedData<UsuarioViewModel, 'usuarios'>>;
+  abstract getUsuarios(search: UsuarioSearchFilter): Observable<PaginatedData<UsuarioListadoViewModel, 'usuarios'>>;
   abstract getUsuariosAdmin(search: UsuarioAdminSearchFilter, filtro?: AdminFiltro): Observable<PaginatedData<UsuarioAdminViewModel, 'usuarios'>>;
   abstract getLoggedUserByJwt(): Observable<UsuarioViewModel>;
   abstract getUserByUserName(userName: string): Observable<PerfilUsuarioViewModel>;

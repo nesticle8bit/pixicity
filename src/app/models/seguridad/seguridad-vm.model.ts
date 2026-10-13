@@ -13,6 +13,25 @@ export interface UsuarioAvatarViewModel {
   avatar: string;
 }
 
+/** Una tarjeta de /usuarios (GET api/usuarios/getUsuarios). */
+export interface UsuarioListadoViewModel {
+  id: number;
+  avatar: string | null;
+  userName: string;
+  /** 1 hombre, 2 mujer, 3 otro (GenerosEnum). */
+  genero: number;
+  pais: string | null;
+  iso2: string | null;
+  rango: { nombre: string | null; icono: string | null; color: string | null };
+  puntos: number;
+  comentarios: number;
+  posts: number;
+  /** Minutos desde su última actividad (null si nunca inició sesión). */
+  activo: number | null;
+  /** Calculado en el API con el tiempo "en línea" del panel. */
+  enLinea: boolean;
+}
+
 /** Lo que devuelve /api/usuarios/getAdmins. */
 export interface AdminResumen {
   id: number;

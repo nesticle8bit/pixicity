@@ -1,8 +1,358 @@
-.radio-group {
-    display: flex;
-    flex-direction: column;
+@use '../../profile/perfil' as p;
+
+.us {
+  padding-top: 16px;
+  padding-bottom: 32px;
+  color: p.$texto;
 }
 
-.radio-button {
-    margin: 5px;
+// --- Cabecera ---------------------------------------------------------------
+
+.us-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-bottom: 12px;
+  padding: 20px 22px;
+  border-radius: p.$radio;
+  background: linear-gradient(120deg, #0b6ea5 0%, #004160 100%);
+  color: #fff;
+
+  h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+
+  p {
+    margin: 2px 0 0;
+    font-size: 0.9rem;
+    opacity: 0.85;
+  }
+}
+
+.us-buscador {
+  position: relative;
+  flex: 1 1 280px;
+  max-width: 420px;
+
+  i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: p.$tenue;
+    font-size: 1.1rem;
+  }
+
+  input {
+    width: 100%;
+    height: 42px;
+    padding: 0 14px 0 38px;
+    border: 0;
+    border-radius: 999px;
+    background: #fff;
+    font: inherit;
+    font-size: 0.95rem;
+    color: p.$texto;
+
+    &:focus-visible { outline: 3px solid rgba(255, 255, 255, 0.6); outline-offset: 1px; }
+  }
+}
+
+// --- Filtros ----------------------------------------------------------------
+
+.us-filtros {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  @include p.tarjeta;
+}
+
+.us-segmento {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: p.$fondo-suave;
+  border: 1px solid p.$borde;
+
+  label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: p.$tenue;
+    cursor: pointer;
+
+    &.activo {
+      background: p.$superficie;
+      color: p.$marca;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    &:has(input:focus-visible) { outline: 2px solid p.$marca; outline-offset: 1px; }
+  }
+}
+
+.us-punto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2f9e44;
+}
+
+.us-select {
+  height: 36px;
+  padding: 0 28px 0 10px;
+  border: 1px solid p.$borde;
+  border-radius: 8px;
+  background-color: p.$superficie;
+  font: inherit;
+  font-size: 0.85rem;
+  color: p.$texto;
+
+  &:focus-visible { outline: 2px solid p.$marca; outline-offset: 1px; }
+}
+
+.us-filtros__select {
+  width: 190px;
+}
+
+.us-filtros__fin {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.us-limpiar {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: p.$marca;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover { background: p.$marca-suave; }
+  &:focus-visible { outline: 2px solid p.$marca; outline-offset: 1px; }
+}
+
+// --- Tarjetas ---------------------------------------------------------------
+
+.us-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+  transition: opacity 0.15s;
+
+  // Al cambiar un filtro se mantienen los resultados anteriores atenuados (sin parpadeo a vacío).
+  &--recargando { opacity: 0.55; }
+}
+
+.us-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 14px 14px;
+  text-align: center;
+  @include p.tarjeta;
+  transition: box-shadow 0.15s, transform 0.15s;
+
+  &:hover {
+    box-shadow: 0 6px 18px rgba(0, 40, 70, 0.1);
+    transform: translateY(-2px);
+  }
+
+  &--esqueleto {
+    height: 270px;
+    background: linear-gradient(90deg, #eef2f5 25%, #f7f9fb 50%, #eef2f5 75%) 0 0 / 200% 100%;
+    animation: us-brillo 1.2s infinite linear;
+  }
+}
+
+@keyframes us-brillo { to { background-position: -200% 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .us-card { transition: none; &:hover { transform: none; } }
+  .us-card--esqueleto { animation: none; }
+}
+
+.us-card__enlace {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  color: p.$texto;
+  text-decoration: none;
+  border-radius: 8px;
+
+  &:hover .us-card__nombre { color: p.$marca; }
+  &:focus-visible { outline: 2px solid p.$marca; outline-offset: 3px; }
+}
+
+.us-card__avatar {
+  position: relative;
+  display: block;
+
+  ::ng-deep img {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 50% !important; // pisa la utilidad .rounded de Bootstrap
+    box-shadow: 0 0 0 3px p.$superficie, 0 0 0 4px p.$borde;
+  }
+}
+
+.us-card__estado {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 14px;
+  height: 14px;
+  border: 3px solid p.$superficie;
+  border-radius: 50%;
+  background: #b8c2c9;
+
+  &--online { background: #2f9e44; }
+}
+
+.us-card__nombre {
+  @include p.truncar;
+  max-width: 100%;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.us-rango {
+  --rango: #{p.$marca};
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 10px 1px 6px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--rango) 35%, transparent);
+  background: color-mix(in srgb, var(--rango) 10%, #fff);
+  color: var(--rango);
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  img { width: 14px; height: 14px; }
+}
+
+.us-card__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  font-size: 0.8rem;
+  color: p.$tenue;
+}
+
+.us-card__actividad {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #8a97a0;
+
+  &--online { color: #2f9e44; font-weight: 700; }
+}
+
+.us-card__numeros {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  margin: 6px 0 4px;
+  padding-top: 10px;
+  border-top: 1px solid p.$borde;
+
+  div + div { border-left: 1px solid p.$borde; }
+
+  dt {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: p.$tenue;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// El botón de seguir usa clases globales viejas (bverde/bgris): aquí se ve como un botón actual.
+.us-card__seguir {
+  width: 100%;
+
+  ::ng-deep a.bverde,
+  ::ng-deep a.bgris {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid p.$marca;
+    background: p.$marca;
+    color: #fff !important;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-shadow: none;
+    box-shadow: none;
+    cursor: pointer;
+
+    &:hover { background: #00527a; }
+  }
+
+  ::ng-deep a.bgris {
+    background: p.$superficie;
+    color: p.$marca !important;
+
+    &:hover { background: p.$marca-suave; }
+  }
+}
+
+// --- Vacío y paginador --------------------------------------------------------
+
+.us-vacio {
+  @include p.vacio;
+  padding: 48px 16px;
+}
+
+.us-paginador {
+  border-radius: p.$radio;
+  border: 1px solid p.$borde;
+}
+
+// --- Móvil ------------------------------------------------------------------
+
+@media (max-width: 767.98px) {
+  .us-cabecera { padding: 16px; }
+  .us-buscador { max-width: none; }
+  .us-filtros__select { width: calc(50% - 4px); }
+  .us-filtros__fin { margin-left: 0; width: 100%; justify-content: space-between; }
+  .us-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
 }

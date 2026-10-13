@@ -5,10 +5,19 @@ export interface FotoSearchParams {
   pageCount?: number;
 }
 
+/** Filtros de /usuarios (GET api/usuarios/getUsuarios). */
 export interface UsuarioSearchFilter {
-  genero?: string;
-  pais?: string;
-  rango?: string;
+  genero?: number | string | null;
+  pais?: number | string | null;
+  rango?: number | string | null;
+  /** Solo quienes tuvieron actividad dentro del tiempo "en línea" configurado en el panel. */
+  enLinea?: boolean;
+  /** Búsqueda por nombre de usuario (contiene, sin distinguir mayúsculas). */
+  query?: string | null;
+  /** recientes (por defecto), puntos o activos. */
+  orden?: 'recientes' | 'puntos' | 'activos';
+  page?: number;
+  pageCount?: number;
 }
 
 export interface UsuarioAdminSearchFilter {

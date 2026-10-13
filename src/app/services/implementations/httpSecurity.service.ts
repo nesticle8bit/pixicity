@@ -7,13 +7,13 @@ import { UserModel } from 'src/app/models/security/user.model';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, finalize, map, shareReplay } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { AdminResumen, PerfilUsuarioViewModel, UsuarioAdminViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { AdminResumen, PerfilUsuarioViewModel, UsuarioAdminViewModel, UsuarioListadoViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { enNavegador } from '../../shared/helpers/plataforma';
 @Injectable()
 export class HttpSecurityService implements IHttpSecurityService {
@@ -181,25 +181,20 @@ export class HttpSecurityService implements IHttpSecurityService {
     return this.currentUserSubject.asObservable();
   }
 
-  getUsuarios(search: UsuarioSearchFilter): Observable<PaginatedData<UsuarioViewModel, 'usuarios'>> {
-    let searchParams = ``;
+  getUsuarios(search: UsuarioSearchFilter): Observable<PaginatedData<UsuarioListadoViewModel, 'usuarios'>> {
+    let params = new HttpParams()
+      .set('page', search?.page ?? 1)
+      .set('pageCount', search?.pageCount ?? 24);
 
-    if (search?.genero) {
-      searchParams += `&genero=${search.genero}`;
-    }
-
-    if (search?.pais) {
-      searchParams += `&pais=${search.pais}`;
-    }
-
-    if (search?.rango) {
-      searchParams += `&rango=${search.rango}`;
-    }
+    if (search?.genero) params = params.set('genero', search.genero);
+    if (search?.pais) params = params.set('pais', search.pais);
+    if (search?.rango) params = params.set('rango', search.rango);
+    if (search?.enLinea) params = params.set('enLinea', true);
+    if (search?.query?.trim()) params = params.set('query', search.query.trim());
+    if (search?.orden && search.orden !== 'recientes') params = params.set('orderBy', search.orden);
 
     return this.http
-      .get<ApiResponse<PaginatedData<UsuarioViewModel, 'usuarios'>>>(
-        `${environment.api}/api/usuarios/getUsuarios?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${searchParams}`
-      )
+      .get<ApiResponse<PaginatedData<UsuarioListadoViewModel, 'usuarios'>>>(`${environment.api}/api/usuarios/getUsuarios`, { params })
       .pipe(
         map((response) => {
           if (response.status === 200) {
