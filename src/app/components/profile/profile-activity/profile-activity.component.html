@@ -3,8 +3,12 @@
   <label class="visually-hidden" for="perfil-actividad-tipo">Filtrar actividad por tipo</label>
   <select id="perfil-actividad-tipo" class="actividad__filtro" formControlName="tipoActividad" (change)="getActividadUsuario()">
     <option value="">Todas</option>
-    @for (tipo of tipoActividades; track tipo.value) {
-      <option [value]="tipo.value">{{ tipo.key }}</option>
+    @for (filtro of filtros; track filtro.grupo) {
+      <optgroup [label]="filtro.grupo">
+        @for (tipo of filtro.tipos; track tipo.value) {
+          <option [value]="tipo.value">{{ tipo.key }}</option>
+        }
+      </optgroup>
     }
   </select>
 </h2>
@@ -37,8 +41,11 @@
                     }
                     {{ item.titulo }}
                   </a>
+                } @else if (item.titulo) {
+                  <!-- Sin página propia (p. ej. un rango): el nombre, sin enlace -->
+                  <strong>{{ item.titulo }}</strong>
                 } @else {
-                  <em>Este post ya no existe en la comunidad</em>
+                  <em>ya no está disponible</em>
                 }
               </span>
               <time class="actividad__fecha" [attr.datetime]="item.fechaRegistro">{{ item.fechaRegistro | timeAgo }}</time>

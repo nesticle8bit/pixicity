@@ -22,19 +22,49 @@ $radio: 12px;
   margin-bottom: 16px;
 }
 
+// Misma altura que la cabecera de /perfil (170 / 120 en móvil): lo que se acomoda aquí es lo que se ve allá.
 .cuenta__banner {
-  height: 150px;
+  position: relative;
+  height: 170px;
   background: linear-gradient(120deg, #0b6ea5 0%, #004160 100%) center / cover no-repeat;
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
   padding: 10px 14px;
   transition: background-image 0.2s;
+  user-select: none;
+
+  &:focus-visible {
+    outline: 3px solid $marca;
+    outline-offset: -3px;
+  }
 }
 
 .cuenta__banner-vacio {
   font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.75);
+}
+
+// Pista para arrastrar: discreta, y más visible al pasar el mouse o con foco de teclado.
+.cuenta__banner-pista {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 0.7;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.cuenta__banner:hover .cuenta__banner-pista,
+.cuenta__banner:focus-visible .cuenta__banner-pista,
+.cuenta__banner.arrastrar-fondo--activo .cuenta__banner-pista {
+  opacity: 1;
 }
 
 .cuenta__identidad {
@@ -284,6 +314,83 @@ $radio: 12px;
 .campo__ayuda { color: $tenue; font-size: 0.78rem; }
 .campo__error { color: #b3261e; font-size: 0.78rem; }
 
+// --- Personalización: banner y fondo de página ---------------------------
+
+.fondo-grupo {
+  margin: 0 0 20px;
+  padding: 14px 16px 4px;
+  border: 1px solid $borde;
+  border-radius: $radio;
+
+  legend {
+    float: none;
+    width: auto;
+    margin: 0;
+    padding: 0 6px;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: $texto;
+  }
+}
+
+.campo__label {
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.repeticion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.repeticion__opcion {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 5px 12px;
+  border: 1px solid $borde;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: $tenue;
+  cursor: pointer;
+
+  &:hover { background: #f6f8fa; }
+  &:has(input:focus-visible) { outline: 2px solid $marca; outline-offset: 2px; }
+
+  &--activa {
+    border-color: $marca;
+    background: $marca-suave;
+    color: $marca;
+  }
+}
+
+// Vista previa: el patrón tal cual, con una "tarjeta" encima que simula el contenido del perfil.
+.fondo-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  margin: 0 0 14px;
+  border: 1px dashed $borde;
+  border-radius: 10px;
+  background-color: #f6f8fa;
+  background-position: top center;
+  font-size: 0.8rem;
+  color: $tenue;
+}
+
+.fondo-preview__contenido {
+  padding: 18px 28px;
+  border: 1px solid $borde;
+  border-radius: 8px;
+  background: $superficie;
+  font-weight: 600;
+  color: $texto;
+}
+
 .cuenta__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -323,7 +430,7 @@ $radio: 12px;
 // --- Móvil ------------------------------------------------------------------
 
 @media (max-width: 767.98px) {
-  .cuenta__banner { height: 110px; }
+  .cuenta__banner { height: 120px; }
 
   .cuenta__identidad {
     padding: 0 16px 14px;

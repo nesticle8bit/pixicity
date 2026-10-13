@@ -47,6 +47,12 @@ export const PESTANAS_PERFIL: { id: PestanaPerfil; label: string; icono: string 
 
 const PESTANA_INICIAL: PestanaPerfil = 'shouts';
 
+/** url("…") para CSS, sin comillas ni paréntesis que puedan cerrar el url() (la URL es texto del usuario). */
+function urlCss(url: string | null | undefined): string | null {
+  const limpia = (url ?? '').trim().replace(/["()\\]/g, '');
+  return /^https?:\/\//i.test(limpia) ? `url("${limpia}")` : null;
+}
+
 @Component({
     selector: 'app-perfil',
     templateUrl: './perfil.component.html',
@@ -76,6 +82,12 @@ const PESTANA_INICIAL: PestanaPerfil = 'shouts';
         DatePipe,
         DecimalPipe,
     ],
+    host: {
+      // Fondo de página que eligió el usuario (mosaico detrás de todo el contenido del perfil).
+      '[style.background-image]': 'fondoPaginaCss',
+      '[style.background-repeat]': 'fondoPaginaCss ? (currentUser.profilePageBackgroundRepeat || "repeat") : null',
+      '[class.pf-con-fondo]': '!!fondoPaginaCss',
+    },
 })
 export class PerfilComponent implements OnInit {
   private readonly documento = inject(DOCUMENT);
@@ -131,7 +143,12 @@ export class PerfilComponent implements OnInit {
 
   /** Imagen del banner: el "fondo de perfil" que el usuario eligió en /cuenta (allí se previsualiza como banner). */
   get bannerCss(): string | null {
-    return this.currentUser.profileBackground ? `url("${this.currentUser.profileBackground}")` : null;
+    return urlCss(this.currentUser.profileBackground);
+  }
+
+  /** Fondo de la página del perfil (otro campo, distinto del banner), repetido según lo que eligió el usuario. */
+  get fondoPaginaCss(): string | null {
+    return urlCss(this.currentUser.profilePageBackground);
   }
 
   /** Cambia de pestaña dejando rastro en la URL; ?page= es de los posts y no se arrastra a otras pestañas. */

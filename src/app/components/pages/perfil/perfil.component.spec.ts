@@ -86,6 +86,17 @@ describe('PerfilComponent', () => {
     expect(navigate.calls.mostRecent().args[1].queryParams).toEqual({ tab: null, page: null });
   });
 
+  it('fondo de página: arma el url() sin caracteres que lo puedan cerrar y descarta lo que no es http(s)', () => {
+    const c = crear(null, of({ ...perfil, profilePageBackground: 'https://x/patron.png")+red', profilePageBackgroundRepeat: 'repeat-x' }));
+    expect(c.fondoPaginaCss).toBe('url("https://x/patron.png+red")');
+
+    TestBed.resetTestingModule();
+    expect(crear(null, of({ ...perfil, profilePageBackground: 'javascript:alert(1)' })).fondoPaginaCss).toBeNull();
+
+    TestBed.resetTestingModule();
+    expect(crear(null, of({ ...perfil, profilePageBackground: null })).fondoPaginaCss).toBeNull();
+  });
+
   it('perfil inexistente: muestra el aviso en vez de la cabecera vacía', () => {
     const c = crear(null, throwError(() => new Error('400')));
 

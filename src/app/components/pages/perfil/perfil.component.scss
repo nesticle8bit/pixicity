@@ -1,5 +1,19 @@
 @use '../../profile/perfil' as p;
 
+// El fondo de página (si lo hay) va en el propio app-perfil: cubre todo el ancho detrás del contenido.
+:host {
+  display: block;
+  background-position: top center;
+}
+
+// Con fondo propio, el título "Muro"/"Posts"… queda sobre la imagen: se le da una pastilla para que se lea.
+:host(.pf-con-fondo) ::ng-deep .pf-titulo {
+  display: inline-flex;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
 .pf {
   padding-top: 16px;
   padding-bottom: 32px;

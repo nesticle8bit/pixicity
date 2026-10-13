@@ -51,50 +51,51 @@ export class ProfileActivityComponent implements OnInit {
   get hayActividad(): boolean {
     return this.grupos.some((g) => g.items.length > 0);
   }
-  public tipoActividades: { key: string; value: number }[] = [
+
+  /** Filtro por tipo, agrupado. Los valores son los de TipoActividad en el API. */
+  readonly filtros: { grupo: string; tipos: { key: string; value: number }[] }[] = [
     {
-      key: 'Post Nuevo',
-      value: 1,
+      grupo: 'Posts',
+      tipos: [
+        { key: 'Post nuevo', value: 1 },
+        { key: 'Post favorito', value: 2 },
+        { key: 'Post votado', value: 3 },
+        { key: 'Post recomendado', value: 4 },
+        { key: 'Comentario nuevo', value: 5 },
+        { key: 'Comentario votado', value: 6 },
+        { key: 'Siguiendo un post', value: 7 },
+      ],
     },
     {
-      key: 'Post Favorito',
-      value: 2,
+      grupo: 'Shouts',
+      tipos: [
+        { key: 'Publicaciones en muro', value: 10 },
+        { key: 'Le gusta un shout', value: 11 },
+        { key: 'Shout compartido', value: 13 },
+      ],
     },
     {
-      key: 'Post Votado',
-      value: 3,
+      grupo: 'Fotos',
+      tipos: [
+        { key: 'Foto nueva', value: 9 },
+        { key: 'Foto comentada', value: 12 },
+      ],
     },
     {
-      key: 'Post Recomendado',
-      value: 4,
+      grupo: 'Comunidades',
+      tipos: [
+        { key: 'Comunidad creada', value: 14 },
+        { key: 'Se unió a una comunidad', value: 15 },
+        { key: 'Tema nuevo', value: 16 },
+        { key: 'Tema comentado', value: 17 },
+      ],
     },
     {
-      key: 'Comentario Nuevo',
-      value: 5,
-    },
-    {
-      key: 'Comentario Votado',
-      value: 6,
-    },
-    {
-      key: 'Siguiendo un Post',
-      value: 7,
-    },
-    {
-      key: 'Siguiendo un Usuario',
-      value: 8,
-    },
-    {
-      key: 'Foto Nueva',
-      value: 9,
-    },
-    {
-      key: 'Publicaciones en Muro',
-      value: 10,
-    },
-    {
-      key: 'Le Gusta un Shout',
-      value: 11,
+      grupo: 'Usuarios',
+      tipos: [
+        { key: 'Siguiendo un usuario', value: 8 },
+        { key: 'Rango alcanzado', value: 18 },
+      ],
     },
   ];
 

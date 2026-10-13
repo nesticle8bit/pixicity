@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogChangeAvatarComponent } from 'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { UsuarioPerfilViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { RepeticionFondo, UsuarioPerfilViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { EstadoViewModel, PaisViewModel } from 'src/app/models/parametros/parametros-vm.model';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { MatIcon } from '@angular/material/icon';
@@ -20,6 +20,7 @@ import { AccountPasswordComponent } from './account-password/account-password.co
 import { AccountDosFactoresComponent } from './account-dos-factores/account-dos-factores.component';
 import { AccountNotificacionesComponent } from './account-notificaciones/account-notificaciones.component';
 import { AccountMisDatosComponent } from './account-mis-datos/account-mis-datos.component';
+import { ArrastrarFondoDirective, PosicionFondo } from 'src/app/shared/directives/arrastrar-fondo.directive';
 
 export type SeccionCuenta = 'datos' | 'perfil' | 'personalizacion' | 'password' | 'dos-factores' | 'bloqueados' | 'notificaciones' | 'mis-datos';
 
@@ -59,6 +60,8 @@ export const GRUPOS_CUENTA: { nombre: string; secciones: Seccion[] }[] = [
 
 const SECCIONES = GRUPOS_CUENTA.flatMap((g) => g.secciones);
 const FONDO_VALIDO = /^https?:\/\/\S+\.(jpe?g|png)(\?\S*)?$/i;
+// El fondo de página suele ser un patrón pequeño en mosaico: también .gif y .webp.
+const FONDO_PAGINA_VALIDO = /^https?:\/\/\S+\.(jpe?g|png|gif|webp)(\?\S*)?$/i;
 
 @Component({
     selector: 'app-account',
@@ -79,6 +82,7 @@ const FONDO_VALIDO = /^https?:\/\/\S+\.(jpe?g|png)(\?\S*)?$/i;
     AccountDosFactoresComponent,
     AccountNotificacionesComponent,
     AccountMisDatosComponent,
+    ArrastrarFondoDirective,
 ],
 })
 export class AccountComponent implements OnInit {
@@ -101,6 +105,24 @@ export class AccountComponent implements OnInit {
   public readonly reenviando = signal(false);
   public readonly guardando = signal(false);
   private readonly fondo = signal<string>('');
+  /** Punto de la imagen que queda a la vista; se elige arrastrando la cabecera. */
+  public readonly posicionFondo = signal<PosicionFondo>({ x: 50, y: 50 });
+  /** URL del fondo solo si es válida (la directiva de arrastre necesita la URL suelta, sin url(...)). */
+  public readonly fondoValido = computed(() => (FONDO_VALIDO.test(this.fondo().trim()) ? this.fondo().trim() : ''));
+
+  private readonly fondoPagina = signal<string>('');
+  /** Vista previa del fondo de página: mismas reglas que el banner (sin comillas ni paréntesis en el url()). */
+  public readonly fondoPaginaCss = computed(() => {
+    const url = this.fondoPagina().trim();
+    return FONDO_PAGINA_VALIDO.test(url) ? `url("${url.replace(/["()\\]/g, '')}")` : '';
+  });
+
+  public readonly repeticiones: { valor: RepeticionFondo; label: string; icono: string }[] = [
+    { valor: 'repeat', label: 'Mosaico', icono: 'ti-layout-grid' },
+    { valor: 'repeat-x', label: 'Horizontal', icono: 'ti-arrows-horizontal' },
+    { valor: 'repeat-y', label: 'Vertical', icono: 'ti-arrows-vertical' },
+    { valor: 'no-repeat', label: 'Una vez', icono: 'ti-square' },
+  ];
   /** Fondo para la cabecera: solo URLs válidas, sin comillas/paréntesis que rompan el url(). */
   public readonly fondoCss = computed(() => {
     const url = this.fondo().trim();
@@ -200,11 +222,16 @@ export class AccountComponent implements OnInit {
 
     this.formGroupPersonalizacion = this.formBuilder.group({
       profileBackground: ['', Validators.pattern(FONDO_VALIDO)],
+      profilePageBackground: ['', Validators.pattern(FONDO_PAGINA_VALIDO)],
+      profilePageBackgroundRepeat: ['repeat' as RepeticionFondo],
     });
 
     this.formGroupPersonalizacion.controls['profileBackground'].valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((v: string | null) => this.fondo.set(v ?? ''));
+    this.formGroupPersonalizacion.controls['profilePageBackground'].valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((v: string | null) => this.fondoPagina.set(v ?? ''));
 
     this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       const id = params.get('seccion');
@@ -218,7 +245,12 @@ export class AccountComponent implements OnInit {
     this.usuarioPerfilService.getCurrentPerfilInfo().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.perfilActual = response.perfil ?? null;
-        this.formGroupPersonalizacion.reset({ profileBackground: response.background ?? '' });
+        this.formGroupPersonalizacion.reset({
+          profileBackground: response.background ?? '',
+          profilePageBackground: response.pageBackground ?? '',
+          profilePageBackgroundRepeat: response.pageBackgroundRepeat ?? 'repeat',
+        });
+        this.posicionFondo.set({ x: response.backgroundPosX ?? 50, y: response.backgroundPosY ?? 50 });
       }
     });
   }
@@ -337,6 +369,19 @@ export class AccountComponent implements OnInit {
     const control = this.formGroupPersonalizacion.controls['profileBackground'];
     control.setValue('');
     control.markAsDirty();
+    this.posicionFondo.set({ x: 50, y: 50 });
+  }
+
+  quitarFondoPagina(): void {
+    const control = this.formGroupPersonalizacion.controls['profilePageBackground'];
+    control.setValue('');
+    control.markAsDirty();
+  }
+
+  /** Mover la imagen es un cambio sin guardar, igual que cambiar la URL. */
+  moverFondo(posicion: PosicionFondo): void {
+    this.posicionFondo.set(posicion);
+    this.formGroupPersonalizacion.markAsDirty();
   }
 
   updateUsuario(): void {
@@ -391,7 +436,15 @@ export class AccountComponent implements OnInit {
   }
 
   saveFormGroupPersonalizacion(): void {
-    const personalization = Object.assign({}, this.formGroupPersonalizacion.value);
+    const { x, y } = this.posicionFondo();
+    const valor = this.formGroupPersonalizacion.value;
+    const personalization = {
+      profileBackground: valor.profileBackground ?? '',
+      profileBackgroundPosX: x,
+      profileBackgroundPosY: y,
+      profilePageBackground: valor.profilePageBackground ?? '',
+      profilePageBackgroundRepeat: valor.profilePageBackgroundRepeat ?? 'repeat',
+    };
 
     this.usuarioPerfilService.changeBackgroundProfile(personalization).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.formGroupPersonalizacion.markAsPristine();

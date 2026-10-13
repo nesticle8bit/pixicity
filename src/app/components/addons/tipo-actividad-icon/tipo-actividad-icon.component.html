@@ -1,24 +1,23 @@
-@if (tipoActividad() === 1) {
-  <i class="icon sprite-document-text-image {{class()}}"></i>
-}
-@if (tipoActividad() === 2) {
-  <i class="icon sprite-star {{class()}}"></i>
-}
-@if (tipoActividad() === 3) {
-  <i class="icon moneda {{class()}}"></i>
-}
-@if (tipoActividad() === 4) {
-  <i class="icon sprite-star {{class()}}"></i>
-}
-@if (tipoActividad() === 5) {
-  <i class="icon sprite-balloon-left {{class()}}"></i>
-}
-@if (tipoActividad() === 6) {
-  <i class="icon sprite-balloon-left {{class()}}"></i>
-}
-@if (tipoActividad() === 7) {
-  <i class="icon post-plus {{class()}}"></i>
-}
-@if (tipoActividad() === 8) {
-  <i class="icon sprite-follow {{class()}}"></i>
+@switch (tipoActividad()) {
+  <!-- Posts (sprites clásicos) -->
+  @case (1) { <i class="icon sprite-document-text-image {{class()}}"></i> }
+  @case (2) { <i class="icon sprite-star {{class()}}"></i> }
+  @case (3) { <i class="icon moneda {{class()}}"></i> }
+  @case (4) { <i class="icon sprite-star {{class()}}"></i> }
+  @case (5) { <i class="icon sprite-balloon-left {{class()}}"></i> }
+  @case (6) { <i class="icon sprite-balloon-left {{class()}}"></i> }
+  @case (7) { <i class="icon post-plus {{class()}}"></i> }
+  @case (8) { <i class="icon sprite-follow {{class()}}"></i> }
+
+  <!-- Fotos, shouts, comunidades y logros -->
+  @case (9) { <i class="ti ti-photo actividad-ti actividad-ti--foto {{class()}}" aria-hidden="true"></i> }
+  @case (10) { <i class="ti ti-message-circle actividad-ti actividad-ti--shout {{class()}}" aria-hidden="true"></i> }
+  @case (11) { <i class="ti ti-heart actividad-ti actividad-ti--like {{class()}}" aria-hidden="true"></i> }
+  @case (12) { <i class="ti ti-message-dots actividad-ti actividad-ti--foto {{class()}}" aria-hidden="true"></i> }
+  @case (13) { <i class="ti ti-repeat actividad-ti actividad-ti--shout {{class()}}" aria-hidden="true"></i> }
+  @case (14) { <i class="ti ti-building-community actividad-ti actividad-ti--comunidad {{class()}}" aria-hidden="true"></i> }
+  @case (15) { <i class="ti ti-user-plus actividad-ti actividad-ti--comunidad {{class()}}" aria-hidden="true"></i> }
+  @case (16) { <i class="ti ti-file-plus actividad-ti actividad-ti--comunidad {{class()}}" aria-hidden="true"></i> }
+  @case (17) { <i class="ti ti-messages actividad-ti actividad-ti--comunidad {{class()}}" aria-hidden="true"></i> }
+  @case (18) { <i class="ti ti-trophy actividad-ti actividad-ti--logro {{class()}}" aria-hidden="true"></i> }
 }

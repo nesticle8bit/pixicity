@@ -61,6 +61,10 @@ export interface PerfilUsuarioViewModel {
   id: number;
   avatar: string;
   profileBackground: string;
+  profileBackgroundPosX: number;
+  profileBackgroundPosY: number;
+  profilePageBackground: string | null;
+  profilePageBackgroundRepeat: RepeticionFondo | null;
   userName: string;
   completeName: string;
   mensajePersonal: string;
@@ -100,7 +104,8 @@ export const SIN_PERFIL: PerfilRef = { id: 0, userName: '' };
 
 /** Perfil completo vacío: lo que muestra /perfil/:usuario hasta que llega la respuesta. */
 export const PERFIL_VACIO: PerfilUsuarioViewModel = {
-  id: 0, avatar: '', profileBackground: '', userName: '', completeName: '', mensajePersonal: '', website: '',
+  id: 0, avatar: '', profileBackground: '', profileBackgroundPosX: 50, profileBackgroundPosY: 50,
+  profilePageBackground: null, profilePageBackgroundRepeat: null, userName: '', completeName: '', mensajePersonal: '', website: '',
   fechaRegistro: '', puntos: 0, comentariosCount: 0, postsCount: 0, seguidoresCount: 0, siguiendoCount: 0,
   genero: '', rango: null, fechaNacimiento: '', edad: 0, pais: null,
 };
@@ -180,6 +185,24 @@ export interface UsuarioPerfilViewModel {
 export interface PerfilInfoResponse {
   perfil: UsuarioPerfilViewModel | null;
   background?: string | null;
+  /** Posición elegida del fondo (background-position en %, 50/50 = centrado). */
+  backgroundPosX?: number;
+  backgroundPosY?: number;
+  /** Fondo de la página del perfil (mosaico detrás del contenido) y cómo se repite. */
+  pageBackground?: string | null;
+  pageBackgroundRepeat?: RepeticionFondo;
+}
+
+/** Valores de background-repeat que acepta el API para el fondo de página. */
+export type RepeticionFondo = 'repeat' | 'repeat-x' | 'repeat-y' | 'no-repeat';
+
+/** Lo que se guarda desde /cuenta → Personalización. */
+export interface FondoPerfilRequest {
+  profileBackground: string;
+  profileBackgroundPosX: number;
+  profileBackgroundPosY: number;
+  profilePageBackground: string;
+  profilePageBackgroundRepeat: RepeticionFondo;
 }
 
 export interface RangoUsuarioReportViewModel {

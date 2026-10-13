@@ -1,9 +1,13 @@
 <section class="container container--home cuenta">
   <!-- Cabecera: fondo de perfil (preview en vivo), avatar editable y estado del correo -->
   <header class="cuenta__hero">
-    <div class="cuenta__banner" [style.background-image]="fondoCss()">
+    <div class="cuenta__banner" [style.background-image]="fondoCss()"
+      [style.background-position]="posicionFondo().x + '% ' + posicionFondo().y + '%'"
+      [appArrastrarFondo]="fondoValido()" [posicion]="posicionFondo()" (posicionChange)="moverFondo($event)">
       @if (!fondoCss()) {
         <span class="cuenta__banner-vacio">Sin fondo de perfil</span>
+      } @else {
+        <span class="cuenta__banner-pista" aria-hidden="true"><i class="ti ti-arrows-move"></i> Arrastra para acomodar</span>
       }
     </div>
 
@@ -130,22 +134,71 @@
 
           @case ('personalizacion') {
             <form [formGroup]="formGroupPersonalizacion" (ngSubmit)="saveFormGroupPersonalizacion()" class="cuenta__form">
-              <div class="campo">
-                <label for="account-profileBackground">Fondo de perfil</label>
-                <input id="account-profileBackground" type="url" class="form-control"
-                  placeholder="https://…/imagen.jpg" formControlName="profileBackground" />
-                <small class="campo__ayuda">URL de una imagen .jpg, .jpeg o .png. La vista previa aparece arriba mientras escribes.</small>
-                @if (formGroupPersonalizacion.controls['profileBackground'].invalid) {
-                  <small class="campo__error">La URL debe terminar en .jpg, .jpeg o .png.</small>
-                }
-              </div>
+              <!-- 1. Banner de la cabecera (la vista previa es la cabecera de arriba: se acomoda arrastrándola) -->
+              <fieldset class="fondo-grupo">
+                <legend>Imagen de la cabecera</legend>
+                <div class="campo">
+                  <label for="account-profileBackground">URL de la imagen</label>
+                  <div class="campo__fila">
+                    <input id="account-profileBackground" type="url" class="form-control"
+                      placeholder="https://…/imagen.jpg" formControlName="profileBackground" />
+                    @if (formGroupPersonalizacion.value.profileBackground) {
+                      <button type="button" mat-button (click)="quitarFondo()">
+                        <mat-icon>hide_image</mat-icon> Quitar
+                      </button>
+                    }
+                  </div>
+                  <small class="campo__ayuda">.jpg, .jpeg o .png. Se ve arriba mientras escribes; arrástrala para elegir qué parte se muestra.</small>
+                  @if (formGroupPersonalizacion.controls['profileBackground'].invalid) {
+                    <small class="campo__error">La URL debe terminar en .jpg, .jpeg o .png.</small>
+                  }
+                </div>
+              </fieldset>
+
+              <!-- 2. Fondo de la página del perfil, en mosaico -->
+              <fieldset class="fondo-grupo">
+                <legend>Fondo de la página</legend>
+                <div class="campo">
+                  <label for="account-profilePageBackground">URL de la imagen</label>
+                  <div class="campo__fila">
+                    <input id="account-profilePageBackground" type="url" class="form-control"
+                      placeholder="https://…/patron.png" formControlName="profilePageBackground" />
+                    @if (formGroupPersonalizacion.value.profilePageBackground) {
+                      <button type="button" mat-button (click)="quitarFondoPagina()">
+                        <mat-icon>hide_image</mat-icon> Quitar
+                      </button>
+                    }
+                  </div>
+                  <small class="campo__ayuda">Va detrás de todo tu perfil. Los patrones pequeños (.png, .gif, .webp) quedan mejor repetidos.</small>
+                  @if (formGroupPersonalizacion.controls['profilePageBackground'].invalid) {
+                    <small class="campo__error">La URL debe terminar en .jpg, .jpeg, .png, .gif o .webp.</small>
+                  }
+                </div>
+
+                <div class="campo" role="radiogroup" aria-labelledby="account-repeticion-label">
+                  <span class="campo__label" id="account-repeticion-label">Repetición</span>
+                  <div class="repeticion">
+                    @for (opcion of repeticiones; track opcion.valor) {
+                      <label class="repeticion__opcion" [class.repeticion__opcion--activa]="formGroupPersonalizacion.value.profilePageBackgroundRepeat === opcion.valor">
+                        <input type="radio" class="visually-hidden" formControlName="profilePageBackgroundRepeat" [value]="opcion.valor" />
+                        <i class="ti {{ opcion.icono }}" aria-hidden="true"></i> {{ opcion.label }}
+                      </label>
+                    }
+                  </div>
+                </div>
+
+                <div class="fondo-preview" aria-label="Vista previa del fondo de página"
+                  [style.background-image]="fondoPaginaCss()"
+                  [style.background-repeat]="formGroupPersonalizacion.value.profilePageBackgroundRepeat">
+                  @if (!fondoPaginaCss()) {
+                    <span>Sin fondo de página</span>
+                  } @else {
+                    <span class="fondo-preview__contenido">Contenido del perfil</span>
+                  }
+                </div>
+              </fieldset>
 
               <div class="cuenta__acciones" [class.cuenta__acciones--sucio]="formGroupPersonalizacion.dirty">
-                @if (formGroupPersonalizacion.value.profileBackground) {
-                  <button type="button" mat-button (click)="quitarFondo()">
-                    <mat-icon>hide_image</mat-icon> Quitar fondo
-                  </button>
-                }
                 <button mat-flat-button color="primary" type="submit"
                   [disabled]="formGroupPersonalizacion.invalid || formGroupPersonalizacion.pristine">
                   <mat-icon>save</mat-icon> Guardar

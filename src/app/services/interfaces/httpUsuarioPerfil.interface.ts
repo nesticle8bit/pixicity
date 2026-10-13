@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
 import { ActividadLogsViewModel } from 'src/app/models/logs/logs-vm.model';
-import { PerfilInfoResponse, PerfilUsuarioViewModel, SeguidoresResponse, UsuarioAvatarViewModel, UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { PerfilInfoResponse, PerfilUsuarioViewModel, SeguidoresResponse, UsuarioAvatarViewModel, UsuarioInfoViewModel, FondoPerfilRequest } from 'src/app/models/seguridad/seguridad-vm.model';
 
 /** Perfil de usuarios: info pública, perfil extendido, seguidores, avatar, fondo, actividad y estado en línea. */
 @Injectable()
@@ -23,6 +23,6 @@ export abstract class IHttpUsuarioPerfilService {
   abstract getActividadUsuario(usuarioId: number, tipoActividad: number): Observable<ActividadLogsViewModel>;
   /** Archivo JSON con todos los datos propios del usuario actual. */
   abstract exportarMisDatos(): Observable<Blob>;
-  abstract changeBackgroundProfile(obj: { imageUrl: string }): Observable<boolean>;
+  abstract changeBackgroundProfile(obj: FondoPerfilRequest): Observable<boolean>;
   abstract getUserStatus(userName: string): Observable<number | null>;
 }

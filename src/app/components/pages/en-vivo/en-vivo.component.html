@@ -27,7 +27,11 @@
                   </td>
 
                   <td class="titulo">
-                    <a [routerLink]="accion.tituloUrl">{{ accion.titulo }}</a>
+                    @if (accion.tituloUrl) {
+                      <a [routerLink]="accion.tituloUrl">{{ accion.titulo }}</a>
+                    } @else {
+                      <strong class="text-muted">{{ accion.titulo }}</strong>
+                    }
                   </td>
                 </tr>
                 }

@@ -1,11 +1,11 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (142).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (149).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2?v=b35b57ec3c") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=ca39e9bc7f") format("woff2");
 }
 
 @font-face {
@@ -39,7 +39,10 @@
 .ti-arrow-big-up-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6cf"; }
 .ti-arrow-down:before { content: "\ea16"; }
 .ti-arrow-up:before { content: "\ea25"; }
+.ti-arrows-horizontal:before { content: "\eb59"; }
+.ti-arrows-move:before { content: "\f22f"; }
 .ti-arrows-shuffle:before { content: "\f000"; }
+.ti-arrows-vertical:before { content: "\eb5b"; }
 .ti-article:before { content: "\f1e2"; }
 .ti-award:before { content: "\ea2c"; }
 .ti-ban:before { content: "\ea2e"; }
@@ -51,6 +54,7 @@
 .ti-brand-x:before { content: "\fc0f"; }
 .ti-brand-youtube:before { content: "\ec90"; }
 .ti-briefcase:before { content: "\ea46"; }
+.ti-building-community:before { content: "\ebf6"; }
 .ti-bulb:before { content: "\ea51"; }
 .ti-calendar:before { content: "\ea53"; }
 .ti-calendar-user:before { content: "\fd1f"; }
@@ -83,6 +87,7 @@
 .ti-external-link:before { content: "\ea99"; }
 .ti-eye:before { content: "\ea9a"; }
 .ti-file-off:before { content: "\ecf2"; }
+.ti-file-plus:before { content: "\eaa0"; }
 .ti-file-text:before { content: "\eaa2"; }
 .ti-filter:before { content: "\eaa5"; }
 .ti-flag:before { content: "\eaa6"; }
@@ -100,6 +105,7 @@
 .ti-info-circle:before { content: "\eac5"; }
 .ti-layout-dashboard:before { content: "\f02c"; }
 .ti-layout-distribute-horizontal:before { content: "\ead5"; }
+.ti-layout-grid:before { content: "\edba"; }
 .ti-link:before { content: "\eade"; }
 .ti-list-check:before { content: "\eb6a"; }
 .ti-list-numbers:before { content: "\ef11"; }
@@ -144,6 +150,7 @@
 .ti-shield-check:before { content: "\eb22"; }
 .ti-smart-home:before { content: "\ecde"; }
 .ti-sparkles:before { content: "\f6d7"; }
+.ti-square:before { content: "\eb2c"; }
 .ti-stack-2:before { content: "\eef7"; }
 .ti-star:before { content: "\eb2e"; }
 .ti-star-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6a6"; }

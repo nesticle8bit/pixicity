@@ -7,7 +7,7 @@ import { catchError, map } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { PerfilInfoResponse, PerfilUsuarioViewModel, SeguidoresResponse, UsuarioAvatarViewModel, UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { PerfilInfoResponse, PerfilUsuarioViewModel, SeguidoresResponse, UsuarioAvatarViewModel, UsuarioInfoViewModel, FondoPerfilRequest } from 'src/app/models/seguridad/seguridad-vm.model';
 import { ActividadLogsViewModel } from 'src/app/models/logs/logs-vm.model';
 import { IHttpUsuarioPerfilService } from '../interfaces/httpUsuarioPerfil.interface';
 
@@ -244,7 +244,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  changeBackgroundProfile(obj: { imageUrl: string }): Observable<boolean> {
+  changeBackgroundProfile(obj: FondoPerfilRequest): Observable<boolean> {
     return this.http
       .post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/changeBackgroundProfile`, obj)
       .pipe(

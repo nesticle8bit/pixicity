@@ -9,7 +9,8 @@
   } @else {
     <!-- Cabecera: banner (fondo de perfil), avatar, identidad, acciones y números -->
     <header class="pf-hero" [class.pf-hero--cargando]="cargando">
-      <div class="pf-hero__banner" [style.background-image]="bannerCss"></div>
+      <div class="pf-hero__banner" [style.background-image]="bannerCss"
+        [style.background-position]="currentUser.profileBackgroundPosX + '% ' + currentUser.profileBackgroundPosY + '%'"></div>
 
       <div class="pf-hero__cuerpo">
         <div class="pf-hero__avatar">
