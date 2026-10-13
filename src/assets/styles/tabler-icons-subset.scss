@@ -1,11 +1,11 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (149).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (152).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2?v=ca39e9bc7f") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=8af3e08845") format("woff2");
 }
 
 @font-face {
@@ -13,7 +13,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-filled-subset.woff2?v=b15a2ac07a") format("woff2");
+  src: url("/assets/fonts/tabler-icons-filled-subset.woff2?v=a05cb2ce19") format("woff2");
 }
 
 .ti {
@@ -38,6 +38,7 @@
 .ti-arrow-big-down-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6c6"; }
 .ti-arrow-big-up-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6cf"; }
 .ti-arrow-down:before { content: "\ea16"; }
+.ti-arrow-right:before { content: "\ea1f"; }
 .ti-arrow-up:before { content: "\ea25"; }
 .ti-arrows-horizontal:before { content: "\eb59"; }
 .ti-arrows-move:before { content: "\f22f"; }
@@ -46,6 +47,7 @@
 .ti-article:before { content: "\f1e2"; }
 .ti-award:before { content: "\ea2c"; }
 .ti-ban:before { content: "\ea2e"; }
+.ti-brand-discord-filled:before { font-family: "tabler-icons-filled" !important; content: "\f7e4"; }
 .ti-brand-facebook:before { content: "\ec1a"; }
 .ti-brand-instagram:before { content: "\ec20"; }
 .ti-brand-tiktok:before { content: "\ec73"; }
@@ -129,6 +131,7 @@
 .ti-messages:before { content: "\eb6c"; }
 .ti-mood-empty:before { content: "\eeb5"; }
 .ti-mood-smile:before { content: "\eaf7"; }
+.ti-news:before { content: "\eafd"; }
 .ti-notes:before { content: "\eb6e"; }
 .ti-pencil:before { content: "\eb04"; }
 .ti-pencil-plus:before { content: "\f1ec"; }

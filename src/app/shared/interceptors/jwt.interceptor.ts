@@ -3,9 +3,20 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 // Margen para renovar antes de que venza: cubre la latencia y relojes algo desfasados.
 const MARGEN_EXPIRACION_MS = 60 * 1000;
+
+/**
+ * Solo las peticiones a nuestro API llevan el token: una ruta relativa ("/api/…") o una URL que empieza con
+ * environment.api / environment.publicUrl. Antes se agregaba a cualquier URL, y una llamada a un servicio externo
+ * (p. ej. el widget de Discord) le habría entregado el JWT del usuario a un tercero.
+ */
+export function esNuestraApi(url: string): boolean {
+  if (url.startsWith('/') && !url.startsWith('//')) return true;
+  return [environment.api, environment.publicUrl].some((base) => !!base && url.startsWith(base + '/'));
+}
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -15,7 +26,7 @@ export class JwtInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const currentUser = this.securityService.getCurrentUser();
 
-        if (!currentUser?.token) {
+        if (!currentUser?.token || !esNuestraApi(request.url)) {
             return next.handle(request);
         }
 

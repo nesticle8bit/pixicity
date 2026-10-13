@@ -53,10 +53,10 @@ describe('MainMenuComponent (pestañas)', () => {
     fixture.detectChanges();
   };
 
-  it('invitado: 4 pestañas + iniciar sesión + registro, todas como enlaces reales', async () => {
+  it('invitado: 5 pestañas + iniciar sesión + registro, todas como enlaces reales', async () => {
     await build();
 
-    expect(tabs().length).toBe(6);
+    expect(tabs().length).toBe(7);
     expect(tabs().every((t) => !!t.querySelector('a[href]'))).toBeTrue();
   });
 
@@ -64,7 +64,7 @@ describe('MainMenuComponent (pestañas)', () => {
     await build({ userName: 'yo', rango: 'Usuario' });
 
     const titulos = tabs().map((t) => t.querySelector('a')!.getAttribute('title'));
-    expect(titulos).toEqual(['Posts', 'TOPs', 'Comunidades', 'Fotos']);
+    expect(titulos).toEqual(['Mi', 'Posts', 'TOPs', 'Comunidades', 'Fotos']);
   });
 
   it('administrador: agrega Administración, y reacciona al cambio de sesión sin recargar', async () => {
@@ -119,7 +119,7 @@ describe('main-nav.config', () => {
   it('las pestañas son un subconjunto de los enlaces', () => {
     const tabs = linksFor('Administrador', true).map((l) => l.label);
 
-    expect(tabs).toEqual(['Posts', 'TOPs', 'Comunidades', 'Fotos', 'Administración']);
+    expect(tabs).toEqual(['Mi', 'Posts', 'TOPs', 'Comunidades', 'Fotos', 'Administración']);
     expect(NAV_LINKS.length).toBeGreaterThan(tabs.length);
   });
 

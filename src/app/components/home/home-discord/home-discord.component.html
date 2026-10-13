@@ -1,0 +1,41 @@
+<h2 class="main-title mb-2">
+  <span>Discord</span>
+</h2>
+
+<a class="discord" [href]="invitacion()" target="_blank" rel="noopener noreferrer"
+  [attr.aria-label]="'Unirse al servidor de Discord ' + nombre() + (enLinea() !== null ? ', ' + enLinea() + ' en línea' : '')">
+  <!-- Decoración: burbujas de fondo -->
+  <span class="discord__burbuja discord__burbuja--a" aria-hidden="true"></span>
+  <span class="discord__burbuja discord__burbuja--b" aria-hidden="true"></span>
+
+  <span class="discord__arriba">
+    <span class="discord__logo" aria-hidden="true"><i class="ti ti-brand-discord-filled"></i></span>
+    <span class="discord__etiqueta">Comunidad</span>
+  </span>
+
+  <span class="discord__centro">
+    <strong class="discord__nombre">{{ nombre() }}</strong>
+    @if (enLinea() !== null) {
+      <span class="discord__online">
+        <span class="discord__pulso" aria-hidden="true"></span>
+        {{ enLinea() | number }} en línea ahora
+      </span>
+    } @else {
+      <span class="discord__online discord__online--sin-datos">Charla, juega y comparte con la comunidad</span>
+    }
+  </span>
+
+  <span class="discord__abajo">
+    @if (avatares().length) {
+      <span class="discord__avatares" aria-hidden="true">
+        @for (a of avatares(); track a.id) {
+          <img [src]="a.url" [alt]="a.nombre" width="28" height="28" loading="lazy" decoding="async" referrerpolicy="no-referrer" />
+        }
+        @if (restantes() > 0) {
+          <span class="discord__mas">+{{ restantes() > 99 ? '99' : restantes() }}</span>
+        }
+      </span>
+    }
+    <span class="discord__boton">Unirme <i class="ti ti-arrow-right" aria-hidden="true"></i></span>
+  </span>
+</a>

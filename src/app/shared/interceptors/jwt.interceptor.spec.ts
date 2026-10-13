@@ -75,6 +75,15 @@ describe('JwtInterceptor', () => {
     expect(security.refreshAccessToken).not.toHaveBeenCalled();
   });
 
+  it('nunca envía el token a otro dominio (ni a URLs "//host" sin esquema)', () => {
+    security.getCurrentUser.and.returnValue({ usuario: {}, token: jwtQueVence(3600), refreshToken: 'r' } as any);
+    http.get('https://discord.com/api/guilds/1/widget.json').subscribe();
+    http.get('//evil.example/api/x').subscribe();
+
+    expect(backend.expectOne('https://discord.com/api/guilds/1/widget.json').request.headers.has('Authorization')).toBeFalse();
+    expect(backend.expectOne('//evil.example/api/x').request.headers.has('Authorization')).toBeFalse();
+  });
+
   it('un token ilegible no rompe la petición', () => {
     security.getCurrentUser.and.returnValue({ usuario: {}, token: 'no-es-un-jwt', refreshToken: 'r' } as any);
     http.get('/api/x').subscribe();
