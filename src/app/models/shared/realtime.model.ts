@@ -21,7 +21,8 @@ export interface ReporteEnVivo {
 /** Actividad pública para la página "En Vivo". Sale de ActividadService.PushEnVivo. */
 export interface ActividadEnVivo {
   usuario: string;
-  avatar: string;
+  /** Archivo del avatar (o null): la URL la arma app-user-avatar con environment.api. */
+  avatar: string | null;
   usuarioUrl: string;
   accion: string;
   titulo: string;

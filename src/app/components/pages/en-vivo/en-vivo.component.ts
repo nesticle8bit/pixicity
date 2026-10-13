@@ -8,6 +8,7 @@ import { RouterLink } from '@angular/router';
 import { MatTooltip } from '@angular/material/tooltip';
 import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
 import { enNavegador } from '../../../shared/helpers/plataforma';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 
 @Component({
     selector: 'app-en-vivo',
@@ -17,6 +18,7 @@ import { enNavegador } from '../../../shared/helpers/plataforma';
         RouterLink,
         MatTooltip,
         AdsByTypeComponent,
+        UserAvatarComponent,
     ],
 })
 export class EnVivoComponent implements OnInit, OnDestroy {

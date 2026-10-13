@@ -37,7 +37,8 @@
                 @if (item.url) {
                   <a [routerLink]="item.url">
                     @if (item.avatar) {
-                      <img class="actividad__avatar" height="16" width="16" [src]="item.avatar" alt="" />
+                      <!-- avatar = archivo; el título es el usuario seguido -->
+                      <app-user-avatar class="actividad__avatar" [avatar]="item.avatar" [userName]="item.titulo" [width]="16" [height]="16"></app-user-avatar>
                     }
                     {{ item.titulo }}
                   </a>

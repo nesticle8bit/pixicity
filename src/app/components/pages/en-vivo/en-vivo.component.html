@@ -18,7 +18,8 @@
                 <tr [class]="accion.tipo">
                   <td class="usuario">
                     <a [routerLink]="accion.usuarioUrl">
-                      <img [src]="accion.avatar" width="16" height="16" class="me-1" alt="" loading="lazy" decoding="async"/>{{ accion.usuario }}
+                      <!-- El API manda solo el archivo del avatar: la URL la arma app-user-avatar con environment.api -->
+                      <app-user-avatar class="me-1" [avatar]="accion.avatar" [userName]="accion.usuario" [width]="16" [height]="16"></app-user-avatar>{{ accion.usuario }}
                     </a>
                   </td>
 

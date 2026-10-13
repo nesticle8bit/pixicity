@@ -8,6 +8,7 @@ import { TipoActividadIconComponent } from '../../addons/tipo-actividad-icon/tip
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 import { RouterLink } from '@angular/router';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { ActividadViewModel } from 'src/app/models/logs/logs-vm.model';
 
 @Component({
@@ -20,6 +21,7 @@ import { ActividadViewModel } from 'src/app/models/logs/logs-vm.model';
         TipoActividadIconComponent,
         TimeAgoPipe,
         RouterLink,
+        UserAvatarComponent,
     ],
 })
 export class ProfileActivityComponent implements OnInit {
