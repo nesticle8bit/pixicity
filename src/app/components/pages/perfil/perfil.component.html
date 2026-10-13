@@ -1,158 +1,167 @@
 <div class="container container--home pf">
   @if (noEncontrado) {
-    <section class="pf-vacio-pagina" role="status">
-      <i class="ti ti-user-off" aria-hidden="true"></i>
-      <h1>Este perfil no existe</h1>
-      <p>El usuario no existe o fue dado de baja.</p>
-      <a class="pf-boton" [routerLink]="['/']">Volver al inicio</a>
-    </section>
+  <section class="pf-vacio-pagina" role="status">
+    <i class="ti ti-user-off" aria-hidden="true"></i>
+    <h1>Este perfil no existe</h1>
+    <p>El usuario no existe o fue dado de baja.</p>
+    <a class="pf-boton" [routerLink]="['/']">Volver al inicio</a>
+  </section>
   } @else {
-    <!-- Cabecera: banner (fondo de perfil), avatar, identidad, acciones y números -->
-    <header class="pf-hero" [class.pf-hero--cargando]="cargando">
-      <div class="pf-hero__banner" [style.background-image]="bannerCss"
-        [style.background-position]="currentUser.profileBackgroundPosX + '% ' + currentUser.profileBackgroundPosY + '%'"></div>
-
-      <div class="pf-hero__cuerpo">
-        <div class="pf-hero__avatar">
-          <app-user-avatar [avatar]="currentUser.avatar" [userName]="currentUser.userName" [height]="112" [width]="112"></app-user-avatar>
-          @if (currentUser.userName) {
-            <app-user-online-status class="pf-hero__online" [userName]="currentUser.userName"></app-user-online-status>
-          }
-        </div>
-
-        <div class="pf-hero__identidad">
-          <h1 class="pf-hero__nombre">{{ nombreVisible }}</h1>
-          <div class="pf-hero__usuario">
-            <span>{{ '@' }}{{ currentUser.userName }}</span>
-            @if (currentUser.rango) {
-              <span class="pf-rango" [ngStyle]="{ '--rango': currentUser.rango.color }">
-                @if (currentUser.rango.icono) {
-                  <img [src]="'/assets/images/icons/rangos/' + currentUser.rango.icono" alt="" aria-hidden="true" loading="lazy" decoding="async" />
-                }
-                {{ currentUser.rango.nombre }}
-              </span>
-            }
-          </div>
-
-          <ul class="pf-hero__meta">
-            @if (currentUser.pais?.nombre) {
-              <li>
-                <addon-country-flag [iso2]="currentUser.pais?.iso2" [title]="currentUser.pais?.nombre ?? ''"></addon-country-flag>
-                {{ currentUser.pais?.nombre }}
-              </li>
-            }
-            @if (currentUser.edad) {
-              <li><app-genre-icon [genre]="currentUser.genero" [isFA]="true"></app-genre-icon> {{ currentUser.edad }} años</li>
-            }
-            @if (currentUser.fechaRegistro) {
-              <li [matTooltip]="(currentUser.fechaRegistro | date: 'longDate') ?? ''">
-                <i class="ti ti-calendar" aria-hidden="true"></i>
-                Se unió en {{ currentUser.fechaRegistro | date: 'MMMM y' }}
-              </li>
-            }
-          </ul>
-        </div>
-
-        @if (esAjeno) {
-          <div class="pf-hero__acciones">
-            <app-follow-button [userName]="currentUser.userName" [icon]="true"></app-follow-button>
-            <app-send-message-button [userName]="currentUser.userName" [icon]="true"></app-send-message-button>
-            @if (!bloqueoActivo) {
-              <button type="button" class="pf-icono-boton" (click)="bloquearUsuario()"
-                matTooltip="Bloquear a {{ currentUser.userName }}" [attr.aria-label]="'Bloquear a ' + currentUser.userName">
-                <i class="ti ti-ban" aria-hidden="true"></i>
-              </button>
-            } @else {
-              <button type="button" class="pf-icono-boton pf-icono-boton--activo" (click)="desbloquearUsuario()"
-                matTooltip="Desbloquear a {{ currentUser.userName }}" [attr.aria-label]="'Desbloquear a ' + currentUser.userName">
-                <i class="ti ti-lock-open" aria-hidden="true"></i>
-              </button>
-            }
-          </div>
-        }
-      </div>
-
-      @if (currentUser.mensajePersonal) {
-        <blockquote class="pf-hero__mensaje">{{ currentUser.mensajePersonal }}</blockquote>
-      }
-
-      <!-- Números: cada uno abre su pestaña -->
-      <ul class="pf-stats">
-        <li>
-          <div class="pf-stats__item pf-stats__item--fijo">
-            <strong>{{ currentUser.puntos | number }}</strong>
-            <span>Puntos</span>
-          </div>
-        </li>
-        @for (stat of [
-          { tab: 'posts', valor: currentUser.postsCount, label: 'Posts' },
-          { tab: 'comments', valor: currentUser.comentariosCount, label: 'Comentarios' },
-          { tab: 'followers', valor: currentUser.seguidoresCount, label: 'Seguidores' },
-          { tab: 'following', valor: currentUser.siguiendoCount, label: 'Siguiendo' }
-        ]; track stat.tab) {
-          <li>
-            <button type="button" class="pf-stats__item" [class.activo]="currentSelection === stat.tab"
-              (click)="seleccionar($any(stat.tab))">
-              <strong>{{ stat.valor | number }}</strong>
-              <span>{{ stat.label }}</span>
-            </button>
-          </li>
-        }
-      </ul>
-
-      @if (esStaff && currentUser.id) {
-        <div class="pf-hero__staff" aria-label="Herramientas de moderación">
-          <span class="pf-hero__staff-titulo"><i class="ti ti-shield" aria-hidden="true"></i> Moderación</span>
-          <app-banear-usuario [data]="{ usuarioId: currentUser.id, nombre: currentUser.rango?.nombre }"></app-banear-usuario>
-          @if (currentUser.rango) {
-            <app-change-rango
-              [data]="{ id: currentUser.rango.id, usuarioId: currentUser.id, icono: currentUser.rango.icono, color: currentUser.rango.color, nombre: currentUser.rango.nombre }">
-            </app-change-rango>
-          }
-          @if (esAjeno) {
-            <app-change-avatar [data]="{ id: currentUser.id, userName: currentUser.userName }"></app-change-avatar>
-          }
-        </div>
-      }
-    </header>
-
-    <div class="row">
-      <div class="col-12 col-lg-9">
-        <!-- Pestañas -->
-        <nav class="pf-tabs" role="tablist" aria-label="Secciones del perfil">
-          @for (tab of pestanas; track tab.id) {
-            <button type="button" role="tab" class="pf-tabs__tab" [id]="'perfil-tab-' + tab.id"
-              [attr.aria-selected]="currentSelection === tab.id" [attr.aria-controls]="'perfil-panel'"
-              [tabindex]="currentSelection === tab.id ? 0 : -1"
-              (click)="seleccionar(tab.id)" (keydown)="teclaPestana($event, tab.id)">
-              <i class="ti {{ tab.icono }}" aria-hidden="true"></i>
-              <span>{{ tab.label }}</span>
-            </button>
-          }
-        </nav>
-
-        <section class="pf-panel" id="perfil-panel" role="tabpanel" [attr.aria-labelledby]="'perfil-tab-' + currentSelection">
-          @if (currentUser.id) {
-            @switch (currentSelection) {
-              @case ('activity') { <app-profile-activity [user]="currentUser"></app-profile-activity> }
-              @case ('posts') { <app-profile-posts [user]="currentUser"></app-profile-posts> }
-              @case ('comments') { <app-profile-comments [user]="currentUser"></app-profile-comments> }
-              @case ('followers') { <app-profile-follows tipo="seguidores" [user]="currentUser"></app-profile-follows> }
-              @case ('following') { <app-profile-follows tipo="siguiendo" [user]="currentUser"></app-profile-follows> }
-              @case ('information') { <app-profile-information [user]="currentUser"></app-profile-information> }
-              @default { <app-profile-shouts [user]="currentUser"></app-profile-shouts> }
-            }
-          } @else {
-            <div class="pf-cargando" aria-hidden="true"><span></span><span></span><span></span></div>
-          }
-        </section>
-      </div>
-
-      <aside class="col-12 col-lg-3 pf-lateral">
-        <app-perfil-social-media-buttons [usuarioId]="currentUser.id"></app-perfil-social-media-buttons>
-        <app-perfil-user-followers [usuarioId]="currentUser.id" (verTodos)="seleccionar('followers')"></app-perfil-user-followers>
-        <ads-by-type class="pf-lateral__ads" [type]="'300x250'"></ads-by-type>
-      </aside>
+  <!-- Cabecera: banner (fondo de perfil), avatar, identidad, acciones y números -->
+  <header class="pf-hero" [class.pf-hero--cargando]="cargando">
+    <div class="pf-hero__banner" [style.background-image]="bannerCss"
+      [style.background-position]="currentUser.profileBackgroundPosX + '% ' + currentUser.profileBackgroundPosY + '%'">
     </div>
+
+    <div class="pf-hero__cuerpo">
+      <div class="pf-hero__avatar">
+        <app-user-avatar [avatar]="currentUser.avatar" [userName]="currentUser.userName" [height]="112"
+          [width]="112"></app-user-avatar>
+        @if (currentUser.userName) {
+        <app-user-online-status class="pf-hero__online" [userName]="currentUser.userName"></app-user-online-status>
+        }
+      </div>
+
+      <div class="pf-hero__identidad">
+        <h1 class="pf-hero__nombre">{{ nombreVisible }}</h1>
+        <div class="pf-hero__usuario">
+          <span>{{ '@' }}{{ currentUser.userName }}</span>
+          @if (currentUser.rango) {
+          <span class="pf-rango" [ngStyle]="{ '--rango': currentUser.rango.color }">
+            @if (currentUser.rango.icono) {
+            <img [src]="'/assets/images/icons/rangos/' + currentUser.rango.icono" alt="" aria-hidden="true"
+              loading="lazy" decoding="async" />
+            }
+            {{ currentUser.rango.nombre }}
+          </span>
+          }
+        </div>
+
+        <ul class="pf-hero__meta">
+          @if (currentUser.pais?.nombre) {
+          <li>
+            <addon-country-flag [iso2]="currentUser.pais?.iso2"
+              [title]="currentUser.pais?.nombre ?? ''"></addon-country-flag>
+            {{ currentUser.pais?.nombre }}
+          </li>
+          }
+          @if (currentUser.edad) {
+          <li><app-genre-icon [genre]="currentUser.genero" [isFA]="true"></app-genre-icon> {{ currentUser.edad }} años
+          </li>
+          }
+          @if (currentUser.fechaRegistro) {
+          <li [matTooltip]="(currentUser.fechaRegistro | date: 'longDate') ?? ''">
+            <i class="ti ti-calendar" aria-hidden="true"></i>
+            Se unió en {{ currentUser.fechaRegistro | date: 'MMMM y' }}
+          </li>
+          }
+        </ul>
+      </div>
+
+      @if (esAjeno) {
+      <div class="pf-hero__acciones">
+        <app-follow-button [userName]="currentUser.userName" [icon]="true"></app-follow-button>
+        <app-send-message-button [userName]="currentUser.userName" [icon]="true"></app-send-message-button>
+        @if (!bloqueoActivo) {
+        <button type="button" class="pf-icono-boton" (click)="bloquearUsuario()"
+          matTooltip="Bloquear a {{ currentUser.userName }}" [attr.aria-label]="'Bloquear a ' + currentUser.userName">
+          <i class="ti ti-ban" aria-hidden="true"></i>
+        </button>
+        } @else {
+        <button type="button" class="pf-icono-boton pf-icono-boton--activo" (click)="desbloquearUsuario()"
+          matTooltip="Desbloquear a {{ currentUser.userName }}"
+          [attr.aria-label]="'Desbloquear a ' + currentUser.userName">
+          <i class="ti ti-lock-open" aria-hidden="true"></i>
+        </button>
+        }
+      </div>
+      }
+    </div>
+
+    @if (currentUser.mensajePersonal) {
+    <blockquote class="pf-hero__mensaje">{{ currentUser.mensajePersonal }}</blockquote>
+    }
+
+    <!-- Números: cada uno abre su pestaña -->
+    <ul class="pf-stats">
+      <li>
+        <div class="pf-stats__item pf-stats__item--fijo">
+          <strong>{{ currentUser.puntos | number }}</strong>
+          <span>Puntos</span>
+        </div>
+      </li>
+      @for (stat of [
+      { tab: 'posts', valor: currentUser.postsCount, label: 'Posts' },
+      { tab: 'comments', valor: currentUser.comentariosCount, label: 'Comentarios' },
+      { tab: 'followers', valor: currentUser.seguidoresCount, label: 'Seguidores' },
+      { tab: 'following', valor: currentUser.siguiendoCount, label: 'Siguiendo' }
+      ]; track stat.tab) {
+      <li>
+        <button type="button" class="pf-stats__item" [class.activo]="currentSelection === stat.tab"
+          (click)="seleccionar($any(stat.tab))">
+          <strong>{{ stat.valor | number }}</strong>
+          <span>{{ stat.label }}</span>
+        </button>
+      </li>
+      }
+    </ul>
+
+    @if (esStaff && currentUser.id) {
+    <div class="pf-hero__staff" aria-label="Herramientas de moderación">
+      <span class="pf-hero__staff-titulo"><i class="ti ti-shield" aria-hidden="true"></i> Moderación</span>
+      <app-banear-usuario
+        [data]="{ usuarioId: currentUser.id, nombre: currentUser.rango?.nombre }"></app-banear-usuario>
+      @if (currentUser.rango) {
+      <app-change-rango
+        [data]="{ id: currentUser.rango.id, usuarioId: currentUser.id, icono: currentUser.rango.icono, color: currentUser.rango.color, nombre: currentUser.rango.nombre }">
+      </app-change-rango>
+      }
+      @if (esAjeno) {
+      <app-change-avatar [data]="{ id: currentUser.id, userName: currentUser.userName }"></app-change-avatar>
+      }
+    </div>
+    }
+  </header>
+
+  <div class="row">
+    <div class="col-12 col-lg-9">
+      <!-- Pestañas -->
+      <nav class="pf-tabs" role="tablist" aria-label="Secciones del perfil">
+        @for (tab of pestanas; track tab.id) {
+        <button type="button" role="tab" class="pf-tabs__tab" [id]="'perfil-tab-' + tab.id"
+          [attr.aria-selected]="currentSelection === tab.id" [attr.aria-controls]="'perfil-panel'"
+          [tabindex]="currentSelection === tab.id ? 0 : -1" (click)="seleccionar(tab.id)"
+          (keydown)="teclaPestana($event, tab.id)">
+          <i class="ti {{ tab.icono }}" aria-hidden="true"></i>
+          <span>{{ tab.label }}</span>
+        </button>
+        }
+      </nav>
+
+      <section class="pf-panel" id="perfil-panel" role="tabpanel"
+        [attr.aria-labelledby]="'perfil-tab-' + currentSelection">
+        @if (currentUser.id) {
+        @switch (currentSelection) {
+        @case ('activity') { <app-profile-activity [user]="currentUser"></app-profile-activity> }
+        @case ('posts') { <app-profile-posts [user]="currentUser"></app-profile-posts> }
+        @case ('comments') { <app-profile-comments [user]="currentUser"></app-profile-comments> }
+        @case ('followers') { <app-profile-follows tipo="seguidores" [user]="currentUser"></app-profile-follows> }
+        @case ('following') { <app-profile-follows tipo="siguiendo" [user]="currentUser"></app-profile-follows> }
+        @case ('information') { <app-profile-information [user]="currentUser"></app-profile-information> }
+        @default { <app-profile-shouts [user]="currentUser"></app-profile-shouts> }
+        }
+        } @else {
+        <div class="pf-cargando" aria-hidden="true"><span></span><span></span><span></span></div>
+        }
+      </section>
+    </div>
+
+    <aside class="col-12 col-lg-3 pf-lateral">
+      <app-perfil-social-media-buttons [usuarioId]="currentUser.id"></app-perfil-social-media-buttons>
+      <app-perfil-user-followers [usuarioId]="currentUser.id"
+        (verTodos)="seleccionar('followers')"></app-perfil-user-followers>
+      <ads-by-type class="pf-lateral__ads" [type]="'300x250'"></ads-by-type>
+    </aside>
+  </div>
   }
 </div>
