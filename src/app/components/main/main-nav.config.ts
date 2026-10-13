@@ -16,13 +16,19 @@ export interface NavLink {
 
 // Fuente única de la navegación principal: la usan la barra de pestañas (main-menu) y el cajón móvil.
 export const NAV_LINKS: NavLink[] = [
+  { label: 'Mi', icon: 'ti-news', route: '/mi', tab: true },
   { label: 'Posts', icon: 'ti-smart-home', route: '/', exact: true, tab: true },
   { label: 'TOPs', icon: 'ti-trophy', route: '/tops', tab: true },
   { label: 'Comunidades', icon: 'ti-users', route: '/comunidades', tab: true },
   { label: 'Fotos', icon: 'ti-camera', route: '/fotos', tab: true },
   { label: 'Buscador', icon: 'ti-search', route: '/buscar', exact: true },
   { label: 'Historial', icon: 'ti-history', route: '/mod-history' },
-  { label: 'Moderación', icon: 'ti-tool', route: '/moderacion', rango: 'Moderador' },
+  {
+    label: 'Moderación',
+    icon: 'ti-tool',
+    route: '/moderacion',
+    rango: 'Moderador',
+  },
   {
     label: 'Administración',
     icon: 'ti-adjustments',
@@ -33,8 +39,13 @@ export const NAV_LINKS: NavLink[] = [
   },
 ];
 
-export function linksFor(rango: string | undefined, soloTabs = false): NavLink[] {
-  return NAV_LINKS.filter((l) => (!l.rango || l.rango === rango) && (!soloTabs || l.tab));
+export function linksFor(
+  rango: string | undefined,
+  soloTabs = false,
+): NavLink[] {
+  return NAV_LINKS.filter(
+    (l) => (!l.rango || l.rango === rango) && (!soloTabs || l.tab),
+  );
 }
 
 export function isLinkActive(router: Router, link: NavLink): boolean {
