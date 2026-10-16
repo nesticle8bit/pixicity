@@ -159,10 +159,29 @@ export interface PostInteracciones {
   /** Puntos que le di (0 = todavía no voté). */
   misPuntos: number;
   enFavoritos: boolean;
+  /** Ya lo recomendé (se recomienda una sola vez). */
+  yoRecomende: boolean;
+  /** Puntos que me quedan hoy; null sin sesión. */
+  puntosDisponibles: number | null;
+  /** Puntos que recibió hoy (resumen para el autor). */
+  puntosHoy: number;
   votantes: PostInteraccionUsuario[];
   totalVotantes: number;
   recomendaron: PostInteraccionUsuario[];
   totalRecomendaciones: number;
+}
+
+/** Página de la lista completa (GET /api/posts/getInteraccionesPostPagina). */
+export interface PostInteraccionesPagina {
+  items: PostInteraccionUsuario[];
+  total: number;
+}
+
+/** Evento en vivo "postVotado" del hub: puntos nuevos y quién votó. */
+export interface PostVotadoEnVivo {
+  postId: number;
+  puntos: number;
+  votante: PostInteraccionUsuario;
 }
 
 export interface FavoritoAlternado {

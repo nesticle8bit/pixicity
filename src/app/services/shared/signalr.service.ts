@@ -14,6 +14,7 @@ import {
   NotificacionEnVivo,
   ReporteEnVivo,
 } from 'src/app/models/shared/realtime.model';
+import { PostVotadoEnVivo } from 'src/app/models/posts/post-vm.model';
 import { IHttpSecurityService } from '../interfaces/httpSecurity.interface';
 
 @Injectable({ providedIn: 'root' })
@@ -29,11 +30,14 @@ export class SignalrService {
   private mensajesLeidosSubject = new Subject<EventoDeUsuario>();
   private escribiendoSubject = new Subject<EventoDeUsuario>();
   private shoutNuevoSubject = new Subject<{ shoutId: number; autor: string }>();
+  private postVotadoSubject = new Subject<PostVotadoEnVivo>();
   private handlersBound = false;
 
   /** Qué grupos volver a pedir al reconectar. */
   private suscritoUsuario = false;
   private suscritoEnVivo = false;
+  /** Posts abiertos (grupo "post-{id}"): reciben "postVotado". */
+  private postsSuscritos = new Set<number>();
 
   // Notificación personal en tiempo real (campana).
   public notification$: Observable<NotificacionEnVivo> = this.notificationSubject.asObservable();
@@ -49,6 +53,8 @@ export class SignalrService {
   public escribiendo$: Observable<EventoDeUsuario> = this.escribiendoSubject.asObservable();
   // Alguien que sigo publicó un shout (el muro de /mi ofrece "ver nuevos").
   public shoutNuevo$: Observable<{ shoutId: number; autor: string }> = this.shoutNuevoSubject.asObservable();
+  // Alguien dio puntos a un post que tengo abierto.
+  public postVotado$: Observable<PostVotadoEnVivo> = this.postVotadoSubject.asObservable();
 
   // Inicia la conexión y se suscribe a los grupos del usuario. Idempotente.
   async start(token: string): Promise<void> {
@@ -86,6 +92,9 @@ export class SignalrService {
     if (this.suscritoEnVivo) {
       await this.invokeEnVivo();
     }
+    for (const postId of this.postsSuscritos) {
+      await this.invocar('SubscribePost', postId);
+    }
   }
 
   // Crea (si hace falta) e inicia la conexión, registrando los handlers una sola vez. Idempotente.
@@ -105,6 +114,7 @@ export class SignalrService {
       this.connection.on('mensaje', (payload: MensajeEnVivo) => this.mensajeSubject.next(payload));
       this.connection.on('mensajesLeidos', (payload: EventoDeUsuario) => this.mensajesLeidosSubject.next(payload));
       this.connection.on('escribiendo', (payload: EventoDeUsuario) => this.escribiendoSubject.next(payload));
+      this.connection.on('postVotado', (payload: PostVotadoEnVivo) => this.postVotadoSubject.next(payload));
       this.connection.on('shoutNuevo', (payload: { shoutId: number; autor: string }) => this.shoutNuevoSubject.next(payload));
       // Un solo manejador de reconexión: antes cada start()/startEnVivo() agregaba uno más.
       this.connection.onreconnected(() => this.alReconectar());
@@ -116,6 +126,28 @@ export class SignalrService {
         await this.connection.start();
       } catch {
         // Silencioso: la app funciona sin realtime (degradación elegante).
+      }
+    }
+  }
+
+  /** Puntos en vivo de un post (público, sirve sin sesión). */
+  async startPost(postId: number): Promise<void> {
+    this.postsSuscritos.add(postId);
+    await this.ensureStarted();
+    await this.invocar('SubscribePost', postId);
+  }
+
+  async stopPost(postId: number): Promise<void> {
+    if (!this.postsSuscritos.delete(postId)) return;
+    await this.invocar('UnsubscribePost', postId);
+  }
+
+  private async invocar(metodo: string, ...args: unknown[]): Promise<void> {
+    if (this.connection?.state === HubConnectionState.Connected) {
+      try {
+        await this.connection.invoke(metodo, ...args);
+      } catch {
+        // ignorar: sin realtime los puntos se ven al recargar
       }
     }
   }
@@ -181,6 +213,7 @@ export class SignalrService {
       this.handlersBound = false;
       this.suscritoUsuario = false;
       this.suscritoEnVivo = false;
+      this.postsSuscritos.clear();
     }
   }
 }

@@ -12,7 +12,7 @@ import { NotificationService } from '../shared/notification.service';
 import { IHttpPostsService } from '../interfaces/httpPosts.interface';
 import { PaginationService } from '../shared/pagination.service';
 import { ApiResponse, PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
-import { CloudTagViewModel, FavoritoAlternado, PostDetailResponse, PostInteracciones, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
+import { CloudTagViewModel, FavoritoAlternado, PostDetailResponse, PostInteracciones, PostInteraccionesPagina, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
 @Injectable()
 export class HttpPostsService implements IHttpPostsService {
   private notificationService = inject(NotificationService);
@@ -308,6 +308,21 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(
         map((r) => (r.status === 200 ? r.data ?? null : null)),
         catchError(() => of(null)),
+      );
+  }
+
+  getInteraccionesPostPagina(
+    postId: number,
+    tipo: 'votos' | 'recomendaciones',
+    pagina: number,
+  ): Observable<PostInteraccionesPagina> {
+    return this.http
+      .get<ApiResponse<PostInteraccionesPagina>>(
+        `${environment.api}/api/posts/getInteraccionesPostPagina?postId=${postId}&tipo=${tipo}&pagina=${pagina}`,
+      )
+      .pipe(
+        map((r) => r.data ?? { items: [], total: 0 }),
+        catchError(() => of({ items: [], total: 0 })),
       );
   }
 

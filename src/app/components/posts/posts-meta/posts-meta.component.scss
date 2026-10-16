@@ -60,11 +60,19 @@ $oro: #b7791f;
 
   &__titulo {
     display: flex;
-    align-items: center;
-    gap: 6px;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 12px;
     margin-bottom: 8px;
     font-weight: 700;
     color: $texto;
+  }
+
+  &__restantes {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: $suave;
   }
 
   &__nota,
@@ -396,6 +404,8 @@ $oro: #b7791f;
   &__mas {
     display: grid;
     place-items: center;
+    border: 0;
+    cursor: pointer;
     min-width: 28px;
     height: 28px;
     padding: 0 6px;
@@ -404,5 +414,76 @@ $oro: #b7791f;
     font-size: 0.72rem;
     font-weight: 700;
     color: $suave;
+  }
+}
+
+.pm-gente__mas:hover,
+.pm-gente__mas:focus-visible {
+  background: #e3ebf1;
+  color: $texto;
+}
+
+.pm-gente__mas:focus-visible {
+  outline: 2px solid $marca;
+  outline-offset: 2px;
+}
+
+/* --- Vista del autor --- */
+.pm-autor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+
+  &__hoy {
+    color: #8a5a00;
+  }
+
+  &__editar {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+    color: #005a85;
+  }
+}
+
+/* --- Esqueleto mientras llega mi estado (evita el salto de "Dar puntos" a "¡Le diste…!") --- */
+.pm-esqueleto {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &__linea,
+  &__barra {
+    display: block;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #eef2f5 25%, #f7f9fa 50%, #eef2f5 75%);
+    background-size: 200% 100%;
+    animation: pm-brillo 1.2s linear infinite;
+  }
+
+  &__linea {
+    width: 140px;
+    height: 14px;
+  }
+
+  &__barra {
+    width: min(100%, 440px);
+    height: 38px;
+  }
+}
+
+@keyframes pm-brillo {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pm-esqueleto__linea,
+  .pm-esqueleto__barra {
+    animation: none;
   }
 }

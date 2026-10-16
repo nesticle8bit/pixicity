@@ -1,0 +1,81 @@
+.dip-titulo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dip-total {
+  font-weight: 500;
+  color: #5f6b75;
+}
+
+.dip-lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dip-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+
+  & + & {
+    border-top: 1px solid #e6eaee;
+  }
+}
+
+.dip-usuario {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  font-weight: 600;
+  color: #1f2a33;
+  text-decoration: none;
+
+  &:hover .dip-nombre,
+  &:focus-visible .dip-nombre {
+    color: #005a85;
+    text-decoration: underline;
+  }
+
+  ::ng-deep img {
+    border-radius: 50%;
+  }
+}
+
+.dip-nombre {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dip-meta {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: #5f6b75;
+}
+
+.dip-puntos {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #fff7e6;
+  color: #8a5a00;
+}
+
+.dip-vacio {
+  padding: 16px 0;
+  text-align: center;
+  color: #5f6b75;
+}
+
+.dip-mas {
+  width: 100%;
+  margin-top: 8px;
+}

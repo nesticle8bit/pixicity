@@ -8,24 +8,40 @@
 
     <div class="pm-puntos__dar">
       @if (esAutor) {
-      <p class="pm-puntos__nota"><i class="ti ti-user-check" aria-hidden="true"></i> Este es tu post: los puntos te los
-        dan los demás.</p>
+      <div class="pm-autor">
+        <p class="pm-puntos__nota">
+          <i class="ti ti-user-check" aria-hidden="true"></i> Este es tu post.
+          @if (interacciones) {
+          <span>Hoy recibió <strong class="pm-autor__hoy">{{ puntosTexto(interacciones.puntosHoy || 0) }}</strong>.</span>
+          }
+        </p>
+        <a class="pm-autor__editar" [routerLink]="['/posts/actualizar', post.id]">
+          <i class="ti ti-pencil" aria-hidden="true"></i> Editar post
+        </a>
+      </div>
       } @else if (!haySesion) {
       <p class="pm-puntos__nota">¿Te gustó? <button type="button" class="pm-link" (click)="iniciarSesion()">Inicia
           sesión</button> para darle puntos.</p>
+      } @else if (!cargado) {
+      <div class="pm-esqueleto" aria-busy="true" aria-label="Cargando tus puntos">
+        <span class="pm-esqueleto__linea"></span>
+        <span class="pm-esqueleto__barra"></span>
+      </div>
       } @else if (puntosDados) {
       <p class="pm-puntos__ok" role="status"><i class="ti ti-circle-check" aria-hidden="true"></i> ¡Le diste {{
         puntosDados }} {{ puntosDados === 1 ? 'punto' : 'puntos' }}! Gracias por valorar el aporte.</p>
       } @else if (availablePuntos.length) {
-      <span class="pm-puntos__titulo" id="pm-dar-puntos"><i class="ti ti-award" aria-hidden="true"></i> Dar
-        puntos</span>
+      <span class="pm-puntos__titulo">
+        <span id="pm-dar-puntos"><i class="ti ti-award" aria-hidden="true"></i> Dar puntos</span>
+        <span class="pm-puntos__restantes">Te quedan {{ puntosTexto(puntosRestantes) }} hoy</span>
+      </span>
       <div class="barpuntos" role="group" aria-labelledby="pm-dar-puntos">
         @for (punto of availablePuntos; track punto) {
         <button type="button" class="pm-punto" [disabled]="votando" (click)="votarPost(punto)"
-          [attr.aria-label]="'Dar ' + punto + (punto === 1 ? ' punto' : ' puntos')">{{ punto }}</button>
+          [attr.aria-label]="'Dar ' + puntosTexto(punto)">{{ punto }}</button>
         }
       </div>
-      } @else if (puntosCargados) {
+      } @else {
       <p class="pm-puntos__nota"><i class="ti ti-hourglass" aria-hidden="true"></i> Ya repartiste tus puntos de hoy.
         Mañana tendrás más.</p>
       }
@@ -41,15 +57,20 @@
           @for (v of interacciones.votantes; track v.userName) {
           <li>
             <a [routerLink]="['/perfil', v.userName]" class="pm-gente__usuario"
-              [matTooltip]="'@' + v.userName + ' · +' + v.cantidad + (v.cantidad === 1 ? ' punto' : ' puntos')"
-              [attr.aria-label]="v.userName + ' dio ' + v.cantidad + ' puntos'">
+              [matTooltip]="'@' + v.userName + ' · +' + puntosTexto(v.cantidad)"
+              [attr.aria-label]="v.userName + ' dio ' + puntosTexto(v.cantidad)">
               <app-user-avatar [avatar]="v.avatar" [userName]="v.userName" [width]="28" [height]="28" />
               <span class="pm-gente__puntos" aria-hidden="true">+{{ v.cantidad }}</span>
             </a>
           </li>
           }
           @if (interacciones.totalVotantes > interacciones.votantes.length) {
-          <li class="pm-gente__mas">+{{ interacciones.totalVotantes - interacciones.votantes.length | number }}</li>
+          <li>
+            <button type="button" class="pm-gente__mas" (click)="verTodos('votos')"
+              [attr.aria-label]="'Ver los ' + interacciones.totalVotantes + ' que dieron puntos'">
+              +{{ interacciones.totalVotantes - interacciones.votantes.length | number }}
+            </button>
+          </li>
           }
         </ul>
       </div>
@@ -68,13 +89,15 @@
         {{ post.seguirPost ? 'Siguiendo' : 'Seguir post' }}
       </button>
       <button type="button" class="pm-accion" [class.is-activa]="enFavoritos" [attr.aria-pressed]="enFavoritos"
-        [disabled]="procesando === 'favorito'" (click)="alternarFavorito()"
+        [disabled]="procesando === 'favorito' || !cargado" [attr.aria-busy]="!cargado" (click)="alternarFavorito()"
         [matTooltip]="enFavoritos ? 'Clic para quitarlo de tus favoritos' : ''">
         <i class="ti" [class.ti-star-filled]="enFavoritos" [class.ti-star]="!enFavoritos" [class.is-llena]="enFavoritos" aria-hidden="true"></i>
         {{ enFavoritos ? 'Agregado a favoritos' : 'Agregar a favoritos' }}
       </button>
-      <button type="button" class="pm-accion" (click)="recomendarPost()">
-        <i class="ti ti-speakerphone" aria-hidden="true"></i> Recomendar
+      <button type="button" class="pm-accion" [class.is-activa]="yoRecomende" [attr.aria-pressed]="yoRecomende"
+        (click)="recomendarPost()" [matTooltip]="yoRecomende ? 'Ya se lo recomendaste a tus seguidores' : ''">
+        <i class="ti" [class.ti-speakerphone]="!yoRecomende" [class.ti-circle-check]="yoRecomende" aria-hidden="true"></i>
+        {{ yoRecomende ? 'Recomendado' : 'Recomendar' }}
       </button>
       <button type="button" class="pm-accion pm-accion--discreta" (click)="denunciarPost()"
         matTooltip="Denunciar este post" aria-label="Denunciar este post">
@@ -99,7 +122,12 @@
           </li>
           }
           @if (interacciones.totalRecomendaciones > interacciones.recomendaron.length) {
-          <li class="pm-gente__mas">+{{ interacciones.totalRecomendaciones - interacciones.recomendaron.length | number }}</li>
+          <li>
+            <button type="button" class="pm-gente__mas" (click)="verTodos('recomendaciones')"
+              [attr.aria-label]="'Ver los ' + interacciones.totalRecomendaciones + ' que lo recomendaron'">
+              +{{ interacciones.totalRecomendaciones - interacciones.recomendaron.length | number }}
+            </button>
+          </li>
           }
         </ul>
       </div>
@@ -115,8 +143,8 @@
               aria-hidden="true"></i></dd>
         </div>
         <div class="pm-stat">
-          <dt>Puntos</dt>
-          <dd>{{ post.puntos || 0 | number }}<i class="ti ti-award pm-stat__icono pm-stat__icono--puntos"
+          <dt>Comentarios</dt>
+          <dd>{{ post.cantidadComentarios || 0 | number }}<i class="ti ti-message pm-stat__icono pm-stat__icono--puntos"
               aria-hidden="true"></i></dd>
         </div>
         <div class="pm-stat">

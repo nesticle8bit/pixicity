@@ -116,6 +116,23 @@ export const FOTO = {
 const RESPUESTAS: [RegExp, unknown][] = [
   [/\/api\/posts\/getpostbyid/i, { post: POST }],
   [
+    /\/api\/posts\/getinteraccionespost\?/i,
+    {
+      misPuntos: 0,
+      enFavoritos: false,
+      yoRecomende: false,
+      puntosDisponibles: null,
+      puntosHoy: 9,
+      votantes: [
+        { userName: 'lector_uno', avatar: null, cantidad: 5, fecha: AYER },
+        { userName: 'lector_dos', avatar: null, cantidad: 1, fecha: AYER },
+      ],
+      totalVotantes: 6,
+      recomendaron: [{ userName: 'lector_uno', avatar: null, cantidad: 0, fecha: AYER }],
+      totalRecomendaciones: 1,
+    },
+  ],
+  [
     /\/api\/comentarios\/getcomentariosbypostid/i,
     [
       comentarioPost(1, 'lector_uno', 'Muy buen aporte', 8, [comentarioPost(2, AUTOR, 'Gracias por leer', 2)]),

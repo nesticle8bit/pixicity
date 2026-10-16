@@ -1,0 +1,38 @@
+<h2 mat-dialog-title class="dip-titulo">
+  <i class="ti" [class.ti-award]="esVotos" [class.ti-speakerphone]="!esVotos" aria-hidden="true"></i>
+  {{ esVotos ? 'Le dieron puntos' : 'Recomendado por' }}
+  <span class="dip-total">({{ total | number }})</span>
+</h2>
+
+<mat-dialog-content>
+  <ul class="dip-lista">
+    @for (u of items; track u.userName) {
+    <li class="dip-item">
+      <a [routerLink]="['/perfil', u.userName]" mat-dialog-close class="dip-usuario">
+        <app-user-avatar [avatar]="u.avatar" [userName]="u.userName" [width]="36" [height]="36" />
+        <span class="dip-nombre">{{ u.userName }}</span>
+      </a>
+      <span class="dip-meta">
+        @if (esVotos) {
+        <strong class="dip-puntos">+{{ u.cantidad }}</strong>
+        }
+        <time [attr.datetime]="u.fecha">{{ u.fecha | date: 'dd.MM.yyyy HH:mm' }}</time>
+      </span>
+    </li>
+    } @empty {
+    @if (!cargando) {
+    <li class="dip-vacio">Todavía no hay nadie.</li>
+    }
+    }
+  </ul>
+
+  @if (hayMas) {
+  <button type="button" mat-button class="dip-mas" [disabled]="cargando" (click)="cargarMas()">
+    {{ cargando ? 'Cargando…' : 'Ver más' }}
+  </button>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button type="button" mat-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>
