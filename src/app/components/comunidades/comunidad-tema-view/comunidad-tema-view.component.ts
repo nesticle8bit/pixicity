@@ -1,3 +1,4 @@
+import { EnlazarHashtagsPipe } from 'src/app/shared/pipes/enlazarHashtags.pipe';
 import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { environment } from 'src/environments/environment';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
@@ -60,7 +61,7 @@ function aHilo(c: TemaComentario): ComentarioHilo {
         DecimalPipe,
         DatePipe,
         TimeAgoPipe,
-        ContenidoSeoPipe,
+        ContenidoSeoPipe, EnlazarHashtagsPipe,
     ],
 })
 export class ComunidadTemaViewComponent implements OnInit {
@@ -229,7 +230,8 @@ export class ComunidadTemaViewComponent implements OnInit {
   /** Mods/admins o el dueño de la comunidad (el id de la sesión viene en base64). */
   get esDuenoComunidad(): boolean {
     const miId = idUsuarioSesion(this.currentUser?.usuario);
-    return miId !== null && this.tema?.comunidad?.usuarioId === miId;
+    // El staff de la comunidad modera igual que el creador (el API lo informa en puedoModerar).
+    return (miId !== null && this.tema?.comunidad?.usuarioId === miId) || !!this.tema?.puedoModerar;
   }
 
   // - Tema

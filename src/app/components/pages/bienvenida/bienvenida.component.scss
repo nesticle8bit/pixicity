@@ -1,0 +1,280 @@
+$marca: #006595;
+$texto: #1f2a33;
+$suave: #6b7782;
+$borde: #e6eaee;
+
+.bv {
+  max-width: 900px;
+  margin: 16px auto 48px;
+  padding: 28px;
+  border: 1px solid $borde;
+  border-radius: 16px;
+  background: #fff;
+
+  &__head {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  &__saludo {
+    margin: 0;
+    font-weight: 600;
+    color: $marca;
+  }
+
+  &__titulo {
+    margin: 4px 0;
+    font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
+    font-weight: 800;
+    color: $texto;
+  }
+
+  &__sub {
+    margin: 0;
+    color: $suave;
+  }
+
+  &__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid $borde;
+  }
+
+  &__resumen {
+    margin-right: auto;
+    font-size: 0.9rem;
+    color: $suave;
+  }
+}
+
+.bv-pasos {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+  counter-reset: paso;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 6px;
+    border: 1px solid $borde;
+    border-radius: 999px;
+    background: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: $suave;
+    cursor: pointer;
+  }
+
+  &__num {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #f1f4f6;
+    font-size: 0.85rem;
+  }
+
+  &__item.is-actual button {
+    border-color: $marca;
+    color: $marca;
+
+    .bv-pasos__num {
+      background: $marca;
+      color: #fff;
+    }
+  }
+
+  &__item.is-hecho .bv-pasos__num {
+    background: #e3f4ea;
+    color: #1e8a4c;
+  }
+}
+
+.bv-aviso {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fffaf0;
+  border: 1px solid #f3d9a4;
+  color: #7a5310;
+}
+
+.bv-paso {
+  &__titulo {
+    margin: 0 0 16px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: $texto;
+  }
+
+  &__ayuda {
+    margin: 0 0 16px;
+    color: $suave;
+    line-height: 1.8;
+
+    a {
+      color: $marca;
+      font-weight: 600;
+    }
+  }
+}
+
+.bv-tag {
+  display: inline-block;
+  margin: 0 2px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #eef6fb;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: $marca;
+}
+
+.bv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bv-tarjeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid $borde;
+  border-radius: 12px;
+  transition: border-color 0.15s, background-color 0.15s;
+
+  &.is-elegida {
+    border-color: $marca;
+    background: #f5fafd;
+  }
+
+  &__img {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #eef6fb;
+    color: $marca;
+    font-size: 1.4rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__nombre {
+    overflow: hidden;
+    font-weight: 700;
+    color: $texto;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__meta {
+    font-size: 0.8rem;
+    color: $suave;
+  }
+}
+
+.bv-boton-elegir {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid $marca;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: $marca;
+  cursor: pointer;
+
+  &.is-activo {
+    background: $marca;
+    color: #fff;
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: default;
+  }
+}
+
+.bv-boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 10px;
+  background: $marca;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+
+  &--suave {
+    background: #f1f4f6;
+    color: $texto;
+  }
+}
+
+.bv-vacio {
+  color: $suave;
+}
+
+.bv-listo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #e9f7ef;
+  font-weight: 600;
+  color: #1e7a45;
+}
+
+@media (max-width: 575.98px) {
+  .bv {
+    padding: 18px 14px;
+  }
+
+  .bv-pasos {
+    flex-wrap: wrap;
+  }
+}

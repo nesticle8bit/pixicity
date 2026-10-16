@@ -1,0 +1,110 @@
+.sil__intro {
+  margin: 0 0 20px;
+  color: #6b7782;
+
+  a {
+    font-weight: 600;
+    color: #006595;
+  }
+}
+
+.sil__bloque {
+  margin-bottom: 28px;
+}
+
+.sil__titulo {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1f2a33;
+}
+
+.sil__form {
+  display: flex;
+  gap: 8px;
+  max-width: 480px;
+  margin-bottom: 12px;
+}
+
+.sil__boton {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: #006595;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  &--suave {
+    margin-left: auto;
+    background: #f1f4f6;
+    color: #1f2a33;
+  }
+}
+
+.sil__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sil__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px 4px 12px;
+  border-radius: 999px;
+  background: #eef6fb;
+  font-weight: 600;
+  color: #006595;
+
+  button {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+
+    &:hover {
+      background: #d7eaf5;
+    }
+  }
+}
+
+.sil__usuarios {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sil__usuario {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  a {
+    font-weight: 600;
+    color: #1f2a33;
+  }
+}
+
+.sil__vacio {
+  margin: 0;
+  color: #6b7782;
+}

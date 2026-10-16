@@ -1,3 +1,4 @@
+@if (!oculto()) {
 @if (compartidoPor(); as por) {
 <p class="sc-compartido">
   <i class="ti ti-repeat" aria-hidden="true"></i>
@@ -55,6 +56,10 @@
         aria-label="Denunciar shout">
         <i class="ti ti-flag" aria-hidden="true"></i>
       </button>
+      <button type="button" class="sc-action sc-action--secundaria" (click)="silenciarAutor()"
+        [matTooltip]="'Silenciar a @' + autor()" [attr.aria-label]="'Silenciar a ' + autor()">
+        <i class="ti ti-volume-off" aria-hidden="true"></i>
+      </button>
       }
       <a class="sc-action" [routerLink]="enlace()" matTooltip="Comentar"
         [attr.aria-label]="'Comentar (' + (interacciones().comentarios ?? 0) + ' comentarios)'">
@@ -87,3 +92,4 @@
     </footer>
   </div>
 </article>
+}

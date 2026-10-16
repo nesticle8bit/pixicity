@@ -41,6 +41,9 @@
                             {{notificacion.usuarioQueHaceAccion?.userName}}
                           </a>
                           <span [innerHTML]="notificacion.mensaje"></span>
+                          @if (notificacion.tipoString === 'Moderacion') {
+                            <a routerLink="/paginas/protocolo">· ver protocolo</a>
+                          }
                           @if (notificacion.shoutId && notificacion.shoutAutor) {
                             <a [routerLink]="['/shouts', notificacion.shoutAutor, notificacion.shoutId]">· ver</a>
                           }

@@ -10,6 +10,7 @@ import { ComunidadTemaViewComponent } from '../../components/comunidades/comunid
 import { ComunidadMiembrosComponent } from '../../components/comunidades/comunidad-miembros/comunidad-miembros.component';
 import { ComunidadesExplorarComponent } from '../../components/comunidades/comunidades-explorar/comunidades-explorar.component';
 import { AuthGuard } from '../../shared/guards/auth.guard';
+import { ComunidadModeracionComponent } from '../../components/comunidades/comunidad-moderacion/comunidad-moderacion.component';
 
 const routes: Routes = [
   { path: '', component: ComunidadesIndexComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: ':slug/nuevo-tema', component: ComunidadTemaCreateComponent, canActivate: [AuthGuard] },
   { path: ':slug/tema/:id/editar', component: ComunidadTemaCreateComponent, canActivate: [AuthGuard] },
   { path: ':slug/miembros', component: ComunidadMiembrosComponent },
+  { path: ':slug/moderacion', component: ComunidadModeracionComponent, canActivate: [AuthGuard] },
   { path: ':slug/tema/:id/:url', component: ComunidadTemaViewComponent },
   { path: ':slug', component: ComunidadViewComponent },
 ];

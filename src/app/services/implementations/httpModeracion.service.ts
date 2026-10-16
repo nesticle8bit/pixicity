@@ -4,10 +4,10 @@ import { HelperService } from '../shared/helper.service';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { ModeracionLog, PaginaReportes } from 'src/app/models/admin/moderacion.model';
+import { ModeracionLog, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
 
 @Injectable()
 export class HttpModeracionService implements IHttpModeracionService {
@@ -56,11 +56,28 @@ export class HttpModeracionService implements IHttpModeracionService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  eliminarContenidoReportado(reporteId: number): Observable<boolean> {
+  eliminarContenidoReportado(reporteId: number, regla: string | null = null): Observable<boolean> {
+    const extra = regla ? `&regla=${encodeURIComponent(regla)}` : '';
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/moderacion/eliminarContenidoReportado?reporteId=${reporteId}`, {})
+      .post<ApiResponse<boolean>>(`${environment.api}/api/moderacion/eliminarContenidoReportado?reporteId=${reporteId}${extra}`, {})
       .pipe(this.unwrap<boolean>())
       .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getReportesComunidad(comunidadId: number, soloPendientes: boolean): Observable<ReportesComunidad> {
+    return this.http
+      .get<ApiResponse<ReportesComunidad>>(
+        `${environment.api}/api/moderacion/getReportesComunidad?comunidadId=${comunidadId}&soloPendientes=${soloPendientes}`,
+      )
+      .pipe(this.unwrap<ReportesComunidad>())
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getReglasProtocolo(): Observable<ReglaProtocolo[]> {
+    return this.http
+      .get<ApiResponse<ReglaProtocolo[]>>(`${environment.api}/api/moderacion/getReglasProtocolo`)
+      .pipe(this.unwrap<ReglaProtocolo[]>())
+      .pipe(catchError(() => of([] as ReglaProtocolo[])));
   }
 
   getModeracionLogs(page: number, pageCount: number): Observable<PaginatedData<ModeracionLog>> {

@@ -49,12 +49,17 @@ test('moderación: un shout denunciado se muestra con su tipo y enlace, y se pue
       contenidoPreview: 'Compra seguidores baratos', autorUserName: 'spammer', autorAvatar: null, contenidoEliminado: false,
       contextoUrl: 'spammer' },
   ]))));
+  await page.route(/\/api\/moderacion\/getReglasProtocolo/i, (r) => r.fulfill(ok([
+    { id: 'spam', titulo: 'Spam o publicidad', descripcion: 'Publicidad no autorizada.' },
+  ])));
   let eliminado = '';
+  let regla = '';
   await page.route(/\/api\/moderacion\/eliminarContenidoReportado/i, (r) => {
-    eliminado = new URL(r.request().url()).searchParams.get('reporteId') ?? '';
+    const url = new URL(r.request().url());
+    eliminado = url.searchParams.get('reporteId') ?? '';
+    regla = url.searchParams.get('regla') ?? '';
     return r.fulfill(ok(true));
   });
-  page.on('dialog', (d) => d.accept());
 
   await page.goto('/administracion/moderacion');
   const fila = page.getByRole('row', { name: /Compra seguidores baratos/ });
@@ -63,5 +68,12 @@ test('moderación: un shout denunciado se muestra con su tipo y enlace, y se pue
 
   await fila.getByRole('button', { name: 'Acciones' }).click();
   await page.getByRole('menuitem', { name: /Borrar contenido/ }).click();
+
+  // Se elige la regla del protocolo que incumple: el autor la recibe en su aviso.
+  const dialogo = page.getByRole('dialog', { name: 'Eliminar contenido' });
+  await expect(dialogo.getByText('Denunciado por: Spam o publicidad')).toBeVisible();
+  await dialogo.getByRole('radio', { name: /Spam o publicidad/ }).check();
+  await dialogo.getByRole('button', { name: 'Eliminar' }).click();
   await expect.poll(() => eliminado).toBe('3');
+  expect(regla).toBe('spam');
 });

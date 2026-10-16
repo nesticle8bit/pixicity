@@ -35,20 +35,20 @@
     <dl class="auth-stats">
       <div>
         <dt>Usuarios</dt>
-        <dd>{{ s.totalUsuarios | number }}</dd>
+        <dd>{{ s.usuarios | number }}</dd>
       </div>
       <div>
         <dt>Posts</dt>
-        <dd>{{ s.totalPosts | number }}</dd>
+        <dd>{{ s.posts | number }}</dd>
       </div>
       <div>
         <dt>Comentarios</dt>
-        <dd>{{ s.totalComentarios | number }}</dd>
+        <dd>{{ s.comentarios | number }}</dd>
       </div>
-      @if (s.onlineUsers && s.onlineUsers.total) {
+      @if (s.listaOnline && s.listaOnline.total) {
       <div>
         <dt><span class="auth-stats__punto" aria-hidden="true"></span> En línea</dt>
-        <dd>{{ s.onlineUsers.total | number }}</dd>
+        <dd>{{ s.listaOnline.total | number }}</dd>
       </div>
       }
     </dl>

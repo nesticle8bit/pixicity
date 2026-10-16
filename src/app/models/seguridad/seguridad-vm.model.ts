@@ -148,11 +148,16 @@ export interface BloqueoViewModel {
   fechaRegistro: string;
 }
 
+/** GET /api/general/getEstadisticas (contadores públicos del sitio). */
 export interface EstadisticasViewModel {
-  onlineUsers: OnlineUsersListViewModel;
-  totalUsuarios: number;
-  totalPosts: number;
-  totalComentarios: number;
+  usuariosOnline: number;
+  listaOnline: OnlineUsersListViewModel;
+  usuarios: number;
+  posts: number;
+  comentarios: number;
+  shouts: number;
+  comunidades: number;
+  fotos: number;
 }
 
 export interface UsuarioPerfilViewModel {

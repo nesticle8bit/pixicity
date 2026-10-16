@@ -1,3 +1,4 @@
+import { AvisoProtocoloComponent } from '../../shared/aviso-protocolo/aviso-protocolo.component';
 import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, map, of, switchMap } from 'rxjs';
@@ -44,6 +45,7 @@ const MAX_AUTO_TAGS = 6;
     templateUrl: './posts-create.component.html',
     styleUrls: ['./posts-create.component.scss'],
     imports: [
+        AvisoProtocoloComponent,
         BorradorAvisoComponent,
         FormsModule,
         ReactiveFormsModule,

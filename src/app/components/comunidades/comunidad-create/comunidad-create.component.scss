@@ -493,3 +493,161 @@
     }
   }
 }
+
+.comunidad-create {
+  .cc-hero {
+    flex-wrap: wrap;
+
+    &__pasos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 14px;
+      margin: 0 0 0 auto;
+      padding: 0;
+      list-style: none;
+      font-size: 13px;
+      font-weight: 600;
+
+      li {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        opacity: 0.7;
+
+        &.is-ok {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .cc-imagen {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    &__vista {
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      width: 72px;
+      height: 72px;
+      overflow: hidden;
+      border: 1px dashed #c9d3da;
+      border-radius: 14px;
+      background: #f5f8fa;
+      font-size: 28px;
+      color: #8a97a1;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &__acciones {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+
+      .cc-hint {
+        flex-basis: 100%;
+      }
+    }
+
+    &__subir {
+      position: relative;
+      cursor: pointer;
+
+      input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      &.is-cargando {
+        opacity: 0.6;
+      }
+    }
+  }
+
+  .cc-preview {
+    margin-bottom: 14px;
+    padding: 14px;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    background: #fff;
+
+    &__titulo {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #8a97a1;
+    }
+
+    &__tarjeta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    &__img {
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      width: 56px;
+      height: 56px;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #eef6fb;
+      font-size: 24px;
+      color: #006595;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &__info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+
+      strong {
+        overflow: hidden;
+        font-size: 15px;
+        color: #1f2a33;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    &__url,
+    &__meta {
+      overflow: hidden;
+      font-size: 12px;
+      color: #6b7782;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__desc {
+      display: -webkit-box;
+      margin: 10px 0 0;
+      overflow: hidden;
+      font-size: 13px;
+      color: #4a5660;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow-wrap: anywhere;
+    }
+  }
+}

@@ -34,3 +34,16 @@ export interface ModeracionLog {
   detalle: string | null;
   fechaRegistro: string;
 }
+
+/** Regla del protocolo que se cita al eliminar contenido (GET /api/moderacion/getReglasProtocolo). */
+export interface ReglaProtocolo {
+  id: string;
+  titulo: string;
+  descripcion: string;
+}
+
+/** Denuncias del panel de moderación de una comunidad. */
+export interface ReportesComunidad {
+  reportes: Reporte[];
+  pendientes: number;
+}

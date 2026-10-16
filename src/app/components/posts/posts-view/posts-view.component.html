@@ -114,7 +114,7 @@
 
           <div class="post-body">
             <div class="contenido">
-              <span [innerHTML]="post.contenido | contenidoSeo:post.titulo"></span>
+              <span [innerHTML]="post.contenido | contenidoSeo:post.titulo | enlazarHashtags"></span>
             </div>
           </div>
 

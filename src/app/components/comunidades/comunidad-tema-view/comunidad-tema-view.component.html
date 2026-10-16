@@ -133,7 +133,7 @@
           </div>
 
           <div class="tema-body">
-            <div class="tema-content" [innerHTML]="tema.contenido | contenidoSeo:tema.titulo"></div>
+            <div class="tema-content" [innerHTML]="tema.contenido | contenidoSeo:tema.titulo | enlazarHashtags"></div>
 
             <div class="tema-vote">
               <button type="button" class="tema-vote__btn up" [class.active]="tema.miVoto === 1"

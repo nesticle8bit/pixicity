@@ -1,3 +1,4 @@
+import { EnlazarHashtagsPipe } from 'src/app/shared/pipes/enlazarHashtags.pipe';
 import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { environment } from 'src/environments/environment';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -50,7 +51,7 @@ import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsua
         DecimalPipe,
         DatePipe,
         TimeAgoPipe,
-        ContenidoSeoPipe,
+        ContenidoSeoPipe, EnlazarHashtagsPipe,
     ],
 })
 export class PostsViewComponent implements OnInit {

@@ -16,9 +16,12 @@
       <img [src]="url()" alt="Imagen del shout" loading="lazy">
     </a>
   } @else if (esEnlace) {
-    <a [href]="url()" target="_blank" rel="noopener" class="sm-card">
+    <a [href]="url()" target="_blank" rel="noopener" class="sm-card" [class.sm-card--grande]="!!mediaImagen() && !imagenFallo()">
       @if (mediaImagen(); as mediaImagen) {
-        <div class="sm-card__img" [style.background-image]="'url(' + mediaImagen + ')'"></div>
+        @if (!imagenFallo()) {
+        <img class="sm-card__img" [src]="mediaImagen" alt="" loading="lazy" decoding="async" width="1200" height="630"
+          (error)="imagenFallo.set(true)" />
+        }
       }
       <div class="sm-card__body">
         <span class="sm-card__host">{{hostname}}</span>

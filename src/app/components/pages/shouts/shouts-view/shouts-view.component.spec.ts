@@ -1,3 +1,4 @@
+import { provideRouter, Router } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
@@ -12,6 +13,7 @@ import { ShoutsViewComponent } from './shouts-view.component';
 
 describe('ShoutsViewComponent: me gusta y favoritos', () => {
   let perfil: jasmine.SpyObj<IHttpPerfilService>;
+  let navegar: jasmine.Spy;
   let avisos: jasmine.SpyObj<NotificationService>;
 
   function crear(sesion: boolean): ShoutsViewComponent {
@@ -26,15 +28,17 @@ describe('ShoutsViewComponent: me gusta y favoritos', () => {
     perfil.getReshouts.and.returnValue(of({ usuarios: [], total: 0 }));
     perfil.getShoutById.and.returnValue(of({ id: 5, comentario: 'hola', avatar: { userName: 'ana' } } as any));
     perfil.getShoutInteracciones.and.returnValue(of({ meGustas: 3, favoritos: 1, meGusta: false, favorito: true }));
-    avisos = jasmine.createSpyObj('NotificationService', ['warning', 'success', 'confirm']);
+    avisos = jasmine.createSpyObj('NotificationService', ['warning', 'info', 'success', 'confirm']);
 
     TestBed.configureTestingModule({
       providers: [
+        // Primero el router real: el ActivatedRoute simulado de abajo tiene que pisar el suyo.
+        provideRouter([]),
         { provide: ActivatedRoute, useValue: { paramMap: of(convertToParamMap({ id: '5' })) } },
         { provide: IHttpPerfilService, useValue: perfil },
         {
           provide: IHttpSecurityService,
-          useValue: { getCurrentUser: () => ({ usuario: sesion ? { userName: 'yo' } : undefined, token: '' }) },
+          useValue: { getCurrentUser: () => ({ usuario: sesion ? { userName: 'yo' } : undefined, token: sesion ? 't' : '' }) },
         },
         { provide: NotificationService, useValue: avisos },
         { provide: DisplayComponentService, useValue: { setDisplay: () => {} } },
@@ -42,6 +46,7 @@ describe('ShoutsViewComponent: me gusta y favoritos', () => {
         { provide: MatSnackBar, useValue: { open: () => {} } },
       ],
     });
+    navegar = spyOn(TestBed.inject(Router), 'navigate').and.resolveTo(true);
     const c = TestBed.runInInjectionContext(() => new ShoutsViewComponent());
     c.ngOnInit();
     return c;
@@ -90,13 +95,14 @@ describe('ShoutsViewComponent: me gusta y favoritos', () => {
     expect(c.compartidoPor().total).toBe(1);
   });
 
-  it('sin sesión avisa y no llama al API', () => {
+  it('sin sesión avisa, lleva al login (volviendo a esta página) y no llama al API', () => {
     const c = crear(false);
 
     c.alternarMeGusta();
     c.alternarFavorito();
 
-    expect(avisos.warning).toHaveBeenCalledTimes(2);
+    expect(avisos.info).toHaveBeenCalledTimes(2);
+    expect(navegar).toHaveBeenCalledWith(['/login'], { queryParams: { returnUrl: jasmine.any(String) } });
     expect(perfil.alternarMeGustaShout).not.toHaveBeenCalled();
     expect(perfil.alternarFavoritoShout).not.toHaveBeenCalled();
   });

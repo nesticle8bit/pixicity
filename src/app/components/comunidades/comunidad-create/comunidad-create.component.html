@@ -1,11 +1,16 @@
 <div class="container container--home comunidad-create">
-  <!-- <header class="cc-hero">
-    <div class="cc-hero__icon"><i class="ti ti-users-group"></i></div>
+  <header class="cc-hero">
+    <div class="cc-hero__icon"><i class="ti ti-users-group" aria-hidden="true"></i></div>
     <div class="cc-hero__text">
       <h1>Crear una comunidad</h1>
       <p>Reúne a personas con tus mismos intereses y empieza a compartir temas.</p>
     </div>
-  </header> -->
+    <ol class="cc-hero__pasos" aria-label="Progreso">
+      @for (p of pasos; track p.id) {
+      <li [class.is-ok]="p.ok()"><i class="ti" [class.ti-circle-check]="p.ok()" [class.ti-circle]="!p.ok()" aria-hidden="true"></i> {{ p.titulo }}</li>
+      }
+    </ol>
+  </header>
 
   <form [formGroup]="formGroup" (ngSubmit)="crear()" class="cc-grid">
     <div class="cc-main">
@@ -40,6 +45,30 @@
           @if (formGroup.get('nombreCorto')?.touched && formGroup.get('nombreCorto')?.invalid) {
           <small class="cc-err">Formato inválido (solo a-z, 0-9 y guiones).</small>
           }
+        </div>
+
+        <div class="cc-field">
+          <label for="comunidad-create-imagen">Imagen o logo</label>
+          <div class="cc-imagen">
+            <div class="cc-imagen__vista">
+              @if (formGroup.value.imagen) {
+              <img [src]="formGroup.value.imagen" alt="Imagen de la comunidad" width="72" height="72" />
+              } @else {
+              <i class="ti ti-photo" aria-hidden="true"></i>
+              }
+            </div>
+            <div class="cc-imagen__acciones">
+              <label class="cc-btn cc-btn--ghost cc-imagen__subir" [class.is-cargando]="subiendo">
+                <input id="comunidad-create-imagen" type="file" accept="image/png,image/jpeg,image/webp,image/gif"
+                  (change)="subirImagen($event)" [disabled]="subiendo" />
+                <i class="ti ti-upload" aria-hidden="true"></i> {{ subiendo ? 'Subiendo…' : (formGroup.value.imagen ? 'Cambiar' : 'Subir imagen') }}
+              </label>
+              @if (formGroup.value.imagen) {
+              <button type="button" class="cc-btn cc-btn--ghost" (click)="quitarImagen()">Quitar</button>
+              }
+              <small class="cc-hint">Cuadrada, al menos 200×200 px. Opcional: sin imagen se usa un ícono.</small>
+            </div>
+          </div>
         </div>
 
         <div class="cc-field">
@@ -149,13 +178,35 @@
 
       <div class="cc-actions">
         <a [routerLink]="['/comunidades']" class="cc-btn cc-btn--ghost">Cancelar</a>
-        <button type="submit" class="cc-btn cc-btn--primary" [disabled]="loading">
-          <i class="ti ti-check"></i> Crear comunidad
+        <button type="submit" class="cc-btn cc-btn--primary" [disabled]="loading || subiendo">
+          <i class="ti ti-check" aria-hidden="true"></i> {{ loading ? 'Creando…' : 'Crear comunidad' }}
         </button>
       </div>
     </div>
 
     <aside class="cc-aside">
+      <section class="cc-preview" aria-label="Vista previa">
+        <span class="cc-preview__titulo">Vista previa</span>
+        <div class="cc-preview__tarjeta">
+          <div class="cc-preview__img">
+            @if (formGroup.value.imagen) {
+            <img [src]="formGroup.value.imagen" alt="" width="56" height="56" />
+            } @else {
+            <i class="ti ti-users-group" aria-hidden="true"></i>
+            }
+          </div>
+          <div class="cc-preview__info">
+            <strong>{{ formGroup.value.nombre || 'Nombre de tu comunidad' }}</strong>
+            <span class="cc-preview__url">/comunidades/{{ formGroup.value.nombreCorto || 'nombre-corto' }}</span>
+            <span class="cc-preview__meta">
+              <i class="ti" [class.ti-world]="+formGroup.value.acceso === 1" [class.ti-user-shield]="+formGroup.value.acceso === 2" aria-hidden="true"></i>
+              {{ nombreCategoria || 'Sin categoría' }}
+            </span>
+          </div>
+        </div>
+        <p class="cc-preview__desc">{{ formGroup.value.descripcion || 'Aquí aparecerá la descripción que escribas.' }}</p>
+      </section>
+
       <div class="cc-rules">
         <span class="cc-rules__title"><i class="ti ti-shield-check"></i> Reglas para tu comunidad</span>
         <p>Para que tu comunidad sea exitosa, ten en cuenta estos puntos:</p>

@@ -1,3 +1,5 @@
+import { IHttpSilenciosService } from './services/interfaces/httpSilencios.interface';
+import { HttpSilenciosService } from './services/implementations/httpSilencios.service';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
@@ -162,6 +164,7 @@ export const appConfig: ApplicationConfig = {
     { provide: IHttpFotosService, useClass: HttpFotosService },
     { provide: IHttpComunidadesService, useClass: HttpComunidadesService },
     { provide: IHttpBloqueosService, useClass: HttpBloqueosService },
+    { provide: IHttpSilenciosService, useClass: HttpSilenciosService },
     { provide: IHttpUsuarioPerfilService, useClass: HttpUsuarioPerfilService },
     { provide: IHttpRangosService, useClass: HttpRangosService },
     { provide: IHttpComentariosPostService, useClass: HttpComentariosPostService },

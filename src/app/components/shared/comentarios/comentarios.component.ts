@@ -1,3 +1,4 @@
+import { enlazarHashtagsTexto } from 'src/app/shared/pipes/enlazarHashtags.pipe';
 import { Component, DestroyRef, ElementRef, inject, Input, output, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EmojisPopoverService } from '../../bottom-sheets/bottom-sheets-emojis/emojis-popover.service';
@@ -476,7 +477,7 @@ export class ComentariosComponent {
 
   // - Formato
 
-  /** Escapa HTML y convierte URLs y @menciones en enlaces. */
+  /** Escapa HTML y convierte URLs, @menciones y #hashtags en enlaces. */
   formatear(texto: string): string {
     if (!texto) return '';
     const escapado = texto
@@ -484,9 +485,9 @@ export class ComentariosComponent {
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
 
-    return escapado
+    const enlazado = escapado
       .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="nofollow noopener">$1</a>')
-      .replace(/(^|\s)@([a-zA-Z0-9_]+)/g, '$1<a href="/perfil/$2">@$2</a>')
-      .replace(/\n/g, '<br>');
+      .replace(/(^|\s)@([a-zA-Z0-9_]+)/g, '$1<a href="/perfil/$2">@$2</a>');
+    return enlazarHashtagsTexto(enlazado).replace(/\n/g, '<br>');
   }
 }

@@ -101,3 +101,23 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Enlace con imagen (Open Graph o captura de la página): imagen grande arriba y el texto abajo. */
+.sm-card--grande {
+  flex-direction: column;
+
+  .sm-card__img {
+    flex: none;
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1200 / 630;
+    min-height: 0;
+    object-fit: cover;
+    background-color: #e9e9e9;
+  }
+}
+
+img.sm-card__img {
+  object-fit: cover;
+}

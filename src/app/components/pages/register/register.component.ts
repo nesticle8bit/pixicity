@@ -17,13 +17,12 @@ import { NgClass } from '@angular/common';
 import { SelectAutocompleteComponent } from '../../shared/select-autocomplete/select-autocomplete.component';
 import { SelectOptionDirective, SelectLabelDirective } from '../../shared/select-autocomplete/select-template.directives';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'app-register',
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
-    imports: [NgClass, FormsModule, ReactiveFormsModule, SelectAutocompleteComponent, SelectOptionDirective, SelectLabelDirective, MatCheckbox, MatButton, RouterLink, TurnstileComponent, AuthLateralComponent]
+    imports: [NgClass, FormsModule, ReactiveFormsModule, SelectAutocompleteComponent, SelectOptionDirective, SelectLabelDirective, MatCheckbox, TurnstileComponent, AuthLateralComponent]
 })
 export class RegisterComponent implements OnInit {
   private parametrosService = inject(IHttpParametrosService);
@@ -197,7 +196,8 @@ export class RegisterComponent implements OnInit {
             `Te enviamos un correo a ${user.email} para confirmar tu cuenta. Ya puedes iniciar sesión.`,
             '¡Cuenta creada!',
           );
-          this.router.navigate(['/login']);
+          // Al entrar por primera vez sigue la bienvenida guiada (comunidades, a quién seguir, primer shout).
+          this.router.navigate(['/login'], { queryParams: { returnUrl: '/bienvenida' } });
         }
       },
       // Cada token de captcha sirve una sola vez: tras un error (usuario repetido, etc.) se pide otro.

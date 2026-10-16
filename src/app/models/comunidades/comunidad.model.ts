@@ -70,6 +70,8 @@ export interface ComunidadDetalle {
   seguidoresCount: number;
   soyMiembro: boolean;
   laSigo: boolean;
+  /** Creador o staff de la comunidad: ve el panel de moderación. */
+  puedoModerar?: boolean;
 }
 
 export interface ComunidadGuardar {
@@ -160,6 +162,8 @@ export interface TemaDetalle {
   votos: number;
   miVoto: number;
   comunidad: { nombre: string; nombreCorto: string; usuarioId: number } | null;
+  /** Creador o staff de la comunidad (o staff del sitio). */
+  puedoModerar?: boolean;
   userName: string | null;
   avatar: string | null;
   temasUsuario: TemaDelUsuario[];

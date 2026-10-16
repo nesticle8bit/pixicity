@@ -8,6 +8,7 @@ import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametr
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SelectAutocompleteComponent } from '../../shared/select-autocomplete/select-autocomplete.component';
+import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { SelectOptionDirective, SelectLabelDirective } from '../../shared/select-autocomplete/select-template.directives';
 
 @Component({
@@ -30,6 +31,7 @@ export class ComunidadCreateComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private notificationService = inject(NotificationService);
+  private fotosService = inject(IHttpFotosService);
 
   // Solo el host (sin protocolo) para mostrar el prefijo de la URL de la comunidad.
   public readonly publicHost = new URL(environment.publicUrl).host;
@@ -41,6 +43,23 @@ export class ComunidadCreateComponent implements OnInit {
   public subCategorias: any[] = [];
   public paises: any[] = [];
   public loading: boolean = false;
+  public subiendo = false;
+
+  /** Checklist del encabezado: se completa a medida que se llena el formulario. */
+  public readonly pasos = [
+    { id: 'identidad', titulo: 'Identidad', ok: () => this.valido('nombre') && this.valido('nombreCorto') && this.valido('descripcion') },
+    { id: 'clasificacion', titulo: 'Clasificación', ok: () => this.valido('comunidadCategoriaId') },
+    { id: 'acceso', titulo: 'Acceso y permisos', ok: () => this.valido('acceso') && this.valido('permisos') },
+  ];
+
+  get nombreCategoria(): string | null {
+    const id = +this.formGroup.value.comunidadCategoriaId;
+    return this.categorias.find((c) => c.id === id)?.nombre ?? null;
+  }
+
+  private valido(campo: string): boolean {
+    return !!this.formGroup.get(campo)?.valid;
+  }
 
   constructor() {
     this.formGroup = this.fb.group({
@@ -50,6 +69,7 @@ export class ComunidadCreateComponent implements OnInit {
       comunidadSubCategoriaId: [null],
       paisId: [null],
       descripcion: ['', [Validators.required, Validators.maxLength(1000)]],
+      imagen: [null as string | null],
       acceso: [1, Validators.required],
       permisos: [3, Validators.required],
     });
@@ -74,6 +94,32 @@ export class ComunidadCreateComponent implements OnInit {
         .replace(/-+/g, '-');
       slugCtrl.setValue(slug);
     }
+  }
+
+  subirImagen(evento: Event): void {
+    const input = evento.target as HTMLInputElement;
+    const archivo = input.files?.[0];
+    input.value = '';
+    if (!archivo) return;
+    if (archivo.size > 8 * 1024 * 1024) {
+      this.notificationService.error('La imagen no puede pesar más de 8 MB', 'Imagen');
+      return;
+    }
+    this.subiendo = true;
+    this.fotosService
+      .uploadImage(archivo)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (url) => {
+          this.formGroup.patchValue({ imagen: url });
+          this.subiendo = false;
+        },
+        error: () => (this.subiendo = false),
+      });
+  }
+
+  quitarImagen(): void {
+    this.formGroup.patchValue({ imagen: null });
   }
 
   onCategoriaChange(): void {

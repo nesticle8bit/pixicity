@@ -1,3 +1,6 @@
+import { MatDialog } from '@angular/material/dialog';
+import { filter, switchMap } from 'rxjs';
+import { DialogReglaEliminarComponent, ReglaEliminarData, ReglaEliminarResultado } from 'src/app/components/dialogs/dialog-regla-eliminar/dialog-regla-eliminar.component';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
@@ -34,6 +37,7 @@ import { RouterLink } from '@angular/router';
 export class DashboardModeracionComponent implements OnInit {
   paginationService = inject(PaginationService);
   private moderacionService = inject(IHttpModeracionService);
+  private dialog = inject(MatDialog);
   private notificationService = inject(NotificationService);
   private signalrService = inject(SignalrService);
 
@@ -143,9 +147,25 @@ export class DashboardModeracionComponent implements OnInit {
     });
   }
 
+  /** Pide la regla del protocolo que incumple (se le cita al autor) y elimina. */
   eliminarContenido(reporte: Reporte): void {
-    if (!this.notificationService.confirm('¿Borrar el contenido reportado? Esta acción no se puede deshacer.')) return;
-    this.moderacionService.eliminarContenidoReportado(reporte.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    this.moderacionService
+      .getReglasProtocolo()
+      .pipe(
+        switchMap((reglas) =>
+          this.dialog
+            .open<DialogReglaEliminarComponent, ReglaEliminarData, ReglaEliminarResultado>(DialogReglaEliminarComponent, {
+              width: '520px',
+              maxWidth: '95vw',
+              data: { reglas, motivoDenuncia: reporte.motivo },
+            })
+            .afterClosed(),
+        ),
+        filter((regla): regla is string => regla !== undefined),
+        switchMap((regla) => this.moderacionService.eliminarContenidoReportado(reporte.id, regla || null)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
       next: () => {
         reporte.contenidoEliminado = true;
         reporte.resuelto = true;

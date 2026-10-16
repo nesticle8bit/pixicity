@@ -401,3 +401,15 @@
     background: #fff4c2;
   }
 }
+
+/* "Inicia sesión para comentar": enlace al login con el color de enlace del sitio (contraste AA). */
+.com-login {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 700;
+  color: #005a85;
+  text-decoration: underline;
+  cursor: pointer;
+}

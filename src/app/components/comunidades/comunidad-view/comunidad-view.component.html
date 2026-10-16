@@ -53,6 +53,11 @@
                     <i class="ti ti-pencil"></i> Editar
                   </a>
                 }
+                @if (comunidad.puedoModerar || esStaff) {
+                  <a [routerLink]="['/comunidades', comunidad.nombreCorto, 'moderacion']" class="boton gris">
+                    <i class="ti ti-shield-check" aria-hidden="true"></i> Moderación
+                  </a>
+                }
                 @if (logueado && !comunidad.soyMiembro) {
                   <a class="boton verde" (click)="unirme()" role="button" tabindex="0" (keydown.enter)="unirme()" (keydown.space)="unirme(); $event.preventDefault()"><i class="ti ti-user-plus"></i> Unirme</a>
                 }

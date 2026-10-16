@@ -1,4 +1,5 @@
 <div class="cp container container--home">
+  <app-aviso-protocolo que="post" />
   <form [formGroup]="formGroup" (ngSubmit)="publicarPost()">
     @if (borrador?.pendiente; as pendiente) {
       <app-borrador-aviso [fecha]="pendiente.fecha" (recuperar)="recuperarBorrador()" (descartar)="borrador?.descartar()"></app-borrador-aviso>

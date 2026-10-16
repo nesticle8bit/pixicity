@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
+import { BienvenidaComponent } from './components/pages/bienvenida/bienvenida.component';
 import { ApiDocumentationComponent } from './components/pages/api-documentation/api-documentation.component';
 import { BorradoresComponent } from './components/pages/borradores/borradores.component';
 import { EnVivoComponent } from './components/pages/en-vivo/en-vivo.component';
@@ -118,6 +119,8 @@ export const routes: Routes = [
     path: 'mi',
     component: MiHomeComponent,
   },
+  // Primer ingreso después de registrarse (el registro manda a /login?returnUrl=/bienvenida).
+  { path: 'bienvenida', component: BienvenidaComponent, canActivate: [AuthGuard] },
   // Página pública e indexable de cada #hashtag de los shouts (mismo muro, filtrado).
   { path: 'hashtag/:tag', component: MiHomeComponent },
   {

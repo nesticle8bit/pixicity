@@ -16,13 +16,14 @@ import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.compon
 import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 import { AccountPerfilComponent } from './account-perfil/account-perfil.component';
 import { AccountBloqueadosComponent } from './account-bloqueados/account-bloqueados.component';
+import { AccountSilenciadosComponent } from './account-silenciados/account-silenciados.component';
 import { AccountPasswordComponent } from './account-password/account-password.component';
 import { AccountDosFactoresComponent } from './account-dos-factores/account-dos-factores.component';
 import { AccountNotificacionesComponent } from './account-notificaciones/account-notificaciones.component';
 import { AccountMisDatosComponent } from './account-mis-datos/account-mis-datos.component';
 import { ArrastrarFondoDirective, PosicionFondo } from 'src/app/shared/directives/arrastrar-fondo.directive';
 
-export type SeccionCuenta = 'datos' | 'perfil' | 'personalizacion' | 'password' | 'dos-factores' | 'bloqueados' | 'notificaciones' | 'mis-datos';
+export type SeccionCuenta = 'datos' | 'perfil' | 'personalizacion' | 'password' | 'dos-factores' | 'bloqueados' | 'silenciados' | 'notificaciones' | 'mis-datos';
 
 interface Seccion {
   id: SeccionCuenta;
@@ -47,6 +48,7 @@ export const GRUPOS_CUENTA: { nombre: string; secciones: Seccion[] }[] = [
       { id: 'password', label: 'Contraseña', icono: 'password', descripcion: 'Cambia tu contraseña de acceso.' },
       { id: 'dos-factores', label: 'Verificación en dos pasos', icono: 'verified_user', descripcion: 'Protege tu cuenta con un código extra al iniciar sesión.' },
       { id: 'bloqueados', label: 'Usuarios bloqueados', icono: 'block', descripcion: 'Personas que no pueden interactuar contigo.' },
+      { id: 'silenciados', label: 'Silenciados', icono: 'volume_off', descripcion: 'Personas y palabras que no quieres ver en tu muro.' },
     ],
   },
   {
@@ -78,6 +80,7 @@ const FONDO_PAGINA_VALIDO = /^https?:\/\/\S+\.(jpe?g|png|gif|webp)(\?\S*)?$/i;
     UserAvatarComponent,
     AccountPerfilComponent,
     AccountBloqueadosComponent,
+        AccountSilenciadosComponent,
     AccountPasswordComponent,
     AccountDosFactoresComponent,
     AccountNotificacionesComponent,

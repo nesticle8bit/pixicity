@@ -6,7 +6,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NgClass, DatePipe } from '@angular/common';
-import { MatButton } from '@angular/material/button';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 
 @Component({
@@ -17,7 +16,6 @@ import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
         NgClass,
         FormsModule,
         ReactiveFormsModule,
-        MatButton,
         RouterLink,
         AuthLateralComponent,
         DatePipe,

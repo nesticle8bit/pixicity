@@ -1,94 +1,78 @@
-@if (savedToFavorites.display) {
-<div class="mb-3" [@enterAnimation]
-  [ngClass]="{'nada-verde': savedToFavorites.type, 'nada-rojo': !savedToFavorites.type}">
-  {{savedToFavorites.message}}
-</div>
-}
-
-<section class="nels">
-  <p>
-    <i class="ti ti-award"></i> Dar puntos
-  </p>
-</section>
-
-<section class="meta">
-  <div class="metacentro">
-    <div class="float-start" id="puntos-agregados" [style.display]="addedPuntos ? 'block' : 'none'">
-      Puntos agregados!
+<section class="pm" aria-label="Puntos y acciones del post">
+  <!-- Puntos: el corazón del post (como en el Taringa! original) -->
+  <div class="pm-puntos">
+    <div class="pm-puntos__total" aria-live="polite">
+      <span class="pm-puntos__numero">{{ post.puntos || 0 | number }}</span>
+      <span class="pm-puntos__etiqueta">{{ post.puntos === 1 ? 'Punto' : 'Puntos' }}</span>
     </div>
 
-    @if (currentUser.usuario?.userName != post.usuario.userName) {
-    <div class="float-start" [style.display]="!addedPuntos ? 'block' : 'none'">
-      <div class="barpuntos">
+    <div class="pm-puntos__dar">
+      @if (esAutor) {
+      <p class="pm-puntos__nota"><i class="ti ti-user-check" aria-hidden="true"></i> Este es tu post: los puntos te los dan los demás.</p>
+      } @else if (!haySesion) {
+      <p class="pm-puntos__nota">¿Te gustó? <button type="button" class="pm-link" (click)="iniciarSesion()">Inicia sesión</button> para darle puntos.</p>
+      } @else if (puntosDados) {
+      <p class="pm-puntos__ok" role="status"><i class="ti ti-circle-check" aria-hidden="true"></i> ¡Le diste {{ puntosDados }} {{ puntosDados === 1 ? 'punto' : 'puntos' }}! Gracias por valorar el aporte.</p>
+      } @else if (availablePuntos.length) {
+      <span class="pm-puntos__titulo" id="pm-dar-puntos"><i class="ti ti-award" aria-hidden="true"></i> Dar puntos</span>
+      <div class="barpuntos" role="group" aria-labelledby="pm-dar-puntos">
         @for (punto of availablePuntos; track punto) {
-        <a (click)="votarPost(punto)" role="button" tabindex="0" (keydown.enter)="votarPost(punto)" (keydown.space)="votarPost(punto); $event.preventDefault()">
-          {{punto}}
-        </a>
+        <button type="button" class="pm-punto" [disabled]="votando" (click)="votarPost(punto)"
+          [attr.aria-label]="'Dar ' + punto + (punto === 1 ? ' punto' : ' puntos')">{{ punto }}</button>
         }
       </div>
-    </div>
-    }
-
-    <div class="float-end">
-      <p class="cupuntos">
-        <b id="puntos_post">{{post.puntos || 0}}</b> Puntos
-      </p>
+      } @else if (puntosCargados) {
+      <p class="pm-puntos__nota"><i class="ti ti-hourglass" aria-hidden="true"></i> Ya repartiste tus puntos de hoy. Mañana tendrás más.</p>
+      }
     </div>
   </div>
 
-  <div class="metabottom">
-    @if (currentUser.usuario && currentUser.usuario.userName != post.usuario.userName) {
-    <div class="botones float-start py-2">
-      <li>
-        <a (click)="recomendarPost(post.id)" matTooltip="Recomendar post" aria-label="Recomendar post" class="tetese" role="button" tabindex="0" (keydown.enter)="recomendarPost(post.id)" (keydown.space)="recomendarPost(post.id); $event.preventDefault()">P!</a>
-      </li>
-      <li>
-        <a (click)="agregarFavorito(post.id)" matTooltip="Agregar favoritos" aria-label="Agregar favoritos" role="button" tabindex="0" (keydown.enter)="agregarFavorito(post.id)" (keydown.space)="agregarFavorito(post.id); $event.preventDefault()">
-          <i class="ti ti-star favoritos"></i>
-        </a>
-      </li>
-      <li>
-        <a (click)="denunciarPost()" role="button" tabindex="0" (keydown.enter)="denunciarPost()" (keydown.space)="denunciarPost(); $event.preventDefault()">
-          <i class="ti ti-ban denunciar"></i> Denunciar
-        </a>
-      </li>
-      @if (post.seguirPost) {
-      <li>
-        <a class="unfollow_post" (click)="seguirPost()" role="button" tabindex="0" (keydown.enter)="seguirPost()" (keydown.space)="seguirPost(); $event.preventDefault()">
-          <i class="ti ti-eye dejar-seguir"></i> Dejar de seguir
-        </a>
-      </li>
-      }
-      @if (!post.seguirPost) {
-      <li>
-        <a class="follow_post" (click)="seguirPost()" role="button" tabindex="0" (keydown.enter)="seguirPost()" (keydown.space)="seguirPost(); $event.preventDefault()">
-          <i class="ti ti-ban seguir"></i> Seguir Post
-        </a>
-      </li>
-      }
-    </div>
+  <!-- Acciones -->
+  <div class="pm-acciones">
+    @if (!esAutor) {
+    <button type="button" class="pm-accion" [class.is-activa]="post.seguirPost" [attr.aria-pressed]="!!post.seguirPost"
+      [disabled]="procesando === 'seguir'" (click)="seguirPost()">
+      <i class="ti" [class.ti-bell-ringing]="post.seguirPost" [class.ti-bell]="!post.seguirPost" aria-hidden="true"></i>
+      {{ post.seguirPost ? 'Siguiendo' : 'Seguir post' }}
+    </button>
+    <button type="button" class="pm-accion" [class.is-activa]="enFavoritos" [attr.aria-pressed]="enFavoritos"
+      [disabled]="procesando === 'favorito' || enFavoritos" (click)="agregarFavorito()">
+      <i class="ti ti-star" [class.is-llena]="enFavoritos" aria-hidden="true"></i>
+      {{ enFavoritos ? 'En favoritos' : 'Agregar a favoritos' }}
+    </button>
+    <button type="button" class="pm-accion" (click)="recomendarPost()">
+      <i class="ti ti-speakerphone" aria-hidden="true"></i> Recomendar
+    </button>
+    <button type="button" class="pm-accion pm-accion--discreta" (click)="denunciarPost()" matTooltip="Denunciar este post"
+      aria-label="Denunciar este post">
+      <i class="ti ti-flag" aria-hidden="true"></i> <span class="pm-accion__texto-opcional">Denunciar</span>
+    </button>
     }
-
-    <div class="float-end py-2">
-      <div class="bulto">
-        <strong>{{post.visitantes}}</strong>
-        Visitas
-      </div>
-
-      <div class="bulto">
-        <strong id="cfavori">
-          {{post.favoritos}}
-        </strong>
-        Favoritos
-      </div>
-
-      <div class="bulto">
-        <strong id="cseguir">
-          {{post.seguidores}}
-        </strong>
-
-        Seguidores
-      </div>
-    </div>
   </div>
+
+  @if (aviso) {
+  <p class="pm-aviso" [class.pm-aviso--ok]="aviso.ok" role="status">
+    <i class="ti" [class.ti-circle-check]="aviso.ok" [class.ti-info-circle]="!aviso.ok" aria-hidden="true"></i> {{ aviso.texto }}
+  </p>
+  }
+
+  <!-- Estadísticas -->
+  <dl class="pm-stats">
+    <div class="pm-stat">
+      <dt><i class="ti ti-eye" aria-hidden="true"></i> Visitas</dt>
+      <dd>{{ post.visitantes || 0 | number }}</dd>
+    </div>
+    <div class="pm-stat">
+      <dt><i class="ti ti-star" aria-hidden="true"></i> Favoritos</dt>
+      <dd>{{ post.favoritos || 0 | number }}</dd>
+    </div>
+    <div class="pm-stat">
+      <dt><i class="ti ti-bell" aria-hidden="true"></i> Seguidores</dt>
+      <dd>{{ post.seguidores || 0 | number }}</dd>
+    </div>
+    <div class="pm-stat">
+      <dt><i class="ti ti-message-circle" aria-hidden="true"></i> Comentarios</dt>
+      <dd>{{ post.cantidadComentarios || 0 | number }}</dd>
+    </div>
+  </dl>
 </section>

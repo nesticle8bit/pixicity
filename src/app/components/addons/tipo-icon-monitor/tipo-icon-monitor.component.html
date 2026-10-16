@@ -12,4 +12,7 @@
         'ma_post': tipo() === 'PostNuevoUsuarioQueSigues',
         'ma_comment_resp': tipo() === 'Respuestas'
         }">
+  @if (tipo() === 'Moderacion') {
+  <i class="ti ti-shield-exclamation tipo-moderacion" aria-hidden="true"></i>
+  }
 </span>

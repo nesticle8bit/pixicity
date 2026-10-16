@@ -1,3 +1,4 @@
+import { IHttpSilenciosService } from 'src/app/services/interfaces/httpSilencios.interface';
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -48,6 +49,9 @@ export class ShoutCardComponent {
   private readonly notificationService = inject(NotificationService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly sesion = inject(SesionRequeridaService);
+  private readonly silencios = inject(IHttpSilenciosService);
+  /** El autor quedó silenciado desde esta tarjeta: se oculta (el muro ya no lo traerá). */
+  readonly oculto = signal(false);
   private readonly usuarioActual = inject(IHttpSecurityService).getCurrentUser()?.usuario?.userName ?? null;
 
   readonly shout = input.required<ShoutViewModel>();
@@ -130,6 +134,21 @@ export class ShoutCardComponent {
             next: () => this.notificationService.success('Denuncia enviada. Gracias por reportar.', 'Denuncia'),
             error: (e: unknown) => this.notificationService.error(e instanceof Error ? e.message : 'No se pudo denunciar', 'Denuncia'),
           });
+      });
+  }
+
+  silenciarAutor(): void {
+    if (!this.sesion.exigir('Inicia sesión para silenciar usuarios')) return;
+    const autor = this.autor();
+    this.silencios
+      .alternarUsuario(autor)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((silenciado) => {
+        this.oculto.set(silenciado);
+        this.notificationService.success(
+          `No verás más a @${autor} en tu muro. Puedes deshacerlo en Cuenta > Silenciados.`,
+          'Silenciado',
+        );
       });
   }
 

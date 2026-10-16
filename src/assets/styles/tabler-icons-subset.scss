@@ -1,11 +1,11 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (160).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (167).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2?v=eedd94c6fc") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=f105715e00") format("woff2");
 }
 
 @font-face {
@@ -38,6 +38,7 @@
 .ti-arrow-big-down-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6c6"; }
 .ti-arrow-big-up-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6cf"; }
 .ti-arrow-down:before { content: "\ea16"; }
+.ti-arrow-left:before { content: "\ea19"; }
 .ti-arrow-right:before { content: "\ea1f"; }
 .ti-arrow-up:before { content: "\ea25"; }
 .ti-arrow-up-right:before { content: "\ea24"; }
@@ -48,6 +49,8 @@
 .ti-article:before { content: "\f1e2"; }
 .ti-award:before { content: "\ea2c"; }
 .ti-ban:before { content: "\ea2e"; }
+.ti-bell:before { content: "\ea35"; }
+.ti-bell-ringing:before { content: "\ed07"; }
 .ti-book:before { content: "\ea39"; }
 .ti-brand-discord-filled:before { font-family: "tabler-icons-filled" !important; content: "\f7e4"; }
 .ti-brand-facebook:before { content: "\ec1a"; }
@@ -105,6 +108,7 @@
 .ti-heart-handshake:before { content: "\f0f3"; }
 .ti-history:before { content: "\ebea"; }
 .ti-home-heart:before { content: "\f353"; }
+.ti-hourglass:before { content: "\ef93"; }
 .ti-id:before { content: "\eac3"; }
 .ti-id-badge:before { content: "\eff7"; }
 .ti-id-badge-2:before { content: "\f076"; }
@@ -137,6 +141,7 @@
 .ti-message-off:before { content: "\ed41"; }
 .ti-messages:before { content: "\eb6c"; }
 .ti-mood-empty:before { content: "\eeb5"; }
+.ti-mood-happy:before { content: "\eaf4"; }
 .ti-mood-smile:before { content: "\eaf7"; }
 .ti-news:before { content: "\eafd"; }
 .ti-notes:before { content: "\eb6e"; }
@@ -158,6 +163,7 @@
 .ti-share:before { content: "\eb21"; }
 .ti-shield:before { content: "\eb24"; }
 .ti-shield-check:before { content: "\eb22"; }
+.ti-shield-exclamation:before { content: "\f9c6"; }
 .ti-smart-home:before { content: "\ecde"; }
 .ti-sparkles:before { content: "\f6d7"; }
 .ti-speakerphone:before { content: "\ed61"; }
@@ -183,6 +189,7 @@
 .ti-user-star:before { content: "\f7d1"; }
 .ti-users:before { content: "\ebf2"; }
 .ti-users-group:before { content: "\fa21"; }
+.ti-volume-off:before { content: "\f1c3"; }
 .ti-wand:before { content: "\ebcb"; }
 .ti-wifi:before { content: "\eb52"; }
 .ti-world:before { content: "\eb54"; }

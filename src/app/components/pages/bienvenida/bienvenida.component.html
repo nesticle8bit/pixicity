@@ -1,0 +1,141 @@
+<div class="container container--home">
+  <div class="bv">
+    <header class="bv__head">
+      <p class="bv__saludo">¡Hola{{ usuario?.userName ? ', @' + usuario?.userName : '' }}! 👋</p>
+      <h1 class="bv__titulo">Armemos tu muro</h1>
+      <p class="bv__sub">Tres pasos rápidos para que tu inicio no esté vacío. Puedes saltear cualquiera.</p>
+    </header>
+
+    <ol class="bv-pasos" aria-label="Pasos">
+      @for (p of pasos; track p.id; let i = $index) {
+      <li class="bv-pasos__item" [class.is-actual]="p.id === paso()" [class.is-hecho]="i < indice()"
+        [attr.aria-current]="p.id === paso() ? 'step' : null">
+        <button type="button" (click)="irA(p.id)">
+          <span class="bv-pasos__num">
+            @if (i < indice()) {
+            <i class="ti ti-check" aria-hidden="true"></i>
+            } @else {
+            {{ i + 1 }}
+            }
+          </span>
+          {{ p.titulo }}
+        </button>
+      </li>
+      }
+    </ol>
+
+    @if (sinConfirmar) {
+    <div class="bv-aviso" role="status">
+      <i class="ti ti-mail" aria-hidden="true"></i>
+      Confirma tu correo (revisa tu bandeja) para poder unirte, seguir y publicar. Mientras tanto puedes explorar.
+    </div>
+    }
+
+    @switch (paso()) {
+    @case ('comunidades') {
+    <section class="bv-paso" aria-labelledby="bv-t-comunidades">
+      <h2 id="bv-t-comunidades" class="bv-paso__titulo">Únete a comunidades que te interesen</h2>
+      @if (comunidades(); as lista) {
+      @if (lista.length) {
+      <ul class="bv-grid">
+        @for (c of lista; track c.id) {
+        <li class="bv-tarjeta" [class.is-elegida]="c.elegido">
+          <div class="bv-tarjeta__img">
+            @if (c.imagen) {
+            <img [src]="c.imagen" alt="" loading="lazy" width="56" height="56" />
+            } @else {
+            <i class="ti ti-users-group" aria-hidden="true"></i>
+            }
+          </div>
+          <div class="bv-tarjeta__info">
+            <a class="bv-tarjeta__nombre" [routerLink]="['/comunidades', c.nombreCorto]" target="_blank">{{ c.nombre }}</a>
+            <span class="bv-tarjeta__meta">{{ c.miembrosCount | number }} miembros · {{ c.temasCount | number }} temas</span>
+          </div>
+          <button type="button" class="bv-boton-elegir" [class.is-activo]="c.elegido" [disabled]="c.procesando || sinConfirmar"
+            [attr.aria-pressed]="!!c.elegido" [attr.aria-label]="(c.elegido ? 'Salir de ' : 'Unirme a ') + c.nombre"
+            (click)="alternarComunidad(c)">
+            <i class="ti" [class.ti-check]="c.elegido" [class.ti-plus]="!c.elegido" aria-hidden="true"></i>
+            {{ c.elegido ? 'Unido' : 'Unirme' }}
+          </button>
+        </li>
+        }
+      </ul>
+      } @else {
+      <p class="bv-vacio">Todavía no hay comunidades. Podrás <a routerLink="/comunidades/crear">crear la primera</a>.</p>
+      }
+      } @else {
+      <app-cargando texto="Buscando comunidades…" />
+      }
+    </section>
+    }
+
+    @case ('personas') {
+    <section class="bv-paso" aria-labelledby="bv-t-personas">
+      <h2 id="bv-t-personas" class="bv-paso__titulo">Sigue a gente para ver lo que comparte</h2>
+      @if (personas(); as lista) {
+      @if (lista.length) {
+      <ul class="bv-grid">
+        @for (p of lista; track p.userName) {
+        <li class="bv-tarjeta" [class.is-elegida]="p.elegido">
+          <app-user-avatar [avatar]="p.avatar" [userName]="p.userName" [width]="48" [height]="48" />
+          <div class="bv-tarjeta__info">
+            <a class="bv-tarjeta__nombre" [routerLink]="['/perfil', p.userName]" target="_blank">{{ '@' }}{{ p.userName }}</a>
+            <span class="bv-tarjeta__meta">{{ p.seguidores | number }} {{ p.seguidores === 1 ? 'seguidor' : 'seguidores' }}</span>
+          </div>
+          <button type="button" class="bv-boton-elegir" [class.is-activo]="p.elegido" [disabled]="p.procesando || sinConfirmar"
+            [attr.aria-pressed]="!!p.elegido" [attr.aria-label]="(p.elegido ? 'Dejar de seguir a ' : 'Seguir a ') + p.userName"
+            (click)="alternarPersona(p)">
+            <i class="ti" [class.ti-check]="p.elegido" [class.ti-user-plus]="!p.elegido" aria-hidden="true"></i>
+            {{ p.elegido ? 'Siguiendo' : 'Seguir' }}
+          </button>
+        </li>
+        }
+      </ul>
+      } @else {
+      <p class="bv-vacio">Aún no hay sugerencias. ¡Serás de los primeros!</p>
+      }
+      } @else {
+      <app-cargando texto="Buscando personas…" />
+      }
+    </section>
+    }
+
+    @case ('primer-shout') {
+    <section class="bv-paso" aria-labelledby="bv-t-shout">
+      <h2 id="bv-t-shout" class="bv-paso__titulo">Preséntate con tu primer shout</h2>
+      <p class="bv-paso__ayuda">Cuenta quién eres o qué te gusta. Usa #hashtags para sumarte a temas
+        @if (tendencias().length) {
+        — los más usados ahora:
+        @for (t of tendencias(); track t.tag) {
+        <span class="bv-tag">#{{ t.tag }}</span>
+        }
+        }
+      </p>
+      @if (publicado()) {
+      <div class="bv-listo" role="status">
+        <i class="ti ti-circle-check" aria-hidden="true"></i> ¡Publicado! Ya forma parte de tu muro.
+      </div>
+      } @else if (usuarioId && !sinConfirmar) {
+      <app-shout-composer [perfilId]="usuarioId" (publicado)="publicado.set(true)" />
+      }
+      <p class="bv-paso__ayuda mt-3">
+        También puedes <a routerLink="/cuenta" [queryParams]="{ seccion: 'perfil' }">completar tu perfil</a> con una foto y una descripción.
+      </p>
+    </section>
+    }
+    }
+
+    <footer class="bv__acciones">
+      <span class="bv__resumen">
+        @if (unidas() || seguidas()) {
+        {{ unidas() }} {{ unidas() === 1 ? 'comunidad' : 'comunidades' }} · {{ seguidas() }} {{ seguidas() === 1 ? 'persona' : 'personas' }}
+        }
+      </span>
+      <button type="button" class="bv-boton bv-boton--suave" (click)="terminar()">Saltar todo</button>
+      <button type="button" class="bv-boton" (click)="siguiente()">
+        {{ indice() === pasos.length - 1 ? 'Ir a mi muro' : 'Siguiente' }}
+        <i class="ti ti-arrow-right" aria-hidden="true"></i>
+      </button>
+    </footer>
+  </div>
+</div>

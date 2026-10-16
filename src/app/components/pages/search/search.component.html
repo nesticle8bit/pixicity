@@ -7,9 +7,14 @@
     <form class="bq-box bq-box--grande" role="search" (ngSubmit)="buscar()">
       <i class="ti ti-search bq-box__icono" aria-hidden="true"></i>
       <input class="bq-box__input" type="search" name="q" [(ngModel)]="texto" autocomplete="off" autofocus
-        placeholder="Ej.: El resplandor, metallica, tutorial de Angular…" aria-label="Texto a buscar" />
+        placeholder="Ej.: El resplandor, #musica, @usuario…" aria-label="Texto a buscar"
+        (input)="alEscribir()" (keydown)="teclaBuscador($event)" (blur)="cerrarSugerencias()"
+        role="combobox" aria-autocomplete="list" aria-controls="bq-sugerencias" [attr.aria-expanded]="sugerencias.length > 0"
+        [attr.aria-activedescendant]="sugerencias.length ? 'bq-sug-' + sugerenciaActiva : null" />
       <button type="submit" class="bq-box__btn" [disabled]="!texto.trim()">Buscar</button>
+      <ng-container [ngTemplateOutlet]="sugerenciasTpl" />
     </form>
+    <p class="bq-hero__ayuda">Tip: escribe <strong>#tag</strong> para ver un hashtag o <strong>@usuario</strong> para ir a un perfil.</p>
 
     <div class="bq-tipos" role="radiogroup" aria-label="Buscar en">
       @for (t of tipos; track t.valor) {
@@ -56,8 +61,11 @@
     <div class="bq-box">
       <i class="ti ti-search bq-box__icono" aria-hidden="true"></i>
       <input class="bq-box__input" type="search" name="q" [(ngModel)]="texto" autocomplete="off"
-        aria-label="Texto a buscar" />
+        aria-label="Texto a buscar" (input)="alEscribir()" (keydown)="teclaBuscador($event)" (blur)="cerrarSugerencias()"
+        role="combobox" aria-autocomplete="list" aria-controls="bq-sugerencias" [attr.aria-expanded]="sugerencias.length > 0"
+        [attr.aria-activedescendant]="sugerencias.length ? 'bq-sug-' + sugerenciaActiva : null" />
       <button type="submit" class="bq-box__btn" [disabled]="!texto.trim()">Buscar</button>
+      <ng-container [ngTemplateOutlet]="sugerenciasTpl" />
     </div>
     <div class="bq-tipos bq-tipos--compacto" role="radiogroup" aria-label="Buscar en">
       @for (t of tipos; track t.valor) {
@@ -287,3 +295,24 @@
   </div>
   }
 </div>
+
+<ng-template #sugerenciasTpl>
+  @if (sugerencias.length) {
+  <ul id="bq-sugerencias" class="bq-sugerencias" role="listbox" aria-label="Sugerencias">
+    @for (s of sugerencias; track s.tipo + s.valor; let i = $index) {
+    <li [id]="'bq-sug-' + i" role="option" class="bq-sugerencias__item" [class.is-activa]="i === sugerenciaActiva"
+      [attr.aria-selected]="i === sugerenciaActiva" (mousedown)="$event.preventDefault(); elegirSugerencia(s)"
+      (mouseenter)="sugerenciaActiva = i">
+      @if (s.tipo === 'usuario') {
+      <app-user-avatar [avatar]="s.avatar ?? null" [userName]="s.valor" [width]="28" [height]="28" />
+      <span class="bq-sugerencias__valor">{{ '@' }}{{ s.valor }}</span>
+      } @else {
+      <span class="bq-sugerencias__icono" aria-hidden="true">#</span>
+      <span class="bq-sugerencias__valor">#{{ s.valor }}</span>
+      }
+      <span class="bq-sugerencias__detalle">{{ s.detalle }}</span>
+    </li>
+    }
+  </ul>
+  }
+</ng-template>

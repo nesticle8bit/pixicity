@@ -2,7 +2,7 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
-import { combineLatest, debounceTime, distinctUntilChanged, Subject, switchMap, of, catchError } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, Subject, switchMap, of, catchError, map } from 'rxjs';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -17,11 +17,21 @@ import {
   TipoBusqueda,
 } from 'src/app/models/posts/busqueda.model';
 import { FormsModule } from '@angular/forms';
+import { IHttpMiService } from 'src/app/services/interfaces/httpMi.interface';
+import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
+
+/** Sugerencia del buscador al escribir "#..." (hashtag) o "@..." (usuario). */
+interface SugerenciaBusqueda {
+  tipo: 'tag' | 'usuario';
+  valor: string;
+  detalle: string;
+  avatar?: string;
+}
 import { MatTooltip } from '@angular/material/tooltip';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
-import { DecimalPipe, DatePipe } from '@angular/common';
+import { DecimalPipe, DatePipe, NgTemplateOutlet } from '@angular/common';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
 import { ShoutCardComponent } from '../../shared/shouts/shout-card/shout-card.component';
@@ -51,6 +61,7 @@ interface EstadoBusqueda {
     templateUrl: './search.component.html',
     styleUrls: ['./search.component.scss'],
     imports: [
+        NgTemplateOutlet,
         FormsModule,
         RouterLink,
         MatTooltip,
@@ -71,6 +82,13 @@ export class SearchComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private seoService = inject(SEOService);
+  private miService = inject(IHttpMiService);
+  private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
+
+  /** Autocompletado de #hashtags y @usuarios. */
+  public sugerencias: SugerenciaBusqueda[] = [];
+  public sugerenciaActiva = 0;
+  private readonly pedirSugerencias = new Subject<string>();
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly autor$ = new Subject<string>();
@@ -119,6 +137,33 @@ export class SearchComponent implements OnInit {
   public readonly esqueletos = [1, 2, 3, 4];
 
   constructor() {
+    this.pedirSugerencias
+      .pipe(
+        debounceTime(180),
+        distinctUntilChanged(),
+        switchMap((texto) => {
+          const tag = /^#([\p{L}\p{N}_]{1,40})$/u.exec(texto);
+          if (tag) {
+            return this.miService.buscarHashtags(tag[1], 6).pipe(
+              catchError(() => of([])),
+              map((l) => l.map((h): SugerenciaBusqueda => ({ tipo: 'tag', valor: h.tag, detalle: `${h.shouts} ${h.shouts === 1 ? 'shout' : 'shouts'}` }))),
+            );
+          }
+          const usuario = /^@([A-Za-z0-9_]{1,30})$/.exec(texto);
+          if (usuario) {
+            return this.usuarioPerfilService.sugerirMenciones(usuario[1]).pipe(
+              map((l) => l.slice(0, 6).map((u): SugerenciaBusqueda => ({ tipo: 'usuario', valor: u.userName, detalle: 'Ver perfil', avatar: u.avatar }))),
+            );
+          }
+          return of([] as SugerenciaBusqueda[]);
+        }),
+        takeUntilDestroyed(),
+      )
+      .subscribe((l) => {
+        this.sugerencias = l;
+        this.sugerenciaActiva = 0;
+      });
+
     this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: true, submenu: true, background: '' });
   }
 
@@ -241,7 +286,47 @@ export class SearchComponent implements OnInit {
   buscar(texto: string = this.texto): void {
     const q = texto.trim();
     if (!q) return;
+    this.cerrarSugerencias();
+    // "#rock" lleva a la página del hashtag y "@usuario" al perfil; el resto es una búsqueda normal.
+    const tag = /^#([\p{L}\p{N}_]{2,40})$/u.exec(q);
+    if (tag) {
+      this.router.navigate(['/hashtag', tag[1].toLowerCase()]);
+      return;
+    }
+    const usuario = /^@([A-Za-z0-9_]{2,30})$/.exec(q);
+    if (usuario) {
+      this.router.navigate(['/perfil', usuario[1]]);
+      return;
+    }
     this.navegar({ q, tipo: this.tipoElegido, pagina: 1 });
+  }
+
+  alEscribir(): void {
+    this.pedirSugerencias.next(this.texto.trim());
+  }
+
+  teclaBuscador(e: KeyboardEvent): void {
+    if (!this.sugerencias.length) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const n = this.sugerencias.length;
+      this.sugerenciaActiva = (this.sugerenciaActiva + (e.key === 'ArrowDown' ? 1 : -1) + n) % n;
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      this.elegirSugerencia(this.sugerencias[this.sugerenciaActiva]);
+    } else if (e.key === 'Escape') {
+      this.cerrarSugerencias();
+    }
+  }
+
+  elegirSugerencia(s: SugerenciaBusqueda): void {
+    this.texto = (s.tipo === 'tag' ? '#' : '@') + s.valor;
+    this.buscar();
+  }
+
+  cerrarSugerencias(): void {
+    this.sugerencias = [];
+    this.pedirSugerencias.next('');
   }
 
   elegirTipo(tipo: TipoBusqueda): void {

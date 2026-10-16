@@ -1,3 +1,4 @@
+import { AvisoProtocoloComponent } from '../../aviso-protocolo/aviso-protocolo.component';
 import { Component, DestroyRef, ElementRef, effect, inject, input, output, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -30,7 +31,7 @@ const TAG_EN_CURSOR = /(?:^|[^\p{L}\p{N}_&])#([\p{L}\p{N}_]{1,40})$/u;
   selector: 'app-shout-composer',
   templateUrl: './shout-composer.component.html',
   styleUrls: ['./shout-composer.component.scss'],
-  imports: [ReactiveFormsModule, UserAvatarComponent, ShoutMediaComponent],
+  imports: [ReactiveFormsModule, UserAvatarComponent, ShoutMediaComponent, AvisoProtocoloComponent],
 })
 export class ShoutComposerComponent {
   private readonly formBuilder = inject(FormBuilder);

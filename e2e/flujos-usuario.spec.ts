@@ -50,7 +50,8 @@ test('registro: exige aceptar los términos y envía los datos', async ({ page }
   await expect(registrarse).toBeEnabled();
   await registrarse.click();
 
-  await expect(page).toHaveURL(/\/login$/);
+  // Al entrar por primera vez sigue la bienvenida guiada.
+  await expect(page).toHaveURL(/\/login\?returnUrl=%2Fbienvenida$/);
   expect(enviado).toEqual(expect.objectContaining({
     userName: 'nuevo_usuario', email: 'nuevo@ejemplo.com', paisId: 2, estadoId: 10, termsConditions: true,
   }));

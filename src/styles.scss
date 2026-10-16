@@ -3836,3 +3836,14 @@ span.ma_monitor_rango {
     display: none;
   }
 }
+
+/* #hashtags enlazados dentro de posts, temas y comentarios (HTML inyectado). */
+a.te-tag {
+  font-weight: 600;
+  color: #006595;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

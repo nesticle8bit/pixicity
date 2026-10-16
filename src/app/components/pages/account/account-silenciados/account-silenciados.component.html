@@ -1,0 +1,45 @@
+<p class="sil__intro">
+  Lo silenciado no aparece en tu muro de <a routerLink="/mi">/mi</a>. A diferencia de bloquear, la otra persona no se
+  entera y puede seguir viendo tu perfil.
+</p>
+
+<section class="sil__bloque" aria-labelledby="sil-palabras">
+  <h3 id="sil-palabras" class="sil__titulo">Palabras y hashtags</h3>
+  <form class="sil__form" (ngSubmit)="agregarPalabra()">
+    <label for="sil-nueva" class="visually-hidden">Palabra a silenciar</label>
+    <input id="sil-nueva" class="form-control" name="palabra" [(ngModel)]="nuevaPalabra" maxlength="60"
+      placeholder="Ej.: spoilers, #futbol" autocomplete="off" />
+    <button type="submit" class="sil__boton" [disabled]="nuevaPalabra.trim().length < 2 || agregando">Silenciar</button>
+  </form>
+  @if (palabras().length) {
+  <ul class="sil__chips">
+    @for (p of palabras(); track p.id) {
+    <li class="sil__chip">
+      {{ p.palabra }}
+      <button type="button" (click)="quitarPalabra(p)" [attr.aria-label]="'Dejar de silenciar ' + p.palabra">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </li>
+    }
+  </ul>
+  } @else if (cargado()) {
+  <p class="sil__vacio">No silenciaste ninguna palabra.</p>
+  }
+</section>
+
+<section class="sil__bloque" aria-labelledby="sil-usuarios">
+  <h3 id="sil-usuarios" class="sil__titulo">Usuarios</h3>
+  @if (usuarios().length) {
+  <ul class="sil__usuarios">
+    @for (u of usuarios(); track u.id) {
+    <li class="sil__usuario">
+      <app-user-avatar [avatar]="u.avatar" [userName]="u.userName" [width]="36" [height]="36" />
+      <a [routerLink]="['/perfil', u.userName]">{{ '@' }}{{ u.userName }}</a>
+      <button type="button" class="sil__boton sil__boton--suave" (click)="dejarDeSilenciar(u)">Dejar de silenciar</button>
+    </li>
+    }
+  </ul>
+  } @else if (cargado()) {
+  <p class="sil__vacio">No silenciaste a nadie. Puedes hacerlo desde el menú de cualquier shout.</p>
+  }
+</section>

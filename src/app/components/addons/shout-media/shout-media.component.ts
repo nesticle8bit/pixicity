@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnChanges, input, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnChanges, input, inject, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 /**
@@ -22,6 +22,8 @@ export class ShoutMediaComponent implements OnChanges {
   readonly tipo = input<string | null>(null);
   readonly mediaTitulo = input<string | null>(null);
   readonly mediaImagen = input<string | null>(null);
+  /** La imagen no cargó (p. ej. la captura todavía se está generando): la tarjeta queda solo con el texto. */
+  readonly imagenFallo = signal(false);
   readonly mediaDescripcion = input<string | null>(null);
 
   // URLs de embed memoizadas (se recalculan SOLO cuando cambian los inputs,
