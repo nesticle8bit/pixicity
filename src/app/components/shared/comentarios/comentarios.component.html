@@ -39,7 +39,7 @@
     </div>
   </div>
   } @else {
-  <div class="com-empty">Inicia sesión para comentar.</div>
+  <div class="com-empty"><button type="button" class="btn btn-link p-0 align-baseline" (click)="sesion.irALogin()">Inicia sesión</button> para comentar.</div>
   }
 
   @if (total === 0) {

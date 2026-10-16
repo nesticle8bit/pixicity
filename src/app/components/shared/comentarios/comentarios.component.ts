@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ComentarioHilo, ComentariosAcciones, OrdenComentarios } from 'src/app/models/shared/comentario-hilo.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { SesionRequeridaService } from 'src/app/services/shared/sesion-requerida.service';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { FormsModule } from '@angular/forms';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -54,6 +55,7 @@ export class ComentariosComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly securityService = inject(IHttpSecurityService);
   private readonly notificationService = inject(NotificationService);
+  readonly sesion = inject(SesionRequeridaService);
   private readonly emojis = inject(EmojisPopoverService);
   private readonly dialog = inject(MatDialog);
 
@@ -276,7 +278,7 @@ export class ComentariosComponent {
 
   responder(c: ComentarioVista): void {
     if (!this.logueado) {
-      this.notificationService.warning('Inicia sesión para responder', 'Comentarios');
+      this.sesion.exigir('Inicia sesión para responder');
       return;
     }
     this.cerrarEmojisRespuesta();
@@ -377,7 +379,7 @@ export class ComentariosComponent {
 
   votar(c: ComentarioVista, valor: 1 | -1): void {
     if (!this.logueado) {
-      this.notificationService.warning('Inicia sesión para votar', 'Comentarios');
+      this.sesion.exigir('Inicia sesión para votar');
       return;
     }
     if (c.votando) return;

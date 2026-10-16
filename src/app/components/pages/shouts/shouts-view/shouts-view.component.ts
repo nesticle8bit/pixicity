@@ -5,7 +5,7 @@ import { ShoutInteracciones, ShoutReaccion } from 'src/app/models/perfil/shout-v
 import { Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -52,6 +52,7 @@ export class ShoutsViewComponent implements OnInit {
   private displayService = inject(DisplayComponentService);
   private securityService = inject(IHttpSecurityService);
   private activatedRoute = inject(ActivatedRoute);
+  private router = inject(Router);
   private perfilService = inject(IHttpPerfilService);
   private snackBar = inject(MatSnackBar);
   private notificationService = inject(NotificationService);
@@ -120,43 +121,67 @@ export class ShoutsViewComponent implements OnInit {
           this.perfilService
             .getShoutInteracciones(shoutId)
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((i) => this.interacciones.set(i));
+            .subscribe((i) => {
+              this.interacciones.set(i);
+              this.aplicarSEO();
+            });
           this.cargarCompartidoPor(shoutId);
 
-          const texto = (this.shout.contenido || '')
-            .replace(/<[^>]*>/g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim();
-          const autor = this.shout.usuario?.userName ?? '';
-
-          this.seoService.setSEO({
-            title: texto ? texto.substring(0, 60) : `Shout de ${autor}`,
-            description: texto
-              ? texto.substring(0, 200)
-              : `Shout de ${autor} en Taringa.`,
-            type: 'article',
-            imageURL: '',
-            tags: [autor, 'shout', 'taringas'].filter(Boolean),
-            canonical: `${environment.publicUrl}${this.documento.location.pathname}`,
-            jsonLd: {
-              '@context': 'https://schema.org',
-              '@type': 'SocialMediaPosting',
-              headline: texto ? texto.substring(0, 110) : `Shout de ${autor}`,
-              datePublished: this.shout.fechaRegistro,
-              author: { '@type': 'Person', name: autor },
-              publisher: { '@id': `${environment.publicUrl}/#organization` },
-              mainEntityOfPage: {
-                '@type': 'WebPage',
-                '@id': `${environment.publicUrl}${this.documento.location.pathname}`,
-              },
-            },
-          });
+          this.aplicarSEO();
         }
 
         if (!this.shout) {
-          window.location.href = '';
+          this.router.navigate(['/mi'], { replaceUrl: true });
         }
       });
+  }
+
+  /** Título, descripción, imagen y JSON-LD a partir del texto real del shout (lo que lee Google vía SSR). */
+  private aplicarSEO(): void {
+    const s = this.shout;
+    const autor: string = s.avatar?.userName ?? '';
+    const texto = (s.comentario || '')
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    const hashtags: string[] = Array.from(new Set<string>((texto.match(/#[\p{L}\p{N}_]+/gu) ?? []).map((t: string) => t.slice(1).toLowerCase())));
+    const recorte = (t: string, max: number) => (t.length > max ? t.substring(0, max - 1).trimEnd() + '…' : t);
+    const url = `${environment.publicUrl}/shouts/${encodeURIComponent(autor)}/${s.id}`;
+    const imagen: string = s.mediaImagen || (s.tipo === 'Foto' || /\.(jpe?g|png|gif|webp)(\?|$)/i.test(s.url ?? '') ? s.url : '') || '';
+    const titulo = texto ? `${recorte(texto, 60)} · @${autor}` : `Shout de @${autor}`;
+    const descripcion = texto
+      ? recorte(texto, 160)
+      : s.mediaTitulo
+        ? `@${autor} compartió: ${recorte(s.mediaTitulo, 120)}`
+        : `Shout de @${autor} en Taringas.`;
+
+    this.seoService.setSEO({
+      title: titulo,
+      description: descripcion,
+      type: 'article',
+      imageURL: imagen,
+      tags: [autor, 'shout', ...hashtags].filter(Boolean),
+      canonical: url,
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@type': 'SocialMediaPosting',
+        '@id': url,
+        url,
+        headline: recorte(texto || `Shout de @${autor}`, 110),
+        articleBody: texto || undefined,
+        datePublished: s.fechaRegistro,
+        dateModified: s.fechaActualiza || s.fechaRegistro,
+        image: imagen || undefined,
+        keywords: hashtags.length ? hashtags.join(', ') : undefined,
+        author: { '@type': 'Person', name: autor, url: `${environment.publicUrl}/perfil/${encodeURIComponent(autor)}` },
+        publisher: { '@id': `${environment.publicUrl}/#organization` },
+        mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+        interactionStatistic: [
+          { '@type': 'InteractionCounter', interactionType: 'https://schema.org/LikeAction', userInteractionCount: this.interacciones().meGustas },
+          { '@type': 'InteractionCounter', interactionType: 'https://schema.org/ShareAction', userInteractionCount: this.interacciones().reshouts },
+        ],
+      },
+    });
   }
 
   alternarMeGusta(): void {
