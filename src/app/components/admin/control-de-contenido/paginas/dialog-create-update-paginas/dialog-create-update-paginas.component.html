@@ -1,70 +1,99 @@
-<h2 mat-dialog-title>
-  {{data?.id ? 'Actualizar' : 'Crear nueva'}} Página
+<h2 mat-dialog-title class="pag-titulo">
+  <mat-icon>{{ data?.id ? 'edit_note' : 'note_add' }}</mat-icon>
+  {{ data?.id ? 'Editar página' : 'Nueva página' }}
+  @if (data; as pagina) {
+    <span class="badge bg-secondary">#{{ pagina.id }}</span>
+  }
 </h2>
 
 <form [formGroup]="formGroup" (ngSubmit)="savePagina()">
   <mat-dialog-content>
-    @if (formGroup.value?.id) {
+    <div class="pag-tipos" role="radiogroup" aria-label="Tipo de página">
+      <button type="button" role="radio" class="pag-tipo" [class.activo]="esInterna" [attr.aria-checked]="esInterna" (click)="cambiarTipo('routerLink')">
+        <i class="ti ti-file-text" aria-hidden="true"></i>
+        <span>
+          <strong>Página interna</strong>
+          <small>Contenido propio en {{ prefijo }}…</small>
+        </span>
+      </button>
+      <button type="button" role="radio" class="pag-tipo" [class.activo]="!esInterna" [attr.aria-checked]="!esInterna" (click)="cambiarTipo('link')">
+        <i class="ti ti-external-link" aria-hidden="true"></i>
+        <span>
+          <strong>Enlace</strong>
+          <small>Apunta a otra URL</small>
+        </span>
+      </button>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-md-6 mb-3">
+        <label for="pag-titulo" class="form-label">Título <strong class="text-danger">*</strong></label>
+        <input id="pag-titulo" class="form-control" type="text" formControlName="titulo" maxlength="120"
+          placeholder="Ej. Política de privacidad" [class.is-invalid]="invalido('titulo')" />
+        <div class="form-text">Se muestra en el footer y como título de la página.</div>
+      </div>
+
+      <div class="col-12 col-md-6 mb-3">
+        @if (esInterna) {
+          <label for="pag-slug" class="form-label">Slug <strong class="text-danger">*</strong></label>
+          <div class="input-group">
+            <span class="input-group-text">{{ prefijo }}</span>
+            <input id="pag-slug" class="form-control" type="text" formControlName="slug" placeholder="politica-de-privacidad"
+              (input)="onSlugInput()" (blur)="normalizarSlug()"
+              [class.is-invalid]="invalido('slug') || formGroup.hasError('slugInvalido')" />
+          </div>
+          <div class="form-text">Minúsculas, números y guiones. Se genera a partir del título.</div>
+        } @else {
+          <label for="pag-url" class="form-label">URL <strong class="text-danger">*</strong></label>
+          <input id="pag-url" class="form-control" type="text" formControlName="slug" placeholder="https://…"
+            [class.is-invalid]="invalido('slug') || formGroup.hasError('urlInvalida')" />
+          <div class="form-text">Debe empezar con https://, / o mailto:</div>
+        }
+      </div>
+    </div>
+
+    @if (!esInterna) {
       <div class="mb-3">
-        <label for="dialog-create-update-paginas-titulo">Id</label> <br>
-        <span class="badge bg-primary">{{formGroup.value?.id}}</span>
+        <span class="form-label d-block">Abrir en</span>
+        <div class="btn-group" role="group" aria-label="Abrir en">
+          @for (t of targets; track t.valor) {
+            <input type="radio" class="btn-check" [id]="'pag-target-' + t.valor" formControlName="target" [value]="t.valor" />
+            <label class="btn btn-outline-primary btn-sm" [for]="'pag-target-' + t.valor">{{ t.texto }}</label>
+          }
+        </div>
       </div>
     }
 
-    <div class="row">
-      <div class="col-12 col-sm-12 col-md-6">
-        <div class="mb-3">
-          <label>Titulo <strong class="text-danger">*</strong></label>
-          <input id="dialog-create-update-paginas-titulo" class="form-control" type="text" formControlName="titulo" />
-        </div>
+    @if (destino) {
+      <div class="pag-destino mb-3">
+        <i class="ti ti-link" aria-hidden="true"></i>
+        <code>{{ destino }}</code>
+        @if (data?.id && !formGroup.value.eliminado) {
+          <a [href]="destino" target="_blank" rel="noopener" class="ms-auto">Ver <i class="ti ti-arrow-up-right" aria-hidden="true"></i></a>
+        }
       </div>
+    }
 
-      <div class="col-12 col-sm-12 col-md-6">
-        <div class="mb-3">
-          <label for="dialog-create-update-paginas-slug">Slug</label>
-          <input id="dialog-create-update-paginas-slug" class="form-control" type="text" formControlName="slug" />
-        </div>
+    @if (esInterna) {
+      <div class="mb-3">
+        <label class="form-label">Contenido <strong class="text-danger">*</strong></label>
+        <app-rich-editor formControlName="contenido" [placeholder]="'Escribe el contenido de la página...'"></app-rich-editor>
+        @if (formGroup.hasError('contenidoRequerido') && formGroup.get('contenido')?.touched) {
+          <div class="text-danger small mt-1">El contenido es obligatorio en una página interna.</div>
+        }
       </div>
-    </div>
+    }
 
-    <div class="row">
-      <div class="col-12 col-sm-12 col-md-6">
-        <div class="mb-3">
-          <label>Tipo</label>
-          <app-select [items]="tipos" formControlName="tipo"></app-select>
-        </div>
-      </div>
-
-      <div class="col-12 col-sm-12 col-md-6">
-        <div class="mb-3">
-          <label>Target</label>
-          <app-select [items]="targets" formControlName="target"></app-select>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-12 col-sm-12 col-md-12">
-        <div class="mb-3">
-          <label>Contenido</label>
-          <app-rich-editor formControlName="contenido"
-            [placeholder]="'Ingresa el Contenido'"></app-rich-editor>
-        </div>
-      </div>
-    </div>
-
-    <div class="mb-3">
-      <mat-slide-toggle formControlName="eliminado" color="primary">Eliminado</mat-slide-toggle>
-    </div>
+    @if (data?.id) {
+      <mat-slide-toggle formControlName="eliminado" color="warn">Oculta (eliminada)</mat-slide-toggle>
+    }
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>
-      Cancelar
-    </button>
-
-    <button type="submit" mat-button color="primary" [disabled]="formGroup.invalid">
-      {{data?.id ? 'Actualizar' : 'Guardar'}}
+    <button type="button" mat-button mat-dialog-close [disabled]="guardando">Cancelar</button>
+    <button type="submit" mat-flat-button color="primary" [disabled]="formGroup.invalid || guardando">
+      <mat-icon>save</mat-icon>
+      {{ guardando ? 'Guardando…' : (data?.id ? 'Guardar cambios' : 'Crear página') }}
     </button>
   </mat-dialog-actions>
 </form>
