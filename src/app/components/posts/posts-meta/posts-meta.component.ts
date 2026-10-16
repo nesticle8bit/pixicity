@@ -1,4 +1,5 @@
-import { DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,7 +24,7 @@ const MAX_OPCIONES_PUNTOS = 10;
   selector: 'app-posts-meta',
   templateUrl: './posts-meta.component.html',
   styleUrls: ['./posts-meta.component.scss'],
-  imports: [MatTooltip, DecimalPipe],
+  imports: [MatTooltip, DecimalPipe, DatePipe, RouterLink],
 })
 export class PostsMetaComponent {
   private readonly securityService = inject(IHttpSecurityService);

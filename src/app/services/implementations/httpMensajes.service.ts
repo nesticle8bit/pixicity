@@ -78,9 +78,11 @@ export class HttpMensajesService implements IHttpMensajesService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  sendMensajePrivado(mp: SendMPViewModel): Observable<ResponseMPViewModel> {
+  sendMensajePrivado(mp: SendMPViewModel, captcha?: string | null): Observable<ResponseMPViewModel> {
+    // El API pide captcha solo al abrir una conversación nueva (como el registro, en la cabecera X-Captcha).
+    const headers = captcha ? new HttpHeaders({ 'X-Captcha': captcha }) : undefined;
     return this.http
-      .post<ApiResponse<ResponseMPViewModel>>(`${environment.api}/api/mensajes/sendMensajePrivado`, mp)
+      .post<ApiResponse<ResponseMPViewModel>>(`${environment.api}/api/mensajes/sendMensajePrivado`, mp, { headers })
       .pipe(
         map((response) => {
           if (response.status === 200) {

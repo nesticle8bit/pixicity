@@ -27,6 +27,7 @@
     </div>
   </div>
 
+  <div class="pm-pie">
   <!-- Acciones -->
   <div class="pm-acciones">
     @if (!esAutor) {
@@ -50,29 +51,40 @@
     }
   </div>
 
+  <!-- Estadísticas, categoría y fecha: a la derecha, como el Taringa! clásico -->
+  <div class="pm-info">
+    <dl class="pm-stats">
+      <div class="pm-stat">
+        <dt>Seguidores</dt>
+        <dd>{{ post.seguidores || 0 | number }}<i class="ti ti-bell pm-stat__icono pm-stat__icono--seguidores" aria-hidden="true"></i></dd>
+      </div>
+      <div class="pm-stat">
+        <dt>Puntos</dt>
+        <dd>{{ post.puntos || 0 | number }}<i class="ti ti-award pm-stat__icono pm-stat__icono--puntos" aria-hidden="true"></i></dd>
+      </div>
+      <div class="pm-stat">
+        <dt>Visitas</dt>
+        <dd>{{ post.visitantes || 0 | number }}<i class="ti ti-chart-bar pm-stat__icono pm-stat__icono--visitas" aria-hidden="true"></i></dd>
+      </div>
+      <div class="pm-stat">
+        <dt>Favoritos</dt>
+        <dd>{{ post.favoritos || 0 | number }}<i class="ti ti-star pm-stat__icono pm-stat__icono--favoritos" aria-hidden="true"></i></dd>
+      </div>
+    </dl>
+    <ul class="pm-datos">
+      @if (post.categoria && post.categoria.seo) {
+      <li><strong>Categoría:</strong> <a [routerLink]="['/posts', post.categoria.seo]">{{ post.categoria.nombre }}</a></li>
+      }
+      @if (post.fechaRegistro) {
+      <li><strong>Creado:</strong> <time [attr.datetime]="post.fechaRegistro">{{ post.fechaRegistro | date: 'dd.MM.yyyy' }} a las {{ post.fechaRegistro | date: 'HH:mm' }} hs.</time></li>
+      }
+    </ul>
+  </div>
+  </div>
+
   @if (aviso) {
   <p class="pm-aviso" [class.pm-aviso--ok]="aviso.ok" role="status">
     <i class="ti" [class.ti-circle-check]="aviso.ok" [class.ti-info-circle]="!aviso.ok" aria-hidden="true"></i> {{ aviso.texto }}
   </p>
   }
-
-  <!-- Estadísticas -->
-  <dl class="pm-stats">
-    <div class="pm-stat">
-      <dt><i class="ti ti-eye" aria-hidden="true"></i> Visitas</dt>
-      <dd>{{ post.visitantes || 0 | number }}</dd>
-    </div>
-    <div class="pm-stat">
-      <dt><i class="ti ti-star" aria-hidden="true"></i> Favoritos</dt>
-      <dd>{{ post.favoritos || 0 | number }}</dd>
-    </div>
-    <div class="pm-stat">
-      <dt><i class="ti ti-bell" aria-hidden="true"></i> Seguidores</dt>
-      <dd>{{ post.seguidores || 0 | number }}</dd>
-    </div>
-    <div class="pm-stat">
-      <dt><i class="ti ti-message-circle" aria-hidden="true"></i> Comentarios</dt>
-      <dd>{{ post.cantidadComentarios || 0 | number }}</dd>
-    </div>
-  </dl>
 </section>

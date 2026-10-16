@@ -10,7 +10,7 @@
     align-items: center;
     gap: 7px;
     padding: 9px 12px;
-    background: linear-gradient(135deg, #006595 0%, #0085c4 100%);
+    background: #0085c4;
 
     i {
       color: #fff;
@@ -54,7 +54,7 @@
   padding: 7px 10px;
   transition: background 0.12s ease;
 
-  & + & {
+  &+& {
     border-top: 1px dotted #eee;
   }
 

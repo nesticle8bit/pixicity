@@ -15,7 +15,7 @@ import { PostsMetaComponent } from './posts-meta.component';
   imports: [PostsMetaComponent],
 })
 class HostComponent {
-  post: any = { id: 10, puntos: 3, seguidores: 2, favoritos: 1, visitantes: 50, seguirPost: false, usuario: { userName: 'autor' } };
+  post: any = { id: 10, puntos: 3, fechaRegistro: '2026-01-12T14:02:00Z', categoria: { seo: 'design', nombre: 'Design y Variados' }, seguidores: 2, favoritos: 1, visitantes: 50, seguirPost: false, usuario: { userName: 'autor' } };
 }
 
 describe('PostsMetaComponent', () => {
@@ -89,7 +89,8 @@ describe('PostsMetaComponent', () => {
     expect(boton(el, /Siguiendo/).getAttribute('aria-pressed')).toBe('true');
     expect(boton(el, /En favoritos/).disabled).toBeTrue();
     const stats = [...el.querySelectorAll('.pm-stat dd')].map((d) => d.textContent?.trim());
-    expect(stats).toEqual(['50', '2', '3', '0']); // visitas, favoritos, seguidores, comentarios
+    expect(stats).toEqual(['3', '3', '50', '2']); // seguidores, puntos, visitas, favoritos (como el Taringa! clásico)
+    expect(el.querySelector('.pm-datos')?.textContent).toContain('Design y Variados');
   });
 
   it('el autor no ve la barra de puntos ni las acciones sobre su propio post', async () => {

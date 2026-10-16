@@ -9,7 +9,8 @@ export abstract class IHttpMensajesService {
   abstract getMensajes(): Observable<PaginatedData<MensajeViewModel, 'mensajes'>>;
   abstract getMensajesAdmin(filtro?: AdminFiltro): Observable<PaginatedData<MensajeViewModel, 'mensajes'>>;
   abstract getLastMensajes(): Observable<MensajeViewModel[]>;
-  abstract sendMensajePrivado(mp: SendMPViewModel): Observable<ResponseMPViewModel>;
+  /** `captcha`: token de Turnstile (lo exige el API al abrir una conversación nueva). */
+  abstract sendMensajePrivado(mp: SendMPViewModel, captcha?: string | null): Observable<ResponseMPViewModel>;
   abstract getMensajePrivadoById(id: number): Observable<MensajeViewModel>;
   abstract getConversaciones(): Observable<{ conversaciones: ConversacionViewModel[]; pagination: Pagination }>;
   abstract getConversacion(params: ConversacionParams): Observable<ConversacionPage>;

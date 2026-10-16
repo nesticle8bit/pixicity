@@ -129,16 +129,24 @@ $oro: #b7791f;
   cursor: pointer;
 }
 
+/* --- Pie: acciones a la izquierda, estadísticas a la derecha --- */
+.pm-pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+}
+
 /* --- Acciones --- */
 .pm-acciones {
   display: flex;
+  flex: 1 1 260px;
   flex-wrap: wrap;
+  align-content: flex-start;
   gap: 8px;
-  padding: 14px 20px;
-
-  &:empty {
-    display: none;
-  }
+  min-width: 0;
 }
 
 .pm-accion {
@@ -184,7 +192,6 @@ $oro: #b7791f;
   }
 
   &--discreta {
-    margin-left: auto;
     border-color: transparent;
     color: $suave;
 
@@ -212,39 +219,70 @@ $oro: #b7791f;
   }
 }
 
-/* --- Estadísticas --- */
+/* --- Estadísticas: número + ícono arriba, etiqueta en versalitas abajo (como el Taringa! clásico) --- */
+.pm-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  margin-left: auto;
+  text-align: right;
+}
+
 .pm-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  gap: 18px;
   margin: 0;
-  border-top: 1px solid $borde;
 }
 
 .pm-stat {
-  padding: 12px 8px;
-  text-align: center;
+  display: flex;
+  flex-direction: column-reverse; // en el DOM el dt va primero (accesible); visualmente el número arriba
+  align-items: flex-end;
 
-  & + & {
-    border-left: 1px solid $borde;
+  dd {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.15;
+    color: $texto;
   }
 
   dt {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
     color: $suave;
   }
 
-  dd {
-    margin: 2px 0 0;
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: $texto;
+  &__icono {
+    font-size: 1.05rem;
+
+    &--seguidores { color: #5f6b75; }
+    &--puntos { color: #1d8fd0; }
+    &--visitas { color: #c2410c; }
+    &--favoritos { color: $oro; }
+  }
+}
+
+.pm-datos {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.88rem;
+  color: $texto;
+
+  li + li {
+    margin-top: 2px;
+  }
+
+  a {
+    font-weight: 600;
+    color: #005a85;
   }
 }
 
@@ -262,7 +300,7 @@ $oro: #b7791f;
     }
   }
 
-  .pm-acciones {
+  .pm-pie {
     padding: 12px 14px;
   }
 
@@ -270,15 +308,20 @@ $oro: #b7791f;
     display: none;
   }
 
+  // En móvil va debajo de las acciones, a lo ancho: estadísticas repartidas y datos a la izquierda.
+  .pm-info {
+    width: 100%;
+    align-items: stretch;
+    text-align: left;
+  }
+
   .pm-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .pm-stat:nth-child(3) {
-    border-left: 0;
-  }
-
-  .pm-stat:nth-child(n + 3) {
+    justify-content: space-between;
+    padding-top: 10px;
     border-top: 1px solid $borde;
+  }
+
+  .pm-stat {
+    align-items: center;
   }
 }

@@ -1,11 +1,11 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (167).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (168).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2?v=f105715e00") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=d5d2e1253c") format("woff2");
 }
 
 @font-face {
@@ -132,6 +132,7 @@
 .ti-mail:before { content: "\eae5"; }
 .ti-mail-exclamation:before { content: "\f93e"; }
 .ti-mail-off:before { content: "\f15a"; }
+.ti-mail-plus:before { content: "\f943"; }
 .ti-menu-2:before { content: "\ec42"; }
 .ti-message:before { content: "\eaef"; }
 .ti-message-2:before { content: "\eaec"; }

@@ -1,42 +1,70 @@
-<h2 mat-dialog-title>
-  Mensaje Nuevo
+<h2 mat-dialog-title class="mp-titulo">
+  <i class="ti ti-mail-plus" aria-hidden="true"></i> Mensaje nuevo
 </h2>
 
-<form [formGroup]="formGroup" (ngSubmit)="enviarMP()">
-  <mat-dialog-content>
-    <div class="row">
-      <div class="col-12 col-sm-12">
-        <div class="mb-3">
-          <mat-form-field class="col-12">
-            <mat-label>A</mat-label>
-            <input matInput formControlName="aUserName" />
-
-            @if (userName) {
-              <mat-error>
-                {{userName}}
-              </mat-error>
-            }
-          </mat-form-field>
-        </div>
-
-        <div class="mb-2">
-          <label>Mensaje</label>
-          <app-rich-editor formControlName="contenido"
-            [placeholder]="'Escribe tu mensaje'"></app-rich-editor>
-        </div>
-
-        <!-- <app-re-captcha (response)="captchaResponse($event)"></app-re-captcha> -->
-      </div>
+<form [formGroup]="formGroup" (ngSubmit)="enviarMP()" (keydown)="atajoEnviar($event)">
+  <mat-dialog-content class="mp">
+    <!-- Destinatario -->
+    @if (destinatarioFijo) {
+    <div class="mp-para">
+      <span class="mp-para__etiqueta">Para</span>
+      <app-user-avatar [avatar]="data?.avatar ?? null" [userName]="formGroup.value.aUserName ?? ''" [width]="36" [height]="36" />
+      <strong class="mp-para__nombre">{{ '@' }}{{ formGroup.value.aUserName }}</strong>
     </div>
+    } @else {
+    <div class="mp-campo">
+      <label for="mp-destinatario" class="mp-campo__etiqueta">Para</label>
+      <div class="mp-destinatario">
+        <span class="mp-destinatario__arroba" aria-hidden="true">&#64;</span>
+        <input id="mp-destinatario" class="form-control" formControlName="aUserName" autocomplete="off"
+          placeholder="nombre de usuario" [class.is-invalid]="errorDestinatario() || (formGroup.controls.aUserName.touched && formGroup.controls.aUserName.invalid)"
+          role="combobox" aria-autocomplete="list" aria-controls="mp-sugerencias" [attr.aria-expanded]="sugerencias().length > 0"
+          [attr.aria-activedescendant]="sugerencias().length ? 'mp-sug-' + activa() : null"
+          (keydown)="teclaDestinatario($event)" (blur)="cerrarSugerencias()" />
+
+        @if (sugerencias().length) {
+        <ul id="mp-sugerencias" class="mp-sugerencias" role="listbox" aria-label="Usuarios">
+          @for (u of sugerencias(); track u.userName; let i = $index) {
+          <li [id]="'mp-sug-' + i" role="option" class="mp-sugerencias__item" [class.is-activa]="i === activa()"
+            [attr.aria-selected]="i === activa()" (mousedown)="$event.preventDefault(); elegir(u)" (mouseenter)="activa.set(i)">
+            <app-user-avatar [avatar]="u.avatar" [userName]="u.userName" [width]="26" [height]="26" />
+            {{ '@' }}{{ u.userName }}
+          </li>
+          }
+        </ul>
+        }
+      </div>
+      @if (errorDestinatario()) {
+      <small class="mp-error" role="alert">{{ errorDestinatario() }}</small>
+      } @else if (formGroup.controls.aUserName.touched && formGroup.controls.aUserName.invalid) {
+      <small class="mp-error">Escribe el nombre de usuario del destinatario.</small>
+      }
+    </div>
+    }
+
+    <!-- Mensaje -->
+    <div class="mp-campo">
+      <span class="mp-campo__etiqueta" id="mp-mensaje">Mensaje</span>
+      <app-rich-editor formControlName="contenido" [placeholder]="'Escribe tu mensaje…'" aria-labelledby="mp-mensaje"></app-rich-editor>
+      <small class="mp-ayuda">Ctrl + Enter para enviar. Sé respetuoso: los mensajes también se rigen por el protocolo.</small>
+    </div>
+
+    <!-- Verificación anti-bots (solo al abrir conversaciones nuevas) -->
+    @if (captchaSiteKey(); as clave) {
+    <div class="mp-captcha">
+      <app-turnstile #captcha [siteKey]="clave" (token)="captchaResponse($event)" />
+    </div>
+    }
+
+    @if (error()) {
+    <p class="mp-alerta" role="alert"><i class="ti ti-alert-circle" aria-hidden="true"></i> {{ error() }}</p>
+    }
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button type="button" mat-button mat-dialog-close>
-      Cancelar
-    </button>
-
-    <button type="submit" mat-button color="primary" [disabled]="formGroup.invalid">
-      Enviar <i class="ti ti-send"></i>
+    <button type="button" mat-button mat-dialog-close [disabled]="enviando()">Cancelar</button>
+    <button type="submit" mat-flat-button color="primary" [disabled]="formGroup.invalid || enviando() || sinCaptcha">
+      <i class="ti ti-send" aria-hidden="true"></i> {{ enviando() ? 'Enviando…' : 'Enviar' }}
     </button>
   </mat-dialog-actions>
 </form>
