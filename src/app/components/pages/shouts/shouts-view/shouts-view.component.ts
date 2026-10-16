@@ -11,6 +11,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { SesionRequeridaService } from 'src/app/services/shared/sesion-requerida.service';
 import { UserPopoverDirective } from '../../../../shared/directives/userPopover.directive';
 import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.component';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -55,6 +56,7 @@ export class ShoutsViewComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
   private notificationService = inject(NotificationService);
   private seoService = inject(SEOService);
+  private sesion = inject(SesionRequeridaService);
 
   public readonly publicUrl = environment.publicUrl;
 
@@ -189,10 +191,7 @@ export class ShoutsViewComponent implements OnInit {
     pedido: (shoutId: number) => Observable<ShoutReaccion>,
     alTerminar?: () => void,
   ): void {
-    if (!this.currentUser?.usuario) {
-      this.notificationService.warning(SIN_SESION[marca], 'Shouts');
-      return;
-    }
+    if (!this.sesion.exigir(SIN_SESION[marca])) return;
     if (this.enviando()) return;
 
     const antes = this.interacciones();

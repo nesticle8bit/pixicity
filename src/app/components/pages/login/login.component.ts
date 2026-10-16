@@ -2,7 +2,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component, DestroyRef, inject, OnInit, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NgClass, DatePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit {
   private securityService = inject(IHttpSecurityService);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   private readonly destroyRef = inject(DestroyRef);
 
@@ -139,7 +140,8 @@ export class LoginComponent implements OnInit {
 
   private entrar(sesion: JwtUserModel): void {
     this.securityService.setUserToLocalStorage(sesion);
-    const volverA = this.volverA();
+    // returnUrl lo ponen AuthGuard y SesionRequeridaService al mandar acá desde una página que exige sesión.
+    const volverA = this.volverA() ?? this.route.snapshot.queryParamMap.get('returnUrl');
     window.location.href = esRutaInterna(volverA) ? volverA! : '';
   }
 }

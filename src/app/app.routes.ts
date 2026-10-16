@@ -117,7 +117,6 @@ export const routes: Routes = [
   {
     path: 'mi',
     component: MiHomeComponent,
-    canActivate: [AuthGuard],
   },
   {
     path: 'fotos',

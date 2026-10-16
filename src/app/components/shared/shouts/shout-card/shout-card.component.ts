@@ -10,6 +10,7 @@ import { ShoutInteracciones, ShoutReaccion, ShoutViewModel } from 'src/app/model
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { SesionRequeridaService } from 'src/app/services/shared/sesion-requerida.service';
 import { UserPopoverDirective } from 'src/app/shared/directives/userPopover.directive';
 import { ShoutMediaComponent } from '../../../addons/shout-media/shout-media.component';
 import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.component';
@@ -46,6 +47,7 @@ export class ShoutCardComponent {
   private readonly perfilService = inject(IHttpPerfilService);
   private readonly notificationService = inject(NotificationService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly sesion = inject(SesionRequeridaService);
   private readonly usuarioActual = inject(IHttpSecurityService).getCurrentUser()?.usuario?.userName ?? null;
 
   readonly shout = input.required<ShoutViewModel>();
@@ -113,10 +115,7 @@ export class ShoutCardComponent {
   }
 
   async denunciar(): Promise<void> {
-    if (!this.usuarioActual) {
-      this.notificationService.warning('Inicia sesión para denunciar', 'Shouts');
-      return;
-    }
+    if (!this.sesion.exigir('Inicia sesión para denunciar')) return;
     const { DialogMotivoDenunciaComponent } = await import('../../../dialogs/dialog-motivo-denuncia/dialog-motivo-denuncia.component');
     this.dialog
       .open(DialogMotivoDenunciaComponent, { width: '440px', maxWidth: '95vw', data: { que: 'shout', motivos: MOTIVOS_DENUNCIA } })
@@ -149,10 +148,7 @@ export class ShoutCardComponent {
   }
 
   private alternar(marca: Marca, total: Total, sinSesion: string, pedido: (id: number) => Observable<ShoutReaccion>): void {
-    if (!this.usuarioActual) {
-      this.notificationService.warning(sinSesion, 'Shouts');
-      return;
-    }
+    if (!this.sesion.exigir(sinSesion)) return;
     if (this.enviando()) return;
 
     const antes = this.interacciones();
