@@ -10,7 +10,7 @@
           </button>
         </h1>
         } @else {
-        <h1 class="mi__titulo">Mi</h1>
+        <h1 class="mi__titulo">{{ haySesion ? 'Mi' : 'Shouts' }}</h1>
         }
 
         <div class="mi__tabs" role="tablist" aria-label="Qué mostrar" (keydown)="teclaPestanas($event)">
@@ -26,6 +26,16 @@
           </button>
         </div>
       </header>
+
+      @if (!haySesion) {
+      <div class="mi-card mi-invitado">
+        <p class="mb-2"><strong>Únete a la conversación.</strong> Crea tu cuenta para publicar shouts, dar me gusta, comentar y seguir a otros.</p>
+        <div class="d-flex gap-2">
+          <a routerLink="/registro" class="mi-boton">Crear cuenta</a>
+          <button type="button" class="mi-boton mi-boton--suave" (click)="iniciarSesion()">Iniciar sesión</button>
+        </div>
+      </div>
+      }
 
       @if (resumen(); as yo) {
       <app-shout-composer class="mi__composer" [perfilId]="yo.id" (publicado)="alPublicar()" />
@@ -140,19 +150,40 @@
 </ng-template>
 
 <ng-template #tendenciasTpl>
-  @if (tendencias().length) {
+  @if (tendencias().length || recientes().length) {
   <section class="mi-card">
-    <h2 class="mi-card__titulo">Tendencias</h2>
-    <ul class="mi-tendencias">
-      @for (t of tendencias(); track t.tag) {
+    <div class="mi-card__cabecera">
+      <h2 class="mi-card__titulo">Hashtags</h2>
+      <div class="mi-tags-tabs" role="tablist" aria-label="Orden de hashtags" (keydown)="teclaTags($event)">
+        @for (o of ordenes; track o) {
+        <button type="button" role="tab" class="mi-tags-tab" [attr.data-orden]="o" [class.is-activa]="ordenTags() === o"
+          [attr.aria-selected]="ordenTags() === o" [attr.tabindex]="ordenTags() === o ? 0 : -1" (click)="ordenTags.set(o)">
+          {{ o === 'mejores' ? 'Mejores' : 'Recientes' }}
+        </button>
+        }
+      </div>
+    </div>
+    @let lista = ordenTags() === 'mejores' ? tendencias() : recientes();
+    @if (lista.length) {
+    <ul class="mi-tendencias" role="tabpanel">
+      @for (t of lista; track t.tag) {
       <li>
-        <a routerLink="/mi" [queryParams]="{ tag: t.tag }" class="mi-tendencia" [class.is-activa]="tag() === t.tag">
+        <a [routerLink]="['/hashtag', t.tag]" class="mi-tendencia" [class.is-activa]="tag() === t.tag">
           <span class="mi-tendencia__tag">#{{ t.tag }}</span>
-          <span class="mi-tendencia__num">{{ t.shouts | number }} {{ t.shouts === 1 ? 'shout' : 'shouts' }}</span>
+          <span class="mi-tendencia__num">
+            @if (ordenTags() === 'recientes') {
+            {{ t.ultimo | timeAgo }}
+            } @else {
+            {{ t.shouts | number }} {{ t.shouts === 1 ? 'shout' : 'shouts' }}
+            }
+          </span>
         </a>
       </li>
       }
     </ul>
+    } @else {
+    <p class="mi-tendencias__vacio" role="tabpanel">Todavía no hay hashtags {{ ordenTags() === 'mejores' ? 'populares' : 'recientes' }}.</p>
+    }
   </section>
   }
 </ng-template>

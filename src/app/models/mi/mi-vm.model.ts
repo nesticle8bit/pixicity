@@ -45,7 +45,11 @@ export interface Tendencia {
   /** Sin el "#". */
   tag: string;
   shouts: number;
+  /** Último shout que lo usó. */
+  ultimo: string;
 }
+
+export type OrdenTendencias = 'mejores' | 'recientes';
 
 export interface SugerenciaUsuario {
   userName: string;

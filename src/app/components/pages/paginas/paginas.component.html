@@ -1,17 +1,18 @@
 <div class="container container--home">
     <div class="row">
         <div class="col-12">
-            <h1 class="dashboard--title">
-                <strong>
-                    {{pagina?.titulo}}
-                </strong>
-            </h1>
+            <article class="pagina">
+                <header class="pagina__head">
+                    <h1 class="pagina__titulo">{{pagina?.titulo}}</h1>
+                    @if (pagina?.fechaActualiza || pagina?.fechaRegistro) {
+                    <p class="pagina__fecha">
+                        Última actualización: {{(pagina?.fechaActualiza || pagina?.fechaRegistro) | date:'longDate'}}
+                    </p>
+                    }
+                </header>
 
-            <p><em>Fecha última actualización: {{pagina?.fechaActualiza | date:'medium'}}</em></p>
-
-            <span [innerHTML]="pagina?.contenido | contenidoSeo:pagina?.titulo"></span>
-
-            <br /><br />
+                <div class="pagina__contenido" [innerHTML]="pagina?.contenido | contenidoSeo:pagina?.titulo"></div>
+            </article>
         </div>
     </div>
 </div>

@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ApiResponse } from 'src/app/models/api/api-response.model';
-import { AlcanceMuro, MiResumen, Muro, SugerenciaUsuario, Tendencia } from 'src/app/models/mi/mi-vm.model';
+import { AlcanceMuro, MiResumen, Muro, SugerenciaUsuario, Tendencia, OrdenTendencias } from 'src/app/models/mi/mi-vm.model';
 import { environment } from 'src/environments/environment';
 import { IHttpMiService } from '../interfaces/httpMi.interface';
 import { HelperService } from '../shared/helper.service';
@@ -13,9 +13,16 @@ export class HttpMiService implements IHttpMiService {
   private readonly http = inject(HttpClient);
   private readonly helper = inject(HelperService);
 
-  getTendencias(cantidad = 8): Observable<Tendencia[]> {
+  getTendencias(cantidad = 8, orden: OrdenTendencias = 'mejores'): Observable<Tendencia[]> {
     return this.http
-      .get<ApiResponse<Tendencia[]>>(`${environment.api}/api/mi/getTendencias?cantidad=${cantidad}`)
+      .get<ApiResponse<Tendencia[]>>(`${environment.api}/api/mi/getTendencias?cantidad=${cantidad}&orden=${orden}`)
+      .pipe(map((r) => (r.status === 200 ? r.data ?? [] : [])), catchError(() => of([])));
+  }
+
+  buscarHashtags(prefijo: string, cantidad = 6): Observable<Tendencia[]> {
+    const params = new HttpParams().set('q', prefijo).set('cantidad', cantidad);
+    return this.http
+      .get<ApiResponse<Tendencia[]>>(`${environment.api}/api/mi/buscarHashtags`, { params })
       .pipe(map((r) => (r.status === 200 ? r.data ?? [] : [])), catchError(() => of([])));
   }
 

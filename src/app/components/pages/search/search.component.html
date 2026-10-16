@@ -129,7 +129,7 @@
           }
         </div>
         @if (hashtagBuscado; as tag) {
-        <a class="bq-shouts__mas" routerLink="/mi" [queryParams]="{ tag }">Ver todos los shouts con #{{ tag }}</a>
+        <a class="bq-shouts__mas" [routerLink]="['/hashtag', tag]">Ver todos los shouts con #{{ tag }}</a>
         }
       </section>
       }

@@ -21,14 +21,14 @@ export function partirTexto(texto: string): Parte[] {
 }
 
 /**
- * Texto de un shout con #hashtags (llevan a /mi?tag=...) y @menciones (al perfil) como enlaces.
+ * Texto de un shout con #hashtags (llevan a /hashtag/:tag) y @menciones (al perfil) como enlaces.
  * Va dentro del elemento que ya da formato (white-space: pre-wrap); no agrega espacios propios.
  */
 @Component({
   selector: 'app-texto-enlazado',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink],
-  template: `@for (p of partes(); track $index) {@switch (p.tipo) {@case ('tag') {<a class="te-tag" routerLink="/mi" [queryParams]="{ tag: p.valor.toLowerCase() }">#{{ p.valor }}</a>}@case ('mencion') {<a class="te-mencion" [routerLink]="['/perfil', p.valor]">{{ '@' }}{{ p.valor }}</a>}@default {{{ p.valor }}}}}`,
+  template: `@for (p of partes(); track $index) {@switch (p.tipo) {@case ('tag') {<a class="te-tag" [routerLink]="['/hashtag', p.valor.toLowerCase()]">#{{ p.valor }}</a>}@case ('mencion') {<a class="te-mencion" [routerLink]="['/perfil', p.valor]">{{ '@' }}{{ p.valor }}</a>}@default {{{ p.valor }}}}}`,
   styles: `
     :host { display: contents; }
     a { font-weight: 600; color: #006595; text-decoration: none; }

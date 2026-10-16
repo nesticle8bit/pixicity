@@ -1,6 +1,9 @@
 import { Component, DestroyRef, ElementRef, effect, inject, input, output, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, of, Subject, switchMap } from 'rxjs';
+import { Tendencia } from 'src/app/models/mi/mi-vm.model';
+import { IHttpMiService } from 'src/app/services/interfaces/httpMi.interface';
 import { ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -19,6 +22,9 @@ export function detectarTipoShout(url: string): string {
   return 'Enlace';
 }
 
+/** "#ro" justo antes del cursor (mismo criterio de caracteres que HashtagHelper del API). */
+const TAG_EN_CURSOR = /(?:^|[^\p{L}\p{N}_&])#([\p{L}\p{N}_]{1,40})$/u;
+
 /** "¿Qué estás pensando?": publica un shout (texto, emojis y un enlace opcional) en el muro de `perfilId`. */
 @Component({
   selector: 'app-shout-composer',
@@ -31,6 +37,7 @@ export class ShoutComposerComponent {
   private readonly perfilService = inject(IHttpPerfilService);
   private readonly emojis = inject(EmojisPopoverService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly miService = inject(IHttpMiService);
 
   /** Muro donde se publica (el propio en /mi). */
   readonly perfilId = input.required<number>();
@@ -50,8 +57,75 @@ export class ShoutComposerComponent {
     url: [''],
   });
 
+  /** Autocompletado de #hashtags: sugerencias para el tag que se está escribiendo. */
+  readonly hashtags = signal<Tendencia[]>([]);
+  readonly hashtagActivo = signal(0);
+  private readonly buscarTag = new Subject<string | null>();
+
   constructor() {
     effect(() => this.formGroup.patchValue({ perfilId: this.perfilId() }));
+
+    this.buscarTag
+      .pipe(
+        debounceTime(180),
+        distinctUntilChanged(),
+        switchMap((prefijo) => (prefijo ? this.miService.buscarHashtags(prefijo, 6) : of([]))),
+        takeUntilDestroyed(),
+      )
+      .subscribe((lista) => {
+        // Si el usuario ya escribió el tag completo y es la única opción, no hace falta sugerirlo.
+        const actual = this.tagEnCursor()?.toLowerCase();
+        this.hashtags.set(lista.length === 1 && lista[0].tag === actual ? [] : lista);
+        this.hashtagActivo.set(0);
+      });
+  }
+
+  private tagEnCursor(): string | null {
+    const campo = this.campoShout()?.nativeElement;
+    if (!campo || campo.selectionStart !== campo.selectionEnd) return null;
+    return campo.value.slice(0, campo.selectionStart).match(TAG_EN_CURSOR)?.[1] ?? null;
+  }
+
+  alEscribir(): void {
+    this.buscarTag.next(this.tagEnCursor()?.toLowerCase() ?? null);
+  }
+
+  teclaCampo(e: KeyboardEvent): void {
+    const lista = this.hashtags();
+    if (!lista.length) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const paso = e.key === 'ArrowDown' ? 1 : -1;
+      this.hashtagActivo.update((i) => (i + paso + lista.length) % lista.length);
+    } else if (e.key === 'Enter' || e.key === 'Tab') {
+      e.preventDefault();
+      this.elegirHashtag(lista[this.hashtagActivo()].tag);
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      this.cerrarHashtags();
+    }
+  }
+
+  cerrarHashtags(): void {
+    this.hashtags.set([]);
+    this.buscarTag.next(null);
+  }
+
+  /** Reemplaza el "#ro" que se está escribiendo por "#rock " y deja el cursor después. */
+  elegirHashtag(tag: string): void {
+    const campo = this.campoShout()?.nativeElement;
+    const parcial = this.tagEnCursor();
+    if (!campo || parcial == null) return this.cerrarHashtags();
+    const cursor = campo.selectionStart;
+    const inicio = cursor - parcial.length;
+    const despues = campo.value.slice(cursor);
+    const nuevo = campo.value.slice(0, inicio) + tag + (despues.startsWith(' ') ? '' : ' ') + despues;
+    this.formGroup.patchValue({ comentario: nuevo });
+    campo.value = nuevo;
+    const pos = inicio + tag.length + 1;
+    campo.setSelectionRange(pos, pos);
+    campo.focus();
+    this.cerrarHashtags();
   }
 
   async abrirEmojis(boton: HTMLElement): Promise<void> {
@@ -93,6 +167,7 @@ export class ShoutComposerComponent {
           this.enviando.set(false);
           if (response) {
             this.formGroup.patchValue({ comentario: '', url: '' });
+            this.cerrarHashtags();
             this.publicado.emit();
           }
         },

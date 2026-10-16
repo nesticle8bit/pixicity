@@ -171,3 +171,46 @@
     justify-content: center;
   }
 }
+
+.sh-composer__campo {
+  position: relative;
+}
+
+.sh-hashtags {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% - 4px);
+  left: 0;
+  min-width: 220px;
+  max-width: 100%;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid #e3e8ec;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(16, 24, 40, 0.12);
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &.is-activo {
+      background: #eef6fb;
+    }
+  }
+
+  &__tag {
+    font-weight: 600;
+    color: #006595;
+  }
+
+  &__num {
+    font-size: 0.8rem;
+    color: #6b7782;
+  }
+}

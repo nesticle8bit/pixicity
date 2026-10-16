@@ -5,8 +5,26 @@
   </div>
 
   <div class="sh-composer__main">
-    <textarea #campoShout class="sh-composer__input" rows="3" formControlName="comentario"
-      aria-label="¿Qué estás pensando?" placeholder="¿Qué estás pensando?"></textarea>
+    <div class="sh-composer__campo">
+      <textarea #campoShout class="sh-composer__input" rows="3" formControlName="comentario"
+        aria-label="¿Qué estás pensando?" placeholder="¿Qué estás pensando? Usa #hashtags para sumarte a un tema"
+        role="combobox" aria-autocomplete="list" aria-controls="sh-hashtags" [attr.aria-expanded]="hashtags().length > 0"
+        [attr.aria-activedescendant]="hashtags().length ? 'sh-hashtag-' + hashtagActivo() : null"
+        (input)="alEscribir()" (click)="alEscribir()" (keydown)="teclaCampo($event)" (blur)="cerrarHashtags()"></textarea>
+
+      @if (hashtags().length) {
+      <ul id="sh-hashtags" class="sh-hashtags" role="listbox" aria-label="Hashtags sugeridos">
+        @for (h of hashtags(); track h.tag; let i = $index) {
+        <li [id]="'sh-hashtag-' + i" role="option" class="sh-hashtags__item" [class.is-activo]="i === hashtagActivo()"
+          [attr.aria-selected]="i === hashtagActivo()" (mousedown)="$event.preventDefault(); elegirHashtag(h.tag)"
+          (mouseenter)="hashtagActivo.set(i)">
+          <span class="sh-hashtags__tag">#{{ h.tag }}</span>
+          <span class="sh-hashtags__num">{{ h.shouts }} {{ h.shouts === 1 ? 'shout' : 'shouts' }}</span>
+        </li>
+        }
+      </ul>
+      }
+    </div>
 
     <div class="sh-composer__media">
       <i class="ti ti-link" aria-hidden="true"></i>

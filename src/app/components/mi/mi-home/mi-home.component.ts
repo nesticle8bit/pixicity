@@ -1,16 +1,19 @@
 import { DecimalPipe, NgTemplateOutlet } from '@angular/common';
+import { TimeAgoPipe } from 'src/app/shared/pipes/timeAgo.pipe';
 import { afterNextRender, Component, DestroyRef, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { catchError, EMPTY, Subject, switchMap, tap } from 'rxjs';
-import { AlcanceMuro, MiResumen, MuroItem, SugerenciaUsuario, Tendencia } from 'src/app/models/mi/mi-vm.model';
+import { catchError, combineLatest, EMPTY, Subject, switchMap, tap } from 'rxjs';
+import { AlcanceMuro, OrdenTendencias, MiResumen, MuroItem, SugerenciaUsuario, Tendencia } from 'src/app/models/mi/mi-vm.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { IHttpMiService } from 'src/app/services/interfaces/httpMi.interface';
 import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { SesionRequeridaService } from 'src/app/services/shared/sesion-requerida.service';
+import { environment } from 'src/environments/environment';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
@@ -24,6 +27,7 @@ const POR_PAGINA = 15;
 /**
  * /mi: el inicio personal. Muro con los shouts propios y de quienes sigues (más lo que comparten y sus posts nuevos)
  * o "Novedades" con los shouts de todo el sitio; al costado, el resumen del usuario y a quién seguir.
+ * Es pública: sin sesión se ven Novedades y los #hashtags (indexables); interactuar lleva al login.
  */
 @Component({
   selector: 'app-mi-home',
@@ -33,6 +37,7 @@ const POR_PAGINA = 15;
     RouterLink,
     MatTooltip,
     DecimalPipe,
+    TimeAgoPipe,
     NgTemplateOutlet,
     UserAvatarComponent,
     CargandoComponent,
@@ -49,6 +54,9 @@ export class MiHomeComponent implements OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly seo = inject(SEOService);
+  private readonly sesion = inject(SesionRequeridaService);
+  readonly haySesion = this.sesion.haySesion;
 
   readonly alcance = signal<AlcanceMuro>('siguiendo');
   readonly items = signal<MuroItem[]>([]);
@@ -59,9 +67,13 @@ export class MiHomeComponent implements OnDestroy {
   readonly cargandoMas = signal(false);
   readonly error = signal(false);
 
-  /** #hashtag elegido (?tag=...): muestra los shouts del sitio con ese tag en vez de las pestañas. */
+  /** #hashtag elegido (/hashtag/:tag, o ?tag= de enlaces viejos): muestra los shouts del sitio con ese tag en vez de las pestañas. */
   readonly tag = signal<string | null>(null);
+  /** Hashtags del lateral: "Mejores" (más usados) y "Recientes" (últimos usados). */
   readonly tendencias = signal<Tendencia[]>([]);
+  readonly recientes = signal<Tendencia[]>([]);
+  readonly ordenTags = signal<OrdenTendencias>('mejores');
+  readonly ordenes: OrdenTendencias[] = ['mejores', 'recientes'];
   /** Shouts nuevos de gente que sigo, llegados en vivo desde que cargó el muro. */
   readonly nuevos = signal(0);
 
@@ -79,14 +91,6 @@ export class MiHomeComponent implements OnDestroy {
       searchFooter: false,
       submenu: true,
       background: '',
-    });
-    inject(SEOService).setSEO({
-      title: 'Mi',
-      description: 'Tu muro: lo que comparten las personas que sigues.',
-      type: 'website',
-      imageURL: '',
-      tags: [],
-      noIndex: true,
     });
 
     // switchMap: cambiar de pestaña descarta la página que estaba en camino.
@@ -123,15 +127,18 @@ export class MiHomeComponent implements OnDestroy {
         this.reobservarFin();
       });
 
-    this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((q) => {
-      this.alcance.set(q.get('ver') === 'novedades' ? 'todos' : 'siguiendo');
-      this.tag.set(q.get('tag')?.replace(/^#/, '').toLowerCase() || null);
+    combineLatest([this.route.paramMap, this.route.queryParamMap]).pipe(takeUntilDestroyed()).subscribe(([p, q]) => {
+      // Sin sesión no hay muro propio: siempre Novedades.
+      this.alcance.set(!this.haySesion || q.get('ver') === 'novedades' ? 'todos' : 'siguiendo');
+      this.tag.set((p.get('tag') ?? q.get('tag'))?.replace(/^#/, '').toLowerCase() || null);
+      this.aplicarSEO();
       this.pedir.next({ reiniciar: true });
     });
 
-    this.miService.getResumen().pipe(takeUntilDestroyed()).subscribe((r) => this.resumen.set(r));
+    if (this.haySesion) this.miService.getResumen().pipe(takeUntilDestroyed()).subscribe((r) => this.resumen.set(r));
     this.miService.getSugerencias(5).pipe(takeUntilDestroyed()).subscribe((s) => this.sugerencias.set(s));
-    this.miService.getTendencias(8).pipe(takeUntilDestroyed()).subscribe((t) => this.tendencias.set(t));
+    this.miService.getTendencias(8, 'mejores').pipe(takeUntilDestroyed()).subscribe((t) => this.tendencias.set(t));
+    this.miService.getTendencias(8, 'recientes').pipe(takeUntilDestroyed()).subscribe((t) => this.recientes.set(t));
 
     // Shout nuevo de alguien que sigo: no se mete en la lista (movería lo que estoy leyendo), se ofrece "ver nuevos".
     const signalr = inject(SignalrService);
@@ -172,17 +179,37 @@ export class MiHomeComponent implements OnDestroy {
     this.observador?.disconnect();
   }
 
+  /** El muro "Siguiendo" es personal (noindex); Novedades y cada #hashtag son públicos e indexables. */
+  private aplicarSEO(): void {
+    const tag = this.tag();
+    const personal = !tag && this.alcance() === 'siguiendo';
+    const base = `${environment.publicUrl}/mi`;
+    this.seo.setSEO({
+      title: tag ? `#${tag} · Shouts` : personal ? 'Mi muro' : 'Shouts: lo último de la comunidad',
+      description: tag
+        ? `Shouts con #${tag}: lo que la comunidad está diciendo sobre ${tag}.`
+        : personal
+          ? 'Tu muro: lo que comparten las personas que sigues.'
+          : 'Los shouts más recientes de la comunidad: textos, fotos, videos y enlaces. Tendencias y hashtags del momento.',
+      type: 'website',
+      imageURL: '',
+      tags: tag ? [tag, 'shouts'] : ['shouts', 'comunidad', 'tendencias'],
+      noIndex: personal,
+      canonical: tag ? `${environment.publicUrl}/hashtag/${encodeURIComponent(tag)}` : `${base}?ver=novedades`,
+    });
+  }
+
   cambiarAlcance(alcance: AlcanceMuro): void {
+    if (alcance === 'siguiendo' && !this.sesion.exigir('Inicia sesión para ver tu muro')) return;
     if (alcance === this.alcance() && !this.tag()) return;
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { ver: alcance === 'todos' ? 'novedades' : null, tag: null },
-      replaceUrl: true,
+    this.router.navigate(['/mi'], {
+      queryParams: { ver: alcance === 'todos' ? 'novedades' : null },
+      replaceUrl: !this.tag(),
     });
   }
 
   quitarTag(): void {
-    this.router.navigate([], { relativeTo: this.route, queryParams: { tag: null }, queryParamsHandling: 'merge' });
+    this.router.navigate(['/mi'], { queryParams: { ver: this.haySesion ? null : 'novedades' } });
   }
 
   verNuevos(): void {
@@ -197,6 +224,20 @@ export class MiHomeComponent implements OnDestroy {
     const otra: AlcanceMuro = this.alcance() === 'siguiendo' ? 'todos' : 'siguiendo';
     this.cambiarAlcance(otra);
     queueMicrotask(() => document.getElementById(`mi-tab-${otra}`)?.focus());
+  }
+
+  iniciarSesion(): void {
+    this.sesion.irALogin();
+  }
+
+  /** Flechas entre las pestañas Mejores / Recientes. */
+  teclaTags(e: KeyboardEvent): void {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    const lista = e.currentTarget as HTMLElement;
+    this.ordenTags.update((o) => (o === 'mejores' ? 'recientes' : 'mejores'));
+    const orden = this.ordenTags();
+    queueMicrotask(() => lista.querySelector<HTMLElement>(`[data-orden="${orden}"]`)?.focus());
   }
 
   cargarMas(): void {
@@ -218,7 +259,7 @@ export class MiHomeComponent implements OnDestroy {
   }
 
   seguir(usuario: SugerenciaUsuario & { siguiendo?: boolean; procesando?: boolean }): void {
-    if (usuario.procesando) return;
+    if (usuario.procesando || !this.sesion.exigir('Inicia sesión para seguir usuarios')) return;
     this.actualizarSugerencia(usuario.userName, { procesando: true });
     this.usuarioPerfilService
       .seguirUsuario({ userName: usuario.userName })

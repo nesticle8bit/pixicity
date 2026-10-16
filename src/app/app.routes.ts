@@ -118,6 +118,8 @@ export const routes: Routes = [
     path: 'mi',
     component: MiHomeComponent,
   },
+  // Página pública e indexable de cada #hashtag de los shouts (mismo muro, filtrado).
+  { path: 'hashtag/:tag', component: MiHomeComponent },
   {
     path: 'fotos',
     loadChildren: () =>
