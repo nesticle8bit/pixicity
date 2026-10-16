@@ -1,3 +1,4 @@
+import { AuthLateralComponent } from '../auth-lateral/auth-lateral.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component, DestroyRef, inject, OnInit, input } from '@angular/core';
@@ -18,6 +19,7 @@ import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
         ReactiveFormsModule,
         MatButton,
         RouterLink,
+        AuthLateralComponent,
         DatePipe,
     ],
 })

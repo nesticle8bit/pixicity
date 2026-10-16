@@ -1,0 +1,69 @@
+<aside class="auth-lateral" [attr.aria-label]="modo() === 'login' ? 'Crear una cuenta' : 'Ya tengo cuenta'">
+  @if (modo() === 'login') {
+  <section class="auth-card auth-card--cta">
+    <h2 class="auth-card__titulo">¿Todavía no tienes cuenta?</h2>
+    <p>Únete gratis en menos de un minuto y empieza a compartir con la comunidad.</p>
+    <a routerLink="/registro" class="auth-boton">
+      <i class="ti ti-user-plus" aria-hidden="true"></i> Crear cuenta gratis
+    </a>
+  </section>
+  } @else {
+  <section class="auth-card auth-card--cta">
+    <h2 class="auth-card__titulo">¿Ya tienes una cuenta?</h2>
+    <p>Entra para seguir donde lo dejaste.</p>
+    <a routerLink="/login" class="auth-boton">
+      <i class="ti ti-login" aria-hidden="true"></i> Iniciar sesión
+    </a>
+  </section>
+  }
+
+  <section class="auth-card">
+    <h2 class="auth-card__titulo">{{ modo() === 'login' ? 'Con tu cuenta puedes' : 'Al registrarte podrás' }}</h2>
+    <ul class="auth-beneficios">
+      @for (b of beneficios; track b.titulo) {
+      <li>
+        <i class="ti {{ b.icono }}" aria-hidden="true"></i>
+        <span><strong>{{ b.titulo }}</strong> {{ b.texto }}</span>
+      </li>
+      }
+    </ul>
+  </section>
+
+  @if (stats(); as s) {
+  <section class="auth-card">
+    <h2 class="auth-card__titulo">La comunidad hoy</h2>
+    <dl class="auth-stats">
+      <div>
+        <dt>Usuarios</dt>
+        <dd>{{ s.totalUsuarios | number }}</dd>
+      </div>
+      <div>
+        <dt>Posts</dt>
+        <dd>{{ s.totalPosts | number }}</dd>
+      </div>
+      <div>
+        <dt>Comentarios</dt>
+        <dd>{{ s.totalComentarios | number }}</dd>
+      </div>
+      @if (s.onlineUsers && s.onlineUsers.total) {
+      <div>
+        <dt><span class="auth-stats__punto" aria-hidden="true"></span> En línea</dt>
+        <dd>{{ s.onlineUsers.total | number }}</dd>
+      </div>
+      }
+    </dl>
+  </section>
+  }
+
+  <section class="auth-card auth-card--ayuda">
+    <h2 class="auth-card__titulo">¿Necesitas ayuda?</h2>
+    <ul class="auth-enlaces">
+      @if (modo() === 'login') {
+      <li><a routerLink="/olvide-password"><i class="ti ti-key" aria-hidden="true"></i> Olvidé mi contraseña</a></li>
+      }
+      <li><a routerLink="/paginas/protocolo"><i class="ti ti-book" aria-hidden="true"></i> Protocolo de la comunidad</a></li>
+      <li><a routerLink="/paginas/terminos-y-condiciones"><i class="ti ti-file-text" aria-hidden="true"></i> Términos y condiciones</a></li>
+      <li><a routerLink="/contacto"><i class="ti ti-lifebuoy" aria-hidden="true"></i> Contactar a soporte</a></li>
+    </ul>
+  </section>
+</aside>

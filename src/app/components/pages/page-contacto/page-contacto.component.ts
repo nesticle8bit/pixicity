@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
@@ -10,7 +10,7 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
     selector: 'app-page-contacto',
     templateUrl: './page-contacto.component.html',
     styleUrls: ['./page-contacto.component.scss'],
-    imports: [FormsModule, ReactiveFormsModule],
+    imports: [FormsModule, ReactiveFormsModule, RouterLink],
 })
 export class PageContactoComponent implements OnInit {
   private displayService = inject(DisplayComponentService);

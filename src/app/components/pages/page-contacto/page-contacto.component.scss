@@ -2,11 +2,117 @@
     text-align: left !important;
 }
 
-h4 {
-    font-size: 16px;
-    color: #6b6b6b;
-    margin: 10px 0 0;
-    padding: 0 0 10px;
-    line-height: 1.7rem;
-    text-align: justify;
+.contacto-lateral {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+}
+
+.contacto-card {
+    padding: 18px;
+    border: 1px solid #e6eaee;
+    border-radius: 12px;
+    background: #fff;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: #3a4650;
+
+    p {
+        margin: 0;
+    }
+
+    a {
+        color: #006595;
+        font-weight: 600;
+    }
+
+    &__titulo {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 0 0 12px;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #1f2a33;
+    }
+
+    &--aviso {
+        border-color: #f3d9a4;
+        background: #fffaf0;
+
+        .contacto-card__titulo i {
+            color: #c27c0e;
+        }
+    }
+}
+
+.contacto-motivos {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    i {
+        flex-shrink: 0;
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: #eef6fb;
+        color: #006595;
+        font-size: 1.15rem;
+    }
+
+    strong {
+        display: block;
+        color: #1f2a33;
+    }
+}
+
+.contacto-enlaces {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0 0 12px;
+    padding: 0;
+    list-style: none;
+
+    a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 8px;
+        border-radius: 8px;
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+            background: #f3f6f8;
+        }
+    }
+}
+
+.contacto-nota {
+    display: flex;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid #eef1f3;
+    font-size: 0.85rem;
+    color: #6b7782;
+}
+
+@media (max-width: 575.98px) {
+    .contacto-lateral {
+        margin-top: 24px;
+    }
 }

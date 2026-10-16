@@ -83,23 +83,7 @@
 
     @if (!hide()?.sidebar) {
       <div class="col-12 col-sm-4">
-        <div class="text-center">
-          <img loading="lazy" decoding="async" src="/assets/images/login-bg.gif" alt="" width="300" height="247">
-          <div class="dot--ccc mt-0">
-            <span class="w200">¿No tienes cuenta?</span>
-          </div>
-          <button [routerLink]="['/registro']" type="button" mat-flat-button color="primary">
-            Registrate
-          </button>
-          <div class="dot--ccc">
-            <span class="w200">¿Tienes problemas?</span>
-          </div>
-          <div class="olvidar">
-            <p>
-              <a routerLink="/olvide-password">¿Olvidaste la contraseña?</a>
-            </p>
-          </div>
-        </div>
+        <app-auth-lateral modo="login" />
       </div>
     }
   </div>

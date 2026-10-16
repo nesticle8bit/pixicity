@@ -1,11 +1,11 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (152).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (160).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2?v=8af3e08845") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=eedd94c6fc") format("woff2");
 }
 
 @font-face {
@@ -40,6 +40,7 @@
 .ti-arrow-down:before { content: "\ea16"; }
 .ti-arrow-right:before { content: "\ea1f"; }
 .ti-arrow-up:before { content: "\ea25"; }
+.ti-arrow-up-right:before { content: "\ea24"; }
 .ti-arrows-horizontal:before { content: "\eb59"; }
 .ti-arrows-move:before { content: "\f22f"; }
 .ti-arrows-shuffle:before { content: "\f000"; }
@@ -47,6 +48,7 @@
 .ti-article:before { content: "\f1e2"; }
 .ti-award:before { content: "\ea2c"; }
 .ti-ban:before { content: "\ea2e"; }
+.ti-book:before { content: "\ea39"; }
 .ti-brand-discord-filled:before { font-family: "tabler-icons-filled" !important; content: "\f7e4"; }
 .ti-brand-facebook:before { content: "\ec1a"; }
 .ti-brand-instagram:before { content: "\ec20"; }
@@ -97,17 +99,21 @@
 .ti-gender-female:before { content: "\f0e7"; }
 .ti-gender-male:before { content: "\f0ee"; }
 .ti-gender-neutrois:before { content: "\f0ef"; }
+.ti-hash:before { content: "\eabc"; }
 .ti-heading:before { content: "\ee9b"; }
 .ti-heart:before { content: "\eabe"; }
+.ti-heart-handshake:before { content: "\f0f3"; }
 .ti-history:before { content: "\ebea"; }
 .ti-home-heart:before { content: "\f353"; }
 .ti-id:before { content: "\eac3"; }
 .ti-id-badge:before { content: "\eff7"; }
 .ti-id-badge-2:before { content: "\f076"; }
 .ti-info-circle:before { content: "\eac5"; }
+.ti-key:before { content: "\eac7"; }
 .ti-layout-dashboard:before { content: "\f02c"; }
 .ti-layout-distribute-horizontal:before { content: "\ead5"; }
 .ti-layout-grid:before { content: "\edba"; }
+.ti-lifebuoy:before { content: "\eadd"; }
 .ti-link:before { content: "\eade"; }
 .ti-list-check:before { content: "\eb6a"; }
 .ti-list-numbers:before { content: "\ef11"; }
@@ -116,6 +122,7 @@
 .ti-lock:before { content: "\eae2"; }
 .ti-lock-access:before { content: "\eeaa"; }
 .ti-lock-open:before { content: "\eae1"; }
+.ti-login:before { content: "\eba7"; }
 .ti-login-2:before { content: "\fc76"; }
 .ti-logout:before { content: "\eba8"; }
 .ti-mail:before { content: "\eae5"; }
@@ -153,6 +160,7 @@
 .ti-shield-check:before { content: "\eb22"; }
 .ti-smart-home:before { content: "\ecde"; }
 .ti-sparkles:before { content: "\f6d7"; }
+.ti-speakerphone:before { content: "\ed61"; }
 .ti-square:before { content: "\eb2c"; }
 .ti-stack-2:before { content: "\eef7"; }
 .ti-star:before { content: "\eb2e"; }

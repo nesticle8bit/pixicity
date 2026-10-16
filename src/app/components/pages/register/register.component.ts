@@ -1,3 +1,4 @@
+import { AuthLateralComponent } from '../auth-lateral/auth-lateral.component';
 import { Component, DestroyRef, inject, OnInit, input, signal, viewChild } from '@angular/core';
 import { TurnstileComponent } from '../../addons/turnstile/turnstile.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -22,7 +23,7 @@ import { MatButton } from '@angular/material/button';
     selector: 'app-register',
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
-    imports: [NgClass, FormsModule, ReactiveFormsModule, SelectAutocompleteComponent, SelectOptionDirective, SelectLabelDirective, MatCheckbox, MatButton, RouterLink, TurnstileComponent]
+    imports: [NgClass, FormsModule, ReactiveFormsModule, SelectAutocompleteComponent, SelectOptionDirective, SelectLabelDirective, MatCheckbox, MatButton, RouterLink, TurnstileComponent, AuthLateralComponent]
 })
 export class RegisterComponent implements OnInit {
   private parametrosService = inject(IHttpParametrosService);

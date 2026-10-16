@@ -34,20 +34,49 @@
             </form>
         </div>
 
-        <div class="col-12 col-sm-4">
-            <div class="text-center">
-                <img loading="lazy" decoding="async" src="/assets/images/login-bg.gif" alt="" width="300" height="247">
-            </div>
+        <aside class="col-12 col-sm-4 contacto-lateral" aria-label="Información de contacto">
+            <section class="contacto-card">
+                <h2 class="contacto-card__titulo">¿En qué te podemos ayudar?</h2>
+                <ul class="contacto-motivos">
+                    <li>
+                        <i class="ti ti-speakerphone" aria-hidden="true"></i>
+                        <span><strong>Publicidad</strong> Anuncios y campañas en el sitio.</span>
+                    </li>
+                    <li>
+                        <i class="ti ti-heart-handshake" aria-hidden="true"></i>
+                        <span><strong>Alianzas</strong> Propuestas y acuerdos con la comunidad.</span>
+                    </li>
+                    <li>
+                        <i class="ti ti-news" aria-hidden="true"></i>
+                        <span><strong>Prensa</strong> Consultas de medios (indica tu medio en el formulario).</span>
+                    </li>
+                    <li>
+                        <i class="ti ti-lifebuoy" aria-hidden="true"></i>
+                        <span><strong>Soporte</strong> Problemas con tu cuenta o con el sitio.</span>
+                    </li>
+                </ul>
+            </section>
 
-            <div class="dot--ccc">
-                <span class="w200">⚠️ Importante</span>
-            </div>
+            <section class="contacto-card contacto-card--aviso">
+                <h2 class="contacto-card__titulo"><i class="ti ti-flag" aria-hidden="true"></i> ¿Quieres denunciar contenido?</h2>
+                <p>
+                    Usa el botón <strong>Denunciar</strong> del post, shout o comentario: llega directo a moderación y se
+                    atiende más rápido. Para derechos de autor sigue el procedimiento <a routerLink="/paginas/dmca">DMCA</a>.
+                </p>
+            </section>
 
-            <h4>
-                En este formulario atenderemos: propuestas ofrecidas al
-                site, tanto de publicidad, como otros acuerdos, también problemas y además daremos soporte a usuarios
-                que tengan problemas en el site.
-            </h4>
-        </div>
+            <section class="contacto-card">
+                <h2 class="contacto-card__titulo">Antes de escribir</h2>
+                <ul class="contacto-enlaces">
+                    <li><a routerLink="/paginas/protocolo"><i class="ti ti-book" aria-hidden="true"></i> Protocolo</a></li>
+                    <li><a routerLink="/paginas/terminos-y-condiciones"><i class="ti ti-file-text" aria-hidden="true"></i> Términos y condiciones</a></li>
+                    <li><a routerLink="/paginas/privacidad-y-datos"><i class="ti ti-lock" aria-hidden="true"></i> Privacidad</a></li>
+                </ul>
+                <p class="contacto-nota">
+                    <i class="ti ti-clock" aria-hidden="true"></i>
+                    Respondemos a tu correo, normalmente en unos días. Revisa también la carpeta de spam.
+                </p>
+            </section>
+        </aside>
     </div>
 </div>
