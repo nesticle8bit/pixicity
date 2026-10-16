@@ -325,3 +325,84 @@ $oro: #b7791f;
     align-items: center;
   }
 }
+
+/* --- Quiénes dieron puntos / recomendaron: avatares apilados con el total --- */
+.pm-gente {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-top: 12px;
+
+  &--recomendado {
+    margin-top: 4px;
+  }
+
+  &__titulo {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: $suave;
+  }
+
+  &__total {
+    font-weight: 600;
+  }
+
+  &__lista {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__usuario {
+    position: relative;
+    display: inline-flex;
+    border-radius: 50%;
+    text-decoration: none;
+
+    ::ng-deep img {
+      border: 2px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px $borde;
+    }
+
+    &:hover ::ng-deep img,
+    &:focus-visible ::ng-deep img {
+      box-shadow: 0 0 0 2px $marca;
+    }
+  }
+
+  &__puntos {
+    position: absolute;
+    right: -6px;
+    bottom: -4px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: #8a5a00; // contraste AA con el texto blanco
+    font-size: 0.62rem;
+    font-weight: 800;
+    line-height: 1.4;
+    color: #fff;
+  }
+
+  &__mas {
+    display: grid;
+    place-items: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #f1f4f6;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: $suave;
+  }
+}

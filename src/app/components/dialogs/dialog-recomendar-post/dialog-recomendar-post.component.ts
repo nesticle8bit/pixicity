@@ -39,7 +39,8 @@ export class DialogRecomendarPostComponent implements OnInit {
         this.notificationService.info('Debes tener al menos un seguidor para poder recomendar posts', 'Recomendar Posts');
       }
 
-      this.dialogRef.close();
+      // La recomendación queda registrada aunque no tenga seguidores: el post la muestra en "Recomendado por".
+      this.dialogRef.close(true);
     });
   }
 }

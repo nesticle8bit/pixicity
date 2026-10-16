@@ -7,7 +7,8 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { Subscription } from 'rxjs';
 import { DialogDenunciarPostComponent } from 'src/app/components/dialogs/dialog-denunciar-post/dialog-denunciar-post.component';
 import { DialogRecomendarPostComponent } from 'src/app/components/dialogs/dialog-recomendar-post/dialog-recomendar-post.component';
-import { PostDetalle } from 'src/app/models/posts/post-vm.model';
+import { PostDetalle, PostInteracciones } from 'src/app/models/posts/post-vm.model';
+import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -24,7 +25,7 @@ const MAX_OPCIONES_PUNTOS = 10;
   selector: 'app-posts-meta',
   templateUrl: './posts-meta.component.html',
   styleUrls: ['./posts-meta.component.scss'],
-  imports: [MatTooltip, DecimalPipe, DatePipe, RouterLink],
+  imports: [MatTooltip, DecimalPipe, DatePipe, RouterLink, UserAvatarComponent],
 })
 export class PostsMetaComponent {
   private readonly securityService = inject(IHttpSecurityService);
@@ -43,7 +44,10 @@ export class PostsMetaComponent {
 
   @Input({ required: true }) set post(value: PostDetalle) {
     this._post = value;
-    if (value) this.cargarPuntosDisponibles();
+    if (value) {
+      this.cargarInteracciones();
+      this.cargarPuntosDisponibles();
+    }
   }
 
   get post(): PostDetalle {
@@ -58,6 +62,9 @@ export class PostsMetaComponent {
   public enFavoritos = false;
   public procesando: 'seguir' | 'favorito' | null = null;
   public aviso: { texto: string; ok: boolean } | null = null;
+  /** Quiénes dieron puntos y quiénes recomendaron (más mi voto y favorito, que llegan en la misma respuesta). */
+  public interacciones: PostInteracciones | null = null;
+  private cargaInteracciones?: Subscription;
 
   get haySesion(): boolean {
     return !!this.currentUser?.usuario;
@@ -69,6 +76,20 @@ export class PostsMetaComponent {
 
   iniciarSesion(): void {
     this.sesion.irALogin();
+  }
+
+  private cargarInteracciones(): void {
+    this.cargaInteracciones?.unsubscribe();
+    this.cargaInteracciones = this.postService
+      .getInteraccionesPost(this.post.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((i) => {
+        if (!i) return;
+        this.interacciones = i;
+        // Ya votó este post (se vota una vez): en lugar de la barra se muestra cuántos le dio.
+        if (i.misPuntos > 0) this.puntosDados = i.misPuntos;
+        this.enFavoritos = i.enFavoritos;
+      });
   }
 
   private cargarPuntosDisponibles(): void {
@@ -98,6 +119,19 @@ export class PostsMetaComponent {
           if (ok) {
             this.puntosDados = puntos;
             this.post.puntos = (this.post.puntos || 0) + puntos;
+            // Me sumo al frente de "Dieron puntos" sin volver a pedir la lista.
+            const yo = this.currentUser.usuario;
+            if (this.interacciones && yo?.userName) {
+              this.interacciones = {
+                ...this.interacciones,
+                misPuntos: puntos,
+                totalVotantes: this.interacciones.totalVotantes + 1,
+                votantes: [
+                  { userName: yo.userName, avatar: yo.avatar ?? null, cantidad: puntos, fecha: new Date().toISOString() },
+                  ...this.interacciones.votantes,
+                ],
+              };
+            }
           }
         },
         error: () => (this.votando = false),
@@ -125,22 +159,22 @@ export class PostsMetaComponent {
       });
   }
 
-  agregarFavorito(): void {
-    if (this.enFavoritos || this.procesando || !this.sesion.exigir('Inicia sesión para guardar en favoritos')) return;
+  /** Agrega o quita de favoritos (un segundo clic lo quita). */
+  alternarFavorito(): void {
+    if (this.procesando || !this.sesion.exigir('Inicia sesión para guardar en favoritos')) return;
     this.procesando = 'favorito';
     this.postService
-      .addFavoritePost(this.post.id)
+      .alternarFavoritoPost(this.post.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (agregado) => {
+        next: (r) => {
           this.procesando = null;
-          this.enFavoritos = true;
-          if (agregado) {
-            this.post.favoritos = (this.post.favoritos || 0) + 1;
-            this.mostrarAviso('¡Listo! Lo encuentras en tus favoritos.', true);
-          } else {
-            this.mostrarAviso('Este post ya estaba en tus favoritos.', false);
-          }
+          this.enFavoritos = r.activo;
+          this.post.favoritos = r.total;
+          this.mostrarAviso(
+            r.activo ? '¡Listo! Lo encuentras en tus favoritos.' : 'Lo quitaste de tus favoritos.',
+            r.activo,
+          );
         },
         error: () => (this.procesando = null),
       });
@@ -148,7 +182,13 @@ export class PostsMetaComponent {
 
   recomendarPost(): void {
     if (!this.sesion.exigir('Inicia sesión para recomendar el post')) return;
-    this.dialog.open(DialogRecomendarPostComponent, { width: '500px', disableClose: true, data: this.post.id });
+    this.dialog
+      .open(DialogRecomendarPostComponent, { width: '500px', disableClose: true, data: this.post.id })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((recomendado) => {
+        if (recomendado) this.cargarInteracciones(); // aparece en "Recomendado por"
+      });
   }
 
   denunciarPost(): void {

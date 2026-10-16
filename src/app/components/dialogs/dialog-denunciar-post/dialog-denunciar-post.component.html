@@ -1,40 +1,42 @@
 <h2 mat-dialog-title>
-    Denunciar post
+  Denunciar post
 </h2>
 
 <form [formGroup]="formGroup" (ngSubmit)="enviarDenuncia()">
-    <mat-dialog-content>
-        <div class="mb-1">
-            <label class="form-label" for="dialog-denunciar-post-comentarios">Denunciar el post:</label> <br>
-            <p>{{data.titulo}}</p>
-        </div>
+  <mat-dialog-content>
+    <div class="mb-1">
+      <label class="form-label" for="dialog-denunciar-post-comentarios">Denunciar el post:</label> <br>
+      <p>{{data.titulo}}</p>
+    </div>
 
-        <div class="mb-1">
-            <label class="form-label">Razón de la denuncia:</label> <br>
-            <app-select [items]="razonDenuncia" bindLabel="label" bindValue="id"
-                formControlName="razonDenunciaId"></app-select>
-        </div>
+    <div class="mb-1">
+      <label class="form-label">Razón de la denuncia:</label> <br>
+      <app-select [items]="razonDenuncia" bindLabel="label" bindValue="id"
+        formControlName="razonDenunciaId"></app-select>
+    </div>
 
-        <div class="mb-1">
-            <label class="form-label">Aclaración y comentarios:</label> <br>
-            <textarea id="dialog-denunciar-post-comentarios" rows="8" class="form-control" formControlName="comentarios"></textarea>
-        </div>
+    <div class="mb-1">
+      <label class="form-label">Aclaración y comentarios:</label> <br>
+      <textarea id="dialog-denunciar-post-comentarios" rows="6" class="form-control"
+        formControlName="comentarios"></textarea>
+    </div>
 
-        <div class="alert alert-warning mt-2 mb-0">
-            <p class="mb-0">
-                <i class="ti ti-alert-circle"></i> Si es <b>Re-post</b> debes indicar el link del post original para ayudar a la comunidad.
-                Muchas gracias!
-            </p>
-        </div>
-    </mat-dialog-content>
+    <div class="alert alert-warning mt-2 mb-0">
+      <p class="mb-0">
+        <i class="ti ti-alert-circle"></i> Si es <b>Re-post</b> debes indicar el link del post original para ayudar a la
+        comunidad.
+        Muchas gracias!
+      </p>
+    </div>
+  </mat-dialog-content>
 
-    <mat-dialog-actions align="end">
-        <button type="button" mat-button mat-dialog-close>
-            Cancelar
-        </button>
+  <mat-dialog-actions align="end">
+    <button type="button" mat-button mat-dialog-close>
+      Cancelar
+    </button>
 
-        <button type="submit" mat-button color="primary" [disabled]="formGroup.invalid">
-            Enviar
-        </button>
-    </mat-dialog-actions>
+    <button type="submit" mat-button color="primary" [disabled]="formGroup.invalid">
+      Enviar
+    </button>
+  </mat-dialog-actions>
 </form>

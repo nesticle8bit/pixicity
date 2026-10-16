@@ -144,3 +144,28 @@ export interface ComentarioVotoResponse {
   total: number;
   miVoto: number;
 }
+
+/** Usuario que dio puntos o recomendó un post (GET /api/posts/getInteraccionesPost). */
+export interface PostInteraccionUsuario {
+  userName: string;
+  avatar: string | null;
+  /** Puntos dados (solo en votantes). */
+  cantidad: number;
+  fecha: string;
+}
+
+/** Mi estado sobre el post y quiénes interactuaron con él. */
+export interface PostInteracciones {
+  /** Puntos que le di (0 = todavía no voté). */
+  misPuntos: number;
+  enFavoritos: boolean;
+  votantes: PostInteraccionUsuario[];
+  totalVotantes: number;
+  recomendaron: PostInteraccionUsuario[];
+  totalRecomendaciones: number;
+}
+
+export interface FavoritoAlternado {
+  activo: boolean;
+  total: number;
+}

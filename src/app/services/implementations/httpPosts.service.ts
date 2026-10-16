@@ -12,7 +12,7 @@ import { NotificationService } from '../shared/notification.service';
 import { IHttpPostsService } from '../interfaces/httpPosts.interface';
 import { PaginationService } from '../shared/pagination.service';
 import { ApiResponse, PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
-import { CloudTagViewModel, PostDetailResponse, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
+import { CloudTagViewModel, FavoritoAlternado, PostDetailResponse, PostInteracciones, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
 @Injectable()
 export class HttpPostsService implements IHttpPostsService {
   private notificationService = inject(NotificationService);
@@ -288,6 +288,27 @@ export class HttpPostsService implements IHttpPostsService {
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
+  }
+
+  alternarFavoritoPost(postId: number): Observable<FavoritoAlternado> {
+    return this.http
+      .post<ApiResponse<FavoritoAlternado>>(`${environment.api}/api/posts/alternarFavoritoPost`, { id: postId })
+      .pipe(
+        map((response) => {
+          if (response.status === 200) return response.data!;
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getInteraccionesPost(postId: number): Observable<PostInteracciones | null> {
+    return this.http
+      .get<ApiResponse<PostInteracciones>>(`${environment.api}/api/posts/getInteraccionesPost?postId=${postId}`)
+      .pipe(
+        map((r) => (r.status === 200 ? r.data ?? null : null)),
+        catchError(() => of(null)),
+      );
   }
 
   addFavoritePost(postId: number): Observable<boolean> {

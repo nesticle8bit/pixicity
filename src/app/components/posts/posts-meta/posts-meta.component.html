@@ -8,13 +8,17 @@
 
     <div class="pm-puntos__dar">
       @if (esAutor) {
-      <p class="pm-puntos__nota"><i class="ti ti-user-check" aria-hidden="true"></i> Este es tu post: los puntos te los dan los demás.</p>
+      <p class="pm-puntos__nota"><i class="ti ti-user-check" aria-hidden="true"></i> Este es tu post: los puntos te los
+        dan los demás.</p>
       } @else if (!haySesion) {
-      <p class="pm-puntos__nota">¿Te gustó? <button type="button" class="pm-link" (click)="iniciarSesion()">Inicia sesión</button> para darle puntos.</p>
+      <p class="pm-puntos__nota">¿Te gustó? <button type="button" class="pm-link" (click)="iniciarSesion()">Inicia
+          sesión</button> para darle puntos.</p>
       } @else if (puntosDados) {
-      <p class="pm-puntos__ok" role="status"><i class="ti ti-circle-check" aria-hidden="true"></i> ¡Le diste {{ puntosDados }} {{ puntosDados === 1 ? 'punto' : 'puntos' }}! Gracias por valorar el aporte.</p>
+      <p class="pm-puntos__ok" role="status"><i class="ti ti-circle-check" aria-hidden="true"></i> ¡Le diste {{
+        puntosDados }} {{ puntosDados === 1 ? 'punto' : 'puntos' }}! Gracias por valorar el aporte.</p>
       } @else if (availablePuntos.length) {
-      <span class="pm-puntos__titulo" id="pm-dar-puntos"><i class="ti ti-award" aria-hidden="true"></i> Dar puntos</span>
+      <span class="pm-puntos__titulo" id="pm-dar-puntos"><i class="ti ti-award" aria-hidden="true"></i> Dar
+        puntos</span>
       <div class="barpuntos" role="group" aria-labelledby="pm-dar-puntos">
         @for (punto of availablePuntos; track punto) {
         <button type="button" class="pm-punto" [disabled]="votando" (click)="votarPost(punto)"
@@ -22,69 +26,127 @@
         }
       </div>
       } @else if (puntosCargados) {
-      <p class="pm-puntos__nota"><i class="ti ti-hourglass" aria-hidden="true"></i> Ya repartiste tus puntos de hoy. Mañana tendrás más.</p>
+      <p class="pm-puntos__nota"><i class="ti ti-hourglass" aria-hidden="true"></i> Ya repartiste tus puntos de hoy.
+        Mañana tendrás más.</p>
+      }
+
+      <!-- Quiénes ya dieron puntos -->
+      @if (interacciones && interacciones.votantes.length) {
+      <div class="pm-gente">
+        <span class="pm-gente__titulo">
+          {{ interacciones.totalVotantes === 1 ? 'Le dio puntos' : 'Le dieron puntos' }}
+          <span class="pm-gente__total">({{ interacciones.totalVotantes | number }})</span>
+        </span>
+        <ul class="pm-gente__lista">
+          @for (v of interacciones.votantes; track v.userName) {
+          <li>
+            <a [routerLink]="['/perfil', v.userName]" class="pm-gente__usuario"
+              [matTooltip]="'@' + v.userName + ' · +' + v.cantidad + (v.cantidad === 1 ? ' punto' : ' puntos')"
+              [attr.aria-label]="v.userName + ' dio ' + v.cantidad + ' puntos'">
+              <app-user-avatar [avatar]="v.avatar" [userName]="v.userName" [width]="28" [height]="28" />
+              <span class="pm-gente__puntos" aria-hidden="true">+{{ v.cantidad }}</span>
+            </a>
+          </li>
+          }
+          @if (interacciones.totalVotantes > interacciones.votantes.length) {
+          <li class="pm-gente__mas">+{{ interacciones.totalVotantes - interacciones.votantes.length | number }}</li>
+          }
+        </ul>
+      </div>
       }
     </div>
   </div>
 
   <div class="pm-pie">
-  <!-- Acciones -->
-  <div class="pm-acciones">
-    @if (!esAutor) {
-    <button type="button" class="pm-accion" [class.is-activa]="post.seguirPost" [attr.aria-pressed]="!!post.seguirPost"
-      [disabled]="procesando === 'seguir'" (click)="seguirPost()">
-      <i class="ti" [class.ti-bell-ringing]="post.seguirPost" [class.ti-bell]="!post.seguirPost" aria-hidden="true"></i>
-      {{ post.seguirPost ? 'Siguiendo' : 'Seguir post' }}
-    </button>
-    <button type="button" class="pm-accion" [class.is-activa]="enFavoritos" [attr.aria-pressed]="enFavoritos"
-      [disabled]="procesando === 'favorito' || enFavoritos" (click)="agregarFavorito()">
-      <i class="ti ti-star" [class.is-llena]="enFavoritos" aria-hidden="true"></i>
-      {{ enFavoritos ? 'En favoritos' : 'Agregar a favoritos' }}
-    </button>
-    <button type="button" class="pm-accion" (click)="recomendarPost()">
-      <i class="ti ti-speakerphone" aria-hidden="true"></i> Recomendar
-    </button>
-    <button type="button" class="pm-accion pm-accion--discreta" (click)="denunciarPost()" matTooltip="Denunciar este post"
-      aria-label="Denunciar este post">
-      <i class="ti ti-flag" aria-hidden="true"></i> <span class="pm-accion__texto-opcional">Denunciar</span>
-    </button>
-    }
-  </div>
+    <!-- Acciones -->
+    <div class="pm-acciones">
+      @if (!esAutor) {
+      <button type="button" class="pm-accion" [class.is-activa]="post.seguirPost"
+        [attr.aria-pressed]="!!post.seguirPost" [disabled]="procesando === 'seguir'" (click)="seguirPost()">
+        <i class="ti" [class.ti-bell-ringing]="post.seguirPost" [class.ti-bell]="!post.seguirPost"
+          aria-hidden="true"></i>
+        {{ post.seguirPost ? 'Siguiendo' : 'Seguir post' }}
+      </button>
+      <button type="button" class="pm-accion" [class.is-activa]="enFavoritos" [attr.aria-pressed]="enFavoritos"
+        [disabled]="procesando === 'favorito'" (click)="alternarFavorito()"
+        [matTooltip]="enFavoritos ? 'Clic para quitarlo de tus favoritos' : ''">
+        <i class="ti" [class.ti-star-filled]="enFavoritos" [class.ti-star]="!enFavoritos" [class.is-llena]="enFavoritos" aria-hidden="true"></i>
+        {{ enFavoritos ? 'Agregado a favoritos' : 'Agregar a favoritos' }}
+      </button>
+      <button type="button" class="pm-accion" (click)="recomendarPost()">
+        <i class="ti ti-speakerphone" aria-hidden="true"></i> Recomendar
+      </button>
+      <button type="button" class="pm-accion pm-accion--discreta" (click)="denunciarPost()"
+        matTooltip="Denunciar este post" aria-label="Denunciar este post">
+        <i class="ti ti-flag" aria-hidden="true"></i> <span class="pm-accion__texto-opcional">Denunciar</span>
+      </button>
+      }
 
-  <!-- Estadísticas, categoría y fecha: a la derecha, como el Taringa! clásico -->
-  <div class="pm-info">
-    <dl class="pm-stats">
-      <div class="pm-stat">
-        <dt>Seguidores</dt>
-        <dd>{{ post.seguidores || 0 | number }}<i class="ti ti-bell pm-stat__icono pm-stat__icono--seguidores" aria-hidden="true"></i></dd>
+      <!-- Quiénes lo recomendaron a sus seguidores -->
+      @if (interacciones && interacciones.recomendaron.length) {
+      <div class="pm-gente pm-gente--recomendado">
+        <span class="pm-gente__titulo">
+          <i class="ti ti-speakerphone" aria-hidden="true"></i> Recomendado por
+          <span class="pm-gente__total">({{ interacciones.totalRecomendaciones | number }})</span>
+        </span>
+        <ul class="pm-gente__lista">
+          @for (r of interacciones.recomendaron; track r.userName) {
+          <li>
+            <a [routerLink]="['/perfil', r.userName]" class="pm-gente__usuario" [matTooltip]="'@' + r.userName"
+              [attr.aria-label]="r.userName">
+              <app-user-avatar [avatar]="r.avatar" [userName]="r.userName" [width]="28" [height]="28" />
+            </a>
+          </li>
+          }
+          @if (interacciones.totalRecomendaciones > interacciones.recomendaron.length) {
+          <li class="pm-gente__mas">+{{ interacciones.totalRecomendaciones - interacciones.recomendaron.length | number }}</li>
+          }
+        </ul>
       </div>
-      <div class="pm-stat">
-        <dt>Puntos</dt>
-        <dd>{{ post.puntos || 0 | number }}<i class="ti ti-award pm-stat__icono pm-stat__icono--puntos" aria-hidden="true"></i></dd>
-      </div>
-      <div class="pm-stat">
-        <dt>Visitas</dt>
-        <dd>{{ post.visitantes || 0 | number }}<i class="ti ti-chart-bar pm-stat__icono pm-stat__icono--visitas" aria-hidden="true"></i></dd>
-      </div>
-      <div class="pm-stat">
-        <dt>Favoritos</dt>
-        <dd>{{ post.favoritos || 0 | number }}<i class="ti ti-star pm-stat__icono pm-stat__icono--favoritos" aria-hidden="true"></i></dd>
-      </div>
-    </dl>
-    <ul class="pm-datos">
-      @if (post.categoria && post.categoria.seo) {
-      <li><strong>Categoría:</strong> <a [routerLink]="['/posts', post.categoria.seo]">{{ post.categoria.nombre }}</a></li>
       }
-      @if (post.fechaRegistro) {
-      <li><strong>Creado:</strong> <time [attr.datetime]="post.fechaRegistro">{{ post.fechaRegistro | date: 'dd.MM.yyyy' }} a las {{ post.fechaRegistro | date: 'HH:mm' }} hs.</time></li>
-      }
-    </ul>
-  </div>
+    </div>
+
+    <!-- Estadísticas, categoría y fecha: a la derecha, como el Taringa! clásico -->
+    <div class="pm-info">
+      <dl class="pm-stats">
+        <div class="pm-stat">
+          <dt>Seguidores</dt>
+          <dd>{{ post.seguidores || 0 | number }}<i class="ti ti-bell pm-stat__icono pm-stat__icono--seguidores"
+              aria-hidden="true"></i></dd>
+        </div>
+        <div class="pm-stat">
+          <dt>Puntos</dt>
+          <dd>{{ post.puntos || 0 | number }}<i class="ti ti-award pm-stat__icono pm-stat__icono--puntos"
+              aria-hidden="true"></i></dd>
+        </div>
+        <div class="pm-stat">
+          <dt>Visitas</dt>
+          <dd>{{ post.visitantes || 0 | number }}<i class="ti ti-chart-bar pm-stat__icono pm-stat__icono--visitas"
+              aria-hidden="true"></i></dd>
+        </div>
+        <div class="pm-stat">
+          <dt>Favoritos</dt>
+          <dd>{{ post.favoritos || 0 | number }}<i class="ti ti-star pm-stat__icono pm-stat__icono--favoritos"
+              aria-hidden="true"></i></dd>
+        </div>
+      </dl>
+      <ul class="pm-datos">
+        @if (post.categoria && post.categoria.seo) {
+        <li><strong class="me-1">Categoría:</strong> <a [routerLink]="['/posts', post.categoria.seo]">{{
+            post.categoria.nombre }}</a></li>
+        }
+        @if (post.fechaRegistro) {
+        <li><strong class="me-1">Creado:</strong> <time [attr.datetime]="post.fechaRegistro">{{ post.fechaRegistro |
+            date: 'dd.MM.yyyy' }} a las {{ post.fechaRegistro | date: 'HH:mm' }} hs.</time></li>
+        }
+      </ul>
+    </div>
   </div>
 
   @if (aviso) {
   <p class="pm-aviso" [class.pm-aviso--ok]="aviso.ok" role="status">
-    <i class="ti" [class.ti-circle-check]="aviso.ok" [class.ti-info-circle]="!aviso.ok" aria-hidden="true"></i> {{ aviso.texto }}
+    <i class="ti" [class.ti-circle-check]="aviso.ok" [class.ti-info-circle]="!aviso.ok" aria-hidden="true"></i> {{
+    aviso.texto }}
   </p>
   }
 </section>

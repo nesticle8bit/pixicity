@@ -23,8 +23,11 @@ describe('PostsMetaComponent', () => {
     getAvailableVotos: jasmine.createSpy('getAvailableVotos'),
     setVotos: jasmine.createSpy('setVotos'),
     seguirPost: jasmine.createSpy('seguirPost'),
-    addFavoritePost: jasmine.createSpy('addFavoritePost'),
+    alternarFavoritoPost: jasmine.createSpy('alternarFavoritoPost'),
+    getInteraccionesPost: jasmine.createSpy('getInteraccionesPost'),
   };
+  /** Respuesta de getInteraccionesPost; cada test la ajusta antes de crear. */
+  let interacciones: any;
   let usuario: unknown;
 
   const crear = async () => {
@@ -52,7 +55,20 @@ describe('PostsMetaComponent', () => {
     posts.getAvailableVotos.and.returnValue(of(25));
     posts.setVotos.and.returnValue(of(true));
     posts.seguirPost.and.returnValue(of(true));
-    posts.addFavoritePost.and.returnValue(of(true));
+    let enFav = false;
+    posts.alternarFavoritoPost.and.callFake(() => {
+      enFav = !enFav;
+      return of({ activo: enFav, total: enFav ? 2 : 1 });
+    });
+    interacciones = {
+      misPuntos: 0,
+      enFavoritos: false,
+      votantes: [{ userName: 'ana', avatar: null, cantidad: 7, fecha: '2026-10-01T00:00:00Z' }],
+      totalVotantes: 4,
+      recomendaron: [{ userName: 'beto', avatar: null, cantidad: 0, fecha: '2026-10-01T00:00:00Z' }],
+      totalRecomendaciones: 1,
+    };
+    posts.getInteraccionesPost.and.callFake(() => of(interacciones));
   });
 
   it('con sesión muestra hasta 10 opciones de puntos aunque el post llegue antes de ngOnInit', async () => {
@@ -87,10 +103,40 @@ describe('PostsMetaComponent', () => {
     fixture.detectChanges();
 
     expect(boton(el, /Siguiendo/).getAttribute('aria-pressed')).toBe('true');
-    expect(boton(el, /En favoritos/).disabled).toBeTrue();
+    expect(boton(el, /Agregado a favoritos/).getAttribute('aria-pressed')).toBe('true');
     const stats = [...el.querySelectorAll('.pm-stat dd')].map((d) => d.textContent?.trim());
     expect(stats).toEqual(['3', '3', '50', '2']); // seguidores, puntos, visitas, favoritos (como el Taringa! clásico)
     expect(el.querySelector('.pm-datos')?.textContent).toContain('Design y Variados');
+
+    // Un segundo clic lo quita de favoritos.
+    boton(el, /Agregado a favoritos/).click();
+    fixture.detectChanges();
+    expect(boton(el, /Agregar a favoritos/).getAttribute('aria-pressed')).toBe('false');
+    expect(posts.alternarFavoritoPost).toHaveBeenCalledTimes(2);
+  });
+
+  it('si ya dio puntos no muestra la barra, sino cuántos dio', async () => {
+    usuario = { usuario: { userName: 'lector' }, token: 't' };
+    interacciones = { ...interacciones, misPuntos: 6, enFavoritos: true };
+    const fixture = await crear();
+    const el: HTMLElement = fixture.nativeElement;
+
+    expect(el.querySelectorAll('.pm-punto').length).toBe(0);
+    expect(el.textContent).toContain('¡Le diste 6 puntos!');
+    expect(boton(el, /Agregado a favoritos/)).toBeTruthy();
+  });
+
+  it('muestra quiénes dieron puntos y quiénes recomendaron', async () => {
+    usuario = { usuario: undefined, token: '' };
+    const fixture = await crear();
+    const el: HTMLElement = fixture.nativeElement;
+
+    const gente = [...el.querySelectorAll('.pm-gente')].map((g) => g.textContent?.replace(/\s+/g, ' ').trim());
+    expect(gente[0]).toContain('Le dieron puntos (4)');
+    expect(gente[0]).toContain('+7');
+    expect(gente[0]).toContain('+3'); // 3 votantes más que no entran en la lista
+    expect(gente[1]).toContain('Recomendado por (1)');
+    expect(el.querySelector('.pm-gente--recomendado a')?.getAttribute('href')).toBe('/perfil/beto');
   });
 
   it('el autor no ve la barra de puntos ni las acciones sobre su propio post', async () => {

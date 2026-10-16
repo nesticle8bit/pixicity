@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BusquedaPostsFiltro, BusquedaPostsResultado } from 'src/app/models/posts/busqueda.model';
 import { PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
-import { CloudTagViewModel, PostDetailResponse, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
+import { CloudTagViewModel, FavoritoAlternado, PostDetailResponse, PostInteracciones, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
 @Injectable()
 export abstract class IHttpPostsService {
   abstract getPosts(categoria?: string): Observable<PaginatedData<PostViewModel>>;
@@ -25,6 +25,10 @@ export abstract class IHttpPostsService {
   abstract previousPost(postId: number): Observable<PostSimpleViewModel>;
   abstract randomPost(postId: number): Observable<PostSimpleViewModel>;
   abstract addFavoritePost(postId: number): Observable<boolean>;
+  /** Agrega o quita el post de mis favoritos. */
+  abstract alternarFavoritoPost(postId: number): Observable<FavoritoAlternado>;
+  /** Mi voto y favorito, quiénes dieron puntos y quiénes lo recomendaron. Nunca falla: ante un error devuelve null. */
+  abstract getInteraccionesPost(postId: number): Observable<PostInteracciones | null>;
   abstract reportPost(report: { postId: number; razon: string }): Observable<boolean>;
   abstract getRelatedPosts(postId: number): Observable<PostSimpleViewModel[]>;
   abstract getPostsFromOP(postId: number): Observable<PostSimpleViewModel[]>;

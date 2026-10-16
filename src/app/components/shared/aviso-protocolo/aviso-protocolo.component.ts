@@ -1,5 +1,12 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, PLATFORM_ID, inject, input, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  PLATFORM_ID,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 const CLAVE = 'pixicity.protocoloVisto';
@@ -14,35 +21,75 @@ const CLAVE = 'pixicity.protocoloVisto';
   imports: [RouterLink],
   template: `
     @if (visible()) {
-    <aside class="ap" role="note" aria-label="Antes de publicar">
-      <i class="ti ti-shield-check ap__icono" aria-hidden="true"></i>
-      <div class="ap__cuerpo">
-        <strong>Antes de publicar tu primer {{ que() }}</strong>
-        <ul>
-          <li>Nada de spam, publicidad ni sorteos de puntos.</li>
-          <li>Respeta a los demás: sin insultos, acoso ni discriminación.</li>
-          <li>Sin enlaces de descarga que infrinjan derechos de autor.</li>
-        </ul>
-        <span>Lee el <a routerLink="/paginas/protocolo" target="_blank">protocolo completo</a>: el contenido que no lo cumpla se elimina.</span>
-      </div>
-      <button type="button" class="ap__ok" (click)="entendido()">Entendido</button>
-    </aside>
+      <aside class="ap" role="note" aria-label="Antes de publicar">
+        <i class="ti ti-shield-check ap__icono" aria-hidden="true"></i>
+        <div class="ap__cuerpo">
+          <strong>Antes de publicar tu primer {{ que() }}</strong>
+          <ul>
+            <li>Nada de spam, publicidad ni sorteos de puntos.</li>
+            <li>Respeta a los demás: sin insultos, acoso ni discriminación.</li>
+            <li>Sin enlaces pornográficos.</li>
+          </ul>
+          <span
+            >Lee el
+            <a routerLink="/paginas/protocolo" target="_blank"
+              >protocolo completo</a
+            >: el contenido que no lo cumpla se elimina.</span
+          >
+        </div>
+        <button type="button" class="ap__ok" (click)="entendido()">
+          Entendido
+        </button>
+      </aside>
     }
   `,
   styles: `
     .ap {
-      display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; padding: 12px 14px;
-      border: 1px solid #cfe3ef; border-radius: 12px; background: #f4f9fc; font-size: 0.9rem; color: #31414d;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding: 12px 14px;
+      border: 1px solid #cfe3ef;
+      border-radius: 12px;
+      background: #f4f9fc;
+      font-size: 0.9rem;
+      color: #31414d;
     }
-    .ap__icono { font-size: 1.6rem; color: #006595; }
-    .ap__cuerpo { flex: 1; min-width: 0; }
-    .ap__cuerpo ul { margin: 4px 0; padding-left: 18px; }
-    .ap__cuerpo a { font-weight: 600; color: #006595; }
+    .ap__icono {
+      font-size: 1.6rem;
+      color: #006595;
+    }
+    .ap__cuerpo {
+      flex: 1;
+      min-width: 0;
+    }
+    .ap__cuerpo ul {
+      margin: 4px 0;
+      padding-left: 18px;
+    }
+    .ap__cuerpo a {
+      font-weight: 600;
+      color: #006595;
+    }
     .ap__ok {
-      flex-shrink: 0; padding: 6px 12px; border: 0; border-radius: 8px;
-      background: #006595; font-weight: 700; color: #fff; cursor: pointer;
+      flex-shrink: 0;
+      padding: 6px 12px;
+      border: 0;
+      border-radius: 8px;
+      background: #006595;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
     }
-    @media (max-width: 575.98px) { .ap { flex-wrap: wrap; } .ap__ok { margin-left: auto; } }
+    @media (max-width: 575.98px) {
+      .ap {
+        flex-wrap: wrap;
+      }
+      .ap__ok {
+        margin-left: auto;
+      }
+    }
   `,
 })
 export class AvisoProtocoloComponent {
