@@ -14,7 +14,6 @@ Disallow: /mensajes
 Disallow: /cuenta
 Disallow: /favoritos
 Disallow: /borradores
-Disallow: /mi
 Disallow: /monitor
 Disallow: /administracion
 

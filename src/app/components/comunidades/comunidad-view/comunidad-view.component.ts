@@ -89,6 +89,8 @@ export class ComunidadViewComponent implements OnInit {
         this.comunidad = comunidad;
         this.loading = false;
         this.seoService.setSEO({
+          // Sin temas es una página vacía: se indexa cuando tenga contenido.
+          noIndex: !comunidad.temasCount,
           title: comunidad.nombre,
           description: comunidad.descripcion || `Comunidad ${comunidad.nombre} en Taringa. Únete, participa en sus temas y comparte con la comunidad.`,
           type: 'website',

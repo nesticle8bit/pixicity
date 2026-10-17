@@ -155,10 +155,14 @@ export class ShoutsViewComponent implements OnInit {
         ? `@${autor} compartió: ${recorte(s.mediaTitulo, 120)}`
         : `Shout de @${autor} en Taringas.`;
 
+    // Shout de una línea, sin imagen ni enlace ni respuestas: no aporta en Google y resta calidad al sitio.
+    const pobre = texto.length < 40 && !imagen && !s.url && !(s.comentarios ?? 0);
+
     this.seoService.setSEO({
       title: titulo,
       description: descripcion,
       type: 'article',
+      noIndex: pobre,
       imageURL: imagen,
       tags: [autor, 'shout', ...hashtags].filter(Boolean),
       canonical: url,

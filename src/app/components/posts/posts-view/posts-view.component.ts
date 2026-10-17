@@ -183,6 +183,10 @@ export class PostsViewComponent implements OnInit {
           publisher: { '@id': `${environment.publicUrl}/#organization` },
           mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
           commentCount: value.post.cantidadComentarios,
+          interactionStatistic: [
+            { '@type': 'InteractionCounter', interactionType: 'https://schema.org/ViewAction', userInteractionCount: value.post.visitantes ?? 0 },
+            { '@type': 'InteractionCounter', interactionType: 'https://schema.org/BookmarkAction', userInteractionCount: value.post.favoritos ?? 0 },
+          ],
         }, this.breadcrumb(value.post, canonical)],
         },
       });

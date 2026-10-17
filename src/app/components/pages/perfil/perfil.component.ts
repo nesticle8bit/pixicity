@@ -209,7 +209,9 @@ export class PerfilComponent implements OnInit {
         };
         this.displayService.setDisplay(this.display);
 
+        const perfilVacio = !(this.currentUser.postsCount ?? 0) && !(this.currentUser.comentariosCount ?? 0);
         this.seoService.setSEO({
+          noIndex: perfilVacio,
           title: `${this.currentUser.userName} - Perfil`,
           description: `Perfil de ${this.currentUser.userName} en Taringa. Mira sus posts, shouts, seguidores y actividad en la comunidad.`,
           type: 'profile',
