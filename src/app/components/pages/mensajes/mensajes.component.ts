@@ -7,6 +7,7 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
+import { MensajesBadgeService } from 'src/app/services/shared/mensajes-badge.service';
 import { Router, RouterLink } from '@angular/router';
 import { ConversacionFila } from 'src/app/models/mensajes/mensaje-vm.model';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -44,12 +45,16 @@ export class MensajesComponent implements OnInit {
   private notificationService = inject(NotificationService);
   private signalrService = inject(SignalrService);
   private router = inject(Router);
+  private badgeService = inject(MensajesBadgeService);
 
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
   public conversaciones: ConversacionFila[] = [];
   public totalCount: number = 0;
+  /** Carpeta visible: bandeja de entrada o archivadas. */
+  public archivadas = false;
+  public totalArchivadas = 0;
 
   constructor() {
     this.displaySections();
@@ -61,6 +66,69 @@ export class MensajesComponent implements OnInit {
 
     // Mensaje nuevo (o enviado desde otra pestaña): refresca la bandeja sin recargar la página.
     this.signalrService.mensaje$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.getConversaciones());
+
+    // Confirmación de lectura en vivo: el ✓ pasa a ✓✓ "Visto" sin recargar la bandeja.
+    this.signalrService.mensajesLeidos$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((p) => {
+      for (const c of this.conversaciones) {
+        if (c.esMio && c.otro?.id === p?.porId) {
+          c.leido = true;
+          c.fechaLeido = p.fecha ?? new Date().toISOString();
+        }
+      }
+    });
+  }
+
+  verCarpeta(archivadas: boolean): void {
+    if (this.archivadas === archivadas) return;
+    this.archivadas = archivadas;
+    this.conversaciones = [];
+    this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });
+    this.getConversaciones();
+  }
+
+  /** Archiva (o, en Archivadas, devuelve a la bandeja) las seleccionadas, o la fila indicada. */
+  archivar(fila?: ConversacionFila): void {
+    const ids = fila ? [fila.otro.id] : this.conversaciones.filter((c) => c.selected).map((c) => c.otro.id);
+    if (!ids.length) return;
+    const archivar = !this.archivadas;
+
+    this.mensajesService.archivarConversaciones(ids, archivar).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok) => {
+      if (!ok) return;
+      this.notificationService.success(
+        archivar
+          ? `${ids.length === 1 ? 'Conversación archivada' : ids.length + ' conversaciones archivadas'}. Vuelven a la bandeja si te escriben.`
+          : 'De vuelta en la bandeja de entrada',
+        archivar ? 'Archivada' : 'Desarchivada',
+      );
+      this.getConversaciones();
+    });
+  }
+
+  /** Silenciar: sin aviso ni contador para esa conversación (el otro no se entera). */
+  silenciar(fila: ConversacionFila): void {
+    const silenciar = !fila.silenciada;
+    this.mensajesService.silenciarConversacion(fila.otro.id, silenciar).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok) => {
+      if (!ok) return;
+      fila.silenciada = silenciar;
+      this.badgeService.refresh();
+      this.notificationService.success(
+        silenciar ? `No te avisaremos de los mensajes de @${fila.otro.userName}` : `Vuelves a recibir avisos de @${fila.otro.userName}`,
+        silenciar ? 'Silenciada' : 'Avisos activados',
+      );
+    });
+  }
+
+  /** "Foto" si el último mensaje es solo una imagen. */
+  vistaPrevia(c: ConversacionFila): string {
+    const texto = this.preview(c.contenido);
+    if (texto) return texto;
+    const n = c.cantidadImagenes ?? 0;
+    if (n > 0 || /<img/i.test(c.contenido ?? '')) return n > 1 ? `${n} fotos` : 'Foto';
+    return '';
+  }
+
+  esSoloImagen(c: ConversacionFila): boolean {
+    return !this.preview(c.contenido) && ((c.cantidadImagenes ?? 0) > 0 || /<img/i.test(c.contenido ?? ''));
   }
 
   ngOnInit(): void {}
@@ -116,12 +184,13 @@ export class MensajesComponent implements OnInit {
     // Conserva la selección al refrescar por tiempo real.
     const seleccionados = new Set(this.conversaciones.filter((c) => c.selected).map((c) => c.otro.id));
 
-    this.mensajesService.getConversaciones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.mensajesService.getConversaciones(this.archivadas).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.conversaciones = (response?.conversaciones ?? []).map((c) => ({
         ...c,
         selected: seleccionados.has(c.otro?.id),
       }));
       this.totalCount = response?.pagination?.totalCount ?? 0;
+      this.totalArchivadas = response?.archivadas ?? 0;
     });
   }
 

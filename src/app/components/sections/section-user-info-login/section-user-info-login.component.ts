@@ -9,6 +9,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { MensajesBadgeService } from 'src/app/services/shared/mensajes-badge.service';
+import { MobileNavService } from 'src/app/services/shared/mobile-nav.service';
 import { debounceTime, merge } from 'rxjs';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -51,6 +52,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
   private router = inject(Router);
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly mobileNav = inject(MobileNavService);
 
   public formGroup: FormGroup;
   public displayMenu: boolean = false;
@@ -79,6 +81,11 @@ export class SectionUserInfoLoginComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       search: '',
     });
+
+    // Si se leyeron en otro lado (p. ej. al entrar a /monitor), el globo también se va.
+    this.mobileNav.notificacionesLeidas$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => (this.currentStats.notifications = 0));
   }
 
   // Esc cierra cualquier desplegable abierto (monitor, mensajes, favoritos).
@@ -130,6 +137,11 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   verNotificaciones(): void {
+    // Al abrir el monitor el contador se va al instante (antes quedaba hasta recargar la página).
+    if (this.currentStats.notifications > 0) {
+      this.setNotificacionesAsReaded();
+    }
+
     this.httpLogs.getLastNotificaciones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         response = response.map((notificacion: any) => {
@@ -163,8 +175,6 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
           return notificacion;
         });
-
-        this.setNotificacionesAsReaded();
       }
 
       this.notificaciones = response;
@@ -183,7 +193,10 @@ export class SectionUserInfoLoginComponent implements OnInit {
     this.mensajesService.getLastMensajes().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.mensajes = response;
 
-      this.setMensajesAsReaded();
+      if (this.currentStats.messages > 0) {
+        this.currentStats.messages = 0;
+        this.setMensajesAsReaded();
+      }
     });
   }
 
@@ -223,18 +236,14 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   setNotificacionesAsReaded(): void {
-    this.httpLogs.setNotificacionesAsReaded().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      console.log(
-        '🔔 Se ha cambiado el estado de las últimas notificaciones a leído'
-      );
-    });
+    this.currentStats.notifications = 0;
+    this.mobileNav.marcarNotificacionesLeidas();
   }
 
   setMensajesAsReaded(): void {
-    this.mensajesService.setMensajesAsReaded().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      console.log(
-        '🔔 Se ha cambiado el estado de los últimos mensajes a leído'
-      );
-    });
+    this.mensajesService
+      .setMensajesAsReaded()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({ next: () => this.badgeService.refresh(), error: () => {} });
   }
 }

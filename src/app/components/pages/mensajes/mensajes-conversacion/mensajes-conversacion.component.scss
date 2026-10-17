@@ -177,3 +177,144 @@ img {
         resize: none;
     }
 }
+
+/* --- Silenciar / archivar desde el chat --- */
+.chat-header__acciones {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.chat-header__accion {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #e6eaee;
+  border-radius: 50%;
+  background: #fff;
+  font-size: 1.1rem;
+  color: #5f6b75;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    border-color: #006595;
+    color: #005a85;
+  }
+
+  &.is-activa {
+    background: #eef2f5;
+    color: #1f2a33;
+  }
+}
+
+/* --- Imágenes en la burbuja --- */
+.chat-fotos {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 4px;
+  max-width: 320px;
+
+  &--varias {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  &__item {
+    display: block;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #eef2f5;
+
+    img {
+      display: block;
+      width: 100%;
+      max-height: 260px;
+      object-fit: cover;
+    }
+  }
+
+  &--varias &__item img {
+    height: 140px;
+  }
+}
+
+.chat-visto {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 3px;
+  margin: -2px 6px 6px;
+  font-size: 0.75rem;
+  color: #1e7a45;
+}
+
+/* --- Adjuntos antes de enviar --- */
+.chat-adjuntos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+
+  &__item {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    overflow: hidden;
+    border: 1px solid #e6eaee;
+    border-radius: 10px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &.is-subiendo img {
+      opacity: 0.5;
+    }
+  }
+
+  &__estado {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 1.3rem;
+    color: #1f2a33;
+
+    i {
+      animation: chat-girar 1s linear infinite;
+    }
+  }
+
+  &__quitar {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(0 0 0 / 65%);
+    font-size: 0.8rem;
+    color: #fff;
+    cursor: pointer;
+  }
+}
+
+@keyframes chat-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-adjuntos__estado i {
+    animation: none;
+  }
+}

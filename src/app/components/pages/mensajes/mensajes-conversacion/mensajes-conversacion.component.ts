@@ -1,8 +1,7 @@
 import { Component, DestroyRef, ElementRef, inject, OnInit, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
-import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
@@ -16,6 +15,16 @@ import { DatePipe } from '@angular/common';
 import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 
 const PAGE_SIZE = 30;
+/** Imágenes por mensaje (igual que el API). */
+export const MAX_ADJUNTOS = 4;
+
+/** Imagen elegida para el próximo mensaje: se sube al elegirla y se envía con el texto. */
+interface Adjunto {
+  id: number;
+  vista: string;
+  url?: string;
+  subiendo: boolean;
+}
 // Distancia (px) al fondo bajo la cual se considera que el usuario "está siguiendo" el chat.
 const NEAR_BOTTOM = 80;
 // Cada cuánto se avisa "escribiendo…" al otro, y cuánto dura el indicador sin nuevos avisos.
@@ -40,7 +49,7 @@ const TYPING_SHOW_FOR_MS = 3500;
 export class MensajesConversacionComponent implements OnInit {
   private displayService = inject(DisplayComponentService);
   private mensajesService = inject(IHttpMensajesService);
-  private fotosService = inject(IHttpFotosService);
+  private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private notificationService = inject(NotificationService);
   private signalrService = inject(SignalrService);
@@ -62,6 +71,9 @@ export class MensajesConversacionComponent implements OnInit {
   public subiendo = false;
   public bloqueado = false;
   public escribiendo = false;
+  public silenciada = false;
+  public adjuntos: Adjunto[] = [];
+  private siguienteAdjunto = 1;
 
   private id?: number;
   private userName?: string;
@@ -84,7 +96,13 @@ export class MensajesConversacionComponent implements OnInit {
 
     this.signalrService.mensajesLeidos$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((p) => {
       if (this.otro && p?.porId === this.otro.id) {
-        this.mensajes.forEach((m) => m.esMio && (m.leido = true));
+        const fecha = p.fecha ?? new Date().toISOString();
+        this.mensajes.forEach((m) => {
+          if (m.esMio && !m.leido) {
+            m.leido = true;
+            m.fechaLeido = fecha;
+          }
+        });
       }
     });
 
@@ -96,7 +114,10 @@ export class MensajesConversacionComponent implements OnInit {
       }
     });
 
-    this.destroyRef.onDestroy(() => clearTimeout(this.typingTimer));
+    this.destroyRef.onDestroy(() => {
+      clearTimeout(this.typingTimer);
+      this.adjuntos.forEach((a) => URL.revokeObjectURL(a.vista));
+    });
   }
 
   ngOnInit(): void {
@@ -122,6 +143,7 @@ export class MensajesConversacionComponent implements OnInit {
         this.otro = page?.otro;
         this.hayMas = !!page?.hayMas;
         this.bloqueado = !!page?.bloqueado;
+        this.silenciada = !!page?.silenciada;
         this.nuevosSinLeer = 0;
         this.escribiendo = false;
         this.actualizarAsunto();
@@ -183,6 +205,7 @@ export class MensajesConversacionComponent implements OnInit {
 
           if (existente) {
             existente.leido = m.leido;
+            existente.fechaLeido = m.fechaLeido;
           } else {
             porId.set(m.id, m);
             if (!m.esMio) {
@@ -242,18 +265,31 @@ export class MensajesConversacionComponent implements OnInit {
     return actual !== previo;
   }
 
-  responderMensaje(): void {
-    const texto = this.respuesta.trim();
+  get subiendoAdjuntos(): boolean {
+    return this.adjuntos.some((a) => a.subiendo);
+  }
 
-    if (!texto) {
+  get puedeEnviar(): boolean {
+    const hayAlgo = !!this.respuesta.trim() || this.adjuntos.some((a) => a.url);
+    return !!this.otro && !this.bloqueado && !this.enviando && !this.subiendoAdjuntos && hayAlgo;
+  }
+
+  responderMensaje(): void {
+    if (!this.puedeEnviar) {
       return;
     }
 
+    const texto = this.respuesta.trim();
+    const imagenes = this.adjuntos.filter((a) => a.url).map((a) => a.url!);
+
     // El contenido es HTML: sin esto Shift+Enter se perdería al renderizar.
-    this.enviar(texto.replace(/\r?\n/g, '<br>'), () => (this.respuesta = ''));
+    this.enviar(texto.replace(/\r?\n/g, '<br>'), imagenes, () => {
+      this.respuesta = '';
+      this.quitarAdjuntos();
+    });
   }
 
-  private enviar(contenido: string, alExito?: () => void): void {
+  private enviar(contenido: string, imagenes: string[], alExito?: () => void): void {
     if (!this.otro || this.enviando || this.bloqueado) {
       return;
     }
@@ -261,7 +297,7 @@ export class MensajesConversacionComponent implements OnInit {
     this.enviando = true;
 
     this.mensajesService
-      .sendMensajePrivado({ aUserName: this.otro.userName, asunto: '', contenido })
+      .sendMensajePrivado({ aUserName: this.otro.userName, asunto: '', contenido, imagenes })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
@@ -299,35 +335,111 @@ export class MensajesConversacionComponent implements OnInit {
     this.signalrService.notifyTyping(this.otro.id);
   }
 
-  // Sube la imagen con el endpoint existente de fotos y la envía como mensaje.
+  /** Elegir imágenes: se suben enseguida y quedan como vista previa hasta enviar (con o sin texto). */
   adjuntarImagen(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
+    const files = [...(input.files ?? [])];
     input.value = '';
+    this.agregarAdjuntos(files);
+  }
 
-    if (!file || this.subiendo || !this.otro || this.bloqueado) {
+  /** Pegar una captura (Ctrl+V) la adjunta. */
+  alPegar(event: ClipboardEvent): void {
+    const files = [...(event.clipboardData?.files ?? [])].filter((f) => f.type.startsWith('image/'));
+    if (files.length) {
+      event.preventDefault();
+      this.agregarAdjuntos(files);
+    }
+  }
+
+  private agregarAdjuntos(files: File[]): void {
+    if (!files.length || !this.otro || this.bloqueado) {
       return;
     }
 
-    if (!file.type.startsWith('image/')) {
+    if (files.some((f) => !f.type.startsWith('image/'))) {
       this.notificationService.error('Solo puedes adjuntar imágenes', 'Archivo no válido');
-      return;
     }
 
-    this.subiendo = true;
+    const libres = MAX_ADJUNTOS - this.adjuntos.length;
+    const imagenes = files.filter((f) => f.type.startsWith('image/'));
+    if (imagenes.length > libres) {
+      this.notificationService.info(`Puedes adjuntar hasta ${MAX_ADJUNTOS} imágenes por mensaje`, 'Imágenes');
+    }
 
-    this.fotosService
-      .uploadImage(file)
+    for (const file of imagenes.slice(0, Math.max(libres, 0))) {
+      const adjunto: Adjunto = { id: this.siguienteAdjunto++, vista: URL.createObjectURL(file), subiendo: true };
+      this.adjuntos = [...this.adjuntos, adjunto];
+      this.subiendo = true;
+
+      this.mensajesService
+        .subirImagenMensaje(file)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (url: string) => {
+            adjunto.url = url;
+            adjunto.subiendo = false;
+            this.subiendo = this.subiendoAdjuntos;
+          },
+          error: () => {
+            this.quitarAdjunto(adjunto);
+            this.subiendo = this.subiendoAdjuntos;
+          },
+        });
+    }
+  }
+
+  quitarAdjunto(adjunto: Adjunto): void {
+    URL.revokeObjectURL(adjunto.vista);
+    this.adjuntos = this.adjuntos.filter((a) => a.id !== adjunto.id);
+  }
+
+  private quitarAdjuntos(): void {
+    this.adjuntos.forEach((a) => URL.revokeObjectURL(a.vista));
+    this.adjuntos = [];
+  }
+
+  /** Imágenes adjuntas de un mensaje (el API las manda una por línea). */
+  imagenesDe(m: { imagenes?: string | null }): string[] {
+    return (m.imagenes ?? '').split('\n').map((i) => i.trim()).filter(Boolean);
+  }
+
+  /** El último mensaje mío que el otro ya vio: debajo va "Visto hace…". */
+  get idUltimoVisto(): number | null {
+    for (let i = this.mensajes.length - 1; i >= 0; i--) {
+      const m = this.mensajes[i];
+      if (!m.esMio) return null; // me respondió después: no hace falta el "Visto"
+      if (m.leido) return m.id;
+    }
+    return null;
+  }
+
+  alternarSilencio(): void {
+    if (!this.otro) return;
+    const silenciar = !this.silenciada;
+    this.mensajesService
+      .silenciarConversacion(this.otro.id, silenciar)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (url: string) => {
-          this.subiendo = false;
+      .subscribe((ok) => {
+        if (!ok) return;
+        this.silenciada = silenciar;
+        this.badgeService.refresh();
+        this.notificationService.success(
+          silenciar ? 'No te avisaremos de sus mensajes nuevos' : 'Vuelves a recibir avisos',
+          silenciar ? 'Conversación silenciada' : 'Avisos activados',
+        );
+      });
+  }
 
-          if (url) {
-            this.enviar(`<img src="${url}" alt="Imagen adjunta">`);
-          }
-        },
-        error: () => (this.subiendo = false),
+  archivar(): void {
+    if (!this.otro) return;
+    this.mensajesService
+      .archivarConversaciones([this.otro.id], true)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((ok) => {
+        if (!ok) return;
+        this.notificationService.success('Vuelve a la bandeja si te escriben de nuevo.', 'Conversación archivada');
+        this.router.navigate(['/mensajes']);
       });
   }
 

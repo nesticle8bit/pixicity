@@ -1,6 +1,7 @@
 import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { ClientErrorHandler } from './client-error-handler';
 
 describe('ClientErrorHandler', () => {
@@ -11,7 +12,12 @@ describe('ClientErrorHandler', () => {
   beforeEach(() => {
     spyOn(console, 'error');
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), ClientErrorHandler],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        ClientErrorHandler,
+        { provide: IHttpSecurityService, useValue: { getCurrentUser: () => ({ token: 'jwt-de-prueba' }) } },
+      ],
     });
     handler = TestBed.inject(ClientErrorHandler);
     backend = TestBed.inject(HttpTestingController);
@@ -59,5 +65,27 @@ describe('ClientErrorHandler', () => {
     handler.handleError(new Error('algo'));
 
     expect(() => backend.expectOne(esLog).flush(null, { status: 500, statusText: 'Error' })).not.toThrow();
+  });
+
+  it('manda el token (para saber qué usuario tuvo el error) y el contexto', () => {
+    handler.handleError(new Error('con contexto'));
+
+    const req = backend.expectOne(esLog);
+    expect(req.request.headers.get('Authorization')).toBe('Bearer jwt-de-prueba');
+    expect(req.request.body.contexto).toContain('Viewport:');
+    expect(req.request.body.contexto).toContain('Versión:');
+    req.flush({});
+  });
+
+  it('un chunk que ya no existe (versión vieja tras desplegar) es advertencia, no error', () => {
+    // Simula que ya se recargó hace poco: así el test no recarga la página.
+    sessionStorage.setItem('pixicity:recarga-por-version', String(Date.now()));
+
+    handler.handleError(new TypeError('Failed to fetch dynamically imported module: https://x/chunk-ABC.js'));
+
+    const req = backend.expectOne(esLog);
+    expect(req.request.body.tipo).toBe('ChunkLoadError');
+    expect(req.request.body.nivel).toBe('Warning');
+    req.flush({});
   });
 });

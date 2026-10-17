@@ -155,6 +155,37 @@ export class MobileDrawerComponent implements OnInit {
     }
   }
 
+  /** "99+" para que el globo no se desborde. */
+  contador(n: number): string {
+    return n > 99 ? '99+' : String(n);
+  }
+
+  /** Entrar al monitor: el contador se va al instante (y el API las marca como leídas). */
+  abrirMonitor(): void {
+    this.nav.marcarNotificacionesLeidas();
+    this.nav.close();
+  }
+
+  /** Foco atrapado en el cajón (es un diálogo modal): Tab en el último vuelve al primero y Shift+Tab al revés. */
+  atraparFoco(event: Event): void {
+    const e = event as KeyboardEvent;
+    const cajon = e.currentTarget as HTMLElement;
+    const enfocables = [...cajon.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled])')].filter(
+      (el) => el.offsetParent !== null,
+    );
+    if (!enfocables.length) return;
+
+    const primero = enfocables[0];
+    const ultimo = enfocables[enfocables.length - 1];
+    if (e.shiftKey && document.activeElement === primero) {
+      e.preventDefault();
+      ultimo.focus();
+    } else if (!e.shiftKey && document.activeElement === ultimo) {
+      e.preventDefault();
+      primero.focus();
+    }
+  }
+
   buscar(): void {
     const q = (this.formGroup.value?.search ?? '').trim();
 

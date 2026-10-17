@@ -9,9 +9,23 @@
         </strong>
       </h2>
 
+      <div class="msg-carpetas" role="tablist" aria-label="Carpetas de mensajes">
+        <button type="button" role="tab" class="msg-carpetas__tab" [class.is-activa]="!archivadas"
+          [attr.aria-selected]="!archivadas" (click)="verCarpeta(false)">
+          <i class="ti ti-inbox" aria-hidden="true"></i> Bandeja
+        </button>
+        <button type="button" role="tab" class="msg-carpetas__tab" [class.is-activa]="archivadas"
+          [attr.aria-selected]="archivadas" (click)="verCarpeta(true)">
+          <i class="ti ti-archive" aria-hidden="true"></i> Archivadas
+          @if (totalArchivadas > 0) {
+            <span class="msg-carpetas__n">{{totalArchivadas}}</span>
+          }
+        </button>
+      </div>
+
       @if (conversaciones.length < 1) {
         <div class="nada-gris my-3">
-          Aún no tienes conversaciones.
+          {{ archivadas ? 'No tienes conversaciones archivadas.' : 'Aún no tienes conversaciones.' }}
         </div>
       }
 
@@ -33,6 +47,13 @@
               }
             }
           </span>
+
+          <button type="button" mat-stroked-button class="msg-toolbar__archivar"
+            [disabled]="selectedCount < 1" (click)="archivar()"
+            [matTooltip]="archivadas ? 'Devolver a la bandeja' : 'Archivar seleccionadas'"
+            [attr.aria-label]="archivadas ? 'Devolver a la bandeja las seleccionadas' : 'Archivar conversaciones seleccionadas'">
+            <i class="ti" [class.ti-archive]="!archivadas" [class.ti-inbox]="archivadas" aria-hidden="true"></i>
+          </button>
 
           <button type="button" mat-flat-button color="warn" class="msg-toolbar__delete"
             [disabled]="selectedCount < 1" (click)="deleteConversaciones()"
@@ -63,7 +84,11 @@
                     {{'@'}}{{c.otro.userName}}
                   </a>
                   @if (c.noLeidos > 0) {
-                    <span class="badge bg-primary" [attr.aria-label]="c.noLeidos + ' sin leer'">{{c.noLeidos}}</span>
+                    <span class="badge" [class.bg-primary]="!c.silenciada" [class.bg-secondary]="c.silenciada"
+                      [attr.aria-label]="c.noLeidos + ' sin leer'">{{c.noLeidos}}</span>
+                  }
+                  @if (c.silenciada) {
+                    <i class="ti ti-bell-off msg-item__silenciada" matTooltip="Silenciada: sin avisos" aria-label="Silenciada"></i>
                   }
                   <span class="msg-item__date text-muted cursor--help"
                     matTooltip="{{c.fechaRegistro | date:'medium'}}">
@@ -74,11 +99,31 @@
                   @if (c.esMio) {
                     <i class="ti msg-item__status" [class.ti-checks]="c.leido" [class.ti-check]="!c.leido"
                       [class.msg-item__status--read]="c.leido"
-                      [matTooltip]="c.leido ? 'Leído por el destinatario' : 'Aún sin leer'"></i>
+                      [attr.aria-label]="c.leido ? 'Leído' : 'Enviado, sin leer'"
+                      [matTooltip]="c.leido ? (c.fechaLeido ? 'Visto el ' + (c.fechaLeido | date:'medium') : 'Leído por el destinatario') : 'Aún sin leer'"></i>
                     Tú:
                   }
-                  {{preview(c.contenido)}}
+                  @if (esSoloImagen(c)) {
+                    <i class="ti ti-photo" aria-hidden="true"></i>
+                  }
+                  {{vistaPrevia(c)}}
                 </div>
+                @if (c.esMio && c.leido && c.fechaLeido) {
+                  <div class="msg-item__visto">Visto {{c.fechaLeido | timeAgo}}</div>
+                }
+              </div>
+
+              <div class="msg-item__acciones">
+                <button type="button" class="msg-item__accion" (click)="silenciar(c)"
+                  [matTooltip]="c.silenciada ? 'Activar avisos' : 'Silenciar'"
+                  [attr.aria-label]="(c.silenciada ? 'Activar avisos de ' : 'Silenciar a ') + c.otro.userName">
+                  <i class="ti" [class.ti-bell-off]="!c.silenciada" [class.ti-bell]="c.silenciada" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="msg-item__accion" (click)="archivar(c)"
+                  [matTooltip]="archivadas ? 'Devolver a la bandeja' : 'Archivar'"
+                  [attr.aria-label]="(archivadas ? 'Desarchivar conversación con ' : 'Archivar conversación con ') + c.otro.userName">
+                  <i class="ti" [class.ti-archive]="!archivadas" [class.ti-inbox]="archivadas" aria-hidden="true"></i>
+                </button>
               </div>
             </li>
           }

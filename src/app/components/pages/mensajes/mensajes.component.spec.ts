@@ -29,17 +29,20 @@ describe('MensajesComponent (bandeja de conversaciones)', () => {
   let notificaciones: jasmine.SpyObj<NotificationService>;
   let router: jasmine.SpyObj<Router>;
   let mensaje$: Subject<any>;
+  let leidos$: Subject<any>;
 
   const pagina = (...items: any[]) => ({
     conversaciones: items,
+    archivadas: 2,
     pagination: { totalCount: items.length, pageSize: 10, currentPage: 1, totalPages: 1 },
   });
 
   beforeEach(async () => {
-    mensajes = jasmine.createSpyObj('IHttpMensajesService', ['getConversaciones', 'deleteConversaciones']);
+    mensajes = jasmine.createSpyObj('IHttpMensajesService', ['getConversaciones', 'deleteConversaciones', 'archivarConversaciones', 'silenciarConversacion']);
     notificaciones = jasmine.createSpyObj('NotificationService', ['success', 'error']);
     router = jasmine.createSpyObj('Router', ['navigate']);
     mensaje$ = new Subject();
+    leidos$ = new Subject();
 
     mensajes.getConversaciones.and.returnValue(of(pagina(conv(1, 2), conv(2, 0), conv(3, 3))));
 
@@ -50,7 +53,7 @@ describe('MensajesComponent (bandeja de conversaciones)', () => {
         { provide: IHttpMensajesService, useValue: mensajes },
         { provide: NotificationService, useValue: notificaciones },
         { provide: Router, useValue: router },
-        { provide: SignalrService, useValue: { mensaje$ } },
+        { provide: SignalrService, useValue: { mensaje$, mensajesLeidos$: leidos$ } },
         { provide: DisplayComponentService, useValue: { setDisplay: () => { } } },
         { provide: PaginationService, useValue: { change: () => { }, pageCount: 10, selectItemsPerPage: [10] } },
     ],
@@ -120,5 +123,47 @@ describe('MensajesComponent (bandeja de conversaciones)', () => {
     expect(component.preview('<p>hola <b>mundo</b></p>')).toBe('hola mundo');
     expect(component.preview('<p>' + 'a'.repeat(200) + '</p>', 10)).toBe('aaaaaaaaaa…');
     expect(component.preview('')).toBe('');
+  });
+
+  it('archivar manda los seleccionados y la pestaña Archivadas pide esa carpeta', () => {
+    expect(component.totalArchivadas).toBe(2);
+    component.conversaciones[0].selected = true;
+    mensajes.archivarConversaciones.and.returnValue(of(true));
+
+    component.archivar();
+    expect(mensajes.archivarConversaciones).toHaveBeenCalledWith([1], true);
+
+    mensajes.getConversaciones.calls.reset();
+    component.verCarpeta(true);
+    expect(mensajes.getConversaciones).toHaveBeenCalledWith(true);
+
+    // En Archivadas, la misma acción las devuelve a la bandeja.
+    component.archivar(component.conversaciones[0]);
+    expect(mensajes.archivarConversaciones).toHaveBeenCalledWith([1], false);
+  });
+
+  it('silenciar alterna el estado de la fila', () => {
+    mensajes.silenciarConversacion.and.returnValue(of(true));
+    component.silenciar(component.conversaciones[0]);
+
+    expect(mensajes.silenciarConversacion).toHaveBeenCalledWith(1, true);
+    expect(component.conversaciones[0].silenciada).toBeTrue();
+  });
+
+  it('la confirmación de lectura en vivo marca "Visto" en mi último mensaje', () => {
+    mensajes.getConversaciones.and.returnValue(of(pagina(conv(4, 0, { esMio: true, leido: false }))));
+    component.getConversaciones();
+
+    leidos$.next({ porId: 4, fecha: '2026-10-16T12:00:00Z' });
+
+    expect(component.conversaciones[0].leido).toBeTrue();
+    expect(component.conversaciones[0].fechaLeido).toBe('2026-10-16T12:00:00Z');
+  });
+
+  it('un mensaje con solo imágenes se resume como "Foto"', () => {
+    const fila: any = { ...conv(5), contenido: '', cantidadImagenes: 1, selected: false };
+    expect(component.vistaPrevia(fila)).toBe('Foto');
+    expect(component.vistaPrevia({ ...fila, cantidadImagenes: 3 })).toBe('3 fotos');
+    expect(component.esSoloImagen(fila)).toBeTrue();
   });
 });

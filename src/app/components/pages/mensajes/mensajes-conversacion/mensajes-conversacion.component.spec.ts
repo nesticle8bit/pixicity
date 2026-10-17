@@ -1,12 +1,11 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, flush, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
 import { MensajesConversacionComponent } from './mensajes-conversacion.component';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
-import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
@@ -28,7 +27,7 @@ describe('MensajesConversacionComponent', () => {
   let component: MensajesConversacionComponent;
 
   let mensajes: jasmine.SpyObj<IHttpMensajesService>;
-  let fotos: jasmine.SpyObj<IHttpFotosService>;
+  let router: jasmine.SpyObj<Router>;
   let notificaciones: jasmine.SpyObj<NotificationService>;
   let signalr: {
     mensaje$: Subject<any>;
@@ -48,9 +47,12 @@ describe('MensajesConversacionComponent', () => {
       'getConversacion',
       'sendMensajePrivado',
       'deleteMensajesById',
+      'subirImagenMensaje',
+      'silenciarConversacion',
+      'archivarConversaciones',
     ]);
-    fotos = jasmine.createSpyObj('IHttpFotosService', ['uploadImage']);
-    notificaciones = jasmine.createSpyObj('NotificationService', ['error', 'success']);
+    router = jasmine.createSpyObj('Router', ['navigate']);
+    notificaciones = jasmine.createSpyObj('NotificationService', ['error', 'success', 'info']);
     signalr = {
       mensaje$: new Subject(),
       mensajesLeidos$: new Subject(),
@@ -63,7 +65,7 @@ describe('MensajesConversacionComponent', () => {
     schemas: [NO_ERRORS_SCHEMA],
     providers: [
         { provide: IHttpMensajesService, useValue: mensajes },
-        { provide: IHttpFotosService, useValue: fotos },
+        { provide: Router, useValue: router },
         { provide: NotificationService, useValue: notificaciones },
         { provide: SignalrService, useValue: signalr },
         { provide: DisplayComponentService, useValue: { setDisplay: () => { } } },
@@ -169,6 +171,7 @@ describe('MensajesConversacionComponent', () => {
       aUserName: 'ana',
       asunto: '',
       contenido: 'hola<br>que tal',
+      imagenes: [],
     });
     expect(component.respuesta).toBe('');
   }));
@@ -212,19 +215,40 @@ describe('MensajesConversacionComponent', () => {
     expect(component.mensajes.map((m) => m.id)).toEqual([2]);
   }));
 
-  it('adjuntar imagen la sube y la envía como mensaje', fakeAsync(() => {
+  it('adjuntar imágenes las sube al elegirlas y se envían con el mensaje (aunque no haya texto)', fakeAsync(() => {
     crear({ mensajes: [], hayMas: false, bloqueado: false, otro: ana });
-    fotos.uploadImage.and.returnValue(of('/images/fotos/yo/a.jpg'));
+    mensajes.subirImagenMensaje.and.returnValues(of('/images/mensajes/yo/a.webp'), of('/images/mensajes/yo/b.webp'));
     mensajes.sendMensajePrivado.and.returnValue(of({ type: 'id', message: '7' }));
 
-    const file = new File(['x'], 'a.png', { type: 'image/png' });
-    component.adjuntarImagen({ target: { files: [file], value: 'a.png' } } as any);
+    const a = new File(['x'], 'a.png', { type: 'image/png' });
+    const b = new File(['y'], 'b.jpg', { type: 'image/jpeg' });
+    component.adjuntarImagen({ target: { files: [a, b], value: 'a.png' } } as any);
     flush();
 
-    expect(fotos.uploadImage).toHaveBeenCalledWith(file);
+    expect(mensajes.subirImagenMensaje).toHaveBeenCalledTimes(2);
+    expect(component.adjuntos.length).toBe(2);
+    expect(component.puedeEnviar).toBeTrue();
+    expect(mensajes.sendMensajePrivado).not.toHaveBeenCalled(); // se envía al apretar Enviar
+
+    component.responderMensaje();
+    flush();
+
     expect(mensajes.sendMensajePrivado).toHaveBeenCalledWith(
-      jasmine.objectContaining({ contenido: '<img src="/images/fotos/yo/a.jpg" alt="Imagen adjunta">' })
+      jasmine.objectContaining({ contenido: '', imagenes: ['/images/mensajes/yo/a.webp', '/images/mensajes/yo/b.webp'] }),
     );
+    expect(component.adjuntos.length).toBe(0);
+  }));
+
+  it('no deja adjuntar más de 4 imágenes', fakeAsync(() => {
+    crear({ mensajes: [], hayMas: false, bloqueado: false, otro: ana });
+    mensajes.subirImagenMensaje.and.returnValue(of('/images/mensajes/yo/x.webp'));
+
+    const files = [1, 2, 3, 4, 5].map((n) => new File(['x'], `${n}.png`, { type: 'image/png' }));
+    component.adjuntarImagen({ target: { files, value: '' } } as any);
+    flush();
+
+    expect(mensajes.subirImagenMensaje).toHaveBeenCalledTimes(4);
+    expect(notificaciones.info).toHaveBeenCalled();
   }));
 
   it('rechaza adjuntos que no son imágenes', fakeAsync(() => {
@@ -234,8 +258,40 @@ describe('MensajesConversacionComponent', () => {
     component.adjuntarImagen({ target: { files: [file], value: 'a.pdf' } } as any);
     flush();
 
-    expect(fotos.uploadImage).not.toHaveBeenCalled();
+    expect(mensajes.subirImagenMensaje).not.toHaveBeenCalled();
     expect(notificaciones.error).toHaveBeenCalled();
+  }));
+
+  it('imagenesDe parte las URLs y "Visto" va en el último mensaje mío leído', fakeAsync(() => {
+    crear({
+      mensajes: [msg(1), msg(2, true, { leido: true, fechaLeido: '2026-10-01T10:05:00Z', imagenes: '/a.webp\n/b.webp' }), msg(3, true)],
+      hayMas: false,
+      bloqueado: false,
+      otro: ana,
+    });
+    flush();
+
+    expect(component.imagenesDe(component.mensajes[1])).toEqual(['/a.webp', '/b.webp']);
+    expect(component.idUltimoVisto).toBe(2);
+
+    signalr.mensajesLeidos$.next({ porId: 2, fecha: '2026-10-01T10:09:00Z' });
+    expect(component.idUltimoVisto).toBe(3);
+    expect(component.mensajes[2].fechaLeido).toBe('2026-10-01T10:09:00Z');
+  }));
+
+  it('silenciar y archivar desde el chat', fakeAsync(() => {
+    crear({ mensajes: [], hayMas: false, bloqueado: false, silenciada: false, otro: ana });
+    mensajes.silenciarConversacion.and.returnValue(of(true));
+    mensajes.archivarConversaciones.and.returnValue(of(true));
+    flush();
+
+    component.alternarSilencio();
+    expect(mensajes.silenciarConversacion).toHaveBeenCalledWith(2, true);
+    expect(component.silenciada).toBeTrue();
+
+    component.archivar();
+    expect(mensajes.archivarConversaciones).toHaveBeenCalledWith([2], true);
+    expect(router.navigate).toHaveBeenCalledWith(['/mensajes']);
   }));
 
   it('esNuevoDia separa los mensajes por fecha', fakeAsync(() => {

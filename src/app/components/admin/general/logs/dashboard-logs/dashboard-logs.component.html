@@ -139,6 +139,10 @@
     @if (log.excepcion && log.excepcion !== log.mensaje) {
       <p class="logs-detalle__excepcion">{{log.excepcion}}</p>
     }
+    @if (log.contexto) {
+      <h4 class="logs-detalle__subtitulo">Contexto</h4>
+      <pre class="logs-detalle__stack logs-detalle__contexto">{{log.contexto}}</pre>
+    }
     @if (log.stackTrace) {
       <pre class="logs-detalle__stack">{{log.stackTrace}}</pre>
     }

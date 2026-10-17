@@ -60,7 +60,19 @@
               }
             </td>
             <td>{{reporte.autorUserName || '—'}}</td>
-            <td>{{reporte.reportanteUserName || '—'}}</td>
+            <td>
+              {{reporte.reportanteUserName || '—'}}
+              @if (reporte.deConfianza) {
+                <span class="badge text-bg-success ms-1" matTooltip="Usuario de confianza: su reporte pesa x{{reporte.peso}}">
+                  <i class="ti ti-shield-check" aria-hidden="true"></i> Confianza
+                </span>
+              }
+              @if (!reporte.resuelto && (reporte.pesoTotal ?? 0) > 1) {
+                <span class="badge text-bg-warning ms-1" matTooltip="Peso acumulado de los reportes pendientes de este contenido">
+                  Prioridad {{reporte.pesoTotal}}
+                </span>
+              }
+            </td>
             <td>{{reporte.motivo}}</td>
             <td>
               @if (reporte.resuelto) {

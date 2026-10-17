@@ -235,3 +235,16 @@ $borde: #e6eaee;
     padding: 16px 12px;
   }
 }
+
+.cm-reporte__confianza {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 4px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #e9f7ef;
+  color: #1e7a45;
+  font-size: 0.75rem;
+  font-weight: 700;
+}

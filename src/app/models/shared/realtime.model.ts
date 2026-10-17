@@ -36,9 +36,13 @@ export interface MensajeEnVivo {
   id: number;
   otroId: number;
   esMio: boolean;
+  /** El destinatario silenció la conversación: sin aviso ni sonido. */
+  silenciada?: boolean;
 }
 
 /** El otro usuario leyó mis mensajes, o me está escribiendo. */
 export interface EventoDeUsuario {
   porId: number;
+  /** En "mensajesLeidos": cuándo los leyó. */
+  fecha?: string;
 }

@@ -15,8 +15,7 @@ import {
   ResponseMPViewModel,
   ConversacionViewModel,
   ConversacionPage,
-  ConversacionParams,
-} from 'src/app/models/mensajes/mensaje-vm.model';
+  ConversacionParams, BandejaConversaciones } from 'src/app/models/mensajes/mensaje-vm.model';
 
 @Injectable()
 export class HttpMensajesService implements IHttpMensajesService {
@@ -114,10 +113,10 @@ export class HttpMensajesService implements IHttpMensajesService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getConversaciones(): Observable<{ conversaciones: ConversacionViewModel[]; pagination: Pagination }> {
+  getConversaciones(archivadas = false): Observable<BandejaConversaciones> {
     return this.http
-      .get<ApiResponse<{ conversaciones: ConversacionViewModel[]; pagination: Pagination }>>(
-        `${environment.api}/api/mensajes/getConversaciones?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
+      .get<ApiResponse<BandejaConversaciones>>(
+        `${environment.api}/api/mensajes/getConversaciones?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&archivadas=${archivadas}`,
       )
       .pipe(
         map((response) => {
@@ -130,6 +129,44 @@ export class HttpMensajesService implements IHttpMensajesService {
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
+  }
+
+  archivarConversaciones(otroIds: number[], archivar: boolean): Observable<boolean> {
+    return this.http
+      .post<ApiResponse<boolean>>(`${environment.api}/api/mensajes/archivarConversaciones`, { otroIds, archivar })
+      .pipe(
+        map((response) => {
+          if (response.status === 200) return !!response.data;
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
+        catchError(this.helper.errorHandler),
+      );
+  }
+
+  silenciarConversacion(otroId: number, silenciar: boolean): Observable<boolean> {
+    return this.http
+      .post<ApiResponse<boolean>>(`${environment.api}/api/mensajes/silenciarConversacion`, { otroId, silenciar })
+      .pipe(
+        map((response) => {
+          if (response.status === 200) return !!response.data;
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
+        catchError(this.helper.errorHandler),
+      );
+  }
+
+  subirImagenMensaje(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http
+      .post<ApiResponse<string>>(`${environment.api}/api/mensajes/subirImagenMensaje`, formData)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) return response.data!;
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
+        catchError(this.helper.errorHandler),
+      );
   }
 
   deleteConversaciones(otroIds: number[]): Observable<boolean> {

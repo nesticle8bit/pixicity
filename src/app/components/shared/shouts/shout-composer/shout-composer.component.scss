@@ -121,7 +121,53 @@
     i { font-size: 20px; }
     &:hover,
     &[aria-expanded="true"] { color: #006595; background: #f1f4f6; }
+    &:disabled { cursor: default; opacity: 0.6; }
   }
+
+  &__preview {
+    position: relative;
+  }
+
+  &__quitar {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(0 0 0 / 65%);
+    color: #fff;
+    cursor: pointer;
+
+    &:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  }
+
+  &__subiendo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 14px;
+    border: 1px dashed #c9d3db;
+    border-radius: 12px;
+    background: #f7f9fb;
+    font-size: 0.9rem;
+    color: #1f2a33;
+
+    i { animation: sh-girar 1s linear infinite; }
+  }
+}
+
+@keyframes sh-girar {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sh-composer__subiendo i { animation: none; }
 }
 
 .sh-btn {

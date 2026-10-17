@@ -1,11 +1,11 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (168).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (171).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2?v=d5d2e1253c") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=32c6a425f4") format("woff2");
 }
 
 @font-face {
@@ -34,6 +34,7 @@
 .ti-alert-triangle:before { content: "\ea06"; }
 .ti-antenna:before { content: "\f094"; }
 .ti-antenna-off:before { content: "\f3bb"; }
+.ti-archive:before { content: "\ea0b"; }
 .ti-arrow-back-up:before { content: "\eb77"; }
 .ti-arrow-big-down-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6c6"; }
 .ti-arrow-big-up-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6cf"; }
@@ -50,6 +51,7 @@
 .ti-award:before { content: "\ea2c"; }
 .ti-ban:before { content: "\ea2e"; }
 .ti-bell:before { content: "\ea35"; }
+.ti-bell-off:before { content: "\ece9"; }
 .ti-bell-ringing:before { content: "\ed07"; }
 .ti-book:before { content: "\ea39"; }
 .ti-brand-discord-filled:before { font-family: "tabler-icons-filled" !important; content: "\f7e4"; }
@@ -112,6 +114,7 @@
 .ti-id:before { content: "\eac3"; }
 .ti-id-badge:before { content: "\eff7"; }
 .ti-id-badge-2:before { content: "\f076"; }
+.ti-inbox:before { content: "\eac4"; }
 .ti-info-circle:before { content: "\eac5"; }
 .ti-key:before { content: "\eac7"; }
 .ti-layout-dashboard:before { content: "\f02c"; }

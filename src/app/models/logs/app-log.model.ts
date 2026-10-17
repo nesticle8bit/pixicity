@@ -10,6 +10,8 @@ export interface AppLog {
   mensaje: string;
   excepcion: string | null;
   stackTrace: string | null;
+  /** Frontend: versión, navegación reciente, viewport y conexión. */
+  contexto?: string | null;
   metodo: string | null;
   ruta: string | null;
   statusCode: number | null;

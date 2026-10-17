@@ -11,7 +11,8 @@
         aria-label="¿Qué estás pensando?" placeholder="¿Qué estás pensando? Usa #hashtags para sumarte a un tema"
         role="combobox" aria-autocomplete="list" aria-controls="sh-hashtags" [attr.aria-expanded]="hashtags().length > 0"
         [attr.aria-activedescendant]="hashtags().length ? 'sh-hashtag-' + hashtagActivo() : null"
-        (input)="alEscribir()" (click)="alEscribir()" (keydown)="teclaCampo($event)" (blur)="cerrarHashtags()"></textarea>
+        (input)="alEscribir()" (click)="alEscribir()" (keydown)="teclaCampo($event)" (blur)="cerrarHashtags()"
+        (paste)="alPegar($event)"></textarea>
 
       @if (hashtags().length) {
       <ul id="sh-hashtags" class="sh-hashtags" role="listbox" aria-label="Hashtags sugeridos">
@@ -27,26 +28,41 @@
       }
     </div>
 
+    @if (!imagenSubida()) {
     <div class="sh-composer__media">
       <i class="ti ti-link" aria-hidden="true"></i>
       <input type="url" class="sh-composer__url" formControlName="url"
         aria-label="Pega un enlace: YouTube, Spotify, imagen o web (opcional)"
         placeholder="Pega un enlace: YouTube, Spotify, imagen o web (opcional)">
     </div>
+    }
 
-    @if (formGroup.value.url) {
+    @if (subiendoImagen()) {
+    <div class="sh-composer__subiendo" role="status">
+      <i class="ti ti-loader-2" aria-hidden="true"></i> Optimizando y subiendo la imagen…
+    </div>
+    } @else if (formGroup.value.url) {
     <div class="sh-composer__preview">
       <app-shout-media [url]="formGroup.value.url" [tipo]="detectarTipo(formGroup.value.url)" />
+      <button type="button" class="sh-composer__quitar" (click)="quitarMedia()"
+        [attr.aria-label]="imagenSubida() ? 'Quitar la imagen' : 'Quitar el enlace'">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
     </div>
     }
 
     <div class="sh-composer__actions">
       <span class="sh-composer__hint">Comparte algo con la comunidad</span>
+      <input #archivoImagen type="file" accept="image/*" hidden (change)="elegirImagen($event)" />
+      <button type="button" class="sh-composer__emoji" (click)="archivoImagen.click()"
+        [disabled]="subiendoImagen()" aria-label="Subir una imagen" title="Subir una imagen">
+        <i class="ti" [class.ti-photo]="!subiendoImagen()" [class.ti-loader-2]="subiendoImagen()" aria-hidden="true"></i>
+      </button>
       <button #botonEmojis type="button" class="sh-composer__emoji" (click)="abrirEmojis(botonEmojis)"
         aria-label="Agregar emoji" aria-haspopup="dialog" [attr.aria-expanded]="emojisAbierto">
         <i class="ti ti-mood-smile" aria-hidden="true"></i>
       </button>
-      <button type="submit" class="sh-btn" [disabled]="!formGroup.value.comentario?.trim() || enviando()">
+      <button type="submit" class="sh-btn" [disabled]="!formGroup.value.comentario?.trim() || enviando() || subiendoImagen()">
         <i class="ti ti-send" aria-hidden="true"></i> Compartir
       </button>
     </div>

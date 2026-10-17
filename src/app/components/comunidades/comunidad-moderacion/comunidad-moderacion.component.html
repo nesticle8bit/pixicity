@@ -54,7 +54,11 @@
           </blockquote>
 
           <div class="cm-reporte__pie">
-            <span class="cm-reporte__quien">Denunciado por {{ '@' }}{{ r.reportanteUserName }}</span>
+            <span class="cm-reporte__quien">Denunciado por {{ '@' }}{{ r.reportanteUserName }}
+              @if (r.deConfianza) {
+              <span class="cm-reporte__confianza" title="Usuario de confianza"><i class="ti ti-shield-check" aria-hidden="true"></i> de confianza</span>
+              }
+            </span>
             @if (enlace(r); as url) {
             <a [href]="url" target="_blank" class="cm-reporte__ver">Ver tema <i class="ti ti-external-link" aria-hidden="true"></i></a>
             }

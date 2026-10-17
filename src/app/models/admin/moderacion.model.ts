@@ -13,6 +13,11 @@ export interface Reporte {
   fechaRegistro: string;
   reportanteUserName: string | null;
   reportanteAvatar: string | null;
+  /** Peso del reporte: más de 1 si lo hizo un usuario de confianza. */
+  peso?: number;
+  deConfianza?: boolean;
+  /** Suma de los pesos de los reportes pendientes del mismo contenido (prioridad en la cola). */
+  pesoTotal?: number;
   contenidoPreview: string | null;
   autorUserName: string | null;
   autorAvatar: string | null;

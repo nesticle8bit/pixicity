@@ -54,18 +54,43 @@ $accent: #004160;
     align-items: center;
     justify-content: space-between;
     gap: .5rem;
-    padding: .75rem 1rem;
-    background: $main;
+    padding: calc(.85rem + env(safe-area-inset-top, 0px)) 1rem .85rem;
+    background: linear-gradient(135deg, $main 0%, $accent 100%);
     color: #fff;
+  }
+
+  &__ident {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.25;
+  }
+
+  &__rango {
+    font-size: .75rem;
+    font-weight: 500;
+    opacity: .9;
   }
 
   &__user {
     display: flex;
     align-items: center;
-    gap: .6rem;
+    gap: .7rem;
     min-width: 0;
     color: #fff;
     font-weight: 700;
+    text-decoration: none;
+
+    ::ng-deep img {
+      border: 2px solid rgb(255 255 255 / 80%);
+      border-radius: 50%;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+      border-radius: 8px;
+    }
   }
 
   &__username {
@@ -75,6 +100,10 @@ $accent: #004160;
   }
 
   &__title {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: 1.05rem;
     font-weight: 700;
   }
 
@@ -102,28 +131,47 @@ $accent: #004160;
   }
 
   &__search {
+    position: relative;
     display: flex;
-    margin: .75rem 1rem;
+    margin: .85rem 1rem;
 
     input {
       flex: 1 1 auto;
       min-width: 0;
-      height: 40px;
-      padding: 0 .75rem;
-      border: 1px solid #ccc;
+      height: 44px;
+      padding: 0 .75rem 0 2.2rem;
+      border: 1px solid #c9d3db;
       border-right: 0;
-      border-radius: 6px 0 0 6px;
+      border-radius: 10px 0 0 10px;
+      background: #f6f9fb;
       font-size: 16px; // 16px evita el zoom automático de iOS al enfocar
+
+      &:focus {
+        border-color: $main;
+        background: #fff;
+        outline: none;
+        box-shadow: 0 0 0 3px rgb(11 110 165 / 20%);
+      }
     }
 
     button {
-      width: 44px;
+      padding: 0 .9rem;
       border: 0;
-      border-radius: 0 6px 6px 0;
+      border-radius: 0 10px 10px 0;
       background: $accent;
       color: #fff;
-      font-size: 1.1rem;
+      font-size: .85rem;
+      font-weight: 700;
     }
+  }
+
+  &__search-icono {
+    position: absolute;
+    top: 50%;
+    left: .75rem;
+    transform: translateY(-50%);
+    color: #5f6b75;
+    pointer-events: none;
   }
 
   &__quick {
@@ -140,25 +188,38 @@ $accent: #004160;
       gap: 2px;
       padding: .6rem .25rem;
       border-radius: 8px;
+      border: 1px solid transparent;
       background: #eef5fa;
       color: $accent;
       font-size: .75rem;
       font-weight: 700;
+      text-decoration: none;
+      transition: background-color .15s, border-color .15s;
 
       i {
         font-size: 1.4rem;
+      }
+
+      &:active {
+        background: #dcebf5;
+      }
+
+      &.active {
+        border-color: $main;
+        background: #fff;
       }
     }
   }
 
   &__badge {
     position: absolute;
-    top: 2px;
-    right: 6px;
+    top: -4px;
+    right: 2px;
+    border: 2px solid #fff;
     min-width: 18px;
     padding: 0 5px;
     border-radius: 9px;
-    background: #d9534f;
+    background: #c0392b; // blanco encima: AA
     color: #fff;
     font-size: .68rem;
     line-height: 18px;
@@ -209,16 +270,57 @@ $accent: #004160;
   }
 
   &__cta {
-    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    min-height: 44px;
+    margin: .25rem 1rem .5rem;
+    border-radius: 10px;
+    background: #95c317;
+    color: #1f2d00;
+    font-weight: 800;
+    text-decoration: none;
+
+    &:active {
+      filter: brightness(.95);
+    }
+  }
+
+  &__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem 1rem;
+    margin: 1rem 1rem 0;
+    padding-top: .75rem;
+    border-top: 1px solid #e6eaee;
+
+    a {
+      color: #5f6b75;
+      font-size: .8rem;
+    }
+  }
+
+  &__foot {
+    flex: 0 0 auto;
+    padding: .5rem 1rem calc(.5rem + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid #e6eaee;
+    background: #fff;
   }
 
   &__logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid #f1c4c0;
+    border-radius: 10px;
+    background: #fff;
+    color: #b42318;
     font-family: inherit;
-    font-weight: 700; // igual que los enlaces del cajón
-
-    i {
-      color: #d9534f;
-    }
+    font-weight: 700;
   }
 
   &__auth {
@@ -226,6 +328,16 @@ $accent: #004160;
     flex-direction: column;
     gap: .6rem;
     margin: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+    background: #eef5fa;
+
+    p {
+      margin: 0 0 .25rem;
+      color: #1f2a33;
+      font-size: .9rem;
+      text-align: center;
+    }
 
     a {
       padding: .7rem;
@@ -238,6 +350,7 @@ $accent: #004160;
 
   &__login {
     border: 1px solid $accent;
+    background: #fff;
     color: $accent;
   }
 

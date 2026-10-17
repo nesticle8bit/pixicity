@@ -14,6 +14,18 @@
               </small>
             }
           </div>
+
+          <div class="chat-header__acciones">
+            <button type="button" class="chat-header__accion" [class.is-activa]="silenciada" (click)="alternarSilencio()"
+              [attr.aria-pressed]="silenciada" [matTooltip]="silenciada ? 'Activar avisos' : 'Silenciar conversación'"
+              [attr.aria-label]="silenciada ? 'Activar avisos de esta conversación' : 'Silenciar esta conversación'">
+              <i class="ti" [class.ti-bell-off]="silenciada" [class.ti-bell]="!silenciada" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="chat-header__accion" (click)="archivar()" matTooltip="Archivar conversación"
+              aria-label="Archivar esta conversación">
+              <i class="ti ti-archive" aria-hidden="true"></i>
+            </button>
+          </div>
         }
       </div>
 
@@ -41,7 +53,18 @@
                   matTooltip="Eliminar (solo para ti)" aria-label="Eliminar mensaje solo para mí">
                   <i class="ti ti-trash"></i>
                 </button>
-                <div class="chat-bubble__content" [innerHTML]="m.contenido"></div>
+                @if (imagenesDe(m).length) {
+                  <div class="chat-fotos" [class.chat-fotos--varias]="imagenesDe(m).length > 1">
+                    @for (img of imagenesDe(m); track img) {
+                      <a [href]="img" target="_blank" rel="noopener" class="chat-fotos__item" aria-label="Abrir imagen adjunta">
+                        <img [src]="img" alt="Imagen adjunta" loading="lazy" />
+                      </a>
+                    }
+                  </div>
+                }
+                @if (m.contenido) {
+                  <div class="chat-bubble__content" [innerHTML]="m.contenido"></div>
+                }
                 <small class="chat-bubble__meta">
                   {{m.fechaRegistro | date:'shortTime'}}
                   @if (m.esMio) {
@@ -53,6 +76,12 @@
                 </small>
               </div>
             </div>
+            @if (m.id === idUltimoVisto) {
+              <div class="chat-visto">
+                <i class="ti ti-checks" aria-hidden="true"></i>
+                Visto{{ m.fechaLeido ? ' ' : '' }}@if (m.fechaLeido) {<time [attr.datetime]="m.fechaLeido">{{ m.fechaLeido | date:'shortTime' }}</time>}
+              </div>
+            }
           } @empty {
             <p class="text-muted text-center my-4">
               Aún no hay mensajes{{otro ? ' con @' + otro.userName : ''}}. ¡Escribe el primero!
@@ -79,17 +108,34 @@
         </div>
       }
 
+      @if (adjuntos.length) {
+        <ul class="chat-adjuntos" aria-label="Imágenes para enviar">
+          @for (a of adjuntos; track a.id) {
+            <li class="chat-adjuntos__item" [class.is-subiendo]="a.subiendo">
+              <img [src]="a.vista" alt="" />
+              @if (a.subiendo) {
+                <span class="chat-adjuntos__estado"><i class="ti ti-loader-2" aria-hidden="true"></i><span class="visually-hidden">Subiendo</span></span>
+              }
+              <button type="button" class="chat-adjuntos__quitar" (click)="quitarAdjunto(a)" aria-label="Quitar imagen">
+                <i class="ti ti-x" aria-hidden="true"></i>
+              </button>
+            </li>
+          }
+        </ul>
+      }
+
       <div class="chat-reply">
-        <input type="file" accept="image/*" hidden #fileInput (change)="adjuntarImagen($event)" />
+        <input type="file" accept="image/*" multiple hidden #fileInput (change)="adjuntarImagen($event)" />
         <button type="button" class="chat-attach" (click)="fileInput.click()"
-          [disabled]="!otro || bloqueado || subiendo" matTooltip="Adjuntar imagen" aria-label="Adjuntar imagen">
-          <i class="ti" [class.ti-photo]="!subiendo" [class.ti-loader-2]="subiendo"></i>
+          [disabled]="!otro || bloqueado || adjuntos.length >= 4" matTooltip="Adjuntar imágenes (hasta 4)" aria-label="Adjuntar imágenes">
+          <i class="ti" [class.ti-photo]="!subiendo" [class.ti-loader-2]="subiendo" aria-hidden="true"></i>
         </button>
         <textarea class="form-control" rows="2" aria-label="Escribir un mensaje" [(ngModel)]="respuesta"
           placeholder="Escribir una respuesta... (Enter para enviar, Shift+Enter nueva línea)"
-          [disabled]="!otro || bloqueado" (ngModelChange)="onTyping()" (keydown.enter)="onEnter($event)"></textarea>
+          [disabled]="!otro || bloqueado" (ngModelChange)="onTyping()" (keydown.enter)="onEnter($event)"
+          (paste)="alPegar($event)"></textarea>
         <input type="button" class="boton azul" (click)="responderMensaje()" value="Enviar"
-          [disabled]="!otro || bloqueado || !respuesta.trim() || enviando" />
+          [disabled]="!puedeEnviar" />
       </div>
     </div>
 

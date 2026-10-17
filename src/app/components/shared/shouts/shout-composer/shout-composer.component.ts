@@ -11,6 +11,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { EmojisPopoverService } from '../../../bottom-sheets/bottom-sheets-emojis/emojis-popover.service';
 import { ShoutMediaComponent } from '../../../addons/shout-media/shout-media.component';
 import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.component';
+import { NotificationService } from 'src/app/services/shared/notification.service';
+import { comprimirImagen } from 'src/app/shared/helpers/comprimir-imagen';
 
 /** Clasificación en cliente para la vista previa (el backend la recalcula al guardar). */
 export function detectarTipoShout(url: string): string {
@@ -26,7 +28,10 @@ export function detectarTipoShout(url: string): string {
 /** "#ro" justo antes del cursor (mismo criterio de caracteres que HashtagHelper del API). */
 const TAG_EN_CURSOR = /(?:^|[^\p{L}\p{N}_&])#([\p{L}\p{N}_]{1,40})$/u;
 
-/** "¿Qué estás pensando?": publica un shout (texto, emojis y un enlace opcional) en el muro de `perfilId`. */
+/** Tamaño máximo que se acepta elegir (antes de comprimir). */
+const MAX_BYTES_ORIGINAL = 20 * 1024 * 1024;
+
+/** "¿Qué estás pensando?": publica un shout (texto, emojis y un enlace o una imagen) en el muro de `perfilId`. */
 @Component({
   selector: 'app-shout-composer',
   templateUrl: './shout-composer.component.html',
@@ -39,6 +44,7 @@ export class ShoutComposerComponent {
   private readonly emojis = inject(EmojisPopoverService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly miService = inject(IHttpMiService);
+  private readonly notificaciones = inject(NotificationService);
 
   /** Muro donde se publica (el propio en /mi). */
   readonly perfilId = input.required<number>();
@@ -46,6 +52,10 @@ export class ShoutComposerComponent {
 
   readonly currentUser = inject(IHttpSecurityService).getCurrentUser();
   readonly enviando = signal(false);
+  /** Subiendo la imagen elegida (se comprime antes en el navegador). */
+  readonly subiendoImagen = signal(false);
+  /** La URL actual es una imagen que subí desde el composer (no un enlace pegado). */
+  readonly imagenSubida = signal(false);
   emojisAbierto = false;
   readonly detectarTipo = detectarTipoShout;
 
@@ -155,9 +165,57 @@ export class ShoutComposerComponent {
     }
   }
 
+  /** Elegir imagen: se comprime (1080 px, WebP) y se sube; la URL queda en el shout como si fuera un enlace a imagen. */
+  async elegirImagen(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (file) await this.subirImagen(file);
+  }
+
+  /** Pegar una captura en el texto la sube como imagen del shout. */
+  async alPegar(event: ClipboardEvent): Promise<void> {
+    const file = [...(event.clipboardData?.files ?? [])].find((f) => f.type.startsWith('image/'));
+    if (!file) return;
+    event.preventDefault();
+    await this.subirImagen(file);
+  }
+
+  private async subirImagen(file: File): Promise<void> {
+    if (this.subiendoImagen()) return;
+    if (!file.type.startsWith('image/')) {
+      this.notificaciones.error('Solo puedes subir imágenes', 'Archivo no válido');
+      return;
+    }
+    if (file.size > MAX_BYTES_ORIGINAL) {
+      this.notificaciones.error('La imagen es demasiado grande (máximo 20 MB)', 'Imagen');
+      return;
+    }
+
+    this.subiendoImagen.set(true);
+    const comprimida = await comprimirImagen(file);
+    this.perfilService
+      .subirImagenShout(comprimida)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (url) => {
+          this.subiendoImagen.set(false);
+          if (!url) return;
+          this.formGroup.patchValue({ url });
+          this.imagenSubida.set(true);
+        },
+        error: () => this.subiendoImagen.set(false),
+      });
+  }
+
+  quitarMedia(): void {
+    this.formGroup.patchValue({ url: '' });
+    this.imagenSubida.set(false);
+  }
+
   publicar(): void {
     const shout = this.formGroup.getRawValue();
-    if (!shout.comentario.trim() || !shout.perfilId || this.enviando()) return;
+    if (!shout.comentario.trim() || !shout.perfilId || this.enviando() || this.subiendoImagen()) return;
 
     this.enviando.set(true);
     this.perfilService
@@ -168,6 +226,7 @@ export class ShoutComposerComponent {
           this.enviando.set(false);
           if (response) {
             this.formGroup.patchValue({ comentario: '', url: '' });
+            this.imagenSubida.set(false);
             this.cerrarHashtags();
             this.publicado.emit();
           }

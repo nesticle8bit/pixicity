@@ -80,6 +80,20 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  subirImagenShout(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http
+      .post<ApiResponse<string>>(`${environment.api}/api/shouts/subirImagenShout`, formData)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) return response.data!;
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
+        catchError(this.helper.errorHandler),
+      );
+  }
+
   deleteShout(shoutId: number): Observable<boolean> {
     return this.http
       .delete<ApiResponse<boolean>>(`${environment.api}/api/shouts/deleteShout`, {

@@ -10,6 +10,8 @@ export abstract class IHttpPerfilService {
   abstract getTopShouts(count?: number): Observable<any[]>;
   abstract getShoutsAdmin(filtro?: AdminFiltro): Observable<PaginatedData<ShoutAdmin, 'shouts'>>;
   abstract createShout(shout: Partial<ShoutViewModel>): Observable<ShoutViewModel>;
+  /** Sube una imagen para un shout (el API la deja en WebP de 1080 px máx.) y devuelve su URL pública. */
+  abstract subirImagenShout(file: File): Observable<string>;
   abstract deleteShout(shoutId: number): Observable<boolean>;
   abstract recoveryShout(shoutId: number): Observable<boolean>;
   abstract getShoutById(shoutId: number): Observable<ShoutViewModel>;

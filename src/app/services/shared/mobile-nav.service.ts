@@ -1,6 +1,6 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { debounceTime, filter, merge } from 'rxjs';
+import { debounceTime, filter, merge, Subject } from 'rxjs';
 import { IHttpLogsService } from '../interfaces/httpLogs.interface';
 import { IHttpSecurityService } from '../interfaces/httpSecurity.interface';
 import { MensajesBadgeService } from './mensajes-badge.service';
@@ -22,6 +22,17 @@ export class MobileNavService {
   public readonly stats = signal({ notifications: 0, messages: 0 });
 
   private watching = false;
+  private readonly leidasSubject = new Subject<void>();
+  /** Se marcaron las notificaciones como leídas (desde el header, el cajón o /monitor): todos los contadores a 0. */
+  public readonly notificacionesLeidas$ = this.leidasSubject.asObservable();
+
+  /** Abrir el monitor: el contador se va al instante y el API las marca como leídas. */
+  marcarNotificacionesLeidas(): void {
+    this.stats.update((s) => ({ ...s, notifications: 0 }));
+    this.leidasSubject.next();
+    if (!this.securityService.getCurrentUser()?.usuario) return;
+    this.logsService.setNotificacionesAsReaded().subscribe({ error: () => {} });
+  }
 
   open(): void {
     this.isOpen.set(true);

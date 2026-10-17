@@ -5,6 +5,7 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { MobileNavService } from 'src/app/services/shared/mobile-nav.service';
 import { FiltroNotificaciones, MonitorViewModel } from 'src/app/models/logs/logs-vm.model';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { RouterLink } from '@angular/router';
@@ -108,6 +109,9 @@ export class MonitorComponent implements OnInit {
   public cargando = false;
 
   private readonly busqueda$ = new Subject<string>();
+  private readonly mobileNav = inject(MobileNavService);
+  /** Las de esta visita se marcan leídas una vez, después de mostrarlas (así se ve cuáles eran nuevas). */
+  private marcadas = false;
 
   constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
@@ -168,6 +172,10 @@ export class MonitorComponent implements OnInit {
         this.notificaciones = response?.data ?? [];
         this.totalCount = response?.pagination?.totalCount ?? 0;
         this.cargando = false;
+        if (!this.marcadas) {
+          this.marcadas = true;
+          this.mobileNav.marcarNotificacionesLeidas();
+        }
       },
       error: () => (this.cargando = false),
     });

@@ -24,7 +24,15 @@ class HostComponent {}
 describe('MainHeader + MobileDrawer (hamburguesa)', () => {
   let fixture: ComponentFixture<HostComponent>;
   let user$: BehaviorSubject<any>;
-  let nav: { isOpen: any; stats: any; open: jasmine.Spy; close: jasmine.Spy; toggle: jasmine.Spy; watchStats: jasmine.Spy };
+  let nav: {
+    isOpen: any;
+    stats: any;
+    open: jasmine.Spy;
+    close: jasmine.Spy;
+    toggle: jasmine.Spy;
+    watchStats: jasmine.Spy;
+    marcarNotificacionesLeidas: jasmine.Spy;
+  };
 
   const el = (selector: string): HTMLElement | null => fixture.nativeElement.querySelector(selector);
   const header = (): MainHeaderComponent => fixture.debugElement.query(By.directive(MainHeaderComponent)).componentInstance;
@@ -42,7 +50,9 @@ describe('MainHeader + MobileDrawer (hamburguesa)', () => {
       close: jasmine.createSpy('close').and.callFake(() => isOpen.set(false)),
       toggle: jasmine.createSpy('toggle').and.callFake(() => isOpen.set(!isOpen())),
       watchStats: jasmine.createSpy('watchStats'),
+      marcarNotificacionesLeidas: jasmine.createSpy('marcarNotificacionesLeidas'),
     };
+    nav.marcarNotificacionesLeidas.and.callFake(() => nav.stats.update((st: any) => ({ ...st, notifications: 0 })));
 
     await TestBed.configureTestingModule({
     imports: [ReactiveFormsModule, RouterModule, HostComponent, MainHeaderComponent, MobileDrawerComponent],
@@ -117,14 +127,15 @@ describe('MainHeader + MobileDrawer (hamburguesa)', () => {
     expect(el('.drawer__auth')).toBeNull();
   });
 
-  it('invitado: botón "Entrar" en el header y login/registro en el cajón, sin búsqueda ni cuenta', async () => {
+  it('invitado: botón "Entrar" en el header y login/registro en el cajón; busca, pero sin accesos de cuenta', async () => {
     await build(undefined);
     nav.open();
     fixture.detectChanges();
 
     expect(el('.mobile-actions__login')).toBeTruthy();
     expect(el('.drawer__auth')).toBeTruthy();
-    expect(el('.drawer__search')).toBeNull();
+    expect(el('.drawer__search')).toBeTruthy(); // buscar no requiere cuenta
+    expect(el('.drawer__quick')).toBeNull();
     expect(el('.drawer__logout')).toBeNull();
   });
 
@@ -263,5 +274,19 @@ describe('MainHeader + MobileDrawer (hamburguesa)', () => {
 
       expect(header().hidden).toBeFalse();
     });
+  });
+
+  it('tocar Monitor en el cajón quita el contador al instante y las marca leídas', async () => {
+    await build(usuarioNormal);
+    nav.stats.set({ notifications: 5, messages: 0 });
+    nav.open();
+    fixture.detectChanges();
+    expect(el('.drawer__badge')?.textContent?.trim()).toBe('5');
+
+    (fixture.nativeElement.querySelector('#mobile-drawer a[href="/monitor"]') as HTMLAnchorElement).click();
+    fixture.detectChanges();
+
+    expect(nav.stats().notifications).toBe(0);
+    expect(el('.drawer__badge')).toBeNull();
   });
 });
