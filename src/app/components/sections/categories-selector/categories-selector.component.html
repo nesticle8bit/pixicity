@@ -10,7 +10,7 @@
 
       @for (categoria of categorias; track categoria) {
         <a [routerLink]="['/posts/' + categoria.seo]">
-          <!-- <img src="/assets/images/categorias/{{categoria.icono}}" class="image-middle" alt="" aria-hidden="true"loading="lazy"/> -->
+          <img src="/assets/images/categorias/{{categoria.icono}}" class="image-middle me-1" alt="" aria-hidden="true" loading="lazy"/>
           {{categoria.nombre}}
         </a>
       }
