@@ -12,7 +12,8 @@
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
     </div>
   } @else if (esFoto) {
-    <a [href]="url()" target="_blank" rel="noopener" class="sm-foto">
+    <a [href]="url()" target="_blank" rel="noopener" class="sm-foto" (click)="abrirFoto($event)"
+      aria-label="Ver la imagen en grande">
       <img [src]="url()" alt="Imagen del shout" loading="lazy">
     </a>
   } @else if (esEnlace) {

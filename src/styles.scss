@@ -17,6 +17,21 @@
   z-index: 1100;
 }
 
+// Visor de imágenes a pantalla completa (VisorImagenService): todo negro, sin bordes ni sombra del diálogo.
+.visor-imagen-fondo {
+  background: #000;
+}
+
+.visor-imagen-panel {
+  .mat-mdc-dialog-surface,
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    border-radius: 0;
+    background: #000;
+    box-shadow: none;
+    overflow: hidden;
+  }
+}
+
 // Dialog moderno del Generador de Posts: esquinas redondeadas + clip del header
 .pg-dialog {
   .mat-mdc-dialog-surface {

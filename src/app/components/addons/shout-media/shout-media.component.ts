@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnChanges, input, inject, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { VisorImagenService } from '../visor-imagen/visor-imagen.service';
 
 /**
  * Renderiza el media adjunto a un shout según su tipo:
@@ -17,6 +18,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 })
 export class ShoutMediaComponent implements OnChanges {
   private sanitizer = inject(DomSanitizer);
+  private visor = inject(VisorImagenService);
 
   readonly url = input<string | null>(null);
   readonly tipo = input<string | null>(null);
@@ -36,6 +38,15 @@ export class ShoutMediaComponent implements OnChanges {
     this.hostname = this.calcularHostname();
     this.youtubeEmbed = this.esVideo ? this.calcularYoutubeEmbed() : null;
     this.spotifyEmbed = this.esSpotify ? this.calcularSpotifyEmbed() : null;
+  }
+
+  /** Clic normal: la imagen se abre en el visor de la plataforma. Ctrl/Cmd/Shift o la rueda abren otra pestaña (el href). */
+  abrirFoto(event: MouseEvent): void {
+    const url = this.url();
+    if (!url || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    event.stopPropagation(); // la tarjeta del shout no debe navegar al detalle
+    this.visor.abrir(url, 'Imagen del shout');
   }
 
   get tieneMedia(): boolean {
