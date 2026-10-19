@@ -4,7 +4,7 @@ import { IHttpNoticiasService } from '../interfaces/httpNoticias.interface';
 import { PaginationService } from '../shared/pagination.service';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -23,7 +23,7 @@ export class HttpNoticiasService implements IHttpNoticiasService {
   getNoticias(search: string, filtro: AdminFiltro = {}): Observable<PaginatedData<NoticiaAdmin, 'noticias'>> {
     return this.http
       .get<ApiResponse<PaginatedData<NoticiaAdmin, 'noticias'>>>(
-        `${environment.api}/api/noticias/getNoticias?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${search}`, { params: adminParams(filtro) },
+        `${environment.api}/api/noticias/admin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${search}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -40,7 +40,7 @@ export class HttpNoticiasService implements IHttpNoticiasService {
 
   saveNoticias(noticia: Partial<NoticiaModel>): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/noticias/saveNoticias`, noticia)
+      .post<ApiResponse<number>>(`${environment.api}/api/noticias`, noticia)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -54,9 +54,9 @@ export class HttpNoticiasService implements IHttpNoticiasService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  updateNoticias(noticia: Partial<NoticiaModel>): Observable<boolean> {
+  updateNoticias(noticia: Partial<NoticiaModel> & { id: number }): Observable<boolean> {
     return this.http
-      .put<ApiResponse<boolean>>(`${environment.api}/api/noticias/updateNoticias`, noticia)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/noticias/${noticia.id}`, noticia)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -72,12 +72,7 @@ export class HttpNoticiasService implements IHttpNoticiasService {
 
   deleteNoticias(id: number): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/noticias/deleteNoticias`, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        }),
-        body: { id },
-      })
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/noticias/${id}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -93,7 +88,7 @@ export class HttpNoticiasService implements IHttpNoticiasService {
 
   getAllNoticias(): Observable<NoticiaModel[]> {
     return this.http
-      .get<ApiResponse<NoticiaModel[]>>(`${environment.api}/api/noticias/getAllNoticias`)
+      .get<ApiResponse<NoticiaModel[]>>(`${environment.api}/api/noticias`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

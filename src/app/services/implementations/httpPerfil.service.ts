@@ -3,7 +3,7 @@ import { IHttpPerfilService } from '../interfaces/httpPerfil.interface';
 import { PaginationService } from '../shared/pagination.service';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -22,7 +22,7 @@ export class HttpPerfilService implements IHttpPerfilService {
   getShouts(userId: number): Observable<PaginatedData<ShoutViewModel, 'shouts'>> {
     return this.http
       .get<ApiResponse<PaginatedData<ShoutViewModel, 'shouts'>>>(
-        `${environment.api}/api/shouts/getShouts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&userId=${userId}`,
+        `${environment.api}/api/shouts/usuarios/${userId}?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
         map((response) => {
@@ -39,7 +39,7 @@ export class HttpPerfilService implements IHttpPerfilService {
 
   getTopShouts(count: number = 6): Observable<any[]> {
     return this.http
-      .get<ApiResponse<any[]>>(`${environment.api}/api/shouts/getTopShouts?count=${count}`)
+      .get<ApiResponse<any[]>>(`${environment.api}/api/shouts/top?count=${count}`)
       .pipe(
         map((response) => (response.status === 200 ? response.data! : [])),
         catchError(this.helper.errorHandler)
@@ -49,7 +49,7 @@ export class HttpPerfilService implements IHttpPerfilService {
   getShoutsAdmin(filtro: AdminFiltro = {}): Observable<PaginatedData<ShoutAdmin, 'shouts'>> {
     return this.http
       .get<ApiResponse<PaginatedData<ShoutAdmin, 'shouts'>>>(
-        `${environment.api}/api/shouts/getShoutsAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
+        `${environment.api}/api/shouts/admin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -66,7 +66,7 @@ export class HttpPerfilService implements IHttpPerfilService {
 
   createShout(shout: Partial<ShoutViewModel>): Observable<ShoutViewModel> {
     return this.http
-      .post<ApiResponse<ShoutViewModel>>(`${environment.api}/api/shouts/createShout`, shout)
+      .post<ApiResponse<ShoutViewModel>>(`${environment.api}/api/shouts`, shout)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -84,7 +84,7 @@ export class HttpPerfilService implements IHttpPerfilService {
     const formData = new FormData();
     formData.append('file', file);
     return this.http
-      .post<ApiResponse<string>>(`${environment.api}/api/shouts/subirImagenShout`, formData)
+      .post<ApiResponse<string>>(`${environment.api}/api/shouts/imagenes`, formData)
       .pipe(
         map((response) => {
           if (response.status === 200) return response.data!;
@@ -96,12 +96,7 @@ export class HttpPerfilService implements IHttpPerfilService {
 
   deleteShout(shoutId: number): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/shouts/deleteShout`, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        }),
-        body: { id: shoutId },
-      })
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/shouts/${shoutId}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -117,7 +112,7 @@ export class HttpPerfilService implements IHttpPerfilService {
 
   recoveryShout(shoutId: number): Observable<boolean> {
     return this.http
-      .put<ApiResponse<boolean>>(`${environment.api}/api/shouts/recoveryShout`, { id: shoutId })
+      .put<ApiResponse<boolean>>(`${environment.api}/api/shouts/${shoutId}/restauracion`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -133,7 +128,7 @@ export class HttpPerfilService implements IHttpPerfilService {
 
   getShoutById(shoutId: number): Observable<ShoutViewModel> {
     return this.http
-      .get<ApiResponse<ShoutViewModel>>(`${environment.api}/api/shouts/getShoutById?id=${shoutId}`)
+      .get<ApiResponse<ShoutViewModel>>(`${environment.api}/api/shouts/${shoutId}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -150,7 +145,7 @@ export class HttpPerfilService implements IHttpPerfilService {
   getComentariosByShoutId(shoutId: number): Observable<ShoutComentarioViewModel[]> {
     return this.http
       .get<ApiResponse<ShoutComentarioViewModel[]>>(
-        `${environment.api}/api/shouts/getComentariosByShoutId?shoutId=${shoutId}`,
+        `${environment.api}/api/shouts/${shoutId}/comentarios`,
       )
       .pipe(map((r) => (r.status === 200 ? r.data! : [])))
       .pipe(catchError(this.helper.errorHandler));
@@ -158,7 +153,7 @@ export class HttpPerfilService implements IHttpPerfilService {
 
   addShoutComentario(model: { shoutId: number; comentario: string; parentId?: number }): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/shouts/addShoutComentario`, model)
+      .post<ApiResponse<number>>(`${environment.api}/api/shouts/comentarios`, model)
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -166,7 +161,7 @@ export class HttpPerfilService implements IHttpPerfilService {
   deleteShoutComentario(id: number): Observable<boolean> {
     return this.http
       .delete<ApiResponse<boolean>>(
-        `${environment.api}/api/shouts/deleteShoutComentario?id=${id}`,
+        `${environment.api}/api/shouts/comentarios/${id}`,
       )
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
@@ -174,69 +169,69 @@ export class HttpPerfilService implements IHttpPerfilService {
 
   votarShoutComentario(comentarioId: number, valor: number): Observable<ShoutComentarioVoto> {
     return this.http
-      .post<ApiResponse<ShoutComentarioVoto>>(`${environment.api}/api/shouts/votarShoutComentario?comentarioId=${comentarioId}&valor=${valor}`, {})
+      .post<ApiResponse<ShoutComentarioVoto>>(`${environment.api}/api/shouts/comentarios/${comentarioId}/votos?valor=${valor}`, {})
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
 
   editarShoutComentario(comentarioId: number, contenido: string): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/shouts/editarShoutComentario?comentarioId=${comentarioId}`, { contenido })
+      .put<ApiResponse<boolean>>(`${environment.api}/api/shouts/comentarios/${comentarioId}`, { contenido })
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
 
   fijarShoutComentario(comentarioId: number): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/shouts/fijarShoutComentario?comentarioId=${comentarioId}`, {})
+      .put<ApiResponse<boolean>>(`${environment.api}/api/shouts/comentarios/${comentarioId}/fijado`, {})
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
 
   denunciarShoutComentario(comentarioId: number, motivo: string): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/shouts/denunciarShoutComentario?comentarioId=${comentarioId}`, { motivo })
+      .post<ApiResponse<boolean>>(`${environment.api}/api/shouts/comentarios/${comentarioId}/denuncias`, { motivo })
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
 
   getShoutInteracciones(shoutId: number): Observable<ShoutInteracciones> {
     return this.http
-      .get<ApiResponse<ShoutInteracciones>>(`${environment.api}/api/shouts/getShoutInteracciones?shoutId=${shoutId}`)
+      .get<ApiResponse<ShoutInteracciones>>(`${environment.api}/api/shouts/${shoutId}/interacciones`)
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
 
   alternarMeGustaShout(shoutId: number): Observable<ShoutReaccion> {
     return this.http
-      .post<ApiResponse<ShoutReaccion>>(`${environment.api}/api/shouts/alternarMeGusta?shoutId=${shoutId}`, {})
+      .post<ApiResponse<ShoutReaccion>>(`${environment.api}/api/shouts/${shoutId}/me-gusta`, {})
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
 
   alternarFavoritoShout(shoutId: number): Observable<ShoutReaccion> {
     return this.http
-      .post<ApiResponse<ShoutReaccion>>(`${environment.api}/api/shouts/alternarFavorito?shoutId=${shoutId}`, {})
+      .post<ApiResponse<ShoutReaccion>>(`${environment.api}/api/shouts/${shoutId}/favorito`, {})
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
 
   denunciarShout(shoutId: number, motivo: string): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/shouts/denunciarShout?shoutId=${shoutId}`, { motivo })
+      .post<ApiResponse<boolean>>(`${environment.api}/api/shouts/${shoutId}/denuncias`, { motivo })
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') || 'No se pudo enviar la denuncia'); }));
   }
 
   editarShout(shoutId: number, contenido: string): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/shouts/editarShout?shoutId=${shoutId}`, { contenido })
+      .put<ApiResponse<boolean>>(`${environment.api}/api/shouts/${shoutId}`, { contenido })
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') || 'No se pudo editar el shout'); }));
   }
 
   getShoutsFavoritos(page: number, pageCount: number): Observable<PaginatedData<ShoutViewModel, 'shouts'>> {
     return this.http
       .get<ApiResponse<PaginatedData<ShoutViewModel, 'shouts'>>>(
-        `${environment.api}/api/shouts/getShoutsFavoritos?page=${page}&pageCount=${pageCount}`,
+        `${environment.api}/api/shouts/favoritos?page=${page}&pageCount=${pageCount}`,
       )
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
@@ -244,7 +239,7 @@ export class HttpPerfilService implements IHttpPerfilService {
 
   alternarReshoutShout(shoutId: number): Observable<ShoutReaccion> {
     return this.http
-      .post<ApiResponse<ShoutReaccion>>(`${environment.api}/api/shouts/alternarReshout?shoutId=${shoutId}`, {})
+      .post<ApiResponse<ShoutReaccion>>(`${environment.api}/api/shouts/${shoutId}/reshout`, {})
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -252,7 +247,7 @@ export class HttpPerfilService implements IHttpPerfilService {
   getReshouts(shoutId: number, cantidad = 12): Observable<{ usuarios: { userName: string; avatar: string | null }[]; total: number }> {
     return this.http
       .get<ApiResponse<{ usuarios: { userName: string; avatar: string | null }[]; total: number }>>(
-        `${environment.api}/api/shouts/getReshouts?shoutId=${shoutId}&cantidad=${cantidad}`,
+        `${environment.api}/api/shouts/${shoutId}/reshouts?cantidad=${cantidad}`,
       )
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));

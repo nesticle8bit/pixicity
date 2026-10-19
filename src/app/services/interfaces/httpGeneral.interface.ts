@@ -25,8 +25,8 @@ export abstract class IHttpGeneralService {
   ): Observable<PaginatedWithCategorias<FavoritoPostLista, 'favoritos'>>;
   abstract getConfiguracion(): Observable<ConfiguracionModel>;
   abstract updateConfiguracion(configuracion: Partial<ConfiguracionModel>): Observable<boolean>;
-  abstract updateAds(configuration: Partial<ConfiguracionModel>): Observable<boolean>;
-  abstract updateAfiliacion(afiliacion: AfiliacionModel): Observable<boolean>;
+  abstract updatePublicidad(configuration: Partial<ConfiguracionModel>): Observable<boolean>;
+  abstract updateAfiliacion(afiliacion: AfiliacionModel & { id: number }): Observable<boolean>;
   abstract setHitInByRefCode(refCode: string): Observable<boolean>;
   abstract deleteAfiliado(id: number): Observable<boolean>;
   abstract getContactos(filtro?: AdminFiltro): Observable<PaginatedData<ContactoAdmin, 'contactos'>>;

@@ -22,7 +22,7 @@ export class HttpRangosService implements IHttpRangosService {
 
   getRangosUsuarios(filtro: AdminFiltro = {}): Observable<PaginatedData<unknown, 'rangos'>> {
     return this.http
-      .get<ApiResponse<PaginatedData<unknown, 'rangos'>>>(`${environment.api}/api/rangos/getRangosUsuarios`, { params: adminParams(filtro, this.paginationService) })
+      .get<ApiResponse<PaginatedData<unknown, 'rangos'>>>(`${environment.api}/api/rangos/usuarios`, { params: adminParams(filtro, this.paginationService) })
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -38,7 +38,7 @@ export class HttpRangosService implements IHttpRangosService {
 
   getRangosDropdown(): Observable<DropdownViewModel[]> {
     return this.http
-      .get<ApiResponse<DropdownViewModel[]>>(`${environment.api}/api/rangos/getRangosDropdown`)
+      .get<ApiResponse<DropdownViewModel[]>>(`${environment.api}/api/rangos`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -54,7 +54,7 @@ export class HttpRangosService implements IHttpRangosService {
 
   addUpdateRango(rango: unknown): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/rangos/addUpdateRango`, rango)
+      .post<ApiResponse<number>>(`${environment.api}/api/rangos`, rango)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -70,8 +70,8 @@ export class HttpRangosService implements IHttpRangosService {
 
   changeRango(rangoUsuario: { userId: number; rangoId: number }): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(
-        `${environment.api}/api/rangos/changeRangoUsuario`,
+      .put<ApiResponse<boolean>>(
+        `${environment.api}/api/rangos/usuarios`,
         rangoUsuario
       )
       .pipe(
@@ -89,7 +89,7 @@ export class HttpRangosService implements IHttpRangosService {
 
   changeUsuariosRangosByPuntos(): Observable<RangoUsuarioReportViewModel[]> {
     return this.http
-      .get<ApiResponse<RangoUsuarioReportViewModel[]>>(`${environment.api}/api/rangos/changeUsuariosRangosByPuntos`)
+      .post<ApiResponse<RangoUsuarioReportViewModel[]>>(`${environment.api}/api/rangos/recalculo`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) {

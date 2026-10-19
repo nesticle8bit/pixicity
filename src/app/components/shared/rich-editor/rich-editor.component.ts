@@ -110,7 +110,7 @@ const INLINE_SHORTCUTS: { key: string; pattern: RegExp; tag: string; open: numbe
 // Formato que quita "Eliminar formato" (los enlaces se conservan)
 const CLEARABLE_TAGS = INLINE_FORMAT_TAGS.filter((t) => t !== 'A');
 
-// Mismas reglas que /api/fotos/UploadImage (ImageUploadHelper.FotoMaxBytes)
+// Mismas reglas que POST /api/fotos/imagenes (ImageUploadHelper.FotoMaxBytes)
 const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 const IMAGE_MAX_BYTES = 8 * 1024 * 1024;
 

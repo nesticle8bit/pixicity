@@ -46,7 +46,7 @@ describe('HttpSecurityService (sesión)', () => {
     let token: string | undefined;
     service.refreshAccessToken().subscribe((t) => (token = t));
 
-    const req = backend.expectOne((r) => r.url.endsWith('/api/usuarios/refreshToken'));
+    const req = backend.expectOne((r) => r.url.endsWith('/api/auth/refresh'));
     expect(req.request.body).toEqual({ refreshToken: 'r1' });
     req.flush({ status: 200, errors: [], data: { token: 't2', refreshToken: 'r2' } });
 
@@ -61,7 +61,7 @@ describe('HttpSecurityService (sesión)', () => {
     service.refreshAccessToken().subscribe((t) => tokens.push(t));
     service.refreshAccessToken().subscribe((t) => tokens.push(t));
 
-    backend.expectOne((r) => r.url.endsWith('/api/usuarios/refreshToken')).flush({ status: 200, errors: [], data: { token: 't2', refreshToken: 'r2' } });
+    backend.expectOne((r) => r.url.endsWith('/api/auth/refresh')).flush({ status: 200, errors: [], data: { token: 't2', refreshToken: 'r2' } });
 
     expect(tokens).toEqual(['t2', 't2', 't2']);
   });
@@ -73,7 +73,7 @@ describe('HttpSecurityService (sesión)', () => {
 
     // Mientras tanto la otra pestaña renovó y guardó su resultado.
     guardar({ usuario: { userName: 'ana' }, token: 't-otra', refreshToken: 'r-otra' });
-    backend.expectOne((r) => r.url.endsWith('/api/usuarios/refreshToken')).flush(
+    backend.expectOne((r) => r.url.endsWith('/api/auth/refresh')).flush(
       { status: 401, errors: ['Sesión inválida o expirada'], data: null }
     );
 
@@ -86,7 +86,7 @@ describe('HttpSecurityService (sesión)', () => {
     let error: unknown;
     service.refreshAccessToken().subscribe({ error: (e) => (error = e) });
 
-    backend.expectOne((r) => r.url.endsWith('/api/usuarios/refreshToken')).flush({ status: 401, errors: ['Sesión inválida'], data: null });
+    backend.expectOne((r) => r.url.endsWith('/api/auth/refresh')).flush({ status: 401, errors: ['Sesión inválida'], data: null });
 
     expect(error).toBeTruthy();
   });
@@ -106,6 +106,6 @@ describe('HttpSecurityService (sesión)', () => {
     service.refreshAccessToken().subscribe({ error: (e) => (error = e) });
 
     expect(error).toBeTruthy();
-    backend.expectNone((r) => r.url.endsWith('/api/usuarios/refreshToken'));
+    backend.expectNone((r) => r.url.endsWith('/api/auth/refresh'));
   });
 });

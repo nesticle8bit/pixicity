@@ -17,19 +17,19 @@ export class HttpSilenciosService implements IHttpSilenciosService {
   private readonly base = `${environment.api}/api/silencios`;
 
   getSilencios(): Observable<Silencios> {
-    return this.http.get<ApiResponse<Silencios>>(`${this.base}/getSilencios`).pipe(this.datos<Silencios>());
+    return this.http.get<ApiResponse<Silencios>>(`${this.base}`).pipe(this.datos<Silencios>());
   }
 
   alternarUsuario(userName: string): Observable<boolean> {
-    return this.http.post<ApiResponse<boolean>>(`${this.base}/alternarUsuario`, JSON.stringify(userName), JSON_HEADERS).pipe(this.datos<boolean>());
+    return this.http.post<ApiResponse<boolean>>(`${this.base}/usuarios`, JSON.stringify(userName), JSON_HEADERS).pipe(this.datos<boolean>());
   }
 
   agregarPalabra(palabra: string): Observable<boolean> {
-    return this.http.post<ApiResponse<boolean>>(`${this.base}/agregarPalabra`, JSON.stringify(palabra), JSON_HEADERS).pipe(this.datos<boolean>());
+    return this.http.post<ApiResponse<boolean>>(`${this.base}/palabras`, JSON.stringify(palabra), JSON_HEADERS).pipe(this.datos<boolean>());
   }
 
   quitarPalabra(id: number): Observable<boolean> {
-    return this.http.delete<ApiResponse<boolean>>(`${this.base}/quitarPalabra?id=${id}`).pipe(this.datos<boolean>());
+    return this.http.delete<ApiResponse<boolean>>(`${this.base}/palabras/${id}`).pipe(this.datos<boolean>());
   }
 
   private datos<T>(): OperatorFunction<ApiResponse<T>, T> {

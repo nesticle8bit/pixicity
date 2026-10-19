@@ -48,7 +48,7 @@ export interface ActividadViewModel {
   avatar?: string | null;
 }
 
-/** Respuesta de /api/usuarios/getActividadUsuario: actividad agrupada por antigüedad. */
+/** Respuesta de /api/usuarios/{id}/actividad: actividad agrupada por antigüedad. */
 export interface ActividadLogsViewModel {
   hoy: ActividadViewModel[];
   ayer: ActividadViewModel[];

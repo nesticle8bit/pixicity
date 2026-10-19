@@ -7,7 +7,7 @@ import { PaginationService } from '../shared/pagination.service';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
@@ -29,7 +29,7 @@ export class HttpWebService implements IHttpWebService {
 
   getTopUsers(): Observable<TopUserModel[]> {
     return this.http
-      .get<ApiResponse<TopUserModel[]>>(`${environment.api}/api/tops/getTopUsers`)
+      .get<ApiResponse<TopUserModel[]>>(`${environment.api}/api/tops/usuarios`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -45,7 +45,7 @@ export class HttpWebService implements IHttpWebService {
 
   getTopPosts(date: string): Observable<TopPostModel[]> {
     return this.http
-      .get<ApiResponse<TopPostModel[]>>(`${environment.api}/api/tops/getTopPosts?date=${date}`)
+      .get<ApiResponse<TopPostModel[]>>(`${environment.api}/api/tops/posts?date=${date}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -59,9 +59,9 @@ export class HttpWebService implements IHttpWebService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getAdsByType(type: string): Observable<string> {
+  getPublicidad(tamano: string): Observable<string> {
     return this.http
-      .get<ApiResponse<string>>(`${environment.api}/api/web/getAdsByType?type=${type}`)
+      .get<ApiResponse<string>>(`${environment.api}/api/publicidad/${encodeURIComponent(tamano)}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -77,7 +77,7 @@ export class HttpWebService implements IHttpWebService {
 
   getAfiliados(): Observable<AfiliacionModel[]> {
     return this.http
-      .get<ApiResponse<AfiliacionModel[]>>(`${environment.api}/api/web/getAfiliados`)
+      .get<ApiResponse<AfiliacionModel[]>>(`${environment.api}/api/afiliados/activos`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -93,7 +93,7 @@ export class HttpWebService implements IHttpWebService {
 
   changeAfiliadoActive(obj: { id: number; activo: boolean }): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/web/changeAfiliadoActive`, obj)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/afiliados/${obj.id}/activo`, obj)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -109,7 +109,7 @@ export class HttpWebService implements IHttpWebService {
 
   hitAfiliado(codigo: string): Observable<string> {
     return this.http
-      .get<ApiResponse<string>>(`${environment.api}/api/web/hitAfiliado?codigo=${codigo}`)
+      .post<ApiResponse<string>>(`${environment.api}/api/afiliados/${encodeURIComponent(codigo)}/salidas`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -125,7 +125,7 @@ export class HttpWebService implements IHttpWebService {
 
   getHistorialModeracion(): Observable<HistorialViewModel[]> {
     return this.http
-      .get<ApiResponse<HistorialViewModel[]>>(`${environment.api}/api/web/getHistorialModeracion`)
+      .get<ApiResponse<HistorialViewModel[]>>(`${environment.api}/api/moderacion/historial`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -142,7 +142,7 @@ export class HttpWebService implements IHttpWebService {
   getPaginas(search: string, filtro: AdminFiltro = {}): Observable<PaginatedData<PaginaAdmin, 'paginas'>> {
     return this.http
       .get<ApiResponse<PaginatedData<PaginaAdmin, 'paginas'>>>(
-        `${environment.api}/api/paginas/getPaginas?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&searchValue=${search}`, { params: adminParams(filtro) },
+        `${environment.api}/api/paginas/admin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&searchValue=${search}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -159,7 +159,7 @@ export class HttpWebService implements IHttpWebService {
 
   getAllPaginas(): Observable<PaginaViewModel[]> {
     return this.http
-      .get<ApiResponse<PaginaViewModel[]>>(`${environment.api}/api/paginas/getAllPaginas`)
+      .get<ApiResponse<PaginaViewModel[]>>(`${environment.api}/api/paginas`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -175,7 +175,7 @@ export class HttpWebService implements IHttpWebService {
 
   savePagina(pagina: Partial<PaginaViewModel>): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/paginas/savePagina`, pagina)
+      .post<ApiResponse<number>>(`${environment.api}/api/paginas`, pagina)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -191,12 +191,7 @@ export class HttpWebService implements IHttpWebService {
 
   deletePagina(paginaId: number): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/paginas/deletePagina`, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        }),
-        body: { id: paginaId },
-      })
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/paginas/${paginaId}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -212,7 +207,7 @@ export class HttpWebService implements IHttpWebService {
 
   getPaginaBySlug(slug: string): Observable<PaginaViewModel> {
     return this.http
-      .get<ApiResponse<PaginaViewModel>>(`${environment.api}/api/paginas/getPaginaBySlug?slug=${slug}`)
+      .get<ApiResponse<PaginaViewModel>>(`${environment.api}/api/paginas/por-slug/${encodeURIComponent(slug)}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -228,7 +223,7 @@ export class HttpWebService implements IHttpWebService {
 
   getConfiguracionFooter(): Observable<string> {
     return this.http
-      .get<ApiResponse<string>>(`${environment.api}/api/configuracion/getFooter`)
+      .get<ApiResponse<string>>(`${environment.api}/api/configuracion/footer`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

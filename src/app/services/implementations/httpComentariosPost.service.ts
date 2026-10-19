@@ -1,7 +1,7 @@
 import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -22,7 +22,7 @@ export class HttpComentariosPostService implements IHttpComentariosPostService {
   getComentarios(filtro: AdminFiltro = {}): Observable<PaginatedData<ComentarioViewModel>> {
     return this.http
       .get<ApiResponse<PaginatedData<ComentarioViewModel>>>(
-        `${environment.api}/api/comentarios/getComentarios?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
+        `${environment.api}/api/comentarios/admin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -40,7 +40,7 @@ export class HttpComentariosPostService implements IHttpComentariosPostService {
   getComentariosByUserId(userId: number): Observable<PaginatedData<ComentarioViewModel>> {
     return this.http
       .get<ApiResponse<PaginatedData<ComentarioViewModel>>>(
-        `${environment.api}/api/comentarios/getComentariosByUserId?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${userId}`,
+        `${environment.api}/api/comentarios/por-usuario?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${userId}`,
       )
       .pipe(
         map((response) => {
@@ -57,7 +57,7 @@ export class HttpComentariosPostService implements IHttpComentariosPostService {
 
   getUltimosComentarios(): Observable<ComentarioViewModel[]> {
     return this.http
-      .get<ApiResponse<ComentarioViewModel[]>>(`${environment.api}/api/comentarios/getComentariosRecientes`)
+      .get<ApiResponse<ComentarioViewModel[]>>(`${environment.api}/api/comentarios/recientes`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -73,7 +73,7 @@ export class HttpComentariosPostService implements IHttpComentariosPostService {
 
   addComentario(comentario: Partial<ComentarioViewModel>): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/comentarios/addComentario`, comentario)
+      .post<ApiResponse<number>>(`${environment.api}/api/comentarios`, comentario)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -89,8 +89,8 @@ export class HttpComentariosPostService implements IHttpComentariosPostService {
 
   updateComentario(comentario: Partial<ComentarioViewModel>): Observable<ComentarioViewModel> {
     return this.http
-      .post<ApiResponse<ComentarioViewModel>>(
-        `${environment.api}/api/comentarios/updateComentario`,
+      .put<ApiResponse<ComentarioViewModel>>(
+        `${environment.api}/api/comentarios/${comentario.id}`,
         comentario,
       )
       .pipe(
@@ -109,7 +109,7 @@ export class HttpComentariosPostService implements IHttpComentariosPostService {
   getComentariosByPostId(postId: number): Observable<ComentarioViewModel[]> {
     return this.http
       .get<ApiResponse<ComentarioViewModel[]>>(
-        `${environment.api}/api/comentarios/getComentariosByPostId?postId=${postId}`,
+        `${environment.api}/api/posts/${postId}/comentarios`,
       )
       .pipe(
         map((response) => {
@@ -126,7 +126,7 @@ export class HttpComentariosPostService implements IHttpComentariosPostService {
 
   recuperarComentario(comentarioId: number): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/comentarios/recuperarComentario`, { id: comentarioId })
+      .put<ApiResponse<boolean>>(`${environment.api}/api/comentarios/${comentarioId}/restauracion`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -141,12 +141,7 @@ export class HttpComentariosPostService implements IHttpComentariosPostService {
 
   deleteComentario(comentarioId: number): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/comentarios/deleteComentario`, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        }),
-        body: { id: comentarioId },
-      })
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/comentarios/${comentarioId}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -162,7 +157,7 @@ export class HttpComentariosPostService implements IHttpComentariosPostService {
 
   votarComentario(comentarioId: number, cantidad: number): Observable<ComentarioVotoResponse> {
     return this.http
-      .post<ApiResponse<ComentarioVotoResponse>>(`${environment.api}/api/comentarios/votarComentario`, {
+      .post<ApiResponse<ComentarioVotoResponse>>(`${environment.api}/api/comentarios/votos`, {
         comentarioId,
         cantidad,
       })
@@ -181,13 +176,13 @@ export class HttpComentariosPostService implements IHttpComentariosPostService {
 
   fijarComentario(comentarioId: number): Observable<boolean> {
     return this.unwrapData(
-      this.http.post<ApiResponse<boolean>>(`${environment.api}/api/comentarios/fijarComentario?comentarioId=${comentarioId}`, {}),
+      this.http.put<ApiResponse<boolean>>(`${environment.api}/api/comentarios/${comentarioId}/fijado`, {}),
     );
   }
 
   denunciarComentario(comentarioId: number, motivo: string): Observable<boolean> {
     return this.unwrapData(
-      this.http.post<ApiResponse<boolean>>(`${environment.api}/api/comentarios/denunciarComentario?comentarioId=${comentarioId}`, { motivo }),
+      this.http.post<ApiResponse<boolean>>(`${environment.api}/api/comentarios/${comentarioId}/denuncias`, { motivo }),
     );
   }
 

@@ -53,9 +53,9 @@ describe('JwtInterceptor', () => {
   it('con el token vencido (o por vencer) lo renueva antes de enviar: los endpoints públicos no darían 401', () => {
     security.getCurrentUser.and.returnValue({ usuario: {}, token: jwtQueVence(30), refreshToken: 'r' } as any);
     security.refreshAccessToken.and.returnValue(of('renovado'));
-    http.get('/api/comunidades/getComunidad').subscribe();
+    http.get('/api/comunidades/por-nombre/x').subscribe();
 
-    expect(backend.expectOne('/api/comunidades/getComunidad').request.headers.get('Authorization')).toBe('Bearer renovado');
+    expect(backend.expectOne('/api/comunidades/por-nombre/x').request.headers.get('Authorization')).toBe('Bearer renovado');
   });
 
   it('si la renovación falla envía con el token viejo y deja que el ErrorInterceptor decida', () => {
@@ -69,9 +69,9 @@ describe('JwtInterceptor', () => {
 
   it('la petición de renovación nunca se renueva a sí misma', () => {
     security.getCurrentUser.and.returnValue({ usuario: {}, token: jwtQueVence(-60), refreshToken: 'r' } as any);
-    http.post('/api/usuarios/refreshToken', {}).subscribe();
+    http.post('/api/auth/refresh', {}).subscribe();
 
-    backend.expectOne('/api/usuarios/refreshToken');
+    backend.expectOne('/api/auth/refresh');
     expect(security.refreshAccessToken).not.toHaveBeenCalled();
   });
 

@@ -19,8 +19,8 @@ describe('ServerApiInterceptor (SSR)', () => {
 
   it('manda /api e /images al API interno', () => {
     const i = crear();
-    expect(i.reescribir('/api/posts/getPosts?page=1')).toBe('http://api-interna:5000/api/posts/getPosts?page=1');
-    expect(i.reescribir(`${environment.publicUrl}/api/tops/getTopPosts`)).toBe('http://api-interna:5000/api/tops/getTopPosts');
+    expect(i.reescribir('/api/posts?page=1')).toBe('http://api-interna:5000/api/posts?page=1');
+    expect(i.reescribir(`${environment.publicUrl}/api/tops/posts`)).toBe('http://api-interna:5000/api/tops/posts');
     expect(i.reescribir('/images/fotos/a.jpg')).toBe('http://api-interna:5000/images/fotos/a.jpg');
   });
 

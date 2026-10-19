@@ -27,9 +27,9 @@ describe('DashboardAdsComponent', () => {
   } as ConfiguracionModel;
 
   beforeEach(async () => {
-    general = jasmine.createSpyObj('IHttpGeneralService', ['getConfiguracion', 'updateAds']);
+    general = jasmine.createSpyObj('IHttpGeneralService', ['getConfiguracion', 'updatePublicidad']);
     general.getConfiguracion.and.returnValue(of(configuracion));
-    general.updateAds.and.returnValue(of(true));
+    general.updatePublicidad.and.returnValue(of(true));
 
     await TestBed.configureTestingModule({
     imports: [ReactiveFormsModule, DashboardAdsComponent],
@@ -65,7 +65,7 @@ describe('DashboardAdsComponent', () => {
     component.agregarAnuncio('banner468x60');
     component.updateAds();
 
-    const enviado = general.updateAds.calls.mostRecent().args[0];
+    const enviado = general.updatePublicidad.calls.mostRecent().args[0];
     expect(enviado.banner300x250).toBe('[{"tipo":"html","html":"b1"}]');
     expect(enviado.banner468x60).toBe('[{"tipo":"html","html":"b2"}]');
     expect(enviado.banner728x90).toBe('[{"tipo":"html","html":"b4"},{"tipo":"componente","componente":"discord","variante":"horizontal"}]');
@@ -74,7 +74,7 @@ describe('DashboardAdsComponent', () => {
   it('al guardar envía los nombres que espera el API, sin perder los scripts', () => {
     component.updateAds();
 
-    const enviado = general.updateAds.calls.mostRecent().args[0];
+    const enviado = general.updatePublicidad.calls.mostRecent().args[0];
     expect(enviado.headerScript).toBe('<script>cabecera()</script>');
     expect(enviado.footerScript).toBe('<script>pie()</script>');
     expect(Object.keys(enviado)).not.toContain('scriptHeader');

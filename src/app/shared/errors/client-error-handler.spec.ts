@@ -7,7 +7,7 @@ import { ClientErrorHandler } from './client-error-handler';
 describe('ClientErrorHandler', () => {
   let handler: ClientErrorHandler;
   let backend: HttpTestingController;
-  const esLog = (r: { url: string }) => r.url.endsWith('/api/appLogs/cliente');
+  const esLog = (r: { url: string }) => r.url.endsWith('/api/app-logs/cliente');
 
   beforeEach(() => {
     spyOn(console, 'error');

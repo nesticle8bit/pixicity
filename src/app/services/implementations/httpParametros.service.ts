@@ -23,7 +23,7 @@ export class HttpParametrosService implements IHttpParametrosService {
   getPaises(filtro: AdminFiltro = {}): Observable<PaginatedData<PaisAdmin>> {
     return this.http
       .get<ApiResponse<PaginatedData<PaisAdmin>>>(
-        `${environment.api}/api/paises/getPaises?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
+        `${environment.api}/api/paises/admin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -40,7 +40,7 @@ export class HttpParametrosService implements IHttpParametrosService {
 
   getPaisesDropdown(): Observable<PaisViewModel[]> {
     return this.http
-      .get<ApiResponse<PaisViewModel[]>>(`${environment.api}/api/paises/getPaisesDropdown`)
+      .get<ApiResponse<PaisViewModel[]>>(`${environment.api}/api/paises`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -56,7 +56,7 @@ export class HttpParametrosService implements IHttpParametrosService {
 
   savePais(pais: Partial<PaisViewModel>): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/paises/savePais`, pais)
+      .post<ApiResponse<number>>(`${environment.api}/api/paises`, pais)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -72,7 +72,7 @@ export class HttpParametrosService implements IHttpParametrosService {
 
   updatePais(pais: PaisViewModel): Observable<number> {
     return this.http
-      .put<ApiResponse<number>>(`${environment.api}/api/paises/updatePais`, pais)
+      .put<ApiResponse<number>>(`${environment.api}/api/paises/${pais.id}`, pais)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -89,7 +89,7 @@ export class HttpParametrosService implements IHttpParametrosService {
   getEstadosByPais(idPais: number): Observable<EstadoViewModel[]> {
     return this.http
       .get<ApiResponse<EstadoViewModel[]>>(
-        `${environment.api}/api/paises/getEstadosByPais?idPais=${idPais}`,
+        `${environment.api}/api/paises/${idPais}/estados`,
       )
       .pipe(
         map((response) => {
@@ -107,7 +107,7 @@ export class HttpParametrosService implements IHttpParametrosService {
   getCategoriasAdmin(filtro: AdminFiltro = {}): Observable<PaginatedData<CategoriaAdmin, 'categorias'>> {
     return this.http
       .get<ApiResponse<PaginatedData<CategoriaAdmin, 'categorias'>>>(
-        `${environment.api}/api/categorias/getCategoriasAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
+        `${environment.api}/api/categorias/admin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -124,7 +124,7 @@ export class HttpParametrosService implements IHttpParametrosService {
 
   getCategoriasDropdown(): Observable<CategoriaViewModel[]> {
     return this.http
-      .get<ApiResponse<CategoriaViewModel[]>>(`${environment.api}/api/categorias/getCategoriasDropdown`)
+      .get<ApiResponse<CategoriaViewModel[]>>(`${environment.api}/api/categorias`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -140,7 +140,7 @@ export class HttpParametrosService implements IHttpParametrosService {
 
   getTopCategorias(count: number = 10): Observable<TopCategoriaViewModel[]> {
     return this.http
-      .get<ApiResponse<TopCategoriaViewModel[]>>(`${environment.api}/api/categorias/getTopCategorias?count=${count}`)
+      .get<ApiResponse<TopCategoriaViewModel[]>>(`${environment.api}/api/categorias/top?count=${count}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -157,7 +157,7 @@ export class HttpParametrosService implements IHttpParametrosService {
   /** Alterna eliminada/activa; devuelve true si quedó eliminada. */
   cambiarEstadoCategoria(id: number): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/categorias/cambiarEstadoCategoria?id=${id}`, null)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/categorias/${id}/estado`, null)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -172,7 +172,7 @@ export class HttpParametrosService implements IHttpParametrosService {
 
   saveCategoria(categoria: Partial<CategoriaViewModel>): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/categorias/saveCategoria`, categoria)
+      .post<ApiResponse<number>>(`${environment.api}/api/categorias`, categoria)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -189,7 +189,7 @@ export class HttpParametrosService implements IHttpParametrosService {
   getCensuras(filtro: AdminFiltro = {}): Observable<PaginatedData<CensuraViewModel>> {
     return this.http
       .get<ApiResponse<PaginatedData<CensuraViewModel>>>(
-        `${environment.api}/api/censuras/getCensuras?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
+        `${environment.api}/api/censuras?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -206,7 +206,7 @@ export class HttpParametrosService implements IHttpParametrosService {
 
   saveCensura(censura: CensuraViewModel): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/censuras/saveCensura`, censura)
+      .post<ApiResponse<number>>(`${environment.api}/api/censuras`, censura)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -222,7 +222,7 @@ export class HttpParametrosService implements IHttpParametrosService {
 
   deleteCensura(id: number): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/censuras/deleteCensura?id=${id}`)
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/censuras/${id}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

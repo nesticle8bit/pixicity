@@ -145,7 +145,7 @@ export interface ComentarioVotoResponse {
   miVoto: number;
 }
 
-/** Usuario que dio puntos o recomendó un post (GET /api/posts/getInteraccionesPost). */
+/** Usuario que dio puntos o recomendó un post (GET /api/posts/{id}/interacciones). */
 export interface PostInteraccionUsuario {
   userName: string;
   avatar: string | null;
@@ -171,7 +171,7 @@ export interface PostInteracciones {
   totalRecomendaciones: number;
 }
 
-/** Página de la lista completa (GET /api/posts/getInteraccionesPostPagina). */
+/** Página de la lista completa (GET /api/posts/{id}/interacciones/{tipo}). */
 export interface PostInteraccionesPagina {
   items: PostInteraccionUsuario[];
   total: number;

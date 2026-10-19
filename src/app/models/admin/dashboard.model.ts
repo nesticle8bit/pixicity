@@ -106,7 +106,7 @@ export interface MetricaRuta {
   maxMs: number;
 }
 
-/** GET /api/dashboard/getMetricas: métricas en memoria desde el último reinicio del API. */
+/** GET /api/dashboard/metricas: métricas en memoria desde el último reinicio del API. */
 export interface MetricasApi {
   minutos: number;
   peticiones: number;

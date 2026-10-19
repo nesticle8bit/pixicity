@@ -72,7 +72,7 @@ export class ClientErrorHandler implements ErrorHandler {
     // Con el token el API sabe qué usuario tuvo el error (el JWT se valida igual que en cualquier pedido).
     const token = this.token();
     const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : undefined;
-    this.http.post(`${environment.api}/api/appLogs/cliente`, log, { headers }).subscribe({ error: () => undefined });
+    this.http.post(`${environment.api}/api/app-logs/cliente`, log, { headers }).subscribe({ error: () => undefined });
   }
 
   private construir(error: unknown): ClienteLog | null {

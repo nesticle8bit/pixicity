@@ -9,7 +9,7 @@ import { NoticiaModel } from 'src/app/models/web/noticia.model';
 export abstract class IHttpNoticiasService {
   abstract getNoticias(search: string, filtro?: AdminFiltro): Observable<PaginatedData<NoticiaAdmin, 'noticias'>>;
   abstract saveNoticias(noticia: Partial<NoticiaModel>): Observable<number>;
-  abstract updateNoticias(noticia: Partial<NoticiaModel>): Observable<boolean>;
+  abstract updateNoticias(noticia: Partial<NoticiaModel> & { id: number }): Observable<boolean>;
   abstract deleteNoticias(id: number): Observable<boolean>;
   abstract getAllNoticias(): Observable<NoticiaModel[]>;
 }

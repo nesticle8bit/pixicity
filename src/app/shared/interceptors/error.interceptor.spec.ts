@@ -78,13 +78,13 @@ describe('ErrorInterceptor', () => {
 
   it('un 401 con cuerpo JSON pero marcado como token vencido sí renueva (post privado)', () => {
     security.refreshAccessToken.and.returnValue(of('nuevo'));
-    http.get('/api/posts/getPostById').subscribe();
+    http.get('/api/posts/1').subscribe();
 
-    backend.expectOne('/api/posts/getPostById').flush(
+    backend.expectOne('/api/posts/1').flush(
       { status: 401, errors: [], data: null },
       { status: 401, statusText: 'Unauthorized', headers: { [TOKEN_EXPIRADO_HEADER]: 'true' } }
     );
-    backend.expectOne('/api/posts/getPostById').flush({ status: 200, errors: [], data: { post: {} } });
+    backend.expectOne('/api/posts/1').flush({ status: 200, errors: [], data: { post: {} } });
 
     expect(security.refreshAccessToken).toHaveBeenCalledTimes(1);
   });
@@ -124,9 +124,9 @@ describe('ErrorInterceptor', () => {
 
   it('un 401 de la propia renovación nunca dispara otra renovación', () => {
     let body: any;
-    http.post('/api/usuarios/refreshToken', {}).subscribe((r) => (body = r));
+    http.post('/api/auth/refresh', {}).subscribe((r) => (body = r));
 
-    backend.expectOne('/api/usuarios/refreshToken').flush({ status: 401, errors: ['Sesión inválida'], data: null }, { status: 401, statusText: 'Unauthorized' });
+    backend.expectOne('/api/auth/refresh').flush({ status: 401, errors: ['Sesión inválida'], data: null }, { status: 401, statusText: 'Unauthorized' });
 
     expect(security.refreshAccessToken).not.toHaveBeenCalled();
     expect(body.status).toBe(401);

@@ -15,7 +15,7 @@ export class HttpAppLogsService implements IHttpAppLogsService {
   private helper = inject(HelperService);
   private notificationService = inject(NotificationService);
 
-  private readonly base = `${environment.api}/api/appLogs`;
+  private readonly base = `${environment.api}/api/app-logs`;
 
   private unwrap<T>() {
     return map((response: ApiResponse<T>) => {
@@ -38,31 +38,31 @@ export class HttpAppLogsService implements IHttpAppLogsService {
   getLogs(page: number, pageCount: number, filtro: AppLogFiltro): Observable<PaginatedData<AppLog>> {
     const params = this.filtroParams(filtro, new HttpParams().set('page', page).set('pageCount', pageCount));
     return this.http
-      .get<ApiResponse<PaginatedData<AppLog>>>(`${this.base}/getLogs`, { params })
+      .get<ApiResponse<PaginatedData<AppLog>>>(`${this.base}`, { params })
       .pipe(this.unwrap<PaginatedData<AppLog>>(), catchError(this.helper.errorHandler));
   }
 
   getLog(id: number): Observable<AppLog> {
     return this.http
-      .get<ApiResponse<AppLog>>(`${this.base}/getLog`, { params: { id } })
+      .get<ApiResponse<AppLog>>(`${this.base}/${id}`)
       .pipe(this.unwrap<AppLog>(), catchError(this.helper.errorHandler));
   }
 
   getResumen(): Observable<AppLogResumen> {
     return this.http
-      .get<ApiResponse<AppLogResumen>>(`${this.base}/getResumen`)
+      .get<ApiResponse<AppLogResumen>>(`${this.base}/resumen`)
       .pipe(this.unwrap<AppLogResumen>(), catchError(this.helper.errorHandler));
   }
 
   resolver(id: number, todosLosIguales: boolean): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${this.base}/resolver`, null, { params: { id, todosLosIguales } })
+      .put<ApiResponse<number>>(`${this.base}/${id}/resuelto`, null, { params: { todosLosIguales } })
       .pipe(this.unwrap<number>(), catchError(this.helper.errorHandler));
   }
 
   resolverTodos(filtro: AppLogFiltro): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${this.base}/resolverTodos`, {
+      .put<ApiResponse<number>>(`${this.base}/resueltos`, {
         nivel: filtro.nivel || null,
         origen: filtro.origen || null,
         texto: filtro.texto?.trim() || null,

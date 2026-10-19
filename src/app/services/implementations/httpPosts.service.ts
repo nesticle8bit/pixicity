@@ -28,7 +28,7 @@ export class HttpPostsService implements IHttpPostsService {
 
     return this.http
       .get<ApiResponse<PaginatedData<PostViewModel>>>(
-        `${environment.api}/api/posts/getPosts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${categoria}`,
+        `${environment.api}/api/posts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${categoria}`,
       )
       .pipe(
         map((response) => {
@@ -46,7 +46,7 @@ export class HttpPostsService implements IHttpPostsService {
   getPostsAdmin(search: string, filtro: AdminFiltro = {}): Observable<PaginatedData<PostAdmin>> {
     return this.http
       .get<ApiResponse<PaginatedData<PostAdmin>>>(
-        `${environment.api}/api/posts/getPostsAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}`, { params: adminParams(filtro) },
+        `${environment.api}/api/posts/admin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -64,7 +64,7 @@ export class HttpPostsService implements IHttpPostsService {
   getPostsByLoggedUser(search: string): Observable<PaginatedData<PostViewModel>> {
     return this.http
       .get<ApiResponse<PaginatedData<PostViewModel>>>(
-        `${environment.api}/api/posts/getPostsByLoggedUser?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}`,
+        `${environment.api}/api/posts/me?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}`,
       )
       .pipe(
         map((response) => {
@@ -82,7 +82,7 @@ export class HttpPostsService implements IHttpPostsService {
   getPostsByUserId(userId: number): Observable<PaginatedData<PostViewModel>> {
     return this.http
       .get<ApiResponse<PaginatedData<PostViewModel>>>(
-        `${environment.api}/api/posts/getPostsByUserId?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${userId}`,
+        `${environment.api}/api/posts/por-usuario?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${userId}`,
       )
       .pipe(
         map((response) => {
@@ -99,7 +99,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   getStickyPosts(): Observable<PostViewModel[]> {
     return this.http
-      .get<ApiResponse<PostViewModel[]>>(`${environment.api}/api/posts/getStickyPosts`)
+      .get<ApiResponse<PostViewModel[]>>(`${environment.api}/api/posts/sticky`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -115,7 +115,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   getPostById(postId: number): Observable<PostDetailResponse> {
     return this.http
-      .get<ApiResponse<PostDetailResponse>>(`${environment.api}/api/posts/getPostById?postId=${postId}`)
+      .get<ApiResponse<PostDetailResponse>>(`${environment.api}/api/posts/${postId}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -131,7 +131,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   savePost(post: Partial<PostViewModel>): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/posts/savePost`, post)
+      .post<ApiResponse<number>>(`${environment.api}/api/posts`, post)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -147,7 +147,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   updatePost(post: Partial<PostViewModel>): Observable<number> {
     return this.http
-      .put<ApiResponse<number>>(`${environment.api}/api/posts/updatePost`, post)
+      .put<ApiResponse<number>>(`${environment.api}/api/posts/${post.id}`, post)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -164,7 +164,7 @@ export class HttpPostsService implements IHttpPostsService {
   deletePost(postId: number, razon: string): Observable<boolean> {
     return this.http
       .delete<ApiResponse<boolean>>(
-        `${environment.api}/api/posts/deletePost?postId=${postId}&razon=${encodeURIComponent(razon ?? '')}`,
+        `${environment.api}/api/posts/${postId}?razon=${encodeURIComponent(razon ?? '')}`,
       )
       .pipe(
         map((response) => {
@@ -181,7 +181,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   recuperarPost(postId: number): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/posts/recuperarPost?postId=${postId}`, null)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/posts/${postId}/restauracion`, null)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -196,7 +196,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   changeStickyPost(postId: number): Observable<boolean> {
     return this.http
-      .put<ApiResponse<boolean>>(`${environment.api}/api/posts/changeStickyPost?postId=${postId}`, {})
+      .put<ApiResponse<boolean>>(`${environment.api}/api/posts/${postId}/sticky`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -212,7 +212,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   getAvailableVotos(type: number): Observable<number> {
     return this.http
-      .get<ApiResponse<number>>(`${environment.api}/api/votos/getAvailableVotos?type=${type}`)
+      .get<ApiResponse<number>>(`${environment.api}/api/votos/disponibles?type=${type}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -228,7 +228,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   setVotos(voto: { typeId: number; cantidad: number; votosType: number }): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/votos/setVoto`, voto)
+      .post<ApiResponse<boolean>>(`${environment.api}/api/votos`, voto)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -244,7 +244,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   nextPost(postId: number): Observable<PostSimpleViewModel> {
     return this.http
-      .post<ApiResponse<PostSimpleViewModel>>(`${environment.api}/api/posts/nextPost`, { id: postId })
+      .get<ApiResponse<PostSimpleViewModel>>(`${environment.api}/api/posts/${postId}/siguiente`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -260,7 +260,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   previousPost(postId: number): Observable<PostSimpleViewModel> {
     return this.http
-      .post<ApiResponse<PostSimpleViewModel>>(`${environment.api}/api/posts/previousPost`, { id: postId })
+      .get<ApiResponse<PostSimpleViewModel>>(`${environment.api}/api/posts/${postId}/anterior`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -276,7 +276,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   randomPost(postId: number): Observable<PostSimpleViewModel> {
     return this.http
-      .post<ApiResponse<PostSimpleViewModel>>(`${environment.api}/api/posts/randomPost`, { id: postId })
+      .get<ApiResponse<PostSimpleViewModel>>(`${environment.api}/api/posts/${postId}/aleatorio`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -292,7 +292,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   alternarFavoritoPost(postId: number): Observable<FavoritoAlternado> {
     return this.http
-      .post<ApiResponse<FavoritoAlternado>>(`${environment.api}/api/posts/alternarFavoritoPost`, { id: postId })
+      .post<ApiResponse<FavoritoAlternado>>(`${environment.api}/api/posts/${postId}/favorito`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) return response.data!;
@@ -304,7 +304,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   getInteraccionesPost(postId: number): Observable<PostInteracciones | null> {
     return this.http
-      .get<ApiResponse<PostInteracciones>>(`${environment.api}/api/posts/getInteraccionesPost?postId=${postId}`)
+      .get<ApiResponse<PostInteracciones>>(`${environment.api}/api/posts/${postId}/interacciones`)
       .pipe(
         map((r) => (r.status === 200 ? r.data ?? null : null)),
         catchError(() => of(null)),
@@ -318,7 +318,7 @@ export class HttpPostsService implements IHttpPostsService {
   ): Observable<PostInteraccionesPagina> {
     return this.http
       .get<ApiResponse<PostInteraccionesPagina>>(
-        `${environment.api}/api/posts/getInteraccionesPostPagina?postId=${postId}&tipo=${tipo}&pagina=${pagina}`,
+        `${environment.api}/api/posts/${postId}/interacciones/${tipo}?pagina=${pagina}`,
       )
       .pipe(
         map((r) => r.data ?? { items: [], total: 0 }),
@@ -328,7 +328,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   addFavoritePost(postId: number): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/posts/addFavoritePost`, { id: postId })
+      .post<ApiResponse<boolean>>(`${environment.api}/api/posts/${postId}/favoritos`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -344,7 +344,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   reportPost(report: { postId: number; razon: string }): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/posts/reportPost`, report)
+      .post<ApiResponse<boolean>>(`${environment.api}/api/posts/denuncias`, report)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -360,7 +360,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   getRelatedPosts(postId: number): Observable<PostSimpleViewModel[]> {
     return this.http
-      .get<ApiResponse<PostSimpleViewModel[]>>(`${environment.api}/api/posts/getRelatedPosts?postId=${postId}`)
+      .get<ApiResponse<PostSimpleViewModel[]>>(`${environment.api}/api/posts/${postId}/relacionados`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -376,7 +376,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   getPostsFromOP(postId: number): Observable<PostSimpleViewModel[]> {
     return this.http
-      .get<ApiResponse<PostSimpleViewModel[]>>(`${environment.api}/api/posts/getPostsFromOP?postId=${postId}`)
+      .get<ApiResponse<PostSimpleViewModel[]>>(`${environment.api}/api/posts/${postId}/del-autor`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -432,7 +432,7 @@ export class HttpPostsService implements IHttpPostsService {
 
     return this.http
       .get<ApiResponse<PostViewModel[]>>(
-        `${environment.api}/api/posts/getTopPosts?date=${date}${search}`,
+        `${environment.api}/api/posts/top?date=${date}${search}`,
       )
       .pipe(
         map((response) => {
@@ -449,7 +449,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   seguirPost(postId: number): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/posts/seguirPost`, { id: postId })
+      .post<ApiResponse<boolean>>(`${environment.api}/api/posts/${postId}/seguimiento`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -465,7 +465,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   getCloudTags(): Observable<CloudTagViewModel[]> {
     return this.http
-      .get<ApiResponse<CloudTagViewModel[]>>(`${environment.api}/api/posts/getCloudTags`)
+      .get<ApiResponse<CloudTagViewModel[]>>(`${environment.api}/api/posts/tags`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -482,7 +482,7 @@ export class HttpPostsService implements IHttpPostsService {
   getBorradores(search: string, categoriaId: number): Observable<PaginatedWithCategorias<PostViewModel>> {
     return this.http
       .get<ApiResponse<PaginatedWithCategorias<PostViewModel>>>(
-        `${environment.api}/api/posts/getBorradores?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}&categoriaId=${categoriaId}`,
+        `${environment.api}/api/posts/borradores?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}&categoriaId=${categoriaId}`,
       )
       .pipe(
         map((response) => {
@@ -499,7 +499,7 @@ export class HttpPostsService implements IHttpPostsService {
 
   recomendarPost(postId: number): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/posts/recomendarPost`, { id: postId })
+      .post<ApiResponse<number>>(`${environment.api}/api/posts/${postId}/recomendaciones`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -516,7 +516,7 @@ export class HttpPostsService implements IHttpPostsService {
   getVotos(filtro: AdminFiltro = {}): Observable<PaginatedData<unknown>> {
     return this.http
       .get<ApiResponse<PaginatedData<unknown>>>(
-        `${environment.api}/api/votos/getVotosAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
+        `${environment.api}/api/votos/admin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -534,7 +534,7 @@ export class HttpPostsService implements IHttpPostsService {
   getPostsRelatedByTitle(title: string): Observable<PostSimpleViewModel[]> {
     return this.http
       .get<ApiResponse<PostSimpleViewModel[]>>(
-        `${environment.api}/api/posts/getPostsRelatedByTitle?title=${title}`,
+        `${environment.api}/api/posts/similares?title=${title}`,
       )
       .pipe(
         map((response) => {

@@ -32,7 +32,7 @@ export class JwtInterceptor implements HttpInterceptor {
 
         // Los endpoints públicos no responden 401 con un JWT vencido: tratan al usuario como anónimo.
         // Por eso se renueva antes de enviar, en vez de esperar al 401 del ErrorInterceptor.
-        if (currentUser.refreshToken && !request.url.includes('/refreshToken') && this.porVencer(currentUser.token)) {
+        if (currentUser.refreshToken && !request.url.includes('/api/auth/refresh') && this.porVencer(currentUser.token)) {
             return this.securityService.refreshAccessToken().pipe(
                 // Si la renovación falla se envía con el token viejo: los endpoints protegidos
                 // responderán 401/423 y el ErrorInterceptor cerrará la sesión.

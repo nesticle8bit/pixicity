@@ -67,7 +67,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     const currentUser = this.securityService.getCurrentUser();
     const hasSession = !!(currentUser && currentUser.token);
 
-    if (!hasSession || !this.refreshableStatuses.includes(err.status) || request.url.includes('/refreshToken')) {
+    if (!hasSession || !this.refreshableStatuses.includes(err.status) || request.url.includes('/api/auth/refresh')) {
       return false;
     }
 

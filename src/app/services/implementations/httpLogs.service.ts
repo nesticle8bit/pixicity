@@ -29,7 +29,7 @@ export class HttpLogsService implements IHttpLogsService {
     if (filtro.periodo) params = params.set('periodo', filtro.periodo);
 
     return this.http
-      .get<ApiResponse<PaginatedData<MonitorViewModel>>>(`${environment.api}/api/monitors/getNotificaciones`, { params })
+      .get<ApiResponse<PaginatedData<MonitorViewModel>>>(`${environment.api}/api/notificaciones`, { params })
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -45,7 +45,7 @@ export class HttpLogsService implements IHttpLogsService {
 
   getLastNotificaciones(): Observable<MonitorViewModel[]> {
     return this.http
-      .get<ApiResponse<MonitorViewModel[]>>(`${environment.api}/api/monitors/getLastNotificaciones`)
+      .get<ApiResponse<MonitorViewModel[]>>(`${environment.api}/api/notificaciones/recientes`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -61,7 +61,7 @@ export class HttpLogsService implements IHttpLogsService {
 
   setNotificacionesAsReaded(): Observable<boolean> {
     return this.http
-      .get<ApiResponse<boolean>>(`${environment.api}/api/monitors/setNotificacionesAsReaded`)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/notificaciones/leidas`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -77,7 +77,7 @@ export class HttpLogsService implements IHttpLogsService {
 
   getStats(): Observable<StatsViewModel> {
     return this.http
-      .get<ApiResponse<StatsViewModel>>(`${environment.api}/api/monitors/getStats`)
+      .get<ApiResponse<StatsViewModel>>(`${environment.api}/api/notificaciones/estadisticas`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -94,7 +94,7 @@ export class HttpLogsService implements IHttpLogsService {
   getMonitorsAdmin(filtro: AdminFiltro = {}): Observable<PaginatedData<MonitorViewModel>> {
     return this.http
       .get<ApiResponse<PaginatedData<MonitorViewModel>>>(
-        `${environment.api}/api/monitors/getMonitorAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
+        `${environment.api}/api/notificaciones/admin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -111,12 +111,7 @@ export class HttpLogsService implements IHttpLogsService {
 
   deleteNotificacion(id: number): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/monitors/deleteNotificacion`, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        }),
-        body: { id },
-      })
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/notificaciones/${id}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -132,13 +127,13 @@ export class HttpLogsService implements IHttpLogsService {
 
   getPreferencias(): Observable<{ tipo: string; activa: boolean }[]> {
     return this.http
-      .get<ApiResponse<{ tipo: string; activa: boolean }[]>>(`${environment.api}/api/monitors/getPreferencias`)
+      .get<ApiResponse<{ tipo: string; activa: boolean }[]>>(`${environment.api}/api/notificaciones/preferencias`)
       .pipe(map((r) => r.data ?? []));
   }
 
   setPreferencia(tipo: string, activa: boolean): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/monitors/setPreferencia?tipo=${encodeURIComponent(tipo)}&activa=${activa}`, {})
+      .put<ApiResponse<boolean>>(`${environment.api}/api/notificaciones/preferencias/${encodeURIComponent(tipo)}?activa=${activa}`, {})
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') || 'No se pudo guardar'); }));
   }
 }

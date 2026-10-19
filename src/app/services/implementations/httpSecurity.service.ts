@@ -49,7 +49,7 @@ export class HttpSecurityService implements IHttpSecurityService {
   }
 
   getCaptchaSiteKey(): Observable<string | null> {
-    return this.http.get<ApiResponse<string | null>>(`${environment.api}/api/usuarios/getCaptchaSiteKey`).pipe(
+    return this.http.get<ApiResponse<string | null>>(`${environment.api}/api/auth/captcha`).pipe(
       map((r) => (r.status === 200 ? r.data ?? null : null)),
       catchError(() => of(null)),
     );
@@ -58,7 +58,7 @@ export class HttpSecurityService implements IHttpSecurityService {
   registerUser(user: UserModel, captcha?: string): Observable<number> {
     const headers = captcha ? new HttpHeaders({ 'X-Captcha': captcha }) : undefined;
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/usuarios/registrarUsuario`, user, { headers })
+      .post<ApiResponse<number>>(`${environment.api}/api/auth/registro`, user, { headers })
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -74,7 +74,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   loginUser(user: { userName: string; password: string }): Observable<LoginResponse> {
     return this.http
-      .post<ApiResponse<LoginResponse>>(`${environment.api}/api/usuarios/login`, user)
+      .post<ApiResponse<LoginResponse>>(`${environment.api}/api/auth/login`, user)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -90,7 +90,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   /** POST que devuelve data o lanza un Error con el mensaje del API (para mostrarlo en el formulario). */
   private postConError<T>(ruta: string, cuerpo: unknown, porDefecto: string): Observable<T> {
-    return this.http.post<ApiResponse<T>>(`${environment.api}/api/usuarios/${ruta}`, cuerpo).pipe(
+    return this.http.post<ApiResponse<T>>(`${environment.api}/api/auth/${ruta}`, cuerpo).pipe(
       map((r) => {
         if (r.status === 200) return r.data!;
         throw new Error(r.errors?.join(', ') || porDefecto);
@@ -99,25 +99,25 @@ export class HttpSecurityService implements IHttpSecurityService {
   }
 
   login2FA(desafio: string, codigo: string): Observable<JwtUserModel> {
-    return this.postConError<JwtUserModel>('login2FA', { desafio, codigo }, 'El código no es correcto');
+    return this.postConError<JwtUserModel>('login/2fa', { desafio, codigo }, 'El código no es correcto');
   }
 
   getEstado2FA(): Observable<{ activo: boolean }> {
     return this.http
-      .get<ApiResponse<{ activo: boolean }>>(`${environment.api}/api/usuarios/getEstado2FA`)
+      .get<ApiResponse<{ activo: boolean }>>(`${environment.api}/api/auth/2fa`)
       .pipe(map((r) => r.data ?? { activo: false }));
   }
 
   configurar2FA(): Observable<{ secreto: string; uri: string }> {
-    return this.postConError('configurar2FA', {}, 'No se pudo generar la clave');
+    return this.postConError('2fa/configuracion', {}, 'No se pudo generar la clave');
   }
 
   activar2FA(codigo: string): Observable<{ codigosRecuperacion: string[] }> {
-    return this.postConError('activar2FA', { codigo }, 'El código no es correcto');
+    return this.postConError('2fa', { codigo }, 'El código no es correcto');
   }
 
   desactivar2FA(password: string, codigo: string): Observable<boolean> {
-    return this.postConError('desactivar2FA', { password, codigo }, 'No se pudo desactivar');
+    return this.postConError('2fa/desactivacion', { password, codigo }, 'No se pudo desactivar');
   }
 
   private refreshEnCurso: Observable<string> | null = null;
@@ -138,7 +138,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
     this.refreshEnCurso = this.http
       .post<ApiResponse<{ token: string; refreshToken: string }>>(
-        `${environment.api}/api/usuarios/refreshToken`,
+        `${environment.api}/api/auth/refresh`,
         { refreshToken }
       )
       .pipe(
@@ -194,7 +194,7 @@ export class HttpSecurityService implements IHttpSecurityService {
     if (search?.orden && search.orden !== 'recientes') params = params.set('orderBy', search.orden);
 
     return this.http
-      .get<ApiResponse<PaginatedData<UsuarioListadoViewModel, 'usuarios'>>>(`${environment.api}/api/usuarios/getUsuarios`, { params })
+      .get<ApiResponse<PaginatedData<UsuarioListadoViewModel, 'usuarios'>>>(`${environment.api}/api/usuarios`, { params })
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -217,7 +217,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
     return this.http
       .get<ApiResponse<PaginatedData<UsuarioAdminViewModel, 'usuarios'>>>(
-        `${environment.api}/api/usuarios/getUsuariosAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${searchParams}`, { params: adminParams(filtro) }
+        `${environment.api}/api/usuarios/admin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}${searchParams}`, { params: adminParams(filtro) }
       )
       .pipe(
         map((response) => {
@@ -234,7 +234,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   getLoggedUserByJwt(): Observable<UsuarioViewModel> {
     return this.http
-      .get<ApiResponse<UsuarioViewModel>>(`${environment.api}/api/usuarios/getLoggedUserByJwt`)
+      .get<ApiResponse<UsuarioViewModel>>(`${environment.api}/api/usuarios/me`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -251,7 +251,7 @@ export class HttpSecurityService implements IHttpSecurityService {
   getUserByUserName(userName: string): Observable<PerfilUsuarioViewModel> {
     return this.http
       .get<ApiResponse<PerfilUsuarioViewModel>>(
-        `${environment.api}/api/usuarios/getUserByUserName?userName=${userName}`
+        `${environment.api}/api/usuarios/por-nombre/${encodeURIComponent(userName)}`
       )
       .pipe(
         map((response) => {
@@ -269,7 +269,7 @@ export class HttpSecurityService implements IHttpSecurityService {
   getSesiones(filtro: AdminFiltro = {}): Observable<PaginatedData<unknown>> {
     return this.http
       .get<ApiResponse<PaginatedData<unknown>>>(
-        `${environment.api}/api/usuarios/getSesiones?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) }
+        `${environment.api}/api/usuarios/sesiones?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) }
       )
       .pipe(
         map((response) => {
@@ -287,7 +287,7 @@ export class HttpSecurityService implements IHttpSecurityService {
   deleteSessionById(sessionId: number): Observable<boolean> {
     return this.http
       .delete<ApiResponse<boolean>>(
-        `${environment.api}/api/usuarios/deleteSesion?id=${sessionId}`
+        `${environment.api}/api/usuarios/sesiones/${sessionId}`
       )
       .pipe(
         map((response) => {
@@ -304,7 +304,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   confirmarEmail(token: string): Observable<{ userName: string }> {
     return this.http
-      .post<ApiResponse<{ userName: string }>>(`${environment.api}/api/usuarios/confirmarEmail`, { token })
+      .post<ApiResponse<{ userName: string }>>(`${environment.api}/api/auth/email/confirmacion`, { token })
       .pipe(
         map((r) => {
           if (r.status === 200) return r.data!;
@@ -314,7 +314,7 @@ export class HttpSecurityService implements IHttpSecurityService {
   }
 
   reenviarConfirmacion(): Observable<boolean> {
-    return this.http.post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/reenviarConfirmacion`, {}).pipe(
+    return this.http.post<ApiResponse<boolean>>(`${environment.api}/api/auth/email/reenvio`, {}).pipe(
       map((r) => {
         if (r.status === 200) return true;
         this.notificationService.warning(r.errors.join(', '), 'Correo');
@@ -324,7 +324,7 @@ export class HttpSecurityService implements IHttpSecurityService {
   }
 
   solicitarRestablecimiento(email: string): Observable<boolean> {
-    return this.http.post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/solicitarRestablecimiento`, { email }).pipe(
+    return this.http.post<ApiResponse<boolean>>(`${environment.api}/api/auth/password/restablecimiento`, { email }).pipe(
       map((r) => {
         if (r.status === 200) return true;
         throw new Error(r.errors?.join(', ') || 'No se pudo enviar el correo');
@@ -334,7 +334,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   restablecerPassword(token: string, password: string): Observable<{ userName: string }> {
     return this.http
-      .post<ApiResponse<{ userName: string }>>(`${environment.api}/api/usuarios/restablecerPassword`, { token, password })
+      .put<ApiResponse<{ userName: string }>>(`${environment.api}/api/auth/password`, { token, password })
       .pipe(
         map((r) => {
           if (r.status === 200) return r.data!;
@@ -344,15 +344,17 @@ export class HttpSecurityService implements IHttpSecurityService {
   }
 
   reenviarConfirmacionAdmin(usuarioId: number): Observable<boolean> {
-    return this.accionAdminEmail('reenviarConfirmacionAdmin', usuarioId);
+    return this.accionAdminEmail('post', `${usuarioId}/email/reenvio`);
   }
 
   confirmarEmailAdmin(usuarioId: number): Observable<boolean> {
-    return this.accionAdminEmail('confirmarEmailAdmin', usuarioId);
+    return this.accionAdminEmail('put', `${usuarioId}/email/confirmacion`);
   }
 
-  private accionAdminEmail(accion: string, usuarioId: number): Observable<boolean> {
-    return this.http.post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/${accion}?usuarioId=${usuarioId}`, {}).pipe(
+  private accionAdminEmail(verbo: 'post' | 'put', ruta: string): Observable<boolean> {
+    const url = `${environment.api}/api/usuarios/${ruta}`;
+    const peticion = verbo === 'put' ? this.http.put<ApiResponse<boolean>>(url, {}) : this.http.post<ApiResponse<boolean>>(url, {});
+    return peticion.pipe(
       map((r) => {
         if (r.status === 200) return true;
         this.notificationService.error(r.errors.join(', '), 'Error');
@@ -363,7 +365,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   getEstadoEmail(): Observable<{ emailConfirmado: boolean; email: string }> {
     return this.http
-      .get<ApiResponse<{ emailConfirmado: boolean; email: string }>>(`${environment.api}/api/usuarios/getEstadoEmail`)
+      .get<ApiResponse<{ emailConfirmado: boolean; email: string }>>(`${environment.api}/api/auth/email`)
       .pipe(
         map((r) => {
           if (r.status === 200) return r.data!;
@@ -392,7 +394,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   changePassword(obj: { currentPassword: string; newPassword: string }): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/changeUserPassword`, obj)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/usuarios/me/password`, obj)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -408,7 +410,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   updateUsuario(usuario: UsuarioViewModel): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/updateUsuario`, usuario)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/usuarios/me`, usuario)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -424,7 +426,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   banUser(usuario: { userName: string; razon?: string }): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/banUser`, usuario)
+      .post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/baneos`, usuario)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -444,7 +446,7 @@ export class HttpSecurityService implements IHttpSecurityService {
     formData.append('usuarioId', usuarioId.toString());
 
     return this.http
-      .post<ApiResponse<string>>(`${environment.api}/api/usuarios/changeAvatarAdmin`, formData)
+      .put<ApiResponse<string>>(`${environment.api}/api/usuarios/admin/avatar`, formData)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -460,7 +462,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   getLastRegisteredUsers(): Observable<UsuarioViewModel[]> {
     return this.http
-      .get<ApiResponse<UsuarioViewModel[]>>(`${environment.api}/api/usuarios/getLastRegisteredUsers`)
+      .get<ApiResponse<UsuarioViewModel[]>>(`${environment.api}/api/usuarios/recientes`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -476,7 +478,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   sessionOnlineUser(): Observable<boolean> {
     return this.http
-      .get<ApiResponse<boolean>>(`${environment.api}/api/usuarios/sessionOnlineUser`)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/usuarios/me/presencia`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -492,7 +494,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   getAdminsList(): Observable<AdminResumen[]> {
     return this.http
-      .get<ApiResponse<AdminResumen[]>>(`${environment.api}/api/usuarios/getAdmins`)
+      .get<ApiResponse<AdminResumen[]>>(`${environment.api}/api/usuarios/admins`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -508,9 +510,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   removeAvatar(usuarioId: number): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/removeAvatar`, {
-        id: usuarioId,
-      })
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/usuarios/${usuarioId}/avatar`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -526,12 +526,7 @@ export class HttpSecurityService implements IHttpSecurityService {
 
   removeUsuario(usuarioId: number): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/usuarios/removeUsuario`, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        }),
-        body: { id: usuarioId },
-      })
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/usuarios/${usuarioId}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

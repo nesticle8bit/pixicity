@@ -51,41 +51,49 @@ export class HttpComunidadesService implements IHttpComunidadesService {
     );
   }
 
+  private url(ruta: string): string {
+    return !ruta || ruta.startsWith('?') ? `${this.base}${ruta}` : `${this.base}/${ruta}`;
+  }
+
   private get<T>(ruta: string): Observable<T> {
-    return this.unwrap(this.http.get<ApiResponse<T>>(`${this.base}/${ruta}`));
+    return this.unwrap(this.http.get<ApiResponse<T>>(this.url(ruta)));
   }
 
   private post<T>(ruta: string, body: unknown = {}): Observable<T> {
-    return this.unwrap(this.http.post<ApiResponse<T>>(`${this.base}/${ruta}`, body));
+    return this.unwrap(this.http.post<ApiResponse<T>>(this.url(ruta), body));
+  }
+
+  private put<T>(ruta: string, body: unknown = {}): Observable<T> {
+    return this.unwrap(this.http.put<ApiResponse<T>>(this.url(ruta), body));
   }
 
   private delete<T>(ruta: string): Observable<T> {
-    return this.unwrap(this.http.delete<ApiResponse<T>>(`${this.base}/${ruta}`));
+    return this.unwrap(this.http.delete<ApiResponse<T>>(this.url(ruta)));
   }
 
   // Taxonomía
   getCategorias(): Observable<ComunidadCategoria[]> {
-    return this.get('getCategorias');
+    return this.get('categorias');
   }
 
   getSubCategorias(categoriaId: number): Observable<ComunidadSubCategoria[]> {
-    return this.get(`getSubCategorias?categoriaId=${categoriaId}`);
+    return this.get(`categorias/${categoriaId}/subcategorias`);
   }
 
   saveCategoria(model: ComunidadCategoriaGuardar): Observable<number> {
-    return this.post('saveCategoria', model);
+    return this.post('categorias', model);
   }
 
   deleteCategoria(id: number): Observable<boolean> {
-    return this.delete(`deleteCategoria?id=${id}`);
+    return this.delete(`categorias/${id}`);
   }
 
   saveSubCategoria(model: ComunidadSubCategoriaGuardar): Observable<number> {
-    return this.post('saveSubCategoria', model);
+    return this.post('subcategorias', model);
   }
 
   deleteSubCategoria(id: number): Observable<boolean> {
-    return this.delete(`deleteSubCategoria?id=${id}`);
+    return this.delete(`subcategorias/${id}`);
   }
 
   // Comunidades
@@ -94,46 +102,46 @@ export class HttpComunidadesService implements IHttpComunidadesService {
     const pageCount = search.pageCount || 12;
     const query = encodeURIComponent(search.query || '');
     const categoriaId = search.categoriaId || '';
-    return this.get(`getComunidades?page=${page}&pageCount=${pageCount}&query=${query}&categoriaId=${categoriaId}`);
+    return this.get(`?page=${page}&pageCount=${pageCount}&query=${query}&categoriaId=${categoriaId}`);
   }
 
   getComunidad(nombreCorto: string): Observable<ComunidadDetalle> {
-    return this.get(`getComunidad?nombreCorto=${encodeURIComponent(nombreCorto)}`);
+    return this.get(`por-nombre/${encodeURIComponent(nombreCorto)}`);
   }
 
   saveComunidad(model: ComunidadGuardar): Observable<number> {
-    return this.post('saveComunidad', model);
+    return this.post('', model);
   }
 
   updateComunidad(model: ComunidadGuardar): Observable<number> {
-    return this.post('updateComunidad', model);
+    return this.put(`${model.id}`, model);
   }
 
   deleteComunidad(id: number): Observable<boolean> {
-    return this.delete(`deleteComunidad?id=${id}`);
+    return this.delete(`${id}`);
   }
 
   // Membresía / seguir
   unirme(comunidadId: number): Observable<boolean> {
-    return this.post(`unirme?comunidadId=${comunidadId}`);
+    return this.post(`${comunidadId}/membresia`);
   }
 
   abandonar(comunidadId: number): Observable<boolean> {
-    return this.post(`abandonar?comunidadId=${comunidadId}`);
+    return this.delete(`${comunidadId}/membresia`);
   }
 
   seguir(comunidadId: number): Observable<boolean> {
-    return this.post(`seguir?comunidadId=${comunidadId}`);
+    return this.post(`${comunidadId}/seguimiento`);
   }
 
   getMiembros(comunidadId: number, search: BusquedaPaginada = {}): Observable<PaginatedData<ComunidadMiembro>> {
     const page = search.page || 1;
     const pageCount = search.pageCount || 24;
-    return this.get(`getMiembros?comunidadId=${comunidadId}&page=${page}&pageCount=${pageCount}`);
+    return this.get(`${comunidadId}/miembros?page=${page}&pageCount=${pageCount}`);
   }
 
   cambiarRangoMiembro(comunidadId: number, usuarioId: number, permiso: number, esStaff: boolean): Observable<boolean> {
-    return this.post(`cambiarRangoMiembro?comunidadId=${comunidadId}&usuarioId=${usuarioId}&permiso=${permiso}&esStaff=${esStaff}`);
+    return this.put(`${comunidadId}/miembros/${usuarioId}/rango?permiso=${permiso}&esStaff=${esStaff}`);
   }
 
   // Temas
@@ -141,80 +149,80 @@ export class HttpComunidadesService implements IHttpComunidadesService {
     const page = search.page || 1;
     const pageCount = search.pageCount || 20;
     const query = encodeURIComponent(search.query || '');
-    return this.get(`getTemas?comunidadId=${comunidadId}&page=${page}&pageCount=${pageCount}&query=${query}`);
+    return this.get(`${comunidadId}/temas?page=${page}&pageCount=${pageCount}&query=${query}`);
   }
 
   getTema(id: number): Observable<TemaDetalle> {
-    return this.get(`getTema?id=${id}`);
+    return this.get(`temas/${id}`);
   }
 
   saveTema(model: TemaGuardar): Observable<number> {
-    return this.post('saveTema', model);
+    return this.post('temas', model);
   }
 
   deleteTema(id: number): Observable<boolean> {
-    return this.delete(`deleteTema?id=${id}`);
+    return this.delete(`temas/${id}`);
   }
 
   changeStickyTema(id: number): Observable<boolean> {
-    return this.post(`changeStickyTema?id=${id}`);
+    return this.put(`temas/${id}/sticky`);
   }
 
   addTemaComentario(model: TemaComentarioGuardar): Observable<number> {
-    return this.post('addTemaComentario', model);
+    return this.post('comentarios', model);
   }
 
   editarComentario(comentarioId: number, contenido: string): Observable<boolean> {
-    return this.post(`editarComentario?comentarioId=${comentarioId}`, { contenido });
+    return this.put(`comentarios/${comentarioId}`, { contenido });
   }
 
   eliminarComentario(comentarioId: number): Observable<boolean> {
-    return this.delete(`eliminarComentario?comentarioId=${comentarioId}`);
+    return this.delete(`comentarios/${comentarioId}`);
   }
 
   votarComentario(comentarioId: number, valor: number): Observable<ResultadoVoto> {
-    return this.post(`votarTemaComentario?comentarioId=${comentarioId}&valor=${valor}`);
+    return this.post(`comentarios/${comentarioId}/votos?valor=${valor}`);
   }
 
   votarTema(temaId: number, valor: number): Observable<ResultadoVoto> {
-    return this.post(`votarTema?temaId=${temaId}&valor=${valor}`);
+    return this.post(`temas/${temaId}/votos?valor=${valor}`);
   }
 
   fijarComentario(comentarioId: number): Observable<boolean> {
-    return this.post(`fijarComentario?comentarioId=${comentarioId}`);
+    return this.put(`comentarios/${comentarioId}/fijado`);
   }
 
   denunciarComentario(comentarioId: number, motivo: string): Observable<boolean> {
-    return this.post(`denunciarComentario?comentarioId=${comentarioId}`, { motivo });
+    return this.post(`comentarios/${comentarioId}/denuncias`, { motivo });
   }
 
   // Widgets
   getTopTemas(comunidadId: number, periodo: string = 'Semana'): Observable<TemaTop[]> {
-    return this.get(`getTopTemas?comunidadId=${comunidadId}&periodo=${periodo}`);
+    return this.get(`${comunidadId}/temas/top?periodo=${periodo}`);
   }
 
   getComentariosRecientes(comunidadId: number, count: number = 5): Observable<ComentarioReciente[]> {
-    return this.get(`getComentariosRecientes?comunidadId=${comunidadId}&count=${count}`);
+    return this.get(`${comunidadId}/comentarios/recientes?count=${count}`);
   }
 
   // Widgets globales (portada)
   getTemasRecientes(count: number = 10): Observable<TemaReciente[]> {
-    return this.get(`getTemasRecientes?count=${count}`);
+    return this.get(`temas/recientes?count=${count}`);
   }
 
   getComentariosRecientesGlobal(count: number = 8): Observable<ComentarioReciente[]> {
-    return this.get(`getComentariosRecientesGlobal?count=${count}`);
+    return this.get(`comentarios/recientes?count=${count}`);
   }
 
   getTopComunidades(count: number = 5): Observable<ComunidadCard[]> {
-    return this.get(`getTopComunidades?count=${count}`);
+    return this.get(`top?count=${count}`);
   }
 
   getTopTemasGlobal(periodo: string = 'Semana', count: number = 5): Observable<TemaTopGlobal[]> {
-    return this.get(`getTopTemasGlobal?periodo=${periodo}&count=${count}`);
+    return this.get(`temas/top?periodo=${periodo}&count=${count}`);
   }
 
   getEstadisticas(): Observable<ComunidadesEstadisticas> {
-    return this.get('getEstadisticas');
+    return this.get('estadisticas');
   }
 }

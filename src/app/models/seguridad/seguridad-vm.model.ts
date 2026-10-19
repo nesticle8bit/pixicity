@@ -13,7 +13,7 @@ export interface UsuarioAvatarViewModel {
   avatar: string;
 }
 
-/** Una tarjeta de /usuarios (GET api/usuarios/getUsuarios). */
+/** Una tarjeta de /usuarios (GET api/usuarios). */
 export interface UsuarioListadoViewModel {
   id: number;
   avatar: string | null;
@@ -32,7 +32,7 @@ export interface UsuarioListadoViewModel {
   enLinea: boolean;
 }
 
-/** Lo que devuelve /api/usuarios/getAdmins. */
+/** Lo que devuelve /api/usuarios/admins. */
 export interface AdminResumen {
   id: number;
   userName: string;
@@ -148,7 +148,7 @@ export interface BloqueoViewModel {
   fechaRegistro: string;
 }
 
-/** GET /api/general/getEstadisticas (contadores públicos del sitio). */
+/** GET /api/estadisticas (contadores públicos del sitio). */
 export interface EstadisticasViewModel {
   usuariosOnline: number;
   listaOnline: OnlineUsersListViewModel;

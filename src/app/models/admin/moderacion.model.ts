@@ -40,7 +40,7 @@ export interface ModeracionLog {
   fechaRegistro: string;
 }
 
-/** Regla del protocolo que se cita al eliminar contenido (GET /api/moderacion/getReglasProtocolo). */
+/** Regla del protocolo que se cita al eliminar contenido (GET /api/moderacion/reglas). */
 export interface ReglaProtocolo {
   id: string;
   titulo: string;

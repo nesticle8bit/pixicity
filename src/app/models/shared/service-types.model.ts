@@ -5,7 +5,7 @@ export interface FotoSearchParams {
   pageCount?: number;
 }
 
-/** Filtros de /usuarios (GET api/usuarios/getUsuarios). */
+/** Filtros de /usuarios (GET api/usuarios). */
 export interface UsuarioSearchFilter {
   genero?: number | string | null;
   pais?: number | string | null;

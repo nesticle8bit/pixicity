@@ -31,7 +31,7 @@ export class AdsByTypeComponent implements OnInit {
       return;
     }
 
-    this.webService.getAdsByType(type).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: string) => {
+    this.webService.getPublicidad(type).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: string) => {
       this.anuncio.set(anuncioAlAzar(leerAnuncios(value)));
     });
   }

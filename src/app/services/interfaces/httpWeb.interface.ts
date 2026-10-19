@@ -13,7 +13,7 @@ import { AfiliacionModel } from 'src/app/models/general/afiliacion.model';
 export abstract class IHttpWebService {
   abstract getTopUsers(): Observable<TopUserModel[]>;
   abstract getTopPosts(date: string): Observable<TopPostModel[]>;
-  abstract getAdsByType(type: string): Observable<string>;
+  abstract getPublicidad(tamano: string): Observable<string>;
   abstract getAfiliados(): Observable<AfiliacionModel[]>;
   abstract changeAfiliadoActive(obj: { id: number; activo: boolean }): Observable<boolean>;
   abstract hitAfiliado(codigo: string): Observable<string>;

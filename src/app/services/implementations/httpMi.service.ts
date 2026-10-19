@@ -15,14 +15,14 @@ export class HttpMiService implements IHttpMiService {
 
   getTendencias(cantidad = 8, orden: OrdenTendencias = 'mejores'): Observable<Tendencia[]> {
     return this.http
-      .get<ApiResponse<Tendencia[]>>(`${environment.api}/api/mi/getTendencias?cantidad=${cantidad}&orden=${orden}`)
+      .get<ApiResponse<Tendencia[]>>(`${environment.api}/api/mi/tendencias?cantidad=${cantidad}&orden=${orden}`)
       .pipe(map((r) => (r.status === 200 ? r.data ?? [] : [])), catchError(() => of([])));
   }
 
   buscarHashtags(prefijo: string, cantidad = 6): Observable<Tendencia[]> {
     const params = new HttpParams().set('q', prefijo).set('cantidad', cantidad);
     return this.http
-      .get<ApiResponse<Tendencia[]>>(`${environment.api}/api/mi/buscarHashtags`, { params })
+      .get<ApiResponse<Tendencia[]>>(`${environment.api}/api/mi/hashtags`, { params })
       .pipe(map((r) => (r.status === 200 ? r.data ?? [] : [])), catchError(() => of([])));
   }
 
@@ -31,21 +31,21 @@ export class HttpMiService implements IHttpMiService {
     if (antes) params = params.set('antes', antes);
     if (tag) params = params.set('tag', tag);
     return this.http
-      .get<ApiResponse<Muro>>(`${environment.api}/api/mi/getMuro`, { params })
+      .get<ApiResponse<Muro>>(`${environment.api}/api/mi/muro`, { params })
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
 
   getResumen(): Observable<MiResumen> {
     return this.http
-      .get<ApiResponse<MiResumen>>(`${environment.api}/api/mi/getResumen`)
+      .get<ApiResponse<MiResumen>>(`${environment.api}/api/mi/resumen`)
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }
 
   getSugerencias(cantidad = 5): Observable<SugerenciaUsuario[]> {
     return this.http
-      .get<ApiResponse<SugerenciaUsuario[]>>(`${environment.api}/api/mi/getSugerencias?cantidad=${cantidad}`)
+      .get<ApiResponse<SugerenciaUsuario[]>>(`${environment.api}/api/mi/sugerencias?cantidad=${cantidad}`)
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }

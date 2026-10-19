@@ -93,7 +93,7 @@ export class DashboardAdsComponent implements OnInit {
       formValue[campo] = escribirAnuncios(formValue[campo]);
     }
 
-    this.generalService.updateAds(formValue).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.generalService.updatePublicidad(formValue).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if(response) {
         this.notificationService.success('La información de la configuración del sitio ha sido actualizado correctamente', 'Actualizado');
       }

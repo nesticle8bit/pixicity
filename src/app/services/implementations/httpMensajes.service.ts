@@ -28,7 +28,7 @@ export class HttpMensajesService implements IHttpMensajesService {
   getMensajes(): Observable<PaginatedData<MensajeViewModel, 'mensajes'>> {
     return this.http
       .get<ApiResponse<PaginatedData<MensajeViewModel, 'mensajes'>>>(
-        `${environment.api}/api/mensajes/getMensajes?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
+        `${environment.api}/api/mensajes?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`,
       )
       .pipe(
         map((response) => {
@@ -46,7 +46,7 @@ export class HttpMensajesService implements IHttpMensajesService {
   getMensajesAdmin(filtro: AdminFiltro = {}): Observable<PaginatedData<MensajeViewModel, 'mensajes'>> {
     return this.http
       .get<ApiResponse<PaginatedData<MensajeViewModel, 'mensajes'>>>(
-        `${environment.api}/api/mensajes/getMensajesAdmin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
+        `${environment.api}/api/mensajes/admin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -63,7 +63,7 @@ export class HttpMensajesService implements IHttpMensajesService {
 
   getLastMensajes(): Observable<MensajeViewModel[]> {
     return this.http
-      .get<ApiResponse<MensajeViewModel[]>>(`${environment.api}/api/mensajes/getLastMensajes`)
+      .get<ApiResponse<MensajeViewModel[]>>(`${environment.api}/api/mensajes/recientes`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -81,7 +81,7 @@ export class HttpMensajesService implements IHttpMensajesService {
     // El API pide captcha solo al abrir una conversación nueva (como el registro, en la cabecera X-Captcha).
     const headers = captcha ? new HttpHeaders({ 'X-Captcha': captcha }) : undefined;
     return this.http
-      .post<ApiResponse<ResponseMPViewModel>>(`${environment.api}/api/mensajes/sendMensajePrivado`, mp, { headers })
+      .post<ApiResponse<ResponseMPViewModel>>(`${environment.api}/api/mensajes`, mp, { headers })
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -98,7 +98,7 @@ export class HttpMensajesService implements IHttpMensajesService {
   getMensajePrivadoById(id: number): Observable<MensajeViewModel> {
     return this.http
       .get<ApiResponse<MensajeViewModel>>(
-        `${environment.api}/api/mensajes/getMensajePrivadoById?id=${id}`,
+        `${environment.api}/api/mensajes/${id}`,
       )
       .pipe(
         map((response) => {
@@ -116,7 +116,7 @@ export class HttpMensajesService implements IHttpMensajesService {
   getConversaciones(archivadas = false): Observable<BandejaConversaciones> {
     return this.http
       .get<ApiResponse<BandejaConversaciones>>(
-        `${environment.api}/api/mensajes/getConversaciones?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&archivadas=${archivadas}`,
+        `${environment.api}/api/mensajes/conversaciones?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&archivadas=${archivadas}`,
       )
       .pipe(
         map((response) => {
@@ -133,7 +133,7 @@ export class HttpMensajesService implements IHttpMensajesService {
 
   archivarConversaciones(otroIds: number[], archivar: boolean): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/mensajes/archivarConversaciones`, { otroIds, archivar })
+      .put<ApiResponse<boolean>>(`${environment.api}/api/mensajes/conversaciones/archivadas`, { otroIds, archivar })
       .pipe(
         map((response) => {
           if (response.status === 200) return !!response.data;
@@ -145,7 +145,7 @@ export class HttpMensajesService implements IHttpMensajesService {
 
   silenciarConversacion(otroId: number, silenciar: boolean): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/mensajes/silenciarConversacion`, { otroId, silenciar })
+      .put<ApiResponse<boolean>>(`${environment.api}/api/mensajes/conversaciones/silenciadas`, { otroId, silenciar })
       .pipe(
         map((response) => {
           if (response.status === 200) return !!response.data;
@@ -159,7 +159,7 @@ export class HttpMensajesService implements IHttpMensajesService {
     const formData = new FormData();
     formData.append('file', file);
     return this.http
-      .post<ApiResponse<string>>(`${environment.api}/api/mensajes/subirImagenMensaje`, formData)
+      .post<ApiResponse<string>>(`${environment.api}/api/mensajes/imagenes`, formData)
       .pipe(
         map((response) => {
           if (response.status === 200) return response.data!;
@@ -171,7 +171,7 @@ export class HttpMensajesService implements IHttpMensajesService {
 
   deleteConversaciones(otroIds: number[]): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/mensajes/deleteConversaciones`, {
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/mensajes/conversaciones`, {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
         }),
@@ -198,7 +198,7 @@ export class HttpMensajesService implements IHttpMensajesService {
     if (params.take) query.set('take', String(params.take));
 
     return this.http
-      .get<ApiResponse<ConversacionPage>>(`${environment.api}/api/mensajes/getConversacion?${query.toString()}`)
+      .get<ApiResponse<ConversacionPage>>(`${environment.api}/api/mensajes/conversacion?${query.toString()}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -214,7 +214,7 @@ export class HttpMensajesService implements IHttpMensajesService {
 
   setMensajesAsReaded(): Observable<boolean> {
     return this.http
-      .get<ApiResponse<boolean>>(`${environment.api}/api/mensajes/setMensajesAsReaded`)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/mensajes/leidos`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -230,7 +230,7 @@ export class HttpMensajesService implements IHttpMensajesService {
 
   deleteMensajesById(ids: number[]): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/mensajes/deleteMensajes`, {
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/mensajes`, {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
         }),
@@ -251,7 +251,7 @@ export class HttpMensajesService implements IHttpMensajesService {
 
   changeRemitente(obj: { mensajeId: number; userName: string }): Observable<boolean> {
     return this.http
-      .put<ApiResponse<boolean>>(`${environment.api}/api/mensajes/changeRemitente`, obj)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/mensajes/remitente`, obj)
       .pipe(
         map((response) => {
           if (response.status === 200) {

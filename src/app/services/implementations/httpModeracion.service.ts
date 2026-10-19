@@ -32,7 +32,7 @@ export class HttpModeracionService implements IHttpModeracionService {
     tipoContenido: number | null,
     soloPendientes: boolean
   ): Observable<PaginaReportes> {
-    let url = `${environment.api}/api/moderacion/getReportes?page=${page}&pageCount=${pageCount}&soloPendientes=${soloPendientes}`;
+    let url = `${environment.api}/api/moderacion/reportes?page=${page}&pageCount=${pageCount}&soloPendientes=${soloPendientes}`;
     if (tipoContenido != null) {
       url += `&tipoContenido=${tipoContenido}`;
     }
@@ -44,22 +44,22 @@ export class HttpModeracionService implements IHttpModeracionService {
 
   resolverReporte(reporteId: number): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/moderacion/resolverReporte?reporteId=${reporteId}`, {})
+      .put<ApiResponse<boolean>>(`${environment.api}/api/moderacion/reportes/${reporteId}/resuelto`, {})
       .pipe(this.unwrap<boolean>())
       .pipe(catchError(this.helper.errorHandler));
   }
 
   descartarReporte(reporteId: number): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/moderacion/descartarReporte?reporteId=${reporteId}`)
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/moderacion/reportes/${reporteId}`)
       .pipe(this.unwrap<boolean>())
       .pipe(catchError(this.helper.errorHandler));
   }
 
   eliminarContenidoReportado(reporteId: number, regla: string | null = null): Observable<boolean> {
-    const extra = regla ? `&regla=${encodeURIComponent(regla)}` : '';
+    const extra = regla ? `?regla=${encodeURIComponent(regla)}` : '';
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/moderacion/eliminarContenidoReportado?reporteId=${reporteId}${extra}`, {})
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/moderacion/reportes/${reporteId}/contenido${extra}`)
       .pipe(this.unwrap<boolean>())
       .pipe(catchError(this.helper.errorHandler));
   }
@@ -67,7 +67,7 @@ export class HttpModeracionService implements IHttpModeracionService {
   getReportesComunidad(comunidadId: number, soloPendientes: boolean): Observable<ReportesComunidad> {
     return this.http
       .get<ApiResponse<ReportesComunidad>>(
-        `${environment.api}/api/moderacion/getReportesComunidad?comunidadId=${comunidadId}&soloPendientes=${soloPendientes}`,
+        `${environment.api}/api/moderacion/comunidades/${comunidadId}/reportes?soloPendientes=${soloPendientes}`,
       )
       .pipe(this.unwrap<ReportesComunidad>())
       .pipe(catchError(this.helper.errorHandler));
@@ -75,14 +75,14 @@ export class HttpModeracionService implements IHttpModeracionService {
 
   getReglasProtocolo(): Observable<ReglaProtocolo[]> {
     return this.http
-      .get<ApiResponse<ReglaProtocolo[]>>(`${environment.api}/api/moderacion/getReglasProtocolo`)
+      .get<ApiResponse<ReglaProtocolo[]>>(`${environment.api}/api/moderacion/reglas`)
       .pipe(this.unwrap<ReglaProtocolo[]>())
       .pipe(catchError(() => of([] as ReglaProtocolo[])));
   }
 
   getModeracionLogs(page: number, pageCount: number): Observable<PaginatedData<ModeracionLog>> {
     return this.http
-      .get<ApiResponse<PaginatedData<ModeracionLog>>>(`${environment.api}/api/moderacion/getModeracionLogs?page=${page}&pageCount=${pageCount}`)
+      .get<ApiResponse<PaginatedData<ModeracionLog>>>(`${environment.api}/api/moderacion/logs?page=${page}&pageCount=${pageCount}`)
       .pipe(this.unwrap<PaginatedData<ModeracionLog>>())
       .pipe(catchError(this.helper.errorHandler));
   }

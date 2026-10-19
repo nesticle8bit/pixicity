@@ -18,7 +18,7 @@ export class HttpBloqueosService implements IHttpBloqueosService {
 
   getBloqueados(): Observable<BloqueoViewModel[]> {
     return this.http
-      .get<ApiResponse<BloqueoViewModel[]>>(`${environment.api}/api/bloqueos/getBloqueados`)
+      .get<ApiResponse<BloqueoViewModel[]>>(`${environment.api}/api/bloqueos`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -35,7 +35,7 @@ export class HttpBloqueosService implements IHttpBloqueosService {
   bloquearUsuario(userName: string): Observable<number> {
     return this.http
       .post<ApiResponse<number>>(
-        `${environment.api}/api/bloqueos/bloquearUsuario`,
+        `${environment.api}/api/bloqueos`,
         JSON.stringify(userName),
         { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) },
       )
@@ -54,10 +54,8 @@ export class HttpBloqueosService implements IHttpBloqueosService {
 
   desbloquearUsuario(bloqueadoId: number): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(
-        `${environment.api}/api/bloqueos/desbloquearUsuario`,
-        bloqueadoId,
-        { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) },
+      .delete<ApiResponse<boolean>>(
+        `${environment.api}/api/bloqueos/${bloqueadoId}`,
       )
       .pipe(
         map((response) => {
@@ -74,7 +72,7 @@ export class HttpBloqueosService implements IHttpBloqueosService {
 
   getBloqueoContraPerfil(userName: string): Observable<BloqueoViewModel | null> {
     return this.http
-      .get<ApiResponse<BloqueoViewModel | null>>(`${environment.api}/api/bloqueos/getBloqueoContraPerfil/${userName}`)
+      .get<ApiResponse<BloqueoViewModel | null>>(`${environment.api}/api/bloqueos/usuarios/${encodeURIComponent(userName)}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -89,7 +87,7 @@ export class HttpBloqueosService implements IHttpBloqueosService {
 
   esBloqueadoPor(userName: string): Observable<boolean> {
     return this.http
-      .get<ApiResponse<boolean>>(`${environment.api}/api/bloqueos/esBloqueadoPor/${userName}`)
+      .get<ApiResponse<boolean>>(`${environment.api}/api/bloqueos/usuarios/${encodeURIComponent(userName)}/recibido`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

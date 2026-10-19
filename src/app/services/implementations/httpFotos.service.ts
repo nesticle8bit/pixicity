@@ -36,7 +36,7 @@ export class HttpFotosService implements IHttpFotosService {
     const page = search?.page || 1;
     const pageCount = search?.pageCount || 12;
     return this.http
-      .get<ApiResponse<PaginatedData<FotoViewModel>>>(`${environment.api}/api/fotos/GetFotos?page=${page}&pageCount=${pageCount}`)
+      .get<ApiResponse<PaginatedData<FotoViewModel>>>(`${environment.api}/api/fotos?page=${page}&pageCount=${pageCount}`)
       .pipe(
         map((response) => {
           if (response.status === 200) { return response.data!; }
@@ -51,7 +51,7 @@ export class HttpFotosService implements IHttpFotosService {
     const pageCount = search?.pageCount || 25;
     const query = search?.query || '';
     return this.http
-      .get<ApiResponse<PaginatedData<FotoAdmin>>>(`${environment.api}/api/fotos/GetFotosAdmin?page=${page}&pageCount=${pageCount}&query=${query}`, { params: adminParams(filtro) })
+      .get<ApiResponse<PaginatedData<FotoAdmin>>>(`${environment.api}/api/fotos/admin?page=${page}&pageCount=${pageCount}&query=${query}`, { params: adminParams(filtro) })
       .pipe(
         map((response) => {
           if (response.status === 200) { return response.data!; }
@@ -63,7 +63,7 @@ export class HttpFotosService implements IHttpFotosService {
 
   getTopFotos(count: number = 5): Observable<FotoViewModel[]> {
     return this.http
-      .get<ApiResponse<FotoViewModel[]>>(`${environment.api}/api/fotos/GetTopFotos?count=${count}`)
+      .get<ApiResponse<FotoViewModel[]>>(`${environment.api}/api/fotos/top?count=${count}`)
       .pipe(
         map((response) => (response.status === 200 ? response.data! : [])),
         catchError(this.helper.errorHandler)
@@ -74,7 +74,7 @@ export class HttpFotosService implements IHttpFotosService {
     const page = search?.page || 1;
     const pageCount = search?.pageCount || 12;
     return this.http
-      .get<ApiResponse<PaginatedData<FotoViewModel>>>(`${environment.api}/api/fotos/GetFotosByUsuario?userName=${encodeURIComponent(userName)}&page=${page}&pageCount=${pageCount}`)
+      .get<ApiResponse<PaginatedData<FotoViewModel>>>(`${environment.api}/api/fotos/usuarios/${encodeURIComponent(userName)}?page=${page}&pageCount=${pageCount}`)
       .pipe(
         map((response) => {
           if (response.status === 200) { return response.data!; }
@@ -86,7 +86,7 @@ export class HttpFotosService implements IHttpFotosService {
 
   getFotoById(fotoId: number): Observable<FotoViewModel> {
     return this.http
-      .get<ApiResponse<FotoViewModel>>(`${environment.api}/api/fotos/GetFotoById?id=${fotoId}`)
+      .get<ApiResponse<FotoViewModel>>(`${environment.api}/api/fotos/${fotoId}`)
       .pipe(
         map((response) => {
           if (response.status === 200) { return response.data!; }
@@ -98,7 +98,7 @@ export class HttpFotosService implements IHttpFotosService {
 
   saveFoto(foto: Partial<FotoViewModel>): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/fotos/SaveFoto`, foto)
+      .post<ApiResponse<number>>(`${environment.api}/api/fotos`, foto)
       .pipe(
         map((response) => {
           if (response.status === 200) { return response.data!; }
@@ -110,7 +110,7 @@ export class HttpFotosService implements IHttpFotosService {
 
   updateFoto(foto: Partial<FotoViewModel>): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/fotos/UpdateFoto`, foto)
+      .put<ApiResponse<number>>(`${environment.api}/api/fotos/${foto.id}`, foto)
       .pipe(
         map((response) => {
           if (response.status === 200) { return response.data!; }
@@ -122,7 +122,7 @@ export class HttpFotosService implements IHttpFotosService {
 
   deleteFoto(fotoId: number): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/fotos/DeleteFoto?id=${fotoId}`)
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/fotos/${fotoId}`)
       .pipe(
         map((response) => {
           if (response.status === 200) { return response.data!; }
@@ -134,7 +134,7 @@ export class HttpFotosService implements IHttpFotosService {
 
   votarFoto(fotoId: number, cantidad: number): Observable<FotoViewModel> {
     return this.http
-      .post<ApiResponse<FotoViewModel>>(`${environment.api}/api/fotos/VotarFoto`, { fotoId, cantidad })
+      .post<ApiResponse<FotoViewModel>>(`${environment.api}/api/fotos/votos`, { fotoId, cantidad })
       .pipe(
         map((response) => {
           if (response.status === 200) { return response.data!; }
@@ -146,7 +146,7 @@ export class HttpFotosService implements IHttpFotosService {
 
   incrementVisitas(fotoId: number): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/fotos/IncrementVisitas`, fotoId)
+      .post<ApiResponse<boolean>>(`${environment.api}/api/fotos/visitas`, fotoId)
       .pipe(
         map((response) => {
           if (response.status === 200) { return response.data!; }
@@ -160,7 +160,7 @@ export class HttpFotosService implements IHttpFotosService {
     const formData = new FormData();
     formData.append('file', file);
     return this.http
-      .post<ApiResponse<string>>(`${environment.api}/api/fotos/UploadImage`, formData)
+      .post<ApiResponse<string>>(`${environment.api}/api/fotos/imagenes`, formData)
       .pipe(
         map((response) => {
           if (response.status === 200) { return response.data!; }
@@ -172,7 +172,7 @@ export class HttpFotosService implements IHttpFotosService {
 
   getComentariosByFotoId(fotoId: number): Observable<FotoComentarioViewModel[]> {
     return this.http
-      .get<ApiResponse<FotoComentarioViewModel[]>>(`${environment.api}/api/fotos/GetComentariosByFotoId?fotoId=${fotoId}`)
+      .get<ApiResponse<FotoComentarioViewModel[]>>(`${environment.api}/api/fotos/${fotoId}/comentarios`)
       .pipe(
         map((response) => (response.status === 200 ? response.data! : [])),
         catchError(this.helper.errorHandler)
@@ -181,37 +181,37 @@ export class HttpFotosService implements IHttpFotosService {
 
   addComentario(comentario: { fotoId: number; contenido: string; parentId?: number | null }): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/fotos/AddComentario`, comentario)
+      .post<ApiResponse<number>>(`${environment.api}/api/fotos/comentarios`, comentario)
       .pipe(this.datos<number>(), catchError(this.helper.errorHandler));
   }
 
   editarComentario(comentarioId: number, contenido: string): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/fotos/EditarComentario?comentarioId=${comentarioId}`, { contenido })
+      .put<ApiResponse<boolean>>(`${environment.api}/api/fotos/comentarios/${comentarioId}`, { contenido })
       .pipe(this.datos<boolean>(), catchError(this.helper.errorHandler));
   }
 
   deleteComentario(id: number): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/fotos/DeleteComentario?id=${id}`)
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/fotos/comentarios/${id}`)
       .pipe(this.datos<boolean>(), catchError(this.helper.errorHandler));
   }
 
   votarComentario(comentarioId: number, cantidad: number): Observable<FotoComentarioVoto> {
     return this.http
-      .post<ApiResponse<FotoComentarioVoto>>(`${environment.api}/api/fotos/VotarComentario`, { comentarioId, cantidad })
+      .post<ApiResponse<FotoComentarioVoto>>(`${environment.api}/api/fotos/comentarios/votos`, { comentarioId, cantidad })
       .pipe(this.datos<FotoComentarioVoto>(), catchError(this.helper.errorHandler));
   }
 
   fijarComentario(comentarioId: number): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/fotos/FijarComentario?comentarioId=${comentarioId}`, {})
+      .put<ApiResponse<boolean>>(`${environment.api}/api/fotos/comentarios/${comentarioId}/fijado`, {})
       .pipe(this.datos<boolean>(), catchError(this.helper.errorHandler));
   }
 
   denunciarComentario(comentarioId: number, motivo: string): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/fotos/DenunciarComentario?comentarioId=${comentarioId}`, { motivo })
+      .post<ApiResponse<boolean>>(`${environment.api}/api/fotos/comentarios/${comentarioId}/denuncias`, { motivo })
       .pipe(this.datos<boolean>(), catchError(this.helper.errorHandler));
   }
 }

@@ -22,7 +22,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
   sugerirMenciones(prefijo: string): Observable<UsuarioAvatarViewModel[]> {
     // Silencioso: es una ayuda mientras se escribe; un fallo no debe mostrar errores.
     return this.http
-      .get<ApiResponse<UsuarioAvatarViewModel[]>>(`${environment.api}/api/usuarios/sugerirMenciones`, { params: { q: prefijo } })
+      .get<ApiResponse<UsuarioAvatarViewModel[]>>(`${environment.api}/api/usuarios/menciones`, { params: { q: prefijo } })
       .pipe(
         map((response) => (response.status === 200 ? response.data ?? [] : [])),
         catchError(() => of([])),
@@ -32,7 +32,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
   getUsuarioInfo(userName: string): Observable<UsuarioInfoViewModel> {
     return this.http
       .get<ApiResponse<UsuarioInfoViewModel>>(
-        `${environment.api}/api/usuarios/getUsuarioInfo?userName=${userName}`
+        `${environment.api}/api/usuarios/por-nombre/${encodeURIComponent(userName)}/info`
       )
       .pipe(
         map((response) => {
@@ -49,7 +49,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
 
   seguirUsuario(usuario: { userName: string }): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/seguirUsuario`, usuario)
+      .post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/seguimientos`, usuario)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -66,7 +66,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
   isFollowingTheUser(userName: string): Observable<boolean> {
     return this.http
       .get<ApiResponse<boolean>>(
-        `${environment.api}/api/usuarios/isFollowingTheUser?userName=${userName}`
+        `${environment.api}/api/usuarios/por-nombre/${encodeURIComponent(userName)}/seguimiento`
       )
       .pipe(
         map((response) => {
@@ -84,7 +84,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
   getFollowingUsersByUserId(id: number): Observable<PaginatedData<UsuarioAvatarViewModel>> {
     return this.http
       .get<ApiResponse<PaginatedData<UsuarioAvatarViewModel>>>(
-        `${environment.api}/api/usuarios/getFollowingUsersByUserId?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${id}`
+        `${environment.api}/api/usuarios/seguidos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${id}`
       )
       .pipe(
         map((response) => {
@@ -102,7 +102,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
   getFollowersByUserId(userId: number): Observable<PaginatedData<UsuarioAvatarViewModel>> {
     return this.http
       .get<ApiResponse<PaginatedData<UsuarioAvatarViewModel>>>(
-        `${environment.api}/api/usuarios/getFollowersByUserId?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${userId}`
+        `${environment.api}/api/usuarios/seguidores?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${userId}`
       )
       .pipe(
         map((response) => {
@@ -120,7 +120,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
   getLastFollowersByUserId(userId: number): Observable<SeguidoresResponse> {
     return this.http
       .get<ApiResponse<SeguidoresResponse>>(
-        `${environment.api}/api/usuarios/getLastFollowersByUserId?userId=${userId}`
+        `${environment.api}/api/usuarios/${userId}/seguidores/recientes`
       )
       .pipe(
         map((response) => {
@@ -137,7 +137,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
 
   savePerfilInfo(perfil: Partial<PerfilUsuarioViewModel>): Observable<boolean> {
     return this.http
-      .put<ApiResponse<boolean>>(`${environment.api}/api/usuarios/savePerfilInfo`, perfil)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/usuarios/me/perfil`, perfil)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -153,7 +153,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
 
   getCurrentPerfilInfo(): Observable<PerfilInfoResponse> {
     return this.http
-      .get<ApiResponse<PerfilInfoResponse>>(`${environment.api}/api/usuarios/getCurrentPerfilInfo`)
+      .get<ApiResponse<PerfilInfoResponse>>(`${environment.api}/api/usuarios/me/perfil`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -170,7 +170,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
   getPerfilInfoByUserId(userId: number): Observable<PerfilUsuarioViewModel> {
     return this.http
       .get<ApiResponse<PerfilUsuarioViewModel>>(
-        `${environment.api}/api/usuarios/getPerfilInfoByUserId?usuarioId=${userId}`
+        `${environment.api}/api/usuarios/${userId}/perfil`
       )
       .pipe(
         map((response) => {
@@ -188,7 +188,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
   getSocialMediaByUsuarioId(usuarioId: number): Observable<unknown> {
     return this.http
       .get<ApiResponse<unknown>>(
-        `${environment.api}/api/usuarios/getSocialMediaByUsuarioId?usuarioId=${usuarioId}`
+        `${environment.api}/api/usuarios/${usuarioId}/redes`
       )
       .pipe(
         map((response) => {
@@ -208,7 +208,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
     formData.append('avatar.jpeg', file);
 
     return this.http
-      .post<ApiResponse<string>>(`${environment.api}/api/usuarios/changeAvatar`, formData)
+      .put<ApiResponse<string>>(`${environment.api}/api/usuarios/me/avatar`, formData)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -223,13 +223,13 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
   }
 
   exportarMisDatos(): Observable<Blob> {
-    return this.http.get(`${environment.api}/api/usuarios/exportarMisDatos`, { responseType: 'blob' });
+    return this.http.get(`${environment.api}/api/usuarios/me/exportacion`, { responseType: 'blob' });
   }
 
   getActividadUsuario(usuarioId: number, tipoActividad: number): Observable<ActividadLogsViewModel> {
     return this.http
       .get<ApiResponse<ActividadLogsViewModel>>(
-        `${environment.api}/api/usuarios/getActividadUsuario?usuarioId=${usuarioId}&tipoActividad=${tipoActividad}`
+        `${environment.api}/api/usuarios/${usuarioId}/actividad?tipoActividad=${tipoActividad}`
       )
       .pipe(
         map((response) => {
@@ -246,7 +246,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
 
   changeBackgroundProfile(obj: FondoPerfilRequest): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/usuarios/changeBackgroundProfile`, obj)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/usuarios/me/fondo`, obj)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -263,7 +263,7 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
   getUserStatus(userName: string): Observable<number | null> {
     return this.http
       .get<ApiResponse<number | null>>(
-        `${environment.api}/api/usuarios/getUserStatus?userName=${userName}`
+        `${environment.api}/api/usuarios/por-nombre/${encodeURIComponent(userName)}/estado`
       )
       .pipe(
         map((response) => {

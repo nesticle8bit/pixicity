@@ -21,7 +21,7 @@ export class HttpFavoritosService implements IHttpFavoritosService {
 
   getLastFavoritos(count: number): Observable<FavoritosViewModel[]> {
     return this.http
-      .get<ApiResponse<FavoritosViewModel[]>>(`${environment.api}/api/favoritos/getLastFavoritos?count=${count}`)
+      .get<ApiResponse<FavoritosViewModel[]>>(`${environment.api}/api/favoritos/recientes?count=${count}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -37,7 +37,7 @@ export class HttpFavoritosService implements IHttpFavoritosService {
 
   deleteFavorito(favoritoId: number): Observable<{ favoritoId: number; eliminado: boolean }> {
     return this.http
-      .delete<ApiResponse<{ favoritoId: number; eliminado: boolean }>>(`${environment.api}/api/favoritos/deleteFavorito?favoritoId=${favoritoId}`)
+      .delete<ApiResponse<{ favoritoId: number; eliminado: boolean }>>(`${environment.api}/api/favoritos/${favoritoId}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

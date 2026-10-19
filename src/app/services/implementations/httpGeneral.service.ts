@@ -5,7 +5,7 @@ import { IHttpGeneralService } from '../interfaces/httpGeneral.interface';
 import { AfiliacionModel } from 'src/app/models/general/afiliacion.model';
 import { environment } from 'src/environments/environment';
 import { HelperService } from '../shared/helper.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -26,7 +26,7 @@ export class HttpGeneralService implements IHttpGeneralService {
 
   getDashboardResumen(): Observable<DashboardResumen> {
     return this.http
-      .get<ApiResponse<DashboardResumen>>(`${environment.api}/api/dashboard/getResumen`)
+      .get<ApiResponse<DashboardResumen>>(`${environment.api}/api/dashboard/resumen`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -40,7 +40,7 @@ export class HttpGeneralService implements IHttpGeneralService {
 
   getMetricasApi(minutos: number): Observable<MetricasApi> {
     return this.http
-      .get<ApiResponse<MetricasApi>>(`${environment.api}/api/dashboard/getMetricas`, { params: { minutos } })
+      .get<ApiResponse<MetricasApi>>(`${environment.api}/api/dashboard/metricas`, { params: { minutos } })
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -54,7 +54,7 @@ export class HttpGeneralService implements IHttpGeneralService {
 
   getAdminEstadisticas(): Observable<unknown> {
     return this.http
-      .get<ApiResponse<unknown>>(`${environment.api}/api/general/getAdminEstadisticas`)
+      .get<ApiResponse<unknown>>(`${environment.api}/api/estadisticas/admin`)
       .pipe(
         map((response) =>
           response.status === 200 ? response.data : null,
@@ -65,7 +65,7 @@ export class HttpGeneralService implements IHttpGeneralService {
 
   getEstadisticas(): Observable<EstadisticasViewModel> {
     return this.http
-      .get<ApiResponse<EstadisticasViewModel>>(`${environment.api}/api/general/getEstadisticas`)
+      .get<ApiResponse<EstadisticasViewModel>>(`${environment.api}/api/estadisticas`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -81,7 +81,7 @@ export class HttpGeneralService implements IHttpGeneralService {
 
   getAfiliados(filtro: AdminFiltro = {}): Observable<PaginatedData<AfiliadoAdmin>> {
     return this.http
-      .get<ApiResponse<PaginatedData<AfiliadoAdmin>>>(`${environment.api}/api/afiliados/getAfiliados`, { params: adminParams(filtro, this.paginationService) })
+      .get<ApiResponse<PaginatedData<AfiliadoAdmin>>>(`${environment.api}/api/afiliados`, { params: adminParams(filtro, this.paginationService) })
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -97,7 +97,7 @@ export class HttpGeneralService implements IHttpGeneralService {
 
   saveAfiliacion(afiliacion: AfiliacionModel): Observable<number> {
     return this.http
-      .post<ApiResponse<number>>(`${environment.api}/api/afiliados/saveAfiliacion`, afiliacion)
+      .post<ApiResponse<number>>(`${environment.api}/api/afiliados`, afiliacion)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -119,7 +119,7 @@ export class HttpGeneralService implements IHttpGeneralService {
   ): Observable<PaginatedWithCategorias<FavoritoPostLista, 'favoritos'>> {
     return this.http
       .get<ApiResponse<PaginatedWithCategorias<FavoritoPostLista, 'favoritos'>>>(
-        `${environment.api}/api/favoritos/getFavoritos?page=${page}&pageCount=${pageCount}&query=${encodeURIComponent(search ?? '')}&categoriaId=${categoriaId}`,
+        `${environment.api}/api/favoritos?page=${page}&pageCount=${pageCount}&query=${encodeURIComponent(search ?? '')}&categoriaId=${categoriaId}`,
       )
       .pipe(
         map((response) => {
@@ -136,7 +136,7 @@ export class HttpGeneralService implements IHttpGeneralService {
 
   getConfiguracion(): Observable<ConfiguracionModel> {
     return this.http
-      .get<ApiResponse<ConfiguracionModel>>(`${environment.api}/api/configuracion/getConfiguracion`)
+      .get<ApiResponse<ConfiguracionModel>>(`${environment.api}/api/configuracion`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -153,7 +153,7 @@ export class HttpGeneralService implements IHttpGeneralService {
   updateConfiguracion(configuracion: Partial<ConfiguracionModel>): Observable<boolean> {
     return this.http
       .put<ApiResponse<boolean>>(
-        `${environment.api}/api/configuracion/updateConfiguracion`,
+        `${environment.api}/api/configuracion`,
         configuracion,
       )
       .pipe(
@@ -169,9 +169,9 @@ export class HttpGeneralService implements IHttpGeneralService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  updateAds(configuration: Partial<ConfiguracionModel>): Observable<boolean> {
+  updatePublicidad(configuration: Partial<ConfiguracionModel>): Observable<boolean> {
     return this.http
-      .put<ApiResponse<boolean>>(`${environment.api}/api/configuracion/updateAds`, configuration)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/publicidad`, configuration)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -185,9 +185,9 @@ export class HttpGeneralService implements IHttpGeneralService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  updateAfiliacion(afiliacion: AfiliacionModel): Observable<boolean> {
+  updateAfiliacion(afiliacion: AfiliacionModel & { id: number }): Observable<boolean> {
     return this.http
-      .put<ApiResponse<boolean>>(`${environment.api}/api/afiliados/updateAfiliacion`, afiliacion)
+      .put<ApiResponse<boolean>>(`${environment.api}/api/afiliados/${afiliacion.id}`, afiliacion)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -203,7 +203,7 @@ export class HttpGeneralService implements IHttpGeneralService {
 
   setHitInByRefCode(refCode: string): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/afiliados/setHitIn`, {
+      .post<ApiResponse<boolean>>(`${environment.api}/api/afiliados/entradas`, {
         codigo: refCode,
       })
       .pipe(
@@ -221,12 +221,7 @@ export class HttpGeneralService implements IHttpGeneralService {
 
   deleteAfiliado(id: number): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/afiliados/deleteAfiliado`, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        }),
-        body: { id },
-      })
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/afiliados/${id}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -243,7 +238,7 @@ export class HttpGeneralService implements IHttpGeneralService {
   getContactos(filtro: AdminFiltro = {}): Observable<PaginatedData<ContactoAdmin, 'contactos'>> {
     return this.http
       .get<ApiResponse<PaginatedData<ContactoAdmin, 'contactos'>>>(
-        `${environment.api}/api/contacto/getContactos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
+        `${environment.api}/api/contactos?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(
         map((response) => {
@@ -260,14 +255,14 @@ export class HttpGeneralService implements IHttpGeneralService {
 
   getContactosPendientes(): Observable<number> {
     return this.http
-      .get<ApiResponse<number>>(`${environment.api}/api/contacto/getContactosPendientes`)
+      .get<ApiResponse<number>>(`${environment.api}/api/contactos/pendientes`)
       .pipe(map((r) => (r.status === 200 ? (r.data ?? 0) : 0)))
       .pipe(catchError(this.helper.errorHandler));
   }
 
   saveContacto(contacto: unknown): Observable<boolean> {
     return this.http
-      .post<ApiResponse<boolean>>(`${environment.api}/api/contacto/saveContacto`, contacto)
+      .post<ApiResponse<boolean>>(`${environment.api}/api/contactos`, contacto)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -283,9 +278,7 @@ export class HttpGeneralService implements IHttpGeneralService {
 
   gestionarContacto(contactoId: number): Observable<boolean> {
     return this.http
-      .put<ApiResponse<boolean>>(`${environment.api}/api/contacto/gestionarContacto`, {
-        id: contactoId,
-      })
+      .put<ApiResponse<boolean>>(`${environment.api}/api/contactos/${contactoId}/gestion`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -301,12 +294,7 @@ export class HttpGeneralService implements IHttpGeneralService {
 
   deleteContacto(contactoId: number): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/contacto/deleteContacto`, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        }),
-        body: { id: contactoId },
-      })
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/contactos/${contactoId}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

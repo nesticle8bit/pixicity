@@ -16,8 +16,8 @@ describe('MetricasApiComponent', () => {
     tasaError: 0.1,
     p50Ms: 40,
     p95Ms: 2500,
-    masLentas: [{ ruta: 'GET api/posts/getPosts', peticiones: 50, errores: 0, promedioMs: 900, p95Ms: 2500, maxMs: 3100 }],
-    conErrores: [{ ruta: 'POST api/posts/savePost', peticiones: 20, errores: 12, promedioMs: 100, p95Ms: 200, maxMs: 300 }],
+    masLentas: [{ ruta: 'GET api/posts', peticiones: 50, errores: 0, promedioMs: 900, p95Ms: 2500, maxMs: 3100 }],
+    conErrores: [{ ruta: 'POST api/posts', peticiones: 20, errores: 12, promedioMs: 100, p95Ms: 200, maxMs: 300 }],
     masUsadas: [],
     ...parcial,
   });
@@ -36,8 +36,8 @@ describe('MetricasApiComponent', () => {
   it('muestra los indicadores y marca en alerta la tasa de errores y el p95 lento', () => {
     const el: HTMLElement = fixture.nativeElement;
     expect(servicio.getMetricasApi).toHaveBeenCalledWith(15);
-    expect(el.textContent).toContain('GET api/posts/getPosts');
-    expect(el.textContent).toContain('POST api/posts/savePost');
+    expect(el.textContent).toContain('GET api/posts');
+    expect(el.textContent).toContain('POST api/posts');
     expect(el.querySelectorAll('.metricas__stat--alerta').length).toBe(2);
   });
 
