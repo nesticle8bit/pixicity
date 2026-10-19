@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, input, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { enNavegador } from '../../../shared/helpers/plataforma';
 
@@ -18,6 +18,8 @@ interface WidgetDiscord {
  * Tarjeta de Discord de la portada, del tamaño del carrusel "Top Fotos" (4:3). Muestra en vivo el nombre del
  * servidor, cuántos están en línea y algunos avatares, con los datos del widget público de Discord. Si Discord no
  * responde (o el widget está desactivado), la tarjeta se ve igual, sin los datos en vivo.
+ *
+ * `variante`: 'cuadrado' (4:3, para columnas) o 'horizontal' (franja baja, para banners tipo 728x90).
  */
 @Component({
   selector: 'app-home-discord',
@@ -25,8 +27,12 @@ interface WidgetDiscord {
   imports: [DecimalPipe],
   templateUrl: './home-discord.component.html',
   styleUrl: './home-discord.component.scss',
+  host: { '[class.horizontal]': "variante() === 'horizontal'" },
 })
 export class HomeDiscordComponent implements OnInit {
+  readonly variante = input<'cuadrado' | 'horizontal'>('cuadrado');
+  readonly mostrarTitulo = input(true);
+
   readonly nombre = signal('Taringa! en Discord');
   readonly enLinea = signal<number | null>(null);
   readonly avatares = signal<{ id: string; nombre: string; url: string }[]>([]);

@@ -30,9 +30,18 @@ $blurple-oscuro: #3c45c5;
     transform: translateY(-2px);
     box-shadow: 0 10px 24px rgba(60, 69, 197, 0.35);
 
-    .discord__boton { background: #fff; color: $blurple-oscuro; }
-    .discord__boton i { transform: translateX(3px); }
-    .discord__logo { transform: rotate(-8deg) scale(1.05); }
+    .discord__boton {
+      background: #fff;
+      color: $blurple-oscuro;
+    }
+
+    .discord__boton i {
+      transform: translateX(3px);
+    }
+
+    .discord__logo {
+      transform: rotate(-8deg) scale(1.05);
+    }
   }
 
   &:focus-visible {
@@ -41,7 +50,7 @@ $blurple-oscuro: #3c45c5;
   }
 }
 
-// --- Decoración -------------------------------------------------------------
+// Decoración
 
 .discord__burbuja {
   position: absolute;
@@ -49,11 +58,23 @@ $blurple-oscuro: #3c45c5;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.08);
 
-  &--a { width: 140px; height: 140px; right: -40px; bottom: -50px; }
-  &--b { width: 70px; height: 70px; left: -20px; top: 38%; background: rgba(255, 255, 255, 0.06); }
+  &--a {
+    width: 140px;
+    height: 140px;
+    right: -40px;
+    bottom: -50px;
+  }
+
+  &--b {
+    width: 70px;
+    height: 70px;
+    left: -20px;
+    top: 38%;
+    background: rgba(255, 255, 255, 0.06);
+  }
 }
 
-// --- Contenido ----------------------------------------------------------------
+// Contenido
 
 .discord__arriba {
   display: flex;
@@ -107,7 +128,10 @@ $blurple-oscuro: #3c45c5;
   font-weight: 600;
   opacity: 0.95;
 
-  &--sin-datos { font-weight: 500; opacity: 0.85; }
+  &--sin-datos {
+    font-weight: 500;
+    opacity: 0.85;
+  }
 }
 
 .discord__pulso {
@@ -129,8 +153,15 @@ $blurple-oscuro: #3c45c5;
 }
 
 @keyframes discord-pulso {
-  from { transform: scale(1); opacity: 0.7; }
-  to { transform: scale(2.8); opacity: 0; }
+  from {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+
+  to {
+    transform: scale(2.8);
+    opacity: 0;
+  }
 }
 
 .discord__abajo {
@@ -153,8 +184,10 @@ $blurple-oscuro: #3c45c5;
     object-fit: cover;
   }
 
-  img + img,
-  img + .discord__mas { margin-left: -9px; }
+  img+img,
+  img+.discord__mas {
+    margin-left: -9px;
+  }
 }
 
 .discord__mas {
@@ -178,13 +211,70 @@ $blurple-oscuro: #3c45c5;
   font-weight: 800;
   transition: background 0.15s, color 0.15s;
 
-  i { transition: transform 0.15s; }
+  i {
+    transition: transform 0.15s;
+  }
+}
+
+// Variante horizontal (banner bajo, p. ej. 728x90)
+
+:host(.horizontal) {
+  .discord {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    aspect-ratio: auto;
+    min-height: 90px;
+    padding: 10px 16px;
+  }
+
+  .discord__arriba {
+    flex: none;
+    gap: 10px;
+  }
+
+  .discord__etiqueta {
+    display: none;
+  }
+
+  .discord__centro {
+    flex: 1 1 auto;
+  }
+
+  .discord__abajo {
+    flex: none;
+  }
+
+  .discord__burbuja--a {
+    width: 110px;
+    height: 110px;
+    bottom: -60px;
+  }
+
+  .discord__burbuja--b {
+    display: none;
+  }
+
+  @media (max-width: 575.98px) {
+    .discord__avatares {
+      display: none;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .discord,
   .discord__logo,
-  .discord__boton i { transition: none; }
-  .discord:hover { transform: none; }
-  .discord__pulso::after { animation: none; }
+  .discord__boton i {
+    transition: none;
+  }
+
+  .discord:hover {
+    transform: none;
+  }
+
+  .discord__pulso::after {
+    animation: none;
+  }
 }

@@ -1,6 +1,8 @@
+@if (mostrarTitulo()) {
 <h2 class="main-title mb-2">
   <span>Discord</span>
 </h2>
+}
 
 <a class="discord" [href]="invitacion()" target="_blank" rel="noopener noreferrer"
   [attr.aria-label]="'Unirse al servidor de Discord ' + nombre() + (enLinea() !== null ? ', ' + enLinea() + ' en línea' : '')">

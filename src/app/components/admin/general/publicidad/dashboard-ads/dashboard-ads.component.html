@@ -21,45 +21,52 @@
         </div>
     </div>
 
-    <div class="mb-3 row">
-        <label class="col-sm-2 col-form-label" for="dashboard-ads-banner300x250">
-            Banner 300x250
-        </label>
+    @for (tamano of tamanos; track tamano.campo) {
+    <div class="mb-4 row" [formArrayName]="tamano.campo">
+        <div class="col-sm-2 col-form-label">
+            <strong>{{ tamano.nombre }}</strong>
+            <small class="d-block text-muted">Se muestra uno al azar</small>
+        </div>
 
         <div class="col-sm-10">
-            <textarea id="dashboard-ads-banner300x250" class="form-control" formControlName="banner300x250" rows="6"></textarea>
+            @for (anuncio of anuncios(tamano.campo).controls; track anuncio; let i = $index) {
+            <div class="anuncio" [formGroupName]="i">
+                <div class="anuncio__cabecera">
+                    <span class="anuncio__numero">#{{ i + 1 }}</span>
+                    <select class="form-select form-select-sm" formControlName="tipo" [attr.aria-label]="'Tipo del anuncio ' + (i + 1)">
+                        <option value="html">HTML / script</option>
+                        <option value="componente">Componente del sitio</option>
+                    </select>
+                    @if (anuncio.value.tipo === 'componente') {
+                    <select class="form-select form-select-sm" formControlName="componente" aria-label="Componente">
+                        @for (c of componentes; track c.id) {
+                        <option [value]="c.id">{{ c.nombre }}</option>
+                        }
+                    </select>
+                    <select class="form-select form-select-sm" formControlName="variante" aria-label="Forma">
+                        <option value="cuadrado">Cuadrado</option>
+                        <option value="horizontal">Horizontal</option>
+                    </select>
+                    }
+                    <button mat-icon-button type="button" class="ms-auto" (click)="quitarAnuncio(tamano.campo, i)"
+                        [attr.aria-label]="'Quitar anuncio ' + (i + 1)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+                @if (anuncio.value.tipo === 'html') {
+                <textarea class="form-control" formControlName="html" rows="4" [attr.aria-label]="'HTML del anuncio ' + (i + 1)"></textarea>
+                }
+            </div>
+            } @empty {
+            <p class="text-muted mb-2">Sin anuncios: este espacio no se muestra.</p>
+            }
+
+            <button mat-stroked-button type="button" (click)="agregarAnuncio(tamano.campo)">
+                <mat-icon>add</mat-icon> Agregar anuncio
+            </button>
         </div>
     </div>
-
-    <div class="mb-3 row">
-        <label class="col-sm-2 col-form-label" for="dashboard-ads-banner468x60">
-            Banner 468x60
-        </label>
-
-        <div class="col-sm-10">
-            <textarea id="dashboard-ads-banner468x60" class="form-control" formControlName="banner468x60" rows="6"></textarea>
-        </div>
-    </div>
-
-    <div class="mb-3 row">
-        <label class="col-sm-2 col-form-label" for="dashboard-ads-banner160x600">
-            Banner 160x600
-        </label>
-
-        <div class="col-sm-10">
-            <textarea id="dashboard-ads-banner160x600" class="form-control" formControlName="banner160x600" rows="6"></textarea>
-        </div>
-    </div>
-
-    <div class="mb-3 row">
-        <label class="col-sm-2 col-form-label" for="dashboard-ads-banner728x90">
-            Banner 728x90
-        </label>
-
-        <div class="col-sm-10">
-            <textarea id="dashboard-ads-banner728x90" class="form-control" formControlName="banner728x90" rows="6"></textarea>
-        </div>
-    </div>
+    }
 
     <div class="form-container--footer text-center mb-4">
         <button mat-flat-button color="primary" type="submit">
