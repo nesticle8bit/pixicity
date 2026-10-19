@@ -64,7 +64,7 @@
     background: #f7f9fb;
     transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 
-    > i {
+    >i {
       color: #006a9e;
       font-size: 1.05rem;
       flex-shrink: 0;
@@ -118,10 +118,20 @@
     border-radius: 6px;
     display: inline-flex;
 
-    i { font-size: 20px; }
+    i {
+      font-size: 20px;
+    }
+
     &:hover,
-    &[aria-expanded="true"] { color: #006595; background: #f1f4f6; }
-    &:disabled { cursor: default; opacity: 0.6; }
+    &[aria-expanded="true"] {
+      color: #006595;
+      background: #f1f4f6;
+    }
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.6;
+    }
   }
 
   &__preview {
@@ -143,7 +153,10 @@
     color: #fff;
     cursor: pointer;
 
-    &:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
   }
 
   &__subiendo {
@@ -158,16 +171,22 @@
     font-size: 0.9rem;
     color: #1f2a33;
 
-    i { animation: sh-girar 1s linear infinite; }
+    i {
+      animation: sh-girar 1s linear infinite;
+    }
   }
 }
 
 @keyframes sh-girar {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sh-composer__subiendo i { animation: none; }
+  .sh-composer__subiendo i {
+    animation: none;
+  }
 }
 
 .sh-btn {
@@ -180,7 +199,7 @@
   font-size: 0.85rem;
   font-weight: 600;
   color: #fff;
-  background: linear-gradient(135deg, #0085c4, #006595);
+  background: #0085c4;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 101, 149, 0.25);
   transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
