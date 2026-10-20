@@ -37,7 +37,10 @@ const VOTOS_DESTACADO = 3;
 // Igual que en el composer de shouts: el navegador la comprime antes de subirla.
 const MAX_BYTES_IMAGEN = 20 * 1024 * 1024;
 // Solo se muestran como imagen las subidas al sitio (/images/shouts/{usuario}/{guid}.webp); el resto queda como enlace.
-const HOSTS_IMAGENES = [environment.publicUrl, environment.api, 'https://taringas.net'].map((u) => new URL(u).host);
+// En producción `api` es '' (mismo origen), por eso se descartan las URLs no absolutas.
+const HOSTS_IMAGENES = [environment.publicUrl, environment.api, 'https://taringas.net']
+  .filter((u) => /^https?:\/\//.test(u))
+  .map((u) => new URL(u).host);
 const RUTA_IMAGEN_SUBIDA = /^\/images\/shouts\/[^/]+\/[0-9a-f]{32}\.webp$/;
 
 /** Campo de texto al que va la imagen subida. */
