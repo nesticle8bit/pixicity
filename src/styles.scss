@@ -1414,6 +1414,27 @@ textarea:focus#msg_body {
     -webkit-overflow-scrolling: touch;
   }
 
+  /* Listas (el reset global quita las viñetas a todo <li>) */
+  & ul,
+  & ol {
+    padding-left: 1.6em;
+    margin: .5em 0;
+    text-align: left;
+  }
+
+  & ul > li { list-style: disc; }
+  & ol > li { list-style: decimal; }
+  & li ul > li { list-style: circle; }
+  & li li ul > li { list-style: square; }
+  & li ol > li { list-style: lower-alpha; }
+
+  & li {
+    margin: .2em 0;
+    padding-left: .2em;
+  }
+
+  & li::marker { color: #1976d2; }
+
   /* Bloque de código (mismo look que en el editor) */
   & pre {
     position: relative;
@@ -1425,7 +1446,7 @@ textarea:focus#msg_body {
     color: #24292f;
     border: 1px solid #d0d7de;
     border-left: 4px solid #1976d2;
-    border-radius: 6px;
+    border-radius: 4px;
     padding: 28px 14px 12px;
     margin: 12px 0;
     font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;

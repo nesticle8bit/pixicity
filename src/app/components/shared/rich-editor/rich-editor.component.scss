@@ -321,7 +321,15 @@
     h6 { font-size: 0.9em; }
 
     p    { margin: 0.4em 0; }
+    // styles.scss quita las viñetas a todo <li>: aquí se restauran
     ul, ol { padding-left: 1.6em; margin: 0.4em 0; }
+    ul > li { list-style: disc; }
+    ol > li { list-style: decimal; }
+    li ul > li { list-style: circle; }
+    li li ul > li { list-style: square; }
+    li ol > li { list-style: lower-alpha; }
+    li { margin: 0.15em 0; padding-left: 0.2em; }
+    li::marker { color: var(--re-accent); }
     li > ul, li > ol { margin: 0.1em 0; }
 
     blockquote {
