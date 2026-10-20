@@ -26,7 +26,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('iniciar sesión', () => {
   test('con credenciales correctas guarda la sesión y entra', async ({ page }) => {
     let enviado: unknown;
-    await page.route('**/api/usuarios/login', (route) => {
+    await page.route('**/api/auth/login', (route) => {
       enviado = route.request().postDataJSON();
       return route.fulfill(ok(sesion('demo')));
     });
@@ -44,7 +44,7 @@ test.describe('iniciar sesión', () => {
   });
 
   test('con credenciales incorrectas muestra el error y no guarda nada', async ({ page }) => {
-    await page.route('**/api/usuarios/login', (route) => route.fulfill(ok('error')));
+    await page.route('**/api/auth/login', (route) => route.fulfill(ok('error')));
 
     await page.goto('/login');
     await page.getByLabel('Nombre de Usuario').fill('demo');
@@ -58,9 +58,9 @@ test.describe('iniciar sesión', () => {
 
 test('publicar un post envía título, categoría, contenido y etiquetas', async ({ page }) => {
   await conSesion(page, 'demo');
-  await page.route('**/api/categorias/getCategoriasDropdown**', (r) => r.fulfill(ok([{ id: 1, nombre: 'Info' }, { id: 2, nombre: 'Juegos' }])));
+  await page.route(/\/api\/categorias(\?|$)/, (r) => r.fulfill(ok([{ id: 1, nombre: 'Info' }, { id: 2, nombre: 'Juegos' }])));
   let publicado: Record<string, unknown> | undefined;
-  await page.route('**/api/posts/savePost', (route) => {
+  await page.route('**/api/posts', (route) => {
     publicado = route.request().postDataJSON();
     return route.fulfill(ok(99));
   });
@@ -89,7 +89,7 @@ test('publicar un post envía título, categoría, contenido y etiquetas', async
 test('comentar un post lo envía al API y lo muestra en la lista', async ({ page }) => {
   await conSesion(page, 'lector_tres');
   let comentario: Record<string, unknown> | undefined;
-  await page.route('**/api/comentarios/addComentario', (route) => {
+  await page.route('**/api/comentarios', (route) => {
     comentario = route.request().postDataJSON();
     return route.fulfill(ok(77));
   });
@@ -104,7 +104,7 @@ test('comentar un post lo envía al API y lo muestra en la lista', async ({ page
 
 test('moderar: marcar un reporte como resuelto', async ({ page }) => {
   await conSesion(page, 'admin', 'Administrador');
-  await page.route('**/api/moderacion/getReportes**', (r) =>
+  await page.route(/\/api\/moderacion\/reportes(\?|$)/, (r) =>
     r.fulfill(
       ok({
         data: [
@@ -121,8 +121,8 @@ test('moderar: marcar un reporte como resuelto', async ({ page }) => {
     )
   );
   const resueltos: string[] = [];
-  await page.route('**/api/moderacion/resolverReporte**', (route) => {
-    resueltos.push(new URL(route.request().url()).searchParams.get('reporteId') ?? '');
+  await page.route('**/api/moderacion/reportes/*/resuelto', (route) => {
+    resueltos.push(/reportes\/(\d+)\//.exec(route.request().url())?.[1] ?? '');
     return route.fulfill(ok(true));
   });
 

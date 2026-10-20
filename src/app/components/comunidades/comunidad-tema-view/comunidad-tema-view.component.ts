@@ -22,6 +22,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { ComentariosComponent } from '../../shared/comentarios/comentarios.component';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { ContenidoSeoPipe } from '../../../shared/pipes/contenidoSeo.pipe';
+import { ContenidoPostDirective } from '../../../shared/directives/contenido-post.directive';
 import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 
 type TemaVista = TemaDetalle & { _votando?: boolean };
@@ -50,7 +51,7 @@ function aHilo(c: TemaComentario): ComentarioHilo {
     selector: 'app-comunidad-tema-view',
     templateUrl: './comunidad-tema-view.component.html',
     styleUrls: ['./comunidad-tema-view.component.scss'],
-    imports: [CargandoComponent, 
+    imports: [CargandoComponent, ContenidoPostDirective,
         RouterLink,
         UserPopoverDirective,
         UserAvatarComponent,

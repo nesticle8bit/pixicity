@@ -25,13 +25,13 @@ async function abrirPostsAdmin(page: Page): Promise<URL[]> {
   const pedidos: URL[] = [];
   await simularApi(page);
   await page.addInitScript((s) => localStorage.setItem('taringas', s), JSON.stringify(SESION));
-  await page.route('**/api/parametros/getCategoriasDropdown**', (r) =>
+  await page.route(/\/api\/categorias(\?|$)/, (r) =>
     r.fulfill({ json: { status: 200, errors: [], data: [{ id: 1, nombre: 'Info' }, { id: 2, nombre: 'Juegos' }] } })
   );
-  await page.route('**/api/categorias/getCategoriasDropdown**', (r) =>
+  await page.route(/\/api\/categorias(\?|$)/, (r) =>
     r.fulfill({ json: { status: 200, errors: [], data: [{ id: 1, nombre: 'Info' }, { id: 2, nombre: 'Juegos' }] } })
   );
-  await page.route('**/api/posts/getPostsAdmin**', (route) => {
+  await page.route('**/api/posts/admin**', (route) => {
     const url = new URL(route.request().url());
     pedidos.push(url);
     const sinResultados = url.searchParams.get('q') === 'zzz';

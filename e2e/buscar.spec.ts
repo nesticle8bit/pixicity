@@ -29,7 +29,7 @@ const resultado = (id: number, titulo: string, extracto: string, etiquetas: stri
 async function simularBusqueda(page: Page): Promise<URL[]> {
   const pedidos: URL[] = [];
   await simularApi(page);
-  await page.route('**/api/categorias/getTopCategorias**', (route) =>
+  await page.route('**/api/categorias/top**', (route) =>
     route.fulfill({
       json: {
         status: 200,

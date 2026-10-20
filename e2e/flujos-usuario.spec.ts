@@ -27,11 +27,11 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('registro: exige aceptar los términos y envía los datos', async ({ page }) => {
-  await page.route('**/api/configuracion/getConfiguracion', (r) => r.fulfill(ok({ disableUserRegistration: false })));
-  await page.route('**/api/paises/getPaisesDropdown', (r) => r.fulfill(ok([{ id: 1, nombre: 'Argentina', iso2: 'AR' }, { id: 2, nombre: 'Chile', iso2: 'CL' }])));
-  await page.route('**/api/paises/getEstadosByPais**', (r) => r.fulfill(ok([{ id: 10, nombre: 'Córdoba' }])));
+  await page.route('**/api/configuracion', (r) => r.fulfill(ok({ disableUserRegistration: false })));
+  await page.route('**/api/paises', (r) => r.fulfill(ok([{ id: 1, nombre: 'Argentina', iso2: 'AR' }, { id: 2, nombre: 'Chile', iso2: 'CL' }])));
+  await page.route('**/api/paises/*/estados', (r) => r.fulfill(ok([{ id: 10, nombre: 'Córdoba' }])));
   let enviado: Record<string, unknown> | undefined;
-  await page.route('**/api/usuarios/registrarUsuario', (r) => {
+  await page.route('**/api/auth/registro', (r) => {
     enviado = r.request().postDataJSON();
     return r.fulfill(ok(99));
   });
@@ -60,7 +60,7 @@ test('registro: exige aceptar los términos y envía los datos', async ({ page }
 test('fotos: votar positivo y después negativo actualiza ambos contadores', async ({ page }) => {
   await conSesion(page);
   const votos: number[] = [];
-  await page.route('**/api/fotos/VotarFoto**', (r) => {
+  await page.route('**/api/fotos/votos', (r) => {
     const cantidad = Number(r.request().postDataJSON()?.cantidad);
     votos.push(cantidad);
     return r.fulfill(ok(cantidad === 1
@@ -80,7 +80,7 @@ test('fotos: votar positivo y después negativo actualiza ambos contadores', asy
 test('denunciar un comentario: elige el motivo en un diálogo y lo envía', async ({ page }) => {
   await conSesion(page);
   let denuncia: Record<string, unknown> | undefined;
-  await page.route('**/api/comentarios/denunciarComentario**', (r) => {
+  await page.route('**/api/**/comentarios/*/denuncias', (r) => {
     denuncia = r.request().postDataJSON();
     return r.fulfill(ok(true));
   });
@@ -103,15 +103,15 @@ test('denunciar un comentario: elige el motivo en un diálogo y lo envía', asyn
 
 test('shouts: publicar en el muro del perfil envía el texto y recarga el muro', async ({ page }) => {
   await conSesion(page);
-  await page.route('**/api/usuarios/getUserByUserName**', (r) =>
+  await page.route(/\/api\/usuarios\/por-nombre\/[^/?]+(\?|$)/, (r) =>
     r.fulfill(ok({ id: 5, userName: AUTOR, avatar: null, profileBackground: '', rango: null, pais: null, postsCount: 2, seguidoresCount: 7 })));
   let cargasDelMuro = 0;
-  await page.route('**/api/shouts/getShouts**', (r) => {
+  await page.route(/\/api\/shouts\/usuarios\/\d+/, (r) => {
     cargasDelMuro++;
     return r.fulfill(ok({ shouts: [], pagination: { totalCount: 0, pageSize: 10, currentPage: 1, totalPages: 0 } }));
   });
   let shout: Record<string, unknown> | undefined;
-  await page.route('**/api/shouts/createShout', (r) => {
+  await page.route('**/api/shouts', (r) => {
     shout = r.request().postDataJSON();
     return r.fulfill(ok({ id: 50, comentario: shout?.['comentario'] }));
   });
@@ -144,9 +144,9 @@ test('mensajes: Enter envía, Shift+Enter hace salto de línea y el mensaje apar
     esMio: de === yo, usuarioDe: de, usuarioA: de === yo ? otro : yo,
   });
   const mensajes = [msg(1, otro, '¿Viste mi último post?')];
-  await page.route('**/api/mensajes/getConversacion**', (r) => r.fulfill(ok({ mensajes, hayMas: false, bloqueado: false, otro })));
+  await page.route('**/api/mensajes/conversacion**', (r) => r.fulfill(ok({ mensajes, hayMas: false, bloqueado: false, otro })));
   let enviado: Record<string, unknown> | undefined;
-  await page.route('**/api/mensajes/sendMensajePrivado', (r) => {
+  await page.route('**/api/mensajes', (r) => {
     enviado = r.request().postDataJSON();
     mensajes.push(msg(2, yo, String(enviado?.['contenido'])));
     return r.fulfill(ok({ type: 'id', message: '2' }));
@@ -169,17 +169,18 @@ test('mensajes: Enter envía, Shift+Enter hace salto de línea y el mensaje apar
 
 test('cuenta: cambiar de país obliga a elegir un estado de ese país y guarda los datos', async ({ page }) => {
   await conSesion(page);
-  await page.route('**/api/usuarios/getLoggedUserByJwt', (r) => r.fulfill(ok({
+  await page.route('**/api/usuarios/me', (r) => r.fulfill(ok({
     userName: 'lector_tres', email: 'lector@ejemplo.com', avatar: null, genero: 'Masculino', paisId: 1, estadoId: 10, fechaNacimiento: '5/3/1990',
   })));
-  await page.route('**/api/usuarios/getCurrentPerfilInfo', (r) => r.fulfill(ok({ perfil: null, background: '' })));
-  await page.route('**/api/paises/getPaisesDropdown', (r) => r.fulfill(ok([{ id: 1, nombre: 'Argentina', iso2: 'AR' }, { id: 2, nombre: 'Chile', iso2: 'CL' }])));
-  await page.route('**/api/paises/getEstadosByPais**', (r) => {
-    const chile = new URL(r.request().url()).searchParams.get('idPais') === '2';
+  await page.route('**/api/usuarios/me/perfil', (r) => r.fulfill(ok({ perfil: null, background: '' })));
+  await page.route('**/api/paises', (r) => r.fulfill(ok([{ id: 1, nombre: 'Argentina', iso2: 'AR' }, { id: 2, nombre: 'Chile', iso2: 'CL' }])));
+  await page.route('**/api/paises/*/estados', (r) => {
+    const chile = /paises\/2\//.test(r.request().url());
     return r.fulfill(ok(chile ? [{ id: 20, nombre: 'Santiago' }] : [{ id: 10, nombre: 'Córdoba' }]));
   });
   let guardado: Record<string, unknown> | undefined;
-  await page.route('**/api/usuarios/updateUsuario', (r) => {
+  await page.route('**/api/usuarios/me', (r) => {
+    if (r.request().method() !== 'PUT') return r.fallback();
     guardado = r.request().postDataJSON();
     return r.fulfill(ok(true));
   });
@@ -200,7 +201,7 @@ test('cuenta: cambiar de país obliga a elegir un estado de ese país y guarda l
 test('comentarios: @menciones sugiere usuarios y Enter completa el nombre', async ({ page }) => {
   await conSesion(page);
   const consultas: string[] = [];
-  await page.route('**/api/usuarios/sugerirMenciones**', (r) => {
+  await page.route('**/api/usuarios/menciones**', (r) => {
     consultas.push(new URL(r.request().url()).searchParams.get('q') ?? '');
     return r.fulfill(ok([{ id: 5, userName: 'autor_demo', avatar: null }, { id: 6, userName: 'autora', avatar: null }]));
   });
@@ -264,13 +265,13 @@ test('comentarios: el formulario muestra mi avatar y las respuestas también tie
 
 test('shouts: me gusta y favorito se alternan y el botón de comentarios lleva al campo', async ({ page }) => {
   await conSesion(page);
-  await page.route(/\/api\/shouts\/getShoutById/i, (r) =>
+  await page.route(/\/api\/shouts\/\d+(\?|$)/i, (r) =>
     r.fulfill(ok({ id: 9, comentario: 'Shout de prueba', tipo: 'Texto', url: '', fechaRegistro: '2026-10-01T12:00:00Z', avatar: { userName: AUTOR } })));
-  await page.route(/\/api\/shouts\/getShoutInteracciones/i, (r) => r.fulfill(ok({ meGustas: 2, favoritos: 0, meGusta: false, favorito: false })));
-  await page.route(/\/api\/shouts\/getComentariosByShoutId/i, (r) => r.fulfill(ok([])));
+  await page.route(/\/api\/shouts\/\d+\/interacciones/i, (r) => r.fulfill(ok({ meGustas: 2, favoritos: 0, meGusta: false, favorito: false })));
+  await page.route(/\/api\/shouts\/\d+\/comentarios/i, (r) => r.fulfill(ok([])));
   const pedidos: string[] = [];
-  await page.route(/\/api\/shouts\/alternar(MeGusta|Favorito)/i, (r) => {
-    const tipo = /megusta/i.test(r.request().url()) ? 'meGusta' : 'favorito';
+  await page.route(/\/api\/shouts\/\d+\/(me-gusta|favorito)(\?|$)/i, (r) => {
+    const tipo = /me-gusta/i.test(r.request().url()) ? 'meGusta' : 'favorito';
     pedidos.push(tipo);
     return r.fulfill(ok(tipo === 'meGusta' ? { total: 3, activo: true } : { total: 1, activo: true }));
   });
@@ -298,7 +299,7 @@ test('favoritos: busca, filtra por categoría, quita con deshacer y lista los sh
   const linux = { id: 1, nombre: 'Linux', icono: 'linux.png', seo: 'linux' };
   const juegos = { id: 2, nombre: 'Juegos', icono: 'juegos.png', seo: 'juegos' };
   const consultas: URLSearchParams[] = [];
-  await page.route(/\/api\/favoritos\/getFavoritos/i, (r) => {
+  await page.route(/\/api\/favoritos\?/i, (r) => {
     const q = new URL(r.request().url()).searchParams;
     consultas.push(q);
     const todos = [fila(1, 'Instalar Arch paso a paso', linux), fila(2, 'Mejores juegos del año', juegos)];
@@ -311,13 +312,13 @@ test('favoritos: busca, filtra por categoría, quita con deshacer y lista los sh
     }));
   });
   const quitados: string[] = [];
-  await page.route(/\/api\/favoritos\/deleteFavorito/i, (r) => {
-    const id = new URL(r.request().url()).searchParams.get('favoritoId')!;
+  await page.route(/\/api\/favoritos\/\d+(\?|$)/i, (r) => {
+    const id = /favoritos\/(\d+)/.exec(r.request().url())![1];
     const eliminado = !quitados.includes(id);
     eliminado ? quitados.push(id) : quitados.splice(quitados.indexOf(id), 1);
     return r.fulfill(ok({ favoritoId: +id, eliminado }));
   });
-  await page.route(/\/api\/shouts\/getShoutsFavoritos/i, (r) => r.fulfill(ok({
+  await page.route(/\/api\/shouts\/favoritos/i, (r) => r.fulfill(ok({
     shouts: [{ id: 9, comentario: 'Un shout guardado', tipo: 'Texto', fechaRegistro: '2026-10-01T12:00:00Z', avatar: { userName: AUTOR, avatar: null } }],
     pagination: { totalCount: 1, pageSize: 10, currentPage: 1, totalPages: 1 },
   })));
@@ -361,7 +362,7 @@ async function simularMi(page: Page) {
     ...extra,
   });
   const pedidos: { url: URL; metodo: string }[] = [];
-  await page.route(/\/api\/mi\/getMuro/i, (r) => {
+  await page.route(/\/api\/mi\/muro/i, (r) => {
     const url = new URL(r.request().url());
     pedidos.push({ url, metodo: 'GET' });
     if (url.searchParams.get('antes')) {
@@ -378,8 +379,8 @@ async function simularMi(page: Page) {
       siguiente: '2026-10-08T10:00:00Z',
     }));
   });
-  await page.route(/\/api\/mi\/getResumen/i, (r) => r.fulfill(ok({ id: 1, userName: 'lector_tres', avatar: null, rango: 'Novato', puntos: 120, seguidores: 4, siguiendo: 1, shouts: 1, posts: 0 })));
-  await page.route(/\/api\/mi\/getSugerencias/i, (r) => r.fulfill(ok([{ userName: 'popular', avatar: null, seguidores: 30 }])));
+  await page.route(/\/api\/mi\/resumen/i, (r) => r.fulfill(ok({ id: 1, userName: 'lector_tres', avatar: null, rango: 'Novato', puntos: 120, seguidores: 4, siguiendo: 1, shouts: 1, posts: 0 })));
+  await page.route(/\/api\/mi\/sugerencias/i, (r) => r.fulfill(ok([{ userName: 'popular', avatar: null, seguidores: 30 }])));
   return pedidos;
 }
 
@@ -387,8 +388,8 @@ test('mi: muestra el muro mezclado, carga más, comparte y sigue a una sugerenci
   await conSesion(page);
   const pedidos = await simularMi(page);
   const acciones: string[] = [];
-  await page.route(/\/api\/shouts\/alternarReshout/i, (r) => (acciones.push('reshout'), r.fulfill(ok({ total: 3, activo: true }))));
-  await page.route(/\/api\/usuarios\/seguirUsuario/i, (r) => (acciones.push('seguir:' + r.request().postDataJSON().userName), r.fulfill(ok(1))));
+  await page.route(/\/api\/shouts\/\d+\/reshout(\?|$)/i, (r) => (acciones.push('reshout'), r.fulfill(ok({ total: 3, activo: true }))));
+  await page.route(/\/api\/usuarios\/seguimientos/i, (r) => (acciones.push('seguir:' + r.request().postDataJSON().userName), r.fulfill(ok(1))));
 
   await page.goto('/mi');
   await expect(page.getByText('compartió')).toBeVisible();
@@ -431,11 +432,11 @@ test('correo sin confirmar: el aviso reenvía el enlace y el enlace del correo c
     refreshToken: 'r',
   };
   await page.addInitScript((s) => localStorage.setItem('taringas', s), JSON.stringify(sesion));
-  await page.route(/\/api\/usuarios\/getEstadoEmail/i, (r) => r.fulfill(ok({ emailConfirmado: false, email: 'lector@correo.com' })));
+  await page.route(/\/api\/auth\/email(\?|$)/i, (r) => r.fulfill(ok({ emailConfirmado: false, email: 'lector@correo.com' })));
   let reenvios = 0;
-  await page.route(/\/api\/usuarios\/reenviarConfirmacion/i, (r) => (reenvios++, r.fulfill(ok(true))));
+  await page.route(/\/api\/auth\/email\/reenvio/i, (r) => (reenvios++, r.fulfill(ok(true))));
   let tokenEnviado = '';
-  await page.route(/\/api\/usuarios\/confirmarEmail/i, (r) => {
+  await page.route(/\/api\/auth\/email\/confirmacion/i, (r) => {
     tokenEnviado = r.request().postDataJSON().token;
     return r.fulfill(ok({ userName: 'lector_tres' }));
   });
@@ -456,7 +457,7 @@ test('correo sin confirmar: el aviso reenvía el enlace y el enlace del correo c
 });
 
 test('confirmar correo: un enlace vencido explica el motivo', async ({ page }) => {
-  await page.route(/\/api\/usuarios\/confirmarEmail/i, (r) =>
+  await page.route(/\/api\/auth\/email\/confirmacion/i, (r) =>
     r.fulfill({ status: 400, json: { status: 400, errors: ['El enlace no es válido o ya venció. Pide uno nuevo desde tu cuenta.'], data: null } }));
 
   await page.goto('/confirmar-email?token=viejo');
@@ -467,9 +468,9 @@ test('confirmar correo: un enlace vencido explica el motivo', async ({ page }) =
 
 test('olvidé mi contraseña: pide el enlace y el enlace permite elegir una nueva', async ({ page }) => {
   let pedido: Record<string, unknown> | undefined;
-  await page.route(/\/api\/usuarios\/solicitarRestablecimiento/i, (r) => ((pedido = r.request().postDataJSON()), r.fulfill(ok(true))));
+  await page.route(/\/api\/auth\/password\/restablecimiento/i, (r) => ((pedido = r.request().postDataJSON()), r.fulfill(ok(true))));
   let restablecido: Record<string, unknown> | undefined;
-  await page.route(/\/api\/usuarios\/restablecerPassword/i, (r) => ((restablecido = r.request().postDataJSON()), r.fulfill(ok({ userName: 'ana' }))));
+  await page.route(/\/api\/auth\/password(\?|$)/i, (r) => ((restablecido = r.request().postDataJSON()), r.fulfill(ok({ userName: 'ana' }))));
 
   await page.goto('/login');
   await page.getByRole('link', { name: '¿Olvidaste tu contraseña?' }).click();
@@ -493,9 +494,9 @@ test('olvidé mi contraseña: pide el enlace y el enlace permite elegir una nuev
 });
 
 test('login con verificación en dos pasos: pide el código y recién después entra', async ({ page }) => {
-  await page.route(/\/api\/usuarios\/login$/i, (r) => r.fulfill(ok({ requiere2FA: true, desafio: 'des-123' })));
+  await page.route(/\/api\/auth\/login$/i, (r) => r.fulfill(ok({ requiere2FA: true, desafio: 'des-123' })));
   const codigos: string[] = [];
-  await page.route(/\/api\/usuarios\/login2FA/i, (r) => {
+  await page.route(/\/api\/auth\/login\/2fa/i, (r) => {
     const { desafio, codigo } = r.request().postDataJSON();
     codigos.push(`${desafio}:${codigo}`);
     if (codigo === '000000') return r.fulfill({ status: 400, json: { status: 400, errors: ['El código no es correcto'], data: null } });

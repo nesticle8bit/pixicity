@@ -1,15 +1,14 @@
 <h2 class="main-title" style="margin-bottom: 11px">
   <span>
     Recientes
-    <a class="rss-link" href="/rss" target="_blank" rel="noopener" title="Suscríbete por RSS"
-      aria-label="Feed RSS de los posts recientes">
+    <a class="rss-link" [href]="rssUrl" target="_blank" rel="noopener" [title]="rssTitulo" [attr.aria-label]="rssTitulo">
       <i class="i rss" aria-hidden="true"></i>
     </a>
   </span>
   <app-categories-selector></app-categories-selector>
 </h2>
 
-@for (post of stickyPosts; track post) {
+@for (post of stickyPosts; track post.id) {
 <article class="lista-posts sticky-post--list">
   <div class="row">
     <div class="col-12 col-sm-12 col-md-7">
@@ -18,49 +17,45 @@
         matTooltip="Post fijado por el Staff" aria-label="Post fijado por el Staff" matTooltipPosition="left"
         alt="Sticky" loading="lazy" />
       }
-      <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
+      <a class="lp-link" [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
         <img width="16" height="16" src="/assets/images/categorias/{{post.categoria.icono}}"
           matTooltip="{{post.categoria.nombre}}" matTooltipPosition="left" alt="{{post.categoria.nombre}}"
           loading="lazy" />
-        &nbsp;
-        <span matTooltip="{{post.titulo}}" matTooltipPosition="right">{{post.titulo}}</span>
+        <span class="lp-titulo" (mouseenter)="tituloSiCortado($event, post.titulo)">{{post.titulo}}</span>
       </a>
     </div>
     <div class="col-12 col-sm-12 col-md-2 text-end d-none d-md-block">
       <small class="text-muted">{{post.fechaRegistro | timeAgo}}</small>
     </div>
     <div class="col-12 col-sm-12 col-md-3 text-end d-none d-md-block">
-      <small class="cursor--pointer" [routerLink]="['/perfil/' + post?.userName]"
-        matTooltip="Ver perfil de {{post?.userName}}" matTooltipPosition="right">
-        <app-user-avatar [class]="'img-avatar'" [avatar]="post?.avatar" [userName]="post?.userName"></app-user-avatar>
-        <span class="ms-1 pe-1 text-muted" [appUserPopover]="post?.userName">{{post?.userName}}</span>
-      </small>
+      <a class="lp-autor" [routerLink]="['/perfil', post.userName]" [attr.aria-label]="'Ver perfil de ' + post.userName">
+        <app-user-avatar [class]="'img-avatar'" [avatar]="post.avatar" [userName]="post.userName"></app-user-avatar>
+        <small class="ms-1 pe-1 text-muted" [appUserPopover]="post.userName">{{post.userName}}</small>
+      </a>
     </div>
   </div>
 </article>
 }
 
-@for (post of lastPosts; track post) {
+@for (post of lastPosts; track post.id) {
 <article class="lista-posts">
   <div class="row">
     <div class="col-12 col-sm-12 col-md-7">
-      <a [ngClass]="{'post-privado': post.esPrivado}"
+      <a class="lp-link" [ngClass]="{'post-privado': post.esPrivado}"
         [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
-        <img src="/assets/images/categorias/{{post.categoria.icono}}" matTooltip="{{post.categoria.nombre}}"
+        <img width="16" height="16" src="/assets/images/categorias/{{post.categoria.icono}}" matTooltip="{{post.categoria.nombre}}"
           matTooltipPosition="left" alt="{{post.categoria.nombre}}" loading="lazy" />
-        &nbsp;
-        <span matTooltip="{{post.titulo}}" matTooltipPosition="right">{{post.titulo | truncate:[52]}}</span>
+        <span class="lp-titulo" (mouseenter)="tituloSiCortado($event, post.titulo)">{{post.titulo}}</span>
       </a>
     </div>
     <div class="col-12 col-sm-12 col-md-2 text-end d-none d-md-block">
       <small class="text-muted">{{post.fechaRegistro | timeAgo}}</small>
     </div>
     <div class="col-12 col-sm-12 col-md-3 text-end d-none d-md-block">
-      <small class="cursor--pointer" [routerLink]="['/perfil/' + post?.userName]"
-        matTooltip="Ver perfil de {{post?.userName}}" matTooltipPosition="right">
-        <app-user-avatar [class]="'img-avatar'" [avatar]="post?.avatar" [userName]="post?.userName"></app-user-avatar>
-        <span class="ms-1 pe-1 text-muted" [appUserPopover]="post?.userName">{{post?.userName}}</span>
-      </small>
+      <a class="lp-autor" [routerLink]="['/perfil', post.userName]" [attr.aria-label]="'Ver perfil de ' + post.userName">
+        <app-user-avatar [class]="'img-avatar'" [avatar]="post.avatar" [userName]="post.userName"></app-user-avatar>
+        <small class="ms-1 pe-1 text-muted" [appUserPopover]="post.userName">{{post.userName}}</small>
+      </a>
     </div>
   </div>
 </article>

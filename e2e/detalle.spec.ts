@@ -26,7 +26,7 @@ for (const p of paginas) {
       // Los errores de plantilla los atrapa el ErrorHandler de Angular y los reporta al API en vez de lanzarlos.
       // Se ignoran los fallos HTTP: el API simulado corta a propósito las rutas que no simula.
       page.on('request', (r) => {
-        if (!/\/api\/appLogs\/cliente/i.test(r.url())) return;
+        if (!/\/api\/app-logs\/cliente/i.test(r.url())) return;
         const cuerpo = r.postData() ?? '';
         if (!cuerpo.includes('Something bad happened')) errores.push(cuerpo || 'error reportado por ClientErrorHandler');
       });

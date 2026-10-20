@@ -24,7 +24,7 @@ async function abrirMonitor(page: Page): Promise<URL[]> {
   const pedidos: URL[] = [];
   await simularApi(page);
   await page.addInitScript((s) => localStorage.setItem('taringas', s), JSON.stringify(SESION));
-  await page.route('**/api/monitors/getNotificaciones**', (route) => {
+  await page.route('**/api/notificaciones**', (route) => {
     pedidos.push(new URL(route.request().url()));
     return route.fulfill({
       json: {

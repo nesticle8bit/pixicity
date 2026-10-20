@@ -11,7 +11,6 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
-import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 
 @Component({
     selector: 'app-home-last-posts',
@@ -26,7 +25,6 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
         NgClass,
         MatPaginator,
         TimeAgoPipe,
-        TruncatePipe,
     ],
 })
 export class HomeLastPostsComponent implements OnInit {
@@ -78,6 +76,21 @@ export class HomeLastPostsComponent implements OnInit {
         this.pageIndex = Math.max(0, page - 1);
         this.load();
       });
+  }
+
+  /** Con una categoría elegida, el ícono lleva a su feed (/rss?categoria=seo). */
+  get rssUrl(): string {
+    return this._categoria ? `/rss?categoria=${encodeURIComponent(this._categoria)}` : '/rss';
+  }
+
+  get rssTitulo(): string {
+    return this._categoria ? 'Suscríbete por RSS a esta categoría' : 'Suscríbete por RSS a los posts recientes';
+  }
+
+  /** El título completo como tooltip nativo solo cuando el CSS lo cortó con "…". */
+  tituloSiCortado(event: MouseEvent, titulo: string): void {
+    const el = event.target as HTMLElement;
+    el.title = el.scrollWidth > el.clientWidth ? titulo : '';
   }
 
   get totalPaginas(): number {

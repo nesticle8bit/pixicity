@@ -31,8 +31,9 @@
 
   &--cta {
     border: 0;
-    background: #0a8bc4;
-    color: #e8f4fa;
+    // #006595 (acento del sitio): el texto claro llega a ~7:1 de contraste; con #0a8bc4 quedaba en ~3,6:1 (WCAG AA pide 4,5)
+    background: #006595;
+    color: #f2f8fb;
 
     .auth-card__titulo {
       font-size: 1.2rem;

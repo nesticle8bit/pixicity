@@ -36,3 +36,39 @@
     margin-top: 0;
   }
 }
+
+// Título con ícono: se corta con "…" según el ancho disponible (antes, 52 caracteres fijos)
+.lp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  vertical-align: middle;
+
+  // En los fijados va después del ícono de "sticky"
+  .sticky-post--list & {
+    max-width: calc(100% - 22px);
+  }
+
+  img {
+    flex: none;
+  }
+}
+
+.lp-titulo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Autor: enlace real (teclado, "abrir en pestaña nueva", rastreable)
+.lp-autor {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 400;
+  text-decoration: none;
+
+  &:hover small {
+    text-decoration: underline;
+  }
+}

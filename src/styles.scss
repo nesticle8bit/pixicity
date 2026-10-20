@@ -1436,54 +1436,8 @@ textarea:focus#msg_body {
 
   & li::marker { color: #1976d2; }
 
-  /* Código, tablas e imágenes: mismo look que en el editor */
-  @include rico.bloques;
-  @include rico.resaltado;
-
-  /* Botón "Copiar" de los bloques de código (lo agrega appContenidoPost) */
-  & .code-copy {
-    position: absolute;
-    top: 4px;
-    right: 6px;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 8px;
-    border: 1px solid #d0d7de;
-    border-radius: 5px;
-    background: #fff;
-    color: #57606a;
-    font: 600 11px/1.6 system-ui, sans-serif;
-    cursor: pointer;
-    opacity: .85;
-
-    &:hover,
-    &:focus-visible {
-      opacity: 1;
-      color: #1976d2;
-      border-color: #1976d2;
-    }
-
-    &.is-ok {
-      color: #1a7f37;
-      border-color: #1a7f37;
-    }
-  }
-
-  /* Títulos destino del índice: que no queden debajo del header fijo */
-  & h2,
-  & h3 {
-    scroll-margin-top: 80px;
-  }
-
-  /* Imágenes que se amplían al hacer clic (las que son enlace no) */
-  & img {
-    cursor: zoom-in;
-  }
-
-  & a img {
-    cursor: pointer;
-  }
+  /* Código, tablas, imágenes, botón Copiar e índice: igual que en los temas de comunidades */
+  @include rico.publicado;
 
   & p {
     font-size: .9rem;
@@ -4001,4 +3955,9 @@ app-rich-editor .rich-editor__content {
   .img-resizable.img-centro {
     display: table;
   }
+}
+
+// Temas de comunidades: mismo contenido enriquecido que los posts (appContenidoPost)
+.tema-content {
+  @include rico.publicado;
 }

@@ -17,7 +17,7 @@ async function comoAdmin(page: Page): Promise<void> {
 test('usuarios: filtra por correo sin confirmar y lo confirma a mano', async ({ page }) => {
   await comoAdmin(page);
   const pedidosLista: URL[] = [];
-  await page.route(/\/api\/usuarios\/getUsuariosAdmin/i, (r) => {
+  await page.route(/\/api\/usuarios\/admin/i, (r) => {
     pedidosLista.push(new URL(r.request().url()));
     return r.fulfill(ok(pagina([
       { id: 7, fechaRegistro: '2026-10-10T10:00:00Z', userName: 'nuevo', email: 'nuevo@correo.com', emailConfirmado: false, genero: null,
@@ -25,8 +25,8 @@ test('usuarios: filtra por correo sin confirmar y lo confirma a mano', async ({ 
     ], 'usuarios')));
   });
   let confirmado = '';
-  await page.route(/\/api\/usuarios\/confirmarEmailAdmin/i, (r) => {
-    confirmado = new URL(r.request().url()).searchParams.get('usuarioId') ?? '';
+  await page.route(/\/api\/usuarios\/\d+\/email\/confirmacion/i, (r) => {
+    confirmado = /usuarios\/(\d+)\//.exec(r.request().url())?.[1] ?? '';
     return r.fulfill(ok(true));
   });
   page.on('dialog', (d) => d.accept());
@@ -43,20 +43,20 @@ test('usuarios: filtra por correo sin confirmar y lo confirma a mano', async ({ 
 
 test('moderación: un shout denunciado se muestra con su tipo y enlace, y se puede eliminar', async ({ page }) => {
   await comoAdmin(page);
-  await page.route(/\/api\/moderacion\/getReportes/i, (r) => r.fulfill(ok(pagina([
+  await page.route(/\/api\/moderacion\/reportes(\?|$)/i, (r) => r.fulfill(ok(pagina([
     { id: 3, tipoContenido: 6, tipoContenidoNombre: 'Shout', contenidoId: 44, motivo: 'Spam o publicidad', resuelto: false,
       resueltoPor: null, fechaResuelto: null, fechaRegistro: '2026-10-11T10:00:00Z', reportanteUserName: 'ana', reportanteAvatar: null,
       contenidoPreview: 'Compra seguidores baratos', autorUserName: 'spammer', autorAvatar: null, contenidoEliminado: false,
       contextoUrl: 'spammer' },
   ]))));
-  await page.route(/\/api\/moderacion\/getReglasProtocolo/i, (r) => r.fulfill(ok([
+  await page.route(/\/api\/moderacion\/reglas/i, (r) => r.fulfill(ok([
     { id: 'spam', titulo: 'Spam o publicidad', descripcion: 'Publicidad no autorizada.' },
   ])));
   let eliminado = '';
   let regla = '';
-  await page.route(/\/api\/moderacion\/eliminarContenidoReportado/i, (r) => {
+  await page.route(/\/api\/moderacion\/reportes\/\d+\/contenido/i, (r) => {
     const url = new URL(r.request().url());
-    eliminado = url.searchParams.get('reporteId') ?? '';
+    eliminado = /reportes\/(\d+)\//.exec(url.pathname)?.[1] ?? '';
     regla = url.searchParams.get('regla') ?? '';
     return r.fulfill(ok(true));
   });

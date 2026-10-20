@@ -113,10 +113,11 @@ export const FOTO = {
   otrasFotosUsuario: [],
 };
 
+// Rutas REST del API (ver RutasApiTests): ids en la ruta, sin verbos. La primera que coincide gana.
 const RESPUESTAS: [RegExp, unknown][] = [
-  [/\/api\/posts\/getpostbyid/i, { post: POST }],
+  [/\/api\/posts\/\d+(\?|$)/i, { post: POST }],
   [
-    /\/api\/posts\/getinteraccionespost\?/i,
+    /\/api\/posts\/\d+\/interacciones(\?|$)/i,
     {
       misPuntos: 0,
       enFavoritos: false,
@@ -133,20 +134,20 @@ const RESPUESTAS: [RegExp, unknown][] = [
     },
   ],
   [
-    /\/api\/comentarios\/getcomentariosbypostid/i,
+    /\/api\/posts\/\d+\/comentarios(\?|$)/i,
     [
       comentarioPost(1, 'lector_uno', 'Muy buen aporte', 8, [comentarioPost(2, AUTOR, 'Gracias por leer', 2)]),
       comentarioPost(3, 'lector_dos', 'Comentario con enlace https://ejemplo.com', 0),
     ],
   ],
-  [/\/api\/comunidades\/gettema/i, TEMA],
-  [/\/api\/fotos\/getfotobyid/i, FOTO],
+  [/\/api\/comunidades\/temas\/\d+(\?|$)/i, TEMA],
+  [/\/api\/fotos\/\d+(\?|$)/i, FOTO],
   [
-    /\/api\/fotos\/getcomentariosbyfotoid/i,
+    /\/api\/fotos\/\d+\/comentarios(\?|$)/i,
     [comentarioPlano(1, null, 'lector_uno', 'Linda foto', 3), comentarioPlano(2, 1, AUTOR, '¡Gracias!', 0)],
   ],
   [
-    /\/api\/usuarios\/getusuarioinfo/i,
+    /\/api\/usuarios\/por-nombre\/[^/?]+\/info(\?|$)/i,
     { userName: AUTOR, avatar: null, rango: RANGO, puntos: 50, postsCount: 2, seguidoresCount: 7 },
   ],
 ];

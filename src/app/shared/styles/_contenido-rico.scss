@@ -188,3 +188,54 @@ $lenguajes: (
   .hljs-emphasis { font-style: italic; }
   .hljs-strong { font-weight: 700; }
 }
+
+// Contenido ya publicado (post y tema): bloques + colores + lo que agrega appContenidoPost
+@mixin publicado {
+  @include bloques;
+  @include resaltado;
+
+  /* Botón "Copiar" de los bloques de código (lo agrega appContenidoPost) */
+  & .code-copy {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border: 1px solid #d0d7de;
+    border-radius: 5px;
+    background: #fff;
+    color: #57606a;
+    font: 600 11px/1.6 system-ui, sans-serif;
+    cursor: pointer;
+    opacity: .85;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      color: #1976d2;
+      border-color: #1976d2;
+    }
+
+    &.is-ok {
+      color: #1a7f37;
+      border-color: #1a7f37;
+    }
+  }
+
+  /* Títulos destino del índice: que no queden debajo del header fijo */
+  & h2,
+  & h3 {
+    scroll-margin-top: 80px;
+  }
+
+  /* Imágenes que se amplían al hacer clic (las que son enlace no) */
+  & img {
+    cursor: zoom-in;
+  }
+
+  & a img {
+    cursor: pointer;
+  }
+}

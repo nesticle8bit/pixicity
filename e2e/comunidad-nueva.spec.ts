@@ -35,7 +35,7 @@ const ok = (route: Route, data: unknown) => route.fulfill({ json: { status: 200,
 async function simularMi(page: Page): Promise<URL[]> {
   const muro: URL[] = [];
   await simularApi(page);
-  await page.route('**/api/mi/getMuro**', (route) => {
+  await page.route('**/api/mi/muro**', (route) => {
     const url = new URL(route.request().url());
     muro.push(url);
     const tag = url.searchParams.get('tag');
@@ -44,21 +44,21 @@ async function simularMi(page: Page): Promise<URL[]> {
       siguiente: null,
     });
   });
-  await page.route('**/api/mi/getTendencias**', (route) => {
+  await page.route('**/api/mi/tendencias**', (route) => {
     const recientes = new URL(route.request().url()).searchParams.get('orden') === 'recientes';
     return ok(route, recientes ? [{ tag: 'jazz', shouts: 1, ultimo: AHORA }] : [{ tag: 'rock', shouts: 12, ultimo: AHORA }]);
   });
-  await page.route('**/api/mi/getSugerencias**', (route) => ok(route, [{ userName: 'ana', avatar: null, seguidores: 4 }]));
-  await page.route('**/api/mi/getResumen**', (route) =>
+  await page.route('**/api/mi/sugerencias**', (route) => ok(route, [{ userName: 'ana', avatar: null, seguidores: 4 }]));
+  await page.route('**/api/mi/resumen**', (route) =>
     ok(route, { id: 1, userName: 'demo', avatar: null, rango: 'Novato', puntos: 0, seguidores: 0, siguiendo: 0, shouts: 0, posts: 0 }),
   );
-  await page.route('**/api/mi/buscarHashtags**', (route) =>
+  await page.route('**/api/mi/hashtags**', (route) =>
     ok(route, [
       { tag: 'rock', shouts: 12, ultimo: AHORA },
       { tag: 'rocknacional', shouts: 3, ultimo: AHORA },
     ]),
   );
-  await page.route('**/api/usuarios/sugerirMenciones**', (route) => ok(route, [{ id: 2, userName: 'ana', avatar: null }]));
+  await page.route('**/api/usuarios/menciones**', (route) => ok(route, [{ id: 2, userName: 'ana', avatar: null }]));
   return muro;
 }
 
@@ -128,7 +128,7 @@ test('el composer de /mi autocompleta #hashtags con el teclado', async ({ page }
 
 test('el login vuelve a la página pedida (returnUrl)', async ({ page }) => {
   await simularApi(page);
-  await page.route('**/api/usuarios/login', (route) => ok(route, SESION));
+  await page.route('**/api/auth/login', (route) => ok(route, SESION));
   await page.route('**/api/mi/**', (route) => ok(route, []));
   await page.route('**/api/comunidades/**', (route) => ok(route, []));
   await page.goto('/login?returnUrl=%2Fbienvenida');
@@ -142,16 +142,16 @@ test('el login vuelve a la página pedida (returnUrl)', async ({ page }) => {
 test('bienvenida guiada: unirse a comunidades, seguir gente y terminar en /mi', async ({ page }) => {
   await simularMi(page);
   const acciones: string[] = [];
-  await page.route('**/api/comunidades/getTopComunidades**', (route) =>
+  await page.route('**/api/comunidades/top**', (route) =>
     ok(route, [
       { id: 3, nombre: 'Comunidad Demo', nombreCorto: 'demo', descripcion: null, imagen: null, categoria: 'Varios', creador: 'ana', miembrosCount: 10, temasCount: 4, fechaRegistro: AHORA },
     ]),
   );
-  await page.route('**/api/comunidades/unirme**', (route) => {
+  await page.route('**/api/comunidades/*/membresia', (route) => {
     acciones.push('unirme');
     return ok(route, true);
   });
-  await page.route('**/api/usuarios/seguirUsuario', (route) => {
+  await page.route('**/api/usuarios/seguimientos', (route) => {
     acciones.push('seguir');
     return ok(route, true);
   });
