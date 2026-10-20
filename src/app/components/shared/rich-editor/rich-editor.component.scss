@@ -308,140 +308,143 @@
       pointer-events: none;
     }
 
-    // Contenido
-    h1, h2, h3, h4, h5, h6 {
-      margin: 0.6em 0 0.3em;
-      line-height: 1.3;
-    }
-    h1 { font-size: 1.8em; }
-    h2 { font-size: 1.5em; }
-    h3 { font-size: 1.3em; }
-    h4 { font-size: 1.1em; }
-    h5 { font-size: 1.0em; }
-    h6 { font-size: 0.9em; }
+    // Contenido: lo crea el editor en tiempo de ejecución (sin atributo _ngcontent), por eso ::ng-deep
+    // acotado a .rich-editor__content
+    ::ng-deep {
+      h1, h2, h3, h4, h5, h6 {
+        margin: 0.6em 0 0.3em;
+        line-height: 1.3;
+      }
+      h1 { font-size: 1.8em; }
+      h2 { font-size: 1.5em; }
+      h3 { font-size: 1.3em; }
+      h4 { font-size: 1.1em; }
+      h5 { font-size: 1.0em; }
+      h6 { font-size: 0.9em; }
 
-    p    { margin: 0.4em 0; }
-    // styles.scss quita las viñetas a todo <li>: aquí se restauran
-    ul, ol { padding-left: 1.6em; margin: 0.4em 0; }
-    ul > li { list-style: disc; }
-    ol > li { list-style: decimal; }
-    li ul > li { list-style: circle; }
-    li li ul > li { list-style: square; }
-    li ol > li { list-style: lower-alpha; }
-    li { margin: 0.15em 0; padding-left: 0.2em; }
-    li::marker { color: var(--re-accent); }
-    li > ul, li > ol { margin: 0.1em 0; }
+      p    { margin: 0.4em 0; }
+      // styles.scss quita las viñetas a todo <li>: aquí se restauran
+      ul, ol { padding-left: 1.6em; margin: 0.4em 0; }
+      ul > li { list-style: disc; }
+      ol > li { list-style: decimal; }
+      li ul > li { list-style: circle; }
+      li li ul > li { list-style: square; }
+      li ol > li { list-style: lower-alpha; }
+      li { margin: 0.15em 0; padding-left: 0.2em; }
+      li::marker { color: var(--re-accent); }
+      li > ul, li > ol { margin: 0.1em 0; }
 
-    blockquote {
-      border-left: 4px solid var(--re-quote-border);
-      margin: 0.5em 0;
-      padding: 4px 12px;
-      color: var(--re-quote-text);
-      font-style: italic;
-    }
-
-    code {
-      background: var(--re-code-bg);
-      border-radius: 3px;
-      padding: 1px 5px;
-      font-family: 'Consolas', 'Monaco', monospace;
-      font-size: 0.9em;
-    }
-
-    // Bloque de código estilo Teams: caja con borde, franja de acento y monoespaciada
-    pre {
-      position: relative;
-      background: #f6f8fa;
-      color: #24292f;
-      border: 1px solid #d0d7de;
-      border-left: 4px solid var(--re-accent);
-      border-radius: 6px;
-      padding: 28px 14px 12px;
-      margin: 0.75em 0;
-      font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
-      font-size: 13px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      tab-size: 2;
-
-      &::before {
-        content: 'Código';
-        position: absolute;
-        top: 6px;
-        left: 14px;
-        font-family: inherit;
-        font-size: 11px;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        color: #6e7781;
-        pointer-events: none;
-        user-select: none;
+      blockquote {
+        border-left: 4px solid var(--re-quote-border);
+        margin: 0.5em 0;
+        padding: 4px 12px;
+        color: var(--re-quote-text);
+        font-style: italic;
       }
 
       code {
-        background: none;
-        padding: 0;
-        font-size: inherit;
+        background: var(--re-code-bg);
+        border-radius: 3px;
+        padding: 1px 5px;
+        font-family: 'Consolas', 'Monaco', monospace;
+        font-size: 0.9em;
       }
-    }
 
-    hr {
-      border: none;
-      border-top: 1px solid var(--re-separator);
-      margin: 0.8em 0;
-    }
+      // Bloque de código estilo Teams: caja con borde, franja de acento y monoespaciada
+      pre {
+        position: relative;
+        background: #f6f8fa;
+        color: #24292f;
+        border: 1px solid #d0d7de;
+        border-left: 4px solid var(--re-accent);
+        border-radius: 6px;
+        padding: 28px 14px 12px;
+        margin: 0.75em 0;
+        font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+        font-size: 13px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        tab-size: 2;
 
-    a {
-      color: var(--re-accent);
-      text-decoration: underline;
-    }
+        &::before {
+          content: 'Código';
+          position: absolute;
+          top: 6px;
+          left: 14px;
+          font-family: inherit;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+          color: #6e7781;
+          pointer-events: none;
+          user-select: none;
+        }
 
-    img {
-      max-width: 100% !important; // ancho/alto fijos del HTML pegado no desbordan
-      height: auto !important;
-      border-radius: 4px;
-    }
+        code {
+          background: none;
+          padding: 0;
+          font-size: inherit;
+        }
+      }
 
-    // Sin tamaño elegido, las imágenes no estiran el editor
-    img:not([width]) {
-      max-height: 420px;
-    }
+      hr {
+        border: none;
+        border-top: 1px solid var(--re-separator);
+        margin: 0.8em 0;
+      }
 
-    // Imagen como bloque atómico; al hacer clic se muestra el marco de resize
-    .img-resizable {
-      display: inline-block;
-      position: relative;
-      max-width: 100%;
-      line-height: 0;
-      border-radius: 4px;
-      cursor: pointer;
-
-      &:hover {
-        outline: 1px dashed var(--re-accent);
+      a {
+        color: var(--re-accent);
+        text-decoration: underline;
       }
 
       img {
-        display: block;
-        max-width: 100%;
-        height: auto;
-        pointer-events: none; // los clics van al span, no a la imagen
+        max-width: 100% !important; // ancho/alto fijos del HTML pegado no desbordan
+        height: auto !important;
+        border-radius: 4px;
       }
-    }
 
-    // Placeholder mientras sube una imagen (no se guarda en el valor)
-    .rich-editor__uploading {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      border: 1px dashed var(--re-accent);
-      border-radius: var(--re-radius);
-      color: var(--re-accent);
-      font-size: 12px;
-      line-height: 1.2;
-      animation: re-pulse 1.2s ease-in-out infinite;
+      // Sin tamaño elegido, las imágenes no estiran el editor
+      img:not([width]) {
+        max-height: 420px;
+      }
+
+      // Imagen como bloque atómico; al hacer clic se muestra el marco de resize
+      .img-resizable {
+        display: inline-block;
+        position: relative;
+        max-width: 100%;
+        line-height: 0;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+          outline: 1px dashed var(--re-accent);
+        }
+
+        img {
+          display: block;
+          max-width: 100%;
+          height: auto;
+          pointer-events: none; // los clics van al span, no a la imagen
+        }
+      }
+
+      // Placeholder mientras sube una imagen (no se guarda en el valor)
+      .rich-editor__uploading {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border: 1px dashed var(--re-accent);
+        border-radius: var(--re-radius);
+        color: var(--re-accent);
+        font-size: 12px;
+        line-height: 1.2;
+        animation: re-pulse 1.2s ease-in-out infinite;
+      }
     }
   }
 
