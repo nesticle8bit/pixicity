@@ -413,3 +413,25 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+// Imágenes subidas desde el formulario: la URL del comentario se muestra como imagen.
+.coment-body p ::ng-deep .coment-img,
+.coment-preview p ::ng-deep .coment-img {
+  display: block;
+  width: fit-content;
+  margin: 6px 0;
+
+  img {
+    display: block;
+    max-width: min(100%, 420px);
+    max-height: 360px;
+    border-radius: 8px;
+    border: 1px solid #e3e8eb;
+    object-fit: contain;
+  }
+}
+
+.coment-emoji .girando { animation: coment-girar 0.9s linear infinite; }
+.coment-emoji:disabled { cursor: default; opacity: 0.6; }
+
+@keyframes coment-girar { to { transform: rotate(360deg); } }

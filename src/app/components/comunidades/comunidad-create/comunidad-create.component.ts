@@ -1,7 +1,13 @@
 import { environment } from 'src/environments/environment';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
@@ -9,20 +15,25 @@ import { DisplayComponentService } from 'src/app/services/shared/displayComponen
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SelectAutocompleteComponent } from '../../shared/select-autocomplete/select-autocomplete.component';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
-import { SelectOptionDirective, SelectLabelDirective } from '../../shared/select-autocomplete/select-template.directives';
+import {
+  SelectOptionDirective,
+  SelectLabelDirective,
+} from '../../shared/select-autocomplete/select-template.directives';
+import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
 
 @Component({
-    selector: 'app-comunidad-create',
-    templateUrl: './comunidad-create.component.html',
-    styleUrls: ['./comunidad-create.component.scss'],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        SelectAutocompleteComponent,
-        SelectOptionDirective,
-        SelectLabelDirective,
-        RouterLink,
-    ],
+  selector: 'app-comunidad-create',
+  templateUrl: './comunidad-create.component.html',
+  styleUrls: ['./comunidad-create.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    SelectAutocompleteComponent,
+    SelectOptionDirective,
+    SelectLabelDirective,
+    RouterLink,
+    AdsByTypeComponent,
+  ],
 })
 export class ComunidadCreateComponent implements OnInit {
   private displayService = inject(DisplayComponentService);
@@ -47,9 +58,24 @@ export class ComunidadCreateComponent implements OnInit {
 
   /** Checklist del encabezado: se completa a medida que se llena el formulario. */
   public readonly pasos = [
-    { id: 'identidad', titulo: 'Identidad', ok: () => this.valido('nombre') && this.valido('nombreCorto') && this.valido('descripcion') },
-    { id: 'clasificacion', titulo: 'Clasificación', ok: () => this.valido('comunidadCategoriaId') },
-    { id: 'acceso', titulo: 'Acceso y permisos', ok: () => this.valido('acceso') && this.valido('permisos') },
+    {
+      id: 'identidad',
+      titulo: 'Identidad',
+      ok: () =>
+        this.valido('nombre') &&
+        this.valido('nombreCorto') &&
+        this.valido('descripcion'),
+    },
+    {
+      id: 'clasificacion',
+      titulo: 'Clasificación',
+      ok: () => this.valido('comunidadCategoriaId'),
+    },
+    {
+      id: 'acceso',
+      titulo: 'Acceso y permisos',
+      ok: () => this.valido('acceso') && this.valido('permisos'),
+    },
   ];
 
   get nombreCategoria(): string | null {
@@ -64,7 +90,10 @@ export class ComunidadCreateComponent implements OnInit {
   constructor() {
     this.formGroup = this.fb.group({
       nombre: ['', [Validators.required, Validators.maxLength(80)]],
-      nombreCorto: ['', [Validators.required, Validators.pattern(/^[a-z0-9-]+$/)]],
+      nombreCorto: [
+        '',
+        [Validators.required, Validators.pattern(/^[a-z0-9-]+$/)],
+      ],
       comunidadCategoriaId: [0, [Validators.required, Validators.min(1)]],
       comunidadSubCategoriaId: [null],
       paisId: [null],
@@ -74,12 +103,24 @@ export class ComunidadCreateComponent implements OnInit {
       permisos: [3, Validators.required],
     });
 
-    this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: true, submenu: true, background: '' });
+    this.displayService.setDisplay({
+      mainMenu: true,
+      footer: true,
+      searchFooter: true,
+      submenu: true,
+      background: '',
+    });
   }
 
   ngOnInit(): void {
-    this.comunidadesService.getCategorias().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => (this.categorias = v ?? []));
-    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => (this.paises = v ?? []));
+    this.comunidadesService
+      .getCategorias()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((v) => (this.categorias = v ?? []));
+    this.parametrosService
+      .getPaisesDropdown()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((v) => (this.paises = v ?? []));
   }
 
   onNombreChange(): void {
@@ -87,7 +128,8 @@ export class ComunidadCreateComponent implements OnInit {
     const slugCtrl = this.formGroup.get('nombreCorto');
     if (slugCtrl && !slugCtrl.dirty) {
       const slug = (this.formGroup.get('nombre')?.value || '')
-        .toLowerCase().trim()
+        .toLowerCase()
+        .trim()
         .normalize('NFD')
         .replace(/[^a-z0-9\s-]/g, '')
         .replace(/\s+/g, '-')
@@ -102,7 +144,10 @@ export class ComunidadCreateComponent implements OnInit {
     input.value = '';
     if (!archivo) return;
     if (archivo.size > 8 * 1024 * 1024) {
-      this.notificationService.error('La imagen no puede pesar más de 8 MB', 'Imagen');
+      this.notificationService.error(
+        'La imagen no puede pesar más de 8 MB',
+        'Imagen',
+      );
       return;
     }
     this.subiendo = true;
@@ -127,14 +172,20 @@ export class ComunidadCreateComponent implements OnInit {
     this.formGroup.get('comunidadSubCategoriaId')?.setValue(null);
     this.subCategorias = [];
     if (categoriaId > 0) {
-      this.comunidadesService.getSubCategorias(categoriaId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => (this.subCategorias = v ?? []));
+      this.comunidadesService
+        .getSubCategorias(categoriaId)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((v) => (this.subCategorias = v ?? []));
     }
   }
 
   crear(): void {
     if (this.formGroup.invalid) {
       this.formGroup.markAllAsTouched();
-      this.notificationService.error('Revisa los campos obligatorios', 'Formulario incompleto');
+      this.notificationService.error(
+        'Revisa los campos obligatorios',
+        'Formulario incompleto',
+      );
       return;
     }
 
@@ -143,12 +194,20 @@ export class ComunidadCreateComponent implements OnInit {
     model.acceso = +model.acceso;
     model.permisos = +model.permisos;
 
-    this.comunidadesService.saveComunidad(model).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
-        this.notificationService.success('Tu comunidad ha sido creada', 'Comunidad creada');
-        this.router.navigate(['/comunidades', model.nombreCorto]);
-      },
-      error: () => { this.loading = false; },
-    });
+    this.comunidadesService
+      .saveComunidad(model)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.notificationService.success(
+            'Tu comunidad ha sido creada',
+            'Comunidad creada',
+          );
+          this.router.navigate(['/comunidades', model.nombreCorto]);
+        },
+        error: () => {
+          this.loading = false;
+        },
+      });
   }
 }

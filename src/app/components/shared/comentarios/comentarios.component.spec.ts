@@ -1,3 +1,4 @@
+import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { TestBed } from '@angular/core/testing';
 import { EmojisPopoverService } from '../../bottom-sheets/bottom-sheets-emojis/emojis-popover.service';
 import { of } from 'rxjs';
@@ -39,6 +40,7 @@ describe('ComentariosComponent', () => {
         { provide: IHttpSecurityService, useValue: { getCurrentUser: () => ({ usuario, token: 't' }) } },
         { provide: NotificationService, useValue: jasmine.createSpyObj('NotificationService', ['confirm', 'success', 'warning']) },
         { provide: EmojisPopoverService, useValue: { cerrar: () => {} } },
+        { provide: IHttpPerfilService, useValue: jasmine.createSpyObj('IHttpPerfilService', ['subirImagenShout']) },
       ],
     });
 
@@ -162,5 +164,14 @@ describe('ComentariosComponent', () => {
     expect(html).toContain('&lt;b&gt;hola&lt;/b&gt;');
     expect(html).toContain('<a href="/perfil/ana">@ana</a>');
     expect(html).toContain('<a href="https://x.com"');
+  });
+
+  it('formatear muestra como imagen solo las subidas al sitio', () => {
+    const guid = 'a'.repeat(32);
+    const propia = componente.formatear(`https://taringas.net/images/shouts/ana/${guid}.webp`);
+    const ajena = componente.formatear(`https://otro.com/images/shouts/ana/${guid}.webp`);
+
+    expect(propia).toContain('<img src="https://taringas.net/images/shouts/ana/');
+    expect(ajena).not.toContain('<img');
   });
 });

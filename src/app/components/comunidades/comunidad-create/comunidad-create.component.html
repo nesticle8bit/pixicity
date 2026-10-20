@@ -7,7 +7,8 @@
     </div>
     <ol class="cc-hero__pasos" aria-label="Progreso">
       @for (p of pasos; track p.id) {
-      <li [class.is-ok]="p.ok()"><i class="ti" [class.ti-circle-check]="p.ok()" [class.ti-circle]="!p.ok()" aria-hidden="true"></i> {{ p.titulo }}</li>
+      <li [class.is-ok]="p.ok()"><i class="ti" [class.ti-circle-check]="p.ok()" [class.ti-circle]="!p.ok()"
+          aria-hidden="true"></i> {{ p.titulo }}</li>
       }
     </ol>
   </header>
@@ -26,8 +27,8 @@
               {{ formGroup.value?.nombre?.length || 0 }}/80
             </span>
           </div>
-          <input id="comunidad-create-nombre" type="text" formControlName="nombre" (input)="onNombreChange()" maxlength="80"
-            placeholder="Ej. Amantes del café" />
+          <input id="comunidad-create-nombre" type="text" formControlName="nombre" (input)="onNombreChange()"
+            maxlength="80" placeholder="Ej. Amantes del café" />
           @if (formGroup.get('nombre')?.touched && formGroup.get('nombre')?.invalid) {
           <small class="cc-err">El nombre es obligatorio.</small>
           }
@@ -37,7 +38,8 @@
           <label for="comunidad-create-nombreCorto">Nombre corto (URL) <span class="cc-req">*</span></label>
           <div class="cc-slug">
             <span class="cc-slug__prefix">{{publicHost}}/comunidades/</span>
-            <input id="comunidad-create-nombreCorto" type="text" formControlName="nombreCorto" placeholder="amantes-del-cafe" />
+            <input id="comunidad-create-nombreCorto" type="text" formControlName="nombreCorto"
+              placeholder="amantes-del-cafe" />
           </div>
           <small class="cc-hint">
             Sólo minúsculas, números y guiones medios (-). <strong>No se podrá modificar después.</strong>
@@ -61,7 +63,8 @@
               <label class="cc-btn cc-btn--ghost cc-imagen__subir" [class.is-cargando]="subiendo">
                 <input id="comunidad-create-imagen" type="file" accept="image/png,image/jpeg,image/webp,image/gif"
                   (change)="subirImagen($event)" [disabled]="subiendo" />
-                <i class="ti ti-upload" aria-hidden="true"></i> {{ subiendo ? 'Subiendo…' : (formGroup.value.imagen ? 'Cambiar' : 'Subir imagen') }}
+                <i class="ti ti-upload" aria-hidden="true"></i> {{ subiendo ? 'Subiendo…' : (formGroup.value.imagen ?
+                'Cambiar' : 'Subir imagen') }}
               </label>
               @if (formGroup.value.imagen) {
               <button type="button" class="cc-btn cc-btn--ghost" (click)="quitarImagen()">Quitar</button>
@@ -112,13 +115,15 @@
             placeholder="Selecciona un país (opcional)">
             <ng-template appSelectOption let-item="item">
               @if (item?.iso2) {
-              <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1" alt="" aria-hidden="true" loading="lazy">
+              <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1" alt=""
+                aria-hidden="true" loading="lazy">
               }
               {{ item.nombre }}
             </ng-template>
             <ng-template appSelectLabel let-item="item">
               @if (item?.iso2) {
-              <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1" alt="" aria-hidden="true" loading="lazy">
+              <img src="/assets/images/flags/{{item?.iso2?.toLowerCase()}}.png" class="image-middle me-1" alt=""
+                aria-hidden="true" loading="lazy">
               }
               {{ item.nombre }}
             </ng-template>
@@ -176,7 +181,7 @@
         </div>
       </section>
 
-      <div class="cc-actions">
+      <div class="cc-actions mb-3">
         <a [routerLink]="['/comunidades']" class="cc-btn cc-btn--ghost">Cancelar</a>
         <button type="submit" class="cc-btn cc-btn--primary" [disabled]="loading || subiendo">
           <i class="ti ti-check" aria-hidden="true"></i> {{ loading ? 'Creando…' : 'Crear comunidad' }}
@@ -184,7 +189,7 @@
       </div>
     </div>
 
-    <aside class="cc-aside">
+    <aside class="cc-aside mb-3">
       <section class="cc-preview" aria-label="Vista previa">
         <span class="cc-preview__titulo">Vista previa</span>
         <div class="cc-preview__tarjeta">
@@ -199,19 +204,28 @@
             <strong>{{ formGroup.value.nombre || 'Nombre de tu comunidad' }}</strong>
             <span class="cc-preview__url">/comunidades/{{ formGroup.value.nombreCorto || 'nombre-corto' }}</span>
             <span class="cc-preview__meta">
-              <i class="ti" [class.ti-world]="+formGroup.value.acceso === 1" [class.ti-user-shield]="+formGroup.value.acceso === 2" aria-hidden="true"></i>
+              <i class="ti" [class.ti-world]="+formGroup.value.acceso === 1"
+                [class.ti-user-shield]="+formGroup.value.acceso === 2" aria-hidden="true"></i>
               {{ nombreCategoria || 'Sin categoría' }}
             </span>
           </div>
         </div>
-        <p class="cc-preview__desc">{{ formGroup.value.descripcion || 'Aquí aparecerá la descripción que escribas.' }}</p>
+        <p class="cc-preview__desc">
+          {{ formGroup.value.descripcion || 'Aquí aparecerá la descripción que escribas.' }}
+        </p>
       </section>
 
       <div class="cc-rules">
-        <span class="cc-rules__title"><i class="ti ti-shield-check"></i> Reglas para tu comunidad</span>
+        <span class="cc-rules__title">
+          <i class="ti ti-shield-check"></i> Reglas para tu comunidad
+        </span>
+
         <p>Para que tu comunidad sea exitosa, ten en cuenta estos puntos:</p>
 
-        <p class="cc-rules__si"><i class="ti ti-circle-check"></i> Una comunidad SÍ puede:</p>
+        <p class="cc-rules__si">
+          <i class="ti ti-circle-check"></i> Una comunidad SÍ puede:
+        </p>
+
         <ul class="cc-rules__list cc-rules__list--ok">
           <li>Compartir ideas y pensamientos.</li>
           <li>Ser interesante para otras personas.</li>
@@ -219,7 +233,10 @@
           <li>Compartir gustos y experiencias.</li>
         </ul>
 
-        <p class="cc-rules__no"><i class="ti ti-circle-x"></i> Una comunidad NO puede:</p>
+        <p class="cc-rules__no">
+          <i class="ti ti-circle-x"></i> Una comunidad NO puede:
+        </p>
+
         <ul class="cc-rules__list cc-rules__list--no">
           <li>Generar odio o violencia.</li>
           <li>Contenido racista o peyorativo.</li>
@@ -228,6 +245,8 @@
           <li>Hacer spam o difundir malware.</li>
         </ul>
       </div>
+
+      <ads-by-type class="d-block d-md-none mb-3" [type]="'300x250'" />
     </aside>
   </form>
 </div>

@@ -16,7 +16,7 @@
   <div class="coment-form">
     <app-user-avatar class="coment-form__avatar" [avatar]="miAvatar" [userName]="miUsuario" [width]="38" [height]="38"></app-user-avatar>
     <div class="coment-form__campo">
-      <textarea #campoComentario appMenciones [(ngModel)]="nuevoComentario" rows="3" placeholder="Escribe un comentario..." aria-label="Escribe un comentario"></textarea>
+      <textarea #campoComentario appMenciones (paste)="alPegar($event, 'nuevo')" [(ngModel)]="nuevoComentario" rows="3" placeholder="Escribe un comentario..." aria-label="Escribe un comentario"></textarea>
       @if (vistaPrevia && nuevoComentario.trim()) {
       <div class="coment-preview" aria-live="polite">
         <span class="coment-preview__titulo">Vista previa</span>
@@ -28,11 +28,16 @@
           [attr.aria-pressed]="vistaPrevia" matTooltip="Ver cómo quedará (enlaces y menciones)">
           <i class="ti ti-eye" aria-hidden="true"></i> Vista previa
         </button>
+        <input #archivo_nuevo type="file" accept="image/*" hidden (change)="elegirImagen($event, 'nuevo', campoComentario)" />
+        <button type="button" class="coment-emoji" (click)="archivo_nuevo.click()" [disabled]="!!subiendoImagen"
+          matTooltip="Subir imagen" aria-label="Subir una imagen">
+          <i class="ti" [class.ti-photo]="subiendoImagen !== 'nuevo'" [class.ti-loader-2]="subiendoImagen === 'nuevo'" [class.girando]="subiendoImagen === 'nuevo'" aria-hidden="true"></i>
+        </button>
         <button #botonEmojis type="button" class="coment-emoji" [class.is-abierto]="emojisAbierto" (click)="abrirEmojis(botonEmojis)"
           matTooltip="Emojis" aria-label="Agregar emoji" aria-haspopup="dialog" [attr.aria-expanded]="emojisAbierto">
           <i class="ti ti-mood-smile"></i>
         </button>
-        <button type="button" class="boton azul" (click)="comentar()" [disabled]="enviando || !nuevoComentario.trim()">
+        <button type="button" class="boton azul" (click)="comentar()" [disabled]="enviando || subiendoImagen === 'nuevo' || !nuevoComentario.trim()">
           <i class="ti ti-send"></i> Comentar
         </button>
       </div>
@@ -125,10 +130,15 @@
 
         @if (editId === c.id) {
         <div class="coment-edit">
-          <textarea appMenciones [(ngModel)]="editText" rows="2" aria-label="Editar comentario"></textarea>
+          <textarea #campoEdicion appMenciones (paste)="alPegar($event, 'edicion')" [(ngModel)]="editText" rows="2" aria-label="Editar comentario"></textarea>
           <div class="coment-mini-actions">
+            <input #archivo_edicion type="file" accept="image/*" hidden (change)="elegirImagen($event, 'edicion', campoEdicion)" />
+            <button type="button" class="coment-emoji" (click)="archivo_edicion.click()" [disabled]="!!subiendoImagen"
+              matTooltip="Subir imagen" aria-label="Subir una imagen">
+              <i class="ti" [class.ti-photo]="subiendoImagen !== 'edicion'" [class.ti-loader-2]="subiendoImagen === 'edicion'" [class.girando]="subiendoImagen === 'edicion'" aria-hidden="true"></i>
+            </button>
             <button class="boton azul" (click)="guardarEdicion(c)"
-              [disabled]="editEnviando || !editText.trim()">Guardar</button>
+              [disabled]="editEnviando || subiendoImagen === 'edicion' || !editText.trim()">Guardar</button>
             <button class="boton gris" (click)="cancelarEdicion()">Cancelar</button>
           </div>
         </div>
@@ -156,15 +166,20 @@
 
         @if (replyTo === c.id) {
         <div class="coment-reply">
-          <textarea #campoRespuesta appMenciones [(ngModel)]="replyText" rows="2" placeholder="Escribe una respuesta..." aria-label="Escribe una respuesta"></textarea>
+          <textarea #campoRespuesta appMenciones (paste)="alPegar($event, 'respuesta')" [(ngModel)]="replyText" rows="2" placeholder="Escribe una respuesta..." aria-label="Escribe una respuesta"></textarea>
           <div class="coment-mini-actions">
+            <input #archivo_respuesta type="file" accept="image/*" hidden (change)="elegirImagen($event, 'respuesta', campoRespuesta)" />
+            <button type="button" class="coment-emoji" (click)="archivo_respuesta.click()" [disabled]="!!subiendoImagen"
+              matTooltip="Subir imagen" aria-label="Subir una imagen">
+              <i class="ti" [class.ti-photo]="subiendoImagen !== 'respuesta'" [class.ti-loader-2]="subiendoImagen === 'respuesta'" [class.girando]="subiendoImagen === 'respuesta'" aria-hidden="true"></i>
+            </button>
             <button #botonEmojisRespuesta type="button" class="coment-emoji" [class.is-abierto]="emojisRespuestaAbierto"
               (click)="abrirEmojisRespuesta(botonEmojisRespuesta)" matTooltip="Emojis" aria-label="Agregar emoji a la respuesta"
               aria-haspopup="dialog" [attr.aria-expanded]="emojisRespuestaAbierto">
               <i class="ti ti-mood-smile"></i>
             </button>
             <button class="boton azul" (click)="enviarRespuesta(c)"
-              [disabled]="replyEnviando || !replyText.trim()">Responder</button>
+              [disabled]="replyEnviando || subiendoImagen === 'respuesta' || !replyText.trim()">Responder</button>
             <button class="boton gris" (click)="cancelarRespuesta()">Cancelar</button>
           </div>
         </div>

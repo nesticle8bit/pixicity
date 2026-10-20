@@ -16,6 +16,9 @@ import { UserPopoverDirective } from '../../../shared/directives/userPopover.dir
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { enNavegador } from '../../../shared/helpers/plataforma';
 import { MencionesDirective } from '../../../shared/menciones/menciones.directive';
+import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
+import { comprimirImagen } from 'src/app/shared/helpers/comprimir-imagen';
+import { environment } from 'src/environments/environment';
 
 /** Comentario con el estado que solo existe en pantalla. */
 interface ComentarioVista extends ComentarioHilo {
@@ -31,6 +34,15 @@ const UMBRAL_COLAPSO = -5;
 const UMBRAL_DENUNCIAS = 3;
 // Votos mínimos para marcar el mejor comentario como destacado.
 const VOTOS_DESTACADO = 3;
+// Igual que en el composer de shouts: el navegador la comprime antes de subirla.
+const MAX_BYTES_IMAGEN = 20 * 1024 * 1024;
+// Solo se muestran como imagen las subidas al sitio (/images/shouts/{usuario}/{guid}.webp); el resto queda como enlace.
+const HOSTS_IMAGENES = [environment.publicUrl, environment.api, 'https://taringas.net'].map((u) => new URL(u).host);
+const RUTA_IMAGEN_SUBIDA = /^\/images\/shouts\/[^/]+\/[0-9a-f]{32}\.webp$/;
+
+/** Campo de texto al que va la imagen subida. */
+type CampoImagen = 'nuevo' | 'respuesta' | 'edicion';
+
 const MOTIVOS_DENUNCIA = ['Spam o publicidad', 'Contenido ofensivo', 'Acoso', 'Información falsa', 'Contenido sexual', 'Otro'];
 
 /**
@@ -59,6 +71,7 @@ export class ComentariosComponent {
   readonly sesion = inject(SesionRequeridaService);
   private readonly emojis = inject(EmojisPopoverService);
   private readonly dialog = inject(MatDialog);
+  private readonly perfilService = inject(IHttpPerfilService);
 
   private readonly campoComentario = viewChild<ElementRef<HTMLTextAreaElement>>('campoComentario');
   /** Solo hay una respuesta abierta a la vez, así que alcanza con una referencia. */
@@ -142,6 +155,9 @@ export class ComentariosComponent {
   public editId: number | null = null;
   public editText = '';
   public editEnviando = false;
+
+  /** Campo cuya imagen se está comprimiendo/subiendo (una a la vez). */
+  public subiendoImagen: CampoImagen | null = null;
 
   // - Sesión y permisos
 
@@ -475,9 +491,70 @@ export class ComentariosComponent {
     return nuevo;
   }
 
+  // - Imágenes
+
+  /** Elegir imagen: se comprime (1080 px, WebP), se sube y su URL queda en el texto, donde se verá como imagen. */
+  async elegirImagen(event: Event, campo: CampoImagen, textarea?: HTMLTextAreaElement): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (file) await this.subirImagen(file, campo, textarea);
+  }
+
+  /** Pegar una captura en el campo la sube como imagen. */
+  async alPegar(event: ClipboardEvent, campo: CampoImagen): Promise<void> {
+    const file = [...(event.clipboardData?.files ?? [])].find((f) => f.type.startsWith('image/'));
+    if (!file) return;
+    event.preventDefault();
+    await this.subirImagen(file, campo, event.target as HTMLTextAreaElement);
+  }
+
+  private async subirImagen(file: File, campo: CampoImagen, textarea?: HTMLTextAreaElement): Promise<void> {
+    if (this.subiendoImagen) return;
+    if (!file.type.startsWith('image/')) {
+      this.notificationService.error('Solo puedes subir imágenes', 'Archivo no válido');
+      return;
+    }
+    if (file.size > MAX_BYTES_IMAGEN) {
+      this.notificationService.error('La imagen es demasiado grande (máximo 20 MB)', 'Imagen');
+      return;
+    }
+
+    this.subiendoImagen = campo;
+    const comprimida = await comprimirImagen(file);
+    this.perfilService.subirImagenShout(comprimida).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (url) => {
+        this.subiendoImagen = null;
+        if (url) this.insertarImagen(campo, url, textarea);
+      },
+      error: () => (this.subiendoImagen = null),
+    });
+  }
+
+  /** La URL va en su propia línea, en el cursor. */
+  private insertarImagen(campo: CampoImagen, url: string, textarea?: HTMLTextAreaElement): void {
+    const actual = campo === 'nuevo' ? this.nuevoComentario : campo === 'respuesta' ? this.replyText : this.editText;
+    const inicio = textarea?.selectionStart ?? actual.length;
+    const antes = actual.slice(0, inicio);
+    const bloque = (antes && !antes.endsWith('\n') ? '\n' : '') + url + '\n';
+    const nuevo = this.insertarEn(textarea, actual, bloque);
+    if (campo === 'nuevo') this.nuevoComentario = nuevo;
+    else if (campo === 'respuesta') this.replyText = nuevo;
+    else this.editText = nuevo;
+  }
+
+  private esImagenSubida(url: string): boolean {
+    try {
+      const u = new URL(url.replace(/&amp;/g, '&'));
+      return HOSTS_IMAGENES.includes(u.host) && RUTA_IMAGEN_SUBIDA.test(u.pathname) && !u.search;
+    } catch {
+      return false;
+    }
+  }
+
   // - Formato
 
-  /** Escapa HTML y convierte URLs, @menciones y #hashtags en enlaces. */
+  /** Escapa HTML y convierte URLs, @menciones y #hashtags en enlaces; las imágenes subidas al sitio se muestran. */
   formatear(texto: string): string {
     if (!texto) return '';
     const escapado = texto
@@ -486,7 +563,9 @@ export class ComentariosComponent {
       .replace(/>/g, '&gt;');
 
     const enlazado = escapado
-      .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="nofollow noopener">$1</a>')
+      .replace(/(https?:\/\/[^\s<]+)/g, (url) => this.esImagenSubida(url)
+        ? `<a href="${url}" target="_blank" rel="noopener" class="coment-img"><img src="${url}" alt="Imagen del comentario" loading="lazy"></a>`
+        : `<a href="${url}" target="_blank" rel="nofollow noopener">${url}</a>`)
       .replace(/(^|\s)@([a-zA-Z0-9_]+)/g, '$1<a href="/perfil/$2">@$2</a>');
     return enlazarHashtagsTexto(enlazado).replace(/\n/g, '<br>');
   }
