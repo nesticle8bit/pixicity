@@ -109,6 +109,10 @@ const INLINE_SHORTCUTS: { key: string; pattern: RegExp; tag: string; open: numbe
 
 // Formato que quita "Eliminar formato" (los enlaces se conservan)
 const CLEARABLE_TAGS = INLINE_FORMAT_TAGS.filter((t) => t !== 'A');
+// HTML pegado: marcas que el editor no crea pero sí puede limpiar
+CLEARABLE_TAGS.push('FONT', 'MARK', 'SMALL', 'BIG', 'SUB', 'SUP', 'INS');
+// Bloques que "Quitar formato" convierte en párrafo
+const PLAIN_BLOCK_TAGS = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'PRE', 'BLOCKQUOTE', 'DIV'];
 
 // Mismas reglas que POST /api/fotos/imagenes (ImageUploadHelper.FotoMaxBytes)
 const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
@@ -660,13 +664,26 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.afterChange();
   }
 
-  // Quita marcas, colores y resaltados de la selección; conserva párrafos, enlaces e imágenes
+  // Quita marcas, colores y resaltados de la selección y deja los bloques como párrafos
+  // simples (títulos, código, citas, alineación); conserva listas, enlaces e imágenes
   removeFormat(): void {
     const range = this.currentRange();
     if (!range || range.collapsed) return;
     const match = (el: HTMLElement) =>
       CLEARABLE_TAGS.includes(el.tagName) && !el.hasAttribute('class') && !isAtomic(el);
     this.formatRange(range, (block, s, e) => this.reformat(block, s, e, match, unwrapNode));
+    this.structural(() => {
+      const blocks = this.selectedBlocks().filter((b) => b !== this.editor).map((b) => {
+        b.removeAttribute('style');
+        b.removeAttribute('align');
+        return PLAIN_BLOCK_TAGS.includes(b.tagName) ? this.renameBlock(b, 'p') : b;
+      });
+      blocks.forEach((b) => {
+        const quote = b.parentElement;
+        if (quote?.tagName === 'BLOCKQUOTE' && this.editor.contains(quote)) unwrapNode(quote);
+      });
+      return blocks[0];
+    });
   }
 
   //  Redimensionar imágenes

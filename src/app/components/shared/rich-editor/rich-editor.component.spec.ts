@@ -136,6 +136,18 @@ describe('RichEditorComponent', () => {
       expect(content()).toBe('<p>uno</p><p><a href="https://x.com">dos</a></p>');
     });
 
+    it('eliminar formato convierte títulos, código y citas en párrafos', () => {
+      setHtml('<h2 style="text-align: center;">uno</h2><pre>dos</pre><blockquote><p>tres</p></blockquote>');
+      const range = document.createRange();
+      range.selectNodeContents(editor);
+      editor.focus();
+      window.getSelection()!.removeAllRanges();
+      window.getSelection()!.addRange(range);
+
+      component.removeFormat();
+      expect(content()).toBe('<p>uno</p><p>dos</p><p>tres</p>');
+    });
+
     it('resaltado y "sin color"', () => {
       setHtml('<p>hola</p>');
       select('hola');
