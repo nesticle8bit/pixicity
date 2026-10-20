@@ -1,25 +1,32 @@
-<h2 mat-dialog-title>{{data ? 'Actualizar' : 'Agregar'}} categoría</h2>
+<h2 mat-dialog-title>{{ data ? 'Editar' : 'Nueva' }} categoría</h2>
 
 <form [formGroup]="formGroup" (ngSubmit)="guardar()">
   <mat-dialog-content>
     <div class="mb-3">
       <label class="form-label" for="dialog-comunidad-categoria-nombre">Nombre</label>
-      <input id="dialog-comunidad-categoria-nombre" type="text" class="form-control" formControlName="nombre" cdkFocusInitial />
+      <input id="dialog-comunidad-categoria-nombre" type="text" class="form-control" formControlName="nombre"
+        maxlength="60" placeholder="Ej.: Videojuegos" cdkFocusInitial />
     </div>
 
-    <div class="mb-3">
-      <label class="form-label" for="dialog-comunidad-categoria-seo">SEO (opcional)</label>
-      <input id="dialog-comunidad-categoria-seo" type="text" class="form-control" formControlName="seo" placeholder="se genera del nombre si se deja vacío" />
+    <div class="mb-1">
+      <label class="form-label" for="dialog-comunidad-categoria-seo">URL <small class="text-muted">(opcional)</small></label>
+      <input id="dialog-comunidad-categoria-seo" type="text" class="form-control" formControlName="seo" maxlength="60"
+        [placeholder]="slugSugerido || 'se genera del nombre'" />
     </div>
+    <p class="cat-url">
+      Se verá como <code>/{{ slugFinal || '…' }}</code>
+      @if (data && slugFinal !== data.seo) {
+      <span class="cat-url__warn">· cambiar la URL rompe los enlaces que ya se compartieron</span>
+      }
+    </p>
 
-    <div class="mb-3">
-      <label class="form-label" for="dialog-comunidad-categoria-orden">Orden</label>
-      <input id="dialog-comunidad-categoria-orden" type="number" class="form-control" formControlName="orden" />
-    </div>
+    @if (!data) {
+    <p class="cat-nota">Se agrega al final de la lista; luego puedes arrastrarla para ordenarla.</p>
+    }
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
     <button type="button" mat-button mat-dialog-close>Cancelar</button>
-    <button type="submit" mat-button [disabled]="formGroup.invalid">Guardar</button>
+    <button type="submit" mat-flat-button color="primary" [disabled]="formGroup.invalid || guardando">Guardar</button>
   </mat-dialog-actions>
 </form>

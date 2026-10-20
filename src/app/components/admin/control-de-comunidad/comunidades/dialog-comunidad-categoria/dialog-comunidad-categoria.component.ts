@@ -38,20 +38,40 @@ export class DialogComunidadCategoriaComponent {
       id: [this.data?.id ?? 0],
       nombre: [this.data?.nombre, Validators.required],
       seo: [this.data?.seo],
-      orden: [this.data?.orden ?? 0],
     });
+  }
+
+  guardando = false;
+
+  /** Mismo criterio que el API (ComunidadService.SlugCategoria), solo para mostrarlo. */
+  get slugSugerido(): string {
+    return (this.formGroup.value.nombre || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .toLowerCase();
+  }
+
+  get slugFinal(): string {
+    return (this.formGroup.value.seo || '').trim().toLowerCase() || this.slugSugerido;
   }
 
   guardar(): void {
     if (this.formGroup.invalid) return;
-    const model = Object.assign({}, this.formGroup.value);
-    model.orden = +model.orden;
+    // El orden se cambia arrastrando en la lista: aquí se conserva (0 = al final, si es nueva)
+    const model = { ...this.formGroup.value, orden: this.data?.orden ?? 0 };
+    this.guardando = true;
 
-    this.comunidadesService.saveCategoria(model).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok) => {
-      if (ok) {
-        this.notificationService.success('Categoría guardada', 'Guardado');
-        this.dialogRef.close(true);
-      }
+    this.comunidadesService.saveCategoria(model).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (ok) => {
+        this.guardando = false;
+        if (ok) {
+          this.notificationService.success('Categoría guardada', 'Guardado');
+          this.dialogRef.close(true);
+        }
+      },
+      error: () => (this.guardando = false),
     });
   }
 }

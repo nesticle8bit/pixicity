@@ -13,6 +13,7 @@ import {
   ComentarioReciente,
   ComunidadCard,
   ComunidadCategoria,
+  ComunidadCategoriaAdmin,
   ComunidadCategoriaGuardar,
   ComunidadDetalle,
   ComunidadesEstadisticas,
@@ -94,6 +95,18 @@ export class HttpComunidadesService implements IHttpComunidadesService {
 
   deleteSubCategoria(id: number): Observable<boolean> {
     return this.delete(`subcategorias/${id}`);
+  }
+
+  getCategoriasAdmin(): Observable<ComunidadCategoriaAdmin[]> {
+    return this.get('categorias/admin');
+  }
+
+  reordenarCategorias(ids: number[]): Observable<boolean> {
+    return this.put('categorias/orden', ids);
+  }
+
+  reordenarSubCategorias(categoriaId: number, ids: number[]): Observable<boolean> {
+    return this.put(`categorias/${categoriaId}/subcategorias/orden`, ids);
   }
 
   // Comunidades

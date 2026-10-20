@@ -29,6 +29,8 @@ import { PostCommentsComponent } from '../post-comments/post-comments.component'
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { ContenidoSeoPipe } from '../../../shared/pipes/contenidoSeo.pipe';
 import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
+import { ContenidoPostDirective } from '../../../shared/directives/contenido-post.directive';
+import { indiceDeContenido, minutosDeLectura, TituloIndice } from '../../../shared/helpers/contenido-post';
 
 @Component({
     selector: 'app-posts-view',
@@ -52,6 +54,7 @@ import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsua
         DatePipe,
         TimeAgoPipe,
         ContenidoSeoPipe, EnlazarHashtagsPipe,
+        ContenidoPostDirective,
     ],
 })
 export class PostsViewComponent implements OnInit {
@@ -77,6 +80,9 @@ export class PostsViewComponent implements OnInit {
   public currentUser: JwtUserModel;
   public post: PostDetalle | null = null;
   public autor: UsuarioInfoViewModel | null = null;
+  // Índice (con 3 o más títulos) y tiempo de lectura: se calculan una vez por post, también en el SSR
+  public indice: TituloIndice[] = [];
+  public minutosLectura = 1;
   public show: boolean = false;
 
   /** Slug del título en la URL: se usa para redirigir a /posts/404 o /posts/privado antes de tener el post. */
@@ -128,6 +134,9 @@ export class PostsViewComponent implements OnInit {
       value.post.tags = value.post.etiquetas ? value.post.etiquetas.split(',') : [];
 
       this.post = { ...value.post, id: postId };
+      const indice = indiceDeContenido(this.post.contenido);
+      this.indice = indice.length >= 3 ? indice : [];
+      this.minutosLectura = minutosDeLectura(this.post.contenido);
       this.getAutor(value.post.usuario?.userName);
 
       const description = value.post.contenido
@@ -276,5 +285,11 @@ export class PostsViewComponent implements OnInit {
           post.sticky = !post.sticky;
         }
       });
+  }
+
+  irATitulo(event: Event, id: string): void {
+    // Un href="#id" navegaría a "/#id" (la app tiene <base href="/">): se desplaza a mano
+    event.preventDefault();
+    this.documento.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }

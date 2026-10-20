@@ -7,6 +7,7 @@ import {
   ComentarioReciente,
   ComunidadCard,
   ComunidadCategoria,
+  ComunidadCategoriaAdmin,
   ComunidadCategoriaGuardar,
   ComunidadDetalle,
   ComunidadesEstadisticas,
@@ -33,6 +34,9 @@ export abstract class IHttpComunidadesService {
   abstract deleteCategoria(id: number): Observable<boolean>;
   abstract saveSubCategoria(model: ComunidadSubCategoriaGuardar): Observable<number>;
   abstract deleteSubCategoria(id: number): Observable<boolean>;
+  abstract getCategoriasAdmin(): Observable<ComunidadCategoriaAdmin[]>;
+  abstract reordenarCategorias(ids: number[]): Observable<boolean>;
+  abstract reordenarSubCategorias(categoriaId: number, ids: number[]): Observable<boolean>;
 
   // Comunidades
   abstract getComunidades(search?: BusquedaComunidades): Observable<PaginatedData<ComunidadCard>>;

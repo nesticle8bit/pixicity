@@ -350,44 +350,8 @@
         font-size: 0.9em;
       }
 
-      // Bloque de código estilo Teams: caja con borde, franja de acento y monoespaciada
-      pre {
-        position: relative;
-        background: #f6f8fa;
-        color: #24292f;
-        border: 1px solid #d0d7de;
-        border-left: 4px solid var(--re-accent);
-        border-radius: 6px;
-        padding: 28px 14px 12px;
-        margin: 0.75em 0;
-        font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
-        font-size: 13px;
-        line-height: 1.5;
-        white-space: pre-wrap;
-        overflow-wrap: anywhere;
-        tab-size: 2;
-
-        &::before {
-          content: 'Código';
-          position: absolute;
-          top: 6px;
-          left: 14px;
-          font-family: inherit;
-          font-size: 11px;
-          font-weight: 600;
-          letter-spacing: 0.5px;
-          text-transform: uppercase;
-          color: #6e7781;
-          pointer-events: none;
-          user-select: none;
-        }
-
-        code {
-          background: none;
-          padding: 0;
-          font-size: inherit;
-        }
-      }
+      // Código, tablas, pies de foto y alineación de imágenes: en styles.scss (app-rich-editor .rich-editor__content),
+      // compartidos con el post publicado
 
       hr {
         border: none;
@@ -760,5 +724,122 @@
 
       &:hover { background: var(--re-bubble-hover); }
     }
+  }
+}
+
+.rich-editor__img-frame .info {
+  button.icon {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 3px;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  button.active {
+    background: var(--re-bubble-hover);
+    color: var(--re-bubble-accent);
+  }
+
+  .sep {
+    width: 1px;
+    height: 14px;
+    margin: 0 3px;
+    background: var(--re-bubble-separator);
+  }
+}
+
+// Selector de tamaño de tabla (cuadrícula tipo Word)
+.rich-editor__table-picker {
+  padding: 8px;
+}
+
+.rich-editor__table-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 18px);
+  gap: 3px;
+
+  button {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    border: 1px solid var(--re-border);
+    border-radius: 2px;
+    background: var(--re-bg);
+    cursor: pointer;
+
+    &.is-on {
+      border-color: var(--re-accent);
+      background: var(--re-toolbar-active);
+    }
+  }
+}
+
+.rich-editor__table-size {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--re-toolbar-text);
+  text-align: center;
+}
+
+// Barra contextual sobre el bloque de código o la tabla con el caret
+.rich-editor__ctx {
+  position: absolute;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 30px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: var(--re-bubble-bg);
+  color: var(--re-bubble-text);
+  font-size: 12px;
+  box-shadow: var(--re-shadow);
+  white-space: nowrap;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  select {
+    height: 22px;
+    border: 0;
+    border-radius: 4px;
+    background: var(--re-bubble-input-bg);
+    color: inherit;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 1px;
+    height: 24px;
+    padding: 0 6px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: inherit;
+    font-size: 12px;
+    cursor: pointer;
+
+    &:hover { background: var(--re-bubble-hover); }
+    &.danger:hover { color: #ff8a80; }
+  }
+
+  .sep {
+    width: 1px;
+    height: 16px;
+    margin: 0 2px;
+    background: var(--re-bubble-separator);
   }
 }

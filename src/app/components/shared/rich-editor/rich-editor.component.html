@@ -59,6 +59,22 @@
           </button>
         </div>
         }
+        @case ('table') {
+        <div class="rich-editor__menu rich-editor__table-picker" (mouseleave)="tableHover = { rows: 0, cols: 0 }">
+          <div class="rich-editor__table-grid" role="grid" aria-label="Tamaño de la tabla">
+            @for (r of tablePicker; track r) {
+            @for (c of tablePicker; track c) {
+            <button type="button" [class.is-on]="r <= tableHover.rows && c <= tableHover.cols"
+              [attr.aria-label]="'Tabla de ' + r + ' × ' + c" (mouseenter)="tableHover = { rows: r, cols: c }"
+              (focus)="tableHover = { rows: r, cols: c }" (click)="insertTable(r, c)"></button>
+            }
+            }
+          </div>
+          <span class="rich-editor__table-size">
+            {{ tableHover.rows ? tableHover.rows + ' × ' + tableHover.cols : 'Elige el tamaño' }}
+          </span>
+        </div>
+        }
         }
         }
       </div>
@@ -126,7 +142,40 @@
       <button type="button" title="Ancho completo" (click)="setImgWidth('full')">100%</button>
       <button type="button" title="Mitad del ancho" (click)="setImgWidth('half')">50%</button>
       <button type="button" title="Tamaño automático" (click)="setImgWidth(null)">Auto</button>
+      <span class="sep"></span>
+      <button type="button" class="icon" title="Alinear a la izquierda (texto al lado)" aria-label="Alinear a la izquierda"
+        [class.active]="imgAlign === 'izq'" (click)="setImgAlign('izq')"><mat-icon>format_align_left</mat-icon></button>
+      <button type="button" class="icon" title="Centrar" aria-label="Centrar imagen"
+        [class.active]="imgAlign === 'centro'" (click)="setImgAlign('centro')"><mat-icon>format_align_center</mat-icon></button>
+      <button type="button" class="icon" title="Alinear a la derecha (texto al lado)" aria-label="Alinear a la derecha"
+        [class.active]="imgAlign === 'der'" (click)="setImgAlign('der')"><mat-icon>format_align_right</mat-icon></button>
+      <button type="button" class="icon" [title]="imgHasCaption ? 'Editar pie de foto' : 'Agregar pie de foto'"
+        aria-label="Pie de foto" [class.active]="imgHasCaption" (click)="editImgCaption()"><mat-icon>short_text</mat-icon></button>
     </span>
+  </div>
+  }
+
+  <!-- Barra contextual: lenguaje del bloque de código / acciones de la tabla -->
+  @if (ctxBar && (codeBlock || tableCell)) {
+  <div class="rich-editor__ctx" [style.top.px]="ctxBar.top" [style.left.px]="ctxBar.left"
+    (mousedown)="keepSelection($event)">
+    @if (codeBlock) {
+    <mat-icon>code</mat-icon>
+    <select aria-label="Lenguaje del código" [value]="codeLang" (change)="setCodeLang($any($event.target).value)">
+      <option value="">Detectar lenguaje</option>
+      @for (l of lenguajes; track l.id) {
+      <option [value]="l.id" [selected]="l.id === codeLang">{{ l.nombre }}</option>
+      }
+    </select>
+    } @else {
+    <button type="button" title="Agregar fila (Tab en la última celda)" (click)="tableAddRow()"><mat-icon>add</mat-icon> Fila</button>
+    <button type="button" title="Agregar columna" (click)="tableAddCol()"><mat-icon>add</mat-icon> Columna</button>
+    <span class="sep"></span>
+    <button type="button" title="Quitar fila" (click)="tableDeleteRow()"><mat-icon>remove</mat-icon> Fila</button>
+    <button type="button" title="Quitar columna" (click)="tableDeleteCol()"><mat-icon>remove</mat-icon> Columna</button>
+    <span class="sep"></span>
+    <button type="button" class="danger" title="Borrar tabla" aria-label="Borrar tabla" (click)="tableDelete()"><mat-icon>delete</mat-icon></button>
+    }
   </div>
   }
 

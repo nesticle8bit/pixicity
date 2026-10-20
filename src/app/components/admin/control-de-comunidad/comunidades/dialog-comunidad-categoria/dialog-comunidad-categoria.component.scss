@@ -1,0 +1,22 @@
+.cat-url {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: #6b7280;
+
+  code {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: #f3f4f6;
+    color: #006595;
+  }
+
+  &__warn {
+    color: #b45309;
+  }
+}
+
+.cat-nota {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}

@@ -68,6 +68,12 @@ $bar-h: 58px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    // Borrador automático (localStorage): más discreto que el borrador del servidor
+    &--local {
+      color: #6b7280;
+      font-weight: 500;
+    }
   }
 
   &__actions {

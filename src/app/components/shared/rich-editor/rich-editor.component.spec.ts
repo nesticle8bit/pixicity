@@ -282,4 +282,71 @@ describe('RichEditorComponent', () => {
       expect(emitted[emitted.length - 1]).toContain('/images/fotos/u/a.jpg');
     });
   });
+
+  describe('bloques de código', () => {
+    it('Enter agrega un salto de línea dentro del bloque', () => {
+      setHtml('<pre>uno</pre><p>x</p>');
+      select('uno', true);
+      expect(key('Enter').defaultPrevented).toBeTrue();
+      expect(editor.querySelectorAll('pre').length).toBe(1);
+      expect(editor.querySelector('pre')!.textContent).toBe('uno\n\n');
+    });
+
+    it('Enter en la línea vacía final sale del bloque', () => {
+      setHtml('<pre>uno</pre>');
+      select('uno', true);
+      key('Enter');
+      key('Enter');
+      expect(editor.querySelector('pre')!.textContent).toBe('uno');
+      expect(editor.querySelector('pre')!.nextElementSibling!.tagName).toBe('P');
+    });
+
+    it('Tab sangra con dos espacios y Shift+Tab la quita', () => {
+      setHtml('<pre>uno</pre>');
+      caretIn(editor.querySelector('pre')!, 0);
+      expect(key('Tab').defaultPrevented).toBeTrue();
+      expect(editor.querySelector('pre')!.textContent).toBe('  uno');
+      key('Tab', { shiftKey: true });
+      expect(editor.querySelector('pre')!.textContent).toBe('uno');
+    });
+
+    it('el lenguaje elegido queda como clase del <pre>', () => {
+      setHtml('<pre>docker ps</pre>');
+      select('docker');
+      component.onSelectionChange();
+      component.setCodeLang('bash');
+      expect(content()).toBe('<pre class="language-bash">docker ps</pre>');
+      component.setCodeLang('');
+      expect(content()).toBe('<pre>docker ps</pre>');
+    });
+  });
+
+  describe('tablas', () => {
+    it('inserta una tabla con encabezado y deja un párrafo debajo', () => {
+      setHtml('<p>hola</p>');
+      select('hola', true);
+      component.insertTable(3, 2);
+      const table = editor.querySelector('table')!;
+      expect(table.querySelectorAll('thead th').length).toBe(2);
+      expect(table.querySelectorAll('tbody tr').length).toBe(2);
+      expect(table.nextElementSibling!.tagName).toBe('P');
+    });
+
+    it('Tab en la última celda agrega una fila', () => {
+      setHtml('<table><tbody><tr><td>a</td><td>b</td></tr></tbody></table><p>x</p>');
+      select('b', true);
+      key('Tab');
+      expect(editor.querySelectorAll('tr').length).toBe(2);
+    });
+
+    it('agregar y quitar columnas', () => {
+      setHtml('<table><tbody><tr><td>a</td></tr><tr><td>b</td></tr></tbody></table><p>x</p>');
+      select('a');
+      component.onSelectionChange();
+      component.tableAddCol();
+      expect(editor.querySelectorAll('tr:first-child td').length).toBe(2);
+      component.tableDeleteCol();
+      expect(editor.querySelectorAll('tr:first-child td').length).toBe(1);
+    });
+  });
 });

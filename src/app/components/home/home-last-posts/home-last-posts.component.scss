@@ -1,4 +1,3 @@
-
 .seo-pagination {
   display: flex;
   flex-wrap: wrap;
@@ -17,5 +16,23 @@
       font-weight: 600;
       border-color: currentColor;
     }
+  }
+}
+
+// Ícono RSS junto al título "Recientes" (.i del sprite es block + float: aquí va en línea)
+.rss-link {
+  display: inline-block;
+  margin-left: 4px;
+  vertical-align: -2px;
+  opacity: .85;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 1;
+  }
+
+  .i {
+    float: none;
+    margin-top: 0;
   }
 }

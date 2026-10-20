@@ -103,6 +103,7 @@
 
           <div class="detail-main-meta">
             <span>{{post.fechaRegistro | timeAgo}}</span>
+            <span class="detail-lectura"><i class="ti ti-clock" aria-hidden="true"></i> {{minutosLectura}} min de lectura</span>
             @if (post.categoria.seo) {
             <a class="detail-cat" [routerLink]="['/posts', post.categoria.seo]">{{post.categoria.nombre}}</a>
             }
@@ -113,7 +114,21 @@
           </div>
 
           <div class="post-body">
-            <div class="contenido">
+            @if (indice.length) {
+            <nav class="post-toc" aria-label="Índice del post">
+              <details open>
+                <summary><i class="ti ti-list" aria-hidden="true"></i> Índice</summary>
+                <ol>
+                  @for (t of indice; track t.id) {
+                  <li [class.post-toc__sub]="t.nivel === 3">
+                    <a [attr.href]="'#' + t.id" (click)="irATitulo($event, t.id)">{{t.texto}}</a>
+                  </li>
+                  }
+                </ol>
+              </details>
+            </nav>
+            }
+            <div class="contenido" [appContenidoPost]="post.contenido">
               <span [innerHTML]="post.contenido | contenidoSeo:post.titulo | enlazarHashtags"></span>
             </div>
           </div>

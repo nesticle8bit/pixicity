@@ -26,7 +26,7 @@ export function isAtomic(el: HTMLElement): boolean {
 export function isVisuallyEmpty(el: Node): boolean {
   const text = (el.textContent || '').replace(new RegExp(CARET_GUARD, 'g'), '').trim();
   if (text) return false;
-  return !(isElement(el) && el.querySelector('img, hr, iframe, [contenteditable="false"]'));
+  return !(isElement(el) && el.querySelector('img, hr, iframe, table, [contenteditable="false"]'));
 }
 
 export function emptyParagraph(): HTMLParagraphElement {

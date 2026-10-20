@@ -18,6 +18,16 @@ export interface ComunidadCategoria {
   subCategorias: ComunidadSubCategoria[];
 }
 
+/** Panel admin: la taxonomía con cuántas comunidades usa cada nivel. */
+export interface ComunidadSubCategoriaAdmin extends ComunidadSubCategoria {
+  comunidades: number;
+}
+
+export interface ComunidadCategoriaAdmin extends Omit<ComunidadCategoria, 'subCategorias'> {
+  comunidades: number;
+  subCategorias: ComunidadSubCategoriaAdmin[];
+}
+
 export interface ComunidadCategoriaGuardar {
   id?: number;
   nombre: string;

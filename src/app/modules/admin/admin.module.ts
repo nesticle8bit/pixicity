@@ -64,7 +64,6 @@ import { TableFotosComponent } from '../../components/admin/control-de-contenido
 import { DashboardComunidadesComponent } from '../../components/admin/control-de-comunidad/comunidades/dashboard-comunidades/dashboard-comunidades.component';
 import { TableComunidadesCategoriasComponent } from '../../components/admin/control-de-comunidad/comunidades/table-comunidades-categorias/table-comunidades-categorias.component';
 import { DialogComunidadCategoriaComponent } from '../../components/admin/control-de-comunidad/comunidades/dialog-comunidad-categoria/dialog-comunidad-categoria.component';
-import { DialogComunidadSubcategoriaComponent } from '../../components/admin/control-de-comunidad/comunidades/dialog-comunidad-subcategoria/dialog-comunidad-subcategoria.component';
 import { DashboardModeracionComponent } from '../../components/admin/control-de-contenido/moderacion/dashboard-moderacion/dashboard-moderacion.component';
 import { DashboardCensurasComponent } from '../../components/admin/control-de-contenido/censuras/dashboard-censuras/dashboard-censuras.component';
 import { TableCensurasComponent } from '../../components/admin/control-de-contenido/censuras/table-censuras/table-censuras.component';
@@ -134,7 +133,6 @@ import { AdminRoutingModule } from './admin-routing.module';
         DashboardComunidadesComponent,
         TableComunidadesCategoriasComponent,
         DialogComunidadCategoriaComponent,
-        DialogComunidadSubcategoriaComponent,
         DashboardModeracionComponent,
         DashboardEstadisticasComponent,
         DashboardVotosComponent,

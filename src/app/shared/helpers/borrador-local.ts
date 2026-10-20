@@ -30,6 +30,8 @@ function storage(): Storage | null {
  */
 export class BorradorLocal<T extends Record<string, unknown> = Record<string, unknown>> {
   pendiente: BorradorGuardado<T> | null = null;
+  /** Hora (ms) del último guardado automático de esta sesión, para mostrarlo; null si aún no se guardó nada. */
+  guardadoEn: number | null = null;
 
   private readonly clave: string;
   private iniciado = false;
@@ -80,6 +82,7 @@ export class BorradorLocal<T extends Record<string, unknown> = Record<string, un
   }
 
   limpiar(): void {
+    this.guardadoEn = null;
     storage()?.removeItem(this.clave);
   }
 
@@ -88,7 +91,9 @@ export class BorradorLocal<T extends Record<string, unknown> = Record<string, un
     const conTexto = this.camposConTexto.some((c) => this.textoPlano(valor[c]).length > 0);
     try {
       if (conTexto) {
-        storage()?.setItem(this.clave, JSON.stringify({ valor, fecha: Date.now() } satisfies BorradorGuardado<T>));
+        const fecha = Date.now();
+        storage()?.setItem(this.clave, JSON.stringify({ valor, fecha } satisfies BorradorGuardado<T>));
+        this.guardadoEn = fecha;
       } else {
         this.limpiar();
       }

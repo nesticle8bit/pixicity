@@ -307,8 +307,8 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   previsualizar(): void {
     this.dialog.open(DialogPrevisualizarPostComponent, {
       width: '850px',
-      data: this.formGroup.value?.contenido,
-      disableClose: true,
+      maxWidth: '95vw',
+      data: { titulo: this.formGroup.value?.titulo || '', contenido: this.formGroup.value?.contenido || '' },
     });
   }
 

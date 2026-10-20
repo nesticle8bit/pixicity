@@ -1,0 +1,190 @@
+// Formato del HTML que escriben los usuarios, compartido por el editor (app-rich-editor) y el post publicado
+// (.contenido en styles.scss): así lo que se ve al escribir es lo que se ve al publicar.
+//
+//   @use '<ruta relativa>/shared/styles/contenido-rico' as rico;
+//   .contenido { @include rico.bloques; }
+//
+// $etiquetas: nombre del lenguaje en la etiqueta del bloque de código. El editor no las incluye (pesan en el
+// presupuesto de estilos del componente) porque ahí el lenguaje se ve en el selector de la barra contextual.
+
+$acento: #1976d2;
+
+// Etiqueta de cada lenguaje (misma lista que LENGUAJES_CODIGO en shared/helpers/contenido-post.ts)
+$lenguajes: (
+  'bash': 'Bash / Shell', 'powershell': 'PowerShell', 'dockerfile': 'Dockerfile', 'yaml': 'YAML', 'json': 'JSON',
+  'xml': 'HTML / XML', 'css': 'CSS', 'javascript': 'JavaScript', 'typescript': 'TypeScript', 'python': 'Python',
+  'csharp': 'C#', 'java': 'Java', 'php': 'PHP', 'sql': 'SQL', 'cpp': 'C / C++', 'go': 'Go', 'rust': 'Rust',
+  'ini': 'INI / TOML', 'nginx': 'Nginx', 'plaintext': 'Texto plano',
+);
+
+@mixin bloques($etiquetas: true) {
+  // Bloque de código estilo Teams: caja con borde, franja de acento y etiqueta del lenguaje
+  pre {
+    position: relative;
+    max-width: 100%;
+    overflow-x: auto;
+    background: #f6f8fa;
+    color: #24292f;
+    border: 1px solid #d0d7de;
+    border-left: 4px solid $acento;
+    border-radius: 6px;
+    padding: 30px 14px 12px;
+    margin: 12px 0;
+    font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    tab-size: 2;
+    text-align: left;
+
+    &::before {
+      content: 'Código';
+      position: absolute;
+      top: 7px;
+      left: 14px;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: #6e7781;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    @if $etiquetas {
+      @each $id, $nombre in $lenguajes {
+        &.language-#{$id}::before {
+          content: $nombre;
+        }
+      }
+    }
+
+    // Lenguaje detectado automáticamente en el post publicado
+    &[data-etiqueta]::before {
+      content: attr(data-etiqueta);
+    }
+
+    code {
+      background: none;
+      padding: 0;
+      font-size: inherit;
+      color: inherit;
+    }
+  }
+
+  // Tablas simples (insertadas desde el editor)
+  table {
+    border-collapse: collapse;
+    margin: 12px 0;
+    max-width: 100%;
+    font-size: .9em;
+  }
+
+  th,
+  td {
+    border: 1px solid #d0d7de;
+    padding: 6px 10px;
+    min-width: 60px;
+    vertical-align: top;
+    text-align: left;
+  }
+
+  th,
+  thead td {
+    background: #f6f8fa;
+    font-weight: 700;
+  }
+
+  // Imagen con pie de foto
+  figure.img-figure {
+    display: table; // se ajusta al ancho de la imagen, así el pie no se estira
+    max-width: 100%;
+    margin: 12px auto;
+
+    figcaption {
+      display: table-caption;
+      caption-side: bottom;
+      padding: 6px 4px 0;
+      font-size: .85em;
+      color: #6e7781;
+      font-style: italic;
+      text-align: center;
+    }
+  }
+
+  // Alineación de imágenes (en la imagen suelta o en su <figure>)
+  .img-centro {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .img-izq,
+  .img-der {
+    max-width: 50%;
+    margin-top: 4px;
+    margin-bottom: 8px;
+  }
+
+  .img-izq {
+    float: left;
+    margin-right: 16px;
+  }
+
+  .img-der {
+    float: right;
+    margin-left: 16px;
+  }
+
+  // En móvil no hay espacio para texto al lado: las flotantes pasan a centradas
+  @media (max-width: 575px) {
+    .img-izq,
+    .img-der {
+      float: none;
+      display: table;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+// Colores de highlight.js (tema claro tipo GitHub); solo en el post publicado
+@mixin resaltado {
+  .hljs-comment,
+  .hljs-quote { color: #6e7781; font-style: italic; }
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-meta .hljs-keyword,
+  .hljs-doctag,
+  .hljs-section { color: #cf222e; }
+  .hljs-string,
+  .hljs-regexp,
+  .hljs-meta .hljs-string { color: #0a3069; }
+  .hljs-number,
+  .hljs-literal,
+  .hljs-symbol,
+  .hljs-bullet,
+  .hljs-variable,
+  .hljs-template-variable { color: #0550ae; }
+  .hljs-title,
+  .hljs-title.function_,
+  .hljs-title.class_ { color: #8250df; }
+  .hljs-attr,
+  .hljs-attribute,
+  .hljs-property,
+  .hljs-selector-class,
+  .hljs-selector-id { color: #116329; }
+  .hljs-built_in,
+  .hljs-type,
+  .hljs-params { color: #953800; }
+  .hljs-tag,
+  .hljs-name { color: #116329; }
+  .hljs-meta { color: #6639ba; }
+  .hljs-addition { color: #116329; background: #dafbe1; }
+  .hljs-deletion { color: #82071e; background: #ffebe9; }
+  .hljs-emphasis { font-style: italic; }
+  .hljs-strong { font-weight: 700; }
+}

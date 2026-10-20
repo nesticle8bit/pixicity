@@ -35,12 +35,14 @@ import {
   textOffset,
   unwrapNode,
 } from './rich-editor-dom';
-import { cleanPastedHtml, imageNode, plainTextFragment } from './rich-editor-paste';
+import { cleanPastedHtml, fijarDimensiones, imageNode, plainTextFragment } from './rich-editor-paste';
+import { LENGUAJES_CODIGO } from 'src/app/shared/helpers/contenido-post';
 import { MatIcon } from '@angular/material/icon';
 import { NgTemplateOutlet } from '@angular/common';
 
 type InlineMark = 'bold' | 'italic' | 'underline' | 'strike' | 'code';
-type ToolbarMenu = 'heading' | 'color' | 'image';
+type ToolbarMenu = 'heading' | 'color' | 'image' | 'table';
+type ImgAlign = 'izq' | 'centro' | 'der';
 type BubbleMode = 'format' | 'link' | 'edit-link';
 type StyleProp = 'color' | 'backgroundColor';
 
@@ -113,6 +115,10 @@ const CLEARABLE_TAGS = INLINE_FORMAT_TAGS.filter((t) => t !== 'A');
 CLEARABLE_TAGS.push('FONT', 'MARK', 'SMALL', 'BIG', 'SUB', 'SUP', 'INS');
 // Bloques que "Quitar formato" convierte en párrafo
 const PLAIN_BLOCK_TAGS = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'PRE', 'BLOCKQUOTE', 'DIV'];
+// Elementos de bloque que no son "líneas" de texto (se insertan entre bloques, nunca dentro de un <p>)
+const STANDALONE_TAGS = ['UL', 'OL', 'HR', 'TABLE', 'FIGURE'];
+const IMG_ALIGN_CLASSES = ['img-izq', 'img-centro', 'img-der'];
+const TABLE_PICKER_SIZE = 6;
 
 // Mismas reglas que POST /api/fotos/imagenes (ImageUploadHelper.FotoMaxBytes)
 const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
@@ -167,6 +173,17 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   imgFrame: { top: number; left: number; width: number; height: number; label: string; clip: string | null } | null = null;
   readonly imgCorners = ['nw', 'ne', 'sw', 'se'] as const;
   private selectedImg: HTMLImageElement | null = null;
+  imgAlign: ImgAlign | null = null;
+  imgHasCaption = false;
+
+  // Barra contextual sobre el bloque de código o la tabla donde está el caret
+  readonly lenguajes = LENGUAJES_CODIGO;
+  readonly tablePicker = Array.from({ length: TABLE_PICKER_SIZE }, (_, i) => i + 1);
+  tableHover = { rows: 0, cols: 0 };
+  codeBlock: HTMLElement | null = null;
+  codeLang = '';
+  tableCell: HTMLTableCellElement | null = null;
+  ctxBar: { top: number; left: number } | null = null;
   private imgDrag: { startX: number; startWidth: number; dir: 1 | -1 } | null = null;
 
   // Vista de código: se edita el HTML en un textarea y se vuelca al editor al salir
@@ -215,6 +232,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     { items: [
       { icon: 'link', title: 'Insertar enlace (Ctrl+K)', run: () => this.insertLink() },
       { menu: 'image', icon: 'image', title: 'Insertar imagen' },
+      { menu: 'table', icon: 'table_chart', title: 'Insertar tabla' },
       { icon: 'mood', title: 'Insertar emoji', run: () => this.abrirEmojis() },
     ] },
     { secondary: true, items: [
@@ -278,12 +296,13 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   // Reposiciona el bubble en cualquier scroll (ventana, diálogo o el propio editor)
   private scrollFrame = 0;
   private readonly onAnyScroll = () => {
-    if ((!this.bubbleMode && !this.selectedImg) || this.scrollFrame) return;
+    if ((!this.bubbleMode && !this.selectedImg && !this.ctxBar) || this.scrollFrame) return;
     this.scrollFrame = requestAnimationFrame(() => {
       this.scrollFrame = 0;
       this.zone.run(() => {
         this.repositionBubble();
         this.positionImgFrame();
+        this.positionCtxBar();
       });
     });
   };
@@ -382,7 +401,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
         event.preventDefault();
         const img = this.selectedImg;
         this.deselectImg();
-        (img.closest('.img-resizable') ?? img).remove();
+        (img.closest('figure.img-figure') ?? img.closest('.img-resizable') ?? img).remove();
         this.normalizeTrailing();
         this.afterChange();
         return;
@@ -419,7 +438,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       case '`':
       case '*':
       case '_': handled = this.inlineShortcut(event.key); break;
-      case 'Enter': handled = !event.shiftKey && this.handleEnter(); break;
+      case 'Enter': handled = this.handleCodeEnter(event.shiftKey) || (!event.shiftKey && this.handleEnter()); break;
       case 'Tab': handled = this.handleTab(event.shiftKey); break;
     }
     if (handled) event.preventDefault();
@@ -458,6 +477,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       this.insertFragment(frag, range);
     } else {
       this.insertFragment(!plain && html ? cleanPastedHtml(html) : plainTextFragment(text), range);
+      this.watchImageSize(this.editor);
     }
     this.afterChange();
   }
@@ -522,7 +542,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   // Los clics en toolbar/bubble no deben quitar la selección del editor
   // (salvo en inputs, que necesitan recibir el foco)
   keepSelection(event: MouseEvent): void {
-    if (!(event.target instanceof HTMLInputElement)) event.preventDefault();
+    if (!(event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement)) event.preventDefault();
   }
 
   toggleMenu(menu: ToolbarMenu): void {
@@ -629,10 +649,268 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.editor.focus();
     if (sel) this.restoreOffsets(sel);
     const frag = document.createDocumentFragment();
-    frag.appendChild(imageNode(url));
+    const node = imageNode(url);
+    this.watchImageSize(node);
+    frag.appendChild(node);
     this.insertFragment(frag);
     this.afterChange();
   }
+
+  //  Tablas
+
+  insertTable(rows: number, cols: number): void {
+    this.openMenu = null;
+    this.tableHover = { rows: 0, cols: 0 };
+    if (!this.currentRange()) this.placeCaretEnd();
+    const table = document.createElement('table');
+    const head = table.createTHead().insertRow();
+    for (let c = 0; c < cols; c++) head.appendChild(this.newCell('th', `Columna ${c + 1}`));
+    const body = table.createTBody();
+    for (let r = 1; r < rows; r++) {
+      const tr = body.insertRow();
+      for (let c = 0; c < cols; c++) tr.appendChild(this.newCell('td'));
+    }
+    const frag = document.createDocumentFragment();
+    frag.appendChild(table);
+    this.insertFragment(frag);
+    if (!isBlock(table.nextElementSibling)) table.after(emptyParagraph());
+    this.selectCell(table.rows[rows > 1 ? 1 : 0].cells[0]);
+    this.afterTableChange();
+  }
+
+  tableAddRow(): void {
+    const cell = this.liveCell();
+    if (!cell) return;
+    const row = cell.parentElement as HTMLTableRowElement;
+    const table = row.closest('table')!;
+    const tr = document.createElement('tr');
+    for (let c = 0; c < row.cells.length; c++) tr.appendChild(this.newCell('td'));
+    // Una fila nueva bajo el encabezado va al principio del cuerpo
+    if (row.parentElement?.tagName === 'THEAD') (table.tBodies[0] ?? table.createTBody()).prepend(tr);
+    else row.after(tr);
+    this.selectCell(tr.cells[Math.min(cell.cellIndex, tr.cells.length - 1)]);
+    this.afterTableChange();
+  }
+
+  tableAddCol(): void {
+    const cell = this.liveCell();
+    if (!cell) return;
+    const index = cell.cellIndex;
+    Array.from(cell.closest('table')!.rows).forEach((tr) => {
+      const nueva = this.newCell(tr.parentElement?.tagName === 'THEAD' ? 'th' : 'td');
+      const ref = tr.cells[index];
+      if (ref) ref.after(nueva);
+      else tr.appendChild(nueva);
+    });
+    this.selectCell(cell.nextElementSibling as HTMLTableCellElement);
+    this.afterTableChange();
+  }
+
+  tableDeleteRow(): void {
+    const cell = this.liveCell();
+    if (!cell) return;
+    const row = cell.parentElement as HTMLTableRowElement;
+    const table = row.closest('table')!;
+    if (table.rows.length <= 1) return this.tableDelete();
+    const section = row.parentElement!;
+    const index = cell.cellIndex;
+    const rowIndex = row.rowIndex;
+    row.remove();
+    if (!section.children.length) section.remove();
+    const next = table.rows[Math.min(rowIndex, table.rows.length - 1)];
+    this.selectCell(next.cells[Math.min(index, next.cells.length - 1)]);
+    this.afterTableChange();
+  }
+
+  tableDeleteCol(): void {
+    const cell = this.liveCell();
+    if (!cell) return;
+    const row = cell.parentElement as HTMLTableRowElement;
+    if (row.cells.length <= 1) return this.tableDelete();
+    const index = cell.cellIndex;
+    Array.from(cell.closest('table')!.rows).forEach((tr) => tr.cells[index]?.remove());
+    this.selectCell(row.cells[Math.min(index, row.cells.length - 1)]);
+    this.afterTableChange();
+  }
+
+  tableDelete(): void {
+    const table = this.liveCell()?.closest('table');
+    if (!table) return;
+    let p = table.nextElementSibling as HTMLElement | null;
+    if (!isBlock(p)) {
+      p = emptyParagraph();
+      table.after(p);
+    }
+    table.remove();
+    this.clearCtx();
+    this.caretAtStart(p!);
+    this.afterChange();
+  }
+
+  private newCell(tag: 'td' | 'th', text = ''): HTMLTableCellElement {
+    const cell = document.createElement(tag);
+    cell.appendChild(text ? document.createTextNode(text) : document.createElement('br'));
+    return cell;
+  }
+
+  private liveCell(): HTMLTableCellElement | null {
+    return this.tableCell?.isConnected && this.editor.contains(this.tableCell) ? this.tableCell : null;
+  }
+
+  // Deja el caret en la celda (vacía) o selecciona su texto para reemplazarlo
+  private selectCell(cell: HTMLTableCellElement | null | undefined): void {
+    if (!cell) return;
+    this.editor.focus({ preventScroll: true });
+    const range = document.createRange();
+    range.selectNodeContents(cell);
+    if (isVisuallyEmpty(cell)) range.collapse(true);
+    this.selectRange(range);
+    this.tableCell = cell;
+  }
+
+  private afterTableChange(): void {
+    this.afterChange();
+    this.updateCtx();
+  }
+
+  // Tab / Shift+Tab: celda siguiente / anterior; en la última celda, Tab agrega una fila
+  private handleTableTab(back: boolean): boolean {
+    const range = this.currentRange();
+    const cell = range ? (this.closestAnyTag(range.startContainer, ['TD', 'TH']) as HTMLTableCellElement | null) : null;
+    if (!cell) return false;
+    this.tableCell = cell;
+    const cells = Array.from(cell.closest('table')!.querySelectorAll<HTMLTableCellElement>('th, td'));
+    const i = cells.indexOf(cell);
+    if (back) {
+      if (i > 0) this.selectCell(cells[i - 1]);
+    } else if (i < cells.length - 1) {
+      this.selectCell(cells[i + 1]);
+    } else {
+      this.tableAddRow();
+      return true;
+    }
+    this.updateCtx();
+    return true;
+  }
+
+  //  Bloques de código
+
+  setCodeLang(lang: string): void {
+    const pre = this.codeBlock;
+    if (!pre?.isConnected) return;
+    pre.classList.remove(...Array.from(pre.classList).filter((c) => c.startsWith('language-')));
+    if (lang) pre.classList.add(`language-${lang}`);
+    if (!pre.classList.length) pre.removeAttribute('class');
+    this.codeLang = lang;
+    this.emit();
+    this.recordHistory();
+    this.cdr.markForCheck();
+  }
+
+  // Enter en un bloque de código: salto de línea dentro del bloque (no un <pre> nuevo).
+  // En una línea vacía al final sale del bloque; Shift+Enter sale siempre.
+  private handleCodeEnter(exit: boolean): boolean {
+    const range = this.currentRange();
+    if (!range?.collapsed) return false;
+    const pre = this.closestAnyTag(range.startContainer, ['PRE']);
+    if (!pre) return false;
+
+    const text = pre.textContent || '';
+    const caret = textOffset(pre, range.startContainer, range.startOffset);
+    const before = text.slice(0, caret);
+    const after = text.slice(caret);
+    const atEnd = after === '' || after === '\n';
+
+    if (exit || (atEnd && before.endsWith('\n'))) {
+      // Quita la línea vacía final y sigue en un párrafo debajo
+      if (!exit) rangeFromOffsets(pre, caret - 1, text.length).deleteContents();
+      const p = emptyParagraph();
+      pre.after(p);
+      this.caretAtStart(p);
+      this.afterChange();
+      return true;
+    }
+
+    const nl = document.createTextNode('\n');
+    range.insertNode(nl);
+    // Un salto al final no se ve si no le sigue otro: se deja un "\n" guía
+    if (after === '') pre.appendChild(document.createTextNode('\n'));
+    const caretRange = document.createRange();
+    caretRange.setStartAfter(nl);
+    caretRange.collapse(true);
+    this.selectRange(caretRange);
+    this.afterChange();
+    return true;
+  }
+
+  // Tab en código: sangría de dos espacios (en vez de mover el foco); Shift+Tab la quita
+  private handleCodeTab(back: boolean): boolean {
+    const range = this.currentRange();
+    const pre = range ? this.closestAnyTag(range.startContainer, ['PRE']) : null;
+    if (!range || !pre) return false;
+
+    if (back) {
+      const text = pre.textContent || '';
+      const caret = textOffset(pre, range.startContainer, range.startOffset);
+      const lineStart = text.lastIndexOf('\n', caret - 1) + 1;
+      const spaces = /^ {1,2}/.exec(text.slice(lineStart))?.[0].length ?? 0;
+      if (spaces) {
+        rangeFromOffsets(pre, lineStart, lineStart + spaces).deleteContents();
+        const pos = Math.max(lineStart, caret - spaces);
+        this.selectRange(rangeFromOffsets(pre, pos, pos));
+        this.afterChange();
+      }
+      return true;
+    }
+
+    range.deleteContents();
+    const indent = document.createTextNode('  ');
+    range.insertNode(indent);
+    const caretRange = document.createRange();
+    caretRange.setStartAfter(indent);
+    caretRange.collapse(true);
+    this.selectRange(caretRange);
+    this.afterChange();
+    return true;
+  }
+
+  //  Barra contextual (lenguaje del código / acciones de la tabla)
+
+  private updateCtx(): void {
+    const range = this.currentRange();
+    if (!range) return; // el foco pasó a la barra (p. ej. al <select>): se conserva
+    const pre = this.closestAnyTag(range.startContainer, ['PRE']);
+    const cell = this.closestAnyTag(range.startContainer, ['TD', 'TH']) as HTMLTableCellElement | null;
+    this.codeBlock = pre;
+    this.codeLang = pre ? (Array.from(pre.classList).find((c) => c.startsWith('language-'))?.slice(9) ?? '') : '';
+    this.tableCell = pre ? null : cell;
+    this.positionCtxBar();
+  }
+
+  private clearCtx(): void {
+    if (!this.codeBlock && !this.tableCell && !this.ctxBar) return;
+    this.codeBlock = null;
+    this.tableCell = null;
+    this.ctxBar = null;
+    this.cdr.markForCheck();
+  }
+
+  // Encima del bloque, a la izquierda; se oculta si quedaría bajo la toolbar fija o fuera de la vista
+  private positionCtxBar(): void {
+    const target = this.codeBlock?.isConnected ? this.codeBlock : (this.liveCell()?.closest('table') ?? null);
+    if (!target) {
+      this.clearCtx();
+      return;
+    }
+    const wrap = this.wrapperEl().nativeElement.getBoundingClientRect();
+    const rect = target.getBoundingClientRect();
+    const toolbarBottom = this.toolbarEl().nativeElement.getBoundingClientRect().bottom;
+    const top = rect.top - 34;
+    const visible = top >= toolbarBottom && rect.top <= Math.min(this.editor.getBoundingClientRect().bottom, window.innerHeight);
+    this.ctxBar = visible ? { top: top - wrap.top, left: Math.max(rect.left - wrap.left, 4) } : null;
+    this.cdr.markForCheck();
+  }
+
 
   applyStyle(prop: StyleProp, value: string | null): void {
     this.openMenu = null;
@@ -697,7 +975,9 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       return;
     }
     this.selectedImg = img;
+    this.refreshImgState();
     this.hideBubble();
+    this.clearCtx();
     this.positionImgFrame();
   }
 
@@ -732,17 +1012,108 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.commitImg();
   }
 
+  setImgAlign(align: ImgAlign): void {
+    const img = this.selectedImg;
+    if (!img) return;
+    const outer = this.imgOuter(img);
+    const same = this.imgAlign === align;
+    outer.classList.remove(...IMG_ALIGN_CLASSES);
+    if (!same) outer.classList.add(`img-${align}`); // otro clic en la misma alineación la quita
+    if (!outer.classList.length) outer.removeAttribute('class');
+    this.commitImg();
+  }
+
+  // Pie de foto: la imagen pasa a un <figure> (no editable) con <figcaption>; vacío lo quita
+  editImgCaption(): void {
+    const img = this.selectedImg;
+    const wrap = img?.closest<HTMLElement>('.img-resizable');
+    if (!img || !wrap) return;
+    const figure = wrap.closest<HTMLElement>('figure.img-figure');
+    const actual = figure?.querySelector('figcaption')?.textContent ?? '';
+    const texto = prompt('Pie de foto (déjalo vacío para quitarlo):', actual);
+    if (texto === null) return;
+    const caption = texto.trim();
+
+    if (figure && !caption) {
+      // Sin pie: la imagen vuelve a un párrafo, con su alineación
+      wrap.classList.add(...IMG_ALIGN_CLASSES.filter((c) => figure.classList.contains(c)));
+      const p = document.createElement('p');
+      p.appendChild(wrap);
+      figure.replaceWith(p);
+    } else if (figure) {
+      figure.querySelector('figcaption')!.textContent = caption;
+    } else if (caption) {
+      const fig = document.createElement('figure');
+      fig.className = 'img-figure';
+      fig.setAttribute('contenteditable', 'false');
+      const align = IMG_ALIGN_CLASSES.filter((c) => wrap.classList.contains(c));
+      wrap.classList.remove(...align);
+      fig.classList.add(...align);
+      const cap = document.createElement('figcaption');
+      cap.textContent = caption;
+      // El <figure> es un bloque: va después del párrafo que tenía la imagen, no dentro
+      const block = this.blockOf(wrap);
+      if (block && block !== this.editor) block.after(fig);
+      else wrap.before(fig);
+      fig.append(wrap, cap);
+      if (block && block !== this.editor && isVisuallyEmpty(block)) block.remove();
+      if (!isBlock(fig.nextElementSibling)) fig.after(emptyParagraph());
+    }
+    this.normalizeTrailing();
+    this.commitImg();
+  }
+
+  private imgOuter(img: HTMLImageElement): HTMLElement {
+    return img.closest<HTMLElement>('figure.img-figure') ?? img.closest<HTMLElement>('.img-resizable') ?? img;
+  }
+
+  private refreshImgState(): void {
+    const img = this.selectedImg;
+    if (!img) return;
+    const outer = this.imgOuter(img);
+    const cls = IMG_ALIGN_CLASSES.find((c) => outer.classList.contains(c));
+    this.imgAlign = cls ? (cls.slice(4) as ImgAlign) : null;
+    this.imgHasCaption = !!img.closest('figure.img-figure');
+  }
+
+  // Ancho elegido + alto proporcional: con width y height el navegador reserva el espacio antes de que cargue la
+  // imagen (el post no "salta"). "Auto" deja las dimensiones reales (el CSS la limita al ancho disponible).
   private applyImgWidth(width: number | null): void {
     const img = this.selectedImg!;
-    if (width === null) img.removeAttribute('width');
-    else img.setAttribute('width', `${Math.round(width)}`);
-    img.removeAttribute('height');
     img.style.width = '';
     img.style.height = '';
+    if (width === null) {
+      img.removeAttribute('width');
+      img.removeAttribute('height');
+      fijarDimensiones(img);
+    } else {
+      const w = Math.round(width);
+      img.setAttribute('width', `${w}`);
+      if (img.naturalWidth) img.setAttribute('height', `${Math.round((w * img.naturalHeight) / img.naturalWidth)}`);
+      else img.removeAttribute('height');
+    }
     this.positionImgFrame();
   }
 
+  // Cuando cada imagen termina de cargar se le ponen sus dimensiones (si no las tiene). Al abrir un post (`notify`
+  // false) no se emite: no es un cambio de la persona; se guardan con la próxima edición.
+  private watchImageSize(root: HTMLElement, notify = true): void {
+    const imgs = root instanceof HTMLImageElement ? [root] : Array.from(root.querySelectorAll('img'));
+    imgs.forEach((img) => {
+      if (img.hasAttribute('width') && img.hasAttribute('height')) return;
+      const fix = () => {
+        if (!this.editor.contains(img) || !fijarDimensiones(img)) return;
+        if (notify) this.emit();
+        if (img === this.selectedImg) this.positionImgFrame();
+      };
+      if (img.complete && img.naturalWidth) fix();
+      else img.addEventListener('load', fix, { once: true });
+    });
+  }
+
+
   private commitImg(): void {
+    this.refreshImgState();
     this.emit();
     this.recordHistory();
     this.positionImgFrame();
@@ -795,6 +1166,8 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.selectedImg = null;
     this.imgDrag = null;
     this.imgFrame = null;
+    this.imgAlign = null;
+    this.imgHasCaption = false;
     this.cdr.markForCheck();
   }
 
@@ -808,6 +1181,11 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       wrap.style.height = '';
       if (!wrap.getAttribute('style')) wrap.removeAttribute('style');
     });
+    // El servidor no guarda contenteditable: imágenes y pies de foto vuelven a ser bloques atómicos
+    this.editor
+      .querySelectorAll<HTMLElement>('.img-resizable, figure.img-figure')
+      .forEach((el) => el.setAttribute('contenteditable', 'false'));
+    this.watchImageSize(this.editor, false);
   }
 
   toggleSource(): void {
@@ -870,6 +1248,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       return;
     }
     this.activeMarks = this.marksAt(range);
+    this.updateCtx();
 
     const link = range.collapsed ? this.closestAnyTag(range.startContainer, ['A']) : null;
     if (!range.collapsed && range.toString().trim() && !this.isTouch) {
@@ -887,6 +1266,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   onViewportChange(): void {
     this.repositionBubble();
     if (this.selectedImg) this.positionImgFrame();
+    this.positionCtxBar();
   }
 
   @HostListener('document:mousedown', ['$event.target'])
@@ -897,6 +1277,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     if (this.bubbleMode && target instanceof Node && !this.host.nativeElement.contains(target)) {
       this.hideBubble();
     }
+    if (target instanceof Node && !this.host.nativeElement.contains(target)) this.clearCtx();
   }
 
   toggleBubbleColors(): void {
@@ -1128,11 +1509,14 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     if (!nodes.length) return;
 
     const host = this.blockOf(range.startContainer);
-    const isBlockNode = (n: Node) => isBlock(n) || (isElement(n) && ['UL', 'OL', 'HR'].includes(n.tagName));
+    const isBlockNode = (n: Node) => isBlock(n) || (isElement(n) && STANDALONE_TAGS.includes(n.tagName));
     const hasBlocks = nodes.some(isBlockNode);
 
-    if (hasBlocks && host && host.tagName !== 'P' && host.tagName !== 'DIV' && host.tagName !== 'BLOCKQUOTE') {
-      if (host.tagName === 'PRE') {
+    // Dentro de una celda tampoco se insertan bloques (ni tablas anidadas)
+    const inCell = !!this.closestAnyTag(range.startContainer, ['TD', 'TH']);
+    const flatHost = !!host && host.tagName !== 'P' && host.tagName !== 'DIV' && host.tagName !== 'BLOCKQUOTE';
+    if (hasBlocks && (flatHost || inCell)) {
+      if (host?.tagName === 'PRE') {
         nodes = [document.createTextNode(nodes.map((n) => n.textContent).join('\n'))];
       } else {
         nodes = this.flattenBlocks(nodes);
@@ -1161,7 +1545,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       range.insertNode(holder);
     }
     // Tras una línea horizontal siempre queda un bloque donde seguir escribiendo
-    if (last.tagName === 'HR') this.ensureBlockAfter(last);
+    if (['HR', 'TABLE', 'FIGURE'].includes(last.tagName)) this.ensureBlockAfter(last);
     else this.caretAtEnd(last);
     this.normalizeTrailing();
   }
@@ -1187,7 +1571,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   private flattenBlocks(nodes: Node[]): Node[] {
     const out: Node[] = [];
     nodes.forEach((n) => {
-      if (isElement(n) && (isBlock(n) || ['UL', 'OL'].includes(n.tagName))) {
+      if (isElement(n) && (isBlock(n) || ['UL', 'OL', 'TABLE', 'FIGURE'].includes(n.tagName))) {
         if (out.length) out.push(document.createElement('br'));
         out.push(document.createTextNode(n.textContent || ''));
       } else if (!(isElement(n) && n.tagName === 'HR')) {
@@ -1202,7 +1586,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     const blocks: HTMLElement[] = [];
     let p: HTMLElement | null = null;
     nodes.forEach((n) => {
-      if (isElement(n) && (isBlock(n) || ['UL', 'OL', 'HR'].includes(n.tagName))) {
+      if (isElement(n) && (isBlock(n) || STANDALONE_TAGS.includes(n.tagName))) {
         blocks.push(n);
         p = null;
       } else if (n.nodeType !== Node.TEXT_NODE || (n as Text).data.trim()) {
@@ -1253,7 +1637,11 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.uploads--;
     const placeholder = this.editor.querySelector(`[data-upload="${id}"]`);
     if (placeholder) {
-      if (url) placeholder.replaceWith(imageNode(url));
+      if (url) {
+        const node = imageNode(url);
+        this.watchImageSize(node);
+        placeholder.replaceWith(node);
+      }
       else placeholder.remove();
       this.emit();
       this.recordHistory();
@@ -1268,6 +1656,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     if (!range?.collapsed) return false;
     const block = this.blockOf(range.startContainer);
     if (!block || !['P', 'DIV'].includes(block.tagName) || block.hasAttribute('class')) return false;
+    if (this.closestAnyTag(block, ['TD', 'TH'])) return false;
 
     const before = document.createRange();
     before.setStart(block, 0);
@@ -1358,6 +1747,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   }
 
   private handleTab(outdent: boolean): boolean {
+    if (this.handleCodeTab(outdent) || this.handleTableTab(outdent)) return true;
     const range = this.currentRange();
     const first = range ? this.closestAnyTag(range.startContainer, ['LI']) : null;
     if (!first) return false; // fuera de listas Tab mueve el foco, como siempre

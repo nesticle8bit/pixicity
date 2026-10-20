@@ -16,13 +16,17 @@
         <span class="cp-bar__saved">
           <i class="ti ti-circle-check"></i> Borrador guardado · {{ today | date:'hh:mm a' }}
         </span>
+        } @else if (borrador?.guardadoEn; as guardado) {
+        <span class="cp-bar__saved cp-bar__saved--local" title="Se guarda solo mientras escribes; si cierras la pestaña, al volver puedes recuperarlo">
+          <i class="ti ti-device-floppy"></i> Guardado en este navegador · {{ guardado | date:'hh:mm a' }}
+        </span>
         }
       </div>
 
       <div class="cp-bar__actions">
-        <!-- <button type="button" mat-stroked-button (click)="previsualizar()" [disabled]="!hasContenido">
-          <i class="ti ti-eye"></i> <span class="cp-hide-sm">Previsualizar</span>
-        </button> -->
+        <button type="button" mat-stroked-button (click)="previsualizar()" [disabled]="!hasContenido">
+          <i class="ti ti-eye"></i> <span class="cp-hide-sm">Vista previa</span>
+        </button>
 
         @if (formGroup.value?.esBorrador || !formGroup.value?.id) {
         <button type="button" mat-flat-button class="mat-gray" (click)="guardarBorrador()"

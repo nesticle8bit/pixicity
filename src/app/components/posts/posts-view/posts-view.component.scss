@@ -59,3 +59,53 @@
   padding: 48px 0;
   min-height: 60vh;
 }
+
+.detail-lectura {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+// Índice automático con los H2/H3 del post
+.post-toc {
+  background: #f7f9fc;
+  border: 1px solid #e3e9f2;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 4px;
+  font-size: .85rem;
+
+  summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: #1976d2;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  ol {
+    margin: 8px 0 2px;
+    padding-left: 1.4em;
+  }
+
+  // El reset global quita los números a todo <li>
+  li {
+    list-style: decimal;
+    margin: 3px 0;
+  }
+
+  .post-toc__sub {
+    list-style: circle;
+    margin-left: 1.2em;
+  }
+
+  a {
+    font-weight: 500;
+    color: #2b4a6f;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

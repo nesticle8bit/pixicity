@@ -66,6 +66,20 @@ function buildElement(source: HTMLElement, tag: string): HTMLElement | null {
   return el;
 }
 
+/** Pone width/height reales a una imagen ya cargada que no los tenga. Devuelve true si cambió algo. */
+export function fijarDimensiones(img: HTMLImageElement): boolean {
+  if (!img.naturalWidth || !img.naturalHeight) return false;
+  const width = Number(img.getAttribute('width')) || 0;
+  if (!width) {
+    img.setAttribute('width', `${img.naturalWidth}`);
+    img.setAttribute('height', `${img.naturalHeight}`);
+    return true;
+  }
+  if (img.hasAttribute('height')) return false;
+  img.setAttribute('height', `${Math.round((width * img.naturalHeight) / img.naturalWidth)}`);
+  return true;
+}
+
 export function imageNode(src: string, alt = ''): HTMLElement {
   const img = document.createElement('img');
   img.src = src;

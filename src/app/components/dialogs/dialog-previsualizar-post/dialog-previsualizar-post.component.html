@@ -1,11 +1,13 @@
-<h2 mat-dialog-title>Previsualización</h2>
+<h2 mat-dialog-title>Vista previa</h2>
 
-<mat-dialog-content class="mat-typography">
-
+<mat-dialog-content>
+  <h1 class="pv-titulo">{{ data.titulo || 'Sin título' }}</h1>
+  <p class="pv-meta"><i class="ti ti-clock" aria-hidden="true"></i> {{ minutos }} min de lectura</p>
+  <div class="contenido pv-contenido" [appContenidoPost]="data.contenido">
+    <span [innerHTML]="data.contenido | contenidoSeo:data.titulo | enlazarHashtags"></span>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>
-        Cerrar
-    </button>
+  <button mat-button mat-dialog-close>Seguir editando</button>
 </mat-dialog-actions>

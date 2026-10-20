@@ -4,6 +4,7 @@
 // Se regenera con: npm run icons   (y `npm run icons:check` lo valida en CI).
 @use "assets/styles/tabler-icons-subset";
 @use "assets/styles/admin-tablas";
+@use "app/shared/styles/contenido-rico" as rico;
 
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 @import "material-icons/iconfont/material-icons.css";
@@ -1435,45 +1436,53 @@ textarea:focus#msg_body {
 
   & li::marker { color: #1976d2; }
 
-  /* Bloque de código (mismo look que en el editor) */
-  & pre {
-    position: relative;
-    max-width: 100%;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-break: break-word;
-    background: #f6f8fa;
-    color: #24292f;
+  /* Código, tablas e imágenes: mismo look que en el editor */
+  @include rico.bloques;
+  @include rico.resaltado;
+
+  /* Botón "Copiar" de los bloques de código (lo agrega appContenidoPost) */
+  & .code-copy {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
     border: 1px solid #d0d7de;
-    border-left: 4px solid #1976d2;
-    border-radius: 4px;
-    padding: 28px 14px 12px;
-    margin: 12px 0;
-    font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
-    font-size: 13px;
-    line-height: 1.5;
-    tab-size: 2;
-    text-align: left;
+    border-radius: 5px;
+    background: #fff;
+    color: #57606a;
+    font: 600 11px/1.6 system-ui, sans-serif;
+    cursor: pointer;
+    opacity: .85;
 
-    &::before {
-      content: 'Código';
-      position: absolute;
-      top: 6px;
-      left: 14px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: .5px;
-      text-transform: uppercase;
-      color: #6e7781;
-      user-select: none;
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      color: #1976d2;
+      border-color: #1976d2;
     }
 
-    & code {
-      background: none;
-      padding: 0;
-      font-size: inherit;
-      color: inherit;
+    &.is-ok {
+      color: #1a7f37;
+      border-color: #1a7f37;
     }
+  }
+
+  /* Títulos destino del índice: que no queden debajo del header fijo */
+  & h2,
+  & h3 {
+    scroll-margin-top: 80px;
+  }
+
+  /* Imágenes que se amplían al hacer clic (las que son enlace no) */
+  & img {
+    cursor: zoom-in;
+  }
+
+  & a img {
+    cursor: pointer;
   }
 
   & p {
@@ -3915,5 +3924,81 @@ a.te-tag {
 
   &:hover {
     text-decoration: underline;
+  }
+}
+
+// Visor de imágenes del post (appContenidoPost lo agrega al <body>)
+.img-visor {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  background: rgba(10, 12, 16, .88);
+  cursor: zoom-out;
+  animation: img-visor-in .15s ease-out;
+
+  img {
+    max-width: 100%;
+    max-height: calc(100vh - 90px);
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, .5);
+  }
+
+  &__pie {
+    margin: 0;
+    color: #e6e6e6;
+    font-size: .9rem;
+    text-align: center;
+  }
+
+  &__cerrar {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .15);
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(255, 255, 255, .28);
+    }
+  }
+}
+
+@keyframes img-visor-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+// Contenido del editor (app-rich-editor): mismo formato que el post publicado. Va aquí y no en el componente
+// porque el contenido lo crea el navegador (sin atributo _ngcontent) y por el presupuesto de estilos del componente.
+app-rich-editor .rich-editor__content {
+  @include rico.bloques($etiquetas: false);
+
+  // Celda con el caret: se marca para ver dónde se está escribiendo
+  td:focus-within,
+  th:focus-within {
+    outline: 2px solid var(--re-accent);
+    outline-offset: -2px;
+  }
+
+  // Imagen con pie de foto: se edita con el botón del marco de la imagen
+  figure.img-figure {
+    cursor: pointer;
+  }
+
+  .img-resizable.img-centro {
+    display: table;
   }
 }
