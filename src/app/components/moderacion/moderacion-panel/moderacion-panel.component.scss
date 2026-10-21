@@ -1,0 +1,63 @@
+.mod-panel {
+  padding-top: 0;
+
+  &__head {
+    margin: 4px 0 12px;
+  }
+
+  &__title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+
+  &__desc {
+    color: #6c757d;
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  &__tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid #e5e8ec;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      white-space: nowrap;
+      color: #495057;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+
+      &:hover {
+        color: #006595;
+      }
+
+      &.active {
+        color: #006595;
+        font-weight: 600;
+        border-bottom-color: #006595;
+      }
+    }
+  }
+
+  &__tabs-historial {
+    margin-left: auto;
+  }
+
+  &__badge {
+    background: #dc3545;
+    color: #fff;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    line-height: 1;
+    padding: 3px 6px;
+  }
+}

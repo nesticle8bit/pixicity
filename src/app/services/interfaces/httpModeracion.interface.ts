@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
-import { ModeracionLog, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
+import { AccionModeracion, FiltroHistorial, ModeracionLog, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
 
 @Injectable()
 export abstract class IHttpModeracionService {
@@ -19,4 +19,7 @@ export abstract class IHttpModeracionService {
   /** Denuncias de comentarios de una comunidad (creador o staff de la comunidad). */
   abstract getReportesComunidad(comunidadId: number, soloPendientes: boolean): Observable<ReportesComunidad>;
   abstract getModeracionLogs(page: number, pageCount: number): Observable<PaginatedData<ModeracionLog>>;
+  /** /mod-history: lo mismo que la bitácora, para cualquier usuario con sesión. */
+  abstract getHistorial(page: number, pageCount: number, filtro?: FiltroHistorial): Observable<PaginatedData<ModeracionLog>>;
+  abstract getAccionesHistorial(): Observable<AccionModeracion[]>;
 }

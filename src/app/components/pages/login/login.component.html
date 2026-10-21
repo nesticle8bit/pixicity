@@ -69,10 +69,14 @@
           <input id="password" type="password" formControlName="password" class="form-control mx-auto" />
         </div>
 
-        <!-- <app-re-captcha #captcha (response)="captchaResponse($event)"></app-re-captcha> -->
+        @if (captchaSiteKey()) {
+          <div class="mb-3">
+            <app-turnstile #captcha [siteKey]="captchaSiteKey()!" (token)="captchaResponse($event)" />
+          </div>
+        }
 
         <div class="dot--ccc">
-          <input type="submit" class="submit-btn" value="Iniciar Sesión">
+          <input type="submit" class="submit-btn" value="Iniciar Sesión" [disabled]="loginForm.invalid">
         </div>
         <p class="text-center mt-2 mb-0">
           <a routerLink="/olvide-password" class="olvide-password">¿Olvidaste tu contraseña?</a>

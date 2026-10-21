@@ -2,47 +2,81 @@
   <h2 class="main-title mb-2">
     <span>Historial de moderación</span>
   </h2>
+  <p class="text-muted mb-3">
+    Cada cambio que hace un moderador o administrador queda acá: qué hizo, sobre qué, qué cambió y por qué.
+  </p>
 
-  <div class="table-responsive" >
-    <table class="table table-sm table-striped table-hover">
+  <form class="mh-filtros" (ngSubmit)="filtrar()">
+    <select class="form-select form-select-sm" name="accion" aria-label="Acción" [(ngModel)]="accion" (ngModelChange)="filtrar()">
+      <option [ngValue]="null">Todas las acciones</option>
+      @for (a of acciones(); track a.id) {
+        <option [ngValue]="a.id">{{a.nombre}}</option>
+      }
+    </select>
+    <input type="search" class="form-control form-control-sm" name="moderador" placeholder="Moderador (usuario exacto)"
+      aria-label="Moderador" [(ngModel)]="moderador" />
+    <button type="submit" class="btn btn-sm btn-outline-secondary">Filtrar</button>
+    @if (accion || moderador) {
+      <button type="button" class="btn btn-sm btn-link" (click)="limpiar()">Quitar filtros</button>
+    }
+  </form>
+
+  <div class="table-responsive">
+    <table class="table table-sm table-striped table-hover align-middle">
       <thead>
         <tr>
-          <th>Post</th>
+          <th>Fecha</th>
           <th>Acción</th>
           <th>Moderador</th>
-          <th>Causa</th>
+          <th>Sobre</th>
+          <th>Qué cambió</th>
         </tr>
       </thead>
 
       <tbody>
-        @for (post of posts; track post) {
+        @for (e of entradas(); track e.id) {
           <tr>
+            <td class="text-nowrap">
+              <span class="cursor--help" [matTooltip]="e.fechaRegistro">{{e.fechaRegistro | timeAgo}}</span>
+            </td>
             <td>
-              {{post.titulo}}
-              <br>
-                <small>
-                  Por:
-                  <strong>
-                    <a href="/perfil/{{post.autor}}" target="_blank" [appUserPopover]="post.autor">
-                      {{post.autor}}
-                    </a>
-                  </strong>
-                </small>
-              </td>
-              <td class="my-auto">
-                <strong [ngClass]="{'text-danger': post.accion === 'Eliminado', 'text-success': post.accion === 'Actualizado'}">
-                  {{post.accion}}
-                </strong>
-              </td>
-              <td class="my-auto">
-                <span [appUserPopover]="post.moderador">{{post.moderador}}</span>
-              </td>
-              <td class="my-auto">
-                {{post.causa}}
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+              <span class="mh-badge {{tono(e.accion)}}">{{e.accionNombre}}</span>
+            </td>
+            <td class="text-nowrap">
+              @if (esSistema(e)) {
+                <span class="text-muted" matTooltip="Acción automática del sitio">Sistema</span>
+              } @else {
+                <button type="button" class="btn btn-link p-0 mh-moderador" [appUserPopover]="e.staffUserName!"
+                  (click)="verDe(e.staffUserName!)" [attr.aria-label]="'Ver solo las acciones de ' + e.staffUserName">
+                  {{e.staffUserName}}
+                </button>
+              }
+            </td>
+            <td class="mh-objetivo">
+              @if (e.objetivoUrl) {
+                <a [routerLink]="e.objetivoUrl">{{e.objetivo || 'Ver'}}</a>
+              } @else {
+                {{e.objetivo || '—'}}
+              }
+            </td>
+            <td class="mh-detalle">
+              {{e.detalle || '—'}}
+              @if (e.razon) {
+                <div class="mh-razon"><strong>Causa:</strong> {{e.razon}}</div>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
   </div>
+
+  @if (!cargando() && entradas().length === 0) {
+    <div class="alert alert-light">No hay acciones de moderación que mostrar.</div>
+  }
+
+  @if (total() > pageSize) {
+    <mat-paginator [length]="total()" [pageIndex]="pageIndex" [pageSize]="pageSize" [hidePageSize]="true"
+      (page)="pageChange($event)" aria-label="Páginas del historial" />
+  }
+</div>

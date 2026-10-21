@@ -36,7 +36,13 @@ export interface ModeracionLog {
   staffUserName: string | null;
   tipoContenido: number | null;
   contenidoId: number | null;
+  /** Qué cambió, en palabras. */
   detalle: string | null;
+  /** Lo moderado (título del post, usuario, extracto del shout) y su enlace, tal como estaban en ese momento. */
+  objetivo: string | null;
+  objetivoUrl: string | null;
+  /** Causa que escribió el moderador. */
+  razon: string | null;
   fechaRegistro: string;
 }
 
@@ -51,4 +57,16 @@ export interface ReglaProtocolo {
 export interface ReportesComunidad {
   reportes: Reporte[];
   pendientes: number;
+}
+
+/** Filtros de /mod-history. */
+export interface FiltroHistorial {
+  accion?: number | null;
+  moderador?: string | null;
+}
+
+/** Acción que se puede filtrar en el historial. */
+export interface AccionModeracion {
+  id: number;
+  nombre: string;
 }

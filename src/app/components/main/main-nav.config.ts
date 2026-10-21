@@ -8,8 +8,8 @@ export interface NavLink {
   exact?: boolean;
   /** Ruta a comparar para el estado activo cuando difiere del destino (p. ej. toda la sección /administracion). */
   matchRoute?: string;
-  /** Si se indica, el enlace solo se muestra a ese rango. */
-  rango?: 'Moderador' | 'Administrador';
+  /** Si se indica, el enlace solo se muestra a esos rangos. */
+  rango?: ('Moderador' | 'Administrador')[];
   /** Se muestra como pestaña en la barra principal (el resto vive solo en el cajón móvil). */
   tab?: boolean;
 }
@@ -27,14 +27,14 @@ export const NAV_LINKS: NavLink[] = [
     label: 'Moderación',
     icon: 'ti-tool',
     route: '/moderacion',
-    rango: 'Moderador',
+    rango: ['Moderador', 'Administrador'],
   },
   {
     label: 'Administración',
     icon: 'ti-adjustments',
     route: '/administracion/dashboard',
     matchRoute: '/administracion',
-    rango: 'Administrador',
+    rango: ['Administrador'],
     tab: true,
   },
 ];
@@ -44,7 +44,7 @@ export function linksFor(
   soloTabs = false,
 ): NavLink[] {
   return NAV_LINKS.filter(
-    (l) => (!l.rango || l.rango === rango) && (!soloTabs || l.tab),
+    (l) => (!l.rango || l.rango.includes(rango as 'Moderador' | 'Administrador')) && (!soloTabs || l.tab),
   );
 }
 

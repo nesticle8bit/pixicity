@@ -94,9 +94,9 @@ export class HttpPerfilService implements IHttpPerfilService {
       );
   }
 
-  deleteShout(shoutId: number): Observable<boolean> {
+  deleteShout(shoutId: number, razon?: string): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/shouts/${shoutId}`)
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/shouts/${shoutId}`, { params: razon ? { razon } : {} })
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -158,10 +158,11 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  deleteShoutComentario(id: number): Observable<boolean> {
+  deleteShoutComentario(id: number, razon?: string): Observable<boolean> {
     return this.http
       .delete<ApiResponse<boolean>>(
         `${environment.api}/api/shouts/comentarios/${id}`,
+        { params: razon ? { razon } : {} },
       )
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));

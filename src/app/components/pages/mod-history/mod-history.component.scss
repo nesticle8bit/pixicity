@@ -1,0 +1,67 @@
+.mh-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+
+  select,
+  input {
+    width: auto;
+    min-width: 200px;
+    flex: 0 1 240px;
+  }
+}
+
+.mh-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &--quita {
+    background: #fdecea;
+    color: #b02a37;
+  }
+
+  &--devuelve {
+    background: #e6f4ea;
+    color: #1e7b34;
+  }
+
+  &--cambia {
+    background: #e7f1f7;
+    color: #006595;
+  }
+}
+
+.mh-moderador {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.mh-objetivo {
+  max-width: 280px;
+  overflow-wrap: anywhere;
+}
+
+.mh-detalle {
+  min-width: 220px;
+  overflow-wrap: anywhere;
+}
+
+.mh-razon {
+  color: #6c757d;
+  font-size: 0.85rem;
+  margin-top: 2px;
+}
+
+@media (max-width: 575px) {
+  .mh-filtros select,
+  .mh-filtros input {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+}

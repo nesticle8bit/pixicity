@@ -72,9 +72,10 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  loginUser(user: { userName: string; password: string }): Observable<LoginResponse> {
+  loginUser(user: { userName: string; password: string }, captcha?: string): Observable<LoginResponse> {
+    const headers = captcha ? new HttpHeaders({ 'X-Captcha': captcha }) : undefined;
     return this.http
-      .post<ApiResponse<LoginResponse>>(`${environment.api}/api/auth/login`, user)
+      .post<ApiResponse<LoginResponse>>(`${environment.api}/api/auth/login`, user, { headers })
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -460,9 +461,9 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getLastRegisteredUsers(): Observable<UsuarioViewModel[]> {
+  getLastRegisteredUsers(version?: number): Observable<UsuarioViewModel[]> {
     return this.http
-      .get<ApiResponse<UsuarioViewModel[]>>(`${environment.api}/api/usuarios/recientes`)
+      .get<ApiResponse<UsuarioViewModel[]>>(`${environment.api}/api/usuarios/recientes${version ? `?v=${version}` : ''}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

@@ -1,6 +1,5 @@
 import { PaginaAdmin } from 'src/app/models/admin/filas-admin.model';
 import { AdminFiltro } from 'src/app/models/admin/admin-filtro.model';
-import { HistorialViewModel } from 'src/app/models/web/historial.model';
 import { PaginaViewModel } from 'src/app/models/shared/service-types.model';
 import { TopUserModel } from 'src/app/models/web/topUser.model';
 import { Injectable } from '@angular/core';
@@ -17,7 +16,6 @@ export abstract class IHttpWebService {
   abstract getAfiliados(): Observable<AfiliacionModel[]>;
   abstract changeAfiliadoActive(obj: { id: number; activo: boolean }): Observable<boolean>;
   abstract hitAfiliado(codigo: string): Observable<string>;
-  abstract getHistorialModeracion(): Observable<HistorialViewModel[]>;
   abstract getPaginas(search: string, filtro?: AdminFiltro): Observable<PaginatedData<PaginaAdmin, 'paginas'>>;
   abstract getAllPaginas(): Observable<PaginaViewModel[]>;
   abstract savePagina(pagina: Partial<PaginaViewModel>): Observable<number>;

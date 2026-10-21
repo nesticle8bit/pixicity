@@ -145,7 +145,7 @@ describe('MainHeader + MobileDrawer (hamburguesa)', () => {
     fixture.detectChanges();
     const textoAdmin = el('#mobile-drawer')!.textContent;
     expect(textoAdmin).toContain('Administración');
-    expect(textoAdmin).not.toContain('Moderación');
+    expect(textoAdmin).toContain('Moderación'); // la sección de moderación también es para administradores
 
     user$.next({ usuario: { userName: 'mod', rango: 'Moderador', avatar: '' }, token: 't' });
     fixture.detectChanges();

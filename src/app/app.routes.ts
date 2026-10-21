@@ -21,6 +21,7 @@ import { PostsCreateComponent } from './components/posts/posts-create/posts-crea
 import { PostsViewComponent } from './components/posts/posts-view/posts-view.component';
 import { SectionHomeForumComponent } from './components/sections/section-home-forum/section-home-forum.component';
 import { AdministradorAuthorization } from './shared/guards/adminAuthorization.guard';
+import { ModeradorAuthorization } from './shared/guards/moderadorAuthorization.guard';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { AuthLoggedUserGuard } from './shared/guards/auth.loggedUser.guard';
 import { PaginasComponent } from './components/pages/paginas/paginas.component';
@@ -97,11 +98,6 @@ export const routes: Routes = [
         (m) => m.MensajesModule,
       ),
   },
-  {
-    path: 'mod-history',
-    component: ModHistoryComponent,
-    canActivate: [AuthGuard],
-  },
   { path: 'monitor', component: MonitorComponent, canActivate: [AuthGuard] },
   { path: 'tops', component: TopsComponent },
   { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
@@ -141,6 +137,13 @@ export const routes: Routes = [
     path: 'api',
     component: ApiDocumentationComponent,
     canActivate: [AuthGuard],
+  },
+
+  {
+    path: 'moderacion',
+    canActivate: [AuthGuard, ModeradorAuthorization],
+    loadChildren: () =>
+      import('./modules/moderacion/moderacion.routes').then((m) => m.MODERACION_ROUTES),
   },
 
   {

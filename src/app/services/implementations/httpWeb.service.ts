@@ -1,6 +1,5 @@
 import { PaginaAdmin } from 'src/app/models/admin/filas-admin.model';
 import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
-import { HistorialViewModel } from 'src/app/models/web/historial.model';
 import { PaginaViewModel } from 'src/app/models/shared/service-types.model';
 import { IHttpWebService } from '../interfaces/httpWeb.interface';
 import { PaginationService } from '../shared/pagination.service';
@@ -110,22 +109,6 @@ export class HttpWebService implements IHttpWebService {
   hitAfiliado(codigo: string): Observable<string> {
     return this.http
       .post<ApiResponse<string>>(`${environment.api}/api/afiliados/${encodeURIComponent(codigo)}/salidas`, {})
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        }),
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
-  getHistorialModeracion(): Observable<HistorialViewModel[]> {
-    return this.http
-      .get<ApiResponse<HistorialViewModel[]>>(`${environment.api}/api/moderacion/historial`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

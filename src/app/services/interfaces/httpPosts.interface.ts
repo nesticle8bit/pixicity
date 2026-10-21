@@ -8,7 +8,8 @@ import { PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-r
 import { CloudTagViewModel, FavoritoAlternado, PostDetailResponse, PostInteracciones, PostInteraccionesPagina, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
 @Injectable()
 export abstract class IHttpPostsService {
-  abstract getPosts(categoria?: string): Observable<PaginatedData<PostViewModel>>;
+  /** `version`: la de "homeActualizado", para saltear la caché del navegador. */
+  abstract getPosts(categoria?: string, version?: number): Observable<PaginatedData<PostViewModel>>;
   abstract getPostsAdmin(search: string, filtro?: AdminFiltro): Observable<PaginatedData<PostAdmin>>;
   abstract getPostsByUserId(userId: number): Observable<PaginatedData<PostViewModel>>;
   abstract getPostsByLoggedUser(search: string): Observable<PaginatedData<PostViewModel>>;

@@ -139,9 +139,9 @@ export class HttpComentariosPostService implements IHttpComentariosPostService {
       );
   }
 
-  deleteComentario(comentarioId: number): Observable<boolean> {
+  deleteComentario(comentarioId: number, razon?: string): Observable<boolean> {
     return this.http
-      .delete<ApiResponse<boolean>>(`${environment.api}/api/comentarios/${comentarioId}`)
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/comentarios/${comentarioId}`, { params: razon ? { razon } : {} })
       .pipe(
         map((response) => {
           if (response.status === 200) {

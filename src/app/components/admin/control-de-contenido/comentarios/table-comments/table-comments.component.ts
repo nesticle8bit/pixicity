@@ -94,9 +94,13 @@ export class TableCommentsComponent implements OnInit {
   deleteComentario(comentario: ComentarioViewModel): void {
     const accion = comentario.eliminado ? 'recuperar' : 'eliminar';
     if (this.notificationService.confirm(`¿Está seguro de ${accion} este comentario?`)) {
+      // Al borrar, la causa queda en /mod-history (se puede dejar vacía).
+      const razon = comentario.eliminado
+        ? undefined
+        : this.notificationService.prompt('¿Por qué lo eliminas? (queda en el historial de moderación)') || undefined;
       const accion$ = comentario.eliminado
         ? this.comentariosPostService.recuperarComentario(comentario.id)
-        : this.comentariosPostService.deleteComentario(comentario.id);
+        : this.comentariosPostService.deleteComentario(comentario.id, razon);
       accion$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success(

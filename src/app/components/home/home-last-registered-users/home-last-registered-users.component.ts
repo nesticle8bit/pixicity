@@ -1,4 +1,5 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { RouterLink } from '@angular/router';
@@ -13,8 +14,9 @@ import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
     styleUrls: ['./home-last-registered-users.component.scss'],
     imports: [RouterLink, UserPopoverDirective, CountryFlagComponent, GenreIconComponent, TimeAgoPipe]
 })
-export class HomeLastRegisteredUsersComponent implements OnInit {
+export class HomeLastRegisteredUsersComponent implements OnInit, OnDestroy {
   private securityService = inject(IHttpSecurityService);
+  private signalrService = inject(SignalrService);
 
   private readonly destroyRef = inject(DestroyRef);
 
@@ -22,11 +24,20 @@ export class HomeLastRegisteredUsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getLastRegisteredUsers();
+
+    this.signalrService.homeActualizado$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ lista, v }) => {
+      if (lista === 'usuarios') this.getLastRegisteredUsers(v);
+    });
+    this.signalrService.startHome();
   }
 
-  getLastRegisteredUsers(): void {
+  ngOnDestroy(): void {
+    this.signalrService.stopHome();
+  }
+
+  getLastRegisteredUsers(version?: number): void {
     this.securityService
-      .getLastRegisteredUsers()
+      .getLastRegisteredUsers(version)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         this.users = response;

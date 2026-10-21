@@ -1,11 +1,12 @@
 import { Subscription } from 'rxjs';
 import { ViewportScroller, NgClass } from '@angular/common';
-import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
+import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { CategoriesSelectorComponent } from '../../sections/categories-selector/categories-selector.component';
 import { MatTooltip } from '@angular/material/tooltip';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
@@ -27,12 +28,13 @@ import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
         TimeAgoPipe,
     ],
 })
-export class HomeLastPostsComponent implements OnInit {
+export class HomeLastPostsComponent implements OnInit, OnDestroy {
   paginationService = inject(PaginationService);
   private postService = inject(IHttpPostsService);
   private viewPort = inject(ViewportScroller);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private signalrService = inject(SignalrService);
 
   private readonly destroyRef = inject(DestroyRef);
   private cargaGetPosts?: Subscription;
@@ -76,6 +78,18 @@ export class HomeLastPostsComponent implements OnInit {
         this.pageIndex = Math.max(0, page - 1);
         this.load();
       });
+
+    // Post nuevo o borrado: solo se recarga la primera página (en las demás la lista se correría bajo el lector).
+    this.signalrService.homeActualizado$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ lista, v }) => {
+      if (lista !== 'posts' || this.pageIndex !== 0) return;
+      this.getPosts(this._categoria, v);
+      this.getStickyPosts();
+    });
+    this.signalrService.startHome();
+  }
+
+  ngOnDestroy(): void {
+    this.signalrService.stopHome();
   }
 
   /** Con una categoría elegida, el ícono lleva a su feed (/rss?categoria=seo). */
@@ -134,13 +148,13 @@ export class HomeLastPostsComponent implements OnInit {
     this.getPosts(this._categoria);
   }
 
-  getPosts(categoria: string): void {
+  getPosts(categoria: string, version?: number): void {
     // Cancela la carga anterior: si cambia el input, una respuesta vieja no pisa a la nueva.
 
     this.cargaGetPosts?.unsubscribe();
 
     this.cargaGetPosts = this.postService
-      .getPosts(categoria)
+      .getPosts(categoria, version)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         this.lastPosts = response.data;

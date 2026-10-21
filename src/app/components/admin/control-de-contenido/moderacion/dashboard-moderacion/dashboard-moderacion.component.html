@@ -123,7 +123,7 @@
     <div class="table-responsive">
       <table class="table table-sm table-striped align-middle">
         <thead>
-          <tr><th>Fecha</th><th>Staff</th><th>Acción</th><th>Detalle</th></tr>
+          <tr><th>Fecha</th><th>Staff</th><th>Acción</th><th>Objetivo</th><th>Detalle</th></tr>
         </thead>
         <tbody>
           @for (log of logs; track log.id) {
@@ -131,7 +131,17 @@
               <td><span matTooltip="{{log.fechaRegistro}}">{{log.fechaRegistro | timeAgo}}</span></td>
               <td>{{log.staffUserName}}</td>
               <td><span class="badge bg-light text-dark">{{log.accionNombre}}</span></td>
-              <td>{{log.detalle}}</td>
+              <td class="coment-cell">
+                @if (log.objetivoUrl) {
+                  <a [href]="log.objetivoUrl" target="_blank" rel="noopener">{{log.objetivo || 'ver'}}</a>
+                } @else {
+                  {{log.objetivo || '—'}}
+                }
+              </td>
+              <td>
+                {{log.detalle}}
+                @if (log.razon) { <div class="text-muted small">Causa: {{log.razon}}</div> }
+              </td>
             </tr>
           }
         </tbody>

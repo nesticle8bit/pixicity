@@ -12,12 +12,13 @@ export abstract class IHttpPerfilService {
   abstract createShout(shout: Partial<ShoutViewModel>): Observable<ShoutViewModel>;
   /** Sube una imagen para un shout (el API la deja en WebP de 1080 px máx.) y devuelve su URL pública. */
   abstract subirImagenShout(file: File): Observable<string>;
-  abstract deleteShout(shoutId: number): Observable<boolean>;
+  /** `razon`: la causa que escribe el staff (queda en /mod-history). */
+  abstract deleteShout(shoutId: number, razon?: string): Observable<boolean>;
   abstract recoveryShout(shoutId: number): Observable<boolean>;
   abstract getShoutById(shoutId: number): Observable<ShoutViewModel>;
   abstract getComentariosByShoutId(shoutId: number): Observable<ShoutComentarioViewModel[]>;
   abstract addShoutComentario(model: { shoutId: number; comentario: string; parentId?: number }): Observable<number>;
-  abstract deleteShoutComentario(id: number): Observable<boolean>;
+  abstract deleteShoutComentario(id: number, razon?: string): Observable<boolean>;
   abstract votarShoutComentario(comentarioId: number, valor: number): Observable<ShoutComentarioVoto>;
   abstract editarShoutComentario(comentarioId: number, contenido: string): Observable<boolean>;
   abstract fijarShoutComentario(comentarioId: number): Observable<boolean>;

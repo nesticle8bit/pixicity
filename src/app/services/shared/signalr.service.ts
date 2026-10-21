@@ -1,4 +1,5 @@
-import { Injectable, Injector, inject } from '@angular/core';
+import { Injectable, Injector, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Subject, Observable } from 'rxjs';
 import {
   HubConnection,
@@ -17,9 +18,16 @@ import {
 import { PostVotadoEnVivo } from 'src/app/models/posts/post-vm.model';
 import { IHttpSecurityService } from '../interfaces/httpSecurity.interface';
 
+/** "v" va en la URL al volver a pedir la lista, para no recibir la copia que guardó el navegador. */
+export interface HomeActualizado {
+  lista: 'posts' | 'usuarios';
+  v: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class SignalrService {
   private injector = inject(Injector);
+  private esNavegador = isPlatformBrowser(inject(PLATFORM_ID));
 
   private connection?: HubConnection;
 
@@ -31,6 +39,7 @@ export class SignalrService {
   private escribiendoSubject = new Subject<EventoDeUsuario>();
   private shoutNuevoSubject = new Subject<{ shoutId: number; autor: string }>();
   private postVotadoSubject = new Subject<PostVotadoEnVivo>();
+  private homeActualizadoSubject = new Subject<HomeActualizado>();
   private handlersBound = false;
 
   /** Qué grupos volver a pedir al reconectar. */
@@ -38,6 +47,8 @@ export class SignalrService {
   private suscritoEnVivo = false;
   /** Posts abiertos (grupo "post-{id}"): reciben "postVotado". */
   private postsSuscritos = new Set<number>();
+  /** Componentes del home que escuchan "homeActualizado" (últimos posts y usuarios comparten el grupo). */
+  private suscritosHome = 0;
 
   // Notificación personal en tiempo real (campana).
   public notification$: Observable<NotificacionEnVivo> = this.notificationSubject.asObservable();
@@ -55,6 +66,8 @@ export class SignalrService {
   public shoutNuevo$: Observable<{ shoutId: number; autor: string }> = this.shoutNuevoSubject.asObservable();
   // Alguien dio puntos a un post que tengo abierto.
   public postVotado$: Observable<PostVotadoEnVivo> = this.postVotadoSubject.asObservable();
+  // Cambió una lista del home (últimos posts o últimos usuarios registrados).
+  public homeActualizado$: Observable<HomeActualizado> = this.homeActualizadoSubject.asObservable();
 
   // Inicia la conexión y se suscribe a los grupos del usuario. Idempotente.
   async start(token: string): Promise<void> {
@@ -92,6 +105,9 @@ export class SignalrService {
     if (this.suscritoEnVivo) {
       await this.invokeEnVivo();
     }
+    if (this.suscritosHome > 0) {
+      await this.invocar('SubscribeHome');
+    }
     for (const postId of this.postsSuscritos) {
       await this.invocar('SubscribePost', postId);
     }
@@ -115,6 +131,7 @@ export class SignalrService {
       this.connection.on('mensajesLeidos', (payload: EventoDeUsuario) => this.mensajesLeidosSubject.next(payload));
       this.connection.on('escribiendo', (payload: EventoDeUsuario) => this.escribiendoSubject.next(payload));
       this.connection.on('postVotado', (payload: PostVotadoEnVivo) => this.postVotadoSubject.next(payload));
+      this.connection.on('homeActualizado', (payload: HomeActualizado) => this.homeActualizadoSubject.next(payload));
       this.connection.on('shoutNuevo', (payload: { shoutId: number; autor: string }) => this.shoutNuevoSubject.next(payload));
       // Un solo manejador de reconexión: antes cada start()/startEnVivo() agregaba uno más.
       this.connection.onreconnected(() => this.alReconectar());
@@ -128,6 +145,19 @@ export class SignalrService {
         // Silencioso: la app funciona sin realtime (degradación elegante).
       }
     }
+  }
+
+  /** Listas en vivo del home (público, sirve sin sesión). Con contador: cada widget llama start/stop. */
+  async startHome(): Promise<void> {
+    if (!this.esNavegador) return;
+    if (this.suscritosHome++ > 0) return;
+    await this.ensureStarted();
+    await this.invocar('SubscribeHome');
+  }
+
+  async stopHome(): Promise<void> {
+    if (this.suscritosHome === 0 || --this.suscritosHome > 0) return;
+    await this.invocar('UnsubscribeHome');
   }
 
   /** Puntos en vivo de un post (público, sirve sin sesión). */
@@ -214,6 +244,7 @@ export class SignalrService {
       this.suscritoUsuario = false;
       this.suscritoEnVivo = false;
       this.postsSuscritos.clear();
+      this.suscritosHome = 0;
     }
   }
 }

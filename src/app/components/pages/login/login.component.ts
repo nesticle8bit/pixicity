@@ -1,7 +1,22 @@
 import { AuthLateralComponent } from '../auth-lateral/auth-lateral.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Component, DestroyRef, inject, OnInit, input } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  input,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { TurnstileComponent } from '../../addons/turnstile/turnstile.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -9,17 +24,18 @@ import { NgClass, DatePipe } from '@angular/common';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
-    imports: [
-        NgClass,
-        FormsModule,
-        ReactiveFormsModule,
-        RouterLink,
-        AuthLateralComponent,
-        DatePipe,
-    ],
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
+  imports: [
+    NgClass,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterLink,
+    AuthLateralComponent,
+    DatePipe,
+    TurnstileComponent,
+  ],
 })
 export class LoginComponent implements OnInit {
   private displayService = inject(DisplayComponentService);
@@ -35,6 +51,9 @@ export class LoginComponent implements OnInit {
   readonly volverA = input<string | null>();
 
   public loginForm: FormGroup;
+  /** Clave pública de Turnstile; null = el API no pide captcha. */
+  readonly captchaSiteKey = signal<string | null>(null);
+  private readonly captcha = viewChild<TurnstileComponent>('captcha');
   public error: string = '';
   /** Con valor: la contraseña fue correcta y falta el código de verificación en dos pasos. */
   public desafio2FA = '';
@@ -50,6 +69,8 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       userName: ['', Validators.required],
       password: ['', Validators.required],
+      // Obligatorio solo si el API tiene captcha configurado (ver getCaptchaSiteKey).
+      captcha: [''],
     });
   }
 
@@ -61,6 +82,17 @@ export class LoginComponent implements OnInit {
       submenu: false,
       background: '',
     });
+
+    this.securityService
+      .getCaptchaSiteKey()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((clave) => {
+        this.captchaSiteKey.set(clave);
+        if (clave) {
+          this.loginForm.controls['captcha'].setValidators(Validators.required);
+          this.loginForm.controls['captcha'].updateValueAndValidity();
+        }
+      });
   }
 
   login(): void {
@@ -68,49 +100,71 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const login = Object.assign({}, this.loginForm.value);
-    login.captcha = '';
+    const { captcha, ...login } = this.loginForm.value as {
+      userName: string;
+      password: string;
+      captcha: string;
+    };
     this.error = '';
 
-    this.securityService.loginUser(login).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
-      if (value === 'error') {
-        this.error = 'Las credenciales son incorrectas, por favor corrige y vuelve a iniciar sesión';
-        return;
-      }
+    this.securityService
+      .loginUser(login, captcha)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (value) => {
+          // Cada token de captcha sirve una sola vez: si no se entra, se pide otro.
+          if (value === 'error' || 'error' in value) this.reiniciarCaptcha();
 
-      if ('error' in value && value.error === 'baneado') {
-        this.error = 'baneado';
-        this.baneo = {
-          title: 'La cuenta se encuentra deshabilitada',
-          causa: value.razonBaneo,
-          hasta: value.tiempoBaneado ?? null,
-        };
-        return;
-      }
+          if (value === 'error') {
+            this.error =
+              'Las credenciales son incorrectas, por favor corrige y vuelve a iniciar sesión';
+            return;
+          }
 
-      if ('error' in value && value.error === 'baneado_permanente') {
-        this.error = 'baneado';
-        this.baneo = {
-          title: 'La cuenta se encuentra deshabilitada permanentemente',
-          causa: value.razonBaneo,
-          hasta: null,
-        };
-        return;
-      }
+          if ('error' in value && value.error === 'baneado') {
+            this.error = 'baneado';
+            this.baneo = {
+              title: 'La cuenta se encuentra deshabilitada',
+              causa: value.razonBaneo,
+              hasta: value.tiempoBaneado ?? null,
+            };
+            return;
+          }
 
-      if ('error' in value) {
-        return;
-      }
+          if ('error' in value && value.error === 'baneado_permanente') {
+            this.error = 'baneado';
+            this.baneo = {
+              title: 'La cuenta se encuentra deshabilitada permanentemente',
+              causa: value.razonBaneo,
+              hasta: null,
+            };
+            return;
+          }
 
-      if ('requiere2FA' in value) {
-        this.desafio2FA = value.desafio;
-        this.codigo2FA = '';
-        setTimeout(() => document.getElementById('codigo-2fa')?.focus());
-        return;
-      }
+          if ('error' in value) {
+            return;
+          }
 
-      this.entrar(value);
-    });
+          if ('requiere2FA' in value) {
+            this.desafio2FA = value.desafio;
+            this.codigo2FA = '';
+            setTimeout(() => document.getElementById('codigo-2fa')?.focus());
+            return;
+          }
+
+          this.entrar(value);
+        },
+        error: () => this.reiniciarCaptcha(),
+      });
+  }
+
+  captchaResponse(value: string): void {
+    this.loginForm.patchValue({ captcha: value });
+  }
+
+  private reiniciarCaptcha(): void {
+    this.loginForm.patchValue({ captcha: '' });
+    this.captcha()?.reiniciar();
   }
 
   /** Segundo paso: el código de la app de autenticación (o uno de recuperación). */
@@ -126,7 +180,8 @@ export class LoginComponent implements OnInit {
         next: (sesion) => this.entrar(sesion),
         error: (e: unknown) => {
           this.verificando2FA = false;
-          this.error = e instanceof Error ? e.message : 'El código no es correcto';
+          this.error =
+            e instanceof Error ? e.message : 'El código no es correcto';
           // Venció o hubo demasiados intentos: hay que volver a poner la contraseña.
           if (/vuelve a iniciar sesión/i.test(this.error)) this.desafio2FA = '';
         },
@@ -141,12 +196,18 @@ export class LoginComponent implements OnInit {
   private entrar(sesion: JwtUserModel): void {
     this.securityService.setUserToLocalStorage(sesion);
     // returnUrl lo ponen AuthGuard y SesionRequeridaService al mandar acá desde una página que exige sesión.
-    const volverA = this.volverA() ?? this.route.snapshot.queryParamMap.get('returnUrl');
+    const volverA =
+      this.volverA() ?? this.route.snapshot.queryParamMap.get('returnUrl');
     window.location.href = esRutaInterna(volverA) ? volverA! : '';
   }
 }
 
 // Solo rutas del propio sitio: "//otro.com" o "https://..." permitirían usar el login para redirigir a un sitio ajeno.
 function esRutaInterna(ruta: string | null | undefined): boolean {
-  return !!ruta && ruta.startsWith('/') && !ruta.startsWith('//') && !ruta.startsWith('/\\');
+  return (
+    !!ruta &&
+    ruta.startsWith('/') &&
+    !ruta.startsWith('//') &&
+    !ruta.startsWith('/\\')
+  );
 }

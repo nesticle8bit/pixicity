@@ -7,7 +7,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { ModeracionLog, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
+import { AccionModeracion, FiltroHistorial, ModeracionLog, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
 
 @Injectable()
 export class HttpModeracionService implements IHttpModeracionService {
@@ -85,5 +85,22 @@ export class HttpModeracionService implements IHttpModeracionService {
       .get<ApiResponse<PaginatedData<ModeracionLog>>>(`${environment.api}/api/moderacion/logs?page=${page}&pageCount=${pageCount}`)
       .pipe(this.unwrap<PaginatedData<ModeracionLog>>())
       .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getHistorial(page: number, pageCount: number, filtro: FiltroHistorial = {}): Observable<PaginatedData<ModeracionLog>> {
+    const params: Record<string, string | number> = { page, pageCount };
+    if (filtro.accion) params['accion'] = filtro.accion;
+    if (filtro.moderador?.trim()) params['moderador'] = filtro.moderador.trim();
+    return this.http
+      .get<ApiResponse<PaginatedData<ModeracionLog>>>(`${environment.api}/api/moderacion/historial`, { params })
+      .pipe(this.unwrap<PaginatedData<ModeracionLog>>())
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getAccionesHistorial(): Observable<AccionModeracion[]> {
+    return this.http
+      .get<ApiResponse<AccionModeracion[]>>(`${environment.api}/api/moderacion/historial/acciones`)
+      .pipe(this.unwrap<AccionModeracion[]>())
+      .pipe(catchError(() => of([] as AccionModeracion[])));
   }
 }

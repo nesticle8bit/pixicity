@@ -54,6 +54,8 @@ export class TableUsuariosComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly searchParameters = input<UsuarioAdminSearchFilter>();
+  /** 'moderacion': sin las acciones que el API reserva a administradores (cambiar avatar, correo, eliminar cuenta). */
+  readonly modo = input<'admin' | 'moderacion'>('admin');
 
   public usuarios: UsuarioAdminViewModel[] = [];
   public totalCount: number = 0;

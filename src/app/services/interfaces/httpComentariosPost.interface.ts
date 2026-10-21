@@ -14,7 +14,8 @@ export abstract class IHttpComentariosPostService {
   abstract updateComentario(comentario: Partial<ComentarioViewModel>): Observable<ComentarioViewModel>;
   abstract getComentariosByPostId(postId: number): Observable<ComentarioViewModel[]>;
   abstract recuperarComentario(comentarioId: number): Observable<boolean>;
-  abstract deleteComentario(comentarioId: number): Observable<boolean>;
+  /** `razon`: la causa que escribe el staff (queda en /mod-history). */
+  abstract deleteComentario(comentarioId: number, razon?: string): Observable<boolean>;
   abstract votarComentario(comentarioId: number, cantidad: number): Observable<ComentarioVotoResponse>;
   abstract fijarComentario(comentarioId: number): Observable<boolean>;
   abstract denunciarComentario(comentarioId: number, motivo: string): Observable<boolean>;

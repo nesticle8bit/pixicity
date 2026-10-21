@@ -20,7 +20,7 @@ export abstract class IHttpSecurityService {
   abstract registerUser(user: UserModel, captcha?: string): Observable<number>;
   /** Clave pública del captcha del registro; null si el API no lo pide. Nunca falla. */
   abstract getCaptchaSiteKey(): Observable<string | null>;
-  abstract loginUser(user: { userName: string; password: string }): Observable<LoginResponse>;
+  abstract loginUser(user: { userName: string; password: string }, captcha?: string): Observable<LoginResponse>;
   abstract refreshAccessToken(): Observable<string>;
   /** Segundo paso del login: código de la app o de recuperación. Error con el motivo si no sirve. */
   abstract login2FA(desafio: string, codigo: string): Observable<JwtUserModel>;
@@ -33,7 +33,7 @@ export abstract class IHttpSecurityService {
   abstract updateUsuario(usuario: UsuarioViewModel): Observable<boolean>;
   abstract banUser(usuario: { userName: string; razon?: string }): Observable<boolean>;
   abstract changeAvatarAdmin(file: Blob, usuarioId: number): Observable<string>;
-  abstract getLastRegisteredUsers(): Observable<UsuarioViewModel[]>;
+  abstract getLastRegisteredUsers(version?: number): Observable<UsuarioViewModel[]>;
   abstract sessionOnlineUser(): Observable<boolean>;
   abstract getAdminsList(): Observable<AdminResumen[]>;
   abstract removeAvatar(usuarioId: number): Observable<boolean>;

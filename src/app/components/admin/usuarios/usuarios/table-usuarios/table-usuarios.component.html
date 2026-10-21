@@ -103,15 +103,17 @@
             <i class="ti ti-dots-vertical"></i>
           </button>
           <mat-menu #menu="matMenu">
-            <button type="button" mat-menu-item (click)="changeAvatar(usuario)">
-              <mat-icon>photo_camera</mat-icon>
-              Actualizar Imagen de Perfil
-            </button>
+            @if (modo() === 'admin') {
+              <button type="button" mat-menu-item (click)="changeAvatar(usuario)">
+                <mat-icon>photo_camera</mat-icon>
+                Actualizar Imagen de Perfil
+              </button>
+            }
             <button type="button" mat-menu-item (click)="removeAvatar(usuario)">
               <mat-icon>image_not_supported</mat-icon>
               Eliminar Imagen de Perfil
             </button>
-            @if (!usuario.emailConfirmado && !usuario.eliminado) {
+            @if (modo() === 'admin' && !usuario.emailConfirmado && !usuario.eliminado) {
               <button type="button" mat-menu-item (click)="reenviarConfirmacion(usuario)">
                 <mat-icon>mark_email_unread</mat-icon>
                 Reenviar correo de confirmación
@@ -135,16 +137,18 @@
                 Banear
               </button>
             }
-            <mat-divider></mat-divider>
-            <button type="button" mat-menu-item (click)="deleteUser(usuario)">
-              @if (!usuario.eliminado) {
-                <mat-icon>delete_outline</mat-icon>
-              }
-              @if (usuario.eliminado) {
-                <mat-icon>undo</mat-icon>
-              }
-              <span>{{!usuario.eliminado ? 'Eliminar' : 'Recuperar'}}</span>
-            </button>
+            @if (modo() === 'admin') {
+              <mat-divider></mat-divider>
+              <button type="button" mat-menu-item (click)="deleteUser(usuario)">
+                @if (!usuario.eliminado) {
+                  <mat-icon>delete_outline</mat-icon>
+                }
+                @if (usuario.eliminado) {
+                  <mat-icon>undo</mat-icon>
+                }
+                <span>{{!usuario.eliminado ? 'Eliminar' : 'Recuperar'}}</span>
+              </button>
+            }
           </mat-menu>
         </td>
       </tr>
