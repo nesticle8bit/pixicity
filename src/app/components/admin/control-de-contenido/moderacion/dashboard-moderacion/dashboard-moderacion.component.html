@@ -33,7 +33,10 @@
         <i class="ti ti-check" aria-hidden="true"></i> Marcar resueltos
       </button>
       <button type="button" class="btn btn-sm btn-outline-secondary" (click)="atenderSeleccion('descartar')">
-        <i class="ti ti-trash" aria-hidden="true"></i> Descartar
+        <i class="ti ti-x" aria-hidden="true"></i> Descartar
+      </button>
+      <button type="button" class="btn btn-sm btn-danger" (click)="atenderSeleccion('ocultar')">
+        <i class="ti ti-trash" aria-hidden="true"></i> Eliminar contenido
       </button>
       <button type="button" class="btn btn-sm btn-link" (click)="seleccion.clear()">Quitar selección</button>
     </div>

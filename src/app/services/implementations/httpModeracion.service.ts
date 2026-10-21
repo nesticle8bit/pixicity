@@ -7,7 +7,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { AccionModeracion, FiltroHistorial, MiModeracion, ModeracionLog, PaginaApelaciones, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
+import { AccionLote, AccionModeracion, FiltroHistorial, MiModeracion, ModeracionLog, PaginaApelaciones, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
 
 @Injectable()
 export class HttpModeracionService implements IHttpModeracionService {
@@ -56,7 +56,7 @@ export class HttpModeracionService implements IHttpModeracionService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  atenderLote(ids: number[], accion: 'resolver' | 'descartar'): Observable<number> {
+  atenderLote(ids: number[], accion: AccionLote): Observable<number> {
     return this.http
       .put<ApiResponse<number>>(`${environment.api}/api/moderacion/reportes/lote`, { ids, accion })
       .pipe(this.unwrap<number>())

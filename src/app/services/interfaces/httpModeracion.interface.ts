@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
-import { AccionModeracion, FiltroHistorial, MiModeracion, ModeracionLog, PaginaApelaciones, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
+import { AccionLote, AccionModeracion, FiltroHistorial, MiModeracion, ModeracionLog, PaginaApelaciones, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
 
 @Injectable()
 export abstract class IHttpModeracionService {
@@ -14,7 +14,7 @@ export abstract class IHttpModeracionService {
   abstract resolverReporte(reporteId: number): Observable<boolean>;
   abstract descartarReporte(reporteId: number): Observable<boolean>;
   /** Varios a la vez; devuelve cuántos se atendieron ("resolver" no reabre los ya resueltos). */
-  abstract atenderLote(ids: number[], accion: 'resolver' | 'descartar'): Observable<number>;
+  abstract atenderLote(ids: number[], accion: AccionLote): Observable<number>;
   /** `regla`: id de la regla del protocolo que incumple (se le cita al autor). */
   abstract eliminarContenidoReportado(reporteId: number, regla?: string | null): Observable<boolean>;
   abstract getReglasProtocolo(): Observable<ReglaProtocolo[]>;

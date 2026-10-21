@@ -94,44 +94,10 @@
   overflow-wrap: anywhere;
 }
 
+// El formato del contenido (código, listas, tablas, media) es global: .tema-content en styles.scss, igual que .contenido
 .tema-content {
-  font-size: 14px;
   line-height: 1.6;
   color: #333;
-  max-width: 100%;
-  overflow: hidden;
-  word-wrap: break-word;
-  overflow-wrap: anywhere;
-
-  // El contenido llega por [innerHTML]: sus elementos no llevan el atributo de encapsulación.
-  ::ng-deep {
-    img,
-    video,
-    iframe,
-    embed,
-    object,
-    svg {
-      max-width: 100% !important;
-      height: auto;
-    }
-
-    img { display: block; margin: 8px 0; }
-
-    iframe { width: 100%; aspect-ratio: 16 / 9; }
-
-    table {
-      display: block;
-      max-width: 100%;
-      overflow-x: auto;
-    }
-
-    pre {
-      max-width: 100%;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-  }
 }
 
 /* Voto del tema (debajo del contenido) */

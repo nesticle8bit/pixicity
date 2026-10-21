@@ -28,6 +28,9 @@ export interface Reporte {
 }
 
 /** Página de reportes: además trae el total de pendientes (para el contador del panel). */
+/** Acciones de la barra de selección múltiple de la cola. */
+export type AccionLote = 'resolver' | 'descartar' | 'ocultar';
+
 export type PaginaReportes = PaginatedData<Reporte> & { pendientes: number };
 
 /** Acción de staff registrada en la bitácora (ModeracionLogViewModel del API). */

@@ -1339,14 +1339,19 @@ textarea:focus#msg_body {
 }
 
 .contenido {
-  word-wrap: break-word;
-  overflow-wrap: anywhere;
   clear: both;
   min-height: 400px;
   margin-bottom: 20px;
   border-top: solid 1px #ebebeb;
   padding: 20px 0 0;
   margin-top: 20px;
+}
+
+// Formato del HTML publicado: post (.contenido) y tema de comunidad (.tema-content) se ven igual
+.contenido,
+.tema-content {
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
   max-width: 100%;
   overflow-x: hidden;
   font-size: 0.9rem;
@@ -1435,7 +1440,7 @@ textarea:focus#msg_body {
 
   & li::marker { color: #1976d2; }
 
-  /* Código, tablas, imágenes, botón Copiar e índice: igual que en los temas de comunidades */
+  /* Código, tablas, imágenes, botón Copiar e índice */
   @include rico.publicado;
 
   & p {
@@ -3956,7 +3961,3 @@ app-rich-editor .rich-editor__content {
   }
 }
 
-// Temas de comunidades: mismo contenido enriquecido que los posts (appContenidoPost)
-.tema-content {
-  @include rico.publicado;
-}

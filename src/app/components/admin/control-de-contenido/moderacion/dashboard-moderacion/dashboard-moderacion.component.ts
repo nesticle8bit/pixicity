@@ -4,7 +4,7 @@ import { DialogReglaEliminarComponent, ReglaEliminarData, ReglaEliminarResultado
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
-import { ModeracionLog, Reporte } from 'src/app/models/admin/moderacion.model';
+import { AccionLote, ModeracionLog, Reporte } from 'src/app/models/admin/moderacion.model';
 import { IHttpModeracionService } from 'src/app/services/interfaces/httpModeracion.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
@@ -202,14 +202,18 @@ export class DashboardModeracionComponent implements OnInit {
     this.seleccion = this.todosSeleccionados ? new Set() : new Set(this.reportes.map((r) => r.id));
   }
 
-  atenderSeleccion(accion: 'resolver' | 'descartar'): void {
+  atenderSeleccion(accion: AccionLote): void {
     const ids = [...this.seleccion];
     if (ids.length === 0) return;
-    const texto = accion === 'resolver' ? 'marcar como resueltos' : 'descartar';
-    if (!this.notificationService.confirm(`¿${texto[0].toUpperCase() + texto.slice(1)} ${ids.length} reporte(s)?`)) return;
+    const textos: Record<AccionLote, [string, string]> = {
+      resolver: [`¿Marcar como resueltos ${ids.length} reporte(s)?`, 'resueltos'],
+      descartar: [`¿Descartar ${ids.length} reporte(s)?`, 'descartados'],
+      ocultar: [`¿Eliminar el contenido de ${ids.length} reporte(s)? Se avisará a cada autor.`, 'atendidos y su contenido eliminado'],
+    };
+    if (!this.notificationService.confirm(textos[accion][0])) return;
     this.moderacionService.atenderLote(ids, accion).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (cantidad) => {
-        this.notificationService.success(`${cantidad} reporte(s) ${accion === 'resolver' ? 'resueltos' : 'descartados'}`, 'Moderación');
+        this.notificationService.success(`${cantidad} reporte(s) ${textos[accion][1]}`, 'Moderación');
         this.seleccion.clear();
         this.getReportes();
       },
