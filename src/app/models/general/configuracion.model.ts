@@ -27,6 +27,8 @@ export interface ConfiguracionModel {
   /** Además del shout, mandarla como mensaje privado. */
   welcomeMensajePrivado: boolean;
   footer: string;
+  /** Minutos desde el registro para publicar sin confirmar el correo; -1 = siempre exigir confirmación. */
+  minutosPublicarSinConfirmar: number;
 }
 
 export interface ContactoModel {

@@ -51,7 +51,7 @@ export class EnVivoComponent implements OnInit, OnDestroy {
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,
-      searchFooter: false,
+      searchFooter: true,
       submenu: true,
       background: '',
     });

@@ -5,7 +5,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { NotificationService } from 'src/app/services/shared/notification.service';
 
 /**
- * Aviso arriba de la página mientras el usuario no confirmó su correo: puede leer, pero no publicar.
+ * Aviso arriba de la página mientras el usuario no confirmó su correo. Según la configuración no puede publicar,
+ * o solo tiene que esperar unos minutos desde el registro (el API lo decide y lo explica en el error).
  * Ofrece reenviar el enlace y corregir el correo. Al aparecer consulta el estado al API una vez, por si ya lo
  * confirmó desde otro dispositivo.
  */
@@ -19,7 +20,7 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
       <div class="aviso-email__contenido">
         <i class="ti ti-mail-exclamation aviso-email__icono" aria-hidden="true"></i>
         <p class="aviso-email__texto">
-          <strong>Confirma tu correo para poder publicar.</strong>
+          <strong>Confirma tu correo para tener la cuenta completa.</strong>
           Te enviamos un enlace{{ email() ? ' a ' + email() : '' }}. Revisa también la carpeta de spam.
         </p>
         <div class="aviso-email__acciones">

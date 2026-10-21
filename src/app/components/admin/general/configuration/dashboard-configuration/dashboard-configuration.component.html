@@ -112,6 +112,29 @@
     <hr>
 
     <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label" for="dashboard-configuration-minutosSinConfirmar">
+            Usuarios nuevos <br>
+            <i>Cuándo puede publicar una cuenta que todavía no confirmó su correo</i>
+        </label>
+
+        <div class="col-sm-10">
+            <mat-slide-toggle formControlName="exigirConfirmacion" color="primary">Exigir el correo confirmado para publicar</mat-slide-toggle>
+            @if (!formGroup.value.exigirConfirmacion) {
+              <div class="mt-2">
+                <label for="dashboard-configuration-minutosSinConfirmar">Minutos de espera desde el registro</label>
+                <input id="dashboard-configuration-minutosSinConfirmar" type="number" min="0" max="10080" class="form-control"
+                  formControlName="minutosPublicarSinConfirmar" aria-describedby="dashboard-configuration-minutosAyuda" style="max-width: 160px">
+                <small id="dashboard-configuration-minutosAyuda" class="text-muted">
+                  0 = puede publicar apenas se registra. Confirmar el correo siempre quita la espera; los límites anti-spam de cuenta nueva siguen aplicando.
+                </small>
+              </div>
+            }
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="mb-3 row">
         <label class="col-sm-2 col-form-label" for="dashboard-configuration-footer">
             Footer <span>(copyright/etc)</span> <br>
             <i>Contenido que se visualizará en la parte inferior de la página</i>
