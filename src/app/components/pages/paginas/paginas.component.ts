@@ -45,7 +45,7 @@ export class PaginasComponent implements OnInit {
 
   getPaginaBySlug(): void {
     this.webService
-      .getPaginaBySlug(`/paginas/${this.slug}`)
+      .getPaginaBySlug(this.slug)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         if (response) {

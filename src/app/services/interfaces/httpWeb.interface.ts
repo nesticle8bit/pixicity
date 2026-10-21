@@ -20,6 +20,7 @@ export abstract class IHttpWebService {
   abstract getAllPaginas(): Observable<PaginaViewModel[]>;
   abstract savePagina(pagina: Partial<PaginaViewModel>): Observable<number>;
   abstract deletePagina(paginaId: number): Observable<boolean>;
+  /** `slug`: solo el nombre ("protocolo"), sin "/paginas/" (las barras codificadas no llegan bien al API). */
   abstract getPaginaBySlug(slug: string): Observable<PaginaViewModel>;
   abstract getConfiguracionFooter(): Observable<string>;
 }
