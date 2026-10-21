@@ -1,94 +1,136 @@
 import { Routes } from '@angular/router';
-import { MiHomeComponent } from './components/mi/mi-home/mi-home.component';
-import { BienvenidaComponent } from './components/pages/bienvenida/bienvenida.component';
-import { ApiDocumentationComponent } from './components/pages/api-documentation/api-documentation.component';
-import { BorradoresComponent } from './components/pages/borradores/borradores.component';
-import { EnVivoComponent } from './components/pages/en-vivo/en-vivo.component';
-import { FavoritosComponent } from './components/pages/favoritos/favoritos.component';
-import { LoginComponent } from './components/pages/login/login.component';
-import { ModHistoryComponent } from './components/pages/mod-history/mod-history.component';
-import { MonitorComponent } from './components/pages/monitor/monitor.component';
-import { PageContactoComponent } from './components/pages/page-contacto/page-contacto.component';
-import { PerfilComponent } from './components/pages/perfil/perfil.component';
-import { RegisterComponent } from './components/pages/register/register.component';
-import { SearchComponent } from './components/pages/search/search.component';
-import { ShoutsViewComponent } from './components/pages/shouts/shouts-view/shouts-view.component';
-import { TopsComponent } from './components/pages/tops/tops.component';
-import { UsuariosComponent } from './components/pages/usuarios/usuarios.component';
 import { PostNotFoundComponent } from './components/posts/post-not-found/post-not-found.component';
-import { PostPrivadoComponent } from './components/posts/post-privado/post-privado.component';
-import { PostsCreateComponent } from './components/posts/posts-create/posts-create.component';
 import { PostsViewComponent } from './components/posts/posts-view/posts-view.component';
 import { SectionHomeForumComponent } from './components/sections/section-home-forum/section-home-forum.component';
 import { AdministradorAuthorization } from './shared/guards/adminAuthorization.guard';
 import { ModeradorAuthorization } from './shared/guards/moderadorAuthorization.guard';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { AuthLoggedUserGuard } from './shared/guards/auth.loggedUser.guard';
-import { PaginasComponent } from './components/pages/paginas/paginas.component';
 
+// Solo el home, el post y el 404 van en el bundle inicial (son las páginas de entrada); el resto se carga al navegar.
 export const routes: Routes = [
   { path: '', component: SectionHomeForumComponent },
   {
     path: 'registro',
-    component: RegisterComponent,
+    loadComponent: () =>
+      import('./components/pages/register/register.component').then(
+        (m) => m.RegisterComponent,
+      ),
     canActivate: [AuthLoggedUserGuard],
   },
 
-  { path: 'buscar', component: SearchComponent },
-  { path: 'buscar/:tipo/:query', component: SearchComponent },
-  { path: 'buscar/:tipo/:query/:categoria', component: SearchComponent },
+  {
+    path: 'buscar',
+    loadComponent: () =>
+      import('./components/pages/search/search.component').then(
+        (m) => m.SearchComponent,
+      ),
+  },
+  {
+    path: 'buscar/:tipo/:query',
+    loadComponent: () =>
+      import('./components/pages/search/search.component').then(
+        (m) => m.SearchComponent,
+      ),
+  },
+  {
+    path: 'buscar/:tipo/:query/:categoria',
+    loadComponent: () =>
+      import('./components/pages/search/search.component').then(
+        (m) => m.SearchComponent,
+      ),
+  },
 
   {
     path: 'login',
-    component: LoginComponent,
+    loadComponent: () =>
+      import('./components/pages/login/login.component').then(
+        (m) => m.LoginComponent,
+      ),
     canActivate: [AuthLoggedUserGuard],
   },
   {
     path: 'confirmar-email',
     loadComponent: () =>
-      import('./components/pages/confirmar-email/confirmar-email.component').then((m) => m.ConfirmarEmailComponent),
+      import('./components/pages/confirmar-email/confirmar-email.component').then(
+        (m) => m.ConfirmarEmailComponent,
+      ),
   },
   {
     path: 'olvide-password',
     loadComponent: () =>
-      import('./components/pages/restablecer-password/olvide-password.component').then((m) => m.OlvidePasswordComponent),
+      import('./components/pages/restablecer-password/olvide-password.component').then(
+        (m) => m.OlvidePasswordComponent,
+      ),
   },
   {
     path: 'restablecer-password',
     loadComponent: () =>
-      import('./components/pages/restablecer-password/restablecer-password.component').then((m) => m.RestablecerPasswordComponent),
+      import('./components/pages/restablecer-password/restablecer-password.component').then(
+        (m) => m.RestablecerPasswordComponent,
+      ),
   },
   {
     path: 'cuenta',
     loadChildren: () =>
       import('./modules/cuenta/cuenta.module').then((m) => m.CuentaModule),
   },
-  { path: 'en-vivo', component: EnVivoComponent },
-  { path: 'perfil/:userName', component: PerfilComponent },
-  { path: 'shouts/:userName/:id', component: ShoutsViewComponent },
+  {
+    path: 'en-vivo',
+    loadComponent: () =>
+      import('./components/pages/en-vivo/en-vivo.component').then(
+        (m) => m.EnVivoComponent,
+      ),
+  },
+  {
+    path: 'perfil/:userName',
+    loadComponent: () =>
+      import('./components/pages/perfil/perfil.component').then(
+        (m) => m.PerfilComponent,
+      ),
+  },
+  {
+    path: 'shouts/:userName/:id',
+    loadComponent: () =>
+      import('./components/pages/shouts/shouts-view/shouts-view.component').then(
+        (m) => m.ShoutsViewComponent,
+      ),
+  },
 
   { path: 'posts/:categoria', component: SectionHomeForumComponent },
   { path: 'posts/:categoria/:id/:nombre-post', component: PostsViewComponent },
   { path: 'posts/404/:nombre-post', component: PostNotFoundComponent },
   {
     path: 'posts/privado/:nombre-post',
-    component: PostPrivadoComponent,
+    loadComponent: () =>
+      import('./components/posts/post-privado/post-privado.component').then(
+        (m) => m.PostPrivadoComponent,
+      ),
     canActivate: [AuthGuard],
   },
   {
     path: 'crear/post',
-    component: PostsCreateComponent,
+    loadComponent: () =>
+      import('./components/posts/posts-create/posts-create.component').then(
+        (m) => m.PostsCreateComponent,
+      ),
     canActivate: [AuthGuard],
   },
   {
     path: 'posts/actualizar/:id',
-    component: PostsCreateComponent,
+    loadComponent: () =>
+      import('./components/posts/posts-create/posts-create.component').then(
+        (m) => m.PostsCreateComponent,
+      ),
     canActivate: [AuthGuard],
   },
 
   {
     path: 'mod-history',
-    component: ModHistoryComponent,
+    loadComponent: () =>
+      import('./components/pages/mod-history/mod-history.component').then(
+        (m) => m.ModHistoryComponent,
+      ),
     canActivate: [AuthGuard],
   },
   {
@@ -98,27 +140,69 @@ export const routes: Routes = [
         (m) => m.MensajesModule,
       ),
   },
-  { path: 'monitor', component: MonitorComponent, canActivate: [AuthGuard] },
-  { path: 'tops', component: TopsComponent },
-  { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard] },
+  {
+    path: 'monitor',
+    loadComponent: () =>
+      import('./components/pages/monitor/monitor.component').then(
+        (m) => m.MonitorComponent,
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'tops',
+    loadComponent: () =>
+      import('./components/pages/tops/tops.component').then(
+        (m) => m.TopsComponent,
+      ),
+  },
+  {
+    path: 'usuarios',
+    loadComponent: () =>
+      import('./components/pages/usuarios/usuarios.component').then(
+        (m) => m.UsuariosComponent,
+      ),
+    canActivate: [AuthGuard],
+  },
   {
     path: 'favoritos',
-    component: FavoritosComponent,
+    loadComponent: () =>
+      import('./components/pages/favoritos/favoritos.component').then(
+        (m) => m.FavoritosComponent,
+      ),
     canActivate: [AuthGuard],
   },
   {
     path: 'borradores',
-    component: BorradoresComponent,
+    loadComponent: () =>
+      import('./components/pages/borradores/borradores.component').then(
+        (m) => m.BorradoresComponent,
+      ),
     canActivate: [AuthGuard],
   },
   {
     path: 'mi',
-    component: MiHomeComponent,
+    loadComponent: () =>
+      import('./components/mi/mi-home/mi-home.component').then(
+        (m) => m.MiHomeComponent,
+      ),
   },
   // Primer ingreso después de registrarse (el registro manda a /login?returnUrl=/bienvenida).
-  { path: 'bienvenida', component: BienvenidaComponent, canActivate: [AuthGuard] },
+  {
+    path: 'bienvenida',
+    loadComponent: () =>
+      import('./components/pages/bienvenida/bienvenida.component').then(
+        (m) => m.BienvenidaComponent,
+      ),
+    canActivate: [AuthGuard],
+  },
   // Página pública e indexable de cada #hashtag de los shouts (mismo muro, filtrado).
-  { path: 'hashtag/:tag', component: MiHomeComponent },
+  {
+    path: 'hashtag/:tag',
+    loadComponent: () =>
+      import('./components/mi/mi-home/mi-home.component').then(
+        (m) => m.MiHomeComponent,
+      ),
+  },
   {
     path: 'fotos',
     loadChildren: () =>
@@ -129,21 +213,40 @@ export const routes: Routes = [
 
   {
     path: 'paginas/:slug',
-    component: PaginasComponent,
+    loadComponent: () =>
+      import('./components/pages/paginas/paginas.component').then(
+        (m) => m.PaginasComponent,
+      ),
   },
 
-  { path: 'contacto', component: PageContactoComponent },
+  {
+    path: 'contacto',
+    loadComponent: () =>
+      import('./components/pages/page-contacto/page-contacto.component').then(
+        (m) => m.PageContactoComponent,
+      ),
+  },
   {
     path: 'api',
-    component: ApiDocumentationComponent,
+    loadComponent: () =>
+      import('./components/pages/api-documentation/api-documentation.component').then(
+        (m) => m.ApiDocumentationComponent,
+      ),
     canActivate: [AuthGuard],
   },
 
   {
+    path: 'apelaciones',
+    loadComponent: () => import('./components/pages/apelaciones/apelaciones.component').then((m) => m.ApelacionesComponent),
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'moderacion',
     canActivate: [AuthGuard, ModeradorAuthorization],
     loadChildren: () =>
-      import('./modules/moderacion/moderacion.routes').then((m) => m.MODERACION_ROUTES),
+      import('./modules/moderacion/moderacion.routes').then(
+        (m) => m.MODERACION_ROUTES,
+      ),
   },
 
   {

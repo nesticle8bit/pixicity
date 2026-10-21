@@ -106,6 +106,25 @@ describe('PostsMetaComponent', () => {
     expect(el.textContent).toContain('¡Le diste 5 puntos!');
   });
 
+  it('si el aviso en vivo de mi propio voto llega antes que la respuesta, no suma dos veces', async () => {
+    usuario = { usuario: { userName: 'lector' }, token: 't' };
+    // El API emite "postVotado" mientras procesa el voto, antes de responder.
+    posts.setVotos.and.callFake(() => {
+      enVivo.next({ postId: 10, puntos: 8, votante: { userName: 'lector', avatar: null, cantidad: 5, fecha: '2026-10-21T00:00:00Z' } });
+      return of(true);
+    });
+    const fixture = await crear();
+    const el: HTMLElement = fixture.nativeElement;
+
+    (el.querySelector('[aria-label="Dar 5 puntos"]') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    expect(el.querySelector('.pm-puntos__numero')?.textContent?.trim()).toBe('8'); // 3 + 5, no 13
+    const meta = fixture.debugElement.children[0].componentInstance as PostsMetaComponent;
+    expect(meta.interacciones!.votantes.filter((v) => v.userName === 'lector').length).toBe(1);
+    expect(meta.interacciones!.misPuntos).toBe(5);
+  });
+
   it('seguir y favoritos cambian el estado y los contadores', async () => {
     usuario = { usuario: { userName: 'lector' }, token: 't' };
     const fixture = await crear();

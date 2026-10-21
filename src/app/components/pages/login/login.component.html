@@ -57,6 +57,22 @@
               </div>
             }
           </div>
+
+          @if (error === 'baneado' && apelacionEnviada) {
+            <div class="alert alert-success p-3 mb-3" role="status">
+              Recibimos tu apelación. Una persona del equipo la va a revisar y, si la acepta, vas a poder volver a entrar.
+            </div>
+          } @else if (error === 'baneado' && tokenApelacion) {
+            <div class="apelar-baneo mb-3">
+              <label for="apelacion-baneo">¿Crees que es un error? Cuéntale al equipo por qué debería revisarse</label>
+              <textarea id="apelacion-baneo" class="form-control" rows="4" maxlength="2000" [(ngModel)]="mensajeApelacion"
+                [ngModelOptions]="{ standalone: true }" placeholder="Explica qué pasó (mínimo 20 caracteres)"></textarea>
+              <button type="button" class="btn btn-sm btn-outline-primary mt-2" (click)="apelarBaneo()"
+                [disabled]="mensajeApelacion.trim().length < 20 || enviandoApelacion">
+                {{ enviandoApelacion ? 'Enviando…' : 'Enviar apelación' }}
+              </button>
+            </div>
+          }
         }
 
         <div class="mb-3">

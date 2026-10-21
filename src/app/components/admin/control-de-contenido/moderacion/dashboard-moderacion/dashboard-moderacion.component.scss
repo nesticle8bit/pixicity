@@ -49,3 +49,20 @@
   margin-top: 1.75rem;
   font-size: 1.1rem;
 }
+
+.mod-check {
+  width: 32px;
+  text-align: center;
+}
+
+.mod-lote {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: #e7f1f7;
+  border: 1px solid #c9dfec;
+  border-radius: 6px;
+}

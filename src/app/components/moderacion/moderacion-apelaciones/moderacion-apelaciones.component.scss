@@ -1,0 +1,38 @@
+.ma-filtros {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.ma-item {
+  border: 1px solid #e5e8ec;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+
+  &__cabecera {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  &__objetivo {
+    margin: 4px 0;
+    overflow-wrap: anywhere;
+  }
+
+  &__mensaje {
+    margin: 8px 0;
+    padding: 8px 12px;
+    border-left: 3px solid #006595;
+    background: #f7f9fb;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+  }
+
+  &__acciones {
+    display: flex;
+    gap: 8px;
+  }
+}

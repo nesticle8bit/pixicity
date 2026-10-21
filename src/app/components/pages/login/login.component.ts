@@ -22,6 +22,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NgClass, DatePipe } from '@angular/common';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
+import { IHttpModeracionService } from 'src/app/services/interfaces/httpModeracion.interface';
 
 @Component({
   selector: 'app-login',
@@ -40,6 +41,7 @@ import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 export class LoginComponent implements OnInit {
   private displayService = inject(DisplayComponentService);
   private securityService = inject(IHttpSecurityService);
+  private moderacionService = inject(IHttpModeracionService);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -59,6 +61,11 @@ export class LoginComponent implements OnInit {
   public desafio2FA = '';
   public codigo2FA = '';
   public verificando2FA = false;
+  /** Baneado: token para apelar sin sesión, el texto y si ya se envió. */
+  public tokenApelacion = '';
+  public mensajeApelacion = '';
+  public enviandoApelacion = false;
+  public apelacionEnviada = false;
   public baneo: any = {
     title: 'La cuenta se encuentra deshabilitada',
     causa: '',
@@ -128,6 +135,7 @@ export class LoginComponent implements OnInit {
               causa: value.razonBaneo,
               hasta: value.tiempoBaneado ?? null,
             };
+            this.prepararApelacion(value.apelacion);
             return;
           }
 
@@ -138,6 +146,7 @@ export class LoginComponent implements OnInit {
               causa: value.razonBaneo,
               hasta: null,
             };
+            this.prepararApelacion(value.apelacion);
             return;
           }
 
@@ -185,6 +194,30 @@ export class LoginComponent implements OnInit {
           // Venció o hubo demasiados intentos: hay que volver a poner la contraseña.
           if (/vuelve a iniciar sesión/i.test(this.error)) this.desafio2FA = '';
         },
+      });
+  }
+
+  private prepararApelacion(token: string | undefined): void {
+    this.tokenApelacion = token ?? '';
+    this.mensajeApelacion = '';
+    this.apelacionEnviada = false;
+  }
+
+  /** Pide al equipo que revise el baneo (no hace falta sesión: vale el token del login). */
+  apelarBaneo(): void {
+    const mensaje = this.mensajeApelacion.trim();
+    if (!this.tokenApelacion || mensaje.length < 20 || this.enviandoApelacion) return;
+    this.enviandoApelacion = true;
+    this.moderacionService
+      .apelarBaneo(this.tokenApelacion, mensaje)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.enviandoApelacion = false;
+          this.apelacionEnviada = true;
+          this.tokenApelacion = '';
+        },
+        error: () => (this.enviandoApelacion = false),
       });
   }
 

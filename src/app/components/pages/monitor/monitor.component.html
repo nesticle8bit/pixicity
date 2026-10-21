@@ -77,7 +77,7 @@
               } @else if (notificacion.shoutId && notificacion.shoutAutor) {
               <a [routerLink]="['/shouts', notificacion.shoutAutor, notificacion.shoutId]">Ver shout</a>
               } @else if (notificacion.tipoString === 'Moderacion') {
-              <a routerLink="/paginas/protocolo">Ver protocolo</a>
+              <a routerLink="/paginas/protocolo">Ver protocolo</a> · <a routerLink="/apelaciones">Apelar</a>
               }
             </div>
           </div>

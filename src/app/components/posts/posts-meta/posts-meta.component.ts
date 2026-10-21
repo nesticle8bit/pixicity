@@ -181,6 +181,7 @@ export class PostsMetaComponent {
   votarPost(puntos: number): void {
     if (this.votando || !this.sesion.exigir('Inicia sesión para dar puntos')) return;
     this.votando = true;
+    const totalAntes = this.post.puntos || 0;
     this.postService
       .setVotos({ typeId: this.post.id, cantidad: puntos, votosType: 1 })
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -189,21 +190,26 @@ export class PostsMetaComponent {
           this.votando = false;
           if (!ok) return;
           this.puntosDados = puntos;
-          this.post.puntos = (this.post.puntos || 0) + puntos;
+          // El servidor avisa "postVotado" (con el total absoluto) antes de responder: si ese aviso ya llegó, el total
+          // incluye mi voto y sumar acá lo contaba dos veces. Nunca baja de "lo que había + mis puntos".
+          this.post.puntos = Math.max(this.post.puntos || 0, totalAntes + puntos);
           this.fijarPuntosDisponibles(this.puntosRestantes - puntos);
-          // Me sumo al frente de "Le dieron puntos" sin volver a pedir la lista.
           const yo = this.currentUser.usuario;
-          if (this.interacciones && yo?.userName && !this.interacciones.votantes.some((v) => v.userName === yo.userName)) {
-            this.interacciones = {
-              ...this.interacciones,
-              misPuntos: puntos,
-              totalVotantes: this.interacciones.totalVotantes + 1,
-              puntosHoy: (this.interacciones.puntosHoy || 0) + puntos,
-              votantes: [
-                { userName: yo.userName, avatar: yo.avatar ?? null, cantidad: puntos, fecha: new Date().toISOString() },
-                ...this.interacciones.votantes,
-              ],
-            };
+          if (this.interacciones && yo?.userName) {
+            const yaEstoy = this.interacciones.votantes.some((v) => v.userName === yo.userName);
+            this.interacciones = yaEstoy
+              ? { ...this.interacciones, misPuntos: puntos } // el aviso en vivo ya me agregó a la lista
+              : {
+                  ...this.interacciones,
+                  misPuntos: puntos,
+                  totalVotantes: this.interacciones.totalVotantes + 1,
+                  puntosHoy: (this.interacciones.puntosHoy || 0) + puntos,
+                  // Me sumo al frente de "Le dieron puntos" sin volver a pedir la lista.
+                  votantes: [
+                    { userName: yo.userName, avatar: yo.avatar ?? null, cantidad: puntos, fecha: new Date().toISOString() },
+                    ...this.interacciones.votantes,
+                  ],
+                };
           }
         },
         error: () => (this.votando = false),

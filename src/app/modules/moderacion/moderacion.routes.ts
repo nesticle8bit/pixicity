@@ -33,6 +33,13 @@ export const MODERACION_ROUTES: Routes = [
           ),
       },
       {
+        path: 'apelaciones',
+        loadComponent: () =>
+          import('../../components/moderacion/moderacion-apelaciones/moderacion-apelaciones.component').then(
+            (m) => m.ModeracionApelacionesComponent,
+          ),
+      },
+      {
         path: 'usuarios',
         loadComponent: () =>
           import('../../components/moderacion/moderacion-usuarios/moderacion-usuarios.component').then((m) => m.ModeracionUsuariosComponent),

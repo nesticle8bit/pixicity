@@ -1,0 +1,52 @@
+.ap-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ap-item {
+  border: 1px solid #e5e8ec;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  background: #fff;
+
+  &__cabecera {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__objetivo {
+    margin: 2px 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+.ap-estado {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #f1f3f5;
+  font-size: 0.9rem;
+
+  &--ok {
+    background: #e6f4ea;
+    color: #1e7b34;
+  }
+
+  &--no {
+    background: #fdecea;
+    color: #8a1f2b;
+  }
+}
+
+.ap-form {
+  margin-top: 8px;
+
+  &__acciones {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+  }
+}

@@ -9,6 +9,7 @@ import { IHttpModeracionService } from 'src/app/services/interfaces/httpModeraci
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -40,10 +41,13 @@ export class DashboardModeracionComponent implements OnInit {
   private dialog = inject(MatDialog);
   private notificationService = inject(NotificationService);
   private signalrService = inject(SignalrService);
+  private securityService = inject(IHttpSecurityService);
 
   private readonly destroyRef = inject(DestroyRef);
 
   public reportes: Reporte[] = [];
+  /** Reportes marcados para las acciones en lote. */
+  public seleccion = new Set<number>();
   public totalCount = 0;
   public pendientes = 0;
   public soloPendientes = true;
@@ -89,6 +93,14 @@ export class DashboardModeracionComponent implements OnInit {
           this.getReportes();
         }
       });
+
+    // Otro moderador atendió un reporte que estoy viendo: se recarga para no actuar dos veces sobre lo mismo.
+    this.signalrService.reporteAtendido$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(({ reporteId, por }) => {
+        if (por === this.securityService.getCurrentUser()?.usuario?.userName) return;
+        if (this.reportes.some((r) => r.id === reporteId)) this.getReportes();
+      });
   }
 
   tipoNombre(tipo: number): string {
@@ -102,6 +114,9 @@ export class DashboardModeracionComponent implements OnInit {
       .subscribe((response) => {
         this.reportes = response?.data ?? [];
         this.totalCount = response?.pagination?.totalCount ?? 0;
+        // La selección es de la página que se ve: al recargar se queda solo con lo que sigue en la lista.
+        const visibles = new Set(this.reportes.map((r) => r.id));
+        this.seleccion = new Set([...this.seleccion].filter((id) => visibles.has(id)));
         this.pendientes = response?.pendientes ?? 0;
       });
   }
@@ -172,6 +187,40 @@ export class DashboardModeracionComponent implements OnInit {
         this.notificationService.success('Contenido eliminado', 'Moderación');
       },
     });
+  }
+
+  alternarSeleccion(reporte: Reporte): void {
+    if (this.seleccion.has(reporte.id)) this.seleccion.delete(reporte.id);
+    else this.seleccion.add(reporte.id);
+  }
+
+  get todosSeleccionados(): boolean {
+    return this.reportes.length > 0 && this.reportes.every((r) => this.seleccion.has(r.id));
+  }
+
+  alternarTodos(): void {
+    this.seleccion = this.todosSeleccionados ? new Set() : new Set(this.reportes.map((r) => r.id));
+  }
+
+  atenderSeleccion(accion: 'resolver' | 'descartar'): void {
+    const ids = [...this.seleccion];
+    if (ids.length === 0) return;
+    const texto = accion === 'resolver' ? 'marcar como resueltos' : 'descartar';
+    if (!this.notificationService.confirm(`¿${texto[0].toUpperCase() + texto.slice(1)} ${ids.length} reporte(s)?`)) return;
+    this.moderacionService.atenderLote(ids, accion).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (cantidad) => {
+        this.notificationService.success(`${cantidad} reporte(s) ${accion === 'resolver' ? 'resueltos' : 'descartados'}`, 'Moderación');
+        this.seleccion.clear();
+        this.getReportes();
+      },
+    });
+  }
+
+  /** Banear al autor del contenido reportado sin salir de la cola. */
+  async banearAutor(reporte: Reporte): Promise<void> {
+    if (!reporte.autorId) return;
+    const { DialogBanUserComponent } = await import('src/app/components/dialogs/dialog-ban-user/dialog-ban-user.component');
+    this.dialog.open(DialogBanUserComponent, { width: '860px', maxWidth: '95vw', data: { usuarioId: reporte.autorId }, disableClose: true });
   }
 
   toggleBitacora(): void {

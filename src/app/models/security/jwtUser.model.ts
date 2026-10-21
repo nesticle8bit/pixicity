@@ -41,6 +41,8 @@ export interface LoginBaneado {
   razonBaneo: string;
   tiempoBaneado?: string;
   baneadoPermanente?: boolean;
+  /** Token de un solo uso (1 h) para apelar el baneo sin sesión. */
+  apelacion?: string;
 }
 
 /** Contraseña correcta, pero la cuenta tiene verificación en dos pasos: falta el código (usuarios/login2FA). */

@@ -7,12 +7,10 @@
 <!-- Fuera del header: el header móvil se desplaza con transform y eso rompería el position: fixed del cajón. -->
 <app-mobile-drawer></app-mobile-drawer>
 @if (displayComponent.mainMenu) {
-  <main-menu></main-menu>
+<main-menu></main-menu>
 }
 <main-submenu />
 
-<!-- Fondo de página (p. ej. el que eligió un usuario para su perfil): desde la barra de noticias hasta el pie,
-     así no queda una franja gris a los lados de la barra. -->
 <div class="fondo-pagina" [style.background-image]="fondoPaginaCss"
   [style.background-repeat]="fondoPaginaCss ? (displayComponent.backgroundRepeat || 'repeat') : null">
   <app-main-ultimas-noticias />
@@ -22,5 +20,5 @@
     <router-outlet></router-outlet>
   </main>
 
-  <main-footer></main-footer>
+  <main-footer />
 </div>

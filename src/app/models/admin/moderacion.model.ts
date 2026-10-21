@@ -19,6 +19,8 @@ export interface Reporte {
   /** Suma de los pesos de los reportes pendientes del mismo contenido (prioridad en la cola). */
   pesoTotal?: number;
   contenidoPreview: string | null;
+  /** Para banear al autor desde la cola. */
+  autorId?: number | null;
   autorUserName: string | null;
   autorAvatar: string | null;
   contenidoEliminado: boolean;
@@ -70,3 +72,45 @@ export interface AccionModeracion {
   id: number;
   nombre: string;
 }
+
+/** Estado de una apelación (EstadoApelacion del API). */
+export enum EstadoApelacion {
+  Pendiente = 0,
+  Aceptada = 1,
+  Rechazada = 2,
+}
+
+/** Apelación de una acción de moderación (ApelacionViewModel). */
+export interface Apelacion {
+  id: number;
+  moderacionLogId: number | null;
+  userName: string | null;
+  mensaje: string;
+  estado: EstadoApelacion;
+  estadoNombre: string;
+  respuesta: string | null;
+  atendidaPor: string | null;
+  fechaAtendida: string | null;
+  fechaRegistro: string;
+  accionNombre?: string | null;
+  objetivo?: string | null;
+  objetivoUrl?: string | null;
+  detalle?: string | null;
+  razon?: string | null;
+  moderador?: string | null;
+}
+
+/** Una acción de moderación sobre el usuario actual (GET api/apelaciones/me). */
+export interface MiModeracion {
+  moderacionLogId: number;
+  accion: number;
+  accionNombre: string;
+  objetivo: string | null;
+  detalle: string | null;
+  razon: string | null;
+  fechaRegistro: string;
+  apelable: boolean;
+  apelacion: Apelacion | null;
+}
+
+export type PaginaApelaciones = PaginatedData<Apelacion> & { pendientes: number };

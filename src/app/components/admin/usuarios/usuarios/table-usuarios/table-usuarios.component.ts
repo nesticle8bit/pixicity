@@ -101,7 +101,7 @@ export class TableUsuariosComponent implements OnInit {
   banUser(user: UsuarioAdminViewModel): void {
     const dialogRef = this.dialog.open(DialogBanUserComponent, {
       width: '860px',
-      data: user.id,
+      data: { usuarioId: user.id },
       disableClose: true,
     });
 

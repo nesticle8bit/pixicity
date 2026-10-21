@@ -45,6 +45,13 @@ module.exports = function (config) {
         flags: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage']
       }
     },
+    // Con la máquina cargada el navegador tarda en arrancar o se desconecta un momento: sin margen, la corrida
+    // se abortaba ("failed 2 times (cannot start)") aunque las pruebas pasaran.
+    captureTimeout: 180000,
+    browserDisconnectTimeout: 30000,
+    browserDisconnectTolerance: 2,
+    browserNoActivityTimeout: 180000,
+    retryLimit: 4,
     singleRun: false,
     restartOnFileChange: true
   });

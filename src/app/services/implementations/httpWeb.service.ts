@@ -195,6 +195,9 @@ export class HttpWebService implements IHttpWebService {
         map((response) => {
           if (response.status === 200) {
             return response.data!;
+          } else if (response.status === 404) {
+            // No existe: la página muestra su 404 (sin toast de error).
+            return null as unknown as PaginaViewModel;
           } else {
             this.notificationService.error(response.errors.join(', '), 'Error');
             throw new Error(response.errors?.join(', ') ?? 'Error');

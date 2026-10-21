@@ -26,10 +26,26 @@
 </div>
 
 @if (reportes.length > 0) {
+  @if (seleccion.size > 0) {
+    <div class="mod-lote" role="toolbar" aria-label="Acciones sobre los reportes seleccionados">
+      <span><strong>{{seleccion.size}}</strong> seleccionado(s)</span>
+      <button type="button" class="btn btn-sm btn-success" (click)="atenderSeleccion('resolver')">
+        <i class="ti ti-check" aria-hidden="true"></i> Marcar resueltos
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="atenderSeleccion('descartar')">
+        <i class="ti ti-trash" aria-hidden="true"></i> Descartar
+      </button>
+      <button type="button" class="btn btn-sm btn-link" (click)="seleccion.clear()">Quitar selección</button>
+    </div>
+  }
   <div class="table-responsive">
     <table class="table table-sm table-striped table-hover align-middle">
       <thead>
         <tr>
+          <th class="mod-check">
+            <input type="checkbox" class="form-check-input" [checked]="todosSeleccionados" (change)="alternarTodos()"
+              aria-label="Seleccionar todos los reportes de esta página" />
+          </th>
           <th>Creado</th>
           <th>Tipo</th>
           <th>Contenido</th>
@@ -43,6 +59,10 @@
       <tbody>
         @for (reporte of reportes; track reporte.id) {
           <tr [ngClass]="{'opacity-50': reporte.resuelto}">
+            <td class="mod-check">
+              <input type="checkbox" class="form-check-input" [checked]="seleccion.has(reporte.id)" (change)="alternarSeleccion(reporte)"
+                [attr.aria-label]="'Seleccionar reporte de ' + (reporte.autorUserName || 'contenido')" />
+            </td>
             <td>
               <span class="cursor--help" matTooltip="{{reporte.fechaRegistro}}">
                 {{reporte.fechaRegistro | timeAgo}}
@@ -100,6 +120,12 @@
                   <mat-icon>delete_outline</mat-icon>
                   <span>Descartar reporte</span>
                 </button>
+                @if (reporte.autorId) {
+                  <button type="button" mat-menu-item (click)="banearAutor(reporte)">
+                    <mat-icon>do_disturb_alt</mat-icon>
+                    <span>Banear a {{reporte.autorUserName}}</span>
+                  </button>
+                }
               </mat-menu>
             </td>
           </tr>

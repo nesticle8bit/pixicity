@@ -1,0 +1,49 @@
+<div class="container container--home">
+  <h2 class="main-title mb-2"><span>Mis apelaciones</span></h2>
+  <p class="text-muted mb-3">
+    Lo que el equipo de moderación hizo con tu contenido o tu cuenta en los últimos 90 días. Si crees que fue un error,
+    puedes pedir que otra persona del equipo lo revise (hasta 30 días después). Las reglas están en el
+    <a routerLink="/paginas/protocolo">protocolo</a>.
+  </p>
+
+  @if (!cargando() && items().length === 0) {
+    <div class="alert alert-light">No hay acciones de moderación sobre tu cuenta. 🎉</div>
+  }
+
+  <ul class="ap-lista">
+    @for (item of items(); track item.moderacionLogId) {
+      <li class="ap-item">
+        <div class="ap-item__cabecera">
+          <strong>{{item.accionNombre}}</strong>
+          <small class="text-muted">{{item.fechaRegistro | timeAgo}}</small>
+        </div>
+        @if (item.objetivo) { <div class="ap-item__objetivo">{{item.objetivo}}</div> }
+        @if (item.detalle) { <div class="text-muted small">{{item.detalle}}</div> }
+        @if (item.razon) { <div class="small"><strong>Causa:</strong> {{item.razon}}</div> }
+
+        @if (item.apelacion; as ap) {
+          <div class="ap-estado" [class.ap-estado--ok]="ap.estado === Estado.Aceptada" [class.ap-estado--no]="ap.estado === Estado.Rechazada">
+            <strong>Apelación {{ap.estadoNombre.toLowerCase()}}</strong>
+            @if (ap.respuesta) { <div>Respuesta del equipo: {{ap.respuesta}}</div> }
+          </div>
+        } @else if (item.apelable) {
+          @if (abierta === item.moderacionLogId) {
+            <div class="ap-form">
+              <label [for]="'ap-' + item.moderacionLogId">¿Por qué debería revisarse?</label>
+              <textarea [id]="'ap-' + item.moderacionLogId" class="form-control" rows="4" maxlength="2000" [(ngModel)]="mensaje"
+                placeholder="Explica qué pasó (mínimo 20 caracteres)"></textarea>
+              <div class="ap-form__acciones">
+                <button type="button" class="btn btn-sm btn-primary" (click)="enviar(item)" [disabled]="mensaje.trim().length < 20 || enviando">
+                  {{ enviando ? 'Enviando…' : 'Enviar apelación' }}
+                </button>
+                <button type="button" class="btn btn-sm btn-link" (click)="abierta = null">Cancelar</button>
+              </div>
+            </div>
+          } @else {
+            <button type="button" class="btn btn-sm btn-outline-primary mt-2" (click)="abrir(item)">Apelar</button>
+          }
+        }
+      </li>
+    }
+  </ul>
+</div>

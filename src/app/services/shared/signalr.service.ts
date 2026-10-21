@@ -33,6 +33,7 @@ export class SignalrService {
 
   private notificationSubject = new Subject<NotificacionEnVivo>();
   private newReportSubject = new Subject<ReporteEnVivo>();
+  private reporteAtendidoSubject = new Subject<{ reporteId: number; por: string }>();
   private actividadSubject = new Subject<ActividadEnVivo>();
   private mensajeSubject = new Subject<MensajeEnVivo>();
   private mensajesLeidosSubject = new Subject<EventoDeUsuario>();
@@ -54,6 +55,8 @@ export class SignalrService {
   public notification$: Observable<NotificacionEnVivo> = this.notificationSubject.asObservable();
   // Nuevo reporte para staff.
   public newReport$: Observable<ReporteEnVivo> = this.newReportSubject.asObservable();
+  // Otro moderador resolvió, descartó o borró el contenido de un reporte.
+  public reporteAtendido$: Observable<{ reporteId: number; por: string }> = this.reporteAtendidoSubject.asObservable();
   // Actividad pública en tiempo real (página "En Vivo").
   public actividad$: Observable<ActividadEnVivo> = this.actividadSubject.asObservable();
   // Mensaje privado nuevo (recibido o enviado desde otra pestaña).
@@ -126,6 +129,7 @@ export class SignalrService {
     if (!this.handlersBound) {
       this.connection.on('notification', (payload: NotificacionEnVivo) => this.notificationSubject.next(payload));
       this.connection.on('newReport', (payload: ReporteEnVivo) => this.newReportSubject.next(payload));
+      this.connection.on('reporteAtendido', (payload: { reporteId: number; por: string }) => this.reporteAtendidoSubject.next(payload));
       this.connection.on('actividad', (payload: ActividadEnVivo) => this.actividadSubject.next(payload));
       this.connection.on('mensaje', (payload: MensajeEnVivo) => this.mensajeSubject.next(payload));
       this.connection.on('mensajesLeidos', (payload: EventoDeUsuario) => this.mensajesLeidosSubject.next(payload));

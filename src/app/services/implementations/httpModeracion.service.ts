@@ -7,7 +7,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { AccionModeracion, FiltroHistorial, ModeracionLog, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
+import { AccionModeracion, FiltroHistorial, MiModeracion, ModeracionLog, PaginaApelaciones, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
 
 @Injectable()
 export class HttpModeracionService implements IHttpModeracionService {
@@ -56,6 +56,13 @@ export class HttpModeracionService implements IHttpModeracionService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  atenderLote(ids: number[], accion: 'resolver' | 'descartar'): Observable<number> {
+    return this.http
+      .put<ApiResponse<number>>(`${environment.api}/api/moderacion/reportes/lote`, { ids, accion })
+      .pipe(this.unwrap<number>())
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   eliminarContenidoReportado(reporteId: number, regla: string | null = null): Observable<boolean> {
     const extra = regla ? `?regla=${encodeURIComponent(regla)}` : '';
     return this.http
@@ -94,6 +101,41 @@ export class HttpModeracionService implements IHttpModeracionService {
     return this.http
       .get<ApiResponse<PaginatedData<ModeracionLog>>>(`${environment.api}/api/moderacion/historial`, { params })
       .pipe(this.unwrap<PaginatedData<ModeracionLog>>())
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getMisModeraciones(): Observable<MiModeracion[]> {
+    return this.http
+      .get<ApiResponse<MiModeracion[]>>(`${environment.api}/api/apelaciones/me`)
+      .pipe(this.unwrap<MiModeracion[]>())
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  apelar(moderacionLogId: number, mensaje: string): Observable<number> {
+    return this.http
+      .post<ApiResponse<number>>(`${environment.api}/api/apelaciones`, { moderacionLogId, mensaje })
+      .pipe(this.unwrap<number>())
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  apelarBaneo(token: string, mensaje: string): Observable<number> {
+    return this.http
+      .post<ApiResponse<number>>(`${environment.api}/api/apelaciones/baneo`, { token, mensaje })
+      .pipe(this.unwrap<number>())
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getApelaciones(page: number, pageCount: number, soloPendientes: boolean): Observable<PaginaApelaciones> {
+    return this.http
+      .get<ApiResponse<PaginaApelaciones>>(`${environment.api}/api/apelaciones`, { params: { page, pageCount, soloPendientes } })
+      .pipe(this.unwrap<PaginaApelaciones>())
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  resolverApelacion(id: number, aceptar: boolean, respuesta: string): Observable<boolean> {
+    return this.http
+      .put<ApiResponse<boolean>>(`${environment.api}/api/apelaciones/${id}/resolucion`, { aceptar, respuesta })
+      .pipe(this.unwrap<boolean>())
       .pipe(catchError(this.helper.errorHandler));
   }
 

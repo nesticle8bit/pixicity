@@ -30,32 +30,38 @@ import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { ContenidoSeoPipe } from '../../../shared/pipes/contenidoSeo.pipe';
 import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 import { ContenidoPostDirective } from '../../../shared/directives/contenido-post.directive';
-import { indiceDeContenido, minutosDeLectura, TituloIndice } from '../../../shared/helpers/contenido-post';
+import {
+  indiceDeContenido,
+  minutosDeLectura,
+  TituloIndice,
+} from '../../../shared/helpers/contenido-post';
 
 @Component({
-    selector: 'app-posts-view',
-    templateUrl: './posts-view.component.html',
-    styleUrls: ['./posts-view.component.scss'],
-    imports: [CargandoComponent, 
-        RouterLink,
-        UserPopoverDirective,
-        UserAvatarComponent,
-        FollowButtonComponent,
-        PostMoreFromOPComponent,
-        PostRelatedPostsComponent,
-        PostsBreadcrumbComponent,
-        PostsNavComponent,
-        ShareButtonsComponent,
-        PostsTagsComponent,
-        PostsMetaComponent,
-        AdsByTypeComponent,
-        PostCommentsComponent,
-        DecimalPipe,
-        DatePipe,
-        TimeAgoPipe,
-        ContenidoSeoPipe, EnlazarHashtagsPipe,
-        ContenidoPostDirective,
-    ],
+  selector: 'app-posts-view',
+  templateUrl: './posts-view.component.html',
+  styleUrls: ['./posts-view.component.scss'],
+  imports: [
+    CargandoComponent,
+    RouterLink,
+    UserPopoverDirective,
+    UserAvatarComponent,
+    FollowButtonComponent,
+    PostMoreFromOPComponent,
+    PostRelatedPostsComponent,
+    PostsBreadcrumbComponent,
+    PostsNavComponent,
+    ShareButtonsComponent,
+    PostsTagsComponent,
+    PostsMetaComponent,
+    AdsByTypeComponent,
+    PostCommentsComponent,
+    DecimalPipe,
+    DatePipe,
+    TimeAgoPipe,
+    ContenidoSeoPipe,
+    EnlazarHashtagsPipe,
+    ContenidoPostDirective,
+  ],
 })
 export class PostsViewComponent implements OnInit {
   private readonly documento = inject(DOCUMENT);
@@ -89,7 +95,10 @@ export class PostsViewComponent implements OnInit {
   private tituloRuta = '';
 
   get esAutor(): boolean {
-    return !!this.currentUser?.usuario && this.post?.usuario?.userName === this.currentUser.usuario?.userName;
+    return (
+      !!this.currentUser?.usuario &&
+      this.post?.usuario?.userName === this.currentUser.usuario?.userName
+    );
   }
 
   get esStaff(): boolean {
@@ -102,104 +111,137 @@ export class PostsViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
-      this.tituloRuta = values.get('nombre-post') ?? '';
-      this.getPostById(+(values.get('id') ?? 0));
-    });
+    this.activatedRoute.paramMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((values) => {
+        this.tituloRuta = values.get('nombre-post') ?? '';
+        this.getPostById(+(values.get('id') ?? 0));
+      });
 
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,
-      searchFooter: false,
+      searchFooter: true,
       submenu: true,
       background: '',
     });
   }
 
   getPostById(postId: number): void {
-    this.postService.getPostById(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
-      if (!value) {
-        this.router.navigate([`/posts/404/${this.tituloRuta}`], { replaceUrl: true });
-        return;
-      }
+    this.postService
+      .getPostById(postId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        if (!value) {
+          this.router.navigate([`/posts/404/${this.tituloRuta}`], {
+            replaceUrl: true,
+          });
+          return;
+        }
 
-      if (value.post.esPrivado && !value.post.id) {
-        this.router.navigate([`/posts/privado/${this.tituloRuta}`], {
-          replaceUrl: true,
-          queryParams: { volver: this.documento.location.pathname },
-        });
-        return;
-      }
+        if (value.post.esPrivado && !value.post.id) {
+          this.router.navigate([`/posts/privado/${this.tituloRuta}`], {
+            replaceUrl: true,
+            queryParams: { volver: this.documento.location.pathname },
+          });
+          return;
+        }
 
-      value.post.tags = value.post.etiquetas ? value.post.etiquetas.split(',') : [];
+        value.post.tags = value.post.etiquetas
+          ? value.post.etiquetas.split(',')
+          : [];
 
-      this.post = { ...value.post, id: postId };
-      const indice = indiceDeContenido(this.post.contenido);
-      this.indice = indice.length >= 3 ? indice : [];
-      this.minutosLectura = minutosDeLectura(this.post.contenido);
-      this.getAutor(value.post.usuario?.userName);
+        this.post = { ...value.post, id: postId };
+        const indice = indiceDeContenido(this.post.contenido);
+        this.indice = indice.length >= 3 ? indice : [];
+        this.minutosLectura = minutosDeLectura(this.post.contenido);
+        this.getAutor(value.post.usuario?.userName);
 
-      const description = value.post.contenido
-        ? value.post.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 160)
-        : value.post.titulo;
+        const description = value.post.contenido
+          ? value.post.contenido
+              .replace(/<[^>]+>/g, ' ')
+              .replace(/\s+/g, ' ')
+              .trim()
+              .substring(0, 160)
+          : value.post.titulo;
 
-      const imagen = this.primeraImagen(value.post.contenido);
+        const imagen = this.primeraImagen(value.post.contenido);
 
-      // El post se carga solo por id: /posts/lo-que-sea/123/cualquier-cosa
-      // devuelve el mismo contenido. Sin una ruta canonica fija, cualquiera
-      // puede generar duplicados ilimitados enlazando mal.
-      const rutaCanonica = this.router
-        .createUrlTree(['/posts', value.post.categoria?.seo, postId, value.post.url])
-        .toString();
-      const canonical = `${environment.publicUrl}${rutaCanonica}`;
+        // El post se carga solo por id: /posts/lo-que-sea/123/cualquier-cosa
+        // devuelve el mismo contenido. Sin una ruta canonica fija, cualquiera
+        // puede generar duplicados ilimitados enlazando mal.
+        const rutaCanonica = this.router
+          .createUrlTree([
+            '/posts',
+            value.post.categoria?.seo,
+            postId,
+            value.post.url,
+          ])
+          .toString();
+        const canonical = `${environment.publicUrl}${rutaCanonica}`;
 
-      if (this.rutaDistinta(rutaCanonica)) {
-        // Conserva el #comentario-{id} de las notificaciones al corregir la URL.
-        this.router.navigateByUrl(rutaCanonica + this.documento.location.hash, { replaceUrl: true });
-        return;
-      }
+        if (this.rutaDistinta(rutaCanonica)) {
+          // Conserva el #comentario-{id} de las notificaciones al corregir la URL.
+          this.router.navigateByUrl(
+            rutaCanonica + this.documento.location.hash,
+            { replaceUrl: true },
+          );
+          return;
+        }
 
-      this.seoService.setSEO({
-        title: value.post.titulo,
-        description,
-        tags: value.post.tags ?? [],
-        // og:type solo acepta valores del vocabulario Open Graph, no la categoria.
-        type: 'article',
-        imageURL: imagen,
-        canonical,
-        publishedTime: value.post.fechaRegistro,
-        modifiedTime: value.post.fechaActualiza ?? value.post.fechaRegistro,
-        author: value.post.usuario?.userName,
-        section: value.post.categoria?.nombre,
-        jsonLd: {
-          '@context': 'https://schema.org',
-          '@graph': [{
-          '@type': 'Article',
-          headline: value.post.titulo,
+        this.seoService.setSEO({
+          title: value.post.titulo,
           description,
-          articleSection: value.post.categoria?.nombre,
-          keywords: (value.post.tags ?? []).join(', '),
-          datePublished: value.post.fechaRegistro,
-          dateModified: value.post.fechaActualiza ?? value.post.fechaRegistro,
-          image: imagen ? [imagen] : undefined,
-          author: {
-            '@type': 'Person',
-            name: value.post.usuario?.userName ?? 'Taringa!',
-            url: value.post.usuario?.userName
-              ? `${environment.publicUrl}/perfil/${value.post.usuario.userName}`
-              : undefined,
+          tags: value.post.tags ?? [],
+          // og:type solo acepta valores del vocabulario Open Graph, no la categoria.
+          type: 'article',
+          imageURL: imagen,
+          canonical,
+          publishedTime: value.post.fechaRegistro,
+          modifiedTime: value.post.fechaActualiza ?? value.post.fechaRegistro,
+          author: value.post.usuario?.userName,
+          section: value.post.categoria?.nombre,
+          jsonLd: {
+            '@context': 'https://schema.org',
+            '@graph': [
+              {
+                '@type': 'Article',
+                headline: value.post.titulo,
+                description,
+                articleSection: value.post.categoria?.nombre,
+                keywords: (value.post.tags ?? []).join(', '),
+                datePublished: value.post.fechaRegistro,
+                dateModified:
+                  value.post.fechaActualiza ?? value.post.fechaRegistro,
+                image: imagen ? [imagen] : undefined,
+                author: {
+                  '@type': 'Person',
+                  name: value.post.usuario?.userName ?? 'Taringa!',
+                  url: value.post.usuario?.userName
+                    ? `${environment.publicUrl}/perfil/${value.post.usuario.userName}`
+                    : undefined,
+                },
+                publisher: { '@id': `${environment.publicUrl}/#organization` },
+                mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+                commentCount: value.post.cantidadComentarios,
+                interactionStatistic: [
+                  {
+                    '@type': 'InteractionCounter',
+                    interactionType: 'https://schema.org/ViewAction',
+                    userInteractionCount: value.post.visitantes ?? 0,
+                  },
+                  {
+                    '@type': 'InteractionCounter',
+                    interactionType: 'https://schema.org/BookmarkAction',
+                    userInteractionCount: value.post.favoritos ?? 0,
+                  },
+                ],
+              },
+              this.breadcrumb(value.post, canonical),
+            ],
           },
-          publisher: { '@id': `${environment.publicUrl}/#organization` },
-          mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-          commentCount: value.post.cantidadComentarios,
-          interactionStatistic: [
-            { '@type': 'InteractionCounter', interactionType: 'https://schema.org/ViewAction', userInteractionCount: value.post.visitantes ?? 0 },
-            { '@type': 'InteractionCounter', interactionType: 'https://schema.org/BookmarkAction', userInteractionCount: value.post.favoritos ?? 0 },
-          ],
-        }, this.breadcrumb(value.post, canonical)],
-        },
+        });
       });
-    });
   }
 
   private getAutor(userName: string): void {
@@ -207,9 +249,12 @@ export class PostsViewComponent implements OnInit {
       return;
     }
 
-    this.usuarioPerfilService.getUsuarioInfo(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((info) => {
-      this.autor = info;
-    });
+    this.usuarioPerfilService
+      .getUsuarioInfo(userName)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((info) => {
+        this.autor = info;
+      });
   }
 
   /** Compara la ruta visitada con la canonica, sin que la codificacion moleste. */
@@ -225,14 +270,24 @@ export class PostsViewComponent implements OnInit {
     return {
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${environment.publicUrl}/` },
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Taringa!',
+          item: `${environment.publicUrl}/`,
+        },
         {
           '@type': 'ListItem',
           position: 2,
           name: post.categoria?.nombre,
           item: `${environment.publicUrl}/posts/${post.categoria?.seo}`,
         },
-        { '@type': 'ListItem', position: 3, name: post.titulo, item: canonical },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: post.titulo,
+          item: canonical,
+        },
       ],
     };
   }
@@ -245,7 +300,9 @@ export class PostsViewComponent implements OnInit {
     }
 
     const src = match[1];
-    return src.startsWith('http') ? src : `${environment.publicUrl}${src.startsWith('/') ? '' : '/'}${src}`;
+    return src.startsWith('http')
+      ? src
+      : `${environment.publicUrl}${src.startsWith('/') ? '' : '/'}${src}`;
   }
 
   actualizarPost(): void {
@@ -255,7 +312,10 @@ export class PostsViewComponent implements OnInit {
   }
 
   eliminarPost(): void {
-    if (!this.post || !this.notificationService.confirm('¿Seguro que deseas borrar este post?')) {
+    if (
+      !this.post ||
+      !this.notificationService.confirm('¿Seguro que deseas borrar este post?')
+    ) {
       return;
     }
 
@@ -264,7 +324,10 @@ export class PostsViewComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: boolean) => {
         if (response) {
-          this.notificationService.success('El post ha sido eliminado correctamente, ahora nadie lo podrá visualizar', 'Eliminado');
+          this.notificationService.success(
+            'El post ha sido eliminado correctamente, ahora nadie lo podrá visualizar',
+            'Eliminado',
+          );
           this.router.navigate(['']);
         }
       });
@@ -281,7 +344,10 @@ export class PostsViewComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         if (response) {
-          this.notificationService.success('Se ha cambiado el sticky para este post correctamente', 'Sticky');
+          this.notificationService.success(
+            'Se ha cambiado el sticky para este post correctamente',
+            'Sticky',
+          );
           post.sticky = !post.sticky;
         }
       });
@@ -290,6 +356,8 @@ export class PostsViewComponent implements OnInit {
   irATitulo(event: Event, id: string): void {
     // Un href="#id" navegaría a "/#id" (la app tiene <base href="/">): se desplaza a mano
     event.preventDefault();
-    this.documento.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    this.documento
+      .getElementById(id)
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }

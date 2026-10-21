@@ -1,0 +1,58 @@
+<h1 class="dashboard--title">Apelaciones</h1>
+<p class="text-muted">
+  Usuarios que piden revisar una acción de moderación. Aceptar la revierte (restaura el contenido o levanta el baneo);
+  la acción y la respuesta quedan en el historial. Una apelación sobre tu propia acción la tiene que revisar otra persona.
+</p>
+
+<div class="ma-filtros" role="group" aria-label="Filtrar apelaciones">
+  <button type="button" class="btn btn-sm" [class.btn-primary]="soloPendientes" [class.btn-outline-secondary]="!soloPendientes" (click)="filtrar(true)">
+    Pendientes @if (pendientes() > 0) { <span class="badge bg-light text-dark ms-1">{{pendientes()}}</span> }
+  </button>
+  <button type="button" class="btn btn-sm" [class.btn-primary]="!soloPendientes" [class.btn-outline-secondary]="soloPendientes" (click)="filtrar(false)">
+    Todas
+  </button>
+</div>
+
+@if (!cargando() && apelaciones().length === 0) {
+  <div class="alert alert-light">No hay apelaciones {{soloPendientes ? 'pendientes' : ''}}.</div>
+}
+
+@for (a of apelaciones(); track a.id) {
+  <article class="ma-item">
+    <header class="ma-item__cabecera">
+      <div>
+        <strong>{{a.userName}}</strong> apela <strong>{{a.accionNombre}}</strong>
+        @if (a.moderador) { <span class="text-muted">de {{a.moderador}}</span> }
+      </div>
+      <small class="text-muted">{{a.fechaRegistro | timeAgo}}</small>
+    </header>
+
+    @if (a.objetivo) {
+      <div class="ma-item__objetivo">
+        Sobre:
+        @if (a.objetivoUrl) { <a [href]="a.objetivoUrl" target="_blank" rel="noopener">{{a.objetivo}}</a> } @else { {{a.objetivo}} }
+      </div>
+    }
+    @if (a.detalle || a.razon) {
+      <div class="text-muted small">{{a.detalle}} @if (a.razon) { · Causa: {{a.razon}} }</div>
+    }
+
+    <blockquote class="ma-item__mensaje">{{a.mensaje}}</blockquote>
+
+    @if (a.estado === Estado.Pendiente) {
+      <div class="ma-item__acciones">
+        <button type="button" class="btn btn-sm btn-success" (click)="aceptar(a)"><i class="ti ti-check" aria-hidden="true"></i> Aceptar</button>
+        <button type="button" class="btn btn-sm btn-outline-danger" (click)="rechazar(a)"><i class="ti ti-x" aria-hidden="true"></i> Rechazar</button>
+      </div>
+    } @else {
+      <div class="small" [class.text-success]="a.estado === Estado.Aceptada" [class.text-danger]="a.estado === Estado.Rechazada">
+        {{a.estadoNombre}} por {{a.atendidaPor}} @if (a.respuesta) { — «{{a.respuesta}}» }
+      </div>
+    }
+  </article>
+}
+
+@if (total() > pageSize) {
+  <mat-paginator [length]="total()" [pageIndex]="pageIndex" [pageSize]="pageSize" [hidePageSize]="true" (page)="pageChange($event)"
+    aria-label="Páginas de apelaciones" />
+}

@@ -4,6 +4,8 @@ import { Title } from '@angular/platform-browser';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { IHttpModeracionService } from 'src/app/services/interfaces/httpModeracion.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
+import { SignalrService } from 'src/app/services/shared/signalr.service';
+import { merge } from 'rxjs';
 
 interface PestanaModeracion {
   label: string;
@@ -24,6 +26,7 @@ interface PestanaModeracion {
 export class ModeracionPanelComponent implements OnInit {
   private displayService = inject(DisplayComponentService);
   private moderacionService = inject(IHttpModeracionService);
+  private signalrService = inject(SignalrService);
   private title = inject(Title);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -35,6 +38,7 @@ export class ModeracionPanelComponent implements OnInit {
     { label: 'Posts', icon: 'ti-file-text', route: 'posts' },
     { label: 'Shouts', icon: 'ti-message-circle', route: 'shouts' },
     { label: 'Comentarios', icon: 'ti-messages', route: 'comentarios' },
+    { label: 'Apelaciones', icon: 'ti-scale', route: 'apelaciones' },
     { label: 'Usuarios', icon: 'ti-users', route: 'usuarios' },
   ];
 
@@ -51,6 +55,14 @@ export class ModeracionPanelComponent implements OnInit {
       background: '',
     });
 
+    this.contarPendientes();
+    // El contador de la pestaña sigue en vivo: reportes nuevos y los que atiende cualquier moderador.
+    merge(this.signalrService.newReport$, this.signalrService.reporteAtendido$)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.contarPendientes());
+  }
+
+  private contarPendientes(): void {
     this.moderacionService
       .getReportes(1, 1, null, true)
       .pipe(takeUntilDestroyed(this.destroyRef))
