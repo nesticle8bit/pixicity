@@ -29,6 +29,8 @@ export interface ConfiguracionModel {
   footer: string;
   /** Minutos desde el registro para publicar sin confirmar el correo; -1 = siempre exigir confirmación. */
   minutosPublicarSinConfirmar: number;
+  /** Puntos que necesita una cuenta nueva para enlazar a otros sitios; 0 = sin restricción. */
+  minPuntosEnlacesExternos: number;
 }
 
 export interface ContactoModel {

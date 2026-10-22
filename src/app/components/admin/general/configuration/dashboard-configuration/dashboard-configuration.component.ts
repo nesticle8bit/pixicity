@@ -51,6 +51,7 @@ export class DashboardConfigurationComponent implements OnInit {
       footer: '',
       exigirConfirmacion: false,
       minutosPublicarSinConfirmar: [5, [Validators.min(0), Validators.max(10080)]],
+      minPuntosEnlacesExternos: [1, [Validators.min(0), Validators.max(100000)]],
     });
   }
 
@@ -79,6 +80,7 @@ export class DashboardConfigurationComponent implements OnInit {
           footer: configuracion.footer,
           exigirConfirmacion: (configuracion.minutosPublicarSinConfirmar ?? 5) < 0,
           minutosPublicarSinConfirmar: Math.max(0, configuracion.minutosPublicarSinConfirmar ?? 5),
+          minPuntosEnlacesExternos: Math.max(0, configuracion.minPuntosEnlacesExternos ?? 1),
         });
 
         // this.formGroup.controls['url'].disable();
@@ -92,6 +94,7 @@ export class DashboardConfigurationComponent implements OnInit {
     // -1 = exigir el correo confirmado; si no, los minutos de espera para una cuenta sin confirmar
     formValue.minutosPublicarSinConfirmar = formValue.exigirConfirmacion ? -1 : Math.max(0, Number(formValue.minutosPublicarSinConfirmar) || 0);
     delete formValue.exigirConfirmacion;
+    formValue.minPuntosEnlacesExternos = Math.max(0, Number(formValue.minPuntosEnlacesExternos) || 0);
 
     this.generalService
       .updateConfiguracion(formValue)
