@@ -104,6 +104,10 @@
           </button>
           <mat-menu #menu="matMenu">
             @if (modo() === 'admin') {
+              <button type="button" mat-menu-item (click)="editarCuenta(usuario)">
+                <mat-icon>manage_accounts</mat-icon>
+                Editar cuenta
+              </button>
               <button type="button" mat-menu-item (click)="changeAvatar(usuario)">
                 <mat-icon>photo_camera</mat-icon>
                 Actualizar Imagen de Perfil

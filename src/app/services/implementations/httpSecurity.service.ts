@@ -13,7 +13,7 @@ import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { AdminResumen, PerfilUsuarioViewModel, UsuarioAdminViewModel, UsuarioListadoViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { AdminResumen, CuentaAdminModel, PerfilUsuarioViewModel, UsuarioAdminViewModel, UsuarioListadoViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { enNavegador } from '../../shared/helpers/plataforma';
 @Injectable()
 export class HttpSecurityService implements IHttpSecurityService {
@@ -536,6 +536,32 @@ export class HttpSecurityService implements IHttpSecurityService {
             this.notificationService.error(response.errors.join(', '), 'Error');
             throw new Error(response.errors?.join(', ') ?? 'Error');
           }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getCuentaAdmin(usuarioId: number): Observable<CuentaAdminModel> {
+    return this.http
+      .get<ApiResponse<CuentaAdminModel>>(`${environment.api}/api/usuarios/${usuarioId}/cuenta`)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) return response.data!;
+          this.notificationService.error(response.errors.join(', '), 'Error');
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  editarCuentaAdmin(cuenta: CuentaAdminModel): Observable<boolean> {
+    return this.http
+      .put<ApiResponse<boolean>>(`${environment.api}/api/usuarios/${cuenta.id}/cuenta`, cuenta)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) return response.data!;
+          this.notificationService.error(response.errors.join(', '), 'Error');
+          throw new Error(response.errors?.join(', ') ?? 'Error');
         })
       )
       .pipe(catchError(this.helper.errorHandler));

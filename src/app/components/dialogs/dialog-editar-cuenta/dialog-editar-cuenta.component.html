@@ -1,0 +1,117 @@
+<h2 mat-dialog-title>
+    Editar cuenta de {{ data.userName }}
+</h2>
+
+<form [formGroup]="formGroup" (ngSubmit)="guardar()">
+    <mat-dialog-content>
+        @if (cargando) {
+          <div class="adm-cargando" role="progressbar" aria-label="Cargando"></div>
+        }
+
+        <div class="row">
+            <div class="col-12 mb-3">
+                <label class="form-label" for="dialog-editar-cuenta-username">Nombre de usuario</label>
+                <input id="dialog-editar-cuenta-username" class="form-control" formControlName="userName" autocomplete="off" maxlength="30"
+                  aria-describedby="dialog-editar-cuenta-username-ayuda">
+                <small id="dialog-editar-cuenta-username-ayuda" class="text-muted">3 a 30 caracteres: letras, números y guion bajo.</small>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-8 mb-3">
+                <label class="form-label" for="dialog-editar-cuenta-email">Correo</label>
+                <input id="dialog-editar-cuenta-email" type="email" class="form-control" formControlName="email" autocomplete="off">
+            </div>
+            <div class="col-12 col-sm-4 mb-3 d-flex align-items-end">
+                <mat-slide-toggle formControlName="emailConfirmado" color="primary">Correo confirmado</mat-slide-toggle>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-8 mb-3">
+                <label class="form-label" for="dialog-editar-cuenta-rango">Rango</label>
+                <select id="dialog-editar-cuenta-rango" class="form-select" formControlName="rangoId">
+                    @for (rango of rangos; track rango.id) {
+                      <option [ngValue]="rango.id">{{ rango.nombre }}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-12 col-sm-4 mb-3">
+                <label class="form-label" for="dialog-editar-cuenta-puntos">Puntos</label>
+                <input id="dialog-editar-cuenta-puntos" type="number" min="0" class="form-control" formControlName="puntos">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-4 mb-3">
+                <label class="form-label" for="dialog-editar-cuenta-genero">Género</label>
+                <select id="dialog-editar-cuenta-genero" class="form-select" formControlName="genero">
+                    @for (genero of generos; track genero.value) {
+                      <option [ngValue]="genero.value">{{ genero.label }}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-12 col-sm-4 mb-3">
+                <label class="form-label" for="dialog-editar-cuenta-pais">País</label>
+                <select id="dialog-editar-cuenta-pais" class="form-select" formControlName="paisId" (change)="cambiarPais()">
+                    @for (pais of paises; track pais.id) {
+                      <option [ngValue]="pais.id">{{ pais.nombre }}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-12 col-sm-4 mb-3">
+                <label class="form-label" for="dialog-editar-cuenta-estado">Estado / provincia</label>
+                <select id="dialog-editar-cuenta-estado" class="form-select" formControlName="estadoId">
+                    @for (estado of estados; track estado.id) {
+                      <option [ngValue]="estado.id">{{ estado.nombre }}</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-8 mb-3">
+                <label class="form-label" for="dialog-editar-cuenta-password">Nueva contraseña <span class="text-muted">(opcional)</span></label>
+                <input id="dialog-editar-cuenta-password" type="password" class="form-control" formControlName="nuevaPassword" autocomplete="new-password"
+                  aria-describedby="dialog-editar-cuenta-password-ayuda">
+                <small id="dialog-editar-cuenta-password-ayuda" class="text-muted">Vacía = no se cambia. Mínimo 6 caracteres.</small>
+            </div>
+            <div class="col-12 col-sm-4 mb-3 d-flex align-items-end">
+                @if (dosFactoresActivo) {
+                  <mat-slide-toggle formControlName="quitarDosFactores" color="warn">Quitar verificación en dos pasos</mat-slide-toggle>
+                } @else {
+                  <span class="text-muted small">Sin verificación en dos pasos</span>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-4 mb-3">
+                <label class="form-label" for="dialog-editar-cuenta-nacimiento">Fecha de nacimiento</label>
+                <input id="dialog-editar-cuenta-nacimiento" class="form-control" formControlName="fechaNacimiento" placeholder="dd/mm/aaaa">
+            </div>
+            <div class="col-12 col-sm-8 mb-3">
+                <label class="form-label" for="dialog-editar-cuenta-razon">Motivo del cambio <span class="text-muted">(opcional)</span></label>
+                <input id="dialog-editar-cuenta-razon" class="form-control" formControlName="razon" maxlength="1000"
+                  aria-describedby="dialog-editar-cuenta-razon-ayuda">
+                <small id="dialog-editar-cuenta-razon-ayuda" class="text-muted">Queda en el historial de moderación junto con los cambios.</small>
+            </div>
+        </div>
+        @if (cierraSesiones) {
+          <div class="alert alert-warning py-2 mb-0" role="status">
+            <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+            Al guardar se cierran todas las sesiones de la cuenta: tendrá que volver a entrar.
+          </div>
+        }
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button type="button" mat-button mat-dialog-close>
+            Cancelar
+        </button>
+
+        <button type="submit" mat-button color="primary" [disabled]="cargando || guardando || formGroup.invalid">
+            Guardar
+        </button>
+    </mat-dialog-actions>
+</form>

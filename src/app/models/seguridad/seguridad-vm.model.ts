@@ -53,6 +53,29 @@ export interface UsuarioViewModel {
 }
 
 /** Fila del listado de usuarios del panel admin (UsuarioAdminViewModel del API). */
+/** Datos editables de una cuenta desde /administracion/usuarios (GET/PUT api/usuarios/{id}/cuenta). */
+export interface CuentaAdminModel {
+  id: number;
+  userName: string;
+  email: string;
+  emailConfirmado: boolean;
+  rangoId: number;
+  puntos: number;
+  genero: number;
+  paisId?: number | null;
+  estadoId: number;
+  /** dd/MM/yyyy */
+  fechaNacimiento?: string | null;
+  /** Solo lectura. */
+  dosFactoresActivo?: boolean;
+  /** Solo al guardar: vacía = no se cambia. */
+  nuevaPassword?: string | null;
+  /** Solo al guardar: desactiva el 2FA. */
+  quitarDosFactores?: boolean;
+  /** Solo al guardar: queda en el historial de moderación. */
+  razon?: string;
+}
+
 export interface UsuarioAdminViewModel {
   id: number;
   fechaRegistro: string;

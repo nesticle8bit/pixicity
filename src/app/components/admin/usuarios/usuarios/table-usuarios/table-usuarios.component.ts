@@ -139,6 +139,24 @@ export class TableUsuariosComponent implements OnInit {
     this.getUsuarios();
   }
 
+  async editarCuenta(usuario: UsuarioAdminViewModel): Promise<void> {
+    const { DialogEditarCuentaComponent } = await import(
+      'src/app/components/dialogs/dialog-editar-cuenta/dialog-editar-cuenta.component'
+    );
+
+    this.dialog
+      .open(DialogEditarCuentaComponent, {
+        width: '780px',
+        disableClose: true,
+        data: { usuarioId: usuario.id, userName: usuario.userName },
+      })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((cambio) => {
+        if (cambio) this.getUsuarios();
+      });
+  }
+
   async changeAvatar(usuario: UsuarioAdminViewModel): Promise<void> {
     const { DialogChangeAvatarComponent } = await import(
       'src/app/components/dialogs/dialog-change-avatar/dialog-change-avatar.component'
