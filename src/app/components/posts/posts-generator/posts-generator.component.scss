@@ -1,50 +1,9 @@
 $accent: #1976d2;
 $accent-soft: rgba(25, 118, 210, 0.1);
 
-// - Header con gradiente -
-.pg-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin: 0 !important;
-  padding: 22px 28px;
-  background: linear-gradient(120deg, #0b6ea5 0%, #1976d2 100%);
-  color: #fff;
-
-  // neutraliza el ::before de mat-dialog-title (MDC)
-  &::before {
-    display: none;
-  }
-
-  &__icon {
-    flex: 0 0 48px;
-    width: 48px;
-    height: 48px;
-    display: grid;
-    place-items: center;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.18);
-    font-size: 24px;
-  }
-
-  &__title {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 1.2;
-    color: #fff;
-  }
-
-  &__sub {
-    margin: 2px 0 0;
-    font-size: 13px;
-    opacity: 0.85;
-  }
-}
-
 // - Cuerpo -
 .pg-content {
-  padding: 8px 28px 20px !important;
+  padding: 24px 28px 20px !important;
   max-height: 70vh;
 }
 
@@ -116,6 +75,25 @@ $accent-soft: rgba(25, 118, 210, 0.1);
     color: #8a9098;
     line-height: 1.4;
   }
+
+  &__opt {
+    font-weight: 400;
+    font-size: 12px;
+    color: #8a9098;
+  }
+
+  &__error {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 6px 0 0;
+    font-size: 12px;
+    color: #d32f2f;
+  }
+}
+
+.pg-input.is-invalid {
+  border-color: #d32f2f;
 }
 
 // - Inputs modernos -

@@ -383,6 +383,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       maxWidth: '94vw',
       disableClose: true,
       panelClass: 'pg-dialog',
+      ariaLabel: 'Generador de Posts',
       autoFocus: false,
     });
 

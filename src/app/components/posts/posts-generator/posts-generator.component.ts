@@ -1,15 +1,22 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MatButton } from '@angular/material/button';
+import { videoYoutube } from 'src/app/shared/helpers/youtube';
+import { videoNode } from '../../shared/rich-editor/rich-editor-paste';
+
+// Vacío es válido (los videos son opcionales); con algo escrito tiene que ser un enlace de YouTube
+function enlaceYoutubeValidator(control: AbstractControl): ValidationErrors | null {
+  const valor = (control.value || '').trim();
+  return !valor || videoYoutube(valor) ? null : { youtube: true };
+}
 
 @Component({
     selector: 'app-posts-generator',
     templateUrl: './posts-generator.component.html',
     styleUrls: ['./posts-generator.component.scss'],
     imports: [
-        MatDialogTitle,
         FormsModule,
         ReactiveFormsModule,
         CdkScrollable,
@@ -41,6 +48,8 @@ export class PostsGeneratorComponent implements OnInit {
       image1: '',
       image2: '',
       image3: '',
+      video1: ['', enlaceYoutubeValidator],
+      video2: ['', enlaceYoutubeValidator],
       links: '',
       password: '',
       divisor: 'lines',
@@ -53,7 +62,18 @@ export class PostsGeneratorComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  videoInvalido(): boolean {
+    return ['video1', 'video2'].some((n) => {
+      const control = this.formGroup.get(n)!;
+      return control.invalid && (control.dirty || control.touched);
+    });
+  }
+
   generarPost(): void {
+    if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
+      return;
+    }
     const form = Object.assign({}, this.formGroup.value);
     let buildPost = ``;
 
@@ -84,6 +104,14 @@ export class PostsGeneratorComponent implements OnInit {
       if (form.image3) {
         buildPost += `<img src='${form.image3}' alt='Imagen' /><br/><br/>`;
       }
+    }
+
+    // Mismo bloque que inserta el editor: en el post se cambia por el reproductor al hacer clic
+    const videos = [form.video1, form.video2].map((v: string) => videoYoutube(v)).filter((v) => !!v);
+    if (videos.length) {
+      buildPost += this.sectionDivider(videos.length > 1 ? 'Videos' : 'Video');
+      videos.forEach((video) => (buildPost += videoNode(video!).outerHTML));
+      buildPost += `<br/>`;
     }
 
     if (form.links) {

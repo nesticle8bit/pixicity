@@ -1,13 +1,3 @@
-<div mat-dialog-title class="pg-header">
-  <div class="pg-header__icon">
-    <i class="ti ti-wand"></i>
-  </div>
-  <div class="pg-header__text">
-    <h2 class="pg-header__title">Generador de Posts</h2>
-    <p class="pg-header__sub">Arma un post estructurado y con estilo en segundos</p>
-  </div>
-</div>
-
 <form [formGroup]="formGroup" (ngSubmit)="generarPost()">
   <mat-dialog-content class="pg-content">
     <div class="pg-grid">
@@ -69,6 +59,28 @@
             <input type="url" aria-label="http://" placeholder="http://" class="pg-input" formControlName="image2" />
             <input type="url" aria-label="http://" placeholder="http://" class="pg-input" formControlName="image3" />
           </div>
+        </div>
+      </div>
+
+      <div class="pg-field pg-field--full">
+        <div class="pg-field__icon">
+          <i class="ti ti-brand-youtube"></i>
+        </div>
+        <div class="pg-field__body">
+          <label class="pg-field__label" for="posts-generator-video1">Videos de YouTube <span class="pg-field__opt">(opcional)</span></label>
+          <p class="pg-field__hint">Tráiler, review o gameplay: pega el enlace del video (máximo 2).</p>
+
+          <div class="pg-imgrow">
+            <input id="posts-generator-video1" type="url" placeholder="https://www.youtube.com/watch?v=..." class="pg-input"
+              formControlName="video1" [class.is-invalid]="formGroup.get('video1')!.invalid && formGroup.get('video1')!.touched" />
+            <input type="url" aria-label="Segundo video de YouTube" placeholder="https://youtu.be/..." class="pg-input"
+              formControlName="video2" [class.is-invalid]="formGroup.get('video2')!.invalid && formGroup.get('video2')!.touched" />
+          </div>
+          @if (videoInvalido()) {
+          <p class="pg-field__error" role="alert">
+            <i class="ti ti-alert-circle"></i> Usa un enlace de YouTube (youtube.com/watch, youtu.be o shorts).
+          </p>
+          }
         </div>
       </div>
 
