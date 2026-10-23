@@ -35,8 +35,9 @@ import {
   textOffset,
   unwrapNode,
 } from './rich-editor-dom';
-import { cleanPastedHtml, fijarDimensiones, imageNode, plainTextFragment } from './rich-editor-paste';
+import { cleanPastedHtml, fijarDimensiones, imageNode, plainTextFragment, videoNode } from './rich-editor-paste';
 import { LENGUAJES_CODIGO } from 'src/app/shared/helpers/contenido-post';
+import { CLASE_VIDEO_YOUTUBE, VideoYoutube, videoYoutube } from 'src/app/shared/helpers/youtube';
 import { MatIcon } from '@angular/material/icon';
 import { NgTemplateOutlet } from '@angular/common';
 
@@ -232,6 +233,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     { items: [
       { icon: 'link', title: 'Insertar enlace (Ctrl+K)', run: () => this.insertLink() },
       { menu: 'image', icon: 'image', title: 'Insertar imagen' },
+      { icon: 'smart_display', title: 'Insertar video de YouTube (o pega el enlace)', run: () => this.youtubeFromUrl() },
       { menu: 'table', icon: 'table_chart', title: 'Insertar tabla' },
       { icon: 'mood', title: 'Insertar emoji', run: () => this.abrirEmojis() },
     ] },
@@ -438,7 +440,9 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       case '`':
       case '*':
       case '_': handled = this.inlineShortcut(event.key); break;
-      case 'Enter': handled = this.handleCodeEnter(event.shiftKey) || (!event.shiftKey && this.handleEnter()); break;
+      case 'Enter':
+        handled = this.handleCodeEnter(event.shiftKey) || (!event.shiftKey && (this.youtubeLine() || this.handleEnter()));
+        break;
       case 'Tab': handled = this.handleTab(event.shiftKey); break;
     }
     if (handled) event.preventDefault();
@@ -471,7 +475,16 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       return;
     }
 
-    if (this.closestAnyTag(range.startContainer, ['PRE', 'CODE'])) {
+    const inCode = !!this.closestAnyTag(range.startContainer, ['PRE', 'CODE']);
+    // Enlace de YouTube pegado: se inserta el reproductor (Ctrl+Shift+V lo deja como texto)
+    const video = !plain && !inCode ? videoYoutube(url) : null;
+    if (video) {
+      this.insertVideo(video, range);
+      this.afterChange();
+      return;
+    }
+
+    if (inCode) {
       const frag = document.createDocumentFragment();
       frag.appendChild(document.createTextNode(text));
       this.insertFragment(frag, range);
@@ -654,6 +667,58 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     frag.appendChild(node);
     this.insertFragment(frag);
     this.afterChange();
+  }
+
+  youtubeFromUrl(): void {
+    this.openMenu = null;
+    const sel = this.offsetsOf(this.currentRange());
+    const url = (prompt('Enlace del video de YouTube:') || '').trim();
+    if (!url) return;
+    const video = videoYoutube(url);
+    if (!video) {
+      this.notificationService.warning('Pega un enlace de YouTube, por ejemplo https://www.youtube.com/watch?v=…', 'Video no válido');
+      return;
+    }
+    this.editor.focus();
+    if (sel) this.restoreOffsets(sel);
+    this.insertVideo(video);
+    this.afterChange();
+  }
+
+  // El video es un bloque: en una lista, celda, título o código va después del bloque de primer nivel
+  // (insertFragment aplanaría el <figure> a su texto, que está vacío)
+  private insertVideo(video: VideoYoutube, range: Range | null = this.currentRange()): void {
+    const fig = videoNode(video);
+    const host = range ? this.blockOf(range.startContainer) : null;
+    const nested = !!range && !!this.closestAnyTag(range.startContainer, ['LI', 'TD', 'TH', 'PRE']);
+    const flat = nested || (!!host && !['P', 'DIV', 'BLOCKQUOTE'].includes(host.tagName));
+    if (!range || !flat) {
+      const frag = document.createDocumentFragment();
+      frag.appendChild(fig);
+      this.insertFragment(frag, range);
+      return;
+    }
+    let top: Node = host ?? range.startContainer;
+    while (top.parentNode && top.parentNode !== this.editor) top = top.parentNode;
+    if (top.parentNode !== this.editor) return;
+    (top as ChildNode).after(fig);
+    this.ensureBlockAfter(fig);
+  }
+
+  // Enter al final de un párrafo que es solo un enlace de YouTube: lo cambia por el reproductor
+  private youtubeLine(): boolean {
+    const range = this.currentRange();
+    if (!range?.collapsed) return false;
+    const block = this.blockOf(range.startContainer);
+    if (!block || !['P', 'DIV'].includes(block.tagName) || block.parentNode !== this.editor) return false;
+    const video = videoYoutube(block.textContent?.replace(new RegExp(CARET_GUARD, 'g'), ''));
+    if (!video) return false;
+
+    const fig = videoNode(video);
+    block.replaceWith(fig);
+    this.ensureBlockAfter(fig);
+    this.afterChange();
+    return true;
   }
 
   //  Tablas
@@ -968,6 +1033,18 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
 
   onEditorClick(event: MouseEvent): void {
     const target = event.target as HTMLElement | null;
+    // Video: un clic lo selecciona entero (Supr lo borra) y no abre el enlace de la miniatura
+    const video = target?.closest?.(`figure.${CLASE_VIDEO_YOUTUBE}`);
+    if (video && this.editor.contains(video)) {
+      event.preventDefault();
+      this.deselectImg();
+      this.hideBubble();
+      this.clearCtx();
+      const range = document.createRange();
+      range.selectNode(video);
+      this.selectRange(range);
+      return;
+    }
     const wrap = target?.closest?.('.img-resizable');
     const img = target instanceof HTMLImageElement ? target : wrap?.querySelector('img') ?? null;
     if (this.disabled || !img || !this.editor.contains(img)) {
@@ -1181,9 +1258,9 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       wrap.style.height = '';
       if (!wrap.getAttribute('style')) wrap.removeAttribute('style');
     });
-    // El servidor no guarda contenteditable: imágenes y pies de foto vuelven a ser bloques atómicos
+    // El servidor no guarda contenteditable: imágenes, pies de foto y videos vuelven a ser bloques atómicos
     this.editor
-      .querySelectorAll<HTMLElement>('.img-resizable, figure.img-figure')
+      .querySelectorAll<HTMLElement>(`.img-resizable, figure.img-figure, figure.${CLASE_VIDEO_YOUTUBE}`)
       .forEach((el) => el.setAttribute('contenteditable', 'false'));
     this.watchImageSize(this.editor, false);
   }

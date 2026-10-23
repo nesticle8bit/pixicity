@@ -3,6 +3,13 @@
 // clases, fuentes y metadatos que no deben terminar en el post.
 
 import { BLOCK_TAGS } from './rich-editor-dom';
+import {
+  CLASE_VIDEO_YOUTUBE,
+  enlaceYoutube,
+  miniaturaYoutube,
+  VideoYoutube,
+  videoYoutube,
+} from 'src/app/shared/helpers/youtube';
 
 // Se descartan junto con todo su contenido
 const DROP_TAGS = new Set([
@@ -92,6 +99,39 @@ export function imageNode(src: string, alt = ''): HTMLElement {
   return wrap;
 }
 
+/** Video de YouTube como bloque no editable: miniatura enlazada que el post publicado cambia por el reproductor. */
+export function videoNode(video: VideoYoutube): HTMLElement {
+  const img = document.createElement('img');
+  img.src = miniaturaYoutube(video.id);
+  img.alt = 'Video de YouTube';
+  img.setAttribute('width', '640');
+  img.setAttribute('height', '360');
+  const link = videoLink(video);
+  link.replaceChildren(img);
+  const fig = document.createElement('figure');
+  fig.className = CLASE_VIDEO_YOUTUBE;
+  fig.setAttribute('contenteditable', 'false');
+  fig.appendChild(link);
+  return fig;
+}
+
+function videoLink(video: VideoYoutube): HTMLAnchorElement {
+  const a = document.createElement('a');
+  a.href = enlaceYoutube(video);
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.textContent = a.href;
+  return a;
+}
+
+function pastedVideo(source: HTMLElement, name: string): VideoYoutube | null {
+  if (name === 'IFRAME') return videoYoutube(source.getAttribute('src'));
+  if (name === 'FIGURE' && source.classList.contains(CLASE_VIDEO_YOUTUBE)) {
+    return videoYoutube(source.querySelector('a')?.getAttribute('href'));
+  }
+  return null;
+}
+
 function convertChildren(source: Node, out: Node, inPre: boolean): void {
   source.childNodes.forEach((child) => convertNode(child, out, inPre));
 }
@@ -111,6 +151,14 @@ function convertNode(node: Node, out: Node, inPre: boolean): void {
 
   const source = node as HTMLElement;
   const name = source.tagName.toUpperCase();
+
+  // Video de YouTube (iframe de otra página o video copiado de otro post): reproductor si va entre bloques,
+  // enlace si cae dentro de un párrafo/ítem
+  const video = pastedVideo(source, name);
+  if (video) {
+    out.appendChild(out instanceof DocumentFragment ? videoNode(video) : videoLink(video));
+    return;
+  }
   if (DROP_TAGS.has(name)) return;
 
   // Contenedor invisible de Google Docs: <b style="font-weight:normal" id="docs-internal-guid-…">

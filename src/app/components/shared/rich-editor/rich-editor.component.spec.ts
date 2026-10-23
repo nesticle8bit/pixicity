@@ -260,6 +260,70 @@ describe('RichEditorComponent', () => {
       expect(a.getAttribute('href')).toBe('https://pixicity.com');
       expect(a.textContent).toBe('esto');
     });
+
+    it('un enlace de YouTube pegado se convierte en video y deja un párrafo debajo', () => {
+      setHtml('<p>antes</p>');
+      select('antes', true);
+      paste({ 'text/plain': 'https://youtu.be/dQw4w9WgXcQ?t=42' });
+      const fig = editor.querySelector('figure.video-yt')!;
+      expect(fig.getAttribute('contenteditable')).toBe('false');
+      expect(fig.querySelector('a')!.getAttribute('href')).toBe('https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=42s');
+      expect(fig.querySelector('img')!.getAttribute('src')).toBe('https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg');
+      expect(fig.previousElementSibling!.textContent).toBe('antes');
+      expect(fig.nextElementSibling!.tagName).toBe('P');
+    });
+
+    it('Ctrl+Shift+V pega el enlace de YouTube como texto', () => {
+      setHtml('<p>x</p>');
+      select('x', true);
+      key('v', { ctrlKey: true, shiftKey: true });
+      paste({ 'text/plain': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' });
+      expect(editor.querySelector('figure')).toBeNull();
+      expect(content()).toContain('youtube.com/watch');
+    });
+
+    it('un video pegado dentro de una lista va después de la lista', () => {
+      setHtml('<ul><li>uno</li></ul>');
+      select('uno', true);
+      paste({ 'text/plain': 'https://www.youtube.com/shorts/dQw4w9WgXcQ' });
+      expect(editor.querySelector('li figure')).toBeNull();
+      expect(editor.querySelector('ul + figure.video-yt')).not.toBeNull();
+    });
+  });
+
+  describe('videos', () => {
+    it('Enter en un párrafo que es solo un enlace de YouTube lo convierte en video', () => {
+      setHtml('<p>https://www.youtube.com/watch?v=dQw4w9WgXcQ</p>');
+      select('dQw4w9WgXcQ', true);
+      expect(key('Enter').defaultPrevented).toBeTrue();
+      expect(editor.firstElementChild!.matches('figure.video-yt')).toBeTrue();
+      expect(emitted[emitted.length - 1]).toContain('class="video-yt"');
+    });
+
+    it('Enter en un párrafo con más texto no lo convierte', () => {
+      setHtml('<p>mira https://www.youtube.com/watch?v=dQw4w9WgXcQ</p>');
+      select('dQw4w9WgXcQ', true);
+      key('Enter');
+      expect(editor.querySelector('figure')).toBeNull();
+    });
+
+    it('el botón inserta el video del enlace y avisa si no es de YouTube', () => {
+      setHtml('<p>x</p>');
+      select('x', true);
+      const prompt = spyOn(window, 'prompt').and.returnValue('https://vimeo.com/1');
+      component.youtubeFromUrl();
+      expect(notifications.warning).toHaveBeenCalled();
+      expect(editor.querySelector('figure')).toBeNull();
+
+      prompt.and.returnValue('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+      component.youtubeFromUrl();
+      expect(editor.querySelector('figure.video-yt')).not.toBeNull();
+    });
+
+    it('un video guardado vuelve a ser un bloque no editable al abrirlo', () => {
+      setHtml('<figure class="video-yt"><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="x.jpg"></a></figure>');
+      expect(editor.querySelector('figure')!.getAttribute('contenteditable')).toBe('false');
+    });
   });
 
   describe('imágenes', () => {

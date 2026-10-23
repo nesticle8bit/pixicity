@@ -59,4 +59,21 @@ describe('rich-editor-paste', () => {
     many.appendChild(plainTextFragment('uno\r\n\r\ndos\n'));
     expect(many.innerHTML).toBe('<p>uno</p><p><br></p><p>dos</p>');
   });
+
+  it('convierte iframes de YouTube en video y descarta los demás', () => {
+    const out = clean(
+      '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?start=10"></iframe><iframe src="https://evil.com/x"></iframe>',
+    );
+    expect(out).toBe(
+      '<figure class="video-yt" contenteditable="false"><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&amp;t=10s" '
+      + 'target="_blank" rel="noopener noreferrer"><img src="https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg" '
+      + 'alt="Video de YouTube" width="640" height="360"></a></figure>',
+    );
+  });
+
+  it('un video dentro de un párrafo queda como enlace', () => {
+    const out = clean('<p>mira <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"></iframe></p>');
+    expect(out).toContain('<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"');
+    expect(out).not.toContain('<figure');
+  });
 });

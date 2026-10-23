@@ -1,5 +1,6 @@
 import { afterRenderEffect, DestroyRef, Directive, ElementRef, inject, input } from '@angular/core';
 import { idUnico, LENGUAJES_CODIGO, slugTitulo } from '../helpers/contenido-post';
+import { CLASE_VIDEO_YOUTUBE, embedYoutube, videoYoutube } from '../helpers/youtube';
 
 type HLJSApi = typeof import('highlight.js').default;
 
@@ -41,6 +42,7 @@ function cargarHljs(): Promise<HLJSApi> {
  * - bloques de código con colores por lenguaje y botón "Copiar"
  * - ids en los H2/H3 para el índice (ver `indiceDeContenido`)
  * - imágenes que se amplían al hacer clic
+ * - videos de YouTube (miniatura enlazada) que se cambian por el reproductor al hacer clic
  *
  *   <div class="contenido" [appContenidoPost]="post.contenido">…[innerHTML]…</div>
  */
@@ -145,12 +147,34 @@ export class ContenidoPostDirective {
   //  Visor de imágenes
 
   private readonly alHacerClic = (event: MouseEvent): void => {
+    const video = event.target instanceof Element ? event.target.closest<HTMLElement>(`figure.${CLASE_VIDEO_YOUTUBE}`) : null;
+    // Ctrl/Cmd+clic sigue abriendo el video en YouTube
+    if (video && !event.ctrlKey && !event.metaKey && this.host.contains(video) && this.reproducir(video)) {
+      event.preventDefault();
+      return;
+    }
     const img = event.target instanceof HTMLImageElement ? event.target : null;
     // Las imágenes que son enlaces siguen su enlace; los íconos chicos no se amplían
     if (!img || img.closest('a') || img.naturalWidth < 120) return;
     event.preventDefault();
     this.abrirVisor(img);
   };
+
+  // Hasta el clic solo se descarga la miniatura: el reproductor de YouTube pesa cientos de KB por video
+  private reproducir(figura: HTMLElement): boolean {
+    const enlace = figura.querySelector('a');
+    const video = videoYoutube(enlace?.getAttribute('href'));
+    if (!enlace || !video) return false;
+    const iframe = document.createElement('iframe');
+    iframe.src = embedYoutube(video, true);
+    iframe.title = 'Video de YouTube';
+    iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    iframe.allowFullscreen = true;
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+    enlace.replaceWith(iframe);
+    figura.classList.add('is-reproduciendo');
+    return true;
+  }
 
   private readonly alPresionarTecla = (event: KeyboardEvent): void => {
     if (event.key === 'Escape') this.cerrarVisor();

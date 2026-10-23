@@ -3944,6 +3944,16 @@ a.te-tag {
 app-rich-editor .rich-editor__content {
   @include rico.bloques($etiquetas: false);
 
+  // La miniatura del video llena su caja 16:9 (el componente le pone height: auto !important a las imágenes)
+  figure.video-yt {
+    cursor: pointer;
+
+    img {
+      height: 100% !important;
+      border-radius: 0;
+    }
+  }
+
   // Celda con el caret: se marca para ver dónde se está escribiendo
   td:focus-within,
   th:focus-within {

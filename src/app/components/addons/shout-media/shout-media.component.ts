@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnChanges, input, inject, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { VisorImagenService } from '../visor-imagen/visor-imagen.service';
+import { embedYoutube, videoYoutube } from 'src/app/shared/helpers/youtube';
 
 /**
  * Renderiza el media adjunto a un shout según su tipo:
@@ -66,9 +67,9 @@ export class ShoutMediaComponent implements OnChanges {
   private calcularYoutubeEmbed(): SafeResourceUrl | null {
     const url = this.url();
     if (!url) return null;
-    const id = this.extractYoutubeId(url);
-    if (!id) return null;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube-nocookie.com/embed/${id}`);
+    const video = videoYoutube(url);
+    if (!video) return null;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(embedYoutube(video));
   }
 
   private calcularSpotifyEmbed(): SafeResourceUrl | null {
@@ -78,19 +79,5 @@ export class ShoutMediaComponent implements OnChanges {
     const m = url.match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(track|album|playlist|episode|show)\/([a-zA-Z0-9]+)/);
     if (!m) return null;
     return this.sanitizer.bypassSecurityTrustResourceUrl(`https://open.spotify.com/embed/${m[1]}/${m[2]}`);
-  }
-
-  private extractYoutubeId(url: string): string | null {
-    const patterns = [
-      /youtu\.be\/([a-zA-Z0-9_-]{11})/,
-      /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/,
-      /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
-      /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
-    ];
-    for (const p of patterns) {
-      const m = url.match(p);
-      if (m) return m[1];
-    }
-    return null;
   }
 }
