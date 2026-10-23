@@ -8,6 +8,7 @@ import { embedYoutube, videoYoutube } from 'src/app/shared/helpers/youtube';
  * - Video  -> embed de YouTube
  * - Spotify-> embed de Spotify
  * - Foto   -> imagen
+ * - VideoArchivo -> <video> nativo (enlace directo a .mp4/.webm...)
  * - Enlace -> tarjeta con preview Open Graph (imagen + título + descripción)
  */
 @Component({
@@ -58,6 +59,7 @@ export class ShoutMediaComponent implements OnChanges {
   get esSpotify(): boolean { return this.tipo() === 'Spotify'; }
   get esFoto(): boolean { return this.tipo() === 'Foto'; }
   get esEnlace(): boolean { return this.tipo() === 'Enlace'; }
+  get esVideoArchivo(): boolean { return this.tipo() === 'VideoArchivo'; }
 
   private calcularHostname(): string {
     try { return new URL(this.url()!).hostname.replace('www.', ''); }

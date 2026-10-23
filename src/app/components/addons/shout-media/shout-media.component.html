@@ -16,6 +16,11 @@
       aria-label="Ver la imagen en grande">
       <img [src]="url()" alt="Imagen del shout" loading="lazy">
     </a>
+  } @else if (esVideoArchivo) {
+    <!-- click.stop: los controles no deben abrir el detalle del shout. -->
+    <video class="sm-video" [src]="url()" controls playsinline preload="metadata" (click)="$event.stopPropagation()">
+      <a [href]="url()" target="_blank" rel="noopener">Ver el video</a>
+    </video>
   } @else if (esEnlace) {
     <a [href]="url()" target="_blank" rel="noopener" class="sm-card" [class.sm-card--grande]="!!mediaImagen() && !imagenFallo()">
       @if (mediaImagen(); as mediaImagen) {

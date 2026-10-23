@@ -56,6 +56,7 @@ export class TableShoutsComponent implements OnInit {
       { valor: 'Video', label: 'Video' },
       { valor: 'Enlace', label: 'Enlace' },
       { valor: 'Spotify', label: 'Spotify' },
+      { valor: 'VideoArchivo', label: 'Video (archivo)' },
     ],
   };
 

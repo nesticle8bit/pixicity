@@ -44,6 +44,15 @@
   }
 }
 
+//  Video directo (.mp4/.webm)
+.sm-video {
+  display: block;
+  width: 100%;
+  max-height: 480px;
+  border-radius: 10px;
+  background: #000;
+}
+
 //  Tarjeta de enlace (Open Graph)
 .sm-card {
   display: flex;

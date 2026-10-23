@@ -22,6 +22,7 @@ export function detectarTipoShout(url: string): string {
   if (u.includes('youtube.com') || u.includes('youtu.be')) return 'Video';
   if (u.includes('spotify.com')) return 'Spotify';
   if (/\.(jpg|jpeg|png|gif|webp|bmp|avif)(\?.*)?$/.test(u)) return 'Foto';
+  if (/\.(mp4|webm|mov|m4v|ogv)(\?.*)?$/.test(u)) return 'VideoArchivo';
   return 'Enlace';
 }
 
