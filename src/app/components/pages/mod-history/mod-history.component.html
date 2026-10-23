@@ -46,7 +46,7 @@
               @if (esSistema(e)) {
                 <span class="text-muted" matTooltip="Acción automática del sitio">Sistema</span>
               } @else {
-                <button type="button" class="btn btn-link p-0 mh-moderador" [appUserPopover]="e.staffUserName!"
+                <button type="button" class="btn btn-link fs-11 p-0 mh-moderador" [appUserPopover]="e.staffUserName!"
                   (click)="verDe(e.staffUserName!)" [attr.aria-label]="'Ver solo las acciones de ' + e.staffUserName">
                   {{e.staffUserName}}
                 </button>
