@@ -8,6 +8,7 @@ import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interfa
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { sumarContexto } from 'src/app/services/shared/seo-title.strategy';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { ShareButtonsComponent } from '../../addons/share-buttons/share-buttons.component';
@@ -15,13 +16,13 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { NgClass, DecimalPipe, DatePipe, DOCUMENT } from '@angular/common';
 import { FotoComentariosComponent } from '../foto-comentarios/foto-comentarios.component';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
-import { ThumbPipe } from '../../../shared/pipes/thumb.pipe';
+import { ThumbFotoPipe } from '../../../shared/pipes/thumb.pipe';
 
 @Component({
     selector: 'app-foto-detail',
     templateUrl: './foto-detail.component.html',
     styleUrls: ['./foto-detail.component.scss'],
-    imports: [CargandoComponent, ThumbPipe, 
+    imports: [CargandoComponent, ThumbFotoPipe, 
         RouterLink,
         UserPopoverDirective,
         UserAvatarComponent,
@@ -86,7 +87,7 @@ export class FotoDetailComponent implements OnInit {
         }
 
         this.seoService.setSEO({
-          title: this.foto.titulo,
+          title: sumarContexto(this.foto.titulo, `Foto de @${this.foto.usuario}`),
           description: this.foto.descripcion
             ? this.foto.descripcion.replace(/<[^>]*>/g, '').substring(0, 200)
             : `Foto "${this.foto.titulo}" de ${this.foto.usuario} en Taringa.`,

@@ -96,6 +96,22 @@ $bar-h: 58px;
   .cp-bar__saved {
     display: none;
   }
+
+  // Los botones de Material miden 64 px de mínimo aunque solo muestren el ícono: tapaban el chip "Nuevo post".
+  // En pantallas de 320 px las acciones bajan a otra fila en vez de encimarse.
+  .cp-bar {
+    flex-wrap: wrap;
+    row-gap: 8px;
+
+    &__actions {
+      margin-left: auto;
+
+      .mat-mdc-button-base {
+        min-width: 0;
+        padding: 0 12px;
+      }
+    }
+  }
 }
 
 // - Layout -
@@ -262,6 +278,16 @@ $bar-h: 58px;
 
   i {
     color: #e6a700;
+  }
+
+  // En flex, cada trozo de texto y el enlace son columnas separadas: en el celular quedaban tres columnas
+  // angostas. Ahí vuelve a ser un párrafo normal.
+  @media (max-width: 575.98px) {
+    display: block;
+
+    i {
+      margin-right: 4px;
+    }
   }
 
   a {

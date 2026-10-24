@@ -1,7 +1,6 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { EstadoApelacion, MiModeracion } from 'src/app/models/admin/moderacion.model';
@@ -21,7 +20,6 @@ export class ApelacionesComponent implements OnInit {
   private displayService = inject(DisplayComponentService);
   private moderacionService = inject(IHttpModeracionService);
   private notificationService = inject(NotificationService);
-  private title = inject(Title);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly Estado = EstadoApelacion;
@@ -34,7 +32,6 @@ export class ApelacionesComponent implements OnInit {
   public enviando = false;
 
   constructor() {
-    this.title.setTitle('Mis apelaciones | Taringa - Inteligencia colectiva | Comunidad para Compartir Información');
     this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: false, submenu: true, background: '' });
   }
 

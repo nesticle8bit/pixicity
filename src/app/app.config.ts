@@ -14,7 +14,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { Title } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideRouter } from '@angular/router';
+import { provideRouter, TitleStrategy } from '@angular/router';
 import { provideToastr } from 'ngx-toastr';
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
 import { environment } from 'src/environments/environment';
@@ -60,6 +60,7 @@ import { IHttpRangosService } from './services/interfaces/httpRangos.interface';
 import { IHttpComentariosPostService } from './services/interfaces/httpComentariosPost.interface';
 import { DisplayComponentService } from './services/shared/displayComponents.service';
 import { SEOService } from './services/shared/seo.service';
+import { SeoTitleStrategy } from './services/shared/seo-title.strategy';
 import { ClientErrorHandler } from './shared/errors/client-error-handler';
 import { getSpanishPaginatorIntl } from './shared/helpers/getSpanishPaginatorIntl';
 import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
@@ -80,8 +81,9 @@ const SIN_LOADER = [
   'notificaciones/recientes',
   'notificaciones/leidas',
   'notificaciones/estadisticas',
-  'mensajes/recientes',
-  'mensajes/leidos',
+  // Mensajes: bandeja, conversación, envío, imágenes, archivar/silenciar... tienen su propio estado en pantalla
+  // (el chat se refresca en vivo y el overlay lo tapaba). La tabla del admin sí lo muestra, como las demás.
+  'mensajes(?!/admin)(/[^?]*)?',
   'comentarios/recientes',
   'tops/posts',
   'tops/usuarios',
@@ -126,6 +128,8 @@ export const appConfig: ApplicationConfig = {
     // La app depende de zone.js (setTimeout/suscripciones que mutan estado): sin esto Angular 21 arranca zoneless.
     provideZoneChangeDetection(),
     provideRouter(routes),
+    // Cada ruta publica su title/descripcion como SEO por defecto (ver app.routes).
+    { provide: TitleStrategy, useClass: SeoTitleStrategy },
     provideHttpClient(withFetch(), withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

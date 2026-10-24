@@ -222,17 +222,29 @@
     padding: 12px;
     border-radius: 14px;
 
+    // Imagen y emoji juntos en una fila y "Compartir" a lo ancho debajo (en columna cada ícono ocupaba una fila).
     &__actions {
-      flex-direction: column;
-      align-items: stretch;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 6px;
     }
 
     &__hint {
       display: none;
     }
+
+    // El campo del enlace medía 22 px de alto: se agranda lo tocable sin cambiar el alto de la caja.
+    &__media {
+      padding-block: 3px;
+    }
+
+    &__url {
+      padding-block: 5px;
+    }
   }
 
   .sh-btn {
+    flex-basis: 100%;
     justify-content: center;
   }
 }

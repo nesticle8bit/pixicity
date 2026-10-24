@@ -27,10 +27,10 @@
                       <div class="flex-shrink-0">
                         @if (notificacion.usuarioQueHaceAccion) {
                           <app-user-avatar
-                            matTooltip="{{notificacion.usuarioQueHaceAccion?.userName}}"
+                            matTooltip="{{notificacion.usuarioQueHaceAccion.userName}}"
                             [matTooltipPosition]="'before'"
                             [avatar]="notificacion.usuarioQueHaceAccion.avatar"
-                            [userName]="notificacion.usuarioQueHaceAccion?.userName"
+                            [userName]="notificacion.usuarioQueHaceAccion.userName"
                           [height]="20"></app-user-avatar>
                         }
                       </div>
@@ -93,8 +93,8 @@
                         <div class="flex-grow-1 ms-2" [routerLink]="['/mensajes/conversacion/' + mensaje.id]">
                           <!-- <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor> -->
                           <span class="inner-text">
-                            <a [routerLink]="['/perfil/' + mensaje.usuarioDe?.userName]" [appUserPopover]="mensaje.usuarioDe?.userName">
-                              {{mensaje.usuarioDe?.userName}}
+                            <a [routerLink]="['/perfil/' + mensaje.usuarioDe.userName]" [appUserPopover]="mensaje.usuarioDe.userName">
+                              {{mensaje.usuarioDe.userName}}
                             </a>
                             <article class="cursor--pointer">
                               <p [innerHTML]="mensaje.contenido | truncate:[30]"></p>
@@ -133,16 +133,17 @@
                     @if (favoritos.length < 1) {
                       <div class="errr">No hay favoritos</div>
                     }
-                    @for (favorito of favoritos; track favorito) {
+                    @for (favorito of favoritos; track favorito.id) {
+                      @if (favorito.post; as post) {
                       <li class="list-items">
-                        <a [routerLink]="['/posts/' + favorito.post.categoria.seo + '/' + favorito.post.id + '/' + favorito.post.url]"
-                          title="{{favorito.post.titulo}}">
-                          <img src="/assets/images/categorias/{{favorito.post.categoria.icono}}"
-                            title="{{favorito.post.categoria.nombre}}"
-                            alt="{{favorito.post.categoria.nombre}}" loading="lazy"/>
-                            {{favorito.post.titulo | truncate:[44]}}
+                        <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
+                          title="{{post.titulo}}">
+                          <img src="/assets/images/categorias/{{post.categoria.icono}}"
+                            alt="" aria-hidden="true" loading="lazy"/>
+                            {{post.titulo | truncate:[44]}}
                           </a>
                         </li>
+                      }
                       }
                     </ul>
                     <a [routerLink]="['/favoritos']" class="vemas">Más</a>

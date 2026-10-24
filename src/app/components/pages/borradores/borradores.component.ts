@@ -9,6 +9,7 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
 import { RouterLink } from '@angular/router';
 import { MatTooltip } from '@angular/material/tooltip';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
+import { BorradorViewModel, CategoriaConteo } from 'src/app/models/posts/post-vm.model';
 
 @Component({
     selector: 'app-borradores',
@@ -32,8 +33,8 @@ export class BorradoresComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public borradores: any[] = [];
-  public categorias: any[] = [];
+  public borradores: BorradorViewModel[] = [];
+  public categorias: CategoriaConteo[] = [];
   public totalCount: number = 0;
   public formGroup: FormGroup;
 
@@ -71,7 +72,7 @@ export class BorradoresComponent implements OnInit {
       });
   }
 
-  filterByCategory(categoria: any): void {
+  filterByCategory(categoria: CategoriaConteo): void {
     if (!categoria) {
       return;
     }
@@ -79,7 +80,7 @@ export class BorradoresComponent implements OnInit {
     this.getBorradores(categoria.categoria.id);
   }
 
-  deleteBorrador(borrador: any): void {
+  deleteBorrador(borrador: BorradorViewModel): void {
     const accion = !borrador.eliminado ? 'eliminar' : 'recuperar';
 
     if (!this.notificationService.confirm(`¿Seguro que deseas ${accion} este borrador?`)) {

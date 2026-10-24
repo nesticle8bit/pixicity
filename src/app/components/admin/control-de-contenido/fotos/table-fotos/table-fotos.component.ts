@@ -15,13 +15,13 @@ import { UserPopoverDirective } from '../../../../../shared/directives/userPopov
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
-import { ThumbPipe } from '../../../../../shared/pipes/thumb.pipe';
+import { ThumbFotoPipe } from '../../../../../shared/pipes/thumb.pipe';
 
 @Component({
     selector: 'app-table-fotos',
     templateUrl: './table-fotos.component.html',
     styleUrls: ['./table-fotos.component.scss'],
-    imports: [ThumbPipe, 
+    imports: [ThumbFotoPipe, 
         AdminFiltrosComponent,
         NgClass,
         RouterLink,

@@ -98,7 +98,7 @@
               @for (otraFoto of foto.otrasFotosUsuario; track otraFoto.id) {
               <a [routerLink]="['/fotos', foto.usuario, otraFoto.id, otraFoto.url]" class="sidebar-thumb"
                 [title]="otraFoto.titulo">
-                <img [src]="otraFoto.imageUrl | thumb: 120" [alt]="otraFoto.titulo" loading="lazy">
+                <img [src]="otraFoto | thumbFoto: 120" [alt]="otraFoto.titulo" loading="lazy">
                 <div class="sidebar-thumb-overlay">
                   <span class="overlay-title">{{otraFoto.titulo}}</span>
                   <span class="overlay-stat">

@@ -11,6 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { sumarContexto } from 'src/app/services/shared/seo-title.strategy';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { GenreIconComponent } from '../../addons/genre-icon/genre-icon.component';
 import { CountryFlagComponent } from '../../addons/country-flag/country-flag.component';
@@ -212,7 +213,12 @@ export class PerfilComponent implements OnInit {
         const perfilVacio = !(this.currentUser.postsCount ?? 0) && !(this.currentUser.comentariosCount ?? 0);
         this.seoService.setSEO({
           noIndex: perfilVacio,
-          title: `${this.currentUser.userName} - Perfil`,
+          title: sumarContexto(
+            this.nombreVisible !== this.currentUser.userName
+              ? `${this.nombreVisible} (@${this.currentUser.userName})`
+              : `@${this.currentUser.userName}`,
+            'Perfil',
+          ),
           description: `Perfil de ${this.currentUser.userName} en Taringa. Mira sus posts, shouts, seguidores y actividad en la comunidad.`,
           type: 'profile',
           imageURL: this.currentUser.avatar || '',

@@ -5,15 +5,15 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BusquedaPostsFiltro, BusquedaPostsResultado } from 'src/app/models/posts/busqueda.model';
 import { PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
-import { CloudTagViewModel, FavoritoAlternado, PostDetailResponse, PostInteracciones, PostInteraccionesPagina, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
+import { BorradorViewModel, CloudTagViewModel, PostListaViewModel, FavoritoAlternado, PostDetailResponse, PostInteracciones, PostInteraccionesPagina, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
 @Injectable()
 export abstract class IHttpPostsService {
   /** `version`: la de "homeActualizado", para saltear la caché del navegador. */
-  abstract getPosts(categoria?: string, version?: number): Observable<PaginatedData<PostViewModel>>;
+  abstract getPosts(categoria?: string, version?: number): Observable<PaginatedData<PostListaViewModel>>;
   abstract getPostsAdmin(search: string, filtro?: AdminFiltro): Observable<PaginatedData<PostAdmin>>;
   abstract getPostsByUserId(userId: number): Observable<PaginatedData<PostViewModel>>;
   abstract getPostsByLoggedUser(search: string): Observable<PaginatedData<PostViewModel>>;
-  abstract getStickyPosts(): Observable<PostViewModel[]>;
+  abstract getStickyPosts(): Observable<PostListaViewModel[]>;
   abstract getPostById(postId: number): Observable<PostDetailResponse>;
   abstract savePost(post: Partial<PostViewModel>): Observable<number>;
   abstract updatePost(post: Partial<PostViewModel>): Observable<number>;
@@ -45,7 +45,7 @@ export abstract class IHttpPostsService {
   abstract getTopPosts(date: string, categoriaId?: number): Observable<PostViewModel[]>;
   abstract seguirPost(postId: number): Observable<boolean>;
   abstract getCloudTags(): Observable<CloudTagViewModel[]>;
-  abstract getBorradores(search: string, categoriaId: number): Observable<PaginatedWithCategorias<PostViewModel>>;
+  abstract getBorradores(search: string, categoriaId: number): Observable<PaginatedWithCategorias<BorradorViewModel>>;
   abstract recomendarPost(postId: number): Observable<number>;
   abstract getVotos(filtro?: AdminFiltro): Observable<PaginatedData<unknown>>;
   abstract getPostsRelatedByTitle(title: string): Observable<PostSimpleViewModel[]>;

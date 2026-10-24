@@ -412,211 +412,26 @@
     }
   }
 
-  //  Bubble (estilo Notion)
-  &__bubble {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    background: var(--re-bubble-bg);
-    color: var(--re-bubble-text);
-    border-radius: 8px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
-    // oculto pero medible (offsetWidth/Height) para posicionar bien
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(4px);
-    transition: opacity 0.12s ease, transform 0.12s ease;
-    pointer-events: none;
-
-    // Flecha que apunta a la selección (arriba o abajo según is-below)
-    &::after {
-      content: '';
-      position: absolute;
-      top: 100%;
-      left: var(--arrow-x, 50%);
-      transform: translateX(-50%);
-      border: 6px solid transparent;
-      border-top-color: var(--re-bubble-bg);
-    }
-
-    &.is-below {
-      transform: translateY(-4px);
-
-      &::after {
-        top: auto;
-        bottom: 100%;
-        border-top-color: transparent;
-        border-bottom-color: var(--re-bubble-bg);
-      }
-    }
-
-    &.is-visible {
-      visibility: visible;
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-
-    button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      border: none;
-      border-radius: 5px;
-      padding: 5px 6px;
-      cursor: pointer;
-      color: var(--re-bubble-text);
-      line-height: 1;
-      flex-shrink: 0;
-      transition: background 0.12s, color 0.12s;
-
-      mat-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
-      }
-
-      &:hover {
-        background: var(--re-bubble-hover);
-        color: #fff;
-      }
-
-      &:focus-visible {
-        outline: 2px solid var(--re-bubble-accent);
-        outline-offset: -2px;
-      }
-
-      &.active {
-        color: var(--re-bubble-accent);
-      }
-    }
-  }
-
-  &__bubble-row {
-    display: flex;
-    align-items: center;
-    gap: 1px;
-    padding: 4px 5px;
-
-    .btn-color {
-      padding-right: 2px;
-
-      .arrow {
-        font-size: 15px;
-        width: 13px;
-        height: 15px;
-        margin-left: -3px;
-      }
-    }
-  }
-
-  &__bubble-sep {
-    width: 1px;
-    align-self: stretch;
-    margin: 4px 3px;
-    background: var(--re-bubble-separator);
-  }
-
-  &__bubble-palette {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 200px;
-    padding: 6px 8px 8px;
-    border-top: 1px solid var(--re-bubble-separator);
-
+  // Paleta dentro del bubble (oscuro). La plantilla es de este componente aunque se pinte en
+  // app-rich-editor-bubble, por eso estos estilos viven aquí (ngTemplateOutletContext → .is-dark).
+  &__palette-section.is-dark {
     .rich-editor__palette-label {
       color: #9a9a9a;
     }
 
     .rich-editor__swatches button.swatch {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border-color: rgba(255, 255, 255, 0.25);
 
       &.swatch--reset {
         color: var(--re-bubble-text);
       }
-    }
-  }
 
-  // Vista previa del enlace bajo el caret
-  &__link-url {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    max-width: 260px;
-    padding: 4px 6px;
-    border-radius: 5px;
-    color: var(--re-bubble-accent);
-    font-size: 13px;
-    text-decoration: none;
-
-    span {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    mat-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-    }
-
-    &:hover {
-      background: var(--re-bubble-hover);
-      text-decoration: underline;
-    }
-  }
-
-  &__bubble-link {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 8px;
-    width: min(320px, calc(100vw - 32px));
-
-    > mat-icon {
-      color: #9a9a9a;
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-    }
-
-    input {
-      flex: 1;
-      min-width: 0;
-      background: var(--re-bubble-input-bg);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 5px;
-      padding: 6px 9px;
-      color: #fff;
-      font-size: 13px;
-      outline: none;
-
-      &::placeholder {
-        color: #888;
-      }
-
-      &:focus {
-        border-color: var(--re-bubble-accent);
-      }
-    }
-
-    button {
-      padding: 5px;
-
-      &.apply:hover {
-        color: #5ed07a;
-      }
-
-      &.remove:hover {
-        color: #ff7b7b;
+      &:focus-visible {
+        outline: 2px solid var(--re-bubble-accent);
+        outline-offset: -2px;
       }
     }
   }
@@ -661,7 +476,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rich-editor__bubble,
   .rich-editor__content .rich-editor__uploading {
     transition: none;
     animation: none;

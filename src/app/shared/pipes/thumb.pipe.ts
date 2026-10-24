@@ -27,9 +27,31 @@ export function thumbUrl(url: string | null | undefined, anchoMostrado: number):
     return url;
   }
 
+  return `${origen}/images/_t/${anchoMiniatura(anchoMostrado)}/${url.slice(i + '/images/'.length)}`;
+}
+
+/** El doble del tamaño en pantalla (retina), redondeado al ancho disponible más cercano. */
+function anchoMiniatura(anchoMostrado: number): number {
   const deseado = Math.max(1, anchoMostrado) * 2;
-  const ancho = ANCHOS_MINIATURA.find((a) => a >= deseado) ?? ANCHOS_MINIATURA[ANCHOS_MINIATURA.length - 1];
-  return `${origen}/images/_t/${ancho}/${url.slice(i + '/images/'.length)}`;
+  return ANCHOS_MINIATURA.find((a) => a >= deseado) ?? ANCHOS_MINIATURA[ANCHOS_MINIATURA.length - 1];
+}
+
+/**
+ * Miniatura de una foto. Las subidas al sitio usan /images/_t como cualquier imagen; las que están en otro sitio
+ * (postimg, imgur...) usan /images/_foto/{ancho}/{id}.webp: el API las baja una vez y las reduce (ver
+ * MiniaturaFotoEndpoints). Los GIF se dejan como están para no perder la animación.
+ */
+export function thumbFotoUrl(foto: { id: number; imageUrl: string } | null | undefined, anchoMostrado: number): string {
+  const url = foto?.imageUrl ?? '';
+  const local = thumbUrl(url, anchoMostrado);
+  if (local !== url || !foto?.id || !/^https?:\/\//i.test(url) || /\.gif(\?|$)/i.test(url)) {
+    return local;
+  }
+  // Una URL absoluta de nuestro propio /images/ con formato no soportado (gif, etc.) ya volvió sin cambios arriba.
+  if (url.startsWith(`${environment.publicUrl}/images/`) || (environment.api && url.startsWith(`${environment.api}/images/`))) {
+    return url;
+  }
+  return `${environment.api}/images/_foto/${anchoMiniatura(anchoMostrado)}/${foto.id}.webp`;
 }
 
 /** `<img [src]="foto.imageUrl | thumb: 160">` → miniatura WebP del tamaño adecuado. */
@@ -37,5 +59,13 @@ export function thumbUrl(url: string | null | undefined, anchoMostrado: number):
 export class ThumbPipe implements PipeTransform {
   transform(url: string | null | undefined, anchoMostrado: number): string {
     return thumbUrl(url, anchoMostrado);
+  }
+}
+
+/** `<img [src]="foto | thumbFoto: 280">` → miniatura WebP de la foto, también si la imagen es externa. */
+@Pipe({ name: 'thumbFoto' })
+export class ThumbFotoPipe implements PipeTransform {
+  transform(foto: { id: number; imageUrl: string } | null | undefined, anchoMostrado: number): string {
+    return thumbFotoUrl(foto, anchoMostrado);
   }
 }

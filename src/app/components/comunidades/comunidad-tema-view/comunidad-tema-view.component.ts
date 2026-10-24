@@ -9,6 +9,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { sumarContexto } from 'src/app/services/shared/seo-title.strategy';
 import { TemaComentario, TemaDetalle } from 'src/app/models/comunidades/comunidad.model';
 import { idUsuarioSesion, JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { ComentarioHilo, ComentariosAcciones } from 'src/app/models/shared/comentario-hilo.model';
@@ -134,7 +135,7 @@ export class ComunidadTemaViewComponent implements OnInit {
         const limpio = (tema.contenido || '').replace(/<[^>]*>/g, '').trim();
         const imagen = /<img[^>]+src=["']([^"']+)["']/i.exec(tema.contenido ?? '')?.[1] ?? '';
         this.seoService.setSEO({
-          title: tema.titulo,
+          title: sumarContexto(tema.titulo, tema.comunidad?.nombre),
           description: limpio ? limpio.substring(0, 200) : `${tema.titulo} - Tema en la comunidad ${tema.comunidad?.nombre ?? ''} de Taringa.`,
           type: 'article',
           imageURL: imagen,

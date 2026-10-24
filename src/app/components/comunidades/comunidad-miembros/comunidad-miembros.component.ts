@@ -9,6 +9,7 @@ import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunid
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { SEOService } from 'src/app/services/shared/seo.service';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 
@@ -27,6 +28,7 @@ export class ComunidadMiembrosComponent implements OnInit {
   private comunidadesService = inject(IHttpComunidadesService);
   private securityService = inject(IHttpSecurityService);
   private notificationService = inject(NotificationService);
+  private seoService = inject(SEOService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -50,7 +52,19 @@ export class ComunidadMiembrosComponent implements OnInit {
     this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.slug = params['slug'];
       this.comunidadesService.getComunidad(this.slug).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-        next: (c) => { this.comunidad = c; this.loadMiembros(); },
+        next: (c) => {
+          this.comunidad = c;
+          // Listado de usuarios sin contenido propio: título real, pero fuera del índice.
+          this.seoService.setSEO({
+            title: `Miembros de ${c.nombre}`,
+            description: `Los miembros de la comunidad ${c.nombre} en Taringa.`,
+            type: 'website',
+            imageURL: c.imagen || '',
+            tags: [],
+            noIndex: true,
+          });
+          this.loadMiembros();
+        },
         error: () => this.router.navigate(['/comunidades']),
       });
     });

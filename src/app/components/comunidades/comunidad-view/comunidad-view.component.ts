@@ -12,6 +12,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { sumarContexto } from 'src/app/services/shared/seo-title.strategy';
 import { FormsModule } from '@angular/forms';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
@@ -91,7 +92,7 @@ export class ComunidadViewComponent implements OnInit {
         this.seoService.setSEO({
           // Sin temas es una página vacía: se indexa cuando tenga contenido.
           noIndex: !comunidad.temasCount,
-          title: comunidad.nombre,
+          title: sumarContexto(comunidad.nombre, 'Comunidad'),
           description: comunidad.descripcion || `Comunidad ${comunidad.nombre} en Taringa. Únete, participa en sus temas y comparte con la comunidad.`,
           type: 'website',
           imageURL: comunidad.imagen || '',

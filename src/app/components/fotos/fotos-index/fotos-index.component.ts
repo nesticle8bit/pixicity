@@ -2,7 +2,9 @@ import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
+import { FotoViewModel } from 'src/app/models/fotos/foto-vm.model';
+import { Pagination } from 'src/app/models/api/api-response.model';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -11,13 +13,13 @@ import { UserPopoverDirective } from '../../../shared/directives/userPopover.dir
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { NgClass } from '@angular/common';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
-import { ThumbPipe } from '../../../shared/pipes/thumb.pipe';
+import { ThumbFotoPipe } from '../../../shared/pipes/thumb.pipe';
 
 @Component({
     selector: 'app-fotos-index',
     templateUrl: './fotos-index.component.html',
     styleUrls: ['./fotos-index.component.scss'],
-    imports: [CargandoComponent, ThumbPipe, 
+    imports: [CargandoComponent, ThumbFotoPipe, 
         RouterLink,
         UserPopoverDirective,
         UserAvatarComponent,
@@ -35,8 +37,8 @@ export class FotosIndexComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public fotos: any[] = [];
-  public pagination: any = {};
+  public fotos: FotoViewModel[] = [];
+  public pagination: Partial<Pagination> = {};
   public currentUser?: JwtUserModel;
   public loading: boolean = false;
   public userName: string = '';
@@ -120,7 +122,7 @@ export class FotosIndexComponent implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  queryParamsPara(pagina: number): any {
+  queryParamsPara(pagina: number): Params {
     return pagina <= 1 ? { page: null } : { page: pagina };
   }
 

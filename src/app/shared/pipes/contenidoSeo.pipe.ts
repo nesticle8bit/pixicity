@@ -12,7 +12,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class ContenidoSeoPipe implements PipeTransform {
   private static readonly IMG = /<img\b[^>]*?\/?>/gis;
 
-  transform(html: string, titulo: string = ''): string {
+  transform(html: string | null | undefined, titulo: string = ''): string {
     if (!html) {
       return '';
     }

@@ -20,6 +20,10 @@ import { SsrSalud } from './shared/helpers/ssr-salud';
 
 /** Tarjeta social del sitio (1200x630) para páginas sin imagen propia. */
 const DEFAULT_OG_IMAGE = '/assets/images/og-image.jpg';
+/** Mismos textos que index.html: los usan las páginas sin título o descripción propios. */
+const DEFAULT_TITLE = 'Taringa! - Inteligencia colectiva | Posts y comunidades';
+const DEFAULT_DESCRIPTION =
+  'Compartí y descubrí posts, guías, fotos, videos y memes en Taringa!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos.';
 
 @Component({
     selector: 'app-root',
@@ -46,12 +50,11 @@ export class AppComponent {
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly document = inject(DOCUMENT);
-  // En el render del servidor (SSR, solo para bots) no hay window ni prerender: ver isPlatformBrowser.
+  // En el render del servidor (SSR, solo para bots) no hay window: ver isPlatformBrowser.
   private readonly esNavegador = isPlatformBrowser(inject(PLATFORM_ID));
   // Respuesta HTTP del render en el servidor: permite devolver 404/403 reales a los bots.
   private readonly respuestaSsr = inject(RESPONSE_INIT, { optional: true });
   private readonly ssrSalud = inject(SsrSalud);
-  private prerenderTimer: any = null;
 
   public displayComponent: DisplayComponentModel = {
     mainMenu: true,
@@ -79,36 +82,37 @@ export class AppComponent {
       .getSEO()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: SEOModel) => {
-      if (value.title) {
-        this.title.setTitle(this.buildTitle(value.title));
-        this.meta.updateTag({ property: 'og:title', content: value.title });
-        this.meta.updateTag({ name: 'twitter:title', content: value.title });
-        this.meta.updateTag({
-          property: 'og:site_name',
-          content: 'Taringa! - Inteligencia colectiva',
-        });
-      }
+      // Sin título/descripción propios se vuelve a los del sitio: antes quedaban los de la página anterior.
+      const titulo = value.title || DEFAULT_TITLE;
+      this.title.setTitle(this.buildTitle(titulo));
+      this.meta.updateTag({ property: 'og:title', content: titulo });
+      this.meta.updateTag({ name: 'twitter:title', content: titulo });
+      this.meta.updateTag({
+        property: 'og:site_name',
+        content: 'Taringa! - Inteligencia colectiva',
+      });
 
-      if (value.description) {
-        this.meta.updateTag({
-          name: 'description',
-          content: value.description,
-        });
-        this.meta.updateTag({
-          property: 'og:description',
-          content: value.description,
-        });
-        this.meta.updateTag({
-          name: 'twitter:description',
-          content: value.description,
-        });
-      }
+      const descripcion = value.description || DEFAULT_DESCRIPTION;
+      this.meta.updateTag({
+        name: 'description',
+        content: descripcion,
+      });
+      this.meta.updateTag({
+        property: 'og:description',
+        content: descripcion,
+      });
+      this.meta.updateTag({
+        name: 'twitter:description',
+        content: descripcion,
+      });
 
       if (value.tags?.length) {
         this.meta.updateTag({
           name: 'keywords',
           content: value.tags.join(', ').toLowerCase(),
         });
+      } else {
+        this.meta.removeTag("name='keywords'");
       }
 
       // og:image debe ser absoluta: las redes y Google descartan las relativas. Sin imagen propia se usa la
@@ -126,9 +130,7 @@ export class AppComponent {
         this.meta.updateTag({ property: 'og:image:height', content: '630' });
       }
 
-      if (value.type) {
-        this.meta.updateTag({ property: 'og:type', content: value.type });
-      }
+      this.meta.updateTag({ property: 'og:type', content: value.type || 'website' });
 
       // article:* solo tiene sentido cuando og:type es 'article'.
       this.setArticleMeta(value);
@@ -144,18 +146,14 @@ export class AppComponent {
       });
 
       this.setJsonLd(value.jsonLd);
-      this.setPrerenderStatus(value.statusCode);
-
-      // La pagina ya tiene su SEO real: el prerender puede capturar el HTML.
-      this.markPrerenderReady();
+      this.setStatusSsr(value.statusCode);
     });
 
     this.router.events
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((evt) => {
       if (evt instanceof NavigationStart) {
-        // Antes de activar la ruta: el HTML todavia no es el definitivo.
-        this.resetPrerenderReady();
+        this.seoService.iniciarNavegacion();
         return;
       }
 
@@ -178,36 +176,6 @@ export class AppComponent {
   }
 
   /**
-   * El server de prerender espera window.prerenderReady=true antes de
-   * serializar el DOM. Se resetea en cada navegacion y se marca listo cuando
-   * la pagina publica su SEO; el timer es el fallback para vistas que no lo hacen.
-   */
-  private resetPrerenderReady(): void {
-    if (!this.esNavegador) {
-      return;
-    }
-    (window as any).prerenderReady = false;
-
-    if (this.prerenderTimer) {
-      clearTimeout(this.prerenderTimer);
-    }
-
-    this.prerenderTimer = setTimeout(() => this.markPrerenderReady(), 6000);
-  }
-
-  private markPrerenderReady(): void {
-    if (!this.esNavegador) {
-      return;
-    }
-    if (this.prerenderTimer) {
-      clearTimeout(this.prerenderTimer);
-      this.prerenderTimer = null;
-    }
-
-    (window as any).prerenderReady = true;
-  }
-
-  /**
    * Google corta el title alrededor de los 60 caracteres. Se agrega la marca
    * solo si entra; si el titulo ya es largo, el sufijo solo robaria espacio.
    */
@@ -215,6 +183,12 @@ export class AppComponent {
     const MAX = 60;
     const sufijoCorto = ' - Taringa';
     const sufijoLargo = ' - Taringa - Inteligencia colectiva';
+
+    // Cada página de un listado tiene canonical propio (?page=N): sin esto todas compartían título.
+    const pagina = this.paginaActual();
+    if (pagina > 1 && !/página \d/i.test(titulo)) {
+      titulo = `${titulo} - Página ${pagina}`;
+    }
 
     if (/taringa/i.test(titulo)) {
       return titulo;
@@ -229,6 +203,12 @@ export class AppComponent {
     }
 
     return titulo;
+  }
+
+  private paginaActual(): number {
+    const query = this.router.url.split('?')[1] ?? '';
+    const pagina = Number(new URLSearchParams(query.split('#')[0]).get('page'));
+    return Number.isInteger(pagina) ? pagina : 1;
   }
 
   private setArticleMeta(value: SEOModel): void {
@@ -265,7 +245,7 @@ export class AppComponent {
     return `${origin}${url.startsWith('/') ? '' : '/'}${url}`;
   }
 
-  private setJsonLd(data: any): void {
+  private setJsonLd(data: SEOModel['jsonLd']): void {
     const head = this.document.head;
     let script = head.querySelector('script[type="application/ld+json"][data-page-seo]');
 
@@ -284,24 +264,12 @@ export class AppComponent {
     script.textContent = JSON.stringify(data);
   }
 
-  /** Prerender lee estos metas para devolver el status HTTP real (evita soft 404). */
-  private setPrerenderStatus(statusCode?: number): void {
+  /** Status HTTP real del render en el servidor (404 de páginas inexistentes en vez de un soft 404). */
+  private setStatusSsr(statusCode?: number): void {
     // Si el API falló durante el render (SsrSalud) se queda el 503: nunca convertir un fallo en "no encontrado".
     if (this.respuestaSsr && !this.ssrSalud.apiFallo) {
       this.respuestaSsr.status = statusCode || 200;
     }
-
-    const existing = this.document.head.querySelector('meta[name="prerender-status-code"]');
-    existing?.remove();
-
-    if (!statusCode || statusCode === 200) {
-      return;
-    }
-
-    const meta = this.document.createElement('meta');
-    meta.setAttribute('name', 'prerender-status-code');
-    meta.setAttribute('content', String(statusCode));
-    this.document.head.appendChild(meta);
   }
 
   private setCanonical(url: string): void {

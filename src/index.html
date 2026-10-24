@@ -15,11 +15,6 @@
   <meta name="apple-mobile-web-app-title" content="Taringa!" />
   <meta name="format-detection" content="telephone=no" />
 
-  <!-- Prerender (bots): el server de prerender espera a que la app marque -->
-  <!-- prerenderReady=true (SEOService) antes de capturar el HTML. Sin esto -->
-  <!-- Googlebot recibia el shell vacio y no indexaba nada. -->
-  <script>window.prerenderReady = false;</script>
-
   <link rel="canonical" href="https://taringas.net/" />
 
   <!-- Open Graph (Facebook, WhatsApp, Telegram, Discord, LinkedIn) -->
@@ -69,6 +64,9 @@
 
   <link rel="alternate" type="application/rss+xml" title="Taringa! - Posts recientes" href="/rss" />
 
+  <!-- Fondo del header: en móvil es el LCP y, como es un background del CSS, el navegador lo descubría recién
+       cuando Angular pintaba el header. -->
+  <link rel="preload" as="image" href="/assets/images/header-bg-3.png" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- La hoja de fuentes se carga sin bloquear el render: llega como print y

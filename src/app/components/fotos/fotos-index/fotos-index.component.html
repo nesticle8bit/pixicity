@@ -33,7 +33,7 @@
         @for (foto of fotos; track foto.id) {
         <div class="foto-card">
           <a [routerLink]="['/fotos', foto.usuario, foto.id, foto.url]" class="foto-thumb">
-            <img [src]="foto.imageUrl | thumb: 280" [alt]="foto.titulo" loading="lazy">
+            <img [src]="foto | thumbFoto: 280" [alt]="foto.titulo" loading="lazy">
             <div class="foto-overlay">
               <span class="foto-overlay-title">{{foto.titulo}}</span>
               <div class="foto-overlay-stats">
@@ -60,7 +60,7 @@
         }
       </div>
 
-      @if (pagination.totalPages > 1) {
+      @if ((pagination.totalPages ?? 0) > 1) {
       <div class="fotos-pagination">
         @for (page of totalPages; track page) {
         <a class="page-btn" [ngClass]="{'active': page === pagination.currentPage}" [routerLink]="[]"

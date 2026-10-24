@@ -1,4 +1,5 @@
 import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
+import { MonitorAdmin } from 'src/app/models/admin/filas-admin.model';
 import { NotificationService } from '../shared/notification.service';
 import { IHttpLogsService } from '../interfaces/httpLogs.interface';
 import { PaginationService } from '../shared/pagination.service';
@@ -91,9 +92,9 @@ export class HttpLogsService implements IHttpLogsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getMonitorsAdmin(filtro: AdminFiltro = {}): Observable<PaginatedData<MonitorViewModel>> {
+  getMonitorsAdmin(filtro: AdminFiltro = {}): Observable<PaginatedData<MonitorAdmin>> {
     return this.http
-      .get<ApiResponse<PaginatedData<MonitorViewModel>>>(
+      .get<ApiResponse<PaginatedData<MonitorAdmin>>>(
         `${environment.api}/api/notificaciones/admin?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}`, { params: adminParams(filtro) },
       )
       .pipe(

@@ -3,7 +3,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTooltip } from '@angular/material/tooltip';
-import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AccionModeracion, ModeracionLog } from 'src/app/models/admin/moderacion.model';
@@ -22,7 +21,6 @@ import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 export class ModHistoryComponent implements OnInit {
   private displayService = inject(DisplayComponentService);
   private moderacionService = inject(IHttpModeracionService);
-  private title = inject(Title);
 
   private readonly destroyRef = inject(DestroyRef);
 
@@ -37,7 +35,6 @@ export class ModHistoryComponent implements OnInit {
   public moderador = '';
 
   constructor() {
-    this.title.setTitle(`Historial de moderación | Taringa - Inteligencia colectiva | Comunidad para Compartir Información`);
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,

@@ -91,3 +91,30 @@ export interface PostAdmin {
   userName: string;
   ip: string;
 }
+
+/** Usuario resumido de las filas de notificaciones (null si el aviso es del sistema). */
+export interface UsuarioFilaAdmin {
+  id: number | null;
+  userName: string | null;
+  avatar: string | null;
+}
+
+/** GET api/notificaciones/admin: proyección propia del controlador, con el destinatario (`usuario`). */
+export interface MonitorAdmin {
+  id: number;
+  eliminado: boolean;
+  fechaRegistro: string;
+  leido: boolean;
+  mensaje: string;
+  tipo: number;
+  tipoString: string;
+  post: {
+    id: number | null;
+    url: string | null;
+    titulo: string | null;
+    eliminado: boolean | null;
+    categoria: { id: number | null; icono: string | null; nombre: string | null; seo: string | null };
+  };
+  usuarioQueHaceAccion: UsuarioFilaAdmin;
+  usuario: UsuarioFilaAdmin;
+}

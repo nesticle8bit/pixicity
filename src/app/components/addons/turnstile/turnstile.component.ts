@@ -40,7 +40,11 @@ function cargarTurnstile(): Promise<void> {
   selector: 'app-turnstile',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<div #contenedor class="turnstile"></div>`,
-  styles: `.turnstile { min-height: 65px; }`,
+  styles: `
+    :host { display: block; }
+    .turnstile { min-height: 65px; max-width: 100%; }
+    .turnstile--compacto { min-height: 140px; }
+  `,
 })
 export class TurnstileComponent {
   readonly siteKey = input.required<string>();
@@ -56,10 +60,15 @@ export class TurnstileComponent {
       } catch {
         return;
       }
+      // El widget normal mide 300 px fijos: en un celular se salía del formulario (scroll horizontal).
+      const el = this.contenedor().nativeElement;
+      const compacto = el.clientWidth > 0 && el.clientWidth < 300;
+      el.classList.toggle('turnstile--compacto', compacto);
       this.widgetId =
-        window.turnstile?.render(this.contenedor().nativeElement, {
+        window.turnstile?.render(el, {
           sitekey: this.siteKey(),
           language: 'es',
+          size: compacto ? 'compact' : 'normal',
           callback: (t: string) => this.token.emit(t),
           'expired-callback': () => this.token.emit(''),
           'error-callback': () => this.token.emit(''),

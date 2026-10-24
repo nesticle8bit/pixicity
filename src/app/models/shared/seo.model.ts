@@ -6,7 +6,7 @@ export class SEOModel {
   tags: string[];
   canonical?: string;
   /** JSON-LD (schema.org) especifico de la pagina. */
-  jsonLd?: any;
+  jsonLd?: Record<string, unknown>;
   /** true => noindex,follow (paginas sin valor para buscadores). */
   noIndex?: boolean;
   /** Status HTTP que debe reportar el prerender (404 en paginas inexistentes). */
@@ -24,7 +24,7 @@ export class SEOModel {
     imageURL: string,
     tags: string[],
     canonical?: string,
-    jsonLd?: any,
+    jsonLd?: Record<string, unknown>,
     noIndex?: boolean,
     statusCode?: number
   ) {

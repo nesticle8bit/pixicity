@@ -5,12 +5,13 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { HomeDiscordComponent } from '../../home/home-discord/home-discord.component';
 import { enNavegador } from '../../../shared/helpers/plataforma';
 import { Anuncio, anuncioAlAzar, leerAnuncios } from '../ads-rotacion';
+import { ContenidoSeoPipe } from '../../../shared/pipes/contenidoSeo.pipe';
 
 @Component({
     selector: 'ads-by-type',
     templateUrl: './ads-by-type.component.html',
     styleUrls: ['./ads-by-type.component.scss'],
-    imports: [MatTooltip, HomeDiscordComponent]
+    imports: [MatTooltip, HomeDiscordComponent, ContenidoSeoPipe]
 })
 export class AdsByTypeComponent implements OnInit {
   private webService = inject(IHttpWebService);

@@ -11,18 +11,19 @@ import { ComunidadMiembrosComponent } from '../../components/comunidades/comunid
 import { ComunidadesExplorarComponent } from '../../components/comunidades/comunidades-explorar/comunidades-explorar.component';
 import { AuthGuard } from '../../shared/guards/auth.guard';
 import { ComunidadModeracionComponent } from '../../components/comunidades/comunidad-moderacion/comunidad-moderacion.component';
+import { nombreDesdeSlug, tituloConParametro } from '../../services/shared/seo-title.strategy';
 
 const routes: Routes = [
   { path: '', component: ComunidadesIndexComponent },
-  { path: 'explorar', component: ComunidadesExplorarComponent },
-  { path: 'crear', component: ComunidadCreateComponent, canActivate: [AuthGuard] },
-  { path: ':slug/editar', component: ComunidadEditComponent, canActivate: [AuthGuard] },
-  { path: ':slug/nuevo-tema', component: ComunidadTemaCreateComponent, canActivate: [AuthGuard] },
-  { path: ':slug/tema/:id/editar', component: ComunidadTemaCreateComponent, canActivate: [AuthGuard] },
-  { path: ':slug/miembros', component: ComunidadMiembrosComponent },
-  { path: ':slug/moderacion', component: ComunidadModeracionComponent, canActivate: [AuthGuard] },
-  { path: ':slug/tema/:id/:url', component: ComunidadTemaViewComponent },
-  { path: ':slug', component: ComunidadViewComponent },
+  { path: 'explorar', component: ComunidadesExplorarComponent, title: 'Explorar comunidades' },
+  { path: 'crear', component: ComunidadCreateComponent, canActivate: [AuthGuard], title: 'Crear comunidad', data: { noIndex: true } },
+  { path: ':slug/editar', component: ComunidadEditComponent, canActivate: [AuthGuard], title: 'Editar comunidad', data: { noIndex: true } },
+  { path: ':slug/nuevo-tema', component: ComunidadTemaCreateComponent, canActivate: [AuthGuard], title: 'Nuevo tema', data: { noIndex: true } },
+  { path: ':slug/tema/:id/editar', component: ComunidadTemaCreateComponent, canActivate: [AuthGuard], title: 'Editar tema', data: { noIndex: true } },
+  { path: ':slug/miembros', component: ComunidadMiembrosComponent, title: tituloConParametro('slug', (c) => `Miembros de ${nombreDesdeSlug(c)}`), data: { noIndex: true } },
+  { path: ':slug/moderacion', component: ComunidadModeracionComponent, canActivate: [AuthGuard], title: 'Moderación de la comunidad', data: { noIndex: true } },
+  { path: ':slug/tema/:id/:url', component: ComunidadTemaViewComponent, title: tituloConParametro('url', nombreDesdeSlug) },
+  { path: ':slug', component: ComunidadViewComponent, title: tituloConParametro('slug', (c) => `${nombreDesdeSlug(c)} · Comunidad`) },
 ];
 
 @NgModule({

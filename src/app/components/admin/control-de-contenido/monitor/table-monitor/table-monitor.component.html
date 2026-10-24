@@ -54,23 +54,28 @@
               <span [innerHTML]="monitor.mensaje"></span>
             </td>
             <td>
+              <!-- Los avisos del sistema (moderación, shouts...) no tienen post: antes enlazaban a /posts/null/null/null. -->
+              @if (monitor.post.id; as postId) {
               <app-post-url-link
-                [post]="{ id: monitor.post.id, url: monitor.post.url, titulo: monitor.post.titulo, truncate: 20}"
-                [categoria]="{ icono: monitor.post.categoria.icono, nombre: monitor.post.categoria.nombre, seo: monitor.post.categoria.seo}">
+                [post]="{ id: postId, url: monitor.post.url ?? '', titulo: monitor.post.titulo ?? '', truncate: 20}"
+                [categoria]="{ icono: monitor.post.categoria.icono ?? '', nombre: monitor.post.categoria.nombre ?? '', seo: monitor.post.categoria.seo ?? ''}">
               </app-post-url-link>
+              } @else {
+              <span class="text-muted">—</span>
+              }
             </td>
             <td>
-              <app-user-avatar [class]="'img-avatar'" [avatar]="monitor.usuarioQueHaceAccion?.avatar"
-                [userName]="monitor.usuarioQueHaceAccion?.userName">
-              </app-user-avatar> <a [routerLink]="['/perfil/' + monitor.usuarioQueHaceAccion?.userName]"
-              target="_blank" [appUserPopover]="monitor.usuarioQueHaceAccion?.userName">
-              {{monitor.usuarioQueHaceAccion?.userName}}
+              <app-user-avatar [class]="'img-avatar'" [avatar]="monitor.usuarioQueHaceAccion.avatar"
+                [userName]="monitor.usuarioQueHaceAccion.userName">
+              </app-user-avatar> <a [routerLink]="['/perfil/' + monitor.usuarioQueHaceAccion.userName]"
+              target="_blank" [appUserPopover]="monitor.usuarioQueHaceAccion.userName">
+              {{monitor.usuarioQueHaceAccion.userName}}
             </a>
           </td>
           <td>
-            <app-user-avatar [class]="'img-avatar'" [avatar]="monitor.usuario?.avatar"
-              [userName]="monitor.usuario?.userName">
-            </app-user-avatar> <span [appUserPopover]="monitor.usuario?.userName">{{monitor.usuario?.userName}}</span>
+            <app-user-avatar [class]="'img-avatar'" [avatar]="monitor.usuario.avatar"
+              [userName]="monitor.usuario.userName">
+            </app-user-avatar> <span [appUserPopover]="monitor.usuario.userName">{{monitor.usuario.userName}}</span>
           </td>
           <td class="text-center" width="30px">
             <button type="button" class="btn-menu" aria-label="Acciones" [matMenuTriggerFor]="menu">

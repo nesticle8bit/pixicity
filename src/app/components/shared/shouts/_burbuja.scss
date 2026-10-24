@@ -256,5 +256,10 @@ $reshout: #1e7f4f;
     padding: 10px 12px;
 
     &__tail { top: 14px; }
+
+    &__footer { gap: 2px; }
   }
+
+  // Seis acciones en ~270 px: con el relleno de escritorio el "me gusta" quedaba solo en otra línea.
+  .sc-action { padding: 5px 6px; }
 }

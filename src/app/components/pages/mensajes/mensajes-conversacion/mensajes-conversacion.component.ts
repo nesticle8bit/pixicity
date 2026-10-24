@@ -11,6 +11,8 @@ import { UserPopoverDirective } from '../../../../shared/directives/userPopover.
 import { MatTooltip } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { MensajesSidebarComponent } from '../mensajes-sidebar/mensajes-sidebar.component';
+import { MensajeViewModel } from 'src/app/models/mensajes/mensaje-vm.model';
+import { UsuarioAvatarViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { DatePipe } from '@angular/common';
 import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 
@@ -60,8 +62,8 @@ export class MensajesConversacionComponent implements OnInit {
   readonly chatBody = viewChild<ElementRef<HTMLElement>>('chatBody');
   readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
 
-  public mensajes: any[] = [];
-  public otro: any;
+  public mensajes: MensajeViewModel[] = [];
+  public otro?: UsuarioAvatarViewModel;
   public asunto: string = '';
   public hayMas = false;
   public cargandoMas = false;
@@ -78,7 +80,7 @@ export class MensajesConversacionComponent implements OnInit {
   private id?: number;
   private userName?: string;
   private lastTypingSent = 0;
-  private typingTimer: any;
+  private typingTimer?: ReturnType<typeof setTimeout>;
 
   constructor() {
     // La ruta es /conversacion/:id (mensaje base) o /chat/:userName (chat nuevo / sin historial).
@@ -197,7 +199,7 @@ export class MensajesConversacionComponent implements OnInit {
       .getConversacion({ userName: this.otro.userName, take: PAGE_SIZE })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((page) => {
-        const porId = new Map<number, any>(this.mensajes.map((m) => [m.id, m]));
+        const porId = new Map<number, MensajeViewModel>(this.mensajes.map((m) => [m.id, m]));
         let nuevosAjenos = 0;
 
         for (const m of page?.mensajes ?? []) {
@@ -444,7 +446,7 @@ export class MensajesConversacionComponent implements OnInit {
   }
 
   // Oculta el mensaje solo para mí (el otro lo sigue viendo).
-  eliminarMensaje(mensaje: any): void {
+  eliminarMensaje(mensaje: MensajeViewModel): void {
     if (!confirm('¿Eliminar este mensaje? Solo se borrará para ti.')) {
       return;
     }

@@ -12,7 +12,7 @@ import { NotificationService } from '../shared/notification.service';
 import { IHttpPostsService } from '../interfaces/httpPosts.interface';
 import { PaginationService } from '../shared/pagination.service';
 import { ApiResponse, PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
-import { CloudTagViewModel, FavoritoAlternado, PostDetailResponse, PostInteracciones, PostInteraccionesPagina, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
+import { BorradorViewModel, CloudTagViewModel, PostListaViewModel, FavoritoAlternado, PostDetailResponse, PostInteracciones, PostInteraccionesPagina, PostSimpleViewModel, PostViewModel } from 'src/app/models/posts/post-vm.model';
 @Injectable()
 export class HttpPostsService implements IHttpPostsService {
   private notificationService = inject(NotificationService);
@@ -21,13 +21,13 @@ export class HttpPostsService implements IHttpPostsService {
   private http = inject(HttpClient);
 
 
-  getPosts(categoria: string = '', version?: number): Observable<PaginatedData<PostViewModel>> {
+  getPosts(categoria: string = '', version?: number): Observable<PaginatedData<PostListaViewModel>> {
     if (!categoria) {
       categoria = '';
     }
 
     return this.http
-      .get<ApiResponse<PaginatedData<PostViewModel>>>(
+      .get<ApiResponse<PaginatedData<PostListaViewModel>>>(
         `${environment.api}/api/posts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${categoria}${version ? `&v=${version}` : ''}`,
       )
       .pipe(
@@ -97,9 +97,9 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getStickyPosts(): Observable<PostViewModel[]> {
+  getStickyPosts(): Observable<PostListaViewModel[]> {
     return this.http
-      .get<ApiResponse<PostViewModel[]>>(`${environment.api}/api/posts/sticky`)
+      .get<ApiResponse<PostListaViewModel[]>>(`${environment.api}/api/posts/sticky`)
       .pipe(
         map((response) => {
           if (response.status === 200) {
@@ -479,9 +479,9 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getBorradores(search: string, categoriaId: number): Observable<PaginatedWithCategorias<PostViewModel>> {
+  getBorradores(search: string, categoriaId: number): Observable<PaginatedWithCategorias<BorradorViewModel>> {
     return this.http
-      .get<ApiResponse<PaginatedWithCategorias<PostViewModel>>>(
+      .get<ApiResponse<PaginatedWithCategorias<BorradorViewModel>>>(
         `${environment.api}/api/posts/borradores?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${search}&categoriaId=${categoriaId}`,
       )
       .pipe(

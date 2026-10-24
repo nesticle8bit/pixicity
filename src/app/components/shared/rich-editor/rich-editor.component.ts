@@ -23,7 +23,6 @@ import {
   CARET_GUARD,
   closestWithin,
   emptyParagraph,
-  INLINE_FORMAT_TAGS,
   isAtomic,
   isBlock,
   isElement,
@@ -40,95 +39,34 @@ import { LENGUAJES_CODIGO } from 'src/app/shared/helpers/contenido-post';
 import { CLASE_VIDEO_YOUTUBE, VideoYoutube, videoYoutube } from 'src/app/shared/helpers/youtube';
 import { MatIcon } from '@angular/material/icon';
 import { NgTemplateOutlet } from '@angular/common';
-
-type InlineMark = 'bold' | 'italic' | 'underline' | 'strike' | 'code';
-type ToolbarMenu = 'heading' | 'color' | 'image' | 'table';
-type ImgAlign = 'izq' | 'centro' | 'der';
-type BubbleMode = 'format' | 'link' | 'edit-link';
-type StyleProp = 'color' | 'backgroundColor';
-
-interface EditorButton {
-  icon: string;
-  title: string;
-  run: () => void;
-  mark?: InlineMark; // si se indica, el botón refleja el estado activo de esa marca
-}
-
-interface MenuButton {
-  menu: ToolbarMenu;
-  icon: string;
-  title: string;
-}
-
-interface ToolbarGroup {
-  items: (EditorButton | MenuButton)[];
-  secondary?: boolean; // en móvil queda detrás del botón "más"
-}
-
-interface Palette {
-  prop: StyleProp;
-  label: string;
-  resetTitle: string;
-  colors: string[];
-}
-
-interface TextOffsets {
-  start: number;
-  end: number;
-}
-
-interface HistoryEntry {
-  html: string;
-  sel: TextOffsets | null;
-}
-
-// Tags que representan cada marca inline (`create` es el que se inserta)
-const INLINE_MARKS: Record<InlineMark, { tags: string[]; create: string }> = {
-  bold:      { tags: ['STRONG', 'B'], create: 'strong' },
-  italic:    { tags: ['EM', 'I'], create: 'em' },
-  underline: { tags: ['U'], create: 'u' },
-  strike:    { tags: ['S', 'STRIKE', 'DEL'], create: 's' },
-  code:      { tags: ['CODE'], create: 'code' },
-};
-
-// Atajos estilo markdown al escribir un prefijo + espacio al inicio de un párrafo
-const BLOCK_SHORTCUTS: { pattern: RegExp; block: string }[] = [
-  { pattern: /^#{1,6}$/, block: 'heading' },
-  { pattern: /^[-*+]$/, block: 'UL' },
-  { pattern: /^1[.)]$/, block: 'OL' },
-  { pattern: /^>$/, block: 'blockquote' },
-  { pattern: /^```$/, block: 'pre' },
-  { pattern: /^-{3}$/, block: 'hr' },
-];
-
-// Atajos inline al cerrar el delimitador: `código`, **negrita**, *cursiva*, _cursiva_
-// `open`: largo del delimitador de apertura; `typed`: parte del cierre ya escrita
-const INLINE_SHORTCUTS: { key: string; pattern: RegExp; tag: string; open: number; typed: number }[] = [
-  { key: '`', pattern: /`([^`]+)$/, tag: 'code', open: 1, typed: 0 },
-  { key: '*', pattern: /\*\*([^*]+)\*$/, tag: 'strong', open: 2, typed: 1 },
-  { key: '*', pattern: /(?:^|[^*\w])\*([^*\s][^*]*)$/, tag: 'em', open: 1, typed: 0 },
-  { key: '_', pattern: /(?:^|\s)_([^_\s][^_]*)$/, tag: 'em', open: 1, typed: 0 },
-];
-
-// Formato que quita "Eliminar formato" (los enlaces se conservan)
-const CLEARABLE_TAGS = INLINE_FORMAT_TAGS.filter((t) => t !== 'A');
-// HTML pegado: marcas que el editor no crea pero sí puede limpiar
-CLEARABLE_TAGS.push('FONT', 'MARK', 'SMALL', 'BIG', 'SUB', 'SUP', 'INS');
-// Bloques que "Quitar formato" convierte en párrafo
-const PLAIN_BLOCK_TAGS = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'PRE', 'BLOCKQUOTE', 'DIV'];
-// Elementos de bloque que no son "líneas" de texto (se insertan entre bloques, nunca dentro de un <p>)
-const STANDALONE_TAGS = ['UL', 'OL', 'HR', 'TABLE', 'FIGURE'];
-const IMG_ALIGN_CLASSES = ['img-izq', 'img-centro', 'img-der'];
-const TABLE_PICKER_SIZE = 6;
-
-// Mismas reglas que POST /api/fotos/imagenes (ImageUploadHelper.FotoMaxBytes)
-const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-const IMAGE_MAX_BYTES = 8 * 1024 * 1024;
-
-// Separación entre la selección y el bubble, y margen mínimo contra los bordes
-const BUBBLE_GAP = 8;
-const BUBBLE_EDGE = 4;
-const HISTORY_LIMIT = 200;
+import { RichEditorBubbleComponent } from './rich-editor-bubble.component';
+import {
+  BLOCK_SHORTCUTS,
+  BUBBLE_EDGE,
+  BUBBLE_GAP,
+  BubbleMode,
+  CLEARABLE_TAGS,
+  EditorButton,
+  HISTORY_LIMIT,
+  HistoryEntry,
+  IMAGE_MAX_BYTES,
+  IMAGE_TYPES,
+  IMG_ALIGN_CLASSES,
+  INLINE_MARKS,
+  INLINE_SHORTCUTS,
+  ImgAlign,
+  InlineMark,
+  MenuButton,
+  PALETAS,
+  PLAIN_BLOCK_TAGS,
+  STANDALONE_TAGS,
+  StyleProp,
+  TABLE_PICKER_SIZE,
+  TextOffsets,
+  ToolbarGroup,
+  ToolbarMenu,
+} from './rich-editor.config';
+import { agregarColumna, agregarFila, celdaInicial, celdaVecina, crearTabla, quitarColumna, quitarFila } from './rich-editor-tablas';
 
 @Component({
     selector: 'app-rich-editor',
@@ -142,7 +80,7 @@ const HISTORY_LIMIT = 200;
             multi: true,
         },
     ],
-    imports: [MatIcon, NgTemplateOutlet],
+    imports: [MatIcon, NgTemplateOutlet, RichEditorBubbleComponent],
 })
 export class RichEditorComponent implements ControlValueAccessor, AfterViewInit, OnDestroy {
   readonly placeholder = input<string>('Escribe aquí...');
@@ -150,8 +88,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   readonly wrapperEl = viewChild.required<ElementRef<HTMLDivElement>>('wrapperEl');
   readonly toolbarEl = viewChild.required<ElementRef<HTMLDivElement>>('toolbarEl');
   readonly editorEl = viewChild.required<ElementRef<HTMLDivElement>>('editorEl');
-  readonly bubbleEl = viewChild.required<ElementRef<HTMLDivElement>>('bubbleEl');
-  readonly linkInputEl = viewChild<ElementRef<HTMLInputElement>>('linkInputEl');
+  readonly bubble = viewChild.required(RichEditorBubbleComponent);
   readonly fileInputEl = viewChild.required<ElementRef<HTMLInputElement>>('fileInputEl');
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -201,23 +138,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   linkHref = '';
 
   readonly headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
-  readonly palettes: Palette[] = [
-    {
-      prop: 'color', label: 'Texto', resetTitle: 'Sin color',
-      colors: [
-        '#000000', '#434343', '#666666', '#999999', '#b7b7b7', '#cccccc', '#d9d9d9', '#ffffff',
-        '#ff0000', '#ff4500', '#ff8c00', '#ffd700', '#adff2f', '#008000', '#00ced1', '#0000ff',
-        '#8b008b', '#ff1493', '#ff69b4', '#a52a2a', '#d2691e', '#f4a460', '#deb887', '#2e8b57',
-      ],
-    },
-    {
-      prop: 'backgroundColor', label: 'Resaltado', resetTitle: 'Sin resaltado',
-      colors: [
-        '#fff59d', '#ffe0b2', '#ffcdd2', '#f8bbd0', '#e1bee7', '#d1c4e9', '#c5cae9', '#bbdefb',
-        '#b2ebf2', '#c8e6c9', '#dcedc8', '#e0e0e0',
-      ],
-    },
-  ];
+  readonly palettes = PALETAS;
 
   readonly toolbarGroups: ToolbarGroup[] = [
     { items: [
@@ -727,74 +648,44 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.openMenu = null;
     this.tableHover = { rows: 0, cols: 0 };
     if (!this.currentRange()) this.placeCaretEnd();
-    const table = document.createElement('table');
-    const head = table.createTHead().insertRow();
-    for (let c = 0; c < cols; c++) head.appendChild(this.newCell('th', `Columna ${c + 1}`));
-    const body = table.createTBody();
-    for (let r = 1; r < rows; r++) {
-      const tr = body.insertRow();
-      for (let c = 0; c < cols; c++) tr.appendChild(this.newCell('td'));
-    }
+    const table = crearTabla(rows, cols);
     const frag = document.createDocumentFragment();
     frag.appendChild(table);
     this.insertFragment(frag);
     if (!isBlock(table.nextElementSibling)) table.after(emptyParagraph());
-    this.selectCell(table.rows[rows > 1 ? 1 : 0].cells[0]);
+    this.selectCell(celdaInicial(table));
     this.afterTableChange();
   }
 
   tableAddRow(): void {
     const cell = this.liveCell();
     if (!cell) return;
-    const row = cell.parentElement as HTMLTableRowElement;
-    const table = row.closest('table')!;
-    const tr = document.createElement('tr');
-    for (let c = 0; c < row.cells.length; c++) tr.appendChild(this.newCell('td'));
-    // Una fila nueva bajo el encabezado va al principio del cuerpo
-    if (row.parentElement?.tagName === 'THEAD') (table.tBodies[0] ?? table.createTBody()).prepend(tr);
-    else row.after(tr);
-    this.selectCell(tr.cells[Math.min(cell.cellIndex, tr.cells.length - 1)]);
+    this.selectCell(agregarFila(cell));
     this.afterTableChange();
   }
 
   tableAddCol(): void {
     const cell = this.liveCell();
     if (!cell) return;
-    const index = cell.cellIndex;
-    Array.from(cell.closest('table')!.rows).forEach((tr) => {
-      const nueva = this.newCell(tr.parentElement?.tagName === 'THEAD' ? 'th' : 'td');
-      const ref = tr.cells[index];
-      if (ref) ref.after(nueva);
-      else tr.appendChild(nueva);
-    });
-    this.selectCell(cell.nextElementSibling as HTMLTableCellElement);
+    this.selectCell(agregarColumna(cell));
     this.afterTableChange();
   }
 
   tableDeleteRow(): void {
     const cell = this.liveCell();
     if (!cell) return;
-    const row = cell.parentElement as HTMLTableRowElement;
-    const table = row.closest('table')!;
-    if (table.rows.length <= 1) return this.tableDelete();
-    const section = row.parentElement!;
-    const index = cell.cellIndex;
-    const rowIndex = row.rowIndex;
-    row.remove();
-    if (!section.children.length) section.remove();
-    const next = table.rows[Math.min(rowIndex, table.rows.length - 1)];
-    this.selectCell(next.cells[Math.min(index, next.cells.length - 1)]);
+    const siguiente = quitarFila(cell);
+    if (!siguiente) return this.tableDelete();
+    this.selectCell(siguiente);
     this.afterTableChange();
   }
 
   tableDeleteCol(): void {
     const cell = this.liveCell();
     if (!cell) return;
-    const row = cell.parentElement as HTMLTableRowElement;
-    if (row.cells.length <= 1) return this.tableDelete();
-    const index = cell.cellIndex;
-    Array.from(cell.closest('table')!.rows).forEach((tr) => tr.cells[index]?.remove());
-    this.selectCell(row.cells[Math.min(index, row.cells.length - 1)]);
+    const siguiente = quitarColumna(cell);
+    if (!siguiente) return this.tableDelete();
+    this.selectCell(siguiente);
     this.afterTableChange();
   }
 
@@ -810,12 +701,6 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.clearCtx();
     this.caretAtStart(p!);
     this.afterChange();
-  }
-
-  private newCell(tag: 'td' | 'th', text = ''): HTMLTableCellElement {
-    const cell = document.createElement(tag);
-    cell.appendChild(text ? document.createTextNode(text) : document.createElement('br'));
-    return cell;
   }
 
   private liveCell(): HTMLTableCellElement | null {
@@ -844,16 +729,12 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     const cell = range ? (this.closestAnyTag(range.startContainer, ['TD', 'TH']) as HTMLTableCellElement | null) : null;
     if (!cell) return false;
     this.tableCell = cell;
-    const cells = Array.from(cell.closest('table')!.querySelectorAll<HTMLTableCellElement>('th, td'));
-    const i = cells.indexOf(cell);
-    if (back) {
-      if (i > 0) this.selectCell(cells[i - 1]);
-    } else if (i < cells.length - 1) {
-      this.selectCell(cells[i + 1]);
-    } else {
+    const vecina = celdaVecina(cell, back);
+    if (vecina === 'nueva-fila') {
       this.tableAddRow();
       return true;
     }
+    this.selectCell(vecina);
     this.updateCtx();
     return true;
   }
@@ -1393,11 +1274,11 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       if (this.linkEl?.isConnected) return this.linkEl.getBoundingClientRect();
       return this.savedSel ? this.rangeRect(rangeFromOffsets(this.editor, this.savedSel.start, this.savedSel.end)) : null;
     });
-    setTimeout(() => this.linkInputEl()?.nativeElement.select(), 0);
+    setTimeout(() => this.bubble().inputEnlace()?.nativeElement.select(), 0);
   }
 
   applyLink(): void {
-    const url = (this.linkInputEl()?.nativeElement.value || '').trim();
+    const url = (this.bubble().inputEnlace()?.nativeElement.value || '').trim();
     const link = this.linkEl;
     const sel = this.savedSel;
     this.hideBubble();
@@ -2179,7 +2060,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       return;
     }
 
-    const bubble = this.bubbleEl().nativeElement;
+    const bubble = this.bubble().elemento().nativeElement;
     const bw = bubble.offsetWidth || 280;
     const bh = bubble.offsetHeight || 40;
 

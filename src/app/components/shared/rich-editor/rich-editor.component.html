@@ -1,7 +1,7 @@
 <!-- Paleta de color/resaltado: compartida por el menú de la toolbar y el bubble -->
-<ng-template #paletteTpl>
+<ng-template #paletteTpl let-oscura>
   @for (palette of palettes; track palette.prop) {
-  <div class="rich-editor__palette-section">
+  <div class="rich-editor__palette-section" [class.is-dark]="oscura">
     <span class="rich-editor__palette-label">{{ palette.label }}</span>
     <div class="rich-editor__swatches" [class.is-highlight]="palette.prop === 'backgroundColor'">
       <button type="button" class="swatch swatch--reset" [title]="palette.resetTitle"
@@ -179,77 +179,9 @@
   </div>
   }
 
-  <div #bubbleEl class="rich-editor__bubble" [class.is-visible]="!!bubbleMode" [class.is-below]="bubbleBelow"
-    [style.top.px]="bubbleTop" [style.left.px]="bubbleLeft" [style.--arrow-x]="bubbleArrowX + 'px'"
-    (mousedown)="keepSelection($event)">
-
-    @switch (bubbleMode) {
-    @case ('format') {
-    <div class="rich-editor__bubble-row">
-      @for (btn of bubbleMarks; track btn.icon) {
-      <button type="button" [title]="btn.title" [attr.aria-label]="btn.title"
-        [class.active]="activeMarks.has(btn.mark!)" [attr.aria-pressed]="activeMarks.has(btn.mark!)"
-        (click)="btn.run()">
-        <mat-icon>{{ btn.icon }}</mat-icon>
-      </button>
-      }
-
-      <span class="rich-editor__bubble-sep"></span>
-
-      <button type="button" title="Enlace (Ctrl+K)" aria-label="Enlace" (click)="openLinkEditor()">
-        <mat-icon>link</mat-icon>
-      </button>
-      <button type="button" class="btn-color" title="Color y resaltado" aria-label="Color y resaltado"
-        [class.active]="showBubbleColors" (click)="toggleBubbleColors()">
-        <mat-icon>format_color_text</mat-icon>
-        <mat-icon class="arrow">arrow_drop_down</mat-icon>
-      </button>
-
-      <span class="rich-editor__bubble-sep"></span>
-
-      <button type="button" title="Quitar formato" aria-label="Quitar formato" (click)="removeFormat()">
-        <mat-icon>format_clear</mat-icon>
-      </button>
-    </div>
-
-    @if (showBubbleColors) {
-    <div class="rich-editor__bubble-palette">
-      <ng-container [ngTemplateOutlet]="paletteTpl"></ng-container>
-    </div>
-    }
-    }
-
-    @case ('link') {
-    <div class="rich-editor__bubble-row rich-editor__link-preview">
-      <a class="rich-editor__link-url" [href]="linkHref" target="_blank" rel="noopener noreferrer"
-        [title]="linkHref">
-        <mat-icon>open_in_new</mat-icon>
-        <span>{{ linkHref }}</span>
-      </a>
-      <span class="rich-editor__bubble-sep"></span>
-      <button type="button" title="Editar enlace" aria-label="Editar enlace" (click)="openLinkEditor()">
-        <mat-icon>edit</mat-icon>
-      </button>
-      <button type="button" title="Quitar enlace" aria-label="Quitar enlace" (click)="removeLink()">
-        <mat-icon>link_off</mat-icon>
-      </button>
-    </div>
-    }
-
-    @case ('edit-link') {
-    <div class="rich-editor__bubble-link">
-      <mat-icon>link</mat-icon>
-      <input #linkInputEl type="text" placeholder="Pega o escribe un enlace…" aria-label="URL del enlace"
-        [value]="linkHref" (keydown.enter)="applyLink(); $event.preventDefault()"
-        (keydown.escape)="cancelLink(); $event.stopPropagation()" />
-      <button type="button" class="apply" title="Aplicar" aria-label="Aplicar" (click)="applyLink()">
-        <mat-icon>check</mat-icon>
-      </button>
-      <button type="button" class="remove" title="Quitar enlace" aria-label="Quitar enlace" (click)="removeLink()">
-        <mat-icon>link_off</mat-icon>
-      </button>
-    </div>
-    }
-    }
-  </div>
+  <app-rich-editor-bubble [modo]="bubbleMode" [debajo]="bubbleBelow" [top]="bubbleTop" [left]="bubbleLeft"
+    [flechaX]="bubbleArrowX" [marcas]="bubbleMarks" [activas]="activeMarks" [mostrarColores]="showBubbleColors"
+    [href]="linkHref" [paleta]="paletteTpl" (mantenerSeleccion)="keepSelection($event)"
+    (editarEnlace)="openLinkEditor()" (alternarColores)="toggleBubbleColors()" (quitarFormato)="removeFormat()"
+    (quitarEnlace)="removeLink()" (aplicarEnlace)="applyLink()" (cancelarEnlace)="cancelLink()" />
 </div>

@@ -1,5 +1,6 @@
 import { CategoriaViewModel } from '../parametros/parametros-vm.model';
 import { UsuarioViewModel } from '../seguridad/seguridad-vm.model';
+import { PaginatedWithCategorias } from '../api/api-response.model';
 
 export interface PostViewModel {
   fechaActualiza?: string | null;
@@ -125,6 +126,7 @@ export interface PostDetalle {
   esPrivado: boolean;
   seguirPost: boolean;
   sinComentarios: boolean;
+  esBorrador: boolean;
   categoria: { id: number; nombre: string; seo: string; icono: string };
   usuario: UsuarioPost;
   /** Calculado en el cliente a partir de etiquetas. */
@@ -188,3 +190,33 @@ export interface FavoritoAlternado {
   activo: boolean;
   total: number;
 }
+
+/** GET api/posts/borradores: proyección propia del controlador (no es PostViewModel). */
+export interface BorradorViewModel {
+  id: number;
+  titulo: string;
+  fechaRegistro: string;
+  fechaActualiza: string | null;
+  puntos: number;
+  categoria: { id: number; icono: string; nombre: string; seo: string };
+  etiquetas: string;
+  eliminado: boolean;
+}
+
+/** Fila del filtro por categoría de /borradores (`categorias` de PaginatedWithCategorias). */
+export type CategoriaConteo = PaginatedWithCategorias<unknown>['categorias'][number];
+
+/** Fila de los listados de la portada (GET api/posts y api/posts/sticky): proyección liviana del API. */
+export interface PostListaViewModel {
+  id: number;
+  fechaRegistro: string;
+  titulo: string;
+  categoria: { icono: string; nombre: string; seo: string };
+  sticky: boolean;
+  /** No viene en api/posts/sticky. */
+  esPrivado?: boolean;
+  url: string;
+  userName: string;
+  avatar: string;
+}
+

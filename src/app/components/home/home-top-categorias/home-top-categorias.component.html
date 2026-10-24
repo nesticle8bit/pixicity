@@ -17,7 +17,7 @@
         <small>
           <a [routerLink]="['/posts/' + categoria.seo]" matTooltip="Ver posts de {{categoria.nombre}}"
             matTooltipPosition="left">
-            <img src="/assets/images/categorias/{{categoria.icono}}" [alt]="categoria.nombre" class="cat-icon" loading="lazy"/>
+            <img src="/assets/images/categorias/{{categoria.icono}}" alt="" aria-hidden="true" class="cat-icon" loading="lazy"/>
             {{categoria.nombre}}
           </a>
         </small>

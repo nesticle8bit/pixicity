@@ -6,7 +6,7 @@
     border-right: 1px solid #ccc;
     border-left: 1px solid #ccc;
     text-align: center;
-    color: #a38c2e;
+    color: #7a6516; // 4,8:1 sobre el amarillo (antes #a38c2e: 2,8:1)
 }
 
 .fade-in {
@@ -26,6 +26,13 @@
     to {
         opacity: 1;
     }
+}
+
+// El .row de Bootstrap tiene márgenes negativos de 12 px y la barra solo 10 px de relleno: desbordaba 1 px y en
+// el celular toda la página tenía scroll horizontal.
+.last_news > .row {
+    margin-left: 0;
+    margin-right: 0;
 }
 
 // Reserva el alto de una línea de noticia mientras cargan.

@@ -1,6 +1,5 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Title } from '@angular/platform-browser';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { IHttpModeracionService } from 'src/app/services/interfaces/httpModeracion.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -27,7 +26,6 @@ export class ModeracionPanelComponent implements OnInit {
   private displayService = inject(DisplayComponentService);
   private moderacionService = inject(IHttpModeracionService);
   private signalrService = inject(SignalrService);
-  private title = inject(Title);
   private readonly destroyRef = inject(DestroyRef);
 
   /** Reportes sin resolver, para el contador de la pestaña. */
@@ -41,10 +39,6 @@ export class ModeracionPanelComponent implements OnInit {
     { label: 'Apelaciones', icon: 'ti-scale', route: 'apelaciones' },
     { label: 'Usuarios', icon: 'ti-users', route: 'usuarios' },
   ];
-
-  constructor() {
-    this.title.setTitle('Moderación | Taringa - Inteligencia colectiva | Comunidad para Compartir Información');
-  }
 
   ngOnInit(): void {
     this.displayService.setDisplay({

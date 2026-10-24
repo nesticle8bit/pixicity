@@ -3,7 +3,8 @@ import { ViewportScroller, NgClass } from '@angular/common';
 import { Component, DestroyRef, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
+import { PostListaViewModel } from 'src/app/models/posts/post-vm.model';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
@@ -50,8 +51,8 @@ export class HomeLastPostsComponent implements OnInit, OnDestroy {
     return this._categoria;
   }
 
-  public stickyPosts: any = [];
-  public lastPosts: any = [];
+  public stickyPosts: PostListaViewModel[] = [];
+  public lastPosts: PostListaViewModel[] = [];
   public totalCount: number = 0;
   public pageIndex: number = 0;
 
@@ -126,7 +127,7 @@ export class HomeLastPostsComponent implements OnInit, OnDestroy {
     );
   }
 
-  queryParamsPara(pagina: number): any {
+  queryParamsPara(pagina: number): Params {
     return pagina <= 1 ? { page: null } : { page: pagina };
   }
 

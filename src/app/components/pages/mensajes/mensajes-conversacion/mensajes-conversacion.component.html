@@ -45,7 +45,7 @@
 
             <div class="chat-row" [class.chat-row--mine]="m.esMio">
               @if (!m.esMio) {
-                <app-user-avatar [avatar]="m.usuarioDe?.avatar" [userName]="m.usuarioDe?.userName" [height]="32"></app-user-avatar>
+                <app-user-avatar [avatar]="m.usuarioDe.avatar" [userName]="m.usuarioDe.userName" [height]="32"></app-user-avatar>
               }
 
               <div class="chat-bubble" [class.chat-bubble--mine]="m.esMio">

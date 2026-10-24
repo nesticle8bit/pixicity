@@ -181,6 +181,10 @@
 .dot {
   width: 7px;
   height: 7px;
+  // Área táctil de 24 px (WCAG target-size) sin agrandar el punto: el relleno no se pinta.
+  box-sizing: content-box;
+  padding: 8.5px;
+  background-clip: content-box;
   border-radius: 50%;
   background: rgba(255,255,255,.45);
   cursor: pointer;

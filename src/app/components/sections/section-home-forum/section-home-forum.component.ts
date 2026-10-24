@@ -3,9 +3,9 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { nombreDesdeSlug } from 'src/app/services/shared/seo-title.strategy';
 import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { HomeLastPostsComponent } from '../../home/home-last-posts/home-last-posts.component';
 import { HomeStatsComponent } from '../../home/home-stats/home-stats.component';
@@ -46,7 +46,6 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
   private generalService = inject(IHttpGeneralService);
   private activatedRoute = inject(ActivatedRoute);
   private seoService = inject(SEOService);
-  private title = inject(Title);
 
   private readonly destroyRef = inject(DestroyRef);
 
@@ -115,11 +114,7 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const nombre = categoria
-      .split('-')
-      .filter(Boolean)
-      .map((palabra) => palabra.charAt(0).toUpperCase() + palabra.slice(1))
-      .join(' ');
+    const nombre = nombreDesdeSlug(categoria);
 
     this.seoService.setSEO({
       title: `${nombre} | Posts de la comunidad`,

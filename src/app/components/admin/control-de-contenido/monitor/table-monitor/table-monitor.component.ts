@@ -1,5 +1,6 @@
 import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
+import { MonitorAdmin } from 'src/app/models/admin/filas-admin.model';
 import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
@@ -44,7 +45,7 @@ export class TableMonitorComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public monitors: any[] = [];
+  public monitors: MonitorAdmin[] = [];
   public totalCount: number = 0;
 
   public filtro: AdminFiltro = {};
@@ -81,7 +82,7 @@ export class TableMonitorComponent implements OnInit {
     this.cargando = true;
     this.logsService.getMonitorsAdmin(this.filtro).pipe(finalize(() => (this.cargando = false)), takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response?.data) {
-        response.data = response.data.map((notificacion: any) => {
+        response.data = response.data.map((notificacion) => {
           if (notificacion.mensaje) {
             notificacion.mensaje = notificacion.mensaje.replace(
               'tu post',
@@ -117,12 +118,11 @@ export class TableMonitorComponent implements OnInit {
     });
   }
 
-  setURL(notificacion: any, text: string): string {
-    console.log(notificacion);
+  setURL(notificacion: MonitorAdmin, text: string): string {
     return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}" title="${notificacion?.post?.titulo}">${text}</a>`;
   }
 
-  setProfile(text: string, userName: any): string {
+  setProfile(text: string, userName: string | null | undefined): string {
     return `<a href='/perfil/${userName}'>${text}</a>`;
   }
 
@@ -138,7 +138,7 @@ export class TableMonitorComponent implements OnInit {
     this.getMonitors();
   }
 
-  deleteNotificacion(notificacion: any): void {
+  deleteNotificacion(notificacion: MonitorAdmin): void {
     const accion = notificacion.eliminado ? 'recuperar' : 'eliminar';
     if (this.notificationService.confirm(`¿Está seguro de ${accion} esta notificación?`)) {
       this.logsService.deleteNotificacion(notificacion.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {

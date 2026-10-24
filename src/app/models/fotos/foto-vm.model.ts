@@ -14,6 +14,8 @@ export interface FotoViewModel {
   avatar: string;
   categoria: string;
   miVoto?: number;
+  /** Viene en los listados (api/fotos). */
+  totalComentarios?: number;
 }
 
 export interface FotoComentarioViewModel {

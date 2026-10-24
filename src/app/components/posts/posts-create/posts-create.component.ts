@@ -11,10 +11,11 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
+import { CategoriaViewModel } from 'src/app/models/parametros/parametros-vm.model';
+import { PostDetalle, PostSimpleViewModel } from 'src/app/models/posts/post-vm.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Title } from '@angular/platform-browser';
 import { PostsGeneratorComponent } from '../posts-generator/posts-generator.component';
 import { MatButton } from '@angular/material/button';
 import { PostUrlLinkComponent } from '../../addons/post-url-link/post-url-link.component';
@@ -73,16 +74,15 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   private formBuilder = inject(FormBuilder);
   private dialog = inject(MatDialog);
   private router = inject(Router);
-  private title = inject(Title);
   private notificationService = inject(NotificationService);
 
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
   public borrador: BorradorLocal | null = null;
-  public categorias: any[] = [];
-  public etiquetas: any = [];
-  public quienPuedeComentar: any = [
+  public categorias: CategoriaViewModel[] = [];
+  public etiquetas: string[] = [];
+  public quienPuedeComentar: { label: string; value: boolean }[] = [
     {
       label: 'Todos pueden comentar',
       value: false,
@@ -97,7 +97,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   public esBorrador: boolean = false;
   public today = new Date();
   public separatorKeysCodes = [ENTER, COMMA] as const;
-  public relatedPosts: any[] = [];
+  public relatedPosts: PostSimpleViewModel[] = [];
 
   // Etiquetas generadas a partir del título (se reemplazan si el título cambia; las manuales no se tocan).
   public autoTags = new Set<string>();
@@ -130,16 +130,10 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       this.postId = +(value.get('id') ?? 0);
 
       if (!this.postId) {
-        this.title.setTitle(
-          `Crear post | Taringa - Inteligencia colectiva | Comunidad para Compartir Información`
-        );
         this.iniciarBorrador();
         return;
       }
 
-      this.title.setTitle(
-        `Actualizar post | Taringa - Inteligencia colectiva | Comunidad para Compartir Información`
-      );
       this.postService.getPostById(this.postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         const usuario = this.currentUser.usuario;
         if (
@@ -258,7 +252,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       .map((x) => x.palabra);
   }
 
-  setPostOnEdit(post: any): void {
+  setPostOnEdit(post: PostDetalle): void {
     // No pisar con sugerencias automáticas las etiquetas ya guardadas del post.
     this.lastAutoTitulo = (post.titulo || '').trim();
 
@@ -318,7 +312,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     post.esBorrador = false;
 
     const categoria = this.categorias.filter(
-      (categoria: any) => categoria.id === post.categoriaId
+      (categoria) => categoria.id === post.categoriaId
     )[0];
 
     if (!this.postId) {

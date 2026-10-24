@@ -18,6 +18,6 @@
     }
   </section>
   } @else {
-  <section class="{{class ? class : 'mb-4'}}" [innerHTML]="anuncio.html"></section>
+  <section class="{{class ? class : 'mb-4'}}" [innerHTML]="anuncio.html | contenidoSeo: 'Publicidad'"></section>
   }
 }

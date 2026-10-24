@@ -18,7 +18,9 @@
   @for (foto of fotos; track foto.id; let i = $index) {
   <a [routerLink]="['/fotos', foto.usuario, foto.id, foto.url]" class="carousel-slide"
     [class.active]="i === currentIndex">
-    <img [src]="foto.imageUrl | thumb: 280" [alt]="foto.titulo" loading="lazy">
+    <!-- La primera es el LCP de la portada: sin lazy y con prioridad alta. -->
+    <img [attr.src]="debeCargar(i) ? (foto | thumbFoto: 280) : null" [alt]="foto.titulo" decoding="async"
+      [attr.loading]="i === 0 ? 'eager' : 'lazy'" [attr.fetchpriority]="i === 0 ? 'high' : null">
 
     <div class="carousel-progress" [class.running]="i === currentIndex && !paused" [class.paused]="paused"></div>
 
@@ -40,12 +42,13 @@
   </a>
   }
 
-  <button class="carousel-btn carousel-prev" (click)="prev(); startTimer()">&#8249;</button>
-  <button class="carousel-btn carousel-next" (click)="next(); startTimer()">&#8250;</button>
+  <button class="carousel-btn carousel-prev" (click)="prev(); startTimer()" aria-label="Foto anterior">&#8249;</button>
+  <button class="carousel-btn carousel-next" (click)="next(); startTimer()" aria-label="Foto siguiente">&#8250;</button>
 
   <div class="carousel-dots">
     @for (foto of fotos; track foto.id; let i = $index) {
-    <span class="dot" [class.active]="i === currentIndex" (click)="goTo(i)" role="button" tabindex="0" (keydown.enter)="goTo(i)" (keydown.space)="goTo(i); $event.preventDefault()"></span>
+    <span class="dot" [class.active]="i === currentIndex" (click)="goTo(i)" role="button" tabindex="0"
+      [attr.aria-label]="'Ver foto ' + (i + 1) + ': ' + foto.titulo" [attr.aria-current]="i === currentIndex" (keydown.enter)="goTo(i)" (keydown.space)="goTo(i); $event.preventDefault()"></span>
     }
   </div>
 </div>

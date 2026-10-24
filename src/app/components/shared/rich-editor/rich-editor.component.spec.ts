@@ -412,5 +412,62 @@ describe('RichEditorComponent', () => {
       component.tableDeleteCol();
       expect(editor.querySelectorAll('tr:first-child td').length).toBe(1);
     });
+
+    it('quitar la única fila borra la tabla', () => {
+      setHtml('<table><tbody><tr><td>a</td><td>b</td></tr></tbody></table><p>x</p>');
+      select('a');
+      component.onSelectionChange();
+      component.tableDeleteRow();
+      expect(editor.querySelector('table')).toBeNull();
+    });
+  });
+
+  describe('bubble de enlaces (app-rich-editor-bubble)', () => {
+    const bubble = () => fixture.nativeElement.querySelector('app-rich-editor-bubble .rich-editor__bubble') as HTMLElement;
+
+    it('Ctrl+K abre la edición del enlace y aplicar enlaza la selección', () => {
+      setHtml('<p>hola mundo</p>');
+      select('mundo');
+      key('k', { ctrlKey: true });
+      fixture.detectChanges();
+
+      expect(bubble().classList).toContain('is-visible');
+      const input = bubble().querySelector('input') as HTMLInputElement;
+      input.value = 'taringas.net/posts';
+      (bubble().querySelector('button.apply') as HTMLButtonElement).click();
+      fixture.detectChanges();
+
+      const enlace = editor.querySelector('a')!;
+      expect(enlace.getAttribute('href')).toBe('https://taringas.net/posts');
+      expect(enlace.textContent).toBe('mundo');
+      expect(bubble().classList).not.toContain('is-visible');
+    });
+
+    it('Escape en el campo cancela sin crear el enlace', () => {
+      setHtml('<p>hola mundo</p>');
+      select('mundo');
+      component.openLinkEditor();
+      fixture.detectChanges();
+
+      const input = bubble().querySelector('input') as HTMLInputElement;
+      input.value = 'https://ejemplo.com';
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      fixture.detectChanges();
+
+      expect(editor.querySelector('a')).toBeNull();
+      expect(bubble().classList).not.toContain('is-visible');
+    });
+
+    it('la paleta del bubble usa la variante oscura', () => {
+      setHtml('<p>hola mundo</p>');
+      select('mundo');
+      component.onSelectionChange();
+      component.toggleBubbleColors();
+      fixture.detectChanges();
+
+      const secciones = bubble().querySelectorAll('.rich-editor__palette-section');
+      expect(secciones.length).toBe(2);
+      secciones.forEach((s) => expect(s.classList).toContain('is-dark'));
+    });
   });
 });

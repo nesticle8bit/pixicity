@@ -3,6 +3,9 @@ import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.i
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
+import { MonitorViewModel } from 'src/app/models/logs/logs-vm.model';
+import { MensajeViewModel } from 'src/app/models/mensajes/mensaje-vm.model';
+import { FavoritosViewModel } from 'src/app/models/posts/post-vm.model';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component, DestroyRef, HostListener, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -62,9 +65,9 @@ export class SectionUserInfoLoginComponent implements OnInit {
     mensajes: false,
     favoritos: false,
   };
-  public favoritos: any[] = [];
-  public notificaciones: any[] = [];
-  public mensajes: any[] = [];
+  public favoritos: FavoritosViewModel[] = [];
+  public notificaciones: MonitorViewModel[] = [];
+  public mensajes: MensajeViewModel[] = [];
   public currentStats = {
     notifications: 0,
     messages: 0,
@@ -144,7 +147,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
     this.httpLogs.getLastNotificaciones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
-        response = response.map((notificacion: any) => {
+        response = response.map((notificacion) => {
           if (notificacion.mensaje) {
             notificacion.mensaje = notificacion.mensaje.replace(
               'tu post',
@@ -200,7 +203,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
     });
   }
 
-  setURL(notificacion: any, text: string, comentarioId?: number | null): string {
+  setURL(notificacion: MonitorViewModel, text: string, comentarioId?: number | null): string {
     const ancla = comentarioId ? `#comentario-${comentarioId}` : '';
     return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}${ancla}" title="${notificacion?.post?.titulo}">${text}</a>`;
   }
