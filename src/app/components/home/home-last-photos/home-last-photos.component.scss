@@ -181,19 +181,30 @@
 .dot {
   width: 7px;
   height: 7px;
-  // Área táctil de 24 px (WCAG target-size) sin agrandar el punto: el relleno no se pinta.
-  box-sizing: content-box;
-  padding: 8.5px;
-  background-clip: content-box;
   border-radius: 50%;
-  background: rgba(255,255,255,.45);
+  // background-color (no el atajo `background`): el atajo resetea el background-clip del celular y pintaba
+  // todo el círculo de 24 px.
+  background-color: rgba(255,255,255,.45);
   cursor: pointer;
-  transition: background .2s, transform .2s;
+  transition: background-color .2s, transform .2s;
 
   &.active {
-    background: #fff;
+    background-color: #fff;
     transform: scale(1.3);
   }
 
-  &:hover:not(.active) { background: rgba(255,255,255,.7); }
+  &:hover:not(.active) { background-color: rgba(255,255,255,.7); }
+}
+
+// Celular: punto un poco más grande y área táctil de 24 px (WCAG target-size); el relleno no se pinta.
+@media (max-width: 767.98px) {
+  .carousel-dots { gap: 0; }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    box-sizing: content-box;
+    padding: 7px;
+    background-clip: content-box;
+  }
 }
