@@ -1,0 +1,57 @@
+// Ayudas de color para botones de Material y ajustes de formularios.
+
+// Clases helper de color para botones. Setean los tokens de Material v21
+// (--mat-button-filled-*) para que funcionen sobre mat-flat-button (que por
+// defecto usa container-color: white), además del background-color plano para
+// usos no-MDC (snackbars, etc.).
+.mat-success {
+  --mat-button-filled-container-color: #08884c; // 4.5:1 con texto blanco
+  --mat-button-filled-label-text-color: #fff;
+  background-color: #08884c;
+  color: #fff;
+}
+
+.mat-orange {
+  --mat-button-filled-container-color: #ff5e57;
+  --mat-button-filled-label-text-color: #fff;
+  background-color: #ff5e57;
+  color: #fff;
+}
+
+.mat-gray {
+  --mat-button-filled-container-color: #7f8c8d;
+  --mat-button-filled-label-text-color: #fff;
+  background-color: #7f8c8d;
+  color: #fff;
+}
+
+.mat-blue {
+  --mat-button-filled-container-color: #3c40c6;
+  --mat-button-filled-label-text-color: #fff;
+  background-color: #3c40c6;
+  color: #fff;
+}
+
+.mat-danger {
+  --mat-button-filled-container-color: #e74c3c;
+  --mat-button-filled-label-text-color: #fff;
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.mat-warning {
+  --mat-button-filled-container-color: #f39c12;
+  --mat-button-filled-label-text-color: #fff;
+  background-color: #f39c12;
+  color: #fff;
+}
+
+.form-control {
+  font-size: .85rem;
+}
+
+.ng-select.ng-select-borders {}
+
+.ng-select.ng-select-borders .ng-select-container {
+  border-radius: 4px 4px 0 0;
+}

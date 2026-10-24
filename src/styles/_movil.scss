@@ -1,0 +1,43 @@
+// Celular (< 768 px): mismo diseño, sin desbordes y con áreas táctiles cómodas.
+
+// Celular (< 768 px): mismo diseño, sin desbordes horizontales y con áreas táctiles cómodas ───
+@media (max-width: 767.98px) {
+
+  // Un .row directamente dentro de otro .row (tops, en vivo, documentación del API) sumaba los márgenes negativos:
+  // el contenido quedaba corrido 12 px a la izquierda y salía de la pantalla.
+  .row>.row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  // Controles chicos (RSS, pausar, "Inicia sesión", "Ir al cielo", enlaces del pie, selector de período): el ::after
+  // agranda la zona de toque a ~32 px sin cambiar cómo se ven ni moverlos.
+  .rss-link,
+  .en-vivo-toggle,
+  .com-login,
+  a.ircielo,
+  .footer a,
+  .actualtop {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -8px -4px;
+    }
+  }
+
+  // Íconos-botón de los títulos (actualizar, pausar el carrusel): una <img> no admite ::after; el relleno agranda
+  // la zona de toque y el margen negativo lo compensa.
+  .main-title img.cursor--pointer {
+    box-sizing: content-box;
+    padding: 6px;
+    margin: -6px -6px -6px 0;
+  }
+
+  // Enlaces del pie: 10,5 px y renglones pegados eran difíciles de leer y de tocar.
+  .footer {
+    font-size: 12px;
+    line-height: 2;
+  }
+}

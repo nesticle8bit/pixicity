@@ -1,0 +1,104 @@
+// Base: html/body, enlaces, foco visible, "saltar al contenido", movimiento reducido.
+@use 'variables' as *;
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  line-height: 1.5;
+  font-family: "Lato", "Helvetica Neue", "Helvetica", "Arial", "Lucida Grande", sans-serif;
+  font-size: 12px;
+  background: $background-color;
+  /* Evita scroll horizontal / efecto "zoom" en móvil sin romper position: sticky */
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
+a {
+  color: $link-color;
+  text-decoration: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+li,
+ol li {
+  list-style: none;
+}
+
+// Foco visible al navegar con teclado (WCAG 2.4.7). :focus-visible no lo muestra al hacer clic en botones/enlaces.
+// Los .form-control ya marcan el foco con la sombra de Bootstrap; antes "input:focus { outline: 0 }" lo ocultaba en todos.
+:where(a, button, select, summary, [tabindex]):focus-visible,
+:where(input, textarea):not(.form-control):focus-visible {
+  outline: 2px solid $main-color;
+  outline-offset: 2px;
+}
+
+// Nombre del rango con el color elegido en el admin, oscurecido a la mitad: cualquier color (incluso amarillos)
+// queda legible sobre fondo claro (WCAG AA) y conserva su tono.
+.sidebar-rango,
+.coment-rango {
+  color: color-mix(in srgb, var(--rango, currentColor) 50%, #000);
+}
+
+// "Saltar al contenido": primer elemento enfocable de la página, visible solo con foco.
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2000;
+  padding: 8px 14px;
+  border-radius: 4px;
+  background: $main-color;
+  color: #fff !important;
+  font-weight: 500;
+  transform: translateY(-200%);
+  transition: transform 0.15s;
+
+  &:focus {
+    transform: translateY(0);
+  }
+}
+
+// Al menos una pantalla de alto: mientras la página carga su contenido el footer queda fuera de la vista. Antes
+// arrancaba visible y al llegar el contenido saltaba hacia abajo (era el mayor aporte al CLS en escritorio).
+#contenido-principal {
+  display: block;
+}
+
+#contenido-principal:focus {
+  outline: none; // recibe el foco por programa al saltar; no necesita marco
+}
+
+// Respeta "reducir movimiento" del sistema operativo.
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+header {
+  &.main-header {
+    background: url('/assets/images/header-bg-3.png') top center repeat-x $main-color;
+    height: 65px;
+  }
+}
+
+// Elementos que se comportan como botón (role="button") deben verse clicables aunque no sean <button> ni <a href>.
+[role="button"] {
+  cursor: pointer;
+}
+
+[role="button"]:focus-visible {
+  outline: 2px solid $main-color;
+  outline-offset: 2px;
+}

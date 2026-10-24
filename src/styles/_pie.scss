@@ -1,0 +1,106 @@
+// Pie de página: buscador inferior, "Ir al cielo", enlaces y copyright.
+
+.seccion {
+  background: url('/assets/images/final.png') left bottom no-repeat;
+  padding-bottom: 10px;
+}
+
+.inpie {
+  padding: 10px;
+  background: #fff;
+  height: 50px;
+  border: solid;
+  border-color: rgb(255 255 255 / 0%) #ccc #ccc;
+  border-width: 1px 1px 0;
+}
+
+.busb form {
+  margin: 0;
+  padding: 0 8px;
+  width: 240px;
+  border: 1px solid #CCC;
+  border-radius: 30px;
+}
+
+input.bbcuerpo {
+  background: #fff;
+  padding: 5px;
+  border: 0;
+  width: 195px;
+  height: 29px;
+  border-radius: 18px;
+  line-height: 1;
+}
+
+input.bbboton {
+  float: right;
+  padding: 0;
+  margin: 0;
+  background: url('/assets/images/magn.gif') center 8px no-repeat #fff;
+  width: 24px; // mínimo táctil (WCAG 2.5.8)
+  height: 28px;
+  border: 0;
+  border-radius: 22px;
+}
+
+.footer {
+  padding: 12px 0;
+  background: #FFF;
+  margin: 10px auto;
+
+  & a {
+    margin: 0 10px;
+    font-weight: 700;
+  }
+}
+
+.copyright {
+  color: #979797;
+
+  & a {
+    color: #979797;
+  }
+}
+
+#buscador {
+  width: 240px;
+  height: 45px;
+  margin: 0 130px 10px;
+  display: block;
+  background: url('/assets/images/buscador.png') center no-repeat;
+}
+
+#buscador form {
+  height: 32px;
+  clear: both;
+  margin: 0;
+}
+
+input.buscador {
+  background: #FFF !important;
+  display: block;
+  padding: 8px;
+  width: 360px;
+  border-right: solid 1px #c6c6c6;
+  border-left: solid 1px #c6c6c6;
+  border-top: solid 1px #cecece;
+  border-bottom: solid 1px #a4a4a4;
+  box-shadow: 0 1px 1px #d3d3d3;
+  font-size: 13px;
+  font-family: Helvetica, Arial;
+  border-radius: 4px;
+  float: left;
+}
+
+input.buscador:focus {
+  box-shadow: 0 0 5px 0 #b5dff1;
+  border: 1px solid #38B2E5;
+}
+
+a.ircielo {
+  color: #6b6b6b !important;
+  border-bottom: 1px dotted #999;
+  float: right;
+  text-decoration: none;
+  margin: 7px 0;
+}

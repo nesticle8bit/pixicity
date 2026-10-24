@@ -1,0 +1,34 @@
+// Contenido dentro del editor (app-rich-editor).
+@use '../app/shared/styles/contenido-rico' as rico;
+
+// Contenido del editor (app-rich-editor): mismo formato que el post publicado. Va aquí y no en el componente
+// porque el contenido lo crea el navegador (sin atributo _ngcontent) y por el presupuesto de estilos del componente.
+app-rich-editor .rich-editor__content {
+  @include rico.bloques($etiquetas: false);
+
+  // La miniatura del video llena su caja 16:9 (el componente le pone height: auto !important a las imágenes)
+  figure.video-yt {
+    cursor: pointer;
+
+    img {
+      height: 100% !important;
+      border-radius: 0;
+    }
+  }
+
+  // Celda con el caret: se marca para ver dónde se está escribiendo
+  td:focus-within,
+  th:focus-within {
+    outline: 2px solid var(--re-accent);
+    outline-offset: -2px;
+  }
+
+  // Imagen con pie de foto: se edita con el botón del marco de la imagen
+  figure.img-figure {
+    cursor: pointer;
+  }
+
+  .img-resizable.img-centro {
+    display: table;
+  }
+}

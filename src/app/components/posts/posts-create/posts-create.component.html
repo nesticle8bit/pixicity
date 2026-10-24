@@ -5,7 +5,7 @@
       <app-borrador-aviso [fecha]="pendiente.fecha" (recuperar)="recuperarBorrador()" (descartar)="borrador?.descartar()"></app-borrador-aviso>
     }
     <!-- Barra superior: estado + acciones -->
-    <header class="cp-bar">
+    <header class="cp-bar" #barra>
       <div class="cp-bar__state">
         <span class="cp-bar__badge" [class.cp-bar__badge--edit]="postId">
           <i class="ti" [class.ti-pencil-plus]="!postId" [class.ti-edit]="postId"></i>

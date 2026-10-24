@@ -1,0 +1,333 @@
+// Menú del usuario, popovers de perfil y buscadores chicos.
+
+.top-user {
+  padding: 6px 0px;
+  height: 48px;
+  position: relative;
+
+  & a.avatar-top {
+    overflow: hidden;
+    display: block;
+  }
+
+  & a.avatar-top img {
+    width: 60px;
+    height: 60px;
+    float: left;
+    margin-right: 10px;
+  }
+
+  & .avatar-top h3 {
+    color: #4ea1f0;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  & .avatar-top p {
+    color: #545454;
+    margin: 0;
+    font-size: 12px;
+    line-height: 15px;
+    font-weight: 700;
+  }
+}
+
+#sigueme {
+  position: relative;
+  top: -25px;
+  right: -64px;
+
+  & a {
+    font-weight: 700;
+    color: #FFF;
+    text-transform: uppercase;
+    border-radius: 3px;
+    line-height: 2.4em;
+    padding: 0 10px;
+    height: 25px;
+    display: inline-block;
+    font-size: 10px;
+  }
+
+  & a.gris,
+  #ised a.gris {
+    background: #c8c8c8;
+
+    &:hover {
+      background: #bebebe;
+    }
+  }
+
+  a.verde,
+  #ised a.verde {
+    background: #0cd769;
+
+    &:hover {
+      background: #00ab4e;
+    }
+  }
+}
+
+.bg {
+  &-white {
+    background-color: #fff;
+  }
+}
+
+.pixicity-popover.info {
+  background: url('../assets/images/y.png') repeat-x silver;
+  border: 1px solid #ccc;
+}
+
+.pixicity-popover em {
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.pixicity-popover.info em {
+  color: #000;
+  text-shadow: 0 1px 0 #eee;
+}
+
+.info span#puy {
+  background: url('../assets/images/z.png');
+  display: block;
+  width: 9px;
+  height: 16px;
+  position: absolute;
+  left: -9px;
+  top: 18px;
+}
+
+.help {
+  left: 570px;
+  top: 15px;
+  border-radius: 5px;
+  padding: 10px 15px;
+  width: 185px;
+  box-shadow: 0 1px 1px #D3D3D3;
+}
+
+.help {
+  position: absolute;
+  display: block;
+}
+
+.pos {
+  &-relative {
+    position: relative;
+  }
+}
+
+.font {
+  &-w-700 {
+    font-weight: 700;
+  }
+}
+
+.userInfoLogin li .alertas {
+  position: absolute !important;
+  right: -6px;
+  z-index: 10;
+  background: none !important;
+  top: -11px !important;
+}
+
+.userInfoLogin li .alertas a {
+  padding: 0 0 0 6px;
+  background-position: left top;
+}
+
+.userInfoLogin li .alertas a {
+  background: url('/assets/images/ui/bubble.png') top left;
+  padding: 0 5px;
+  display: block;
+  color: #fff;
+  text-shadow: 0 -1px 0 #000;
+  font-size: 11px;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+.userInfoLogin li .alertas span {
+  background: url('/assets/images/ui/bubble.png') top right;
+  display: block;
+  padding: 0 7px 5px 1px;
+}
+
+.image {
+  &-middle {
+    vertical-align: middle;
+  }
+}
+
+.userInfoLogin img {
+  vertical-align: middle;
+}
+
+.userInfoLogin .usernameMenu a {
+  color: #FFF;
+  text-shadow: 0 1px 0 #000;
+  padding-top: 6px;
+}
+
+.usernameMenu {
+  height: 33px;
+}
+
+img.avamu {
+  width: 21px;
+  float: left;
+  margin: -1px 6px 0 0;
+  height: 21px;
+  border-radius: 3px;
+}
+
+.userInfoLogin ul {
+  margin: 0;
+  padding: 0;
+}
+
+.userInfoLogin ul li {
+  float: left;
+}
+
+.userInfoLogin ul li:hover {
+  background: url('/assets/images/ui/bgnavbaractive.gif') top right repeat-x;
+}
+
+li.usernameMenu:hover a.nick {
+  background: url('/assets/images/ui/bgnavbaractive.gif');
+}
+
+.userInfoLogin ul li.logout {
+  border-right: none;
+  border-left: 1px solid #dcdcdc;
+  padding: 7px 10px;
+}
+
+.userInfoLogin ul li.logout:hover {
+  background: none;
+}
+
+.userInfoLogin .logout a {
+  padding: 0;
+}
+
+.userInfoLogin a.menu {
+  color: #fff;
+  text-shadow: 0 1px 0 black;
+  padding: 8px 11px 9px 11px;
+  display: block;
+}
+
+.userInfoLogin li {
+  background: url('/assets/images/ui/bgnavitem.gif') no-repeat top right;
+
+  &:last-child {
+    background: none;
+  }
+}
+
+.userInfoLogin li:hover {
+  background: url('/assets/images/ui/bgnavbarhover.gif') repeat-x top right;
+}
+
+.userInfoLogin {
+  float: right;
+  margin: 16px 5px;
+  border-bottom: 1px solid #062939;
+  border-top: 1px solid #095275;
+  border-left: 1px solid #08415c;
+  border-right: 1px solid #08415c;
+  height: 35px;
+  background: #004b6d url('/assets/images/ui/bgnavbar.gif');
+  border-radius: 4px;
+}
+
+.user-post-image {
+  border-radius: 0.375rem 0.375rem 0 0 !important;
+}
+
+.userInfoLogin ul li div.notificaciones-list ul li:first-child {
+  border-top: 0px solid #EEE !important;
+}
+
+img.punti {
+  float: right;
+  margin: 8px 0 0 6px;
+}
+
+a.nick span {
+  float: left;
+}
+
+.mini_ibuscador {
+  background: url('/assets/images/ui/searchinput.png') top left repeat-x;
+  border: none;
+  float: left;
+  margin: 0;
+  padding: 10px;
+  width: 183px;
+  height: 34px;
+  font-size: 14px;
+  color: #6b6b6b;
+  border-radius: 0;
+}
+
+.mini_bbuscador {
+  background: url('/assets/images/ui/searchinput.png') repeat-x;
+  border: none;
+  width: 32px;
+  height: 34px;
+  float: left;
+  cursor: pointer;
+  margin: 0 !important;
+  background-position: -204px 0px;
+}
+
+.mini_bbuscador:hover {
+  background-position: -236px 0px;
+}
+
+.mini_bbuscador:active {
+  background-position: -268px 0px;
+}
+
+.onblur_effect {
+  color: #B1B1B1;
+  font-family: Helvetica;
+}
+
+#modalBody {
+  text-align: center;
+}
+
+#modalBody label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+#modalBody input:focus {
+  box-shadow: 0 0 5px 0 #b5dff1;
+  border: 1px solid #38B2E5;
+}
+
+#modalBody input,
+#modalBody textarea {
+  width: 100%;
+  padding: 8px 10px;
+  background: #fff;
+  border-right: solid 1px #c6c6c6;
+  border-left: solid 1px #c6c6c6;
+  border-top: solid 1px #cecece;
+  border-bottom: solid 1px #a4a4a4;
+  box-shadow: 0 1px 1px #d3d3d3;
+  font-size: 13px;
+  font-family: Helvetica, Arial;
+  border-radius: 4px;
+}

@@ -1,0 +1,233 @@
+// Botones del sitio (.bverde, .boton…) y avisos vacíos.
+@use 'variables' as *;
+
+.button-uppercase {
+  text-align: center;
+  height: 24px;
+  line-height: 24px;
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+
+.bverde {
+  text-align: center;
+  height: 24px;
+  line-height: 24px;
+  display: block;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #01db59;
+  border-radius: 2px;
+
+  &:hover {
+    background: #0bea71;
+    color: #fff;
+  }
+}
+
+.bgris {
+  text-align: center;
+  height: 24px;
+  line-height: 24px;
+  display: block;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #aaa;
+  border-radius: 2px;
+
+  &:hover {
+    background: #c8c8c8;
+    color: #fff
+  }
+}
+
+.bazul {
+  color: #fff;
+  background: #2594ef;
+
+  &:hover {
+    color: #fff;
+    background: #1e7dca;
+  }
+
+  &:active {
+    color: #fff;
+    background: #196caf;
+  }
+}
+
+.brojo {
+  text-align: center;
+  height: 24px;
+  line-height: 24px;
+  display: block;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #e53935;
+  border-radius: 2px;
+
+  &:hover {
+    background: #ef5350;
+    color: #fff;
+  }
+
+  &:active {
+    background: #c62828;
+    color: #fff;
+  }
+}
+
+.brojo {
+  color: #fff;
+  background: #e74c3c;
+
+  &:hover {
+    color: #fff;
+    background: #d64636;
+  }
+
+  &:active {
+    color: #fff;
+    background: #bb3b2d;
+  }
+}
+
+.bnaranja {
+  color: #fff;
+  background: #f39c12;
+
+  &:hover {
+    color: #fff;
+    background: #e29210;
+  }
+
+  &:active {
+    color: #fff;
+    background: #c57f0f;
+  }
+}
+
+.nada-gris {
+  padding: 6px;
+  text-align: center;
+  color: #555;
+  background: #F7F7F7;
+}
+
+.titulaw {
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.titulaw h2 {
+  color: #9f9f9f;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+}
+
+#respuestas {
+  margin: 0;
+  overflow: hidden;
+  margin-top: 15px;
+  clear: both;
+
+  & section:nth-child(even) {
+    background-color: rgb(247 247 247 / 65%);
+  }
+}
+
+span.positivo {
+  color: #4ca306 !important;
+  font-weight: bold !important;
+  font-size: 13px !important;
+}
+
+.Container {
+  font-size: 12px;
+  color: #333;
+  position: relative;
+  overflow: hidden;
+}
+
+.boton {
+  border-radius: 3px;
+  padding: 5px 10px;
+  display: inline-block;
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color .15s ease;
+
+  &.block {
+    display: block !important;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $main-color;
+    outline-offset: 2px;
+  }
+
+  &:disabled,
+  &.disabled {
+    opacity: .5;
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+// Variantes de color. Todas fijan el color del texto: sin esto un <a class="boton rojo"> se veía como enlace azul sin fondo.
+// Contraste AA (≥ 4.5:1 con el texto blanco) también en hover: el hover oscurece; antes aclaraba y perdía contraste.
+.boton.azul {
+  background: $main-color;
+  color: #fff;
+}
+
+.boton.azul:hover {
+  background: #095a87;
+}
+
+.boton.rojo {
+  background: #c0392b;
+  color: #fff;
+
+  &:hover {
+    background: #a93226;
+  }
+}
+
+.boton.verde {
+  background: #1e7f4f;
+  color: #fff;
+
+  &:hover {
+    background: #18693f;
+  }
+}
+
+.boton.gris {
+  background: #5f6b74;
+  color: #fff;
+
+  &:hover {
+    background: #4f5a62;
+  }
+}
+
+.boton.link {
+  background: none;
+  color: #686868;
+
+  &:hover {
+    color: #4a4a4a;
+  }
+}

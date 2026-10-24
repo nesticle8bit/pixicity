@@ -122,8 +122,8 @@
 
   <div #editorEl class="rich-editor__content" [hidden]="sourceMode" [class.is-empty]="isEmpty" role="textbox" aria-multiline="true"
     [attr.contenteditable]="disabled ? 'false' : 'true'" [attr.aria-disabled]="disabled"
-    [attr.aria-placeholder]="placeholder()" [attr.data-placeholder]="placeholder()" (input)="onInput()"
-    (click)="onEditorClick($event)"
+    [attr.aria-placeholder]="placeholder()" [attr.data-placeholder]="placeholder()" (input)="onInput($event)"
+    (click)="onEditorClick($event)" (contextmenu)="onEditorContextMenu($event)"
     (blur)="onBlur()" (keydown)="onKeydown($event)" (paste)="onPaste($event)" (dragstart)="onDragStart()"
     (dragend)="onDragEnd()" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
     (drop)="onDrop($event)">

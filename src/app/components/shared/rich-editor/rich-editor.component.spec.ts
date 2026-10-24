@@ -217,6 +217,20 @@ describe('RichEditorComponent', () => {
     });
   });
 
+  describe('historial (cambios sin registrar)', () => {
+    it('deshacer justo después de un cambio (antes del snapshot) vuelve un solo paso', () => {
+      setHtml('<p>uno</p>');
+      editor.innerHTML = '<p>uno dos</p>';
+      component.onInput(); // el snapshot queda pendiente 350 ms
+      editor.innerHTML = '<p>uno dos tres</p>';
+      component.onInput();
+      component.undo();
+      expect(content()).toBe('<p>uno</p>');
+      component.redo();
+      expect(content()).toBe('<p>uno dos tres</p>');
+    });
+  });
+
   describe('historial', () => {
     it('deshacer restaura el contenido y la selección', () => {
       setHtml('<p>hola mundo</p>');
@@ -344,6 +358,79 @@ describe('RichEditorComponent', () => {
       upload$.next('/images/fotos/u/a.jpg');
       expect(editor.querySelector('.rich-editor__uploading')).toBeNull();
       expect(emitted[emitted.length - 1]).toContain('/images/fotos/u/a.jpg');
+    });
+
+    it('el control es inválido mientras sube (el formulario no se envía sin la imagen)', () => {
+      setHtml('<p>x</p>');
+      select('x', true);
+      component['uploadImages']([new File(['a'], 'a.png', { type: 'image/png' })], null);
+      expect(component.validate()).toEqual({ subiendoImagenes: true });
+      upload$.next('/images/fotos/u/a.jpg');
+      expect(component.validate()).toBeNull();
+    });
+
+    it('el cursor queda después de la imagen subida, no antes', () => {
+      setHtml('<p>x</p>');
+      select('x', true);
+      component['uploadImages']([new File(['a'], 'a.png', { type: 'image/png' })], null);
+      upload$.next('/images/fotos/u/a.jpg');
+      const range = window.getSelection()!.getRangeAt(0);
+      const wrap = editor.querySelector('.img-resizable')!;
+      expect(range.collapsed).toBeTrue();
+      expect(range.startContainer).toBe(wrap.parentNode!);
+      expect(range.startOffset).toBe(Array.prototype.indexOf.call(wrap.parentNode!.childNodes, wrap) + 1);
+    });
+
+    it('una posición guardada en un renglón vacío vuelve a ese renglón (no al final del texto anterior)', () => {
+      setHtml('<p>Hola</p><p><span class="img-resizable" contenteditable="false"><img src="/a.png"></span></p><p><br></p><p>Chau</p>');
+      const vacio = editor.querySelectorAll('p')[2];
+      caretIn(vacio);
+      const pos = component['guardarPosicion']();
+      select('Chau', true); // el foco se va a otro lado
+      component['restaurarPosicion'](pos);
+      expect(vacio.contains(window.getSelection()!.getRangeAt(0).startContainer)).toBeTrue();
+    });
+
+    it('al hacer clic en una imagen queda seleccionada también para el navegador (Ctrl+C/Ctrl+X)', () => {
+      setHtml('<p>a<span class="img-resizable" contenteditable="false"><img src="/a.png"></span>b</p>');
+      const img = editor.querySelector('img')!;
+      img.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      const range = window.getSelection()!.getRangeAt(0);
+      expect(range.cloneContents().querySelector('img')).not.toBeNull();
+    });
+
+    it('una tecla que escribe con la imagen seleccionada sigue después de ella en vez de reemplazarla', () => {
+      setHtml('<p>a<span class="img-resizable" contenteditable="false"><img src="/a.png"></span>b</p>');
+      editor.querySelector('img')!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      key('x');
+      const range = window.getSelection()!.getRangeAt(0);
+      expect(range.collapsed).toBeTrue();
+      expect(editor.querySelector('img')).not.toBeNull();
+    });
+  });
+
+  describe('estructura en bloques', () => {
+    it('un editor vacío arranca con un párrafo (el texto no queda suelto en la raíz)', () => {
+      setHtml('');
+      expect(editor.innerHTML).toBe('<p><br></p>');
+      expect(emitted.length ? emitted[emitted.length - 1] : '').toBe('');
+    });
+
+    it('el texto suelto que deja el navegador en la raíz pasa a un párrafo y el cursor sigue en su lugar', () => {
+      setHtml('');
+      editor.innerHTML = 'Hola';
+      caretIn(editor, 0);
+      const t = editor.firstChild as Text;
+      const r = document.createRange();
+      r.setStart(t, 4);
+      r.collapse(true);
+      window.getSelection()!.removeAllRanges();
+      window.getSelection()!.addRange(r);
+      component.onInput();
+      expect(editor.innerHTML).toBe('<p>Hola</p>');
+      const sel = window.getSelection()!.getRangeAt(0);
+      expect(sel.startContainer.textContent).toBe('Hola');
+      expect(sel.startOffset).toBe(4);
     });
   });
 

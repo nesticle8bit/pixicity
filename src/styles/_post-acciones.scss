@@ -1,0 +1,83 @@
+// Barra de puntos y acciones del post, estado en línea.
+
+.meta {
+  background: #fff;
+  overflow: hidden;
+  border-radius: 5px;
+  margin: 0 8px;
+}
+
+.barpuntos a {
+  width: 45px;
+  height: 44px;
+  padding: 0 10px;
+  line-height: 45px;
+  font-size: 20px;
+  font-weight: 400;
+  text-align: center;
+  box-sizing: border-box;
+  color: #0c5fa9;
+  border-right: 1px solid #fafafa;
+  float: left;
+  background: #f0f0f0;
+}
+
+.botones li a {
+  height: 30px;
+  margin: 0 4px 0 0 !important;
+  line-height: 30px;
+  border: 1px solid #f0f0f0 !important;
+  font-size: 11px;
+  font-weight: 700;
+  color: #666;
+  text-align: center;
+  text-transform: uppercase;
+  background: #f0f0f0;
+  display: block;
+  padding: 0 1em;
+}
+
+.botones li {
+  float: left;
+}
+
+.botones li a:hover {
+  background: #e5e4e4 !important;
+  text-decoration: none;
+}
+
+.botones li a:hover .favoritos {
+  color: #ffc700;
+}
+
+.botones li a:hover .denunciar {
+  color: #db4040;
+}
+
+.botones li a:hover .seguir {
+  color: #74d03c;
+}
+
+.barpuntos a:hover {
+  text-decoration: none;
+  background: #0c5fa9;
+  color: #fff;
+}
+
+.user-offline {
+  border-radius: 15px;
+  display: inline-flex;
+  width: 10px;
+  height: 10px;
+  margin: 5px 5px 0 0;
+  background: #B3BAB6;
+}
+
+.user-online {
+  border-radius: 15px;
+  display: inline-flex;
+  width: 10px;
+  height: 10px;
+  margin: 5px 5px 0 0;
+  background: #01db59;
+}

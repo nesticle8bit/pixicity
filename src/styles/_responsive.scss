@@ -1,0 +1,68 @@
+// Ajustes responsive de los bloques anteriores.
+
+@media (max-width: 575.98px) {
+  .userInfoLogin {
+    margin: 10px;
+  }
+}
+
+/* La barra de usuario flota a la derecha; en pantallas medianas/pequeñas
+   los desplegables (notificaciones, mensajes, favoritos, menú de usuario) se
+   anclan a la derecha y se limitan al ancho del viewport para que no se salgan
+   fuera de pantalla y queden inaccesibles al click. */
+@media (max-width: 1199.98px) {
+
+  .userInfoLogin .notificaciones-list,
+  .userInfoLogin .menuver {
+    left: auto !important;
+    right: 0;
+    max-width: calc(100vw - 24px);
+    z-index: 300 !important;
+  }
+
+  .userInfoLogin .notificaciones-list {
+    width: 300px;
+    max-width: calc(100vw - 24px);
+  }
+}
+
+@media (max-width: 767.98px) {
+
+  .contenido {
+    min-height: 0;
+  }
+
+  .barpuntos {
+    display: flex;
+    overflow-x: auto;
+  }
+
+  .barpuntos a {
+    float: none;
+    flex-shrink: 0;
+    width: 36px;
+    padding: 0 4px;
+    font-size: 15px;
+    display: inline-block;
+  }
+
+  .botones li a {
+    padding: 0 .5em;
+    font-size: 10px;
+  }
+
+  /* Aviso sin comentarios */
+  .nada-amarillo {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  /* Tags */
+  .tagbox {
+    padding: 10px 12px;
+  }
+}
+
+/* ============================================
+   V5 — SIDEBAR / WIDGET BOXES (.boxposts)
+   ============================================ */

@@ -15,7 +15,7 @@ import {
   viewChild
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import {
@@ -59,6 +59,7 @@ import {
   MenuButton,
   PALETAS,
   PLAIN_BLOCK_TAGS,
+  PosicionGuardada,
   STANDALONE_TAGS,
   StyleProp,
   TABLE_PICKER_SIZE,
@@ -79,10 +80,13 @@ import { agregarColumna, agregarFila, celdaInicial, celdaVecina, crearTabla, qui
             useExisting: forwardRef(() => RichEditorComponent),
             multi: true,
         },
+        // Mientras sube una imagen el control es inválido: el formulario no se envía sin ella (el "Subiendo…" no se
+        // guarda y el post salía sin la imagen).
+        { provide: NG_VALIDATORS, useExisting: forwardRef(() => RichEditorComponent), multi: true },
     ],
     imports: [MatIcon, NgTemplateOutlet, RichEditorBubbleComponent],
 })
-export class RichEditorComponent implements ControlValueAccessor, AfterViewInit, OnDestroy {
+export class RichEditorComponent implements ControlValueAccessor, Validator, AfterViewInit, OnDestroy {
   readonly placeholder = input<string>('Escribe aquí...');
 
   readonly wrapperEl = viewChild.required<ElementRef<HTMLDivElement>>('wrapperEl');
@@ -193,6 +197,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
 
   private onChange: (value: string) => void = () => {};
   private onTouched: () => void = () => {};
+  private onValidatorChange: () => void = () => {};
   private pendingValue = '';
   private lastEmitted: string | null = null;
   private initialized = false;
@@ -201,13 +206,13 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   private readonly isTouch = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
 
   private plainPaste = false; // Ctrl+Shift+V
-  private uploadSel: TextOffsets | null = null; // dónde insertar las imágenes elegidas
-  private emojiSel: TextOffsets | null = null; // dónde va el próximo emoji (el foco está en el selector)
+  private uploadSel: PosicionGuardada | null = null; // dónde insertar las imágenes elegidas
+  private emojiSel: PosicionGuardada | null = null; // dónde va el próximo emoji (el foco está en el selector)
   private internalDrag = false;
   private uploadSeq = 0;
 
   // Estado del bubble
-  private savedSel: TextOffsets | null = null; // selección a la que se aplicará el enlace
+  private savedSel: PosicionGuardada | null = null; // selección a la que se aplicará el enlace
   private linkEl: HTMLAnchorElement | null = null; // enlace bajo el caret / en edición
   private bubbleAnchor: (() => DOMRect | null) | null = null;
 
@@ -273,6 +278,14 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.onTouched = fn;
   }
 
+  validate(): ValidationErrors | null {
+    return this.uploads > 0 ? { subiendoImagenes: true } : null;
+  }
+
+  registerOnValidatorChange(fn: () => void): void {
+    this.onValidatorChange = fn;
+  }
+
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
     if (isDisabled) {
@@ -286,6 +299,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.deselectImg();
     this.editor.innerHTML = html;
     this.migrateImageSizes();
+    this.normalizarRaiz();
     this.normalizeTrailing();
     this.lastEmitted = serializeHtml(this.editor);
     this.isEmpty = !this.lastEmitted;
@@ -304,8 +318,13 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
 
   //  Eventos del área editable
 
-  onInput(): void {
+  onInput(event?: Event): void {
     this.deselectImg();
+    if ((event as InputEvent | undefined)?.inputType === 'insertParagraph') this.quitarBrDeRelleno();
+    if (this.raizConInline()) {
+      const sel = this.offsetsOf(this.currentRange());
+      if (this.normalizarRaiz() && sel) this.restoreOffsets(sel);
+    }
     this.emit();
     clearTimeout(this.snapshotTimer);
     this.snapshotTimer = setTimeout(() => this.recordHistory(), 350);
@@ -318,16 +337,28 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   onKeydown(event: KeyboardEvent): void {
     if (event.isComposing || this.disabled) return;
 
-    // Con una imagen seleccionada: Supr/Retroceso la borran, Escape la deselecciona
+    // Con una imagen seleccionada: Supr/Retroceso la borran, Ctrl+C/Ctrl+X la copian/cortan (el navegador, sobre la
+    // selección que la rodea) y una tecla que escribe sigue después de la imagen en vez de reemplazarla.
     if (this.selectedImg) {
+      const img = this.selectedImg;
+      const outer = this.imgOuter(img);
       if (event.key === 'Delete' || event.key === 'Backspace') {
         event.preventDefault();
-        const img = this.selectedImg;
         this.deselectImg();
-        (img.closest('figure.img-figure') ?? img.closest('.img-resizable') ?? img).remove();
+        outer.remove();
+        this.normalizarRaiz();
         this.normalizeTrailing();
         this.afterChange();
         return;
+      }
+      const atajo = (event.ctrlKey || event.metaKey) && !event.altKey;
+      if (atajo && ['c', 'x'].includes(event.key.toLowerCase())) {
+        this.seleccionarNodo(outer);
+        if (event.key.toLowerCase() === 'x') this.deselectImg();
+        return;
+      }
+      if (!atajo && !event.altKey && (event.key.length === 1 || event.key === 'Enter')) {
+        this.caretDespuesDe(outer);
       }
       this.deselectImg();
     }
@@ -385,14 +416,14 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
 
     // Imagen copiada (captura, archivo): se sube
     if (files.length && !text.trim()) {
-      this.uploadImages(files, this.offsetsOf(range));
+      this.uploadImages(files, this.guardarPosicion(range));
       return;
     }
 
     // URL pegada sobre texto seleccionado: lo convierte en enlace
     const url = text.trim();
     if (!range.collapsed && this.isUrl(url)) {
-      this.linkOffsets(this.normalizeUrl(url), this.offsetsOf(range));
+      this.linkOffsets(this.normalizeUrl(url), this.guardarPosicion(range));
       return;
     }
 
@@ -450,7 +481,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     const point = this.rangeFromPoint(event.clientX, event.clientY);
     if (dt.files.length) {
       event.preventDefault();
-      this.uploadImages(Array.from(dt.files), point ? this.offsetsOf(point) : null);
+      this.uploadImages(Array.from(dt.files), this.guardarPosicion(point));
       return;
     }
     if (internal) return; // mover texto dentro del editor: comportamiento nativo
@@ -534,7 +565,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
 
   pickImage(): void {
     this.openMenu = null;
-    this.uploadSel = this.offsetsOf(this.currentRange());
+    this.uploadSel = this.guardarPosicion();
     this.fileInputEl().nativeElement.click();
   }
 
@@ -543,25 +574,28 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.openMenu = null;
     const boton = this.toolbarEl().nativeElement.querySelector<HTMLElement>('[aria-label="Insertar emoji"]');
     if (!boton) return;
-    this.emojiSel = this.offsetsOf(this.currentRange());
+    this.emojiSel = this.guardarPosicion();
     void this.emojis.alternar(boton, {
       alElegir: (emoji) => this.insertarEmoji(emoji),
       alCerrar: (porTeclado) => {
+        // Sin preventScroll el foco subía la página al principio del editor y el cursor quedaba fuera de la vista
+        if (porTeclado) {
+          this.editor.focus({ preventScroll: true });
+          this.restaurarPosicion(this.emojiSel);
+        }
         this.emojiSel = null;
-        if (porTeclado) this.editor.focus();
       },
     });
   }
 
   private insertarEmoji(emoji: string): void {
     this.editor.focus({ preventScroll: true });
-    if (this.emojiSel) this.restoreOffsets(this.emojiSel);
-    else this.placeCaretEnd();
+    if (!this.restaurarPosicion(this.emojiSel)) this.placeCaretEnd();
     const frag = document.createDocumentFragment();
     frag.appendChild(document.createTextNode(emoji));
     this.insertFragment(frag);
     this.afterChange();
-    this.emojiSel = this.offsetsOf(this.currentRange());
+    this.emojiSel = this.guardarPosicion();
   }
 
   onFilesChosen(input: HTMLInputElement): void {
@@ -573,7 +607,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
 
   imageFromUrl(): void {
     this.openMenu = null;
-    const sel = this.offsetsOf(this.currentRange());
+    const sel = this.guardarPosicion();
     const url = (prompt('URL de la imagen:') || '').trim();
     if (!url) return;
     if (!/^https?:\/\//i.test(url)) {
@@ -581,7 +615,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       return;
     }
     this.editor.focus();
-    if (sel) this.restoreOffsets(sel);
+    this.restaurarPosicion(sel);
     const frag = document.createDocumentFragment();
     const node = imageNode(url);
     this.watchImageSize(node);
@@ -592,7 +626,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
 
   youtubeFromUrl(): void {
     this.openMenu = null;
-    const sel = this.offsetsOf(this.currentRange());
+    const sel = this.guardarPosicion();
     const url = (prompt('Enlace del video de YouTube:') || '').trim();
     if (!url) return;
     const video = videoYoutube(url);
@@ -601,7 +635,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       return;
     }
     this.editor.focus();
-    if (sel) this.restoreOffsets(sel);
+    this.restaurarPosicion(sel);
     this.insertVideo(video);
     this.afterChange();
   }
@@ -933,10 +967,63 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       return;
     }
     this.selectedImg = img;
+    // La selección del navegador también queda sobre la imagen: así Ctrl+C / Ctrl+X y el menú contextual la copian
+    // o cortan (antes solo se dibujaba el marco y se cortaba una selección vacía: "no pasaba nada").
+    this.editor.focus({ preventScroll: true });
+    this.seleccionarNodo(this.imgOuter(img));
     this.refreshImgState();
     this.hideBubble();
     this.clearCtx();
     this.positionImgFrame();
+  }
+
+  /** Clic derecho sobre una imagen o video: queda seleccionado entero para que "Cortar"/"Copiar" lo incluyan. */
+  onEditorContextMenu(event: MouseEvent): void {
+    const target = event.target as HTMLElement | null;
+    const nodo = target?.closest?.<HTMLElement>(`figure.img-figure, .img-resizable, figure.${CLASE_VIDEO_YOUTUBE}`);
+    if (!nodo || !this.editor.contains(nodo) || this.disabled) return;
+    this.seleccionarNodo(nodo.closest('figure.img-figure') ?? nodo);
+  }
+
+  private seleccionarNodo(node: Node): void {
+    const range = document.createRange();
+    range.selectNode(node);
+    this.selectRange(range);
+  }
+
+  /** Lleva a la vista el cursor (o el elemento) si quedó fuera de la pantalla o debajo de la toolbar fija. */
+  private mostrarCursor(objetivo: Range | HTMLElement): void {
+    const rect = objetivo instanceof Range ? this.rangeRect(objetivo) : objetivo.getBoundingClientRect();
+    const toolbarBottom = this.toolbarEl().nativeElement.getBoundingClientRect().bottom;
+    if (rect && rect.top >= Math.max(toolbarBottom, 0) && rect.bottom <= window.innerHeight) return;
+    const el = objetivo instanceof Range
+      ? (isElement(objetivo.startContainer) ? objetivo.startContainer : objetivo.startContainer.parentElement)
+      : objetivo;
+    // instant: con scroll suave el bubble se mediría antes de terminar el desplazamiento (y se ocultaría)
+    el?.scrollIntoView({ block: 'center', behavior: 'instant' });
+  }
+
+  /** ¿El cursor (colapsado) está pegado a `node`, adentro o en uno de sus dos lados? */
+  private cursorJuntoA(node: Node): boolean {
+    const range = this.currentRange();
+    if (!range?.collapsed) return false;
+    if (node.contains(range.startContainer)) return true;
+    const parent = node.parentNode;
+    if (range.startContainer !== parent || !parent) return false;
+    const i = Array.prototype.indexOf.call(parent.childNodes, node);
+    return range.startOffset === i || range.startOffset === i + 1;
+  }
+
+  /** Cursor justo después de una imagen/figura (en un bloque editable si la figura es un bloque). */
+  private caretDespuesDe(node: HTMLElement): void {
+    if (node.tagName === 'FIGURE') {
+      this.ensureBlockAfter(node);
+      return;
+    }
+    const range = document.createRange();
+    range.setStartAfter(node);
+    range.collapse(true);
+    this.selectRange(range);
   }
 
   startImgResize(event: PointerEvent, corner: 'nw' | 'ne' | 'sw' | 'se'): void {
@@ -1159,6 +1246,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.sourceMode = false;
     this.editor.innerHTML = this.sourceHtml.trim();
     this.migrateImageSizes();
+    this.normalizarRaiz();
     this.normalizeTrailing();
     this.emit();
     this.recordHistory();
@@ -1184,12 +1272,14 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
   }
 
   undo(): void {
+    this.registrarPendiente();
     if (this.historyIndex <= 0) return;
     this.historyIndex--;
     this.restoreHistory();
   }
 
   redo(): void {
+    this.registrarPendiente();
     if (this.historyIndex >= this.history.length - 1) return;
     this.historyIndex++;
     this.restoreHistory();
@@ -1261,18 +1351,20 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       // Texto seleccionado que ya es una URL: se enlaza directo
       const text = range.toString().trim();
       if (!range.collapsed && this.isUrl(text)) {
-        this.linkOffsets(this.normalizeUrl(text), this.offsetsOf(range));
+        this.linkOffsets(this.normalizeUrl(text), this.guardarPosicion(range));
         return;
       }
     }
 
     this.linkEl = existing;
     this.linkHref = existing?.getAttribute('href') || '';
-    this.savedSel = this.offsetsOf(range);
+    // El bubble se oculta si su ancla no está a la vista: con el cursor fuera de la pantalla Ctrl+K "no hacía nada"
+    if (range) this.mostrarCursor(existing ?? range);
+    this.savedSel = this.guardarPosicion(range);
     this.showBubbleColors = false;
     this.showBubbleAt('edit-link', () => {
       if (this.linkEl?.isConnected) return this.linkEl.getBoundingClientRect();
-      return this.savedSel ? this.rangeRect(rangeFromOffsets(this.editor, this.savedSel.start, this.savedSel.end)) : null;
+      return this.rangeRect(this.rangoGuardado(this.savedSel));
     });
     setTimeout(() => this.bubble().inputEnlace()?.nativeElement.select(), 0);
   }
@@ -1287,12 +1379,12 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     if (link?.isConnected) {
       if (url) link.setAttribute('href', this.normalizeUrl(url));
       else unwrapNode(link);
-      if (sel) this.restoreOffsets(sel);
+      this.restaurarPosicion(sel);
       this.afterChange();
     } else if (url && sel) {
       this.linkOffsets(this.normalizeUrl(url), sel);
-    } else if (sel) {
-      this.restoreOffsets(sel);
+    } else {
+      this.restaurarPosicion(sel);
     }
   }
 
@@ -1300,21 +1392,23 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     const sel = this.savedSel;
     this.hideBubble();
     this.editor.focus();
-    if (sel) this.restoreOffsets(sel);
+    this.restaurarPosicion(sel);
   }
 
   removeLink(): void {
     const link = this.linkEl;
-    const sel = this.savedSel ?? this.offsetsOf(this.currentRange());
+    const sel = this.savedSel ?? this.guardarPosicion();
     this.hideBubble();
     this.editor.focus();
 
     if (link?.isConnected) {
       unwrapNode(link);
-      if (sel) this.restoreOffsets(sel);
+      this.restaurarPosicion(sel);
       this.afterChange();
-    } else if (sel && sel.start !== sel.end) {
-      const range = rangeFromOffsets(this.editor, sel.start, sel.end);
+      return;
+    }
+    const range = this.rangoGuardado(sel);
+    if (range && !range.collapsed) {
       this.formatRange(range, (block, s, e) => this.reformat(block, s, e, (el) => el.tagName === 'A', unwrapNode));
     }
   }
@@ -1424,10 +1518,10 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     return marks;
   }
 
-  private linkOffsets(url: string, sel: TextOffsets | null): void {
-    if (!sel) return;
+  private linkOffsets(url: string, sel: PosicionGuardada | null): void {
     this.editor.focus();
-    const range = rangeFromOffsets(this.editor, sel.start, sel.end);
+    const range = this.restaurarPosicion(sel);
+    if (!range) return;
 
     if (range.collapsed) {
       // Sin selección: inserta el enlace usando la URL como texto
@@ -1514,8 +1608,9 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     const last = nodes[nodes.length - 1];
     range.insertNode(holder);
 
-    // Imagen suelta al final del editor: deja un párrafo para seguir escribiendo
-    if (last.parentNode === this.editor && !isBlock(last)) {
+    // Imagen suelta al final del editor: deja un párrafo para seguir escribiendo. Solo si es lo último: en medio
+    // del texto ese párrafo partía el renglón en dos y mandaba el cursor a otra línea.
+    if (last.parentNode === this.editor && !isBlock(last) && !last.nextSibling) {
       this.ensureBlockAfter(last);
       return;
     }
@@ -1555,7 +1650,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     return blocks;
   }
 
-  private uploadImages(files: File[], at: TextOffsets | null): void {
+  private uploadImages(files: File[], at: PosicionGuardada | null): void {
     const valid = files.filter((f) => IMAGE_TYPES.includes(f.type) && f.size <= IMAGE_MAX_BYTES);
     if (valid.length < files.length) {
       this.notificationService.warning('Solo se permiten imágenes JPG, PNG, GIF o WEBP de hasta 8 MB', 'Imagen no válida');
@@ -1563,8 +1658,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     if (!valid.length) return;
 
     this.editor.focus();
-    if (at) this.restoreOffsets(at);
-    else if (!this.currentRange()) this.placeCaretEnd();
+    if (!this.restaurarPosicion(at) && !this.currentRange()) this.placeCaretEnd();
 
     valid.forEach((file) => {
       const id = `${++this.uploadSeq}`;
@@ -1578,6 +1672,7 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
       frag.appendChild(placeholder);
       this.insertFragment(frag);
       this.uploads++;
+      this.onValidatorChange();
 
       this.fotosService
         .uploadImage(file)
@@ -1592,15 +1687,25 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
 
   // Se busca el placeholder por id: un deshacer pudo haber recreado el nodo
   private finishUpload(id: string, url: string | null): void {
-    this.uploads--;
-    const placeholder = this.editor.querySelector(`[data-upload="${id}"]`);
+    this.uploads = Math.max(0, this.uploads - 1);
+    this.onValidatorChange();
+    const placeholder = this.editor.querySelector<HTMLElement>(`[data-upload="${id}"]`);
     if (placeholder) {
+      // Chrome mueve el cursor ANTES del nodo reemplazado: lo que se escribía después de subir quedaba delante de la
+      // imagen. Si el cursor estaba junto al "Subiendo…", queda después de la imagen.
+      const cursorAhi = this.cursorJuntoA(placeholder);
       if (url) {
         const node = imageNode(url);
         this.watchImageSize(node);
         placeholder.replaceWith(node);
+        if (cursorAhi) this.caretDespuesDe(node);
+      } else {
+        const range = document.createRange();
+        range.setStartBefore(placeholder);
+        range.collapse(true);
+        placeholder.remove();
+        if (cursorAhi) this.selectRange(range);
       }
-      else placeholder.remove();
       this.emit();
       this.recordHistory();
     }
@@ -1920,6 +2025,28 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.selectRange(rangeFromOffsets(this.editor, sel.start, sel.end));
   }
 
+  /** Guarda el cursor antes de que el foco salga del editor (ver PosicionGuardada). */
+  private guardarPosicion(range: Range | null = this.currentRange()): PosicionGuardada | null {
+    if (!range || !this.editor.contains(range.commonAncestorContainer)) return null;
+    return { range: range.cloneRange(), offsets: this.offsetsOf(range) };
+  }
+
+  /** Rango de una posición guardada, sin seleccionarlo: el clon si sus nodos siguen en el editor, si no los offsets. */
+  private rangoGuardado(pos: PosicionGuardada | null): Range | null {
+    if (!pos) return null;
+    const vivo = (n: Node) => n.isConnected && this.editor.contains(n);
+    if (vivo(pos.range.startContainer) && vivo(pos.range.endContainer)) return pos.range.cloneRange();
+    return pos.offsets ? rangeFromOffsets(this.editor, pos.offsets.start, pos.offsets.end) : null;
+  }
+
+  /** Vuelve a seleccionar una posición guardada y devuelve el rango (null si no había ninguna utilizable). */
+  private restaurarPosicion(pos: PosicionGuardada | null): Range | null {
+    const range = this.rangoGuardado(pos);
+    if (!range) return null;
+    this.selectRange(range);
+    return this.currentRange();
+  }
+
   private caretAtStart(el: HTMLElement): void {
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
     const first = walker.nextNode();
@@ -1981,6 +2108,58 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.caretAtStart(next as HTMLElement);
   }
 
+  /**
+   * Todo el contenido vive en bloques. El navegador escribe texto suelto en la raíz cuando el editor queda vacío
+   * (al empezar, o tras Ctrl+A y borrar) y con texto suelto una imagen insertada partía el texto con un párrafo
+   * nuevo, el cursor saltaba y lo siguiente caía en cualquier lado. Envuelve cada tramo inline en un <p>;
+   * devuelve true si cambió algo (quien llama restaura el cursor).
+   */
+  private normalizarRaiz(): boolean {
+    let cambio = false;
+    let p: HTMLParagraphElement | null = null;
+    for (const n of Array.from(this.editor.childNodes)) {
+      const esBloque = isBlock(n) || (isElement(n) && STANDALONE_TAGS.includes(n.tagName));
+      const vacio = n.nodeType === Node.TEXT_NODE && !(n as Text).data.trim();
+      if (esBloque || n.nodeType === Node.COMMENT_NODE || (vacio && !p)) {
+        p = null;
+        continue;
+      }
+      if (!p) {
+        p = document.createElement('p');
+        this.editor.insertBefore(p, n);
+        cambio = true;
+      }
+      p.appendChild(n);
+    }
+    if (!this.editor.firstChild) {
+      this.editor.appendChild(emptyParagraph());
+      cambio = true;
+    }
+    return cambio;
+  }
+
+  /**
+   * Enter justo antes de una imagen: Chrome cree que el renglón nuevo está vacío (la imagen no es editable) y le
+   * pone un <br> de relleno delante, que se veía como un renglón en blanco arriba de la imagen.
+   */
+  private quitarBrDeRelleno(): void {
+    const bloque = this.blockOf(this.currentRange()?.startContainer ?? null);
+    for (const b of [bloque, bloque?.previousElementSibling, bloque?.nextElementSibling]) {
+      const br = b?.firstChild ?? null;
+      const siguiente = br?.nextSibling ?? null;
+      if (isElement(br) && br.tagName === 'BR' && isElement(siguiente) && isAtomic(siguiente)) br.remove();
+    }
+  }
+
+  /** ¿Hay algo inline suelto en la raíz? (chequeo barato antes de calcular offsets en cada tecla) */
+  private raizConInline(): boolean {
+    if (!this.editor.firstChild) return true;
+    for (let n: ChildNode | null = this.editor.firstChild; n; n = n.nextSibling) {
+      if (n.nodeType === Node.TEXT_NODE ? !!(n as Text).data.trim() : isElement(n) && !isBlock(n) && !STANDALONE_TAGS.includes(n.tagName)) return true;
+    }
+    return false;
+  }
+
   // Asegura que el último hijo del editor sea un bloque editable, para poder
   // escribir debajo de imágenes/líneas insertadas al final.
   private normalizeTrailing(): void {
@@ -2011,10 +2190,19 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     this.historyIndex = this.history.length - 1;
   }
 
+  /**
+   * El snapshot se toma 350 ms después de escribir: un Ctrl+Z antes de eso (p. ej. justo después de cortar) volvía
+   * dos pasos atrás y se perdía lo último. Los cambios todavía sin registrar se registran antes de deshacer/rehacer.
+   */
+  private registrarPendiente(): void {
+    if (this.editor.innerHTML !== this.history[this.historyIndex]?.html) this.recordHistory();
+  }
+
   private restoreHistory(): void {
     const entry = this.history[this.historyIndex];
     this.deselectImg();
     this.editor.innerHTML = entry?.html ?? '';
+    this.normalizarRaiz();
     this.emit();
     this.hideBubble();
     this.editor.focus();
@@ -2094,9 +2282,13 @@ export class RichEditorComponent implements ControlValueAccessor, AfterViewInit,
     if (!range) return null;
     const rect = range.getBoundingClientRect();
     if (rect.width || rect.height) return rect;
-    const rects = range.getClientRects();
-    if (rects.length) return rects[0];
-    return this.blockOf(range.startContainer)?.getBoundingClientRect() ?? null;
+    // Chrome a veces devuelve rectángulos en cero (p. ej. el cursor justo después de un emoji al final del renglón):
+    // tomados al pie de la letra el bubble quedaba "fuera de la vista" y se ocultaba apenas se abría (Ctrl+K no
+    // mostraba nada). Se ignoran y se usa el bloque.
+    const util = Array.from(range.getClientRects()).find((r) => r.height || r.top || r.left);
+    if (util) return util;
+    const nodo = range.startContainer;
+    return (this.blockOf(nodo) ?? (isElement(nodo) ? nodo : nodo.parentElement))?.getBoundingClientRect() ?? null;
   }
 
   //  Helpers

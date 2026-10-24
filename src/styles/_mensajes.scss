@@ -1,0 +1,99 @@
+// Lista de mensajes privados.
+
+.fs-11 {
+  font-size: 11px;
+}
+
+// Listas de mensajes privados (recibidos y enviados)
+.msg-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.msg-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 10px 10px 4px;
+  border-bottom: 1px solid #eee;
+  border-left: 3px solid transparent;
+  transition: background 0.15s;
+
+  // Zebra: filas pares en gris, impares sin fondo (hover / no leído / seleccionado la sobrescriben).
+  &--alt {
+    background: #f3f3f3;
+  }
+
+  &:hover {
+    background: #f5f8ff;
+  }
+
+  &__avatar {
+    flex: 0 0 40px;
+
+    img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0; // permite que el texto se corte con ellipsis
+    cursor: pointer;
+    outline-offset: 2px;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__from {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__date {
+    flex: 0 0 auto;
+    font-size: 12px;
+    font-style: italic;
+  }
+
+  &__subject,
+  &__preview {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__preview {
+    color: #666;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .msg-item__avatar {
+    display: none;
+  }
+
+  // Casilla + acciones dejan ~170 px para la cabecera: con el contador y la hora el nombre quedaba en "@a…".
+  // La hora baja a su propia línea y el nombre usa todo el ancho.
+  .msg-item__head {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+
+  .msg-item__date {
+    order: 1;
+    flex-basis: 100%;
+    font-size: 11.5px;
+  }
+}

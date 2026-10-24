@@ -1,0 +1,101 @@
+// Panel e íconos de la actividad (monitor).
+
+.dashboard {
+  &--title {
+    font-size: 1rem;
+    color: #5f5f5f;
+    border-bottom: 1px solid rgb(216 216 216 / 49%);
+
+    padding-bottom: .5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.btn-menu {
+  border: 0;
+  background: none;
+}
+
+.dsw {
+  margin-bottom: 15px;
+
+  & h2 {
+    color: #F60;
+    margin: 10px 0 0;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  & li {
+    padding: 10px 0;
+    border-bottom: 1px #ddd dotted;
+    margin: 0;
+    line-height: 1;
+  }
+
+  & label {
+    line-height: 1.5em;
+    font-weight: 700;
+    font-size: .8rem;
+  }
+}
+
+
+.monac_icons {
+  background-image: url('/assets/images/sprite-monitor.png');
+  background-repeat: no-repeat;
+  float: left;
+  font-size: 12px;
+  margin-right: 5px;
+
+  width: 16px;
+  height: 16px;
+}
+
+span.ma_voto_negativo {
+  background-position: 0 -16px;
+}
+
+span.ma_comment_post {
+  background-position: 0 -31px;
+}
+
+span.ma_comment_resp {
+  background-position: 0 -47px;
+}
+
+span.ma_post {
+  background-position: 0 -63px;
+}
+
+span.ma_points {
+  background-position: 0 -80px;
+}
+
+span.ma_star {
+  background-position: 0 -96px;
+}
+
+span.ma_follow {
+  background-position: 0 -112px;
+}
+
+span.ma_blue_ball {
+  background-position: 0 -144px;
+}
+
+span.ma_share {
+  background-position: 0 -159px;
+}
+
+span.ma_status {
+  background-position: 0 -176px;
+}
+
+span.ma_wall_post {
+  background-position: 0 -191px;
+}
+
+span.ma_monitor_rango {
+  background-position: 0 -257px;
+}

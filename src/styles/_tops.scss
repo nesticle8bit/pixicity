@@ -1,0 +1,113 @@
+// Selector de período de los tops y listados de categorías.
+
+.mentop {
+  right: 0;
+  position: absolute;
+}
+
+.actualtop {
+  padding: 0 12px 0 10px;
+  font-size: 11px;
+  float: right;
+  color: #666;
+  background: url('/assets/images/ui/droparrow.png') right 6px no-repeat #fff;
+}
+
+.actualtop,
+.tops span {
+  font-weight: 700;
+}
+
+.listop {
+  border: solid #CCC;
+  background: #fff;
+  border-width: 1px 1px 0;
+  margin-top: 24px;
+  display: none;
+  z-index: 1;
+  top: 24px;
+  left: 10px;
+
+  & a {
+    border-bottom: 1px solid #CCC;
+    display: block;
+    padding: 5px 6px;
+    font-size: 11px;
+
+    &:hover {
+      color: #FFF;
+      background: #067CB4;
+    }
+  }
+}
+
+.lista-posts {
+  border-top: #E0E0E0 1px solid;
+  padding: 7px 0 7px 10px;
+  background: #fff;
+}
+
+.lista-posts:nth-child(2n+1) {
+  background: #f5f5f5;
+}
+
+.catbox {
+  margin: 6px 0 6px 6px;
+  width: 180px;
+}
+
+.catbox:hover .liscat,
+.liscat a {
+  display: block;
+}
+
+.liscat,
+.simcat {
+  background: #fff;
+}
+
+.simcat {
+  border: 1px solid #ebebeb;
+  color: #494d50;
+  padding: 3px 10px;
+  font-size: 0.8rem;
+}
+
+.simcat span:before {
+  display: inline-block;
+  content: "";
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #696969;
+}
+
+.liscat {
+  display: none;
+  border: solid #ebebeb;
+  border-width: 0 1px 1px;
+  overflow: auto;
+  max-height: 380px;
+  position: absolute;
+  width: 179px;
+  z-index: 1;
+  font-size: .8rem
+}
+
+.liscat a {
+  font-weight: 400;
+  text-align: left;
+  padding: 0 10px;
+  line-height: 1.8em;
+  color: #4d4d4d;
+}
+
+.liscat a.listo,
+.liscat a:hover {
+  color: #0a6fc2;
+  text-decoration: none;
+}

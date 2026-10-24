@@ -1,0 +1,72 @@
+// Hashtags enlazados y visor de imágenes.
+@use 'variables' as *;
+
+/* #hashtags enlazados dentro de posts, temas y comentarios (HTML inyectado). */
+a.te-tag {
+  font-weight: 600;
+  color: $link-color;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Visor de imágenes del post (appContenidoPost lo agrega al <body>)
+.img-visor {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  background: rgba(10, 12, 16, .88);
+  cursor: zoom-out;
+  animation: img-visor-in .15s ease-out;
+
+  img {
+    max-width: 100%;
+    max-height: calc(100vh - 90px);
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, .5);
+  }
+
+  &__pie {
+    margin: 0;
+    color: #e6e6e6;
+    font-size: .9rem;
+    text-align: center;
+  }
+
+  &__cerrar {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .15);
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(255, 255, 255, .28);
+    }
+  }
+}
+
+@keyframes img-visor-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

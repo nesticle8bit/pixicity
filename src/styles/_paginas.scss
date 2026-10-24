@@ -1,0 +1,133 @@
+// Página del post, tablas, borradores y formularios genéricos.
+
+.post {
+  &-header {
+    a {
+      color: #666;
+    }
+
+    &-list {
+      font-weight: 400;
+      color: #666;
+
+      & li {
+        max-width: 180px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  &-nav {
+    a {
+      font-size: 13px;
+      margin-left: 4px;
+      padding: 2px 8px;
+      border: none;
+      background: #fff;
+      color: #ababab;
+      border-radius: 3px;
+    }
+  }
+}
+
+.mite {
+  border: solid #ddd;
+  border-width: 0 1px 1px;
+  overflow: hidden;
+  padding: 10px;
+  clear: both;
+}
+
+.status {
+  width: 12px;
+  height: 12px;
+  background: url('/assets/images/ui/status.png') no-repeat;
+  float: right;
+  margin: 2.5px 0px 0 0;
+}
+
+.online {
+  background-position: center -2px;
+}
+
+table.table-sm {
+  border: 1px solid #ddd;
+
+  & thead tr th {
+    background: #ebebeb;
+    padding: 10px;
+  }
+
+  &>tbody>tr>td {
+    padding: 7px;
+  }
+
+  &>tbody>tr:nth-of-type(odd) {
+    background: #fff !important;
+  }
+}
+
+.table>:not(:last-child)>:last-child>* {
+  border-bottom: 1px solid #ddd;
+}
+
+.lista-posts {
+  border-top: #E0E0E0 1px solid;
+  padding: 7px 0 7px 10px;
+  background: #fff;
+}
+
+.post-privado {
+  padding-left: 14px;
+  background: transparent url('../assets/images/icons/key-solid.png') no-repeat scroll -3px center;
+}
+
+#borradores-search {
+  border-radius: 15px;
+  position: absolute;
+  top: -2px;
+  right: 0;
+  background: url('/assets/images/ui/searchboxy.gif') no-repeat 5px 5px #FFF;
+  padding: 4px 4px 4px 23px;
+  width: 165px;
+  border: solid 1px #CCC;
+  font-size: 12px;
+}
+
+#borradores-search:active,
+#borradores-search:focus {
+  box-shadow: 0 0 5px #2bbbff;
+  border: 1px solid #2bbbff;
+}
+
+.form-label {
+  font-weight: bold;
+}
+
+.row-deleted {
+  opacity: .5;
+  color: #525252;
+}
+
+.list-items {
+  float: none !important;
+  border-bottom: 1px solid #f1f1f1;
+  padding: 2px 10px 6px 10px;
+  background: none !important;
+  font-size: .7rem;
+}
+
+.form-container {
+
+  &--footer {
+    background: #e8e8e8;
+    border-top: 1px solid #d8d8d8;
+    padding: .5rem;
+  }
+}
+
+.border-right {
+  border-right: 1px solid #dadada;
+}

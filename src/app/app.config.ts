@@ -111,6 +111,9 @@ const SIN_LOADER = [
   'comunidades/temas/recientes',
   `fotos/${ID}`,
   'fotos',
+  // Imágenes subidas desde el editor: muestra "Subiendo imagen…" donde va a quedar; el overlay de pantalla completa
+  // tapaba el editor y bloqueaba los clics mientras subía.
+  'fotos/imagenes',
   `fotos/${ID}/comentarios`,
   `shouts/${ID}/comentarios`,
   // Me gusta / favoritos de shouts: el botón responde al instante y el overlay lo taparía.

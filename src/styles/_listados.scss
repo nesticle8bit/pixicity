@@ -1,0 +1,139 @@
+// Shouts, listas en cebra, tops y utilidades sueltas.
+
+.shout {
+  opacity: .3;
+  background: url('/assets/images/ui/20shout.png') no-repeat;
+  display: inline-block;
+  margin: 0 !important;
+  width: 18px !important;
+  height: 18px !important;
+
+  &.image {
+    background-position: 0 0;
+
+    &:hover {
+      opacity: 1;
+      background-position: 0 -20px;
+    }
+  }
+
+  &.video {
+    background-position: -20px 0;
+
+    &:hover {
+      opacity: 1;
+      background-position: -20px -20px;
+    }
+  }
+
+  &.link {
+    background-position: -40px 0;
+
+    &:hover {
+      opacity: 1;
+      background-position: -40px -20px;
+    }
+  }
+}
+
+.list-posts--zebra {
+  padding: 7px 10px;
+  background: #f5f5f5;
+  border-top: #e0e0e0 1px solid;
+  font-size: .76rem;
+
+  &:nth-child(2n+1) {
+    border-top: #FFF 1px solid;
+    background: #FFF;
+  }
+
+  & strong {
+    width: 21px;
+    color: #666;
+    font-weight: 700;
+    margin-right: 2px;
+  }
+
+  & .value {
+    font-weight: bold;
+    text-shadow: 0 1px 0 #fff;
+    // #69900f no llegaba a 4,5:1 sobre las filas cebra (Lighthouse/axe).
+    color: #4f720b;
+  }
+}
+
+.view-more-list {
+  background: #eff9fd;
+  text-align: center;
+  border-radius: 0 0 5px 5px;
+  border-top: 1px solid #cfe9f4;
+  padding: 3px;
+}
+
+.tops-container {
+  border: #f0d35b solid 1px;
+
+  & .card-body {
+    padding: 0;
+  }
+
+  & .card-header {
+    padding: 7px 10px;
+    border-top: 1px solid #FFF;
+    border-bottom: 1px solid #f0d35b;
+    background: #f9ecb7;
+    overflow: hidden;
+    border-radius: 3px 3px 0 0;
+
+    & h2 {
+      text-shadow: 0 1px 0 rgb(255 255 255 / 70%);
+      color: #b59130;
+      float: left;
+      padding-right: 10px;
+      margin: 0;
+      font-weight: 700;
+      font-size: 15px;
+    }
+  }
+}
+
+.opacity-50 {
+  opacity: .5;
+}
+
+.table>:not(:first-child) {
+  border-top: none;
+}
+
+.text {
+
+  &-rose {
+    color: #E1306C;
+  }
+}
+
+.bg-login {
+  background: url('/assets/images/register-bg.gif') repeat;
+  padding: 2rem;
+  padding-top: 1.4rem;
+  padding-bottom: 1.4rem;
+  border-radius: 10px;
+}
+
+.bg-white {
+  background: #fff;
+}
+
+.align {
+  &-middle {
+    vertical-align: middle;
+  }
+}
+
+.abrir {
+  padding-right: 5px;
+}
+
+.img-avatar {
+  width: 20px;
+}

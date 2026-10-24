@@ -1,0 +1,155 @@
+// Cabecera: logo, menú principal, submenú, títulos de sección y enlaces de registro.
+@use 'variables' as *;
+
+.cursor {
+  &--pointer {
+    cursor: pointer;
+  }
+
+  &--help {
+    cursor: help;
+  }
+}
+
+.main-logo {
+  width: 184px;
+  height: 48px;
+  background: url('../assets/images/logo.svg') no-repeat;
+  float: left;
+  margin-top: 16px;
+}
+
+.main-menu {
+  background: $accent-color;
+
+  // Flex row anchored to the bottom: tabs always align on the baseline of the
+  // bar regardless of zoom level. Replaces the fragile fixed-height + px hack.
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 4px;
+    min-height: 43px;
+  }
+
+  &--item {
+    color: #fff;
+    margin: 0;
+    padding: 8px 10px;
+    border-radius: 4px 4px 0 0;
+    background: #00354e;
+    font-size: .8rem;
+    font-weight: bold;
+    line-height: 1.2;
+    white-space: nowrap;
+
+    &>a {
+      color: #fff;
+    }
+
+    &--active {
+      background: #fff;
+
+      &>a {
+        color: #00354e;
+      }
+    }
+  }
+}
+
+.sub-menu {
+  background: rgb(233, 233, 233);
+  background: linear-gradient(0deg, rgba(233, 233, 233, 1) 0%, rgba(255, 255, 255, 1) 60%);
+
+  border: 1px solid #ccc;
+  border-top: none;
+
+  &--item {
+    color: #105CB6;
+    padding: 6px 10px 6px 10px;
+    font-size: .8rem;
+    font-weight: bold;
+
+    &--active {
+      background: #eee;
+      border-radius: 18px;
+
+      &>a {
+        color: #00354e;
+      }
+    }
+  }
+}
+
+.container--home {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  padding-top: 10px;
+}
+
+.dot {
+  &--ccc {
+    background: url('/assets/images/dotccc.gif') center repeat-x;
+    margin: 20px 0;
+
+    & span {
+      display: block;
+      text-align: center;
+      background-color: #fff;
+      margin: 0 auto;
+      font-size: 18px;
+      padding: 0 20px;
+      color: #6b6b6b;
+      font-family: Georgia, "Times New Roman", Times, serif;
+      font-style: italic;
+
+      &.w200 {
+        width: 200px;
+      }
+    }
+  }
+}
+
+// Títulos de sección. Son <h2> (antes <h6>: el orden de encabezados saltaba de h1 a h6); el tamaño lo fija esta
+// clase, no la etiqueta, para que se vean igual que antes.
+.main-title {
+  background: url('/assets/images/dotccc.gif') center repeat-x;
+  position: relative;
+  height: 19px;
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.main-title span {
+  font-weight: 700;
+  font-size: 16px !important;
+  background: #fff;
+  padding-right: 10px;
+  line-height: 1.2em;
+  color: #666;
+  float: left;
+}
+
+.last-posts {
+  font-size: .85rem;
+}
+
+a.registro {
+  background: url('/assets/images/register.png') bottom left no-repeat;
+  width: 143px;
+  height: 45px;
+  display: block;
+  margin: 8px 10px;
+  float: right;
+}
+
+a.identificarse {
+  color: #fff !important;
+  text-shadow: 0 1px 0 #000;
+  margin: 26px 5px 0px 5px;
+  font-size: .85rem;
+}

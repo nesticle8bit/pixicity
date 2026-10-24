@@ -1,5 +1,5 @@
 import { AvisoProtocoloComponent } from '../../shared/aviso-protocolo/aviso-protocolo.component';
-import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { afterNextRender, Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, map, of, switchMap } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -103,7 +103,22 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   public autoTags = new Set<string>();
   private lastAutoTitulo = '';
 
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly barra = viewChild<ElementRef<HTMLElement>>('barra');
+
   constructor() {
+    // La barra de acciones es fija arriba: la toolbar del editor (también fija) se pega debajo y no detrás. Se mide en
+    // vivo porque en el celular la barra ocupa dos filas.
+    afterNextRender(() => {
+      const barra = this.barra()?.nativeElement;
+      if (!barra || typeof ResizeObserver === 'undefined') return;
+      const ajustar = () => this.host.nativeElement.style.setProperty('--rich-editor-sticky-top', `${barra.offsetHeight}px`);
+      const observador = new ResizeObserver(ajustar);
+      observador.observe(barra);
+      ajustar();
+      this.destroyRef.onDestroy(() => observador.disconnect());
+    });
+
     this.currentUser = this.securityService.getCurrentUser();
 
     this.displayService.setDisplay({

@@ -6,6 +6,24 @@ function clean(markup: string): string {
   return div.innerHTML;
 }
 
+describe('rich-editor-paste: imágenes copiadas del propio editor', () => {
+  it('conserva el tamaño elegido y la alineación', () => {
+    const out = clean('<p>a<span class="img-resizable img-der" contenteditable="false"><img src="/images/x.png" width="320" height="200"></span></p>');
+    expect(out).toContain('class="img-resizable img-der"');
+    expect(out).toContain('width="320"');
+    expect(out).toContain('height="200"');
+  });
+
+  it('una imagen con pie de foto vuelve a ser la figura (el pie no queda como texto suelto)', () => {
+    const out = clean('<figure class="img-figure img-centro" contenteditable="false"><span class="img-resizable"><img src="/images/x.png"></span><figcaption>Atardecer</figcaption></figure>');
+    expect(out).toMatch(/^<figure class="img-figure img-centro" contenteditable="false"><span class="img-resizable" contenteditable="false"><img src="\/images\/x.png"><\/span><figcaption>Atardecer<\/figcaption><\/figure>$/);
+  });
+
+  it('descarta tamaños absurdos', () => {
+    expect(clean('<img src="/images/x.png" width="999999">')).not.toContain('width=');
+  });
+});
+
 describe('rich-editor-paste', () => {
   it('descarta scripts, estilos, metadatos y atributos', () => {
     const out = clean(

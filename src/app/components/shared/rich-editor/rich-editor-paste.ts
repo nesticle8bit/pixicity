@@ -30,6 +30,8 @@ const TAG_MAP: Record<string, string> = {
 const FLAT_CONTAINERS = ['P', 'LI', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'PRE'];
 
 const ALIGNS = ['center', 'right', 'justify'];
+// Alineación de imágenes del editor (IMG_ALIGN_CLASSES en rich-editor.config)
+const IMG_ALIGN = ['img-izq', 'img-centro', 'img-der'];
 
 function isBlockTag(tag: string | undefined): boolean {
   return !!tag && (BLOCK_TAGS.includes(tag.toUpperCase()) || tag === 'ul' || tag === 'ol');
@@ -167,9 +169,45 @@ function convertNode(node: Node, out: Node, inPre: boolean): void {
     return;
   }
 
+  // Imagen con pie de foto copiada del propio editor: entre bloques vuelve a ser la figura; dentro de un párrafo,
+  // solo la imagen (sin esto el <figcaption> terminaba como texto suelto pegado a la imagen).
+  if (name === 'FIGURE' && source.classList.contains('img-figure')) {
+    const img = source.querySelector('img');
+    if (!img) return;
+    if (!(out instanceof DocumentFragment)) {
+      convertNode(img, out, inPre);
+      return;
+    }
+    const fig = document.createElement('figure');
+    fig.className = 'img-figure';
+    fig.setAttribute('contenteditable', 'false');
+    fig.classList.add(...IMG_ALIGN.filter((c) => source.classList.contains(c)));
+    convertNode(img, fig, inPre);
+    const caption = source.querySelector('figcaption')?.textContent?.trim();
+    if (caption) {
+      const cap = document.createElement('figcaption');
+      cap.textContent = caption;
+      fig.appendChild(cap);
+    }
+    if (fig.querySelector('img')) out.appendChild(fig);
+    return;
+  }
+
   if (name === 'IMG') {
     const src = (source.getAttribute('src') || '').trim();
-    if (isSafeImageSrc(src)) out.appendChild(imageNode(src, source.getAttribute('alt') || ''));
+    if (!isSafeImageSrc(src)) return;
+    const wrap = imageNode(src, source.getAttribute('alt') || '');
+    // Copiada del propio editor (cortar/pegar): conserva el tamaño elegido y la alineación
+    const img = wrap.querySelector('img')!;
+    for (const attr of ['width', 'height']) {
+      const v = Number(source.getAttribute(attr));
+      if (v > 0 && v <= 4000) img.setAttribute(attr, `${Math.round(v)}`);
+    }
+    const contenedor = source.closest('.img-resizable');
+    if (contenedor && !source.closest('figure.img-figure')) {
+      wrap.classList.add(...IMG_ALIGN.filter((c) => contenedor.classList.contains(c)));
+    }
+    out.appendChild(wrap);
     return;
   }
 

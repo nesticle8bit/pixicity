@@ -1,3 +1,5 @@
+@use "sass:map";
+
 // Bootstrap 5.3 solo con lo que la app usa (antes se cargaba bootstrap.min.css completo: ~230 KB en cada página).
 // Se sacaron módulos sin uso: accordion, breadcrumb, button-group, carousel, close, list-group, modal, nav, navbar,
 // offcanvas, popover, progress, toasts, tooltip y placeholders (los .carousel/.xx-pagination de la app son propios).
@@ -10,6 +12,35 @@
 @import "bootstrap/scss/maps";
 @import "bootstrap/scss/mixins";
 @import "bootstrap/scss/utilities";
+
+// Utilidades: Bootstrap genera cada grupo con todos sus valores y además una copia por breakpoint (-sm-, -md-…):
+// ~68 KB, la mitad de este archivo, casi todo sin uso. Se sacan los grupos que no aparecen en ninguna plantilla ni en
+// el contenido de los posts, y las variantes responsive/print donde no se usan. Los grupos que quedan conservan
+// todos sus valores (cualquier mb-*, p-*, text-* sigue andando).
+// Si una plantilla necesita una utilidad de las sacadas (p. ej. justify-content-between o w-100), quitala de esta
+// lista; si necesita una variante responsive (p. ej. mb-md-0), quitá su grupo del @each.
+$utilities: map.remove(
+  $utilities,
+  "object-fit", "overflow", "overflow-x", "overflow-y", "shadow", "focus-ring", "position", "top", "bottom", "start",
+  "end", "translate-middle", "border-end", "border-start", "border-color", "subtle-border-color", "border-width",
+  "border-opacity", "width", "max-width", "viewport-width", "min-viewport-width", "max-height", "viewport-height",
+  "min-viewport-height", "flex", "flex-direction", "justify-content", "align-content", "align-self", "order",
+  "negative-margin-x", "negative-margin-top", "negative-margin-bottom", "padding-bottom", "padding-start", "row-gap",
+  "column-gap", "font-family", "font-size", "font-style", "font-weight", "line-height", "text-transform",
+  "word-wrap", "text-opacity", "link-opacity", "link-offset", "link-underline", "link-underline-opacity",
+  "bg-opacity", "gradient", "user-select", "pointer-events", "rounded-top", "rounded-end", "rounded-bottom",
+  "rounded-start", "z-index"
+);
+
+@each $grupo in (
+  "float", "flex-grow", "flex-shrink", "flex-wrap", "align-items", "margin", "margin-x", "margin-y", "margin-end",
+  "margin-bottom", "margin-start", "negative-margin", "negative-margin-y", "negative-margin-end",
+  "negative-margin-start", "padding", "padding-x", "padding-y", "padding-top", "padding-end", "gap", "text-align"
+) {
+  $utilities: map.merge($utilities, ($grupo: map.merge(map.get($utilities, $grupo), (responsive: false))));
+}
+
+$utilities: map.merge($utilities, ("display": map.merge(map.get($utilities, "display"), (print: false))));
 
 // Base
 @import "bootstrap/scss/root";
@@ -31,6 +62,12 @@
 @import "bootstrap/scss/alert";
 @import "bootstrap/scss/spinners";
 
-// Helpers y utilidades (d-flex, mb-3, text-center...)
-@import "bootstrap/scss/helpers";
+// Helpers usados (clearfix, text-bg-*, ratio, visually-hidden). Sin uso: colored-links, focus-ring, icon-link,
+// position (fixed-top/sticky-top), stacks, stretched-link, text-truncation y vr.
+@import "bootstrap/scss/helpers/clearfix";
+@import "bootstrap/scss/helpers/color-bg";
+@import "bootstrap/scss/helpers/ratio";
+@import "bootstrap/scss/helpers/visually-hidden";
+
+// Utilidades (d-flex, mb-3, text-center...), con la configuración de arriba
 @import "bootstrap/scss/utilities/api";

@@ -1,0 +1,268 @@
+// Contenido publicado: posts fijados, cuerpo del post/tema, separadores del generador y etiquetas.
+@use '../app/shared/styles/contenido-rico' as rico;
+
+.sticky-post {
+  &--list {
+    background: rgb(255 252 174 / 38%) !important;
+    border-top: 1px solid rgb(236 233 154) !important;
+  }
+}
+
+.sticky-post--home {
+  margin-right: 3px;
+}
+
+.contenido {
+  clear: both;
+  min-height: 400px;
+  margin-bottom: 20px;
+  border-top: solid 1px #ebebeb;
+  padding: 20px 0 0;
+  margin-top: 20px;
+}
+
+// Formato del HTML publicado: post (.contenido) y tema de comunidad (.tema-content) se ven igual
+.contenido,
+.tema-content {
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  overflow-x: hidden;
+  font-size: 0.9rem;
+
+  /* Red de seguridad: ningún elemento del contenido (HTML de usuario,
+     divs con width fijo, <center>, figures, embeds, etc.) puede superar
+     el ancho del contenedor y provocar scroll horizontal / "zoom" en móvil. */
+  & * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Imágenes y media siempre centradas y proporcionales */
+  & img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  & img,
+  & video,
+  & iframe {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Todo iframe nunca desborda el ancho (mapas, audio, anuncios, etc.) */
+  & iframe {
+    display: block;
+    max-width: 100%;
+    border: 0;
+  }
+
+  /* Solo reproductores de video conocidos escalan en proporción 16:9.
+     Así no deformamos mapas, players de audio ni widgets que tienen su
+     propia altura. */
+  & iframe[src*="youtube"],
+  & iframe[src*="youtu.be"],
+  & iframe[src*="vimeo"],
+  & iframe[src*="dailymotion"],
+  & iframe[src*="filemoon"],
+  & iframe[src*="dood"],
+  & iframe[src*="streamtape"],
+  & iframe[src*="streamwish"],
+  & iframe[src*="ok.ru"],
+  & iframe[src*="mega.nz"],
+  & iframe[src*="/embed"] {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  & video,
+  & embed,
+  & object {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Tablas y bloques de código no deben romper el ancho en móvil */
+  & table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Listas (el reset global quita las viñetas a todo <li>) */
+  & ul,
+  & ol {
+    padding-left: 1.6em;
+    margin: .5em 0;
+    text-align: left;
+  }
+
+  & ul>li {
+    list-style: disc;
+  }
+
+  & ol>li {
+    list-style: decimal;
+  }
+
+  & li ul>li {
+    list-style: circle;
+  }
+
+  & li li ul>li {
+    list-style: square;
+  }
+
+  & li ol>li {
+    list-style: lower-alpha;
+  }
+
+  & li {
+    margin: .2em 0;
+    padding-left: .2em;
+  }
+
+  & li::marker {
+    color: #1976d2;
+  }
+
+  /* Código, tablas, imágenes, botón Copiar e índice */
+  @include rico.publicado;
+
+  & p {
+    font-size: .9rem;
+  }
+
+  & blockquote {
+    border-left: 4px solid rgb(222 222 222 / 58%);
+    margin-left: 1rem;
+    padding-left: 1rem;
+  }
+}
+
+// Separadores de sección del generador de posts (app-rich-editor + post publicado)
+// Base: solo tipografía. El layout lo define cada variante .ph-sep--*
+.ph-sep {
+  margin: 28px 0 16px;
+  color: #1976d2;
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+
+  &__txt {
+    white-space: nowrap;
+  }
+
+  // 1) Líneas a los lados + título centrado
+  &--lines {
+    display: flex;
+    align-items: center;
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1;
+      height: 2px;
+      background: rgba(25, 118, 210, 0.35);
+    }
+
+    .ph-sep__txt {
+      padding: 0 16px;
+    }
+  }
+
+  // 2) Líneas punteadas a los lados
+  &--dotted {
+    display: flex;
+    align-items: center;
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1;
+      border-top: 2px dotted rgba(25, 118, 210, 0.55);
+    }
+
+    .ph-sep__txt {
+      padding: 0 16px;
+    }
+  }
+
+  // 3) Barra con gradiente, texto blanco
+  &--bar {
+    color: #fff;
+    background: linear-gradient(90deg, #1976d2, #6a3ab2);
+    padding: 12px 16px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.25);
+  }
+
+  // 4) Borde lateral + fondo tenue (callout)
+  &--side {
+    text-align: left;
+    background: rgba(25, 118, 210, 0.08);
+    border-left: 5px solid #1976d2;
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+  }
+
+  // 5) Doble línea arriba y abajo
+  &--double {
+    border-top: 3px double rgba(25, 118, 210, 0.55);
+    border-bottom: 3px double rgba(25, 118, 210, 0.55);
+    padding: 10px 0;
+  }
+
+  // 6) Píldora / badge centrado
+  &--pill {
+    .ph-sep__txt {
+      display: inline-block;
+      background: #1976d2;
+      color: #fff;
+      padding: 8px 24px;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(25, 118, 210, 0.25);
+    }
+  }
+}
+
+.tagbox {
+  margin-bottom: 20px;
+  padding: 15px 20px;
+  border-radius: 0 0 5px 5px;
+  background: #fff;
+}
+
+.fortags {
+  overflow: hidden;
+  border-top: 1px solid #ebebeb;
+  padding-top: 15px;
+}
+
+.letres {
+  color: #666;
+  float: left;
+  font-size: 13px;
+  font-weight: 700;
+  margin-right: 10px;
+}
+
+.fortags a {
+  display: block;
+  float: left;
+  padding: 0 5px;
+  color: #0a6fc2;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.fortags span {
+  float: left;
+  color: #ebebeb;
+}

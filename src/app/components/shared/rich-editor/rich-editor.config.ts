@@ -38,6 +38,17 @@ export interface TextOffsets {
   end: number;
 }
 
+/**
+ * Cursor guardado mientras el foco está en otro lado (selector de archivos, prompt, emojis, campo del enlace).
+ * `range` es un clon que sigue al DOM y distingue un renglón vacío o el lado de una imagen (los offsets de texto
+ * no pueden: no cuentan imágenes ni párrafos vacíos, y la imagen terminaba al final del texto anterior).
+ * `offsets` es el respaldo si ese nodo ya no existe (p. ej. un deshacer reemplazó todo el HTML).
+ */
+export interface PosicionGuardada {
+  range: Range;
+  offsets: TextOffsets | null;
+}
+
 export interface HistoryEntry {
   html: string;
   sel: TextOffsets | null;
