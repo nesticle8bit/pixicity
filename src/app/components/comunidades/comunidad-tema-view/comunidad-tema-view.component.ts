@@ -25,6 +25,7 @@ import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { ContenidoSeoPipe } from '../../../shared/pipes/contenidoSeo.pipe';
 import { ContenidoPostDirective } from '../../../shared/directives/contenido-post.directive';
 import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
+import { RedireccionCanonica } from '../../../shared/helpers/redireccion-canonica';
 
 type TemaVista = TemaDetalle & { _votando?: boolean };
 
@@ -68,6 +69,7 @@ function aHilo(c: TemaComentario): ComentarioHilo {
 })
 export class ComunidadTemaViewComponent implements OnInit {
   private readonly documento = inject(DOCUMENT);
+  private readonly redireccionCanonica = inject(RedireccionCanonica);
   private displayService = inject(DisplayComponentService);
   private comunidadesService = inject(IHttpComunidadesService);
   private securityService = inject(IHttpSecurityService);
@@ -128,7 +130,7 @@ export class ComunidadTemaViewComponent implements OnInit {
 
         if (decodeURIComponent(this.documento.location.pathname) !== decodeURIComponent(rutaCanonica.split('?')[0])) {
           // Mismo problema que en posts: el tema se resuelve por id.
-          this.router.navigateByUrl(rutaCanonica, { replaceUrl: true });
+          this.redireccionCanonica.ir(rutaCanonica);
           return;
         }
 

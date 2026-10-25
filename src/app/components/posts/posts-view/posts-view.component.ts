@@ -30,6 +30,7 @@ import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { ContenidoSeoPipe } from '../../../shared/pipes/contenidoSeo.pipe';
 import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 import { ContenidoPostDirective } from '../../../shared/directives/contenido-post.directive';
+import { RedireccionCanonica } from '../../../shared/helpers/redireccion-canonica';
 import {
   indiceDeContenido,
   minutosDeLectura,
@@ -65,6 +66,7 @@ import {
 })
 export class PostsViewComponent implements OnInit {
   private readonly documento = inject(DOCUMENT);
+  private readonly redireccionCanonica = inject(RedireccionCanonica);
   private securityService = inject(IHttpSecurityService);
   private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
   private activatedRoute = inject(ActivatedRoute);
@@ -182,10 +184,7 @@ export class PostsViewComponent implements OnInit {
 
         if (this.rutaDistinta(rutaCanonica)) {
           // Conserva el #comentario-{id} de las notificaciones al corregir la URL.
-          this.router.navigateByUrl(
-            rutaCanonica + this.documento.location.hash,
-            { replaceUrl: true },
-          );
+          this.redireccionCanonica.ir(rutaCanonica + this.documento.location.hash);
           return;
         }
 

@@ -267,7 +267,8 @@ export class AppComponent {
   /** Status HTTP real del render en el servidor (404 de páginas inexistentes en vez de un soft 404). */
   private setStatusSsr(statusCode?: number): void {
     // Si el API falló durante el render (SsrSalud) se queda el 503: nunca convertir un fallo en "no encontrado".
-    if (this.respuestaSsr && !this.ssrSalud.apiFallo) {
+    // Tampoco se pisa el 301 de RedireccionCanonica con el 200 de la vista de destino.
+    if (this.respuestaSsr && !this.ssrSalud.apiFallo && this.respuestaSsr.status !== 301) {
       this.respuestaSsr.status = statusCode || 200;
     }
   }

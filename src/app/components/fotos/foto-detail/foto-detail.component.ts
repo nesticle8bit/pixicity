@@ -17,6 +17,7 @@ import { NgClass, DecimalPipe, DatePipe, DOCUMENT } from '@angular/common';
 import { FotoComentariosComponent } from '../foto-comentarios/foto-comentarios.component';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { ThumbFotoPipe } from '../../../shared/pipes/thumb.pipe';
+import { RedireccionCanonica } from '../../../shared/helpers/redireccion-canonica';
 
 @Component({
     selector: 'app-foto-detail',
@@ -37,6 +38,7 @@ import { ThumbFotoPipe } from '../../../shared/pipes/thumb.pipe';
 })
 export class FotoDetailComponent implements OnInit {
   private readonly documento = inject(DOCUMENT);
+  private readonly redireccionCanonica = inject(RedireccionCanonica);
   private displayService = inject(DisplayComponentService);
   private securityService = inject(IHttpSecurityService);
   private fotosService = inject(IHttpFotosService);
@@ -82,7 +84,7 @@ export class FotoDetailComponent implements OnInit {
           .toString();
 
         if (decodeURIComponent(this.documento.location.pathname) !== decodeURIComponent(rutaCanonica.split('?')[0])) {
-          this.router.navigateByUrl(rutaCanonica, { replaceUrl: true });
+          this.redireccionCanonica.ir(rutaCanonica);
           return;
         }
 
