@@ -1,0 +1,38 @@
+:host {
+  display: block;
+}
+
+// Sin anuncio para este espacio no ocupa lugar (tampoco los márgenes que le pone la página). !important: algunas
+// páginas le ponen d-block de Bootstrap, que también lo lleva.
+:host(.anuncio--vacio) {
+  display: none !important;
+}
+
+// Dentro del contenido de un post: separado del texto, como un bloque más.
+:host(.anuncio--en-contenido) {
+  margin: 20px 0;
+}
+
+.anuncio__etiqueta {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-align: center;
+  text-transform: uppercase;
+  color: #666; // 5,7:1 sobre blanco
+}
+
+.anuncio__cuerpo {
+  text-align: center;
+  overflow: hidden;
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+::ng-deep .mat-tooltip {
+  white-space: pre-line;
+}

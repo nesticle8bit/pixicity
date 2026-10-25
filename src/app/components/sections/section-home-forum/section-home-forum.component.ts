@@ -18,7 +18,7 @@ import { HomeLastPhotosComponent } from '../../home/home-last-photos/home-last-p
 import { HomeAfiliadosComponent } from '../../home/home-afiliados/home-afiliados.component';
 import { TagsCloudComponent } from '../../addons/tags-cloud/tags-cloud.component';
 import { HomeDiscordComponent } from '../../home/home-discord/home-discord.component';
-import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { HomeLastRegisteredUsersComponent } from '../../home/home-last-registered-users/home-last-registered-users.component';
 import { enNavegador } from '../../../shared/helpers/plataforma';
 
@@ -37,7 +37,7 @@ import { enNavegador } from '../../../shared/helpers/plataforma';
         HomeAfiliadosComponent,
         TagsCloudComponent,
         HomeDiscordComponent,
-        AdsByTypeComponent,
+        AnuncioComponent,
         HomeLastRegisteredUsersComponent,
     ],
 })

@@ -2,6 +2,7 @@ import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { environment } from 'src/environments/environment';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
@@ -25,6 +26,7 @@ import { RedireccionCanonica } from '../../../shared/helpers/redireccion-canonic
     styleUrls: ['./foto-detail.component.scss'],
     imports: [CargandoComponent, ThumbFotoPipe, 
         RouterLink,
+        AnuncioComponent,
         UserPopoverDirective,
         UserAvatarComponent,
         ShareButtonsComponent,

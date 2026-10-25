@@ -157,6 +157,7 @@ const RESPUESTAS: [RegExp, unknown][] = [
   [/\/api\/configuracion\/footer(\?|$)/i, ''],
   [/\/api\/notificaciones\/estadisticas(\?|$)/i, { notifications: 0, messages: 0 }],
   [/\/api\/categorias(\?|$)/i, []],
+  [/\/api\/anuncios(\?|$)/i, []],
 ];
 
 export async function simularApi(page: Page): Promise<void> {

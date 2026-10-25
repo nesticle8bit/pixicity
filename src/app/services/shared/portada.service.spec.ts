@@ -20,7 +20,6 @@ describe('PortadaService', () => {
       posts: { data: [{ id: 1 }], pagination: { totalCount: 1 } },
       fijados: [{ id: 9 }],
       tags: [{ tag: 'angular', count: 3 }],
-      publicidad: { '300x250': '<b>anuncio</b>' },
     },
   };
 
@@ -67,14 +66,11 @@ describe('PortadaService', () => {
   it('si la portada falla o no trae la parte, usa el respaldo', () => {
     service.iniciar('', 1);
     const tags: unknown[] = [];
-    const anuncio: unknown[] = [];
 
     service.tomar('tags', of([{ tag: 'respaldo', count: 1 }])).subscribe((v) => tags.push(v));
-    service.tomarPublicidad('160x600', of('respaldo')).subscribe((v) => anuncio.push(v));
     backend.expectOne(`${environment.api}/api/portada?page=1&pageCount=49&query=`).flush('caído', { status: 500, statusText: 'Error' });
 
     expect(tags).toEqual([[{ tag: 'respaldo', count: 1 }]]);
-    expect(anuncio).toEqual(['respaldo']);
   });
 
   it('sin portada iniciada (widget fuera de la portada) usa siempre el respaldo', () => {

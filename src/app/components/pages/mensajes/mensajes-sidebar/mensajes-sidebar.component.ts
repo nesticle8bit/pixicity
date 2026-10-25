@@ -2,13 +2,13 @@ import { DialogEnviarMPComponent } from 'src/app/components/dialogs/dialog-envia
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AdsByTypeComponent } from '../../../ads/ads-by-type/ads-by-type.component';
+import { AnuncioComponent } from '../../../ads/anuncio/anuncio.component';
 
 @Component({
     selector: 'app-mensajes-sidebar',
     templateUrl: './mensajes-sidebar.component.html',
     styleUrls: ['./mensajes-sidebar.component.scss'],
-    imports: [RouterLink, AdsByTypeComponent],
+    imports: [RouterLink, AnuncioComponent],
 })
 export class MensajesSidebarComponent implements OnInit {
   private dialog = inject(MatDialog);

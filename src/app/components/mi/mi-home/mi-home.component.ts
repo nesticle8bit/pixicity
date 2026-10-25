@@ -16,7 +16,7 @@ import { SesionRequeridaService } from 'src/app/services/shared/sesion-requerida
 import { environment } from 'src/environments/environment';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { CargandoComponent } from '../../shared/cargando/cargando.component';
-import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { PostOriginalPosterInfoComponent } from '../../posts/post-original-poster-info/post-original-poster-info.component';
 import { PostCardComponent } from '../../shared/shouts/post-card/post-card.component';
 import { ShoutCardComponent } from '../../shared/shouts/shout-card/shout-card.component';
@@ -41,7 +41,7 @@ const POR_PAGINA = 15;
     NgTemplateOutlet,
     UserAvatarComponent,
     CargandoComponent,
-    AdsByTypeComponent,
+    AnuncioComponent,
     PostOriginalPosterInfoComponent,
     PostCardComponent,
     ShoutCardComponent,

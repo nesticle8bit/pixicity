@@ -90,6 +90,8 @@
           <app-post-related-posts [post]="post"></app-post-related-posts>
           }
 
+          <app-anuncio class="mt-3" ubicacion="post-lateral" [categoriaId]="post.categoria.id" encabezado />
+
         </aside>
 
         <!-- Contenido principal -->
@@ -113,6 +115,8 @@
             <app-share-buttons class="detail-share" [titulo]="post.titulo"></app-share-buttons>
           </div>
 
+          <app-anuncio class="post-ad" ubicacion="post-arriba" [categoriaId]="post.categoria.id" />
+
           <div class="post-body">
             @if (indice.length) {
             <nav class="post-toc" aria-label="Índice del post">
@@ -129,7 +133,13 @@
             </nav>
             }
             <div class="contenido" [appContenidoPost]="post.contenido">
+              @if (contenidoPartido; as partes) {
+              <span [innerHTML]="partes[0] | contenidoSeo:post.titulo | enlazarHashtags"></span>
+              <app-anuncio class="anuncio--en-contenido" ubicacion="post-medio" [categoriaId]="post.categoria.id" />
+              <span [innerHTML]="partes[1] | contenidoSeo:post.titulo | enlazarHashtags"></span>
+              } @else {
               <span [innerHTML]="post.contenido | contenidoSeo:post.titulo | enlazarHashtags"></span>
+              }
             </div>
           </div>
 
@@ -153,9 +163,7 @@
           </div>
           }
 
-          <div class="post-ad">
-            <ads-by-type [hideTitle]="true" [type]="'728x90'"></ads-by-type>
-          </div>
+          <app-anuncio class="post-ad" ubicacion="post-abajo" [categoriaId]="post.categoria.id" />
 
           @if (post.id) {
           <app-post-comments [post]="post"></app-post-comments>

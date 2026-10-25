@@ -14,10 +14,6 @@ export interface ConfiguracionModel {
   // OJO: el API los llama headerScript / footerScript (no scriptHeader / scriptFooter).
   headerScript: string;
   footerScript: string;
-  banner300x250: string;
-  banner468x60: string;
-  banner160x600: string;
-  banner728x90: string;
   recordOnlineUsers: number;
   recordOnlineTime: string;
   welcomeUserId: number | null;

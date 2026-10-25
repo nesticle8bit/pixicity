@@ -30,7 +30,7 @@ interface SugerenciaBusqueda {
 import { MatTooltip } from '@angular/material/tooltip';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
-import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { DecimalPipe, DatePipe, NgTemplateOutlet } from '@angular/common';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
@@ -68,7 +68,7 @@ interface EstadoBusqueda {
         UserPopoverDirective,
         UserAvatarComponent,
         MatPaginator,
-        AdsByTypeComponent,
+        AnuncioComponent,
         DecimalPipe,
         DatePipe,
         TimeAgoPipe,

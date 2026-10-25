@@ -71,13 +71,15 @@ export class ContenidoPostDirective {
   private asignarIds(): void {
     const usados = new Map<string, number>();
     this.host.querySelectorAll<HTMLElement>('h2, h3').forEach((h) => {
+      // Los títulos de un anuncio en medio del post no son del índice: correrían los ids que espera.
+      if (h.closest('app-anuncio')) return;
       const texto = (h.textContent || '').replace(/\s+/g, ' ').trim();
       if (texto) h.id = idUnico(slugTitulo(texto), usados);
     });
   }
 
   private async mejorarCodigo(): Promise<void> {
-    const bloques = Array.from(this.host.querySelectorAll<HTMLElement>('pre')).filter((pre) => !pre.dataset['listo']);
+    const bloques = Array.from(this.host.querySelectorAll<HTMLElement>('pre')).filter((pre) => !pre.dataset['listo'] && !pre.closest('app-anuncio'));
     if (!bloques.length) return;
 
     bloques.forEach((pre) => {
@@ -147,6 +149,8 @@ export class ContenidoPostDirective {
   //  Visor de imágenes
 
   private readonly alHacerClic = (event: MouseEvent): void => {
+    // El anuncio que va en medio del post (app-anuncio) maneja sus propios clics: sus imágenes no se amplían.
+    if (event.target instanceof Element && event.target.closest('app-anuncio')) return;
     const video = event.target instanceof Element ? event.target.closest<HTMLElement>(`figure.${CLASE_VIDEO_YOUTUBE}`) : null;
     // Ctrl/Cmd+clic sigue abriendo el video en YouTube
     if (video && !event.ctrlKey && !event.metaKey && this.host.contains(video) && this.reproducir(video)) {

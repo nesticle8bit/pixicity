@@ -31,6 +31,7 @@ import { HttpPerfilService } from './services/implementations/httpPerfil.service
 import { HttpPostsService } from './services/implementations/httpPosts.service';
 import { HttpSecurityService } from './services/implementations/httpSecurity.service';
 import { HttpWebService } from './services/implementations/httpWeb.service';
+import { HttpAnunciosService } from './services/implementations/httpAnuncios.service';
 import { HttpUsuarioPerfilService } from './services/implementations/httpUsuarioPerfil.service';
 import { HttpRangosService } from './services/implementations/httpRangos.service';
 import { HttpComentariosPostService } from './services/implementations/httpComentariosPost.service';
@@ -51,6 +52,7 @@ import { HttpMiService } from './services/implementations/httpMi.service';
 import { IHttpPostsService } from './services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from './services/interfaces/httpSecurity.interface';
 import { IHttpWebService } from './services/interfaces/httpWeb.interface';
+import { IHttpAnunciosService } from './services/interfaces/httpAnuncios.interface';
 import { IHttpUsuarioPerfilService } from './services/interfaces/httpUsuarioPerfil.interface';
 import { IHttpRangosService } from './services/interfaces/httpRangos.interface';
 import { IHttpComentariosPostService } from './services/interfaces/httpComentariosPost.interface';
@@ -100,6 +102,7 @@ export const appConfig: ApplicationConfig = {
     { provide: IHttpModeracionService, useClass: HttpModeracionService },
     { provide: IHttpAppLogsService, useClass: HttpAppLogsService },
     { provide: IHttpWebService, useClass: HttpWebService },
+    { provide: IHttpAnunciosService, useClass: HttpAnunciosService },
     { provide: IHttpPerfilService, useClass: HttpPerfilService },
     { provide: IHttpMiService, useClass: HttpMiService },
     { provide: IHttpNoticiasService, useClass: HttpNoticiasService },

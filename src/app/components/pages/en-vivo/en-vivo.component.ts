@@ -6,7 +6,7 @@ import { SEOService } from 'src/app/services/shared/seo.service';
 import { ActividadEnVivo as AccionEnVivo } from 'src/app/models/shared/realtime.model';
 import { RouterLink } from '@angular/router';
 import { MatTooltip } from '@angular/material/tooltip';
-import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { enNavegador } from '../../../shared/helpers/plataforma';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 
@@ -17,7 +17,7 @@ import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.compon
     imports: [
         RouterLink,
         MatTooltip,
-        AdsByTypeComponent,
+        AnuncioComponent,
         UserAvatarComponent,
     ],
 })

@@ -19,7 +19,7 @@ import {
   SelectOptionDirective,
   SelectLabelDirective,
 } from '../../shared/select-autocomplete/select-template.directives';
-import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 
 @Component({
   selector: 'app-comunidad-create',
@@ -32,7 +32,7 @@ import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component'
     SelectOptionDirective,
     SelectLabelDirective,
     RouterLink,
-    AdsByTypeComponent,
+    AnuncioComponent,
   ],
 })
 export class ComunidadCreateComponent implements OnInit {

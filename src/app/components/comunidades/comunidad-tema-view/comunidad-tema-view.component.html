@@ -132,6 +132,8 @@
             <app-share-buttons class="detail-share" [titulo]="tema.titulo"></app-share-buttons>
           </div>
 
+          <app-anuncio class="mb-3" ubicacion="tema-arriba" [comunidadId]="tema.comunidadId" />
+
           <div class="tema-body">
             <div class="tema-content" [appContenidoPost]="tema.contenido">
               <span [innerHTML]="tema.contenido | contenidoSeo:tema.titulo | enlazarHashtags"></span>
@@ -168,6 +170,8 @@
             }
           </div>
           }
+
+          <app-anuncio class="my-3" ubicacion="tema-abajo" [comunidadId]="tema.comunidadId" />
 
           <app-comentarios [comentarios]="comentarios" [acciones]="accionesComentarios"
             [puedeFijar]="esAdmin || esDuenoComunidad" [puedeBorrarTodos]="esDuenoComunidad"

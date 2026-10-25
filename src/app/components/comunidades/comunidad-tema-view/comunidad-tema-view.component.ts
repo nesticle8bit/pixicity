@@ -2,6 +2,7 @@ import { EnlazarHashtagsPipe } from 'src/app/shared/pipes/enlazarHashtags.pipe';
 import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { environment } from 'src/environments/environment';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
@@ -55,6 +56,7 @@ function aHilo(c: TemaComentario): ComentarioHilo {
     styleUrls: ['./comunidad-tema-view.component.scss'],
     imports: [CargandoComponent, ContenidoPostDirective,
         RouterLink,
+        AnuncioComponent,
         UserPopoverDirective,
         UserAvatarComponent,
         FollowButtonComponent,

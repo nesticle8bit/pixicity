@@ -1,7 +1,7 @@
-import { slugTitulo } from './slug';
+import { slugUrl } from './slug';
 
 // Mismos casos que SlugHelperTests del API: los dos tienen que dar exactamente lo mismo.
-describe('slugTitulo', () => {
+describe('slugUrl', () => {
   const casos: [string | null, string][] = [
     ['Iron Man (2008) | 2160p | REMUX | Dual', 'iron-man-2008-2160p-remux-dual'],
     ['Ranma ½ S3E4 | La ceremonia del té latino', 'ranma-s3e4-la-ceremonia-del-te-latino'],
@@ -19,11 +19,11 @@ describe('slugTitulo', () => {
   ];
 
   for (const [titulo, esperado] of casos) {
-    it(`"${titulo}" → "${esperado}"`, () => expect(slugTitulo(titulo)).toBe(esperado));
+    it(`"${titulo}" → "${esperado}"`, () => expect(slugUrl(titulo)).toBe(esperado));
   }
 
   it('corta un título largo en un guion, sin pasarse de 80', () => {
-    const slug = slugTitulo(Array(20).fill('palabra').join(' '));
+    const slug = slugUrl(Array(20).fill('palabra').join(' '));
 
     expect(slug.length).toBeLessThanOrEqual(80);
     expect(slug.endsWith('palabra')).toBeTrue();

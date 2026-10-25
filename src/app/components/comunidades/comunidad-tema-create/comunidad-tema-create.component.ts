@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { slugTitulo } from 'src/app/shared/helpers/slug';
+import { slugUrl } from 'src/app/shared/helpers/slug';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -134,7 +134,7 @@ export class ComunidadTemaCreateComponent implements OnInit {
         this.borrador?.limpiar();
         if (this.temaId) {
           this.notificationService.success('Tu tema ha sido actualizado', 'Tema actualizado');
-          this.router.navigate(['/comunidades', this.slug, 'tema', this.temaId, slugTitulo(model.titulo)]);
+          this.router.navigate(['/comunidades', this.slug, 'tema', this.temaId, slugUrl(model.titulo)]);
         } else {
           this.notificationService.success('Tu tema ha sido publicado', 'Tema creado');
           this.router.navigate(['/comunidades', this.slug]);

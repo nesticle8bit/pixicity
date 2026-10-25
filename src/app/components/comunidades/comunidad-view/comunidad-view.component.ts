@@ -2,6 +2,7 @@ import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { environment } from 'src/environments/environment';
 import { DOCUMENT } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { Pagination } from 'src/app/models/api/api-response.model';
@@ -25,6 +26,7 @@ import { ThumbPipe } from '../../../shared/pipes/thumb.pipe';
     styleUrls: ['./comunidad-view.component.scss'],
     imports: [CargandoComponent, ThumbPipe, 
         RouterLink,
+        AnuncioComponent,
         FormsModule,
         UserPopoverDirective,
         UserAvatarComponent,

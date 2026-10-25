@@ -11,6 +11,7 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
 /**
  * Regresión: el formulario usaba scriptHeader/scriptFooter pero el API (entidad Configuracion) usa headerScript/footerScript.
  * Resultado: el formulario nunca mostraba los scripts guardados y, al guardar, el API los dejaba vacíos.
+ * (Los anuncios ya no están en este formulario: son filas propias, ver table-anuncios.)
  */
 describe('DashboardAdsComponent', () => {
   let fixture: ComponentFixture<DashboardAdsComponent>;
@@ -20,10 +21,6 @@ describe('DashboardAdsComponent', () => {
   const configuracion = {
     headerScript: '<script>cabecera()</script>',
     footerScript: '<script>pie()</script>',
-    banner300x250: 'b1',
-    banner468x60: 'b2',
-    banner160x600: 'b3',
-    banner728x90: '[{"tipo":"html","html":"b4"},{"tipo":"componente","componente":"discord","variante":"horizontal"}]',
   } as ConfiguracionModel;
 
   beforeEach(async () => {
@@ -39,7 +36,7 @@ describe('DashboardAdsComponent', () => {
         { provide: NotificationService, useValue: jasmine.createSpyObj('NotificationService', ['success', 'error']) },
     ],
 })
-      .overrideComponent(DashboardAdsComponent, { set: { template: '' } })
+      .overrideComponent(DashboardAdsComponent, { set: { template: '', imports: [] } })
       .compileComponents();
 
     fixture = TestBed.createComponent(DashboardAdsComponent);
@@ -47,36 +44,18 @@ describe('DashboardAdsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('muestra en el formulario los scripts y banners guardados', () => {
+  it('muestra en el formulario los scripts guardados', () => {
     expect(component.formGroup.value).toEqual({
       headerScript: '<script>cabecera()</script>',
       footerScript: '<script>pie()</script>',
-      banner300x250: [{ tipo: 'html', html: 'b1', componente: 'discord', variante: 'cuadrado' }],
-      banner468x60: [{ tipo: 'html', html: 'b2', componente: 'discord', variante: 'cuadrado' }],
-      banner160x600: [{ tipo: 'html', html: 'b3', componente: 'discord', variante: 'cuadrado' }],
-      banner728x90: [
-        { tipo: 'html', html: 'b4', componente: 'discord', variante: 'cuadrado' },
-        { tipo: 'componente', html: '', componente: 'discord', variante: 'horizontal' },
-      ],
     });
   });
 
-  it('guarda cada tamaño como lista JSON (HTML viejo se convierte, vacíos se descartan)', () => {
-    component.agregarAnuncio('banner468x60');
-    component.updateAds();
-
-    const enviado = general.updatePublicidad.calls.mostRecent().args[0];
-    expect(enviado.banner300x250).toBe('[{"tipo":"html","html":"b1"}]');
-    expect(enviado.banner468x60).toBe('[{"tipo":"html","html":"b2"}]');
-    expect(enviado.banner728x90).toBe('[{"tipo":"html","html":"b4"},{"tipo":"componente","componente":"discord","variante":"horizontal"}]');
-  });
-
   it('al guardar envía los nombres que espera el API, sin perder los scripts', () => {
-    component.updateAds();
+    component.guardarScripts();
 
     const enviado = general.updatePublicidad.calls.mostRecent().args[0];
-    expect(enviado.headerScript).toBe('<script>cabecera()</script>');
-    expect(enviado.footerScript).toBe('<script>pie()</script>');
+    expect(enviado).toEqual({ headerScript: '<script>cabecera()</script>', footerScript: '<script>pie()</script>' });
     expect(Object.keys(enviado)).not.toContain('scriptHeader');
     expect(Object.keys(enviado)).not.toContain('scriptFooter');
   });

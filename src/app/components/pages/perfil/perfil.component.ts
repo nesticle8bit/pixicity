@@ -31,7 +31,7 @@ import { ProfileFollowsComponent } from '../../profile/profile-follows/profile-f
 import { ProfileInformationComponent } from '../../profile/profile-information/profile-information.component';
 import { PerfilSocialMediaButtonsComponent } from './perfil-social-media-buttons/perfil-social-media-buttons.component';
 import { PerfilUserFollowersComponent } from './perfil-user-followers/perfil-user-followers.component';
-import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 
 export type PestanaPerfil = 'shouts' | 'activity' | 'posts' | 'comments' | 'followers' | 'following' | 'information';
 
@@ -79,7 +79,7 @@ function urlCss(url: string | null | undefined): string | null {
         ProfileInformationComponent,
         PerfilSocialMediaButtonsComponent,
         PerfilUserFollowersComponent,
-        AdsByTypeComponent,
+        AnuncioComponent,
         DatePipe,
         DecimalPipe,
     ],

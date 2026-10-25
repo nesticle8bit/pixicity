@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 import { AppComponent } from './app.component';
 import { DisplayComponentService } from './services/shared/displayComponents.service';
 import { SEOService } from './services/shared/seo.service';
+import { AnunciosService } from './services/shared/anuncios.service';
 
 describe('AppComponent', () => {
   let display$: BehaviorSubject<any>;
@@ -29,6 +30,7 @@ describe('AppComponent', () => {
         provideRouter([]),
         { provide: DisplayComponentService, useValue: { getDisplay: () => display$.asObservable() } },
         { provide: SEOService, useValue: { getSEO: () => seo$.asObservable(), iniciarNavegacion: () => {} } },
+        { provide: AnunciosService, useValue: { precargar: () => {} } },
     ],
 })
       // Solo se prueba la lógica del componente raíz (SEO y visibilidad de secciones).

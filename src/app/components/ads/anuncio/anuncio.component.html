@@ -1,0 +1,39 @@
+@if (anuncio(); as a) {
+  @if (encabezado()) {
+  <h2 class="main-title mt-2 mb-3">
+    <span>Publicidad</span>
+    <strong class="float-end" style="background: #fff; margin-top: -2px; color: #8B8B8B; padding-left: 7px;">
+      <i class="ti ti-pig-money cursor--help"
+        matTooltip="Con esta publicidad nos apoyas a mantener viva esta comunidad, de antemano muchas gracias ❤️ Att: Gorgoroth"></i>
+    </strong>
+  </h2>
+  } @else {
+  <span class="anuncio__etiqueta">Publicidad</span>
+  }
+
+  <div class="anuncio__cuerpo" (click)="alHacerClic($event)" (auxclick)="alHacerClic($event)">
+    @switch (a.tipo) {
+      @case ('imagen') {
+        @if (a.enlaceUrl) {
+        <a [href]="a.enlaceUrl" target="_blank" rel="sponsored noopener">
+          <img [src]="a.imagenUrl" [attr.width]="a.ancho" [attr.height]="a.alto" [alt]="a.textoAlternativo || 'Publicidad'"
+            loading="lazy" decoding="async" />
+        </a>
+        } @else {
+        <img [src]="a.imagenUrl" [attr.width]="a.ancho" [attr.height]="a.alto" [alt]="a.textoAlternativo || 'Publicidad'"
+          loading="lazy" decoding="async" />
+        }
+      }
+      @case ('componente') {
+        @switch (a.componente) {
+          @case ('discord') {
+          <app-home-discord [variante]="a.variante ?? 'cuadrado'" [mostrarTitulo]="false" />
+          }
+        }
+      }
+      @default {
+      <div [innerHTML]="a.html ?? '' | contenidoSeo: 'Publicidad'"></div>
+      }
+    }
+  </div>
+}

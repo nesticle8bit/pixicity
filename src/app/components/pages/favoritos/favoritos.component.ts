@@ -11,7 +11,7 @@ import { IHttpFavoritosService } from 'src/app/services/interfaces/httpFavoritos
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
-import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
@@ -33,7 +33,7 @@ const POR_PAGINA = 10;
     RouterLink,
     MatTooltip,
     MatPaginator,
-    AdsByTypeComponent,
+    AnuncioComponent,
     UserAvatarComponent,
     CargandoComponent,
     TimeAgoPipe,

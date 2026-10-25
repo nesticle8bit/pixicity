@@ -26,10 +26,8 @@
       @defer (on viewport) {
         <app-home-discord />
 
-        <div class="text-center">
-          <ads-by-type class="d-none d-md-block mb-3" [type]="'160x600'" />
-          <ads-by-type class="d-block d-md-none mb-3" [type]="'300x250'" />
-        </div>
+        <!-- Celular o escritorio lo elige cada anuncio (antes eran dos espacios: 160x600 y 300x250). -->
+        <app-anuncio class="mb-3" ubicacion="portada-lateral" [categoriaSeo]="categoria" encabezado />
 
         <app-home-last-registered-users />
       } @placeholder {

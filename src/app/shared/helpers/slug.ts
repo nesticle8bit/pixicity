@@ -8,12 +8,12 @@ const SIN_TITULO = 'sin-titulo';
  * Sin tildes en las letras latinas (en otros alfabetos la marca cambia la letra), solo letras y dígitos separados
  * por un guion, cortado en un guion antes de LARGO caracteres.
  */
-export function slugTitulo(titulo: string | null | undefined): string {
+export function slugUrl(titulo: string | null | undefined): string {
   if (!titulo?.trim()) return '';
 
   let slug = titulo
     .normalize('NFD')
-    .replace(/([\u0000-ɏ])\p{Mn}+/gu, '$1')
+    .replace(/([\u0000-\u024F])\p{Mn}+/gu, '$1')
     .normalize('NFC')
     .toLowerCase()
     .replace(/[^\p{L}\p{Nd}]+/gu, '-')

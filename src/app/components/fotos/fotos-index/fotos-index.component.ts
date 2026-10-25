@@ -1,6 +1,7 @@
 import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { FotoViewModel } from 'src/app/models/fotos/foto-vm.model';
@@ -21,6 +22,7 @@ import { ThumbFotoPipe } from '../../../shared/pipes/thumb.pipe';
     styleUrls: ['./fotos-index.component.scss'],
     imports: [CargandoComponent, ThumbFotoPipe, 
         RouterLink,
+        AnuncioComponent,
         UserPopoverDirective,
         UserAvatarComponent,
         NgClass,

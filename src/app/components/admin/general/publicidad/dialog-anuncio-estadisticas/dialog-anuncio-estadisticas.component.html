@@ -1,0 +1,53 @@
+<h2 mat-dialog-title>Estadísticas · {{ anuncio.nombre }}</h2>
+
+<mat-dialog-content>
+  <div class="est__cabecera">
+    <div class="btn-group btn-group-sm" role="group" aria-label="Período">
+      <button type="button" class="btn" [class.btn-primary]="dias() === 30" [class.btn-outline-primary]="dias() !== 30"
+        [attr.aria-pressed]="dias() === 30" (click)="cargar(30)">30 días</button>
+      <button type="button" class="btn" [class.btn-primary]="dias() === 90" [class.btn-outline-primary]="dias() !== 90"
+        [attr.aria-pressed]="dias() === 90" (click)="cargar(90)">90 días</button>
+    </div>
+
+    <dl class="est__totales">
+      <div><dt>Impresiones</dt><dd>{{ totales().impresiones | number }}</dd></div>
+      <div><dt>Clics</dt><dd>{{ totales().clics | number }}</dd></div>
+      <div><dt>CTR</dt><dd>{{ ctr(totales().impresiones, totales().clics) }}%</dd></div>
+    </dl>
+  </div>
+
+  @if (cargando()) {
+  <div class="adm-cargando" role="progressbar" aria-label="Cargando"></div>
+  } @else {
+  <div class="table-responsive">
+    <table class="table table-sm table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Día</th>
+          <th scope="col">Impresiones</th>
+          <th scope="col" class="est__barra-col"><span class="visually-hidden">Gráfico</span></th>
+          <th scope="col">Clics</th>
+          <th scope="col">CTR</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (f of filas(); track f.fecha) {
+        <tr>
+          <td>{{ f.fecha | date: 'EEE d MMM' }}</td>
+          <td>{{ f.impresiones | number }}</td>
+          <td class="est__barra-col"><span class="est__barra" [style.width.%]="(f.impresiones / maximo()) * 100"></span></td>
+          <td>{{ f.clics | number }}</td>
+          <td>{{ ctr(f.impresiones, f.clics) }}%</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <small class="text-muted">Una impresión es el anuncio visto al menos 1 segundo con la mitad en pantalla. Los clics dentro de
+    iframes de terceros (p. ej. AdSense) no se pueden contar. Los números se guardan cada medio minuto.</small>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button type="button" mat-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

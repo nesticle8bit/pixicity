@@ -77,3 +77,48 @@ test('moderación: un shout denunciado se muestra con su tipo y enlace, y se pue
   await expect.poll(() => eliminado).toBe('3');
   expect(regla).toBe('spam');
 });
+
+test('publicidad: crea un anuncio segmentado y lo lista con su estado y números', async ({ page }) => {
+  await comoAdmin(page);
+  const guardados: Record<string, unknown>[] = [];
+  const lista: unknown[] = [];
+  await page.route(/\/api\/anuncios\/admin\/opciones/i, (r) => r.fulfill(ok({
+    ubicaciones: [{ id: 'post-abajo', nombre: 'Post: después del contenido' }, { id: 'portada-lateral', nombre: 'Portada: columna derecha' }],
+    categorias: [{ id: '3', nombre: 'Juegos' }, { id: '4', nombre: 'Películas' }],
+    comunidades: [{ id: '8', nombre: 'Linux' }],
+  })));
+  await page.route(/\/api\/anuncios\/admin(\?|$)/i, (r) => r.fulfill(ok(pagina(lista))));
+  await page.route(/\/api\/anuncios$/i, (r) => {
+    if (r.request().method() !== 'POST') return r.fulfill(ok([]));
+    const cuerpo = r.request().postDataJSON();
+    guardados.push(cuerpo);
+    lista.push({ ...cuerpo, id: 1, fechaRegistro: '2026-10-25T10:00:00Z', impresiones30Dias: 200, clics30Dias: 5 });
+    return r.fulfill(ok(1));
+  });
+  await page.route(/\/api\/configuracion(\?|$)/i, (r) => r.fulfill(ok({ headerScript: '', footerScript: '' })));
+
+  await page.goto('/administracion/publicidad');
+  await page.getByRole('button', { name: 'Nuevo anuncio' }).click();
+
+  const dialogo = page.getByRole('dialog');
+  await dialogo.getByLabel('Nombre').fill('Campaña juegos');
+  await dialogo.getByLabel('Tipo').selectOption('imagen');
+  await dialogo.getByLabel('URL de la imagen').fill('https://cdn.ejemplo.com/banner.png');
+  await dialogo.getByLabel('Enlace al hacer clic').fill('https://ejemplo.com');
+  await expect(dialogo.getByText('Elige al menos una ubicación')).toBeVisible();
+  await dialogo.getByLabel('Post: después del contenido').check();
+  await dialogo.getByLabel('Juegos').check();
+  await dialogo.getByLabel('Dispositivo').selectOption('movil');
+  await dialogo.getByRole('button', { name: 'Crear' }).click();
+
+  await expect.poll(() => guardados.length).toBe(1);
+  // El formulario manda más campos (vacíos): se comparan los que importan.
+  expect(guardados[0]).toMatchObject({
+    nombre: 'Campaña juegos', tipo: 'imagen', imagenUrl: 'https://cdn.ejemplo.com/banner.png', ubicaciones: ['post-abajo'],
+    categoriaIds: [3], comunidadIds: [], dispositivo: 'movil', audiencia: 'todos', activo: true, peso: 1,
+  });
+
+  const fila = page.getByRole('row', { name: /Campaña juegos/ });
+  await expect(fila.getByText('Activo')).toBeVisible();
+  await expect(fila.getByText('2.5%')).toBeVisible(); // 5 clics / 200 impresiones
+});

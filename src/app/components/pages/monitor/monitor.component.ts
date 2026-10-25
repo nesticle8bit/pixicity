@@ -12,7 +12,7 @@ import { RouterLink } from '@angular/router';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { TipoIconMonitorComponent } from '../../addons/tipo-icon-monitor/tipo-icon-monitor.component';
 import { MatTooltip } from '@angular/material/tooltip';
-import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { DatePipe } from '@angular/common';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 
@@ -42,7 +42,7 @@ type Periodo = NonNullable<FiltroNotificaciones['periodo']>;
         TipoIconMonitorComponent,
         MatTooltip,
         MatPaginator,
-        AdsByTypeComponent,
+        AnuncioComponent,
         DatePipe,
         TimeAgoPipe,
     ],

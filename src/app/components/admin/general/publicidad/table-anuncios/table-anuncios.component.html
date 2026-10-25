@@ -1,0 +1,92 @@
+<div class="tabla-anuncios__acciones">
+  <button type="button" class="boton azul" (click)="abrir()" [disabled]="!opciones">
+    <i class="ti ti-plus" aria-hidden="true"></i> Nuevo anuncio
+  </button>
+</div>
+
+<app-admin-filtros [config]="filtrosConfig" [total]="totalCount" [cargando]="cargando" (cambio)="aplicarFiltro($event)"></app-admin-filtros>
+@if (cargando) {
+<div class="adm-cargando" role="progressbar" aria-label="Cargando"></div>
+}
+@if (!cargando && !anuncios.length) {
+<div class="adm-vacio"><i class="ti ti-database-search" aria-hidden="true"></i>No hay anuncios{{ filtro.q || filtro.tipo || filtro.desde || filtro.hasta ? ' con estos filtros' : '' }}.</div>
+}
+
+@if (anuncios.length > 0) {
+<div class="table-responsive">
+  <table class="table table-sm table-striped table-hover align-middle">
+    <thead>
+      <tr>
+        <th>Anuncio</th>
+        <th>Ubicaciones</th>
+        <th>Segmentación</th>
+        <th>Vigencia</th>
+        <th class="text-end" matTooltip="Peso en la rotación">Peso</th>
+        <th class="text-end" matTooltip="Últimos 30 días">Impresiones</th>
+        <th class="text-end" matTooltip="Últimos 30 días">Clics</th>
+        <th class="text-end">CTR</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (a of anuncios; track a.id) {
+      <tr>
+        <td>
+          <strong>{{ a.nombre }}</strong>
+          <small class="d-block text-muted">{{ tipos[a.tipo] }}</small>
+        </td>
+        <td>
+          @for (u of a.ubicaciones; track u) {
+          <span class="badge bg-light text-dark tabla-anuncios__chip" [matTooltip]="ubicacion(u)">{{ u }}</span>
+          }
+        </td>
+        <td>
+          @for (s of segmentacion(a); track s) {
+          <span class="badge bg-light text-dark tabla-anuncios__chip">{{ s }}</span>
+          }
+        </td>
+        <td class="text-nowrap">
+          <small>
+            {{ a.fechaInicio ? (a.fechaInicio | date: 'd MMM y, HH:mm') : 'Siempre' }}
+            @if (a.fechaFin) { → {{ a.fechaFin | date: 'd MMM y, HH:mm' }} }
+          </small>
+        </td>
+        <td class="text-end">{{ a.peso }}</td>
+        <td class="text-end">{{ a.impresiones30Dias | number }}</td>
+        <td class="text-end">{{ a.clics30Dias | number }}</td>
+        <td class="text-end">{{ ctr(a.impresiones30Dias, a.clics30Dias) }}%</td>
+        <td><span class="badge" [class]="estado(a).clase">{{ estado(a).texto }}</span></td>
+        <td class="text-center" width="30px">
+          <button type="button" class="btn-menu" [attr.aria-label]="'Acciones de ' + a.nombre" [matMenuTriggerFor]="menu">
+            <i class="ti ti-dots-vertical"></i>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button type="button" mat-menu-item (click)="abrir(a)">
+              <mat-icon>edit</mat-icon>
+              <span>Editar</span>
+            </button>
+            <button type="button" mat-menu-item (click)="verEstadisticas(a)">
+              <mat-icon>bar_chart</mat-icon>
+              <span>Estadísticas</span>
+            </button>
+            <button type="button" mat-menu-item (click)="alternarActivo(a)">
+              <mat-icon>{{ a.activo ? 'toggle_off' : 'toggle_on' }}</mat-icon>
+              <span>{{ a.activo ? 'Desactivar' : 'Activar' }}</span>
+            </button>
+            <button type="button" class="text-danger" mat-menu-item (click)="eliminar(a)">
+              <mat-icon class="text-danger">delete_outline</mat-icon>
+              <span>Eliminar</span>
+            </button>
+          </mat-menu>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<mat-paginator [pageIndex]="paginationService.page - 1" [length]="totalCount" [pageSize]="paginationService.pageCount"
+  [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)">
+</mat-paginator>
+}

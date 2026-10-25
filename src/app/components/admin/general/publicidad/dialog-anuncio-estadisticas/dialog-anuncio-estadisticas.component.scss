@@ -1,0 +1,38 @@
+.est__cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.est__totales {
+  display: flex;
+  gap: 24px;
+  margin: 0;
+
+  dt {
+    font-size: 11px;
+    font-weight: 400;
+    color: #666;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+.est__barra-col {
+  width: 35%;
+}
+
+.est__barra {
+  display: block;
+  height: 8px;
+  min-width: 1px;
+  border-radius: 4px;
+  background: #137eff;
+}

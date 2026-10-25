@@ -1,0 +1,180 @@
+<h2 mat-dialog-title>{{ editando ? 'Editar anuncio' : 'Nuevo anuncio' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <mat-dialog-content class="dlg-anuncio">
+    <div class="row g-3">
+      <div class="col-12 col-md-8">
+        <label class="form-label" for="dlg-anuncio-nombre">Nombre <strong class="text-danger">*</strong></label>
+        <input id="dlg-anuncio-nombre" type="text" class="form-control" formControlName="nombre" maxlength="100"
+          placeholder="Para reconocerlo en la tabla (no se muestra)" cdkFocusInitial />
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="form-label" for="dlg-anuncio-tipo">Tipo</label>
+        <select id="dlg-anuncio-tipo" class="form-select" formControlName="tipo">
+          <option value="html">HTML / script</option>
+          <option value="imagen">Imagen con enlace</option>
+          <option value="componente">Componente del sitio</option>
+        </select>
+      </div>
+
+      @switch (tipo()) {
+        @case ('html') {
+        <div class="col-12">
+          <label class="form-label" for="dlg-anuncio-html">HTML <strong class="text-danger">*</strong></label>
+          <textarea id="dlg-anuncio-html" class="form-control font-monospace" rows="5" formControlName="html"></textarea>
+          <small class="text-muted">Se muestra filtrado por el navegador: los &lt;script&gt; no se ejecutan (van en los scripts globales).</small>
+        </div>
+        }
+        @case ('imagen') {
+        <div class="col-12 col-md-6">
+          <label class="form-label" for="dlg-anuncio-imagen">URL de la imagen <strong class="text-danger">*</strong></label>
+          <input id="dlg-anuncio-imagen" type="url" class="form-control" formControlName="imagenUrl" placeholder="https://..." />
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label" for="dlg-anuncio-enlace">Enlace al hacer clic</label>
+          <input id="dlg-anuncio-enlace" type="url" class="form-control" formControlName="enlaceUrl" placeholder="https://..." />
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label" for="dlg-anuncio-alt">Texto alternativo</label>
+          <input id="dlg-anuncio-alt" type="text" class="form-control" formControlName="textoAlternativo" maxlength="200" />
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="form-label" for="dlg-anuncio-ancho">Ancho (px)</label>
+          <input id="dlg-anuncio-ancho" type="number" class="form-control" formControlName="ancho" min="1" max="2000" />
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="form-label" for="dlg-anuncio-alto">Alto (px)</label>
+          <input id="dlg-anuncio-alto" type="number" class="form-control" formControlName="alto" min="1" max="2000" />
+        </div>
+        <div class="col-12"><small class="text-muted">Con el ancho y el alto la página reserva el lugar y no salta al cargar la imagen.</small></div>
+        }
+        @case ('componente') {
+        <div class="col-12 col-md-6">
+          <label class="form-label" for="dlg-anuncio-componente">Componente</label>
+          <select id="dlg-anuncio-componente" class="form-select" formControlName="componente">
+            @for (c of componentes; track c.id) {
+            <option [value]="c.id">{{ c.nombre }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label" for="dlg-anuncio-variante">Forma</label>
+          <select id="dlg-anuncio-variante" class="form-select" formControlName="variante">
+            <option value="cuadrado">Cuadrado</option>
+            <option value="horizontal">Horizontal</option>
+          </select>
+        </div>
+        }
+      }
+
+      <fieldset class="col-12">
+        <legend class="form-label">Dónde se muestra <strong class="text-danger">*</strong></legend>
+        <div class="dlg-anuncio__casillas dlg-anuncio__casillas--ubicaciones">
+          @for (u of data.opciones.ubicaciones; track u.id) {
+          <label class="form-check">
+            <input class="form-check-input" type="checkbox" [checked]="ubicaciones().has(u.id)" (change)="alternar('ubicaciones', u.id)" />
+            <span class="form-check-label">{{ u.nombre }}</span>
+          </label>
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="col-12 col-md-6">
+        <legend class="form-label">Categorías de posts <small class="text-muted">({{ categorias().size ? categorias().size + ' elegidas' : 'todas' }})</small></legend>
+        <input type="search" class="form-control form-control-sm mb-2" placeholder="Buscar categoría..." aria-label="Buscar categoría"
+          [value]="filtroCategorias()" (input)="filtroCategorias.set($any($event.target).value)" />
+        <div class="dlg-anuncio__casillas">
+          @for (c of categoriasVisibles(); track c.id) {
+          <label class="form-check">
+            <input class="form-check-input" type="checkbox" [checked]="categorias().has(c.id)" (change)="alternar('categorias', c.id)" />
+            <span class="form-check-label">{{ c.nombre }}</span>
+          </label>
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="col-12 col-md-6">
+        <legend class="form-label">Comunidades <small class="text-muted">({{ comunidades().size ? comunidades().size + ' elegidas' : 'todas' }})</small></legend>
+        <input type="search" class="form-control form-control-sm mb-2" placeholder="Buscar comunidad..." aria-label="Buscar comunidad"
+          [value]="filtroComunidades()" (input)="filtroComunidades.set($any($event.target).value)" />
+        <div class="dlg-anuncio__casillas">
+          @for (c of comunidadesVisibles(); track c.id) {
+          <label class="form-check">
+            <input class="form-check-input" type="checkbox" [checked]="comunidades().has(c.id)" (change)="alternar('comunidades', c.id)" />
+            <span class="form-check-label">{{ c.nombre }}</span>
+          </label>
+          } @empty {
+          <span class="text-muted small">No hay comunidades.</span>
+          }
+        </div>
+      </fieldset>
+      <div class="col-12">
+        <small class="text-muted">Sin categorías ni comunidades elegidas sale en todas las páginas de sus ubicaciones. Con alguna,
+          solo en las páginas de esa categoría (posts y su listado) o de esa comunidad (la comunidad y sus temas).</small>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <label class="form-label" for="dlg-anuncio-dispositivo">Dispositivo</label>
+        <select id="dlg-anuncio-dispositivo" class="form-select" formControlName="dispositivo">
+          <option value="todos">Todos</option>
+          <option value="movil">Solo celular</option>
+          <option value="escritorio">Solo escritorio</option>
+        </select>
+      </div>
+      <div class="col-6 col-md-3">
+        <label class="form-label" for="dlg-anuncio-audiencia">Visitantes</label>
+        <select id="dlg-anuncio-audiencia" class="form-select" formControlName="audiencia">
+          <option value="todos">Todos</option>
+          <option value="anonimos">Sin sesión</option>
+          <option value="registrados">Con sesión</option>
+        </select>
+      </div>
+      <div class="col-6 col-md-3">
+        <label class="form-label" for="dlg-anuncio-inicio">Desde</label>
+        <input id="dlg-anuncio-inicio" type="datetime-local" class="form-control" formControlName="fechaInicio" />
+      </div>
+      <div class="col-6 col-md-3">
+        <label class="form-label" for="dlg-anuncio-fin">Hasta</label>
+        <input id="dlg-anuncio-fin" type="datetime-local" class="form-control" formControlName="fechaFin" />
+      </div>
+
+      <div class="col-6 col-md-3">
+        <label class="form-label" for="dlg-anuncio-peso">Peso (1 a 10)</label>
+        <input id="dlg-anuncio-peso" type="number" class="form-control" formControlName="peso" min="1" max="10" />
+      </div>
+      <div class="col-6 col-md-9 d-flex align-items-end">
+        <small class="text-muted">Si hay varios anuncios para el mismo espacio, uno con peso 2 sale el doble de veces que uno con peso 1.</small>
+      </div>
+
+      <div class="col-12">
+        <mat-slide-toggle formControlName="activo" color="primary">Activo</mat-slide-toggle>
+      </div>
+
+      @if (tipo() !== 'componente') {
+      <div class="col-12">
+        <span class="form-label d-block">Vista previa</span>
+        <div class="dlg-anuncio__vista">
+          @if (tipo() === 'imagen') {
+            @if (form.controls.imagenUrl.value) {
+            <img [src]="form.controls.imagenUrl.value" [alt]="form.controls.textoAlternativo.value || 'Vista previa'"
+              [attr.width]="form.controls.ancho.value" [attr.height]="form.controls.alto.value" />
+            }
+          } @else {
+          <div [innerHTML]="form.controls.html.value | contenidoSeo: 'Vista previa'"></div>
+          }
+        </div>
+      </div>
+      }
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    @if (faltante; as falta) {
+    <small class="text-danger me-auto">{{ falta }}</small>
+    }
+    <button type="button" mat-button mat-dialog-close>Cancelar</button>
+    <button type="submit" mat-button color="primary" [disabled]="!!faltante || form.invalid || guardando()">
+      {{ editando ? 'Guardar' : 'Crear' }}
+    </button>
+  </mat-dialog-actions>
+</form>

@@ -24,13 +24,15 @@ import { PostsNavComponent } from '../posts-nav/posts-nav.component';
 import { ShareButtonsComponent } from '../../addons/share-buttons/share-buttons.component';
 import { PostsTagsComponent } from '../posts-tags/posts-tags.component';
 import { PostsMetaComponent } from '../posts-meta/posts-meta.component';
-import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { PostCommentsComponent } from '../post-comments/post-comments.component';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { ContenidoSeoPipe } from '../../../shared/pipes/contenidoSeo.pipe';
 import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 import { ContenidoPostDirective } from '../../../shared/directives/contenido-post.directive';
 import { RedireccionCanonica } from '../../../shared/helpers/redireccion-canonica';
+import { AnunciosService } from '../../../services/shared/anuncios.service';
+import { partirContenido } from '../../ads/anuncios';
 import {
   indiceDeContenido,
   minutosDeLectura,
@@ -54,7 +56,7 @@ import {
     ShareButtonsComponent,
     PostsTagsComponent,
     PostsMetaComponent,
-    AdsByTypeComponent,
+    AnuncioComponent,
     PostCommentsComponent,
     DecimalPipe,
     DatePipe,
@@ -67,6 +69,7 @@ import {
 export class PostsViewComponent implements OnInit {
   private readonly documento = inject(DOCUMENT);
   private readonly redireccionCanonica = inject(RedireccionCanonica);
+  private readonly anunciosService = inject(AnunciosService);
   private securityService = inject(IHttpSecurityService);
   private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
   private activatedRoute = inject(ActivatedRoute);
@@ -91,6 +94,8 @@ export class PostsViewComponent implements OnInit {
   // Índice (con 3 o más títulos) y tiempo de lectura: se calculan una vez por post, también en el SSR
   public indice: TituloIndice[] = [];
   public minutosLectura = 1;
+  /** El contenido en dos, con el anuncio "post-medio" entre las partes (null: sin anuncio en medio). */
+  public contenidoPartido: [string, string] | null = null;
   public show: boolean = false;
 
   /** Slug del título en la URL: se usa para redirigir a /posts/404 o /posts/privado antes de tener el post. */
@@ -154,6 +159,10 @@ export class PostsViewComponent implements OnInit {
           : [];
 
         this.post = { ...value.post, id: postId };
+        // Se decide antes de pintar el contenido: partirlo después movería el texto bajo el lector.
+        this.contenidoPartido = this.anunciosService.hayYa('post-medio', { categoriaId: this.post.categoria?.id })
+          ? partirContenido(this.post.contenido)
+          : null;
         const indice = indiceDeContenido(this.post.contenido);
         this.indice = indice.length >= 3 ? indice : [];
         this.minutosLectura = minutosDeLectura(this.post.contenido);

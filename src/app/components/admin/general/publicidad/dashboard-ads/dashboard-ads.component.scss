@@ -1,22 +1,5 @@
-
-.anuncio {
-    margin-bottom: 0.75rem;
-    padding: 0.75rem;
-    border: 1px solid var(--bs-border-color, #dee2e6);
-    border-radius: 8px;
-}
-
-.anuncio__cabecera {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-
-    select { width: auto; }
-}
-
-.anuncio__numero {
+.dashboard-ads__subtitulo {
+    font-size: 16px;
     font-weight: 700;
-    color: #8b8b8b;
+    margin-bottom: 4px;
 }

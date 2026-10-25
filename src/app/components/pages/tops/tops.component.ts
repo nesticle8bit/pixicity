@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router';
 import { SelectAutocompleteComponent } from '../../shared/select-autocomplete/select-autocomplete.component';
 import { SelectLabelDirective, SelectOptionDirective } from '../../shared/select-autocomplete/select-template.directives';
 import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
-import { AdsByTypeComponent } from '../../ads/ads-by-type/ads-by-type.component';
+import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 
 @Component({
@@ -25,7 +25,7 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
         SelectOptionDirective,
         MatRadioGroup,
         MatRadioButton,
-        AdsByTypeComponent,
+        AnuncioComponent,
         TruncatePipe,
     ],
 })

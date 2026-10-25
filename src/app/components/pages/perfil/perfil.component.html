@@ -160,7 +160,7 @@
       <app-perfil-social-media-buttons [usuarioId]="currentUser.id"></app-perfil-social-media-buttons>
       <app-perfil-user-followers [usuarioId]="currentUser.id"
         (verTodos)="seleccionar('followers')"></app-perfil-user-followers>
-      <ads-by-type class="pf-lateral__ads" [type]="'300x250'"></ads-by-type>
+      <app-anuncio class="pf-lateral__ads" ubicacion="perfil-lateral" encabezado />
     </aside>
   </div>
   }

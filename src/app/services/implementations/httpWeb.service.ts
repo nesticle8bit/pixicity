@@ -58,22 +58,6 @@ export class HttpWebService implements IHttpWebService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getPublicidad(tamano: string): Observable<string> {
-    return this.http
-      .get<ApiResponse<string>>(`${environment.api}/api/publicidad/${encodeURIComponent(tamano)}`)
-      .pipe(
-        map((response) => {
-          if (response.status === 200) {
-            return response.data!;
-          } else {
-            this.notificationService.error(response.errors.join(', '), 'Error');
-            throw new Error(response.errors?.join(', ') ?? 'Error');
-          }
-        }),
-      )
-      .pipe(catchError(this.helper.errorHandler));
-  }
-
   getAfiliados(): Observable<AfiliacionModel[]> {
     return this.http
       .get<ApiResponse<AfiliacionModel[]>>(`${environment.api}/api/afiliados/activos`)

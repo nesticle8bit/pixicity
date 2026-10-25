@@ -29,10 +29,9 @@ export interface PortadaViewModel {
   afiliados: AfiliacionModel[];
   tags: CloudTagViewModel[];
   usuariosRecientes: UsuarioViewModel[];
-  publicidad: Record<string, string>;
 }
 
-type Seccion = Exclude<keyof PortadaViewModel, 'posts' | 'publicidad'>;
+type Seccion = Exclude<keyof PortadaViewModel, 'posts'>;
 
 interface Carga {
   datos$: Observable<PortadaViewModel | null>;
@@ -82,10 +81,6 @@ export class PortadaService {
   tomarPosts(categoria: string, pagina: number, respaldo: Observable<PortadaViewModel['posts']>): Observable<PortadaViewModel['posts']> {
     if (this.carga?.posts !== `${categoria}|${pagina}`) return respaldo;
     return this.desde('posts', (datos) => datos.posts, respaldo);
-  }
-
-  tomarPublicidad(tamano: string, respaldo: Observable<string>): Observable<string> {
-    return this.desde(`publicidad:${tamano}`, (datos) => datos.publicidad?.[tamano], respaldo);
   }
 
   private desde<T>(clave: string, elegir: (datos: PortadaViewModel) => T | undefined, respaldo: Observable<T>): Observable<T> {

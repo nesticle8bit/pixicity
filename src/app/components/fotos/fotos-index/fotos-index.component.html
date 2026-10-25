@@ -61,6 +61,8 @@
       </div>
 
       @if ((pagination.totalPages ?? 0) > 1) {
+      <app-anuncio class="my-3" ubicacion="fotos-listado" />
+
       <div class="fotos-pagination">
         @for (page of totalPages; track page) {
         <a class="page-btn" [ngClass]="{'active': page === pagination.currentPage}" [routerLink]="[]"
