@@ -1,4 +1,5 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { slugTitulo } from 'src/app/shared/helpers/slug';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -133,7 +134,7 @@ export class ComunidadTemaCreateComponent implements OnInit {
         this.borrador?.limpiar();
         if (this.temaId) {
           this.notificationService.success('Tu tema ha sido actualizado', 'Tema actualizado');
-          this.router.navigate(['/comunidades', this.slug, 'tema', this.temaId, this.urlSeo(model.titulo)]);
+          this.router.navigate(['/comunidades', this.slug, 'tema', this.temaId, slugTitulo(model.titulo)]);
         } else {
           this.notificationService.success('Tu tema ha sido publicado', 'Tema creado');
           this.router.navigate(['/comunidades', this.slug]);
@@ -141,15 +142,5 @@ export class ComunidadTemaCreateComponent implements OnInit {
       },
       error: () => { this.loading = false; },
     });
-  }
-
-  private urlSeo(titulo: string): string {
-    return (titulo || '')
-      .toLowerCase()
-      .replace(/ /g, '-').replace(/\//g, '-')
-      .replace(/\(/g, '-').replace(/\)/g, '-')
-      .replace(/á/g, 'a').replace(/é/g, 'e')
-      .replace(/í/g, 'i').replace(/ó/g, 'o')
-      .replace(/ú/g, 'u').replace(/ñ/g, 'n');
   }
 }

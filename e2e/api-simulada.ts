@@ -150,6 +150,13 @@ const RESPUESTAS: [RegExp, unknown][] = [
     /\/api\/usuarios\/por-nombre\/[^/?]+\/info(\?|$)/i,
     { userName: AUTOR, avatar: null, rango: RANGO, puntos: 50, postsCount: 2, seguidoresCount: 7 },
   ],
+  // Lo que piden todas las páginas (layout, campana, selector de categorías). Cortadas, cada una mostraba un toast
+  // de error arriba a la derecha que en el celular tapaba botones y se comía clics (p. ej. el "50%" del editor).
+  [/\/api\/noticias(\?|$)/i, []],
+  [/\/api\/paginas(\?|$)/i, []],
+  [/\/api\/configuracion\/footer(\?|$)/i, ''],
+  [/\/api\/notificaciones\/estadisticas(\?|$)/i, { notifications: 0, messages: 0 }],
+  [/\/api\/categorias(\?|$)/i, []],
 ];
 
 export async function simularApi(page: Page): Promise<void> {

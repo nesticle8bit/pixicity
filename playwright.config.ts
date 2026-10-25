@@ -17,6 +17,10 @@ export default defineConfig({
   forbidOnly: enCI,
   retries: enCI ? 1 : 0,
   reporter: enCI ? 'github' : 'list',
+  // En local, un tercio de los núcleos (2 en una máquina de 6). Con la mitad (el valor por defecto) Edge + axe
+  // saturaban la CPU: el navegador dejaba de pintar ~15 s, los clics no llegaban a tiempo y fallaban pruebas al azar
+  // (favoritos, comentarios, /mi). Con 2 pasaron 85/85 repeticiones, y más rápido que con 3.
+  workers: enCI ? undefined : '33%',
   use: {
     baseURL: `http://localhost:${PUERTO}`,
     trace: 'retain-on-failure',

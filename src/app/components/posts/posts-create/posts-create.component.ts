@@ -1,5 +1,6 @@
 import { AvisoProtocoloComponent } from '../../shared/aviso-protocolo/aviso-protocolo.component';
 import { afterNextRender, Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, viewChild } from '@angular/core';
+import { slugTitulo } from 'src/app/shared/helpers/slug';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, map, of, switchMap } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -343,9 +344,8 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
         if (response) {
           this.borrador?.limpiar();
           this.notificationService.success('Se ha actualizado recientemente tu post 👋🏼, ahora lo podrás visualizar con los cambios realizados', 'Actualizado');
-          this.router.navigate([
-            `/posts/${categoria.nombre.toLowerCase()}/${post.id}/${post.titulo}`,
-          ]);
+          // La misma URL que el canonical: antes iba a /posts/{nombre}/{id}/{título crudo} y la vista redirigía.
+          this.router.navigate(['/posts', categoria.seo, post.id, slugTitulo(post.titulo)]);
         }
       });
     }
