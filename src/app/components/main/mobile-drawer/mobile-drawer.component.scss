@@ -55,7 +55,7 @@ $accent: #004160;
     justify-content: space-between;
     gap: .5rem;
     padding: calc(.85rem + env(safe-area-inset-top, 0px)) 1rem .85rem;
-    background: linear-gradient(135deg, $main 0%, $accent 100%);
+    background: $main;
     color: #fff;
   }
 
@@ -144,7 +144,7 @@ $accent: #004160;
       border-right: 0;
       border-radius: 10px 0 0 10px;
       background: #f6f9fb;
-      font-size: 16px; // 16px evita el zoom automático de iOS al enfocar
+      font-size: 11px; // 16px evita el zoom automático de iOS al enfocar
 
       &:focus {
         border-color: $main;
