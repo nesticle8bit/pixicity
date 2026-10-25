@@ -19,6 +19,24 @@
   }
 }
 
+// Fila de relleno con el alto de una fila real (en md+ la columna del avatar la hace 1 px más alta)
+.lp-esqueleto {
+  height: 30px;
+
+  @media (min-width: 768px) {
+    height: 31px;
+  }
+
+  span {
+    display: block;
+    width: 60%;
+    height: 10px;
+    margin-top: 4px;
+    border-radius: 3px;
+    background: #e6e6e6;
+  }
+}
+
 // Ícono RSS junto al título "Recientes" (.i del sprite es block + float: aquí va en línea)
 .rss-link {
   display: inline-block;

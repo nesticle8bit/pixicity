@@ -1,5 +1,6 @@
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { PortadaService } from 'src/app/services/shared/portada.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
@@ -15,6 +16,7 @@ export class HomeStatsComponent implements OnInit, OnDestroy {
   private generalService = inject(IHttpGeneralService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private portada = inject(PortadaService);
 
   public estadisticas: any;
 
@@ -36,7 +38,7 @@ export class HomeStatsComponent implements OnInit, OnDestroy {
   }
 
   private loadStats(): void {
-    this.generalService.getEstadisticas().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
+    this.portada.tomar('estadisticas', this.generalService.getEstadisticas()).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
       this.estadisticas = values;
     });
   }

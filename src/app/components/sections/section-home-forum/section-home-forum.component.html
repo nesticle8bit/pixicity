@@ -21,14 +21,20 @@
       <br>
       <app-tags-cloud />
 
-      <app-home-discord />
+      <!-- Al final de la columna (en el celular, debajo de toda la lista): se cargan al acercarse. El widget de Discord
+           pide datos a discord.com y baja avatares, y los anuncios traen lo suyo, aunque nadie llegara a verlos. -->
+      @defer (on viewport) {
+        <app-home-discord />
 
-      <div class="text-center">
-        <ads-by-type class="d-none d-md-block mb-3" [type]="'160x600'" />
-        <ads-by-type class="d-block d-md-none mb-3" [type]="'300x250'" />
-      </div>
+        <div class="text-center">
+          <ads-by-type class="d-none d-md-block mb-3" [type]="'160x600'" />
+          <ads-by-type class="d-block d-md-none mb-3" [type]="'300x250'" />
+        </div>
 
-      <app-home-last-registered-users />
+        <app-home-last-registered-users />
+      } @placeholder {
+        <div class="defer-hueco"></div>
+      }
     </div>
   </div>
 </div>

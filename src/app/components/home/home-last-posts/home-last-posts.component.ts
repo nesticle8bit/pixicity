@@ -1,6 +1,7 @@
 import { Subscription } from 'rxjs';
 import { ViewportScroller, NgClass } from '@angular/common';
 import { Component, DestroyRef, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { PortadaService, POSTS_POR_PAGINA_PORTADA } from 'src/app/services/shared/portada.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
@@ -38,6 +39,7 @@ export class HomeLastPostsComponent implements OnInit, OnDestroy {
   private signalrService = inject(SignalrService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private portada = inject(PortadaService);
   private cargaGetPosts?: Subscription;
 
   private _categoria: string = '';
@@ -55,6 +57,8 @@ export class HomeLastPostsComponent implements OnInit, OnDestroy {
   public lastPosts: PostListaViewModel[] = [];
   public totalCount: number = 0;
   public pageIndex: number = 0;
+  public cargado = false;
+  public readonly filasEsqueleto = Array.from({ length: POSTS_POR_PAGINA_PORTADA });
 
   /** Evita la doble carga cuando llegan a la vez la categoria y el ?page=. */
   private ultimaCarga: string = '';
@@ -63,7 +67,7 @@ export class HomeLastPostsComponent implements OnInit, OnDestroy {
   private iniciado = false;
 
   constructor() {
-    this.paginationService.change({ pageIndex: 0, pageSize: 49, length: 0 });
+    this.paginationService.change({ pageIndex: 0, pageSize: POSTS_POR_PAGINA_PORTADA, length: 0 });
   }
 
   ngOnInit(): void {
@@ -154,18 +158,24 @@ export class HomeLastPostsComponent implements OnInit, OnDestroy {
 
     this.cargaGetPosts?.unsubscribe();
 
-    this.cargaGetPosts = this.postService
-      .getPosts(categoria, version)
+    const pedido = this.postService.getPosts(categoria, version);
+    // La primera página llega con /api/portada; las recargas en vivo (con versión) van siempre al endpoint.
+    this.cargaGetPosts = (version ? pedido : this.portada.tomarPosts(categoria, this.pageIndex + 1, pedido))
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response) => {
-        this.lastPosts = response.data;
-        this.totalCount = response.pagination.totalCount;
+      .subscribe({
+        next: (response) => {
+          this.lastPosts = response.data;
+          this.totalCount = response.pagination.totalCount;
+          this.cargado = true;
+        },
+        // Sin esto, si el API falla el esqueleto quedaría para siempre.
+        error: () => (this.cargado = true),
       });
   }
 
   getStickyPosts(): void {
-    this.postService
-      .getStickyPosts()
+    this.portada
+      .tomar('fijados', this.postService.getStickyPosts())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((posts) => {
         this.stickyPosts = posts;

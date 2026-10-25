@@ -1,5 +1,6 @@
 import { TopCategoriaViewModel } from 'src/app/models/parametros/parametros-vm.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { PortadaService } from 'src/app/services/shared/portada.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { RouterLink } from '@angular/router';
@@ -15,6 +16,7 @@ export class HomeTopCategoriasComponent implements OnInit {
   private parametrosService = inject(IHttpParametrosService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private portada = inject(PortadaService);
 
   public categorias: TopCategoriaViewModel[] = [];
 
@@ -23,8 +25,8 @@ export class HomeTopCategoriasComponent implements OnInit {
   }
 
   getTopCategorias(): void {
-    this.parametrosService
-      .getTopCategorias(10)
+    this.portada
+      .tomar('topCategorias', this.parametrosService.getTopCategorias(10))
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => {
         this.categorias = value ?? [];

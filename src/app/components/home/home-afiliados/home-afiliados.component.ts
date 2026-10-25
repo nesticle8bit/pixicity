@@ -1,4 +1,5 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { PortadaService } from 'src/app/services/shared/portada.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAfiliarseComponent } from 'src/app/components/dialogs/dialog-afiliarse/dialog-afiliarse.component';
@@ -17,6 +18,7 @@ export class HomeAfiliadosComponent implements OnInit {
   private dialog = inject(MatDialog);
 
   private readonly destroyRef = inject(DestroyRef);
+  private portada = inject(PortadaService);
 
   public afiliados: any[] = [];
 
@@ -32,7 +34,7 @@ export class HomeAfiliadosComponent implements OnInit {
   }
 
   getAfiliados(): void {
-    this.webService.getAfiliados().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+    this.portada.tomar('afiliados', this.webService.getAfiliados()).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       this.afiliados = response;
     });
   }

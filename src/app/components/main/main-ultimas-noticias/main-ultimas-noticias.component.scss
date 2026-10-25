@@ -35,7 +35,29 @@
     margin-right: 0;
 }
 
-// Reserva el alto de una línea de noticia mientras cargan.
-.last_news--cargando {
+// Alto fijo, igual mientras cargan: el reservado era de 1 línea, en el celular la noticia ocupaba 2 y empujaba la
+// página al llegar (y otra vez al rotar entre una corta y una larga). Lo que no entra se corta con "…".
+.last_news {
+    display: flex;
+    align-items: center;
     height: 34px;
+
+    > .row {
+        flex: 1;
+    }
+
+    strong.fade-in {
+        display: -webkit-box !important;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+    }
+
+    @media (max-width: 767.98px) {
+        height: 52px;
+
+        strong.fade-in {
+            -webkit-line-clamp: 2;
+        }
+    }
 }

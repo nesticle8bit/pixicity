@@ -1,4 +1,5 @@
 import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { PortadaService } from 'src/app/services/shared/portada.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -19,6 +20,7 @@ export class HomeLastRegisteredUsersComponent implements OnInit, OnDestroy {
   private signalrService = inject(SignalrService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private portada = inject(PortadaService);
 
   public users: any[] = [];
 
@@ -36,8 +38,8 @@ export class HomeLastRegisteredUsersComponent implements OnInit, OnDestroy {
   }
 
   getLastRegisteredUsers(version?: number): void {
-    this.securityService
-      .getLastRegisteredUsers(version)
+    this.portada
+      .tomar('usuariosRecientes', this.securityService.getLastRegisteredUsers(version))
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         this.users = response;

@@ -1,6 +1,7 @@
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { TopPostModel } from 'src/app/models/web/topPost.model';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { PortadaService } from 'src/app/services/shared/portada.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TopTimesSelectorComponent } from '../../sections/top-times-selector/top-times-selector.component';
 import { NgClass } from '@angular/common';
@@ -24,6 +25,7 @@ export class HomeTopPostsComponent implements OnInit {
   private httpWeb = inject(IHttpWebService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private portada = inject(PortadaService);
 
   public date: string = '';
   public loading: boolean = false;
@@ -36,8 +38,8 @@ export class HomeTopPostsComponent implements OnInit {
   getTopPosts(): void {
     this.loading = true;
 
-    this.httpWeb
-      .getTopPosts(this.date)
+    this.portada
+      .tomar('topPosts', this.httpWeb.getTopPosts(this.date))
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: TopPostModel[]) => {
         this.topPosts = value;

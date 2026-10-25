@@ -1,12 +1,8 @@
 import { Injectable, Injector, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Subject, Observable } from 'rxjs';
-import {
-  HubConnection,
-  HubConnectionBuilder,
-  HubConnectionState,
-  LogLevel,
-} from '@microsoft/signalr';
+// Solo el tipo: el paquete (55 KB) se importa recién al conectar, fuera del arranque de la app.
+import type { HubConnection } from '@microsoft/signalr';
 import { environment } from 'src/environments/environment';
 import {
   ActividadEnVivo,
@@ -116,10 +112,17 @@ export class SignalrService {
     }
   }
 
+  /** HubConnectionState como texto (sus valores lo son): el enum no está cargado hasta conectar. */
+  private estado(): string | undefined {
+    return this.connection?.state as string | undefined;
+  }
+
   // Crea (si hace falta) e inicia la conexión, registrando los handlers una sola vez. Idempotente.
   private async ensureStarted(): Promise<void> {
     if (!this.connection) {
-      this.connection = new HubConnectionBuilder()
+      const { HubConnectionBuilder, LogLevel } = await import('@microsoft/signalr');
+      // ??=: otra llamada pudo crearla mientras se bajaba el paquete.
+      this.connection ??= new HubConnectionBuilder()
         .withUrl(`${environment.api}/api/hubs/notifications`)
         .withAutomaticReconnect()
         .configureLogging(LogLevel.Error)
@@ -142,7 +145,7 @@ export class SignalrService {
       this.handlersBound = true;
     }
 
-    if (this.connection.state === HubConnectionState.Disconnected) {
+    if (this.estado() === 'Disconnected') {
       try {
         await this.connection.start();
       } catch {
@@ -177,9 +180,9 @@ export class SignalrService {
   }
 
   private async invocar(metodo: string, ...args: unknown[]): Promise<void> {
-    if (this.connection?.state === HubConnectionState.Connected) {
+    if (this.estado() === 'Connected') {
       try {
-        await this.connection.invoke(metodo, ...args);
+        await this.connection!.invoke(metodo, ...args);
       } catch {
         // ignorar: sin realtime los puntos se ven al recargar
       }
@@ -194,9 +197,9 @@ export class SignalrService {
   }
 
   private async invokeEnVivo(): Promise<void> {
-    if (this.connection?.state === HubConnectionState.Connected) {
+    if (this.estado() === 'Connected') {
       try {
-        await this.connection.invoke('SubscribeEnVivo');
+        await this.connection!.invoke('SubscribeEnVivo');
       } catch {
         // ignorar
       }
@@ -206,9 +209,9 @@ export class SignalrService {
   // Sale del grupo "En Vivo" sin cerrar la conexión (puede seguir usándose para notificaciones).
   async stopEnVivo(): Promise<void> {
     this.suscritoEnVivo = false;
-    if (this.connection?.state === HubConnectionState.Connected) {
+    if (this.estado() === 'Connected') {
       try {
-        await this.connection.invoke('UnsubscribeEnVivo');
+        await this.connection!.invoke('UnsubscribeEnVivo');
       } catch {
         // ignorar
       }
@@ -216,9 +219,9 @@ export class SignalrService {
   }
 
   private async subscribe(token: string): Promise<void> {
-    if (this.connection?.state === HubConnectionState.Connected) {
+    if (this.estado() === 'Connected') {
       try {
-        await this.connection.invoke('Subscribe', token);
+        await this.connection!.invoke('Subscribe', token);
       } catch {
         // ignorar
       }
@@ -227,9 +230,9 @@ export class SignalrService {
 
   // Avisa al otro usuario que estoy escribiéndole. Efímero: si no hay conexión simplemente no hace nada.
   async notifyTyping(otroId: number): Promise<void> {
-    if (this.connection?.state === HubConnectionState.Connected) {
+    if (this.estado() === 'Connected') {
       try {
-        await this.connection.invoke('Escribiendo', otroId);
+        await this.connection!.invoke('Escribiendo', otroId);
       } catch {
         // ignorar
       }

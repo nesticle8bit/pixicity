@@ -1,4 +1,5 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { PortadaService } from 'src/app/services/shared/portada.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { RouterLink } from '@angular/router';
@@ -14,6 +15,7 @@ export class TagsCloudComponent implements OnInit {
   private postService = inject(IHttpPostsService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private portada = inject(PortadaService);
 
   public cloudTags: (CloudTagViewModel & { class: number })[] = [];
 
@@ -22,7 +24,7 @@ export class TagsCloudComponent implements OnInit {
   }
 
   getCloudTags(): void {
-    this.postService.getCloudTags().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
+    this.portada.tomar('tags', this.postService.getCloudTags()).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       const tags = value ?? [];
       const max = Math.max(1, ...tags.map((t) => t.count));
 

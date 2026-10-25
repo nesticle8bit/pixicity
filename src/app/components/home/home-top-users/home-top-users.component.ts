@@ -1,4 +1,5 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { PortadaService } from 'src/app/services/shared/portada.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TopUserModel } from 'src/app/models/web/topUser.model';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
@@ -24,6 +25,7 @@ export class HomeTopUsersComponent implements OnInit {
   private httpWeb = inject(IHttpWebService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private portada = inject(PortadaService);
 
   public topUsers: TopUserModel[] = [];
 
@@ -32,8 +34,8 @@ export class HomeTopUsersComponent implements OnInit {
   }
 
   getTopUsers(): void {
-    this.httpWeb
-      .getTopUsers()
+    this.portada
+      .tomar('topUsuarios', this.httpWeb.getTopUsers())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value: TopUserModel[]) => {
         this.topUsers = value;

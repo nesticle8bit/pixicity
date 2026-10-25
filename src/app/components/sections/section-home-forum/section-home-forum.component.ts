@@ -7,6 +7,7 @@ import { nombreDesdeSlug } from 'src/app/services/shared/seo-title.strategy';
 import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
+import { PortadaService } from 'src/app/services/shared/portada.service';
 import { HomeLastPostsComponent } from '../../home/home-last-posts/home-last-posts.component';
 import { HomeStatsComponent } from '../../home/home-stats/home-stats.component';
 import { HomeLastCommentsComponent } from '../../home/home-last-comments/home-last-comments.component';
@@ -46,6 +47,7 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
   private generalService = inject(IHttpGeneralService);
   private activatedRoute = inject(ActivatedRoute);
   private seoService = inject(SEOService);
+  private portada = inject(PortadaService);
 
   private readonly destroyRef = inject(DestroyRef);
 
@@ -61,6 +63,12 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
   // Heartbeat de presencia online (ms). Mantiene Activo fresco mientras el usuario sigue en la página.
   private readonly onlineHeartbeatMs = 120000;
   private onlineHeartbeatTimer: any = null;
+
+  // Pedida en el constructor, antes de que los widgets hijos pidan su parte.
+  private readonly cargaPortada = this.portada.iniciar(
+    this.activatedRoute.snapshot.paramMap.get('categoria') ?? '',
+    Number(this.activatedRoute.snapshot.queryParamMap.get('page')) || 1,
+  );
 
   constructor() {
     this.sessionOnlineUser();
@@ -126,6 +134,7 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.portada.terminar(this.cargaPortada);
     if (this.onlineHeartbeatTimer) {
       clearInterval(this.onlineHeartbeatTimer);
       this.onlineHeartbeatTimer = null;

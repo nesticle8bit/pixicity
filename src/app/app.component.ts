@@ -8,7 +8,7 @@ import { NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/r
 import { SEOService } from './services/shared/seo.service';
 import { SEOModel } from './models/shared/seo.model';
 import { Meta, Title } from '@angular/platform-browser';
-import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { CargaGlobalComponent } from './components/shared/carga-global/carga-global.component';
 import { MainHeaderComponent } from './components/main/main-header/main-header.component';
 import { MobileDrawerComponent } from './components/main/mobile-drawer/mobile-drawer.component';
 import { MainMenuComponent } from './components/main/main-menu/main-menu.component';
@@ -30,7 +30,7 @@ const DEFAULT_DESCRIPTION =
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     imports: [
-        NgxUiLoaderModule,
+        CargaGlobalComponent,
         MainHeaderComponent,
         MobileDrawerComponent,
         MainMenuComponent,

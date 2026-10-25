@@ -1,5 +1,10 @@
 
 
+// Lo que dispara el @defer de Discord/anuncios/registrados: es lo último de la columna y no empuja nada al crecer.
+.defer-hueco {
+  min-height: 1px;
+}
+
 // Widgets con cantidad fija de filas: en escritorio reservan su alto mientras cargan (≈93 % del alto medido en
 // producción). Antes aparecían de a uno y empujaban hacia abajo a los de su columna (CLS). En móvil el CLS ya era 0.
 @media (min-width: 992px) {

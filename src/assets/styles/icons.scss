@@ -1,6 +1,7 @@
 .i,
 .icon {
-    background: url('/assets/images/icons/i.png');
+    // WebP sin pérdida del mismo sprite (52 KB; el PNG pesaba 75 KB). Mismos píxeles: las posiciones no cambian.
+    background: url('/assets/images/icons/i.webp');
     width: 16px;
     height: 16px;
     display: block;

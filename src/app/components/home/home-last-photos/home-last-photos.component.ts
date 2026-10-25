@@ -1,4 +1,5 @@
 import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { PortadaService } from 'src/app/services/shared/portada.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -17,6 +18,7 @@ export class HomeLastPhotosComponent implements OnInit, OnDestroy {
   private fotosService = inject(IHttpFotosService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private portada = inject(PortadaService);
 
   public fotos: FotoViewModel[] = [];
   public loading = true;
@@ -30,7 +32,7 @@ export class HomeLastPhotosComponent implements OnInit, OnDestroy {
   private timer: ReturnType<typeof setTimeout> | null = null;
 
   ngOnInit(): void {
-    this.fotosService.getTopFotos(5).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    this.portada.tomar('fotos', this.fotosService.getTopFotos(5)).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         this.fotos = data || [];
         this.loading = false;

@@ -8,6 +8,13 @@
   <app-categories-selector></app-categories-selector>
 </h2>
 
+@if (!cargado) {
+<!-- Mismo alto que la lista mientras llega: al aparecer empujaba todo lo de abajo (CLS de 0,7 en el celular). -->
+@for (fila of filasEsqueleto; track $index) {
+<div class="lista-posts lp-esqueleto" aria-hidden="true"><span></span></div>
+}
+}
+
 @for (post of stickyPosts; track post.id) {
 <article class="lista-posts sticky-post--list">
   <div class="row">

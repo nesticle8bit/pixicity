@@ -1,4 +1,5 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { PortadaService } from 'src/app/services/shared/portada.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { ComentarioReciente, RecentCommentsListComponent } from '../../addons/recent-comments-list/recent-comments-list.component';
@@ -17,6 +18,7 @@ export class HomeLastCommentsComponent implements OnInit {
   private comentariosPostService = inject(IHttpComentariosPostService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private portada = inject(PortadaService);
 
   public cargando: boolean = false;
   public comentarios: ComentarioReciente[] = [];
@@ -28,8 +30,8 @@ export class HomeLastCommentsComponent implements OnInit {
   getUltimosComentarios(): void {
     this.cargando = true;
 
-    this.comentariosPostService
-      .getUltimosComentarios()
+    this.portada
+      .tomar('comentarios', this.comentariosPostService.getUltimosComentarios())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((comentarios: any[]) => {
         this.comentarios = (comentarios ?? []).map((c) => ({

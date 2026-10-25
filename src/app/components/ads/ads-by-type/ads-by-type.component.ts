@@ -1,4 +1,5 @@
 import { Component, DestroyRef, inject, Input, OnInit, input, signal } from '@angular/core';
+import { PortadaService } from 'src/app/services/shared/portada.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpWebService } from 'src/app/services/interfaces/httpWeb.interface';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -17,6 +18,7 @@ export class AdsByTypeComponent implements OnInit {
   private webService = inject(IHttpWebService);
 
   private readonly destroyRef = inject(DestroyRef);
+  private portada = inject(PortadaService);
 
   readonly type = input<string>('');
   @Input() class: string = '';
@@ -32,7 +34,7 @@ export class AdsByTypeComponent implements OnInit {
       return;
     }
 
-    this.webService.getPublicidad(type).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: string) => {
+    this.portada.tomarPublicidad(type, this.webService.getPublicidad(type)).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value: string) => {
       this.anuncio.set(anuncioAlAzar(leerAnuncios(value)));
     });
   }
