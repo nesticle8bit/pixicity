@@ -155,6 +155,7 @@ const RESPUESTAS: [RegExp, unknown][] = [
   [/\/api\/noticias(\?|$)/i, []],
   [/\/api\/paginas(\?|$)/i, []],
   [/\/api\/configuracion\/footer(\?|$)/i, ''],
+  [/\/api\/configuracion\/scripts(\?|$)/i, { headerScript: '', footerScript: '' }],
   [/\/api\/notificaciones\/estadisticas(\?|$)/i, { notifications: 0, messages: 0 }],
   [/\/api\/categorias(\?|$)/i, []],
   [/\/api\/anuncios(\?|$)/i, []],

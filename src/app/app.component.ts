@@ -18,6 +18,7 @@ import { MainFooterComponent } from './components/main/main-footer/main-footer.c
 import { AvisoEmailComponent } from './components/shared/aviso-email/aviso-email.component';
 import { SsrSalud } from './shared/helpers/ssr-salud';
 import { AnunciosService } from './services/shared/anuncios.service';
+import { ScriptsGlobalesService } from './services/shared/scripts-globales.service';
 
 /** Tarjeta social del sitio (1200x630) para páginas sin imagen propia. */
 const DEFAULT_OG_IMAGE = '/assets/images/og-image.jpg';
@@ -74,6 +75,7 @@ export class AppComponent {
   constructor() {
     // La lista de anuncios sale con las primeras peticiones: cuando una página pinta su espacio, ya está.
     inject(AnunciosService).precargar();
+    inject(ScriptsGlobalesService).insertar();
 
     this.displayComponentService
       .getDisplay()

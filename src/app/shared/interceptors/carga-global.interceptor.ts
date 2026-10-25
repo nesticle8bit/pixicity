@@ -34,6 +34,7 @@ export const SIN_LOADER: RegExp[] = [
   'noticias',
   'paginas',
   'configuracion/footer',
+  'configuracion/scripts',
   'usuarios/me/presencia',
   // Anuncios: la lista se pide al arrancar y no tiene por qué tapar la página.
   'anuncios',
