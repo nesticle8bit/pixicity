@@ -44,7 +44,7 @@ export class ModeracionPanelComponent implements OnInit {
     this.displayService.setDisplay({
       mainMenu: true,
       footer: true,
-      searchFooter: false,
+      searchFooter: true,
       submenu: true,
       background: '',
     });

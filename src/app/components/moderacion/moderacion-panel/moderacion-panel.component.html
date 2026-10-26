@@ -1,4 +1,4 @@
-<section class="container container--home mod-panel">
+<section class="mod-panel">
   <header class="mod-panel__head">
     <h1 class="mod-panel__title"><i class="ti ti-tool" aria-hidden="true"></i> Moderación</h1>
     <p class="mod-panel__desc">
@@ -9,13 +9,13 @@
 
   <nav class="mod-panel__tabs" aria-label="Secciones de moderación">
     @for (p of pestanas; track p.route) {
-      <a [routerLink]="p.route" routerLinkActive="active" [attr.aria-label]="p.label">
-        <i class="ti {{p.icon}}" aria-hidden="true"></i>
-        <span>{{p.label}}</span>
-        @if (p.route === 'reportes' && pendientes() > 0) {
-          <span class="mod-panel__badge" [attr.aria-label]="pendientes() + ' pendientes'">{{pendientes()}}</span>
-        }
-      </a>
+    <a [routerLink]="p.route" routerLinkActive="active" [attr.aria-label]="p.label">
+      <i class="ti {{p.icon}}" aria-hidden="true"></i>
+      <span>{{p.label}}</span>
+      @if (p.route === 'reportes' && pendientes() > 0) {
+      <span class="mod-panel__badge" [attr.aria-label]="pendientes() + ' pendientes'">{{pendientes()}}</span>
+      }
+    </a>
     }
     <a routerLink="/mod-history" class="mod-panel__tabs-historial">
       <i class="ti ti-history" aria-hidden="true"></i>
