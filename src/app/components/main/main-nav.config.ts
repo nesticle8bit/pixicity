@@ -22,7 +22,7 @@ export const NAV_LINKS: NavLink[] = [
   { label: 'Comunidades', icon: 'ti-users', route: '/comunidades', tab: true },
   { label: 'Fotos', icon: 'ti-camera', route: '/fotos', tab: true },
   { label: 'Buscador', icon: 'ti-search', route: '/buscar', exact: true },
-  { label: 'Historial', icon: 'ti-history', route: '/mod-history' },
+  { label: 'Historial', icon: 'ti-history', route: '/mod-history', rango: ['Moderador', 'Administrador'] },
   {
     label: 'Moderación',
     icon: 'ti-tool',

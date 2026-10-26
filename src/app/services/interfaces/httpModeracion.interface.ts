@@ -21,7 +21,7 @@ export abstract class IHttpModeracionService {
   /** Denuncias de comentarios de una comunidad (creador o staff de la comunidad). */
   abstract getReportesComunidad(comunidadId: number, soloPendientes: boolean): Observable<ReportesComunidad>;
   abstract getModeracionLogs(page: number, pageCount: number): Observable<PaginatedData<ModeracionLog>>;
-  /** /mod-history: lo mismo que la bitácora, para cualquier usuario con sesión. */
+  /** /mod-history: lo mismo que la bitácora, solo para moderadores y administradores. */
   abstract getHistorial(page: number, pageCount: number, filtro?: FiltroHistorial): Observable<PaginatedData<ModeracionLog>>;
   abstract getAccionesHistorial(): Observable<AccionModeracion[]>;
   /** Lo que moderaron del usuario actual, con el estado de su apelación. */

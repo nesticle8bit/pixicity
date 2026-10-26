@@ -163,7 +163,7 @@ export const routes: Routes = [
       import('./components/pages/mod-history/mod-history.component').then(
         (m) => m.ModHistoryComponent,
       ),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, ModeradorAuthorization],
   },
   {
     path: 'mensajes',

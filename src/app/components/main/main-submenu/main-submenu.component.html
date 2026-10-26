@@ -73,12 +73,14 @@
         </li>
         }
 
+        @if (currentUser?.usuario?.rango === 'Moderador' || currentUser?.usuario?.rango === 'Administrador') {
         <li class="list-inline-item sub-menu--item">
           <a [routerLink]="['/mod-history']">
             <i class="ti ti-history"></i>
             <span style="margin-left: 2px;">Historial</span>
           </a>
         </li>
+        }
 
         @if (currentUser?.usuario?.rango === 'Moderador') {
         <li class="list-inline-item sub-menu--item">
