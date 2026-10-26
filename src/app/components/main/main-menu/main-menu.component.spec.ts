@@ -119,8 +119,16 @@ describe('main-nav.config', () => {
   it('las pestañas son un subconjunto de los enlaces', () => {
     const tabs = linksFor('Administrador', true).map((l) => l.label);
 
-    expect(tabs).toEqual(['Mi', 'Posts', 'TOPs', 'Comunidades', 'Fotos', 'Administración']);
+    expect(tabs).toEqual(['Mi', 'Posts', 'TOPs', 'Comunidades', 'Fotos', 'Moderación', 'Administración']);
     expect(NAV_LINKS.length).toBeGreaterThan(tabs.length);
+  });
+
+  it('un moderador ve la pestaña Moderación pero no Administración', () => {
+    const tabs = linksFor('Moderador', true).map((l) => l.label);
+
+    expect(tabs).toContain('Moderación');
+    expect(tabs).not.toContain('Administración');
+    expect(linksFor(undefined, true).map((l) => l.label)).not.toContain('Moderación');
   });
 
   it('Moderación solo para moderadores y Administración solo para administradores', () => {

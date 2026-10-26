@@ -33,10 +33,21 @@
     }
   }
 
+  // 44 px de ancho (objetivo táctil cómodo) y solo el gap de 4 px de la lista como separación: así entran las 7
+  // pestañas de un administrador en 360 px. Con 48 px más el margen de list-inline-item la séptima quedaba fuera de
+  // la pantalla y, sin barra de scroll, nadie sabía que estaba.
   .main-menu--item {
     flex: 0 0 auto;
-    min-width: 48px; // objetivo táctil cómodo
+    min-width: 44px;
     text-align: center;
+
+    &.list-inline-item:not(:last-child) {
+      margin-right: 0;
+    }
+
+    > a {
+      padding: 8px 6px;
+    }
 
     i {
       font-size: 1.15rem;

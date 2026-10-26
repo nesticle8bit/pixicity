@@ -28,6 +28,7 @@ export const NAV_LINKS: NavLink[] = [
     icon: 'ti-tool',
     route: '/moderacion',
     rango: ['Moderador', 'Administrador'],
+    tab: true,
   },
   {
     label: 'Administración',
