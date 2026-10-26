@@ -20,13 +20,17 @@ export const MODERACION_ROUTES: Routes = [
         path: 'posts',
         title: 'Posts · Moderación',
         loadComponent: () =>
-          import('../../components/admin/control-de-contenido/posts/dashboard-posts/dashboard-posts.component').then((m) => m.DashboardPostsComponent),
+          import('../../components/admin/control-de-contenido/posts/dashboard-posts/dashboard-posts.component').then(
+            (m) => m.DashboardPostsComponent,
+          ),
       },
       {
         path: 'shouts',
         title: 'Shouts · Moderación',
         loadComponent: () =>
-          import('../../components/admin/control-de-contenido/shouts/dashboard-shouts/dashboard-shouts.component').then((m) => m.DashboardShoutsComponent),
+          import('../../components/admin/control-de-contenido/shouts/dashboard-shouts/dashboard-shouts.component').then(
+            (m) => m.DashboardShoutsComponent,
+          ),
       },
       {
         path: 'comentarios',
@@ -48,7 +52,9 @@ export const MODERACION_ROUTES: Routes = [
         path: 'usuarios',
         title: 'Usuarios · Moderación',
         loadComponent: () =>
-          import('../../components/moderacion/moderacion-usuarios/moderacion-usuarios.component').then((m) => m.ModeracionUsuariosComponent),
+          import('../../components/moderacion/moderacion-usuarios/moderacion-usuarios.component').then(
+            (m) => m.ModeracionUsuariosComponent,
+          ),
       },
     ],
   },

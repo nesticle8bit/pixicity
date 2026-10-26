@@ -276,16 +276,16 @@ export const routes: Routes = [
         (m) => m.PageContactoComponent,
       ),
   },
-  {
-    path: 'api',
-    title: 'Documentación de la API',
-    data: { noIndex: true },
-    loadComponent: () =>
-      import('./components/pages/api-documentation/api-documentation.component').then(
-        (m) => m.ApiDocumentationComponent,
-      ),
-    canActivate: [AuthGuard],
-  },
+  // {
+  //   path: 'api',
+  //   title: 'Documentación de la API',
+  //   data: { noIndex: true },
+  //   loadComponent: () =>
+  //     import('./components/pages/api-documentation/api-documentation.component').then(
+  //       (m) => m.ApiDocumentationComponent,
+  //     ),
+  //   canActivate: [AuthGuard],
+  // },
 
   {
     path: 'apelaciones',
