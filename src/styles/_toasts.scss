@@ -1,0 +1,154 @@
+@use 'sass:list';
+@use 'variables' as *;
+
+// Avisos de ngx-toastr con el estilo del sitio: tarjeta blanca, franja e ícono del color del tipo y barra de
+// progreso. Reemplaza las cajas oscuras semitransparentes por defecto. En el celular van abajo y a lo ancho:
+// arriba a la derecha tapaban el header y botones (y un toque en el aviso lo cerraba en vez de llegar al botón).
+
+// Íconos de Tabler (circle-check, circle-x, info-circle, alert-triangle) como máscara: toman el color del tipo.
+$svg-inicio: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E";
+$svg-circulo: "%3Cpath d='M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0'/%3E";
+
+$toasts: (
+  success: (#2e7d32, "#{$svg-circulo}%3Cpath d='M9 12l2 2l4 -4'/%3E"),
+  error: (#c0392b, "#{$svg-circulo}%3Cpath d='M10 10l4 4m0 -4l-4 4'/%3E"),
+  info: ($main-color, "#{$svg-circulo}%3Cpath d='M12 9h.01'/%3E%3Cpath d='M11 12h1v4h1'/%3E"),
+  warning: (#b26a00, "%3Cpath d='M12 9v4'/%3E%3Cpath d='M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z'/%3E%3Cpath d='M12 16h.01'/%3E"),
+);
+
+// Con .toast-container .ngx-toastr delante: solo .toast-success era menos específico que la regla de abajo, y su
+// color por defecto pisaba el de cada tipo.
+@each $tipo, $datos in $toasts {
+  .toast-container .ngx-toastr.toast-#{$tipo} {
+    --toast-color: #{list.nth($datos, 1)};
+    --toast-icono: url("#{$svg-inicio}#{list.nth($datos, 2)}%3C/svg%3E");
+  }
+}
+
+.toast-container .ngx-toastr {
+  --toast-color: #{$main-color};
+  width: 360px;
+  max-width: calc(100vw - 24px);
+  margin: 0 0 10px;
+  padding: 12px 38px 14px 50px;
+  border: 1px solid #e3e6ea;
+  border-left: 4px solid var(--toast-color);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgb(16 24 40 / 14%), 0 2px 6px rgb(16 24 40 / 8%);
+  color: #3d4852;
+  font-size: 13px;
+  line-height: 1.45;
+
+  &:hover {
+    box-shadow: 0 12px 32px rgb(16 24 40 / 20%), 0 2px 6px rgb(16 24 40 / 10%);
+  }
+
+  // Ícono: un cuadro del color del tipo recortado con la forma del SVG.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    width: 24px;
+    height: 24px;
+    background: var(--toast-color);
+    mask: var(--toast-icono) center / contain no-repeat;
+  }
+
+  // ngx-toastr anima solo la opacidad: además, entra deslizándose desde el borde.
+  &.toast-in {
+    animation: toast-entrar 0.25s ease-out;
+  }
+
+  &.toast-out {
+    animation: toast-entrar 0.2s ease-in reverse forwards;
+  }
+}
+
+.toast-container .toast-title {
+  margin-bottom: 2px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2933;
+}
+
+.toast-container .toast-message {
+  color: #3d4852;
+
+  a,
+  label {
+    color: var(--toast-color);
+  }
+
+  a:hover {
+    color: var(--toast-color);
+    text-decoration: underline;
+  }
+}
+
+.toast-container .toast-close-button {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  float: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1;
+  color: #6b7280;
+  text-shadow: none;
+
+  &:hover,
+  &:focus-visible {
+    background: #f1f3f5;
+    color: #1f2933;
+    opacity: 1;
+  }
+}
+
+.toast-container .toast-progress {
+  height: 3px;
+  background-color: var(--toast-color);
+  opacity: 0.45;
+}
+
+@keyframes toast-entrar {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .toast-container.toast-top-right {
+    top: auto;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+  }
+
+  .toast-container .ngx-toastr {
+    width: 100%;
+    max-width: none;
+  }
+
+  @keyframes toast-entrar {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

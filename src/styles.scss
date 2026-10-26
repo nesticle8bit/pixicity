@@ -1,6 +1,8 @@
 // Estilos globales. Cada parte vive en src/styles/; el ORDEN de los @use es el de la cascada original: mover
 // un parcial de lugar puede cambiar qué regla gana. Los estilos de un solo componente van en su propio .scss.
 @use 'ngx-toastr/toastr';
+// Va justo después: pisa los estilos por defecto de los avisos.
+@use 'styles/toasts';
 @use "assets/styles/icons";
 // Subconjunto de Tabler con solo los íconos usados (~15 KB en vez de ~500 KB de fuente + 210 KB de CSS).
 // Se regenera con: npm run icons   (y `npm run icons:check` lo valida en CI).

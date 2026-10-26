@@ -83,10 +83,16 @@ export const appConfig: ApplicationConfig = {
     provideNativeDateAdapter(),
     provideToastr({
       timeOut: 6000,
-      positionClass: 'toast-top-right',
+      positionClass: 'toast-top-right', // en el celular el CSS los pasa abajo (styles/_toasts.scss)
       progressBar: true,
-      progressAnimation: 'increasing',
+      // La barra se vacía: muestra cuánto le queda al aviso.
+      progressAnimation: 'decreasing',
       closeButton: true,
+      // El mismo aviso repetido (p. ej. varias peticiones que fallan juntas) no se apila: se reinicia su tiempo.
+      preventDuplicates: true,
+      resetTimeoutOnDuplicate: true,
+      maxOpened: 4,
+      autoDismiss: true,
     }),
     { provide: HTTP_INTERCEPTORS, useClass: CargaGlobalInterceptor, multi: true },
 
