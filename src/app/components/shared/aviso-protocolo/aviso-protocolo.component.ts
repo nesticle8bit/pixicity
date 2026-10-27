@@ -21,7 +21,7 @@ const CLAVE = 'pixicity.protocoloVisto';
   imports: [RouterLink],
   template: `
     @if (visible()) {
-      <aside class="ap my-2" role="note" aria-label="Antes de publicar">
+      <aside class="ap" role="note" aria-label="Antes de publicar">
         <i class="ti ti-shield-check ap__icono" aria-hidden="true"></i>
         <div class="ap__cuerpo">
           <strong>Antes de publicar tu primer {{ que() }}</strong>
