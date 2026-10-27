@@ -531,10 +531,10 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getPostsRelatedByTitle(title: string): Observable<PostSimpleViewModel[]> {
+  getPostsRelatedByTitle(title: string, amplio = false): Observable<PostSimpleViewModel[]> {
     return this.http
       .get<ApiResponse<PostSimpleViewModel[]>>(
-        `${environment.api}/api/posts/similares?title=${title}`,
+        `${environment.api}/api/posts/similares?title=${encodeURIComponent(title)}${amplio ? '&amplio=true' : ''}`,
       )
       .pipe(
         map((response) => {

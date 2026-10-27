@@ -48,5 +48,5 @@ export abstract class IHttpPostsService {
   abstract getBorradores(search: string, categoriaId: number): Observable<PaginatedWithCategorias<BorradorViewModel>>;
   abstract recomendarPost(postId: number): Observable<number>;
   abstract getVotos(filtro?: AdminFiltro): Observable<PaginatedData<unknown>>;
-  abstract getPostsRelatedByTitle(title: string): Observable<PostSimpleViewModel[]>;
+  abstract getPostsRelatedByTitle(title: string, amplio?: boolean): Observable<PostSimpleViewModel[]>;
 }

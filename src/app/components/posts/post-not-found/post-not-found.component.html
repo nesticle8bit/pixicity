@@ -10,15 +10,9 @@
                     <small class="my-3">Pero no pierdas las esperanzas, no todo está perdido!</small>
                 </div>
 
-                <div class="boxposts">
-                    <h2 class="main-title">
-                        <span>Posts relacionados</span>
-                    </h2>
-
-                    <section class="listados my-3">
-                        <div class="nada-gris">No se encontraron posts relacionados</div>
-                    </section>
-                </div>
+                <app-post-rank-list titulo="Posts relacionados" icono="ti-stack-2"
+                    mensajeVacio="No se encontraron posts relacionados" iconoVacio="ti-target-off" [posts]="relacionados">
+                </app-post-rank-list>
             </div>
         </div>
 
