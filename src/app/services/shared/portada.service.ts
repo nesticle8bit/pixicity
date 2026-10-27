@@ -13,7 +13,7 @@ import { TopPostModel } from 'src/app/models/web/topPost.model';
 import { AfiliacionModel } from 'src/app/models/general/afiliacion.model';
 
 /** Posts por página del listado de la portada (también lo usa home-last-posts). */
-export const POSTS_POR_PAGINA_PORTADA = 49;
+export const POSTS_POR_PAGINA_PORTADA = 39;
 
 /** Respuesta de /api/portada: cada parte tiene la misma forma que su endpoint suelto. */
 export interface PortadaViewModel {

@@ -9,7 +9,6 @@
       <app-home-last-comments />
       <app-home-top-posts />
       <app-home-top-users />
-      <app-home-top-categorias />
     </div>
 
     <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
@@ -24,14 +23,14 @@
       <!-- Al final de la columna (en el celular, debajo de toda la lista): se cargan al acercarse. El widget de Discord
            pide datos a discord.com y baja avatares, y los anuncios traen lo suyo, aunque nadie llegara a verlos. -->
       @defer (on viewport) {
-        <app-home-discord />
+      <app-home-discord />
 
-        <!-- Celular o escritorio lo elige cada anuncio (antes eran dos espacios: 160x600 y 300x250). -->
-        <app-anuncio class="mb-3" ubicacion="portada-lateral" [categoriaSeo]="categoria" encabezado />
-
-        <app-home-last-registered-users />
+      <!-- Celular o escritorio lo elige cada anuncio (antes eran dos espacios: 160x600 y 300x250). -->
+      <app-anuncio class="mb-3" ubicacion="portada-lateral" [categoriaSeo]="categoria" encabezado />
+      <app-home-top-categorias />
+      <app-home-last-registered-users />
       } @placeholder {
-        <div class="defer-hueco"></div>
+      <div class="defer-hueco"></div>
       }
     </div>
   </div>

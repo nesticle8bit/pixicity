@@ -68,7 +68,7 @@ describe('PortadaService', () => {
     const tags: unknown[] = [];
 
     service.tomar('tags', of([{ tag: 'respaldo', count: 1 }])).subscribe((v) => tags.push(v));
-    backend.expectOne(`${environment.api}/api/portada?page=1&pageCount=49&query=`).flush('caído', { status: 500, statusText: 'Error' });
+    backend.expectOne(`${environment.api}/api/portada?page=1&pageCount=39&query=`).flush('caído', { status: 500, statusText: 'Error' });
 
     expect(tags).toEqual([[{ tag: 'respaldo', count: 1 }]]);
   });
@@ -81,6 +81,6 @@ describe('PortadaService', () => {
     service.tomar('tags', of([])).subscribe((v) => tags.push(v));
 
     expect(tags).toEqual([[]]);
-    backend.expectNone(`${environment.api}/api/portada?page=1&pageCount=49&query=`);
+    backend.expectNone(`${environment.api}/api/portada?page=1&pageCount=39&query=`);
   });
 });
