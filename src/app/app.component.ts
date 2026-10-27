@@ -127,13 +127,24 @@ export class AppComponent {
       this.meta.updateTag({ property: 'og:image', content: imagen });
       this.meta.updateTag({ name: 'twitter:image', content: imagen });
       this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+      // Facebook/WhatsApp priorizan secure_url sobre og:image: si queda la del index.html muestran la tarjeta por defecto.
+      if (imagen.startsWith('https://')) {
+        this.meta.updateTag({ property: 'og:image:secure_url', content: imagen });
+      } else {
+        this.meta.removeTag("property='og:image:secure_url'");
+      }
+      const alt = value.imageURL ? titulo : 'Taringa! - Inteligencia colectiva';
+      this.meta.updateTag({ property: 'og:image:alt', content: alt });
+      this.meta.updateTag({ name: 'twitter:image:alt', content: alt });
       if (value.imageURL) {
-        // Las dimensiones de la tarjeta por defecto no aplican a una imagen arbitraria.
+        // Las dimensiones y el tipo de la tarjeta por defecto no aplican a una imagen arbitraria.
         this.meta.removeTag("property='og:image:width'");
         this.meta.removeTag("property='og:image:height'");
+        this.meta.removeTag("property='og:image:type'");
       } else {
         this.meta.updateTag({ property: 'og:image:width', content: '1200' });
         this.meta.updateTag({ property: 'og:image:height', content: '630' });
+        this.meta.updateTag({ property: 'og:image:type', content: 'image/jpeg' });
       }
 
       this.meta.updateTag({ property: 'og:type', content: value.type || 'website' });
