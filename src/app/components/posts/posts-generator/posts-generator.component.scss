@@ -135,6 +135,49 @@ $accent-soft: rgba(25, 118, 210, 0.1);
   gap: 10px;
 }
 
+.pg-imgitem {
+  position: relative;
+
+  .pg-input {
+    padding-right: 32px;
+  }
+
+  &__quitar {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #999;
+    cursor: pointer;
+
+    &:hover {
+      background: #fdecea;
+      color: #d32f2f;
+    }
+  }
+}
+
+.pg-add {
+  margin-top: 10px;
+  padding: 6px 14px;
+  border: 1px dashed #90caf9;
+  border-radius: 8px;
+  background: rgba(25, 118, 210, 0.04);
+  color: $accent;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(25, 118, 210, 0.1);
+  }
+}
+
 // - Selector de divisores -
 .divider-picker {
   display: grid;
@@ -183,11 +226,19 @@ $accent-soft: rgba(25, 118, 210, 0.1);
       padding: 6px 10px;
     }
 
-    &--double {
+    &--double,
+    &--underline {
       padding: 5px 0;
     }
 
-    &--pill .ph-sep__txt {
+    &--dashed,
+    &--dark,
+    &--shadow {
+      padding: 6px 10px;
+    }
+
+    &--pill .ph-sep__txt,
+    &--tab .ph-sep__txt {
       padding: 4px 14px;
     }
   }

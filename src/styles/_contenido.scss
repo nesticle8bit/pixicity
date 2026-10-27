@@ -242,6 +242,61 @@
       box-shadow: 0 2px 6px rgba(25, 118, 210, 0.25);
     }
   }
+
+  // 7) Título con subrayado en gradiente
+  &--underline {
+    padding-bottom: 8px;
+    background: linear-gradient(90deg, #1976d2, #6a3ab2) no-repeat center bottom / 120px 3px;
+  }
+
+  // 8) Recuadro discontinuo
+  &--dashed {
+    border: 2px dashed rgba(25, 118, 210, 0.55);
+    border-radius: 8px;
+    padding: 10px 16px;
+  }
+
+  // 9) Pestaña: tab a la izquierda sobre una línea
+  &--tab {
+    text-align: left;
+    border-bottom: 3px solid #1976d2;
+
+    .ph-sep__txt {
+      display: inline-block;
+      background: #1976d2;
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 8px 8px 0 0;
+    }
+  }
+
+  // 10) Fondo oscuro con acento
+  &--dark {
+    color: #fff;
+    background: #1f2937;
+    border-bottom: 3px solid #42a5f5;
+    padding: 12px 16px;
+    border-radius: 6px;
+  }
+
+  // 11) Estrellas a los lados
+  &--stars {
+    .ph-sep__txt::before,
+    .ph-sep__txt::after {
+      content: "✦";
+      margin: 0 12px;
+      color: #6a3ab2;
+    }
+  }
+
+  // 12) Tarjeta elevada
+  &--shadow {
+    background: #fff;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border-top: 3px solid #1976d2;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .tagbox {

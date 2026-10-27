@@ -51,14 +51,29 @@
           <i class="ti ti-photo"></i>
         </div>
         <div class="pg-field__body">
-          <label class="pg-field__label" for="posts-generator-image1">Imágenes</label>
-          <p class="pg-field__hint">URLs de las imágenes a incrustar (máximo 3).</p>
+          <label class="pg-field__label" for="posts-generator-image0">Imágenes</label>
+          <p class="pg-field__hint">URLs de las imágenes a incrustar (máximo {{ maxImagenes }}).</p>
 
-          <div class="pg-imgrow">
-            <input id="posts-generator-image1" type="url" placeholder="http://" class="pg-input" formControlName="image1" />
-            <input type="url" aria-label="http://" placeholder="http://" class="pg-input" formControlName="image2" />
-            <input type="url" aria-label="http://" placeholder="http://" class="pg-input" formControlName="image3" />
+          <div class="pg-imgrow" formArrayName="imagenes">
+            @for (control of imagenes.controls; track control; let i = $index) {
+            <div class="pg-imgitem">
+              <input [id]="'posts-generator-image' + i" type="url" placeholder="http://" class="pg-input"
+                [attr.aria-label]="'Imagen ' + (i + 1)" [formControlName]="i" />
+              @if (imagenes.length > 1) {
+              <button type="button" class="pg-imgitem__quitar" (click)="quitarImagen(i)"
+                [attr.aria-label]="'Quitar imagen ' + (i + 1)" title="Quitar">
+                <i class="ti ti-x"></i>
+              </button>
+              }
+            </div>
+            }
           </div>
+
+          @if (imagenes.length < maxImagenes) {
+          <button type="button" class="pg-add" (click)="agregarImagen()">
+            <i class="ti ti-plus"></i> Agregar otra imagen
+          </button>
+          }
         </div>
       </div>
 
@@ -90,9 +105,9 @@
         </div>
         <div class="pg-field__body">
           <label class="pg-field__label" for="posts-generator-links">Links de descarga</label>
-          <p class="pg-field__hint">Un link por fila.</p>
+          <p class="pg-field__hint">Un link por fila. Puedes acompañarlo de texto: solo los enlaces serán clickeables.</p>
           <textarea id="posts-generator-links" class="pg-input" rows="5" formControlName="links"
-            placeholder="https://...&#10;https://..."></textarea>
+            placeholder="Mega: https://...&#10;Parte 2 → https://..."></textarea>
         </div>
       </div>
 

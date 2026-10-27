@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MatButton } from '@angular/material/button';
@@ -10,6 +10,24 @@ import { videoNode } from '../../shared/rich-editor/rich-editor-paste';
 function enlaceYoutubeValidator(control: AbstractControl): ValidationErrors | null {
   const valor = (control.value || '').trim();
   return !valor || videoYoutube(valor) ? null : { youtube: true };
+}
+
+function escaparHtml(texto: string): string {
+  return texto.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+// Una línea de "Links de descarga": el texto queda tal cual y solo las URLs pasan a ser enlaces
+export function enlazar(linea: string): string {
+  return linea
+    .split(/(https?:\/\/[^\s<>"']+)/i)
+    .map((parte, i) => {
+      if (i % 2 === 0) return escaparHtml(parte);
+      // Puntuación final ("…descarga.", "(link)") no es parte de la URL
+      const [, url, cola] = parte.match(/^(.*?)([.,;:!?)\]]*)$/)!;
+      const href = escaparHtml(url);
+      return `<a href="${href}" target="_blank" rel="noopener noreferrer">${href}</a>${escaparHtml(cola)}`;
+    })
+    .join('');
 }
 
 @Component({
@@ -39,15 +57,33 @@ export class PostsGeneratorComponent implements OnInit {
     { id: 'side', label: 'Lateral' },
     { id: 'double', label: 'Doble línea' },
     { id: 'pill', label: 'Píldora' },
+    { id: 'underline', label: 'Subrayado' },
+    { id: 'dashed', label: 'Recuadro' },
+    { id: 'tab', label: 'Pestaña' },
+    { id: 'dark', label: 'Oscuro' },
+    { id: 'stars', label: 'Estrellas' },
+    { id: 'shadow', label: 'Tarjeta' },
   ];
+
+  public readonly maxImagenes = 12;
+
+  get imagenes(): FormArray {
+    return this.formGroup.get('imagenes') as FormArray;
+  }
+
+  agregarImagen(): void {
+    if (this.imagenes.length < this.maxImagenes) this.imagenes.push(this.formBuilder.control(''));
+  }
+
+  quitarImagen(i: number): void {
+    this.imagenes.removeAt(i);
+  }
 
   constructor() {
     this.formGroup = this.formBuilder.group({
       imagenInicial: '',
       informacion: '',
-      image1: '',
-      image2: '',
-      image3: '',
+      imagenes: this.formBuilder.array(['', '', '']),
       video1: ['', enlaceYoutubeValidator],
       video2: ['', enlaceYoutubeValidator],
       links: '',
@@ -78,66 +114,49 @@ export class PostsGeneratorComponent implements OnInit {
     let buildPost = ``;
 
     if (form.imagenInicial) {
-      buildPost += this.sectionDivider('Bienvenidos');
+      buildPost += this.sectionDivider('👋', 'Bienvenidos');
       buildPost += `<img src='${form.imagenInicial}' alt='Imagen Principal del Post' title='Imagen Principal del Post' /><br/><br/>`;
     }
 
     if (form.informacion) {
-      buildPost += this.sectionDivider('Información');
+      buildPost += this.sectionDivider('ℹ️', 'Información');
       buildPost += `<p>${form.informacion.replaceAll(
         '\n',
         '<br/>'
       )}</p><br/><br/>`;
     }
 
-    if (form.image1 || form.image2 || form.image3) {
-      buildPost += this.sectionDivider('Imágenes');
-
-      if (form.image1) {
-        buildPost += `<img src='${form.image1}' alt='Imagen' /><br/><br/>`;
-      }
-
-      if (form.image2) {
-        buildPost += `<img src='${form.image2}' alt='Imagen' /><br/><br/>`;
-      }
-
-      if (form.image3) {
-        buildPost += `<img src='${form.image3}' alt='Imagen' /><br/><br/>`;
-      }
+    const imagenes = (form.imagenes as string[]).map((i) => (i || '').trim()).filter((i) => !!i);
+    if (imagenes.length) {
+      buildPost += this.sectionDivider('🖼️', 'Imágenes');
+      imagenes.forEach((imagen) => (buildPost += `<img src='${escaparHtml(imagen)}' alt='Imagen' /><br/><br/>`));
     }
 
     // Mismo bloque que inserta el editor: en el post se cambia por el reproductor al hacer clic
     const videos = [form.video1, form.video2].map((v: string) => videoYoutube(v)).filter((v) => !!v);
     if (videos.length) {
-      buildPost += this.sectionDivider(videos.length > 1 ? 'Videos' : 'Video');
+      buildPost += this.sectionDivider('🎬', videos.length > 1 ? 'Videos' : 'Video');
       videos.forEach((video) => (buildPost += videoNode(video!).outerHTML));
       buildPost += `<br/>`;
     }
 
-    if (form.links) {
-      buildPost += this.sectionDivider('Links de Descarga');
-
-      let links = form.links.split('\n').filter((link: string) => link);
-
-      if (links?.length > 0) {
-        links.map((link: string) => {
-          buildPost += `<a href='${link}'>${link}</a><br/>`;
-        });
-      }
-
+    const lineas = (form.links || '').split('\n').map((l: string) => l.trim()).filter((l: string) => !!l);
+    if (lineas.length) {
+      buildPost += this.sectionDivider('📥', 'Links de Descarga');
+      lineas.forEach((linea: string) => (buildPost += `${enlazar(linea)}<br/>`));
       buildPost += `<br/><br/>`;
     }
 
     if (form.password) {
-      buildPost += this.sectionDivider('Contraseña');
+      buildPost += this.sectionDivider('🔐', 'Contraseña');
       buildPost += `🔐 <strong>Contraseña:</strong> ${form.password}<br/>`;
     }
 
     this.dialogRef.close(buildPost);
   }
 
-  private sectionDivider(title: string): string {
+  private sectionDivider(icono: string, title: string): string {
     const variant = this.formGroup.value.divisor || 'lines';
-    return `<div class="ph-sep ph-sep--${variant}"><span class="ph-sep__txt">${title}</span></div>`;
+    return `<div class="ph-sep ph-sep--${variant}"><span class="ph-sep__txt">${icono} ${title}</span></div>`;
   }
 }
