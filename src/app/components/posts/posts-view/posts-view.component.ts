@@ -327,8 +327,17 @@ export class PostsViewComponent implements OnInit {
       return;
     }
 
+    // Staff borrando un post ajeno: la causa queda en la bitácora y el autor la ve en /apelaciones.
+    let razon = '';
+    if (this.esStaff && !this.esAutor) {
+      razon = this.notificationService.prompt('Causa de la eliminación (el autor la verá en sus apelaciones)')?.trim() ?? '';
+      if (!razon) {
+        return;
+      }
+    }
+
     this.postService
-      .deletePost(this.post.id, '')
+      .deletePost(this.post.id, razon)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response: boolean) => {
         if (response) {
