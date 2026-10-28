@@ -17,6 +17,7 @@ import { DatePipe } from '@angular/common';
 import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { reemplazarEmotes } from 'src/app/shared/helpers/emotes';
+import { EmojisPopoverService } from '../../../bottom-sheets/bottom-sheets-emojis/emojis-popover.service';
 
 const PAGE_SIZE = 30;
 /** Imágenes por mensaje (igual que el API). */
@@ -69,6 +70,9 @@ export class MensajesConversacionComponent implements OnInit {
 
   readonly chatBody = viewChild<ElementRef<HTMLElement>>('chatBody');
   readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
+  readonly campoMensaje = viewChild<ElementRef<HTMLTextAreaElement>>('campoMensaje');
+  private readonly emojis = inject(EmojisPopoverService);
+  emojisAbierto = false;
 
   public mensajes: MensajeViewModel[] = [];
   public otro?: UsuarioAvatarViewModel;
@@ -296,7 +300,44 @@ export class MensajesConversacionComponent implements OnInit {
     this.enviar(texto.replace(/\r?\n/g, '<br>'), imagenes, () => {
       this.respuesta = '';
       this.quitarAdjuntos();
+      setTimeout(() => this.ajustarAlto());
     });
+  }
+
+  /** El campo crece con el texto hasta un tope (después scrollea) y vuelve a una línea al enviar. */
+  ajustarAlto(): void {
+    const campo = this.campoMensaje()?.nativeElement;
+    if (!campo) return;
+    campo.style.height = 'auto';
+    campo.style.height = `${Math.min(campo.scrollHeight, 160)}px`;
+  }
+
+  async abrirEmojis(boton: HTMLElement): Promise<void> {
+    await this.emojis.alternar(boton, {
+      alElegir: (emoji) => this.insertarEmoji(emoji),
+      noTapar: this.campoMensaje()?.nativeElement,
+      emotes: true,
+      alCerrar: (porTeclado) => {
+        this.emojisAbierto = false;
+        if (porTeclado) this.campoMensaje()?.nativeElement.focus();
+      },
+    });
+    this.emojisAbierto = this.emojis.estaAbiertoPara(boton);
+  }
+
+  /** Inserta en el cursor (o reemplaza la selección) y deja el cursor justo después. */
+  private insertarEmoji(emoji: string): void {
+    const campo = this.campoMensaje()?.nativeElement;
+    const inicio = campo?.selectionStart ?? this.respuesta.length;
+    const fin = campo?.selectionEnd ?? this.respuesta.length;
+    this.respuesta = this.respuesta.slice(0, inicio) + emoji + this.respuesta.slice(fin);
+    if (campo) {
+      // Se escribe ya en el DOM para poder mover el cursor; ngModel después pone el mismo valor y no lo mueve.
+      campo.value = this.respuesta;
+      const cursor = inicio + emoji.length;
+      campo.setSelectionRange(cursor, cursor);
+      this.ajustarAlto();
+    }
   }
 
   private enviar(contenido: string, imagenes: string[], alExito?: () => void): void {

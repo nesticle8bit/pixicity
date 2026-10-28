@@ -179,29 +179,123 @@ img {
     color: light-dark(#888, #9c9c9c);
 }
 
-.chat-attach {
-    flex: 0 0 auto;
-    border: 0;
-    background: transparent;
-    font-size: 1.4rem;
-    color: light-dark(#666, #b0b0b0);
-    cursor: pointer;
+/* --- Caja para escribir: píldora con herramientas, campo que crece y botón redondo de enviar --- */
+.chat-reply {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    margin: .8rem 0 0;
+    padding: 6px 6px 6px 8px;
+    border: 1px solid light-dark(#dfe5ea, #3a4752);
+    border-radius: 24px;
+    background: light-dark(#fff, #1e2124);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, .05);
+    transition: border-color .15s, box-shadow .15s;
 
-    &:disabled {
-        opacity: .4;
-        cursor: default;
+    &:focus-within {
+        border-color: light-dark(#006595, #1e99d3);
+        box-shadow: 0 0 0 3px color-mix(in srgb, light-dark(#006595, #1e99d3) 18%, transparent);
+    }
+
+    &.is-deshabilitado { opacity: .6; }
+
+    &__herramientas {
+        display: flex;
+        flex: none;
+        gap: 2px;
+    }
+
+    &__icono {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        font-size: 1.3rem;
+        color: light-dark(#5d6b75, #aeb8c0);
+        cursor: pointer;
+        transition: background .15s, color .15s;
+
+        &:hover:not(:disabled),
+        &.is-activo {
+            background: light-dark(#eef4f8, #26333c);
+            color: light-dark(#006595, #8ed2f2);
+        }
+
+        &:disabled { opacity: .4; cursor: default; }
+        &:focus-visible { outline: 2px solid light-dark(#006595, #1e99d3); outline-offset: 1px; }
+    }
+
+    &__campo {
+        flex: 1;
+        min-width: 0;
+        min-height: 36px;
+        max-height: 160px;
+        padding: 8px 4px;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        line-height: 20px;
+        resize: none;
+
+        &::placeholder { color: light-dark(#8a959d, #7f8a92); }
+    }
+
+    &__enviar {
+        display: grid;
+        place-items: center;
+        flex: none;
+        width: 38px;
+        height: 38px;
+        border: 0;
+        border-radius: 50%;
+        background: light-dark(#006595, #1e99d3);
+        color: #fff;
+        font-size: 1.15rem;
+        cursor: pointer;
+        transition: background .15s, transform .1s, opacity .15s;
+
+        i { transform: translateX(-1px); }
+
+        &:hover:not(:disabled) { background: light-dark(#00527a, #3aa9de); }
+        &:active:not(:disabled) { transform: scale(.94); }
+        &:disabled {
+            background: light-dark(#d5dde3, #34404a);
+            color: light-dark(#8a959d, #7f8a92);
+            cursor: default;
+        }
+        &:focus-visible { outline: 2px solid light-dark(#006595, #1e99d3); outline-offset: 2px; }
+    }
+
+    &__ayuda {
+        margin: 4px 0 1rem 16px;
+        font-size: .72rem;
+        color: light-dark(#7a868e, #8f9aa2);
+
+        kbd {
+            padding: 0 4px;
+            border: 1px solid light-dark(#dfe5ea, #3a4752);
+            border-radius: 4px;
+            background: light-dark(#f6f8fa, #262b30);
+            color: inherit;
+            font: inherit;
+            font-size: .68rem;
+        }
     }
 }
 
-.chat-reply {
-    display: flex;
-    gap: .6rem;
-    align-items: flex-end;
-    margin: .8rem 0 1rem;
+// En celular se ocultan los atajos de teclado (no suele haber teclado físico).
+@media (max-width: 575.98px) {
+    .chat-reply__ayuda { display: none; }
+    .chat-reply { margin-bottom: 1rem; }
+}
 
-    textarea {
-        resize: none;
-    }
+@media (prefers-reduced-motion: reduce) {
+    .chat-reply, .chat-reply__icono, .chat-reply__enviar { transition: none; }
 }
 
 /* --- Silenciar / archivar desde el chat --- */

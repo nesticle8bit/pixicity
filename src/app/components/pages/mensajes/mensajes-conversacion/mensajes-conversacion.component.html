@@ -130,19 +130,29 @@
         </ul>
       }
 
-      <div class="chat-reply">
+      <div class="chat-reply" [class.is-deshabilitado]="!otro || bloqueado">
         <input type="file" accept="image/*" multiple hidden #fileInput (change)="adjuntarImagen($event)" />
-        <button type="button" class="chat-attach" (click)="fileInput.click()"
-          [disabled]="!otro || bloqueado || adjuntos.length >= 4" matTooltip="Adjuntar imágenes (hasta 4)" aria-label="Adjuntar imágenes">
-          <i class="ti" [class.ti-photo]="!subiendo" [class.ti-loader-2]="subiendo" aria-hidden="true"></i>
-        </button>
-        <textarea class="form-control" rows="2" aria-label="Escribir un mensaje" [(ngModel)]="respuesta"
-          placeholder="Escribir una respuesta... (Enter para enviar, Shift+Enter nueva línea)"
-          [disabled]="!otro || bloqueado" (ngModelChange)="onTyping()" (keydown.enter)="onEnter($event)"
+        <div class="chat-reply__herramientas">
+          <button type="button" class="chat-reply__icono" (click)="fileInput.click()"
+            [disabled]="!otro || bloqueado || adjuntos.length >= 4" matTooltip="Adjuntar imágenes (hasta 4)" aria-label="Adjuntar imágenes">
+            <i class="ti" [class.ti-photo]="!subiendo" [class.ti-loader-2]="subiendo" aria-hidden="true"></i>
+          </button>
+          <button type="button" class="chat-reply__icono" #botonEmojis (click)="abrirEmojis(botonEmojis)"
+            [class.is-activo]="emojisAbierto" [disabled]="!otro || bloqueado" matTooltip="Emojis y emotes"
+            aria-label="Insertar emoji" [attr.aria-expanded]="emojisAbierto">
+            <i class="ti ti-mood-smile" aria-hidden="true"></i>
+          </button>
+        </div>
+        <textarea #campoMensaje class="chat-reply__campo" rows="1" aria-label="Escribir un mensaje" [(ngModel)]="respuesta"
+          placeholder="Escribe un mensaje…" [disabled]="!otro || bloqueado"
+          (ngModelChange)="onTyping(); ajustarAlto()" (keydown.enter)="onEnter($event)"
           (paste)="alPegar($event)"></textarea>
-        <input type="button" class="boton azul" (click)="responderMensaje()" value="Enviar"
-          [disabled]="!puedeEnviar" />
+        <button type="button" class="chat-reply__enviar" (click)="responderMensaje()" [disabled]="!puedeEnviar"
+          matTooltip="Enviar (Enter)" aria-label="Enviar mensaje">
+          <i class="ti ti-send" aria-hidden="true"></i>
+        </button>
       </div>
+      <p class="chat-reply__ayuda"><kbd>Enter</kbd> envía · <kbd>Shift</kbd> + <kbd>Enter</kbd> nueva línea</p>
     </div>
 
     <section class="col-12 col-sm-6 col-md-3 dotted-border--left">
