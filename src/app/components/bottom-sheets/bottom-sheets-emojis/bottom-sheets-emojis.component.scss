@@ -69,6 +69,23 @@
     &:hover { background: light-dark(#f1f4f6, #26333c); transform: scale(1.15); }
   }
 
+  &__tab-img {
+    display: block;
+    max-width: 22px;
+    max-height: 22px;
+    margin: auto;
+  }
+
+  // GIF de distintos tamaños: celdas más anchas y la imagen centrada sin agrandarse.
+  &__grilla--emotes { grid-template-columns: repeat(6, 1fr); }
+
+  &__emote {
+    display: grid;
+    place-items: center;
+
+    img { max-width: 100%; max-height: 40px; }
+  }
+
   button:focus-visible {
     outline: 2px solid #006595;
     outline-offset: 1px;

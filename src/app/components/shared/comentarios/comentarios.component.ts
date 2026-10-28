@@ -1,4 +1,5 @@
 import { enlazarHashtagsTexto } from 'src/app/shared/pipes/enlazarHashtags.pipe';
+import { reemplazarEmotes } from 'src/app/shared/helpers/emotes';
 import { Component, DestroyRef, ElementRef, inject, Input, output, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EmojisPopoverService } from '../../bottom-sheets/bottom-sheets-emojis/emojis-popover.service';
@@ -457,6 +458,7 @@ export class ComentariosComponent {
     await this.emojis.alternar(boton, {
       alElegir: (emoji) => this.insertarEmoji(emoji),
       noTapar: this.campoComentario()?.nativeElement,
+      emotes: true,
       alCerrar: (porTeclado) => {
         this.emojisAbierto = false;
         if (porTeclado) this.campoComentario()?.nativeElement.focus();
@@ -474,6 +476,7 @@ export class ComentariosComponent {
     await this.emojis.alternar(boton, {
       alElegir: (emoji) => (this.replyText = this.insertarEn(this.campoRespuesta()?.nativeElement, this.replyText, emoji)),
       noTapar: this.campoRespuesta()?.nativeElement,
+      emotes: true,
       alCerrar: (porTeclado) => {
         this.emojisRespuestaAbierto = false;
         if (porTeclado) this.campoRespuesta()?.nativeElement.focus();
@@ -581,7 +584,7 @@ export class ComentariosComponent {
 
   // - Formato
 
-  /** Escapa HTML y convierte URLs, @menciones y #hashtags en enlaces; los enlaces a imágenes se muestran. */
+  /** Escapa HTML y convierte URLs, @menciones y #hashtags en enlaces; los enlaces a imágenes y los :emotes: se muestran. */
   formatear(texto: string): string {
     if (!texto) return '';
     const escapado = texto
@@ -594,6 +597,6 @@ export class ComentariosComponent {
         ? `<a href="${url}" target="_blank" rel="noopener" class="coment-img"><img src="${url}" alt="Imagen del comentario" loading="lazy"></a>`
         : `<a href="${url}" target="_blank" rel="nofollow noopener">${url}</a>`)
       .replace(/(^|\s)@([a-zA-Z0-9_]+)/g, '$1<a href="/perfil/$2">@$2</a>');
-    return enlazarHashtagsTexto(enlazado).replace(/\n/g, '<br>');
+    return reemplazarEmotes(enlazarHashtagsTexto(enlazado)).replace(/\n/g, '<br>');
   }
 }

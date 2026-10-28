@@ -10,6 +10,8 @@ export interface OpcionesEmojis {
   alCerrar?: (porTeclado: boolean) => void;
   /** Si no entra debajo del botón, se ubica por ENCIMA de este elemento en vez de taparlo (p. ej. el textarea). */
   noTapar?: HTMLElement | null;
+  /** Muestra también los emoticones de Taringa! (solo donde el texto convierte `:codigo:`, como los comentarios). */
+  emotes?: boolean;
 }
 
 /**
@@ -46,6 +48,7 @@ export class EmojisPopoverService {
         ariaLabel: 'Elegir emoji',
       });
       this.hoja = hoja;
+      hoja.instance.conEmotes.set(!!opciones.emotes);
       hoja.instance.elegido.subscribe(opciones.alElegir);
       hoja.instance.cerrar.subscribe(() => this.cerrar(true));
       hoja.afterDismissed().subscribe(() => {
@@ -77,6 +80,7 @@ export class EmojisPopoverService {
     ref.overlayElement.setAttribute('aria-label', 'Elegir emoji');
 
     const picker = ref.attach(new ComponentPortal(BottomSheetsEmojisComponent));
+    picker.instance.conEmotes.set(!!opciones.emotes);
     picker.instance.elegido.subscribe(opciones.alElegir);
     picker.instance.cerrar.subscribe(() => this.cerrar(true));
     ref.backdropClick().subscribe(() => this.cerrar(false));

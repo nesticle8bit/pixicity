@@ -431,6 +431,14 @@
   }
 }
 
+// :emotes: de Taringa!: GIF chicos en línea con el texto, a su tamaño original (los carteles se limitan en alto).
+.coment-body p ::ng-deep .emote,
+.coment-preview p ::ng-deep .emote {
+  display: inline-block;
+  max-height: 3em;
+  vertical-align: middle;
+}
+
 .coment-emoji .girando { animation: coment-girar 0.9s linear infinite; }
 .coment-emoji:disabled { cursor: default; opacity: 0.6; }
 

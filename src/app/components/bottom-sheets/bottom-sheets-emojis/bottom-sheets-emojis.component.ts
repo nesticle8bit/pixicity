@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, output, signal } from '@angular/core';
+import { GRUPOS_EMOTES, RUTA_EMOTES } from 'src/app/shared/helpers/emotes';
 import { CATEGORIAS_EMOJI, CategoriaEmoji } from './emojis.data';
 
 const CLAVE_RECIENTES = 'emojis-recientes';
@@ -31,6 +32,16 @@ export class BottomSheetsEmojisComponent {
   });
   readonly activaId = signal(this.categorias()[0].id);
   readonly activa = computed(() => this.categorias().find((c) => c.id === this.activaId()) ?? this.categorias()[0]);
+
+  /** Emoticones de imagen de Taringa!: se inserta `:codigo:` y el comentario lo muestra como GIF. */
+  readonly conEmotes = signal(false);
+  readonly gruposEmotes = GRUPOS_EMOTES;
+  readonly ruta = RUTA_EMOTES;
+  readonly grupoEmotes = computed(() => this.gruposEmotes.find((g) => g.id === this.activaId()) ?? null);
+
+  elegirEmote(codigo: string): void {
+    this.elegido.emit(`:${codigo}: `);
+  }
 
   elegir(emoji: string): void {
     // La lista visible no se reordena mientras está abierta (si no, el emoji "salta" bajo el cursor).

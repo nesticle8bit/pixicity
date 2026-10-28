@@ -6,8 +6,27 @@
       [attr.aria-selected]="c.id === activaId()" [attr.title]="c.nombre" [attr.aria-label]="c.nombre"
       (click)="activaId.set(c.id)">{{c.icono}}</button>
     }
+    @if (conEmotes()) {
+    @for (g of gruposEmotes; track g.id) {
+    <button type="button" role="tab" class="emojis__tab" [class.is-activa]="g.id === activaId()"
+      [attr.aria-selected]="g.id === activaId()" [attr.title]="g.nombre" [attr.aria-label]="g.nombre"
+      (click)="activaId.set(g.id)"><img [src]="ruta + g.icono" alt="" class="emojis__tab-img"></button>
+    }
+    }
   </div>
 
+  @if (grupoEmotes(); as g) {
+  <div class="emojis__titulo">{{g.nombre}}</div>
+
+  <div class="emojis__grilla emojis__grilla--emotes" role="tabpanel" [attr.aria-label]="g.nombre">
+    @for (e of g.emotes; track e.codigo) {
+    <button type="button" class="emojis__emoji emojis__emote" [attr.aria-label]="':' + e.codigo + ': ' + e.nombre"
+      [attr.title]="':' + e.codigo + ':'" (click)="elegirEmote(e.codigo)">
+      <img [src]="ruta + e.archivo" alt="" loading="lazy">
+    </button>
+    }
+  </div>
+  } @else {
   <div class="emojis__titulo">{{activa().nombre}}</div>
 
   <div class="emojis__grilla" role="tabpanel" [attr.aria-label]="activa().nombre">
@@ -15,4 +34,5 @@
     <button type="button" class="emojis__emoji" [attr.aria-label]="e" (click)="elegir(e)">{{e}}</button>
     }
   </div>
+  }
 </div>
