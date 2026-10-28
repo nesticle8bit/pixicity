@@ -41,8 +41,8 @@
 // Shared card shell
 .sidebar-card,
 .sidebar-user-card {
-  background: #fff;
-  border: 1px solid #e8e8e8;
+  background: light-dark(#fff, #1e2124);
+  border: 1px solid light-dark(#e8e8e8, #3c434a);
   border-radius: 10px;
   padding: 12px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
@@ -51,7 +51,7 @@
 .sidebar-section-title {
   font-size: .72rem;
   font-weight: 700;
-  color: #6b6b6b;
+  color: light-dark(#6b6b6b, #adadad);
   text-transform: uppercase;
   letter-spacing: .06em;
   margin-bottom: 10px;
@@ -79,33 +79,33 @@
 .sidebar-username {
   font-weight: 700;
   font-size: .92rem;
-  color: #222;
+  color: light-dark(#222, #d9d9d9);
   text-decoration: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
   &:hover {
-    color: #0062cc;
+    color: light-dark(#0062cc, #71adef);
   }
 }
 
 .sidebar-last-seen {
   font-size: .72rem;
-  color: #6b6b6b;
+  color: light-dark(#6b6b6b, #adadad);
   display: flex;
   align-items: center;
   gap: 4px;
 
   .online-dot {
     font-size: .45rem;
-    color: #4caf50;
+    color: light-dark(#4caf50, #7dc780);
   }
 }
 
 .sidebar-ver-perfil {
   font-size: .75rem;
-  color: #0062cc;
+  color: light-dark(#0062cc, #71adef);
   text-decoration: none;
   margin-top: 2px;
 
@@ -126,20 +126,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #f7f7f7;
+  background: light-dark(#f7f7f7, #2a2e33);
   border-radius: 6px;
   padding: 6px 4px;
 
   .stat-val {
     font-size: .95rem;
     font-weight: 700;
-    color: #222;
+    color: light-dark(#222, #d9d9d9);
     line-height: 1;
   }
 
   .stat-lbl {
     font-size: .68rem;
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
     margin-top: 2px;
   }
 }
@@ -157,13 +157,13 @@
   font-size: .74rem;
   padding: 4px 8px;
   border-radius: 20px;
-  background: #eef4ff;
-  color: #1f5fb8;
+  background: light-dark(#eef4ff, #1a2844);
+  color: light-dark(#1f5fb8, #72a3e7);
   text-decoration: none;
   transition: background .15s;
 
   &:hover {
-    background: #dce9ff;
+    background: light-dark(#dce9ff, #1e304e);
   }
 }
 
@@ -181,20 +181,20 @@
     align-items: center;
     gap: 8px;
     font-size: .82rem;
-    color: #555;
+    color: light-dark(#555, #bababa);
 
     i.ti {
       width: 14px;
       text-align: center;
-      color: #6b6b6b;
+      color: light-dark(#6b6b6b, #adadad);
     }
 
     &.stat-pos i.ti {
-      color: #4caf50;
+      color: light-dark(#4caf50, #7dc780);
     }
 
     &.stat-neg i.ti {
-      color: #f44336;
+      color: light-dark(#f44336, #ec5b51);
     }
   }
 }
@@ -208,7 +208,7 @@
 
 .ver-todas-link {
   font-size: .74rem;
-  color: #0062cc;
+  color: light-dark(#0062cc, #71adef);
   text-decoration: none;
 
   &:hover {
@@ -229,15 +229,15 @@
   align-items: center;
   gap: 12px;
   font-size: .85rem;
-  color: #666;
+  color: light-dark(#666, #b0b0b0);
   margin-bottom: 10px;
 }
 
 .detail-cat {
-  background: #eef;
+  background: light-dark(#eef, #1a1a44);
   border-radius: 3px;
   padding: 1px 6px;
-  color: #446;
+  color: light-dark(#446, #acacc8);
   text-decoration: none;
 }
 

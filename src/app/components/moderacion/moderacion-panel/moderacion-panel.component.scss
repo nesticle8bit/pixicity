@@ -10,7 +10,7 @@
   }
 
   &__desc {
-    color: #6c757d;
+    color: light-dark(#6c757d, #a7a7a7);
     margin: 0;
     font-size: 0.9rem;
   }
@@ -18,7 +18,7 @@
   &__tabs {
     display: flex;
     gap: 4px;
-    border-bottom: 1px solid #e5e8ec;
+    border-bottom: 1px solid light-dark(#e5e8ec, #38414d);
     margin-bottom: 16px;
     overflow-x: auto;
     scrollbar-width: none;
@@ -29,17 +29,17 @@
       gap: 6px;
       padding: 8px 12px;
       white-space: nowrap;
-      color: #495057;
+      color: light-dark(#495057, #bdbdbd);
       text-decoration: none;
       border-bottom: 2px solid transparent;
       margin-bottom: -1px;
 
       &:hover {
-        color: #006595;
+        color: light-dark(#006595, #8ed2f2);
       }
 
       &.active {
-        color: #006595;
+        color: light-dark(#006595, #8ed2f2);
         font-weight: 600;
         border-bottom-color: #006595;
       }

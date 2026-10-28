@@ -39,11 +39,11 @@
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  background: #aaa;
+  background: light-dark(#aaa, #616c77);
   border-radius: 2px;
 
   &:hover {
-    background: #c8c8c8;
+    background: light-dark(#c8c8c8, #4b545c);
     color: #fff
   }
 }
@@ -119,8 +119,8 @@
 .nada-gris {
   padding: 6px;
   text-align: center;
-  color: #555;
-  background: #F7F7F7;
+  color: light-dark(#555, #bababa);
+  background: light-dark(#F7F7F7, #2a2e33);
 }
 
 .titulaw {
@@ -129,7 +129,7 @@
 }
 
 .titulaw h2 {
-  color: #9f9f9f;
+  color: light-dark(#9f9f9f, #8e8e8e);
   font-size: 14px;
   font-weight: 400;
   margin: 0;
@@ -147,14 +147,14 @@
 }
 
 span.positivo {
-  color: #4ca306 !important;
+  color: light-dark(#4ca306, #b5f184) !important;
   font-weight: bold !important;
   font-size: 13px !important;
 }
 
 .Container {
   font-size: 12px;
-  color: #333;
+  color: light-dark(#333, #cfcfcf);
   position: relative;
   overflow: hidden;
 }
@@ -225,9 +225,9 @@ span.positivo {
 
 .boton.link {
   background: none;
-  color: #686868;
+  color: light-dark(#686868, #afafaf);
 
   &:hover {
-    color: #4a4a4a;
+    color: light-dark(#4a4a4a, #c1c1c1);
   }
 }

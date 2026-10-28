@@ -13,7 +13,7 @@
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: 6px;
-  background: #eee;
+  background: light-dark(#eee, #30353b);
 
   img {
     width: 100%;
@@ -72,7 +72,7 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   max-height: 75vh;
-  background: #f4f4f4;
+  background: light-dark(#f4f4f4, #2c3135);
   border-radius: 6px;
   overflow: hidden;
 }
@@ -86,7 +86,7 @@
 }
 
 .foto-main-desc {
-  color: #444;
+  color: light-dark(#444, #c4c4c4);
   line-height: 1.6;
   margin-bottom: 16px;
 }
@@ -96,7 +96,7 @@
   flex-direction: column;
   gap: 10px;
   padding: 14px;
-  background: #f8f8f8;
+  background: light-dark(#f8f8f8, #292d32);
   border-radius: 6px;
   margin-bottom: 16px;
 }
@@ -124,7 +124,7 @@
   transition: all .15s;
 
   &.positivo {
-    color: #4caf50;
+    color: light-dark(#4caf50, #7dc780);
     border-color: #4caf50;
 
     &:hover,
@@ -135,7 +135,7 @@
   }
 
   &.negativo {
-    color: #f44336;
+    color: light-dark(#f44336, #ec5b51);
     border-color: #f44336;
 
     &:hover,
@@ -155,6 +155,6 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    color: #666;
+    color: light-dark(#666, #b0b0b0);
   }
 }

@@ -165,7 +165,7 @@
     width: min(320px, calc(100vw - 32px));
 
     > mat-icon {
-      color: #9a9a9a;
+      color: light-dark(#9a9a9a, #919191);
       font-size: 18px;
       width: 18px;
       height: 18px;
@@ -184,7 +184,7 @@
       outline: none;
 
       &::placeholder {
-        color: #888;
+        color: light-dark(#888, #9c9c9c);
       }
 
       &:focus {
@@ -196,11 +196,11 @@
       padding: 5px;
 
       &.apply:hover {
-        color: #5ed07a;
+        color: light-dark(#5ed07a, #69d383);
       }
 
       &.remove:hover {
-        color: #ff7b7b;
+        color: light-dark(#ff7b7b, #ec5151);
       }
     }
   }

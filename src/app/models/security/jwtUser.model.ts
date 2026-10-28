@@ -7,6 +7,8 @@ export interface UsuarioSesion {
   avatar?: string | null;
   /** false = falta confirmar el correo (puede leer, no publicar). undefined en sesiones anteriores = confirmado. */
   emailConfirmado?: boolean;
+  /** Tema guardado en la cuenta: 'light', 'dark' o null (el del sistema). Ausente en sesiones anteriores. */
+  tema?: 'light' | 'dark' | null;
 }
 
 export class JwtUserModel {

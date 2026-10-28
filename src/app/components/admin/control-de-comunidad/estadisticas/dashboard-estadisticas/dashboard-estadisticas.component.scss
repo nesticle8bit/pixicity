@@ -4,8 +4,8 @@
   gap: 14px;
   padding: 16px;
   border-radius: 8px;
-  border: 1px solid #e5e5e5;
-  background: #fff;
+  border: 1px solid light-dark(#e5e5e5, #3e454c);
+  background: light-dark(#fff, #1e2124);
   height: 100%;
 
   &__icon {
@@ -22,19 +22,19 @@
   &__value {
     font-size: 22px;
     font-weight: 700;
-    color: #333;
+    color: light-dark(#333, #cfcfcf);
     line-height: 1.1;
   }
 
   &__label {
     font-size: 12px;
-    color: #666;
+    color: light-dark(#666, #b0b0b0);
     margin-top: 2px;
   }
 
   &__sub {
     font-size: 11px;
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
     margin-top: 2px;
   }
 
@@ -42,8 +42,8 @@
     border-left: 4px solid #1877f2;
 
     .stat-card__icon {
-      background: #e8f0fe;
-      color: #1877f2;
+      background: light-dark(#e8f0fe, #1b2b48);
+      color: light-dark(#1877f2, #5194ec);
     }
   }
 
@@ -51,8 +51,8 @@
     border-left: 4px solid #27ae60;
 
     .stat-card__icon {
-      background: #e8f9ee;
-      color: #27ae60;
+      background: light-dark(#e8f9ee, #1c4b2d);
+      color: light-dark(#27ae60, #79e1a5);
     }
   }
 
@@ -60,8 +60,8 @@
     border-left: 4px solid #e67e22;
 
     .stat-card__icon {
-      background: #fdf3e8;
-      color: #e67e22;
+      background: light-dark(#fdf3e8, #48331b);
+      color: light-dark(#e67e22, #eb9951);
     }
   }
 
@@ -69,28 +69,28 @@
     border-left: 4px solid #00acc1;
 
     .stat-card__icon {
-      background: #e0f7fa;
-      color: #00acc1;
+      background: light-dark(#e0f7fa, #1e494f);
+      color: light-dark(#00acc1, #77e3f0);
     }
   }
 }
 
 .stat-panel {
-  background: #fff;
-  border: 1px solid #e5e5e5;
+  background: light-dark(#fff, #1e2124);
+  border: 1px solid light-dark(#e5e5e5, #3e454c);
   border-radius: 6px;
   overflow: hidden;
 
   &__header {
-    background: #f5f5f5;
-    border-bottom: 1px solid #e5e5e5;
+    background: light-dark(#f5f5f5, #2b3035);
+    border-bottom: 1px solid light-dark(#e5e5e5, #3e454c);
     padding: 9px 14px;
     font-size: 13px;
     font-weight: 700;
-    color: #555;
+    color: light-dark(#555, #bababa);
 
     i.ti {
-      color: #006595;
+      color: light-dark(#006595, #8ed2f2);
       margin-right: 6px;
     }
   }
@@ -109,13 +109,13 @@
 .stat-record__number {
   font-size: 42px;
   font-weight: 800;
-  color: #e67e22;
+  color: light-dark(#e67e22, #eb9951);
   line-height: 1;
 }
 
 .stat-record__label {
   font-size: 13px;
-  color: #666;
+  color: light-dark(#666, #b0b0b0);
   margin-top: 4px;
 }
 
@@ -124,13 +124,13 @@
     display: flex;
     justify-content: space-between;
     font-size: 12px;
-    color: #555;
+    color: light-dark(#555, #bababa);
     margin-bottom: 4px;
   }
 
   &__bar {
     height: 8px;
-    background: #f0f0f0;
+    background: light-dark(#f0f0f0, #2f3439);
     border-radius: 4px;
     overflow: hidden;
   }
@@ -151,7 +151,7 @@
   align-items: center;
   gap: 8px;
   padding: 5px 14px;
-  border-bottom: 1px dotted #f0f0f0;
+  border-bottom: 1px dotted light-dark(#f0f0f0, #373e44);
   font-size: 12px;
 
   &:last-child {
@@ -159,7 +159,7 @@
   }
 
   a {
-    color: #006595;
+    color: light-dark(#006595, #8ed2f2);
     font-weight: 600;
     text-decoration: none;
 
@@ -183,7 +183,7 @@
 
 .stat-puntos {
   font-size: 11px;
-  color: #27ae60;
+  color: light-dark(#27ae60, #79e1a5);
   font-weight: 700;
   margin-left: auto;
   white-space: nowrap;
@@ -193,7 +193,7 @@
   width: 28px !important;
   height: 28px !important;
   border-radius: 50%;
-  border: 1px solid #ddd;
+  border: 1px solid light-dark(#ddd, #434b52);
 }
 
 .stat-post-row {
@@ -201,7 +201,7 @@
   align-items: flex-start;
   gap: 10px;
   padding: 7px 0;
-  border-bottom: 1px dotted #f0f0f0;
+  border-bottom: 1px dotted light-dark(#f0f0f0, #373e44);
 
   &:last-child {
     border-bottom: none;
@@ -212,8 +212,8 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #e0e0e0;
-  color: #555;
+  background: light-dark(#e0e0e0, #3a4147);
+  color: light-dark(#555, #bababa);
   font-size: 11px;
   font-weight: 700;
   display: flex;
@@ -224,12 +224,12 @@
 
   &.gold {
     background: #f0d35b;
-    color: #7a6200;
+    color: light-dark(#7a6200, #f4e39d);
   }
 
   &.silver {
-    background: #c0c0c0;
-    color: #555;
+    background: light-dark(#c0c0c0, #515a63);
+    color: light-dark(#555, #bababa);
   }
 
   &.bronze {
@@ -247,7 +247,7 @@
   display: block;
   font-size: 12px;
   font-weight: 600;
-  color: #006595;
+  color: light-dark(#006595, #8ed2f2);
   text-decoration: none;
   line-height: 1.3;
   margin-bottom: 2px;

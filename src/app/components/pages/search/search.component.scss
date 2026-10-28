@@ -1,10 +1,10 @@
-$accent: #006595;
-$accent-dark: #004160;
+$accent: light-dark(#006595, #1e99d3);
+$accent-dark: light-dark(#004160, #1777a4);
 $accent-soft: rgba(0, 101, 149, 0.08);
-$borde: #e4e4e4;
-$texto: #333;
-$suave: #666;
-$mark: #fff1a8;
+$borde: light-dark(#e4e4e4, #3f464d);
+$texto: light-dark(#333, #cfcfcf);
+$suave: light-dark(#666, #b0b0b0);
+$mark: light-dark(#fff1a8, #f4eab3);
 
 :host {
   display: block;
@@ -19,8 +19,8 @@ $mark: #fff1a8;
   position: relative;
   display: flex;
   align-items: center;
-  background: #fff;
-  border: 1px solid #d6d6d6;
+  background: light-dark(#fff, #1e2124);
+  border: 1px solid light-dark(#d6d6d6, #485058);
   border-radius: 12px;
   transition: border-color 0.15s, box-shadow 0.15s;
 
@@ -32,7 +32,7 @@ $mark: #fff1a8;
   &__icono {
     position: absolute;
     left: 14px;
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
     font-size: 18px;
     pointer-events: none;
   }
@@ -107,8 +107,8 @@ $mark: #fff1a8;
     padding: 6px 12px;
     border: 1px solid $borde;
     border-radius: 999px;
-    background: #fff;
-    color: #555;
+    background: light-dark(#fff, #1e2124);
+    color: light-dark(#555, #bababa);
     font-size: 13px;
     cursor: pointer;
     transition: all 0.15s;
@@ -192,7 +192,7 @@ $mark: #fff1a8;
   align-items: center;
   border: 1px solid $borde;
   border-radius: 999px;
-  background: #fafafa;
+  background: light-dark(#fafafa, #272c30);
   font-size: 13px;
   overflow: hidden;
 
@@ -214,11 +214,11 @@ $mark: #fff1a8;
     padding: 4px 9px 4px 4px;
     border: none;
     background: none;
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
     cursor: pointer;
 
     &:hover {
-      color: #c0392b;
+      color: light-dark(#c0392b, #df796f);
     }
   }
 }
@@ -248,7 +248,7 @@ $mark: #fff1a8;
   padding: 10px 12px;
   border: 1px solid $borde;
   border-radius: 10px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   color: $texto;
   text-decoration: none;
   transition: border-color 0.15s, transform 0.15s;
@@ -270,14 +270,14 @@ $mark: #fff1a8;
 
   &__total {
     font-size: 12px;
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
   }
 }
 
 // - Resultados -
 .bq-barra {
   padding: 16px 0 14px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid light-dark(#eee, #393f45);
   margin-bottom: 16px;
 }
 
@@ -312,11 +312,11 @@ $mark: #fff1a8;
   &__texto {
     margin: 0;
     font-size: 14px;
-    color: #555;
+    color: light-dark(#555, #bababa);
   }
 
   &__rango {
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
   }
 }
 
@@ -332,7 +332,7 @@ $mark: #fff1a8;
     padding: 5px 8px;
     border: 1px solid $borde;
     border-radius: 8px;
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     font-size: 13px;
     color: $texto;
     cursor: pointer;
@@ -394,13 +394,13 @@ $mark: #fff1a8;
 
 .bq-res {
   padding: 14px 16px;
-  border: 1px solid #ececec;
+  border: 1px solid light-dark(#ececec, #3a4047);
   border-radius: 12px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   transition: border-color 0.15s, box-shadow 0.15s;
 
   &:hover {
-    border-color: #d5e6ef;
+    border-color: light-dark(#d5e6ef, #275167);
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
   }
 
@@ -410,14 +410,14 @@ $mark: #fff1a8;
     align-items: center;
     gap: 6px;
     font-size: 12px;
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
   }
 
   &__cat {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    color: #666;
+    color: light-dark(#666, #b0b0b0);
     font-weight: 600;
     text-decoration: none;
 
@@ -432,8 +432,8 @@ $mark: #fff1a8;
     gap: 3px;
     padding: 1px 7px;
     border-radius: 999px;
-    background: #fff4e0;
-    color: #b26a00;
+    background: light-dark(#fff4e0, #4c3b1d);
+    color: light-dark(#b26a00, #f1c37f);
     font-weight: 600;
   }
 
@@ -457,7 +457,7 @@ $mark: #fff1a8;
     margin: 0;
     font-size: 13.5px;
     line-height: 1.55;
-    color: #555;
+    color: light-dark(#555, #bababa);
     overflow-wrap: anywhere;
   }
 
@@ -469,7 +469,7 @@ $mark: #fff1a8;
 
     a {
       font-size: 12px;
-      color: #888;
+      color: light-dark(#888, #9c9c9c);
       text-decoration: none;
 
       &:hover {
@@ -491,7 +491,7 @@ $mark: #fff1a8;
     gap: 8px;
     margin-top: 10px;
     padding-top: 10px;
-    border-top: 1px dashed #eee;
+    border-top: 1px dashed light-dark(#eee, #393f45);
   }
 
   &__autor {
@@ -500,7 +500,7 @@ $mark: #fff1a8;
     gap: 6px;
     font-size: 12.5px;
     font-weight: 600;
-    color: #555;
+    color: light-dark(#555, #bababa);
     text-decoration: none;
 
     &:hover {
@@ -513,7 +513,7 @@ $mark: #fff1a8;
     flex-wrap: wrap;
     gap: 12px;
     font-size: 12px;
-    color: #888;
+    color: light-dark(#888, #9c9c9c);
 
     span {
       display: inline-flex;
@@ -541,7 +541,7 @@ $mark: #fff1a8;
   display: block;
   height: 12px;
   border-radius: 6px;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e6e6e6 50%, #f0f0f0 75%);
+  background: linear-gradient(90deg, light-dark(#f0f0f0, #2f3439) 25%, light-dark(#e6e6e6, #363c42) 50%, light-dark(#f0f0f0, #2f3439) 75%);
   background-size: 200% 100%;
   animation: sk-brillo 1.2s infinite;
 
@@ -574,10 +574,10 @@ $mark: #fff1a8;
 
 .bq-vacio {
   padding: 36px 20px;
-  border: 1px dashed #ddd;
+  border: 1px dashed light-dark(#ddd, #434b52);
   border-radius: 12px;
   text-align: center;
-  color: #666;
+  color: light-dark(#666, #b0b0b0);
 
   > i {
     font-size: 40px;
@@ -622,9 +622,9 @@ $mark: #fff1a8;
     align-items: center;
     gap: 6px;
     padding: 9px 14px;
-    border: 1px solid #e6e6e6;
+    border: 1px solid light-dark(#e6e6e6, #3e454b);
     border-radius: 10px;
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     font-size: 13.5px;
     font-weight: 700;
     color: $texto;
@@ -643,7 +643,7 @@ $mark: #fff1a8;
     &::after {
       content: '▾';
       margin-left: auto;
-      color: #6b6b6b;
+      color: light-dark(#6b6b6b, #adadad);
     }
   }
 
@@ -668,9 +668,9 @@ $mark: #fff1a8;
 
 .bq-card {
   padding: 12px 14px;
-  border: 1px solid #e6e6e6;
+  border: 1px solid light-dark(#e6e6e6, #3e454b);
   border-radius: 12px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
 
   &__titulo {
     display: flex;
@@ -690,7 +690,7 @@ $mark: #fff1a8;
   &__vacio {
     margin: 0;
     font-size: 12.5px;
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
   }
 }
 
@@ -711,12 +711,12 @@ $mark: #fff1a8;
     border-radius: 8px;
     background: none;
     font-size: 13px;
-    color: #444;
+    color: light-dark(#444, #c4c4c4);
     text-align: left;
     cursor: pointer;
 
     &:hover {
-      background: #f4f4f4;
+      background: light-dark(#f4f4f4, #2c3135);
     }
 
     &.active {
@@ -737,9 +737,9 @@ $mark: #fff1a8;
   &__total {
     padding: 0 7px;
     border-radius: 999px;
-    background: #f0f0f0;
+    background: light-dark(#f0f0f0, #2f3439);
     font-size: 11.5px;
-    color: #666;
+    color: light-dark(#666, #b0b0b0);
   }
 }
 
@@ -752,9 +752,9 @@ $mark: #fff1a8;
     padding: 4px 10px;
     border: 1px solid $borde;
     border-radius: 999px;
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     font-size: 12.5px;
-    color: #555;
+    color: light-dark(#555, #bababa);
     cursor: pointer;
 
     &:hover {
@@ -793,7 +793,7 @@ $mark: #fff1a8;
     transform: translateY(-50%);
     border: none;
     background: none;
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
     cursor: pointer;
   }
 }
@@ -802,9 +802,9 @@ $mark: #fff1a8;
 .bq-shouts {
   margin-bottom: 20px;
   padding: 14px;
-  border: 1px solid #e3e9ed;
+  border: 1px solid light-dark(#e3e9ed, #354652);
   border-radius: 12px;
-  background: #f7f9fb;
+  background: light-dark(#f7f9fb, #1e2d3b);
 
   &__titulo {
     display: flex;
@@ -813,15 +813,15 @@ $mark: #fff1a8;
     margin: 0 0 12px;
     font-size: 1rem;
     font-weight: 700;
-    color: #26323a;
+    color: light-dark(#26323a, #c7d2da);
   }
 
   &__total {
     padding: 1px 7px;
     border-radius: 10px;
-    background: #e3ecf1;
+    background: light-dark(#e3ecf1, #263e4b);
     font-size: 0.75rem;
-    color: #5d6b75;
+    color: light-dark(#5d6b75, #aeaeae);
   }
 
   &__lista {
@@ -835,7 +835,7 @@ $mark: #fff1a8;
     margin-top: 10px;
     font-size: 0.85rem;
     font-weight: 700;
-    color: #006595;
+    color: light-dark(#006595, #8ed2f2);
   }
 }
 .bq-box {
@@ -845,7 +845,7 @@ $mark: #fff1a8;
 .bq-hero__ayuda {
   margin: 10px 0 0;
   font-size: 0.85rem;
-  color: #6b7782;
+  color: light-dark(#6b7782, #a6a6a6);
 }
 
 .bq-sugerencias {
@@ -858,8 +858,8 @@ $mark: #fff1a8;
   padding: 4px;
   list-style: none;
   text-align: left;
-  background: #fff;
-  border: 1px solid #e3e8ec;
+  background: light-dark(#fff, #1e2124);
+  border: 1px solid light-dark(#e3e8ec, #374550);
   border-radius: 12px;
   box-shadow: 0 10px 28px rgba(16, 24, 40, 0.14);
 
@@ -872,7 +872,7 @@ $mark: #fff1a8;
     cursor: pointer;
 
     &.is-activa {
-      background: #eef6fb;
+      background: light-dark(#eef6fb, #1a3546);
     }
   }
 
@@ -882,19 +882,19 @@ $mark: #fff1a8;
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: #eef6fb;
+    background: light-dark(#eef6fb, #1a3546);
     font-weight: 700;
-    color: #006595;
+    color: light-dark(#006595, #8ed2f2);
   }
 
   &__valor {
     font-weight: 600;
-    color: #1f2a33;
+    color: light-dark(#1f2a33, #cad6df);
   }
 
   &__detalle {
     margin-left: auto;
     font-size: 0.8rem;
-    color: #6b7782;
+    color: light-dark(#6b7782, #a6a6a6);
   }
 }

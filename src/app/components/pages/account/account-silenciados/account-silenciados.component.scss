@@ -1,10 +1,10 @@
 .sil__intro {
   margin: 0 0 20px;
-  color: #6b7782;
+  color: light-dark(#6b7782, #a6a6a6);
 
   a {
     font-weight: 600;
-    color: #006595;
+    color: light-dark(#006595, #8ed2f2);
   }
 }
 
@@ -16,7 +16,7 @@
   margin: 0 0 10px;
   font-size: 1rem;
   font-weight: 700;
-  color: #1f2a33;
+  color: light-dark(#1f2a33, #cad6df);
 }
 
 .sil__form {
@@ -43,8 +43,8 @@
 
   &--suave {
     margin-left: auto;
-    background: #f1f4f6;
-    color: #1f2a33;
+    background: light-dark(#f1f4f6, #26333c);
+    color: light-dark(#1f2a33, #cad6df);
   }
 }
 
@@ -63,9 +63,9 @@
   gap: 4px;
   padding: 4px 6px 4px 12px;
   border-radius: 999px;
-  background: #eef6fb;
+  background: light-dark(#eef6fb, #1a3546);
   font-weight: 600;
-  color: #006595;
+  color: light-dark(#006595, #8ed2f2);
 
   button {
     display: grid;
@@ -79,7 +79,7 @@
     cursor: pointer;
 
     &:hover {
-      background: #d7eaf5;
+      background: light-dark(#d7eaf5, #214357);
     }
   }
 }
@@ -100,11 +100,11 @@
 
   a {
     font-weight: 600;
-    color: #1f2a33;
+    color: light-dark(#1f2a33, #cad6df);
   }
 }
 
 .sil__vacio {
   margin: 0;
-  color: #6b7782;
+  color: light-dark(#6b7782, #a6a6a6);
 }

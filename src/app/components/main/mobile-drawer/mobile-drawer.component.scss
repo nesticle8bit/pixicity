@@ -5,8 +5,8 @@
   }
 }
 
-$main: #0B6EA5;
-$accent: #004160;
+$main: light-dark(#0B6EA5, #2ba0e1);
+$accent: light-dark(#004160, #1777a4);
 
 .drawer-backdrop {
   position: fixed;
@@ -24,7 +24,7 @@ $accent: #004160;
   display: flex;
   flex-direction: column;
   width: min(86vw, 320px);
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   box-shadow: -4px 0 16px rgb(0 0 0 / 25%);
   transform: translateX(100%);
   visibility: hidden;
@@ -87,7 +87,7 @@ $accent: #004160;
     }
 
     &:focus-visible {
-      outline: 2px solid #fff;
+      outline: 2px solid light-dark(#fff, #2e3338);
       outline-offset: 2px;
       border-radius: 8px;
     }
@@ -119,7 +119,7 @@ $accent: #004160;
     cursor: pointer;
 
     &:focus-visible {
-      outline: 2px solid #fff;
+      outline: 2px solid light-dark(#fff, #2e3338);
     }
   }
 
@@ -140,15 +140,15 @@ $accent: #004160;
       min-width: 0;
       height: 44px;
       padding: 0 .75rem 0 2.2rem;
-      border: 1px solid #c9d3db;
+      border: 1px solid light-dark(#c9d3db, #425463);
       border-right: 0;
       border-radius: 10px 0 0 10px;
-      background: #f6f9fb;
+      background: light-dark(#f6f9fb, #1c303e);
       font-size: 11px; // 16px evita el zoom automático de iOS al enfocar
 
       &:focus {
         border-color: $main;
-        background: #fff;
+        background: light-dark(#fff, #1e2124);
         outline: none;
         box-shadow: 0 0 0 3px rgb(11 110 165 / 20%);
       }
@@ -170,7 +170,7 @@ $accent: #004160;
     top: 50%;
     left: .75rem;
     transform: translateY(-50%);
-    color: #5f6b75;
+    color: light-dark(#5f6b75, #aeaeae);
     pointer-events: none;
   }
 
@@ -189,7 +189,7 @@ $accent: #004160;
       padding: .6rem .25rem;
       border-radius: 8px;
       border: 1px solid transparent;
-      background: #eef5fa;
+      background: light-dark(#eef5fa, #1b3446);
       color: $accent;
       font-size: .75rem;
       font-weight: 700;
@@ -201,12 +201,12 @@ $accent: #004160;
       }
 
       &:active {
-        background: #dcebf5;
+        background: light-dark(#dcebf5, #203f54);
       }
 
       &.active {
         border-color: $main;
-        background: #fff;
+        background: light-dark(#fff, #1e2124);
       }
     }
   }
@@ -215,7 +215,7 @@ $accent: #004160;
     position: absolute;
     top: -4px;
     right: 2px;
-    border: 2px solid #fff;
+    border: 2px solid light-dark(#fff, #2e3338);
     min-width: 18px;
     padding: 0 5px;
     border-radius: 9px;
@@ -233,7 +233,7 @@ $accent: #004160;
 
     h2 {
       margin: .5rem 1rem .25rem;
-      color: #888;
+      color: light-dark(#888, #9c9c9c);
       font-size: .7rem;
       font-weight: 700;
       letter-spacing: .05em;
@@ -249,7 +249,7 @@ $accent: #004160;
       padding: 0 1rem;
       border: 0;
       background: transparent;
-      color: #222;
+      color: light-dark(#222, #d9d9d9);
       font-size: .95rem;
       text-align: left;
 
@@ -261,7 +261,7 @@ $accent: #004160;
       }
 
       &.active {
-        background: #eef5fa;
+        background: light-dark(#eef5fa, #1b3446);
         color: $accent;
         font-weight: 700;
         box-shadow: inset 3px 0 0 $main;
@@ -278,12 +278,40 @@ $accent: #004160;
     margin: .25rem 1rem .5rem;
     border-radius: 10px;
     background: #95c317;
-    color: #1f2d00;
+    color: light-dark(#1f2d00, #e9f9c7);
     font-weight: 800;
     text-decoration: none;
 
     &:active {
       filter: brightness(.95);
+    }
+  }
+
+  &__tema {
+    display: flex;
+    gap: .25rem;
+    margin: 0 1rem;
+    padding: .25rem;
+    border-radius: 10px;
+    background: light-dark(#f1f4f6, #2a3036);
+
+    // Misma especificidad que ".drawer__section button" pero va después: gana.
+    button {
+      flex: 1;
+      justify-content: center;
+      gap: .35rem;
+      min-height: 38px;
+      padding: 0 .5rem;
+      border-radius: 8px;
+      font-size: .8rem;
+      color: light-dark(#5f6b75, #aeb8c1);
+
+      &.active {
+        background: light-dark(#fff, #1e2124);
+        color: light-dark(#006595, #6cbcec);
+        font-weight: 700;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+      }
     }
   }
 
@@ -293,10 +321,10 @@ $accent: #004160;
     gap: .25rem 1rem;
     margin: 1rem 1rem 0;
     padding-top: .75rem;
-    border-top: 1px solid #e6eaee;
+    border-top: 1px solid light-dark(#e6eaee, #35424e);
 
     a {
-      color: #5f6b75;
+      color: light-dark(#5f6b75, #aeaeae);
       font-size: .8rem;
     }
   }
@@ -304,8 +332,8 @@ $accent: #004160;
   &__foot {
     flex: 0 0 auto;
     padding: .5rem 1rem calc(.5rem + env(safe-area-inset-bottom, 0px));
-    border-top: 1px solid #e6eaee;
-    background: #fff;
+    border-top: 1px solid light-dark(#e6eaee, #35424e);
+    background: light-dark(#fff, #1e2124);
   }
 
   &__logout {
@@ -315,10 +343,10 @@ $accent: #004160;
     gap: .5rem;
     width: 100%;
     min-height: 44px;
-    border: 1px solid #f1c4c0;
+    border: 1px solid light-dark(#f1c4c0, #71312b);
     border-radius: 10px;
-    background: #fff;
-    color: #b42318;
+    background: light-dark(#fff, #1e2124);
+    color: light-dark(#b42318, #ec7c74);
     font-family: inherit;
     font-weight: 700;
   }
@@ -330,11 +358,11 @@ $accent: #004160;
     margin: 1rem;
     padding: 1rem;
     border-radius: 12px;
-    background: #eef5fa;
+    background: light-dark(#eef5fa, #1b3446);
 
     p {
       margin: 0 0 .25rem;
-      color: #1f2a33;
+      color: light-dark(#1f2a33, #cad6df);
       font-size: .9rem;
       text-align: center;
     }
@@ -350,12 +378,12 @@ $accent: #004160;
 
   &__login {
     border: 1px solid $accent;
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     color: $accent;
   }
 
   &__register {
     background: #95c317;
-    color: #1f2d00; // el blanco sobre lima no llegaba a 2.1:1
+    color: light-dark(#1f2d00, #e9f9c7); // el blanco sobre lima no llegaba a 2.1:1
   }
 }

@@ -3,12 +3,12 @@
 }
 
 .tema-coments {
-  background: #fff;
-  border: 1px solid #e5e5e5;
+  background: light-dark(#fff, #1e2124);
+  border: 1px solid light-dark(#e5e5e5, #3e454c);
   border-radius: 10px;
   padding: 18px 20px;
 
-  h3 { font-size: 17px; font-weight: 700; color: #006595; margin: 0 0 14px; }
+  h3 { font-size: 17px; font-weight: 700; color: light-dark(#006595, #8ed2f2); margin: 0 0 14px; }
 }
 
 .boton {
@@ -44,7 +44,7 @@
 
 .coment-orden {
   display: inline-flex;
-  background: #eef2f4;
+  background: light-dark(#eef2f4, #28373e);
   border-radius: 20px;
   padding: 2px;
 
@@ -54,7 +54,7 @@
     cursor: pointer;
     font-size: 12px;
     font-weight: 600;
-    color: #52606a;
+    color: light-dark(#52606a, #b5b5b5);
     padding: 4px 12px;
     border-radius: 18px;
 
@@ -74,7 +74,7 @@
 
   textarea {
     width: 100%;
-    border: 1px solid #ccc;
+    border: 1px solid light-dark(#ccc, #4e575f);
     border-radius: 6px;
     padding: 9px 11px;
     font-size: 13px;
@@ -94,11 +94,11 @@
 }
 
 .coment-preview {
-  border: 1px dashed #c9d4da;
+  border: 1px dashed light-dark(#c9d4da, #435762);
   border-radius: 6px;
   padding: 8px 11px;
   margin-bottom: 8px;
-  background: #fafcfd;
+  background: light-dark(#fafcfd, #262b2f);
   font-size: 13px;
   overflow-wrap: anywhere;
 
@@ -107,7 +107,7 @@
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    color: #6b7780;
+    color: light-dark(#6b7780, #a7a7a7);
     margin-bottom: 4px;
   }
 
@@ -118,7 +118,7 @@
   margin-right: auto;
   border: none;
   background: none;
-  color: #6b7780;
+  color: light-dark(#6b7780, #a7a7a7);
   font-size: 12px;
   cursor: pointer;
   padding: 4px 6px;
@@ -128,32 +128,32 @@
   gap: 4px;
 
   &:hover,
-  &.is-activo { color: #006595; background: #f1f4f6; }
+  &.is-activo { color: light-dark(#006595, #8ed2f2); background: light-dark(#f1f4f6, #26333c); }
 }
 
 .coment-emoji {
   border: none;
   background: none;
   cursor: pointer;
-  color: #8a98a0;
+  color: light-dark(#8a98a0, #949494);
   padding: 4px;
   border-radius: 6px;
   display: inline-flex;
 
   i { font-size: 20px; }
   &:hover,
-  &.is-abierto { color: #006595; background: #f1f4f6; }
+  &.is-abierto { color: light-dark(#006595, #8ed2f2); background: light-dark(#f1f4f6, #26333c); }
 }
 
 .coment-list { list-style: none; margin: 0; padding: 0; }
-.coment-thread { border-top: 1px solid #f0f0f0; padding: 4px 0; }
+.coment-thread { border-top: 1px solid light-dark(#f0f0f0, #373e44); padding: 4px 0; }
 
 /* Respuestas (un nivel) */
 .coment-respuestas {
   list-style: none;
   margin: 0 0 4px;
   padding: 0 0 0 30px;
-  border-left: 2px solid #eef2f4;
+  border-left: 2px solid light-dark(#eef2f4, #30414a);
   margin-left: 18px;
 
   > li { padding: 4px 0; }
@@ -161,8 +161,8 @@
 
 .coment {
   &.is-destacado .coment-row {
-    background: #fbfdf6;
-    border: 1px solid #d8ecc2;
+    background: light-dark(#fbfdf6, #354018);
+    border: 1px solid light-dark(#d8ecc2, #51732b);
     border-radius: 8px;
     padding: 8px;
   }
@@ -174,16 +174,16 @@
   gap: 4px;
   font-size: 11px;
   font-weight: 700;
-  color: #3d7a1c;
+  color: light-dark(#3d7a1c, #b4e899);
   margin: 6px 0 4px;
 }
 
 .coment-collapsed {
   font-size: 12px;
-  color: #6b6b6b;
+  color: light-dark(#6b6b6b, #adadad);
   padding: 8px 0;
   cursor: pointer;
-  a { color: #006595; font-weight: 700; }
+  a { color: light-dark(#006595, #8ed2f2); font-weight: 700; }
 }
 
 .coment-row {
@@ -208,7 +208,7 @@
       height: 22px;
       border: none;
       background: none;
-      color: #b5b5b5;
+      color: light-dark(#b5b5b5, #818181);
       cursor: pointer;
       border-radius: 5px;
       padding: 0;
@@ -217,21 +217,21 @@
 
       i { font-size: 18px; }
 
-      &:hover:not(:disabled) { background: #f1f1f1; }
+      &:hover:not(:disabled) { background: light-dark(#f1f1f1, #2e3338); }
       &:disabled { cursor: default; opacity: .6; }
 
-      &.up:hover:not(:disabled), &.up.active { color: #2ec26a; }
-      &.down:hover:not(:disabled), &.down.active { color: #e74c3c; }
+      &.up:hover:not(:disabled), &.up.active { color: light-dark(#2ec26a, #6edd9b); }
+      &.down:hover:not(:disabled), &.down.active { color: light-dark(#e74c3c, #ea6152); }
     }
 
     &__score {
       font-size: 12px;
       font-weight: 700;
-      color: #8a8a8a;
+      color: light-dark(#8a8a8a, #9a9a9a);
       line-height: 1;
 
-      &.pos { color: #2ec26a; }
-      &.neg { color: #e74c3c; }
+      &.pos { color: light-dark(#2ec26a, #6edd9b); }
+      &.neg { color: light-dark(#e74c3c, #ea6152); }
     }
   }
 
@@ -242,8 +242,8 @@
     align-items: center;
     gap: 8px;
     flex-wrap: wrap;
-    a { font-weight: 700; font-size: 12.5px; color: #006595; text-decoration: none; }
-    .meta { font-size: 11px; color: #6b6b6b; }
+    a { font-weight: 700; font-size: 12.5px; color: light-dark(#006595, #8ed2f2); text-decoration: none; }
+    .meta { font-size: 11px; color: light-dark(#6b6b6b, #adadad); }
     .meta-edit { font-style: italic; }
 
     .meta-edit--link {
@@ -253,7 +253,7 @@
       font: inherit;
       color: inherit;
       cursor: pointer;
-      &:hover { text-decoration: underline; color: #006595; }
+      &:hover { text-decoration: underline; color: light-dark(#006595, #8ed2f2); }
     }
   }
 
@@ -282,18 +282,18 @@
     gap: 2px;
     font-size: 10.5px;
     font-weight: 700;
-    color: #006a9e;
+    color: light-dark(#006a9e, #8ad0f2);
   }
 
   p {
     margin: 4px 0 0;
     font-size: 13px;
-    color: #333;
+    color: light-dark(#333, #cfcfcf);
     line-height: 1.5;
     word-wrap: break-word;
     overflow-wrap: anywhere;
     // El texto llega por [innerHTML]: sus <a> no llevan el atributo de encapsulación del componente.
-    ::ng-deep a { color: #006a9e; font-weight: 600; }
+    ::ng-deep a { color: light-dark(#006a9e, #8ad0f2); font-weight: 600; }
   }
 }
 
@@ -310,14 +310,14 @@
     cursor: pointer;
     font-size: 11.5px;
     font-weight: 600;
-    color: #8a98a0;
+    color: light-dark(#8a98a0, #949494);
     display: inline-flex;
     align-items: center;
     gap: 3px;
     padding: 0;
 
-    &:hover { color: #006595; }
-    &.danger:hover { color: #c0392b; }
+    &:hover { color: light-dark(#006595, #8ed2f2); }
+    &.danger:hover { color: light-dark(#c0392b, #df796f); }
   }
 }
 
@@ -328,7 +328,7 @@
 
   textarea {
     width: 100%;
-    border: 1px solid #ccc;
+    border: 1px solid light-dark(#ccc, #4e575f);
     border-radius: 6px;
     padding: 8px 10px;
     font-size: 13px;
@@ -348,12 +348,12 @@
 }
 
 .com-empty {
-  background: #eef6fb;
-  border: 1px dashed #bcd7e4;
+  background: light-dark(#eef6fb, #1a3546);
+  border: 1px dashed light-dark(#bcd7e4, #306078);
   border-radius: 6px;
   padding: 14px;
   text-align: center;
-  color: #476474;
+  color: light-dark(#476474, #a3bac7);
   font-size: 13px;
   margin-top: 10px;
 }
@@ -386,7 +386,7 @@
 @keyframes coment-resaltado {
   0%,
   60% {
-    background: #fff4c2;
+    background: light-dark(#fff4c2, #5d5323);
     box-shadow: 0 0 0 3px #ffd54f;
   }
   100% {
@@ -398,7 +398,7 @@
 @media (prefers-reduced-motion: reduce) {
   .coment--resaltado {
     animation: none;
-    background: #fff4c2;
+    background: light-dark(#fff4c2, #5d5323);
   }
 }
 
@@ -409,7 +409,7 @@
   background: none;
   font: inherit;
   font-weight: 700;
-  color: #005a85;
+  color: light-dark(#005a85, #97d6f3);
   text-decoration: underline;
   cursor: pointer;
 }
@@ -426,7 +426,7 @@
     max-width: min(100%, 420px);
     max-height: 360px;
     border-radius: 8px;
-    border: 1px solid #e3e8eb;
+    border: 1px solid light-dark(#e3e8eb, #39474f);
     object-fit: contain;
   }
 }

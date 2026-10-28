@@ -36,11 +36,11 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
   styles: `
     /* Mismo ancho y bordes laterales que la barra de noticias (app-main-ultimas-noticias). */
     .aviso-email {
-      background: #fff8e6;
-      border-bottom: 1px solid #f1d58a;
-      border-left: 1px solid #ccc;
-      border-right: 1px solid #ccc;
-      color: #4a3a12;
+      background: light-dark(#fff8e6, #483c1b);
+      border-bottom: 1px solid light-dark(#f1d58a, #8c7535);
+      border-left: 1px solid light-dark(#ccc, #4e575f);
+      border-right: 1px solid light-dark(#ccc, #4e575f);
+      color: light-dark(#4a3a12, #edddb6);
     }
     .aviso-email__contenido {
       display: flex;
@@ -49,7 +49,7 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
       flex-wrap: wrap;
       padding: 10px 0;
     }
-    .aviso-email__icono { font-size: 1.4rem; color: #9a6b00; }
+    .aviso-email__icono { font-size: 1.4rem; color: light-dark(#9a6b00, #f2d38c); }
     .aviso-email__texto { flex: 1; min-width: 220px; margin: 0; font-size: 0.86rem; line-height: 1.4; }
     .aviso-email__acciones { display: flex; align-items: center; gap: 12px; }
     .aviso-email__boton {
@@ -66,7 +66,7 @@ import { NotificationService } from 'src/app/services/shared/notification.servic
       &:disabled { cursor: default; opacity: 0.7; }
       &:focus-visible { outline: 2px solid #006595; outline-offset: 2px; }
     }
-    .aviso-email__enlace { font-size: 0.82rem; font-weight: 700; color: #00527a; }
+    .aviso-email__enlace { font-size: 0.82rem; font-weight: 700; color: light-dark(#00527a, #9dd8f4); }
   `,
 })
 export class AvisoEmailComponent {

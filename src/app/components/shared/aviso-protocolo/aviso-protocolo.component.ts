@@ -50,15 +50,15 @@ const CLAVE = 'pixicity.protocoloVisto';
       gap: 12px;
       margin-bottom: 12px;
       padding: 12px 14px;
-      border: 1px solid #cfe3ef;
+      border: 1px solid light-dark(#cfe3ef, #28526a);
       border-radius: 12px;
-      background: #f4f9fc;
+      background: light-dark(#f4f9fc, #193242);
       font-size: 0.9rem;
-      color: #31414d;
+      color: light-dark(#31414d, #bbc9d4);
     }
     .ap__icono {
       font-size: 1.6rem;
-      color: #006595;
+      color: light-dark(#006595, #8ed2f2);
     }
     .ap__cuerpo {
       flex: 1;
@@ -70,7 +70,7 @@ const CLAVE = 'pixicity.protocoloVisto';
     }
     .ap__cuerpo a {
       font-weight: 600;
-      color: #006595;
+      color: light-dark(#006595, #8ed2f2);
     }
     .ap__ok {
       flex-shrink: 0;

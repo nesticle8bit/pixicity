@@ -11,12 +11,12 @@
 
 .auth-card {
   padding: 18px;
-  border: 1px solid #e6eaee;
+  border: 1px solid light-dark(#e6eaee, #35424e);
   border-radius: 12px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   font-size: 0.95rem;
   line-height: 1.55;
-  color: #3a4650;
+  color: light-dark(#3a4650, #bac5cd);
 
   p {
     margin: 0 0 14px;
@@ -26,7 +26,7 @@
     margin: 0 0 12px;
     font-size: 1.05rem;
     font-weight: 700;
-    color: #1f2a33;
+    color: light-dark(#1f2a33, #cad6df);
   }
 
   &--cta {
@@ -50,9 +50,9 @@
   width: 100%;
   padding: 10px 14px;
   border-radius: 10px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   font-weight: 700;
-  color: #006595;
+  color: light-dark(#006595, #8ed2f2);
   text-decoration: none;
   transition: transform 0.15s, box-shadow 0.15s;
 
@@ -62,7 +62,7 @@
   }
 
   &:focus-visible {
-    outline: 3px solid #fff;
+    outline: 3px solid light-dark(#fff, #2e3338);
     outline-offset: 2px;
   }
 }
@@ -88,14 +88,14 @@
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    background: #eef6fb;
-    color: #006595;
+    background: light-dark(#eef6fb, #1a3546);
+    color: light-dark(#006595, #8ed2f2);
     font-size: 1.15rem;
   }
 
   strong {
     display: block;
-    color: #1f2a33;
+    color: light-dark(#1f2a33, #cad6df);
   }
 }
 
@@ -108,7 +108,7 @@
   div {
     padding: 10px 12px;
     border-radius: 10px;
-    background: #f5f8fa;
+    background: light-dark(#f5f8fa, #1f313d);
   }
 
   dt {
@@ -119,14 +119,14 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    color: #6b7782;
+    color: light-dark(#6b7782, #a6a6a6);
   }
 
   dd {
     margin: 2px 0 0;
     font-size: 1.25rem;
     font-weight: 700;
-    color: #1f2a33;
+    color: light-dark(#1f2a33, #cad6df);
   }
 
   &__punto {
@@ -152,12 +152,12 @@
     padding: 6px 8px;
     border-radius: 8px;
     font-weight: 600;
-    color: #006595;
+    color: light-dark(#006595, #8ed2f2);
     text-decoration: none;
 
     &:hover,
     &:focus-visible {
-      background: #f3f6f8;
+      background: light-dark(#f3f6f8, #23323c);
     }
   }
 }

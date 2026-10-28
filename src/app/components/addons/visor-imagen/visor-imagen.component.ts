@@ -87,7 +87,7 @@ export interface VisorImagenData {
       }
 
       &:focus-visible {
-        outline: 2px solid #fff;
+        outline: 2px solid light-dark(#fff, #2e3338);
         outline-offset: 2px;
       }
     }

@@ -62,15 +62,15 @@ const TIPOS: { grupo: string; tipos: { tipo: string; label: string; detalle: str
   `,
   styles: `
     .nt { max-width: 560px; padding: 16px 4px; }
-    .nt__intro { margin: 0 0 8px; font-size: 0.88rem; color: #5d6b75; }
-    .nt__grupo { margin: 18px 0 6px; font-size: 0.95rem; font-weight: 700; color: #26323a; }
-    .nt__lista { margin: 0; padding: 0; list-style: none; border: 1px solid #e3e9ed; border-radius: 10px; }
+    .nt__intro { margin: 0 0 8px; font-size: 0.88rem; color: light-dark(#5d6b75, #aeaeae); }
+    .nt__grupo { margin: 18px 0 6px; font-size: 0.95rem; font-weight: 700; color: light-dark(#26323a, #c7d2da); }
+    .nt__lista { margin: 0; padding: 0; list-style: none; border: 1px solid light-dark(#e3e9ed, #354652); border-radius: 10px; }
     .nt__item {
       display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px;
-      & + & { border-top: 1px solid #e3e9ed; }
+      & + & { border-top: 1px solid light-dark(#e3e9ed, #354652); }
     }
-    .nt__label { display: block; font-size: 0.9rem; font-weight: 700; color: #26323a; }
-    .nt__detalle { display: block; font-size: 0.78rem; color: #5d6b75; }
+    .nt__label { display: block; font-size: 0.9rem; font-weight: 700; color: light-dark(#26323a, #c7d2da); }
+    .nt__detalle { display: block; font-size: 0.78rem; color: light-dark(#5d6b75, #aeaeae); }
   `,
 })
 export class AccountNotificacionesComponent {

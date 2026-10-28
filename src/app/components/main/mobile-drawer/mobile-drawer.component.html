@@ -96,6 +96,18 @@
       </div>
     }
 
+    <div class="drawer__section">
+      <h2 id="drawer-tema">Apariencia</h2>
+      <div class="drawer__tema" role="radiogroup" aria-labelledby="drawer-tema">
+        @for (op of opcionesTema; track op.valor) {
+          <button type="button" role="radio" [attr.aria-checked]="tema.preferencia() === op.valor"
+            [class.active]="tema.preferencia() === op.valor" (click)="tema.establecer(op.valor)">
+            <i class="ti {{op.icono}}" aria-hidden="true"></i> {{op.label}}
+          </button>
+        }
+      </div>
+    </div>
+
     <nav class="drawer__legal" aria-label="Información">
       <a routerLink="/paginas/protocolo" (click)="nav.close()">Protocolo</a>
       <a routerLink="/paginas/terminos-y-condiciones" (click)="nav.close()">Términos</a>

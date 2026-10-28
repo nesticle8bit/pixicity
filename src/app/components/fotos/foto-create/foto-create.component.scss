@@ -1,6 +1,6 @@
 .foto-create-cc {
-  $blue: #006595;
-  $accent: #0085c4;
+  $blue: light-dark(#006595, #1e99d3);
+  $accent: light-dark(#0085c4, #3daee3);
 
   .cc-grid {
     display: grid;
@@ -16,15 +16,15 @@
   .cc-main { display: flex; flex-direction: column; gap: 16px; }
 
   .cc-card {
-    background: #fff;
-    border: 1px solid #e6e6e6;
+    background: light-dark(#fff, #1e2124);
+    border: 1px solid light-dark(#e6e6e6, #3e454b);
     border-radius: 10px;
     padding: 16px 18px;
 
     &__head {
       margin-bottom: 14px;
       padding-bottom: 10px;
-      border-bottom: 1px solid #f0f0f0;
+      border-bottom: 1px solid light-dark(#f0f0f0, #373e44);
     }
 
     &__title {
@@ -47,7 +47,7 @@
       display: block;
       font-weight: 700;
       font-size: 12.5px;
-      color: #444;
+      color: light-dark(#444, #c4c4c4);
       margin-bottom: 6px;
     }
 
@@ -57,38 +57,38 @@
       justify-content: space-between;
       margin-bottom: 6px;
 
-      label { font-weight: 700; font-size: 12.5px; color: #444; margin: 0; }
+      label { font-weight: 700; font-size: 12.5px; color: light-dark(#444, #c4c4c4); margin: 0; }
     }
 
     input[type='text'],
     input[type='url'],
     textarea {
       width: 100%;
-      border: 1px solid #ccc;
+      border: 1px solid light-dark(#ccc, #4e575f);
       border-radius: 6px;
       padding: 9px 11px;
       font-size: 13px;
       outline: none;
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
-      &::placeholder { color: #6b6b6b; }
+      &::placeholder { color: light-dark(#6b6b6b, #adadad); }
       &:focus { border-color: $accent; box-shadow: 0 0 0 2px rgba(0, 133, 196, 0.13); }
     }
 
     textarea { resize: vertical; }
   }
 
-  .cc-req { color: #c0392b; }
+  .cc-req { color: light-dark(#c0392b, #df796f); }
 
   .cc-counter {
     font-size: 11px;
-    color: #6b6b6b;
-    &--warn { color: #e67e22; font-weight: 600; }
+    color: light-dark(#6b6b6b, #adadad);
+    &--warn { color: light-dark(#e67e22, #eb9951); font-weight: 600; }
   }
 
   .cc-err {
     display: block;
-    color: #c0392b;
+    color: light-dark(#c0392b, #df796f);
     font-size: 11px;
     margin-top: 5px;
   }
@@ -121,9 +121,9 @@
     }
 
     &--ghost {
-      background: #f1f3f4;
-      color: #555;
-      &:hover { background: #e7eaec; }
+      background: light-dark(#f1f3f4, #2d3237);
+      color: light-dark(#555, #bababa);
+      &:hover { background: light-dark(#e7eaec, #33393f); }
     }
   }
 
@@ -135,12 +135,12 @@
   }
 
   .cc-rules {
-    background: #fff;
-    border: 1px solid #e6e6e6;
+    background: light-dark(#fff, #1e2124);
+    border: 1px solid light-dark(#e6e6e6, #3e454b);
     border-radius: 10px;
     padding: 16px 18px;
     font-size: 12.5px;
-    color: #555;
+    color: light-dark(#555, #bababa);
 
     &__title {
       display: flex;
@@ -159,7 +159,7 @@
       align-items: center;
       gap: 5px;
       font-weight: 700;
-      color: #22b447;
+      color: light-dark(#22b447, #75e591);
       margin-top: 12px;
     }
 
@@ -168,7 +168,7 @@
       align-items: center;
       gap: 5px;
       font-weight: 700;
-      color: #c0392b;
+      color: light-dark(#c0392b, #df796f);
       margin-top: 12px;
     }
 
@@ -184,8 +184,8 @@
         line-height: 1.4;
       }
 
-      &--ok li::before { content: '✓'; position: absolute; left: 0; top: 0; color: #22b447; font-weight: 700; }
-      &--no li::before { content: '✕'; position: absolute; left: 0; top: 0; color: #c0392b; font-weight: 700; }
+      &--ok li::before { content: '✓'; position: absolute; left: 0; top: 0; color: light-dark(#22b447, #75e591); font-weight: 700; }
+      &--no li::before { content: '✕'; position: absolute; left: 0; top: 0; color: light-dark(#c0392b, #df796f); font-weight: 700; }
     }
   }
 
@@ -194,7 +194,7 @@
 
   .fc-tabs {
     display: inline-flex;
-    background: #eef2f4;
+    background: light-dark(#eef2f4, #28373e);
     border-radius: 20px;
     padding: 2px;
   }
@@ -205,7 +205,7 @@
     cursor: pointer;
     font-size: 12px;
     font-weight: 600;
-    color: #52606a;
+    color: light-dark(#52606a, #b5b5b5);
     padding: 5px 14px;
     border-radius: 18px;
     display: inline-flex;
@@ -226,13 +226,13 @@
 
   .fc-filename {
     font-size: 12px;
-    color: #666;
+    color: light-dark(#666, #b0b0b0);
   }
 
   .fc-ok {
     font-size: 12px;
     font-weight: 600;
-    color: #22b447;
+    color: light-dark(#22b447, #75e591);
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -243,7 +243,7 @@
       max-width: 100%;
       max-height: 320px;
       border-radius: 10px;
-      border: 1px solid #e0e0e0;
+      border: 1px solid light-dark(#e0e0e0, #414950);
       object-fit: contain;
     }
   }

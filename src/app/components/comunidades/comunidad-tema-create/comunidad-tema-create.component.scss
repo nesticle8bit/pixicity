@@ -2,13 +2,13 @@
 
 .cp-bar__comunidad {
   font-size: 13px;
-  color: #666;
+  color: light-dark(#666, #b0b0b0);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
   a {
-    color: #006595;
+    color: light-dark(#006595, #8ed2f2);
     font-weight: 700;
   }
 }
@@ -24,15 +24,15 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  color: #333;
+  color: light-dark(#333, #cfcfcf);
   text-decoration: none;
 
   strong {
-    color: #006595;
+    color: light-dark(#006595, #8ed2f2);
   }
 
   small {
-    color: #888;
+    color: light-dark(#888, #9c9c9c);
     font-size: 12px;
   }
 

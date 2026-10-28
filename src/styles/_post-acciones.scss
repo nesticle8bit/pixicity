@@ -1,7 +1,7 @@
 // Barra de puntos y acciones del post, estado en línea.
 
 .meta {
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   overflow: hidden;
   border-radius: 5px;
   margin: 0 8px;
@@ -16,23 +16,23 @@
   font-weight: 400;
   text-align: center;
   box-sizing: border-box;
-  color: #0c5fa9;
-  border-right: 1px solid #fafafa;
+  color: light-dark(#0c5fa9, #7dbaf1);
+  border-right: 1px solid light-dark(#fafafa, #31373c);
   float: left;
-  background: #f0f0f0;
+  background: light-dark(#f0f0f0, #2f3439);
 }
 
 .botones li a {
   height: 30px;
   margin: 0 4px 0 0 !important;
   line-height: 30px;
-  border: 1px solid #f0f0f0 !important;
+  border: 1px solid light-dark(#f0f0f0, #373e44) !important;
   font-size: 11px;
   font-weight: 700;
-  color: #666;
+  color: light-dark(#666, #b0b0b0);
   text-align: center;
   text-transform: uppercase;
-  background: #f0f0f0;
+  background: light-dark(#f0f0f0, #2f3439);
   display: block;
   padding: 0 1em;
 }
@@ -42,20 +42,20 @@
 }
 
 .botones li a:hover {
-  background: #e5e4e4 !important;
+  background: light-dark(#e5e4e4, #373d43) !important;
   text-decoration: none;
 }
 
 .botones li a:hover .favoritos {
-  color: #ffc700;
+  color: light-dark(#ffc700, #eccb55);
 }
 
 .botones li a:hover .denunciar {
-  color: #db4040;
+  color: light-dark(#db4040, #e05c5c);
 }
 
 .botones li a:hover .seguir {
-  color: #74d03c;
+  color: light-dark(#74d03c, #90d963);
 }
 
 .barpuntos a:hover {
@@ -70,7 +70,7 @@
   width: 10px;
   height: 10px;
   margin: 5px 5px 0 0;
-  background: #B3BAB6;
+  background: light-dark(#B3BAB6, #58626c);
 }
 
 .user-online {

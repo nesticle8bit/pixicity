@@ -121,6 +121,15 @@
     ]
   }
   </script>
+  <!-- Tema antes de pintar (sin parpadeo). Misma lógica que ThemeService.aplicar(). -->
+  <script>
+    try {
+      var t = localStorage.getItem('tema');
+      if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+      document.documentElement.setAttribute('data-bs-theme', t);
+    } catch (e) { }
+  </script>
 </head>
 
 <body>

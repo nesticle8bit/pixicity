@@ -9,7 +9,7 @@
   display: inline-flex;
   padding: 4px 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
+  background: light-dark(rgba(255, 255, 255, 0.92), rgba(30, 33, 36, 0.92));
 }
 
 .pf {
@@ -107,7 +107,7 @@
   padding: 1px 10px 1px 6px;
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--rango) 35%, transparent);
-  background: color-mix(in srgb, var(--rango) 10%, #fff);
+  background: color-mix(in srgb, var(--rango) 10%, light-dark(#fff, #1e2124));
   color: var(--rango);
   font-size: 0.78rem;
   font-weight: 700;
@@ -188,13 +188,13 @@
   font-size: 1.1rem;
   cursor: pointer;
 
-  &:hover { color: #b3261e; border-color: #e4b6b2; background: #fdf2f1; }
+  &:hover { color: light-dark(#b3261e, #e87b75); border-color: light-dark(#e4b6b2, #7f3630); background: light-dark(#fdf2f1, #431d19); }
   &:focus-visible { outline: 2px solid p.$marca; outline-offset: 2px; }
 
   &--activo {
-    color: #b3261e;
-    border-color: #e4b6b2;
-    background: #fdf2f1;
+    color: light-dark(#b3261e, #e87b75);
+    border-color: light-dark(#e4b6b2, #7f3630);
+    background: light-dark(#fdf2f1, #431d19);
   }
 }
 
@@ -274,7 +274,7 @@
   gap: 8px 12px;
   padding: 10px 20px;
   border-top: 1px dashed p.$borde;
-  background: #fffaf0;
+  background: light-dark(#fffaf0, #423519);
   font-size: 0.85rem;
 }
 
@@ -283,7 +283,7 @@
   align-items: center;
   gap: 4px;
   font-weight: 700;
-  color: #8a5a00;
+  color: light-dark(#8a5a00, #f3d294);
 }
 
 //  Pestañas

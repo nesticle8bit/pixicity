@@ -2,8 +2,8 @@
 @use 'variables' as *;
 
 .boxposts {
-  background: #fff;
-  border: 1px solid #e5e5e5;
+  background: light-dark(#fff, #1e2124);
+  border: 1px solid light-dark(#e5e5e5, #3e454c);
   border-radius: 3px;
   overflow: hidden;
 
@@ -12,13 +12,13 @@
   }
 
   & .titular {
-    background: #f5f5f5;
-    border-bottom: 1px solid #e5e5e5;
+    background: light-dark(#f5f5f5, #2b3035);
+    border-bottom: 1px solid light-dark(#e5e5e5, #3e454c);
     padding: 8px 10px;
     overflow: hidden;
 
     & h2 {
-      color: #555;
+      color: light-dark(#555, #bababa);
       font-size: 13px;
       font-weight: 700;
       margin: 0;
@@ -28,11 +28,11 @@
   }
 
   & .paginar {
-    background: #f5f5f5;
-    border-top: 1px solid #e5e5e5;
+    background: light-dark(#f5f5f5, #2b3035);
+    border-top: 1px solid light-dark(#e5e5e5, #3e454c);
     padding: 6px 10px;
     font-size: 11px;
-    color: #666;
+    color: light-dark(#666, #b0b0b0);
     text-align: center;
 
     & a {
@@ -63,9 +63,9 @@
 .lin {
   overflow: hidden;
   padding: 4px 0;
-  border-bottom: 1px dotted #e5e5e5;
+  border-bottom: 1px dotted light-dark(#e5e5e5, #3e454c);
   font-size: 12px;
-  color: #555;
+  color: light-dark(#555, #bababa);
 
   &:last-child {
     border-bottom: none;
@@ -81,8 +81,8 @@
    ============================================ */
 
 .boxposts .main-title {
-  background: #f5f5f5 !important;
-  border-bottom: 1px solid #e5e5e5;
+  background: light-dark(#f5f5f5, #2b3035) !important;
+  border-bottom: 1px solid light-dark(#e5e5e5, #3e454c);
   padding: 8px 10px !important;
   height: auto !important;
   margin-bottom: 0 !important;
@@ -93,7 +93,7 @@
     padding: 0 !important;
     font-size: 13px !important;
     font-weight: 700 !important;
-    color: #555 !important;
+    color: light-dark(#555, #bababa) !important;
     display: inline;
   }
 }
@@ -107,8 +107,8 @@
     display: inline-block;
     margin: 2px 3px;
     padding: 2px 8px;
-    background: #f0f0f0;
-    border: 1px solid #ddd;
+    background: light-dark(#f0f0f0, #2f3439);
+    border: 1px solid light-dark(#ddd, #434b52);
     border-radius: 3px;
     color: $link-color;
     font-size: 11px;
@@ -116,7 +116,7 @@
     text-decoration: none;
 
     &:hover {
-      background: #e0f0fa;
+      background: light-dark(#e0f0fa, #1e3c4f);
       border-color: $link-color;
     }
   }
@@ -125,11 +125,11 @@
 /* home last-posts list: V5 lipost style */
 .lista-posts {
   padding: 5px 0 5px 6px !important;
-  background: #f5f5f5;
-  border-top: #e0e0e0 1px solid !important;
+  background: light-dark(#f5f5f5, #2b3035);
+  border-top: light-dark(#e0e0e0, #414950) 1px solid !important;
 
   &:nth-child(2n+1) {
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
   }
 
   & a {

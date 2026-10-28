@@ -1,6 +1,6 @@
 .ctr-list {
-  background: #fff;
-  border: 1px solid #e5e5e5;
+  background: light-dark(#fff, #1e2124);
+  border: 1px solid light-dark(#e5e5e5, #3e454c);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -9,10 +9,10 @@
   display: flex;
   gap: 10px;
   padding: 11px 14px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid light-dark(#f0f0f0, #373e44);
 
   &:last-child { border-bottom: none; }
-  &:hover { background: #f9fbfc; }
+  &:hover { background: light-dark(#f9fbfc, #1d303a); }
 
   .ctr-avatar { flex: 0 0 auto; }
 
@@ -22,19 +22,19 @@
     display: block;
     font-size: 14px;
     font-weight: 600;
-    color: #1a1a1a;
+    color: light-dark(#1a1a1a, #dedede);
     text-decoration: none;
     line-height: 1.35;
 
-    &:hover { color: #006595; }
+    &:hover { color: light-dark(#006595, #8ed2f2); }
   }
 
   .ctr-meta {
     font-size: 11.5px;
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
     margin-top: 3px;
 
-    a { color: #006595; text-decoration: none; }
+    a { color: light-dark(#006595, #8ed2f2); text-decoration: none; }
 
     .ctr-com {
       font-weight: 600;

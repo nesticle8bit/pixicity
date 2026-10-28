@@ -16,13 +16,13 @@
     align-items: center;
     gap: 8px;
     padding: 8px 10px;
-    border: 1px solid #e1e5e8;
+    border: 1px solid light-dark(#e1e5e8, #3f464d);
     border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
 
-    &:hover { background: #f6f8f9; }
-    &.is-activo { border-color: #006595; background: #eef5f9; }
+    &:hover { background: light-dark(#f6f8f9, #253137); }
+    &.is-activo { border-color: #006595; background: light-dark(#eef5f9, #1b3747); }
     input { accent-color: #006595; }
   }
 }
@@ -39,5 +39,5 @@ textarea { resize: vertical; }
 .contador {
   text-align: right;
   font-size: 11px;
-  color: #6b7780;
+  color: light-dark(#6b7780, #a7a7a7);
 }

@@ -11,7 +11,7 @@
     ::ng-deep img {
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid #fff;
+      border: 2px solid light-dark(#fff, #2e3338);
       box-shadow: 0 1px 4px rgba(16, 24, 40, 0.12);
     }
   }
@@ -22,8 +22,8 @@
   position: relative;
   flex: 1;
   min-width: 0;
-  background: #fff;
-  border: 1px solid #e9edf0;
+  background: light-dark(#fff, #1e2124);
+  border: 1px solid light-dark(#e9edf0, #34424c);
   border-radius: 14px;
   padding: 14px 18px;
   box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
@@ -34,9 +34,9 @@
     top: 18px;
     width: 14px;
     height: 14px;
-    background: #fff;
-    border-left: 1px solid #e9edf0;
-    border-bottom: 1px solid #e9edf0;
+    background: light-dark(#fff, #1e2124);
+    border-left: 1px solid light-dark(#e9edf0, #34424c);
+    border-bottom: 1px solid light-dark(#e9edf0, #34424c);
     transform: rotate(45deg);
     border-radius: 0 0 0 4px;
   }
@@ -53,7 +53,7 @@
   &__user {
     font-weight: 700;
     font-size: 0.95rem;
-    color: #006595;
+    color: light-dark(#006595, #8ed2f2);
     text-decoration: none;
 
     &:hover { text-decoration: underline; }
@@ -61,7 +61,7 @@
 
   &__time {
     font-size: 0.74rem;
-    color: #9aa7b0;
+    color: light-dark(#9aa7b0, #8a8a8a);
     white-space: nowrap;
   }
 
@@ -69,7 +69,7 @@
     margin: 0;
     font-size: 1rem;
     line-height: 1.6;
-    color: #1f2a33;
+    color: light-dark(#1f2a33, #cad6df);
     word-wrap: break-word;
     overflow-wrap: anywhere;
     white-space: pre-wrap;
@@ -82,7 +82,7 @@
     flex-wrap: wrap;
     margin-top: 12px;
     padding-top: 10px;
-    border-top: 1px solid #eef2f4;
+    border-top: 1px solid light-dark(#eef2f4, #30414a);
   }
 }
 
@@ -92,7 +92,7 @@
   gap: 5px;
   font-size: 0.78rem;
   font-weight: 600;
-  color: #8a97a0;
+  color: light-dark(#8a97a0, #949494);
   text-decoration: none;
   padding: 5px 9px;
   border: 0;
@@ -104,7 +104,7 @@
 
   i { font-size: 0.95rem; }
 
-  &:hover { background: #eef5f9; color: #006595; }
+  &:hover { background: light-dark(#eef5f9, #1b3747); color: light-dark(#006595, #8ed2f2); }
 
   &:focus-visible {
     outline: 2px solid #006595;
@@ -114,29 +114,29 @@
   &:disabled { cursor: progress; }
 
   &--favorito.is-activo {
-    color: #b7791f;
+    color: light-dark(#b7791f, #e7b873);
 
-    &:hover { background: #fdf6e7; color: #975a16; }
+    &:hover { background: light-dark(#fdf6e7, #493a1c); color: light-dark(#975a16, #edbc85); }
   }
 
   &--reshout.is-activo {
-    color: #1e7f4f;
+    color: light-dark(#1e7f4f, #96e6be);
 
-    &:hover { background: #e8f5ee; color: #1e7f4f; }
+    &:hover { background: light-dark(#e8f5ee, #204a33); color: light-dark(#1e7f4f, #96e6be); }
   }
 
   &--reshout:disabled { opacity: 0.55; cursor: default; }
 
   &--megusta.is-activo {
-    color: #006595;
+    color: light-dark(#006595, #8ed2f2);
 
-    &:hover { background: #e6f1f7; }
+    &:hover { background: light-dark(#e6f1f7, #1d3c4d); }
   }
 
   &.is-activo i { animation: sv-pop 0.25s ease-out; }
 
   &--open {
-    color: #006a9e;
+    color: light-dark(#006a9e, #8ad0f2);
     margin-right: auto;
 
     &:hover { background: rgba(0, 133, 196, 0.1); }
@@ -161,7 +161,7 @@
   &__vacio {
     margin: 8px 0 0;
     font-size: 0.82rem;
-    color: #5d6b75;
+    color: light-dark(#5d6b75, #aeaeae);
   }
 }
 

@@ -1,7 +1,9 @@
-// Variables de color del sitio.
+// Variables de color del sitio. Cada una lleva su versión clara y oscura con light-dark(): el tema activo lo decide
+// el color-scheme de <html> (ver _tema.scss). No pasarlas por funciones de color de Sass (rgba, darken...): usar
+// color-mix() de CSS.
 
-$background-color: #F0EEEE;
-$main-color: #0B6EA5;
-$accent-color: #004160;
-// Enlaces y acentos de texto (contraste AA sobre blanco).
-$link-color: #006595;
+$background-color: light-dark(#F0EEEE, #121518);
+$main-color: light-dark(#0B6EA5, #2a8cc4);
+$accent-color: light-dark(#004160, #1d5f85);
+// Enlaces y acentos de texto (contraste AA sobre blanco / sobre la superficie oscura).
+$link-color: light-dark(#006595, #6cbcec);

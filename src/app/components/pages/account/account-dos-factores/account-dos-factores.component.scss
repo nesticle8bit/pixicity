@@ -1,5 +1,5 @@
-$marca: #006595;
-$tenue: #5d6b75;
+$marca: light-dark(#006595, #1e99d3);
+$tenue: light-dark(#5d6b75, #aeaeae);
 
 .df {
   max-width: 560px;
@@ -13,9 +13,9 @@ $tenue: #5d6b75;
   margin: 16px 0 6px;
   font-size: 1rem;
   font-weight: 700;
-  color: #26323a;
+  color: light-dark(#26323a, #c7d2da);
 
-  i { color: #1e7f4f; }
+  i { color: light-dark(#1e7f4f, #96e6be); }
 }
 
 .df__texto {
@@ -29,13 +29,13 @@ $tenue: #5d6b75;
   display: inline-block;
   margin: 0 0 8px;
   padding: 10px 14px;
-  border: 1px dashed #b9c6ce;
+  border: 1px dashed light-dark(#b9c6ce, #4c616d);
   border-radius: 8px;
-  background: #f4f8fa;
+  background: light-dark(#f4f8fa, #1d343f);
   font-family: ui-monospace, Consolas, monospace;
   font-size: 1rem;
   letter-spacing: 0.04em;
-  color: #26323a;
+  color: light-dark(#26323a, #c7d2da);
   user-select: all;
 }
 
@@ -61,7 +61,7 @@ $tenue: #5d6b75;
   margin: 0 0 14px;
   padding: 12px 16px;
   border-radius: 8px;
-  background: #f4f8fa;
+  background: light-dark(#f4f8fa, #1d343f);
   list-style: none;
   font-family: ui-monospace, Consolas, monospace;
 }
@@ -91,10 +91,10 @@ $tenue: #5d6b75;
   &:focus-visible { outline: 2px solid $marca; outline-offset: 2px; }
 
   &--suave {
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     color: $marca;
 
-    &:hover:not(:disabled) { background: #f4f8fa; }
+    &:hover:not(:disabled) { background: light-dark(#f4f8fa, #1d343f); }
   }
 
   &--peligro {

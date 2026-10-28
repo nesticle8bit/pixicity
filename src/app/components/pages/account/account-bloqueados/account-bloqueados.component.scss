@@ -8,7 +8,7 @@
   align-items: center;
   gap: 12px;
   padding: 10px 0;
-  border-bottom: 1px solid #eef1f3;
+  border-bottom: 1px solid light-dark(#eef1f3, #333f48);
 
   &:last-child { border-bottom: 0; }
 }
@@ -23,8 +23,8 @@
 .bq__vacio {
   text-align: center;
   padding: 32px 16px;
-  color: #5d6b75;
+  color: light-dark(#5d6b75, #aeaeae);
 
-  mat-icon { font-size: 40px; width: 40px; height: 40px; color: #9fb0bb; }
-  p { margin: 8px 0 2px; font-size: 0.95rem; font-weight: 700; color: #26323a; }
+  mat-icon { font-size: 40px; width: 40px; height: 40px; color: light-dark(#9fb0bb, #8ea2af); }
+  p { margin: 8px 0 2px; font-size: 0.95rem; font-weight: 700; color: light-dark(#26323a, #c7d2da); }
 }

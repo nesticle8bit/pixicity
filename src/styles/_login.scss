@@ -4,13 +4,13 @@
   & h1 {
     font-weight: 700;
     font-size: 30px;
-    color: #333;
+    color: light-dark(#333, #cfcfcf);
     margin: 0 0 15px;
   }
 
   & p {
     font-size: 16px;
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
     margin: 10px 0 0;
     padding: 0 0 10px;
   }
@@ -22,12 +22,12 @@
 
   & label {
     font-size: 13px;
-    color: #444;
+    color: light-dark(#444, #c4c4c4);
     margin-bottom: 5px;
   }
 
   .submit-btn {
-    background: url('/assets/images/btn-green.png') top center no-repeat #FFF;
+    background: url('/assets/images/btn-green.png') top center no-repeat light-dark(#FFF, #1e2124);
     border: 0;
     color: #fff;
     font-size: 16px;
@@ -37,12 +37,12 @@
     margin: 0 auto;
 
     &:hover {
-      background: url('/assets/images/btn-green-hover.png') no-repeat #FFF 24px 0;
+      background: url('/assets/images/btn-green-hover.png') no-repeat light-dark(#FFF, #1e2124) 24px 0;
       text-decoration: none;
     }
 
     &:active {
-      background: url('/assets/images/btn-green-active.png') no-repeat #FFF 24px 0;
+      background: url('/assets/images/btn-green-active.png') no-repeat light-dark(#FFF, #1e2124) 24px 0;
     }
   }
 }
@@ -52,11 +52,11 @@
   padding: 7px;
   font-size: 14px;
   font-weight: 700;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   box-shadow: 0 1px 1px #d3d3d3;
-  border-right: solid 1px #c6c6c6;
-  border-left: solid 1px #c6c6c6;
-  border-top: solid 1px #cecece;
-  border-bottom: solid 1px #a4a4a4;
+  border-right: solid 1px light-dark(#c6c6c6, #525b64);
+  border-left: solid 1px light-dark(#c6c6c6, #525b64);
+  border-top: solid 1px light-dark(#cecece, #4d555e);
+  border-bottom: solid 1px light-dark(#a4a4a4, #67737e);
   text-align: center !important;
 }

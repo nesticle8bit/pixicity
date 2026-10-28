@@ -182,7 +182,7 @@
 
   &--esqueleto {
     height: 270px;
-    background: linear-gradient(90deg, #eef2f5 25%, #f7f9fb 50%, #eef2f5 75%) 0 0 / 200% 100%;
+    background: linear-gradient(90deg, light-dark(#eef2f5, #253440) 25%, light-dark(#f7f9fb, #1e2d3b) 50%, light-dark(#eef2f5, #253440) 75%) 0 0 / 200% 100%;
     animation: us-brillo 1.2s infinite linear;
   }
 }
@@ -229,7 +229,7 @@
   height: 14px;
   border: 3px solid p.$superficie;
   border-radius: 50%;
-  background: #b8c2c9;
+  background: light-dark(#b8c2c9, #515a63);
 
   &--online { background: #2f9e44; }
 }
@@ -249,7 +249,7 @@
   padding: 1px 10px 1px 6px;
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--rango) 35%, transparent);
-  background: color-mix(in srgb, var(--rango) 10%, #fff);
+  background: color-mix(in srgb, var(--rango) 10%, light-dark(#fff, #1e2124));
   color: var(--rango);
   font-size: 0.75rem;
   font-weight: 700;
@@ -269,9 +269,9 @@
 .us-card__actividad {
   margin: 0;
   font-size: 0.75rem;
-  color: #8a97a0;
+  color: light-dark(#8a97a0, #949494);
 
-  &--online { color: #2f9e44; font-weight: 700; }
+  &--online { color: light-dark(#2f9e44, #85db95); font-weight: 700; }
 }
 
 .us-card__numeros {

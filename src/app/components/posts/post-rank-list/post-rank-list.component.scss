@@ -1,6 +1,6 @@
 .rank-widget {
-  background: #fff;
-  border: 1px solid #e5e5e5;
+  background: light-dark(#fff, #1e2124);
+  border: 1px solid light-dark(#e5e5e5, #3e454c);
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 10px;
@@ -30,7 +30,7 @@
   &__empty {
     padding: 18px 12px;
     text-align: center;
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
     font-size: 12px;
     line-height: 1.4;
 
@@ -55,11 +55,11 @@
   transition: background 0.12s ease;
 
   &+& {
-    border-top: 1px dotted #eee;
+    border-top: 1px dotted light-dark(#eee, #393f45);
   }
 
   &:hover {
-    background: #f4fafd;
+    background: light-dark(#f4fafd, #193441);
   }
 
   &__rank {
@@ -72,22 +72,22 @@
     font-size: 11px;
     font-weight: 700;
     border-radius: 50%;
-    background: #eef1f3;
-    color: #666;
+    background: light-dark(#eef1f3, #2b353c);
+    color: light-dark(#666, #b0b0b0);
 
     &.gold {
       background: #f6c343;
-      color: #5b4500;
+      color: light-dark(#5b4500, #f6e5ae);
     }
 
     &.silver {
-      background: #d3d8dd;
-      color: #3a3f44;
+      background: light-dark(#d3d8dd, #40474e);
+      color: light-dark(#3a3f44, #c7c7c7);
     }
 
     &.bronze {
       background: #e7b486;
-      color: #5e3a1c;
+      color: light-dark(#5e3a1c, #e6c6ab);
     }
   }
 
@@ -99,11 +99,11 @@
     overflow: hidden;
 
     ::ng-deep a {
-      color: #2a2a2a;
+      color: light-dark(#2a2a2a, #d4d4d4);
       text-decoration: none;
 
       &:hover {
-        color: #006595;
+        color: light-dark(#006595, #8ed2f2);
         text-decoration: underline;
       }
     }
@@ -116,8 +116,8 @@
     gap: 3px;
     font-size: 11px;
     font-weight: 700;
-    color: #006595;
-    background: #eaf6fc;
+    color: light-dark(#006595, #8ed2f2);
+    background: light-dark(#eaf6fc, #1b3948);
     padding: 2px 8px;
     border-radius: 10px;
 

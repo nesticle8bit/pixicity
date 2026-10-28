@@ -2,7 +2,7 @@
 
 .dotted-border {
   &--left {
-    border-left: 2px dashed rgb(231, 231, 231);
+    border-left: 2px dashed light-dark(#e7e7e7, #3a4047);
   }
 }
 
@@ -25,12 +25,12 @@
 
 .notificaciones-list {
   display: none;
-  background: #FFF;
+  background: light-dark(#FFF, #1e2124);
   position: absolute;
   z-index: 300;
   width: 306px;
   box-shadow: 5px 5px 10px rgb(0 0 0 / 10%);
-  border: solid 1px #dadada;
+  border: solid 1px light-dark(#dadada, #454d55);
   border-radius: 3px 3px 6px 6px;
   top: 42px;
 }
@@ -40,7 +40,7 @@
   content: "";
   top: -10px;
   border: 5px solid transparent;
-  border-bottom-color: #fff;
+  border-bottom-color: light-dark(#fff, #2e3338);
   z-index: 20;
 }
 
@@ -49,7 +49,7 @@
   margin: 0;
   font-weight: 700;
   line-height: 1;
-  color: #424242;
+  color: light-dark(#424242, #c6c6c6);
 }
 
 .notificaciones-list ul {
@@ -60,14 +60,14 @@
 .errr {
   text-align: center;
   padding: 10px 0;
-  border-top: 1px solid #ebebeb;
+  border-top: 1px solid light-dark(#ebebeb, #3b4148);
   display: block;
 }
 
 a.vemas {
   display: block;
-  background: #f8f8f8;
-  color: #0a6fc2;
+  background: light-dark(#f8f8f8, #292d32);
+  color: light-dark(#0a6fc2, #71b6ef);
   text-align: center;
   line-height: 18px;
   font-size: 10px;
@@ -78,11 +78,11 @@ a.vemas {
 
 .nada-amarillo {
   padding: 12px;
-  border: 2px dashed #DEDE88;
+  border: 2px dashed light-dark(#DEDE88, #979739);
   font-weight: 700;
   text-align: center;
   font-size: 14px;
-  color: #555;
-  background: #FFC;
+  color: light-dark(#555, #bababa);
+  background: light-dark(#FFC, #575721);
   margin: 7px 0;
 }

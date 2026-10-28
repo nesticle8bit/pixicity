@@ -1,6 +1,6 @@
-$accent: #006595;
-$borde: #e5e7eb;
-$texto-suave: #6b7280;
+$accent: light-dark(#006595, #1e99d3);
+$borde: light-dark(#e5e7eb, #3c434a);
+$texto-suave: light-dark(#6b7280, #a7a7a7);
 
 :host {
   display: block;
@@ -25,7 +25,7 @@ $texto-suave: #6b7280;
   padding: 10px 12px;
   border: 1px solid $borde;
   border-radius: 10px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
 
   > mat-icon {
     flex: none;
@@ -34,7 +34,7 @@ $texto-suave: #6b7280;
     padding: 5px;
     box-sizing: border-box;
     border-radius: 8px;
-    background: rgba($accent, .1);
+    background: color-mix(in srgb, $accent 10%, transparent);
     color: $accent;
   }
 
@@ -42,7 +42,7 @@ $texto-suave: #6b7280;
     display: block;
     font-size: 18px;
     line-height: 1.1;
-    color: #111827;
+    color: light-dark(#111827, #cfd7ea);
   }
 
   span {
@@ -51,8 +51,8 @@ $texto-suave: #6b7280;
   }
 
   &--warn > mat-icon {
-    background: #fff4e5;
-    color: #b45309;
+    background: light-dark(#fff4e5, #49361c);
+    color: light-dark(#b45309, #f0ac79);
   }
 }
 
@@ -75,12 +75,12 @@ $texto-suave: #6b7280;
   padding: 0 10px;
   border: 1px solid $borde;
   border-radius: 8px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   color: $texto-suave;
 
   &:focus-within {
     border-color: $accent;
-    box-shadow: 0 0 0 3px rgba($accent, .12);
+    box-shadow: 0 0 0 3px color-mix(in srgb, $accent 12%, transparent);
   }
 
   input {
@@ -90,7 +90,7 @@ $texto-suave: #6b7280;
     outline: none;
     background: transparent;
     font-size: 13px;
-    color: #111827;
+    color: light-dark(#111827, #cfd7ea);
   }
 }
 
@@ -119,11 +119,11 @@ $texto-suave: #6b7280;
 .tx-card {
   border: 1px solid $borde;
   border-radius: 10px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   transition: box-shadow .15s, border-color .15s;
 
   &:hover {
-    border-color: #d1d5db;
+    border-color: light-dark(#d1d5db, #485058);
   }
 
   &.is-open {
@@ -132,14 +132,14 @@ $texto-suave: #6b7280;
 
   &--skeleton {
     height: 58px;
-    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%) 0 0 / 200% 100%;
+    background: linear-gradient(90deg, light-dark(#f3f4f6, #2b3035) 25%, light-dark(#e5e7eb, #343a40) 50%, light-dark(#f3f4f6, #2b3035) 75%) 0 0 / 200% 100%;
     animation: tx-shimmer 1.2s infinite;
   }
 
   &--placeholder {
     min-height: 54px;
-    border: 2px dashed rgba($accent, .35);
-    background: rgba($accent, .04);
+    border: 2px dashed color-mix(in srgb, $accent 35%, transparent);
+    background: color-mix(in srgb, $accent 4%, transparent);
   }
 
   &__head {
@@ -164,7 +164,7 @@ $texto-suave: #6b7280;
     cursor: pointer;
 
     &:hover:not(:disabled) {
-      background: #f9fafb;
+      background: light-dark(#f9fafb, #232c35);
     }
 
     &:disabled {
@@ -193,21 +193,21 @@ $texto-suave: #6b7280;
     white-space: nowrap;
     font-size: 15px;
     font-weight: 700;
-    color: #111827;
+    color: light-dark(#111827, #cfd7ea);
   }
 
   &__seo {
     flex: none;
     padding: 1px 6px;
     border-radius: 4px;
-    background: #f3f4f6;
+    background: light-dark(#f3f4f6, #2b3035);
     color: $texto-suave;
     font-size: 11px;
   }
 
   &__chev {
     margin-left: auto;
-    color: #9ca3af;
+    color: light-dark(#9ca3af, #8a8a8a);
     transition: transform .15s;
   }
 
@@ -227,7 +227,7 @@ $texto-suave: #6b7280;
 
   &__body {
     padding: 4px 14px 12px 42px;
-    border-top: 1px solid #f3f4f6;
+    border-top: 1px solid light-dark(#f3f4f6, #353a40);
 
     @media (max-width: 575px) {
       padding-left: 14px;
@@ -241,13 +241,13 @@ $texto-suave: #6b7280;
   border: 0;
   border-radius: 4px;
   background: none;
-  color: #9ca3af;
+  color: light-dark(#9ca3af, #8a8a8a);
   cursor: grab;
 
   &:hover,
   &:focus-visible {
     color: $accent;
-    background: #f3f4f6;
+    background: light-dark(#f3f4f6, #2b3035);
   }
 }
 
@@ -257,7 +257,7 @@ $texto-suave: #6b7280;
   gap: 3px;
   padding: 2px 8px;
   border-radius: 12px;
-  background: rgba($accent, .1);
+  background: color-mix(in srgb, $accent 10%, transparent);
   color: $accent;
   font-size: 11px;
   font-weight: 600;
@@ -270,18 +270,18 @@ $texto-suave: #6b7280;
   }
 
   &--empty {
-    background: #f3f4f6;
+    background: light-dark(#f3f4f6, #2b3035);
     color: $texto-suave;
   }
 
   &--soft {
-    background: #f3f4f6;
-    color: #4b5563;
+    background: light-dark(#f3f4f6, #2b3035);
+    color: light-dark(#4b5563, #b9b9b9);
   }
 }
 
 .is-match {
-  background: #fef3c7;
+  background: light-dark(#fef3c7, #5b4f22);
   border-radius: 3px;
 }
 
@@ -301,23 +301,23 @@ $texto-suave: #6b7280;
   padding: 3px 4px 3px 4px;
   border: 1px solid $borde;
   border-radius: 16px;
-  background: #f9fafb;
+  background: light-dark(#f9fafb, #232c35);
   font-size: 12.5px;
-  color: #374151;
+  color: light-dark(#374151, #b9c2d0);
 
   &:hover {
-    border-color: #cbd5e1;
-    background: #fff;
+    border-color: light-dark(#cbd5e1, #3a4e65);
+    background: light-dark(#fff, #1e2124);
   }
 
   &.is-match {
     border-color: #f59e0b;
-    background: #fef3c7;
+    background: light-dark(#fef3c7, #5b4f22);
   }
 
   &.is-editing {
     border-color: $accent;
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
   }
 
   &__grip {
@@ -336,7 +336,7 @@ $texto-suave: #6b7280;
     min-width: 18px;
     padding: 0 5px;
     border-radius: 9px;
-    background: rgba($accent, .12);
+    background: color-mix(in srgb, $accent 12%, transparent);
     color: $accent;
     font-size: 10.5px;
     font-weight: 700;
@@ -350,12 +350,12 @@ $texto-suave: #6b7280;
     border: 0;
     border-radius: 50%;
     background: none;
-    color: #9ca3af;
+    color: light-dark(#9ca3af, #8a8a8a);
     line-height: 1;
     cursor: pointer;
 
-    &:hover:not(:disabled) { color: $accent; background: #eef2f7; }
-    &--del:hover:not(:disabled) { color: #c0392b; background: #fdecea; }
+    &:hover:not(:disabled) { color: $accent; background: light-dark(#eef2f7, #203044); }
+    &--del:hover:not(:disabled) { color: light-dark(#c0392b, #df796f); background: light-dark(#fdecea, #47201b); }
     &:disabled { opacity: .35; cursor: not-allowed; }
   }
 
@@ -391,9 +391,9 @@ $texto-suave: #6b7280;
   margin: 10px 0 0;
   padding: 0 10px;
   height: 34px;
-  border: 1px dashed #cbd5e1;
+  border: 1px dashed light-dark(#cbd5e1, #3a4e65);
   border-radius: 8px;
-  color: #9ca3af;
+  color: light-dark(#9ca3af, #8a8a8a);
 
   &:focus-within {
     border-style: solid;
@@ -420,9 +420,9 @@ $texto-suave: #6b7280;
 // - Vacío -
 .tx-empty {
   padding: 40px 16px;
-  border: 1px dashed #d1d5db;
+  border: 1px dashed light-dark(#d1d5db, #485058);
   border-radius: 12px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   text-align: center;
   color: $texto-suave;
 
@@ -430,13 +430,13 @@ $texto-suave: #6b7280;
     font-size: 44px;
     width: 44px;
     height: 44px;
-    color: rgba($accent, .55);
+    color: color-mix(in srgb, $accent 55%, transparent);
   }
 
   h3 {
     margin: 8px 0 4px;
     font-size: 16px;
-    color: #111827;
+    color: light-dark(#111827, #cfd7ea);
   }
 
   p {

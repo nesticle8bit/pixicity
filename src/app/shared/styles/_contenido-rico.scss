@@ -7,7 +7,7 @@
 // $etiquetas: nombre del lenguaje en la etiqueta del bloque de código. El editor no las incluye (pesan en el
 // presupuesto de estilos del componente) porque ahí el lenguaje se ve en el selector de la barra contextual.
 
-$acento: #1976d2;
+$acento: light-dark(#1976d2, #559ee7);
 
 // Etiqueta de cada lenguaje (misma lista que LENGUAJES_CODIGO en shared/helpers/contenido-post.ts)
 $lenguajes: (
@@ -23,9 +23,9 @@ $lenguajes: (
     position: relative;
     max-width: 100%;
     overflow-x: auto;
-    background: #f6f8fa;
-    color: #24292f;
-    border: 1px solid #d0d7de;
+    background: light-dark(#f6f8fa, #202d3a);
+    color: light-dark(#24292f, #d4d4d4);
+    border: 1px solid light-dark(#d0d7de, #414f5d);
     border-left: 4px solid $acento;
     border-radius: 6px;
     padding: 30px 14px 12px;
@@ -48,7 +48,7 @@ $lenguajes: (
       font-weight: 600;
       letter-spacing: .5px;
       text-transform: uppercase;
-      color: #6e7781;
+      color: light-dark(#6e7781, #a5a5a5);
       pointer-events: none;
       user-select: none;
     }
@@ -84,7 +84,7 @@ $lenguajes: (
 
   th,
   td {
-    border: 1px solid #d0d7de;
+    border: 1px solid light-dark(#d0d7de, #414f5d);
     padding: 6px 10px;
     min-width: 60px;
     vertical-align: top;
@@ -93,7 +93,7 @@ $lenguajes: (
 
   th,
   thead td {
-    background: #f6f8fa;
+    background: light-dark(#f6f8fa, #202d3a);
     font-weight: 700;
   }
 
@@ -108,7 +108,7 @@ $lenguajes: (
       caption-side: bottom;
       padding: 6px 4px 0;
       font-size: .85em;
-      color: #6e7781;
+      color: light-dark(#6e7781, #a5a5a5);
       font-style: italic;
       text-align: center;
     }
@@ -206,37 +206,37 @@ $lenguajes: (
 // Colores de highlight.js (tema claro tipo GitHub); solo en el post publicado
 @mixin resaltado {
   .hljs-comment,
-  .hljs-quote { color: #6e7781; font-style: italic; }
+  .hljs-quote { color: light-dark(#6e7781, #a5a5a5); font-style: italic; }
   .hljs-keyword,
   .hljs-selector-tag,
   .hljs-meta .hljs-keyword,
   .hljs-doctag,
-  .hljs-section { color: #cf222e; }
+  .hljs-section { color: light-dark(#cf222e, #e6646d); }
   .hljs-string,
   .hljs-regexp,
-  .hljs-meta .hljs-string { color: #0a3069; }
+  .hljs-meta .hljs-string { color: light-dark(#0a3069, #a1c2f5); }
   .hljs-number,
   .hljs-literal,
   .hljs-symbol,
   .hljs-bullet,
   .hljs-variable,
-  .hljs-template-variable { color: #0550ae; }
+  .hljs-template-variable { color: light-dark(#0550ae, #7eb1f1); }
   .hljs-title,
   .hljs-title.function_,
-  .hljs-title.class_ { color: #8250df; }
+  .hljs-title.class_ { color: light-dark(#8250df, #8a5be1); }
   .hljs-attr,
   .hljs-attribute,
   .hljs-property,
   .hljs-selector-class,
-  .hljs-selector-id { color: #116329; }
+  .hljs-selector-id { color: light-dark(#116329, #a5f0bb); }
   .hljs-built_in,
   .hljs-type,
-  .hljs-params { color: #953800; }
+  .hljs-params { color: light-dark(#953800, #f2b48e); }
   .hljs-tag,
-  .hljs-name { color: #116329; }
-  .hljs-meta { color: #6639ba; }
-  .hljs-addition { color: #116329; background: #dafbe1; }
-  .hljs-deletion { color: #82071e; background: #ffebe9; }
+  .hljs-name { color: light-dark(#116329, #a5f0bb); }
+  .hljs-meta { color: light-dark(#6639ba, #9674d4); }
+  .hljs-addition { color: light-dark(#116329, #a5f0bb); background: light-dark(#dafbe1, #1f512a); }
+  .hljs-deletion { color: light-dark(#82071e, #f395a7); background: light-dark(#ffebe9, #461f1b); }
   .hljs-emphasis { font-style: italic; }
   .hljs-strong { font-weight: 700; }
 }
@@ -255,10 +255,10 @@ $lenguajes: (
     align-items: center;
     gap: 4px;
     padding: 2px 8px;
-    border: 1px solid #d0d7de;
+    border: 1px solid light-dark(#d0d7de, #414f5d);
     border-radius: 5px;
-    background: #fff;
-    color: #57606a;
+    background: light-dark(#fff, #1e2124);
+    color: light-dark(#57606a, #b3b3b3);
     font: 600 11px/1.6 system-ui, sans-serif;
     cursor: pointer;
     opacity: .85;
@@ -266,12 +266,12 @@ $lenguajes: (
     &:hover,
     &:focus-visible {
       opacity: 1;
-      color: #1976d2;
+      color: light-dark(#1976d2, #61a7ec);
       border-color: #1976d2;
     }
 
     &.is-ok {
-      color: #1a7f37;
+      color: light-dark(#1a7f37, #95e9ad);
       border-color: #1a7f37;
     }
   }

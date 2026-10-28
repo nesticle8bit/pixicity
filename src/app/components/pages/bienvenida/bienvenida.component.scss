@@ -1,7 +1,7 @@
-$marca: #006595;
-$texto: #1f2a33;
-$suave: #6b7782;
-$borde: #e6eaee;
+$marca: light-dark(#006595, #1e99d3);
+$texto: light-dark(#1f2a33, #cad6df);
+$suave: light-dark(#6b7782, #a6a6a6);
+$borde: light-dark(#e6eaee, #35424e);
 
 .bv {
   max-width: 900px;
@@ -9,7 +9,7 @@ $borde: #e6eaee;
   padding: 28px;
   border: 1px solid $borde;
   border-radius: 16px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
 
   &__head {
     text-align: center;
@@ -67,7 +67,7 @@ $borde: #e6eaee;
     padding: 6px 12px 6px 6px;
     border: 1px solid $borde;
     border-radius: 999px;
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     font-weight: 600;
     font-size: 0.9rem;
     color: $suave;
@@ -80,7 +80,7 @@ $borde: #e6eaee;
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    background: #f1f4f6;
+    background: light-dark(#f1f4f6, #26333c);
     font-size: 0.85rem;
   }
 
@@ -95,8 +95,8 @@ $borde: #e6eaee;
   }
 
   &__item.is-hecho .bv-pasos__num {
-    background: #e3f4ea;
-    color: #1e8a4c;
+    background: light-dark(#e3f4ea, #1f5033);
+    color: light-dark(#1e8a4c, #8fe7b4);
   }
 }
 
@@ -107,9 +107,9 @@ $borde: #e6eaee;
   margin-bottom: 20px;
   padding: 10px 14px;
   border-radius: 10px;
-  background: #fffaf0;
-  border: 1px solid #f3d9a4;
-  color: #7a5310;
+  background: light-dark(#fffaf0, #423519);
+  border: 1px solid light-dark(#f3d9a4, #7e6430);
+  color: light-dark(#7a5310, #f1d096);
 }
 
 .bv-paso {
@@ -137,7 +137,7 @@ $borde: #e6eaee;
   margin: 0 2px;
   padding: 0 8px;
   border-radius: 999px;
-  background: #eef6fb;
+  background: light-dark(#eef6fb, #1a3546);
   font-weight: 600;
   font-size: 0.85rem;
   color: $marca;
@@ -163,7 +163,7 @@ $borde: #e6eaee;
 
   &.is-elegida {
     border-color: $marca;
-    background: #f5fafd;
+    background: light-dark(#f5fafd, #193241);
   }
 
   &__img {
@@ -174,7 +174,7 @@ $borde: #e6eaee;
     height: 48px;
     overflow: hidden;
     border-radius: 12px;
-    background: #eef6fb;
+    background: light-dark(#eef6fb, #1a3546);
     color: $marca;
     font-size: 1.4rem;
 
@@ -219,7 +219,7 @@ $borde: #e6eaee;
   padding: 6px 12px;
   border: 1px solid $marca;
   border-radius: 999px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   font-size: 0.85rem;
   font-weight: 700;
   color: $marca;
@@ -249,7 +249,7 @@ $borde: #e6eaee;
   cursor: pointer;
 
   &--suave {
-    background: #f1f4f6;
+    background: light-dark(#f1f4f6, #26333c);
     color: $texto;
   }
 }
@@ -264,9 +264,9 @@ $borde: #e6eaee;
   gap: 8px;
   padding: 14px;
   border-radius: 12px;
-  background: #e9f7ef;
+  background: light-dark(#e9f7ef, #1c4b30);
   font-weight: 600;
-  color: #1e7a45;
+  color: light-dark(#1e7a45, #99e6ba);
 }
 
 @media (max-width: 575.98px) {

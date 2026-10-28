@@ -1,9 +1,9 @@
-$marca: #006595;
-$texto: #1f2a33;
-$suave: #5f6b75;
-$borde: #e6eaee;
-$verde: #1e7a45;
-$oro: #b7791f;
+$marca: light-dark(#006595, #1e99d3);
+$texto: light-dark(#1f2a33, #cad6df);
+$suave: light-dark(#5f6b75, #aeaeae);
+$borde: light-dark(#e6eaee, #35424e);
+$verde: light-dark(#1e7a45, #30c46f);
+$oro: light-dark(#b7791f, #e1a650);
 
 :host {
   display: block;
@@ -14,7 +14,7 @@ $oro: #b7791f;
   overflow: hidden;
   border: 1px solid $borde;
   border-radius: 14px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
 }
 
 /* --- Puntos --- */
@@ -23,7 +23,7 @@ $oro: #b7791f;
   align-items: center;
   gap: 20px;
   padding: 18px 20px;
-  background: linear-gradient(180deg, #f6fafc 0%, #fff 100%);
+  background: linear-gradient(180deg, light-dark(#f6fafc, #193341) 0%, light-dark(#fff, #1e2124) 100%);
   border-bottom: 1px solid $borde;
 
   &__total {
@@ -34,8 +34,8 @@ $oro: #b7791f;
     min-width: 92px;
     padding: 8px 12px;
     border-radius: 12px;
-    background: #fff7e6;
-    border: 1px solid #f3dfb3;
+    background: light-dark(#fff7e6, #483a1b);
+    border: 1px solid light-dark(#f3dfb3, #77602d);
   }
 
   &__numero {
@@ -50,7 +50,7 @@ $oro: #b7791f;
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: #8a5a00;
+    color: light-dark(#8a5a00, #f3d294);
   }
 
   &__dar {
@@ -100,11 +100,11 @@ $oro: #b7791f;
 .pm-punto {
   width: 38px;
   height: 38px;
-  border: 1px solid #f0d9a6;
+  border: 1px solid light-dark(#f0d9a6, #7f6630);
   border-radius: 10px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   font-weight: 800;
-  color: #8a5a00;
+  color: light-dark(#8a5a00, #f3d294);
   cursor: pointer;
   transition: transform 0.12s, background-color 0.12s, color 0.12s;
 
@@ -132,7 +132,7 @@ $oro: #b7791f;
   background: none;
   font: inherit;
   font-weight: 700;
-  color: #005a85;
+  color: light-dark(#005a85, #97d6f3);
   text-decoration: underline;
   cursor: pointer;
 }
@@ -164,7 +164,7 @@ $oro: #b7791f;
   padding: 8px 14px;
   border: 1px solid $borde;
   border-radius: 999px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   font-size: 0.9rem;
   font-weight: 600;
   color: $texto;
@@ -187,8 +187,8 @@ $oro: #b7791f;
 
   &.is-activa {
     border-color: $marca;
-    background: #eef6fb;
-    color: #005a85;
+    background: light-dark(#eef6fb, #1a3546);
+    color: light-dark(#005a85, #97d6f3);
   }
 
   &:disabled {
@@ -204,8 +204,8 @@ $oro: #b7791f;
     color: $suave;
 
     &:hover:not(:disabled) {
-      border-color: #f1c4c0;
-      color: #b42318;
+      border-color: light-dark(#f1c4c0, #71312b);
+      color: light-dark(#b42318, #ec7c74);
     }
   }
 }
@@ -217,12 +217,12 @@ $oro: #b7791f;
   margin: 0 20px 12px;
   padding: 8px 12px;
   border-radius: 8px;
-  background: #f1f4f6;
+  background: light-dark(#f1f4f6, #26333c);
   font-size: 0.9rem;
   color: $texto;
 
   &--ok {
-    background: #e9f7ef;
+    background: light-dark(#e9f7ef, #1c4b30);
     color: $verde;
   }
 }
@@ -270,9 +270,9 @@ $oro: #b7791f;
   &__icono {
     font-size: 1.05rem;
 
-    &--seguidores { color: #5f6b75; }
-    &--puntos { color: #1d8fd0; }
-    &--visitas { color: #c2410c; }
+    &--seguidores { color: light-dark(#5f6b75, #aeaeae); }
+    &--puntos { color: light-dark(#1d8fd0, #63b8e9); }
+    &--visitas { color: light-dark(#c2410c, #ef9570); }
     &--favoritos { color: $oro; }
   }
 }
@@ -290,7 +290,7 @@ $oro: #b7791f;
 
   a {
     font-weight: 600;
-    color: #005a85;
+    color: light-dark(#005a85, #97d6f3);
   }
 }
 
@@ -377,7 +377,7 @@ $oro: #b7791f;
     text-decoration: none;
 
     ::ng-deep img {
-      border: 2px solid #fff;
+      border: 2px solid light-dark(#fff, #2e3338);
       border-radius: 50%;
       box-shadow: 0 0 0 1px $borde;
     }
@@ -410,7 +410,7 @@ $oro: #b7791f;
     height: 28px;
     padding: 0 6px;
     border-radius: 999px;
-    background: #f1f4f6;
+    background: light-dark(#f1f4f6, #26333c);
     font-size: 0.72rem;
     font-weight: 700;
     color: $suave;
@@ -419,7 +419,7 @@ $oro: #b7791f;
 
 .pm-gente__mas:hover,
 .pm-gente__mas:focus-visible {
-  background: #e3ebf1;
+  background: light-dark(#e3ebf1, #263b4b);
   color: $texto;
 }
 
@@ -437,7 +437,7 @@ $oro: #b7791f;
   gap: 8px 16px;
 
   &__hoy {
-    color: #8a5a00;
+    color: light-dark(#8a5a00, #f3d294);
   }
 
   &__editar {
@@ -445,7 +445,7 @@ $oro: #b7791f;
     align-items: center;
     gap: 4px;
     font-weight: 600;
-    color: #005a85;
+    color: light-dark(#005a85, #97d6f3);
   }
 }
 
@@ -459,7 +459,7 @@ $oro: #b7791f;
   &__barra {
     display: block;
     border-radius: 8px;
-    background: linear-gradient(90deg, #eef2f5 25%, #f7f9fa 50%, #eef2f5 75%);
+    background: linear-gradient(90deg, light-dark(#eef2f5, #253440) 25%, light-dark(#f7f9fa, #233037) 50%, light-dark(#eef2f5, #253440) 75%);
     background-size: 200% 100%;
     animation: pm-brillo 1.2s linear infinite;
   }

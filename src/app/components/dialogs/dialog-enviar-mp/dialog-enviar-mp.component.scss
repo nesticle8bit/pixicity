@@ -1,7 +1,7 @@
-$marca: #006595;
-$texto: #1f2a33;
-$suave: #5f6b75;
-$borde: #e3e8ec;
+$marca: light-dark(#006595, #1e99d3);
+$texto: light-dark(#1f2a33, #cad6df);
+$suave: light-dark(#5f6b75, #aeaeae);
+$borde: light-dark(#e3e8ec, #374550);
 
 :host .NgxEditor__Wrapper {
   height: 230px;
@@ -31,7 +31,7 @@ $borde: #e3e8ec;
   padding: 10px 12px;
   border: 1px solid $borde;
   border-radius: 12px;
-  background: #f6fafc;
+  background: light-dark(#f6fafc, #193341);
 
   &__etiqueta {
     font-size: 0.8rem;
@@ -84,7 +84,7 @@ $borde: #e3e8ec;
   margin: 0;
   padding: 4px;
   list-style: none;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   border: 1px solid $borde;
   border-radius: 10px;
   box-shadow: 0 10px 24px rgba(16, 24, 40, 0.14);
@@ -100,7 +100,7 @@ $borde: #e3e8ec;
     cursor: pointer;
 
     &.is-activa {
-      background: #eef6fb;
+      background: light-dark(#eef6fb, #1a3546);
     }
   }
 }
@@ -110,7 +110,7 @@ $borde: #e3e8ec;
 }
 
 .mp-error {
-  color: #b42318;
+  color: light-dark(#b42318, #ec7c74);
 }
 
 .mp-captcha {
@@ -125,6 +125,6 @@ $borde: #e3e8ec;
   margin: 0;
   padding: 10px 12px;
   border-radius: 8px;
-  background: #fff1f0;
-  color: #b42318;
+  background: light-dark(#fff1f0, #421c19);
+  color: light-dark(#b42318, #ec7c74);
 }

@@ -1,6 +1,6 @@
 .top-list {
     & b {
-        color: #b5b5b5;
+        color: light-dark(#b5b5b5, #818181);
         font-size: 30px;
         float: left;
         margin-right: 8px;
@@ -9,7 +9,7 @@
     }
 
     & h3 {
-        color: #545454;
+        color: light-dark(#545454, #bbbbbb);
         font-size: 12px;
         margin: 0;
         font-weight: 700;
@@ -17,7 +17,7 @@
     }
 
     & p {
-        color: #545454;
+        color: light-dark(#545454, #bbbbbb);
         margin: 0;
         font-size: 12px;
         line-height: 15px;
@@ -28,5 +28,5 @@
 .puntos {
     font-weight: bold;
     text-shadow: 0 1px 0 #fff;
-    color: #69900f;
+    color: light-dark(#69900f, #d2f289);
 }

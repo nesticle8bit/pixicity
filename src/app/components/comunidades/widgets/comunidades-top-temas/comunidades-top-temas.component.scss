@@ -5,10 +5,10 @@
   padding: 8px 10px;
   text-decoration: none;
   color: inherit;
-  border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid light-dark(#f2f2f2, #363c42);
 
   &:last-child { border-bottom: none; }
-  &:hover { background: #f6fafd; }
+  &:hover { background: light-dark(#f6fafd, #182f40); }
 
   .ctt-rank {
     flex: 0 0 18px;
@@ -16,18 +16,18 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 10px; font-weight: 700;
     border-radius: 50%;
-    background: #eef1f3; color: #666;
+    background: light-dark(#eef1f3, #2b353c); color: light-dark(#666, #b0b0b0);
   }
 
   .ctt-body { flex: 1; min-width: 0; }
-  strong { display: block; font-size: 12.5px; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .ctt-com { font-size: 11px; color: #6b6b6b; }
-  .ctt-views { font-size: 11px; color: #6b6b6b; white-space: nowrap; }
+  strong { display: block; font-size: 12.5px; color: light-dark(#1a1a1a, #dedede); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ctt-com { font-size: 11px; color: light-dark(#6b6b6b, #adadad); }
+  .ctt-views { font-size: 11px; color: light-dark(#6b6b6b, #adadad); white-space: nowrap; }
 }
 
 .ctt-empty {
   padding: 12px;
   text-align: center;
-  color: #6b6b6b;
+  color: light-dark(#6b6b6b, #adadad);
   font-size: 12px;
 }

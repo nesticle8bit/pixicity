@@ -48,42 +48,41 @@
     }
 
     &--active {
-      background: #fff;
+      background: light-dark(#fff, #1e2124);
 
       &>a {
-        color: #00354e;
+        color: light-dark(#00354e, #b5e2f7);
       }
     }
   }
 }
 
 .sub-menu {
-  background: rgb(233, 233, 233);
-  background: linear-gradient(0deg, rgba(233, 233, 233, 1) 0%, rgba(255, 255, 255, 1) 60%);
+  background: linear-gradient(0deg, light-dark(#e9e9e9, #24292e) 0%, light-dark(#fff, #1e2124) 60%);
 
-  border: 1px solid #ccc;
+  border: 1px solid light-dark(#ccc, #4e575f);
   border-top: none;
 
   &--item {
-    color: #105CB6;
+    color: light-dark(#105CB6, #74adf0);
     padding: 6px 10px 6px 10px;
     font-size: .8rem;
     font-weight: bold;
 
     &--active {
-      background: #eee;
+      background: light-dark(#eee, #30353b);
       border-radius: 18px;
 
       &>a {
-        color: #00354e;
+        color: light-dark(#00354e, #b5e2f7);
       }
     }
   }
 }
 
 .container--home {
-  background: #fff;
-  border: 1px solid #ccc;
+  background: light-dark(#fff, #1e2124);
+  border: 1px solid light-dark(#ccc, #4e575f);
   border-top: none;
   padding-top: 10px;
 }
@@ -96,11 +95,11 @@
     & span {
       display: block;
       text-align: center;
-      background-color: #fff;
+      background-color: light-dark(#fff, #1e2124);
       margin: 0 auto;
       font-size: 18px;
       padding: 0 20px;
-      color: #6b6b6b;
+      color: light-dark(#6b6b6b, #adadad);
       font-family: Georgia, "Times New Roman", Times, serif;
       font-style: italic;
 
@@ -127,10 +126,10 @@
 .main-title span {
   font-weight: 700;
   font-size: 16px !important;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   padding-right: 10px;
   line-height: 1.2em;
-  color: #666;
+  color: light-dark(#666, #b0b0b0);
   float: left;
 }
 
@@ -152,4 +151,17 @@ a.identificarse {
   text-shadow: 0 1px 0 #000;
   margin: 26px 5px 0px 5px;
   font-size: .85rem;
+}
+
+// Botón de tema para visitantes (con sesión va en .userInfoLogin).
+.tema-invitado {
+  margin: 21px 4px 0;
+  padding: 2px 6px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 1.15rem;
+  line-height: 1;
+  text-shadow: 0 1px 0 #000;
+  cursor: pointer;
 }

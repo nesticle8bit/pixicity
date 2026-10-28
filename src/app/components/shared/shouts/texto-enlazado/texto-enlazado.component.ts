@@ -31,7 +31,7 @@ export function partirTexto(texto: string): Parte[] {
   template: `@for (p of partes(); track $index) {@switch (p.tipo) {@case ('tag') {<a class="te-tag" [routerLink]="['/hashtag', p.valor.toLowerCase()]">#{{ p.valor }}</a>}@case ('mencion') {<a class="te-mencion" [routerLink]="['/perfil', p.valor]">{{ '@' }}{{ p.valor }}</a>}@default {{{ p.valor }}}}}`,
   styles: `
     :host { display: contents; }
-    a { font-weight: 600; color: #006595; text-decoration: none; }
+    a { font-weight: 600; color: light-dark(#006595, #8ed2f2); text-decoration: none; }
     a:hover { text-decoration: underline; }
   `,
 })

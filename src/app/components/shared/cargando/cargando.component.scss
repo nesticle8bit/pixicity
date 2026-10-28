@@ -1,14 +1,14 @@
 :host {
   --cargando-tam: 28px;
   --cargando-grosor: 3px;
-  --cargando-color: #006595;
+  --cargando-color: light-dark(#006595, #1e99d3);
   --cargando-pista: rgba(0, 101, 149, 0.15);
 
   display: inline-flex;
   align-items: center;
   gap: 10px;
   vertical-align: middle;
-  color: #5f6b73;
+  color: light-dark(#5f6b73, #aeaeae);
   font-size: 13px;
   // Si la respuesta llega enseguida, no se llega a ver (evita el parpadeo de un loader de 100 ms).
   animation: cargando-aparecer 0.2s ease-out 0.15s both;

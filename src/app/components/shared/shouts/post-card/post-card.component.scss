@@ -10,16 +10,16 @@
   gap: 12px;
   margin-top: 4px;
   padding: 10px 12px;
-  border: 1px solid #e9edf0;
+  border: 1px solid light-dark(#e9edf0, #34424c);
   // border-left: 3px solid burbuja.$marca;
   border-radius: 10px;
-  background: #f7f9fb;
+  background: light-dark(#f7f9fb, #1e2d3b);
   color: inherit;
   text-decoration: none;
   transition: background 0.12s ease;
 
   &:hover {
-    background: #eef5f9;
+    background: light-dark(#eef5f9, #1b3747);
 
     .pc-post__titulo {
       color: burbuja.$marca;
@@ -52,7 +52,7 @@
     font-size: 0.95rem;
     font-weight: 700;
     line-height: 1.35;
-    color: #1f2a33;
+    color: light-dark(#1f2a33, #cad6df);
     overflow-wrap: anywhere;
     transition: color 0.12s ease;
   }

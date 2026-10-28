@@ -50,15 +50,15 @@ export type ReglaEliminarResultado = string | undefined;
   `,
   styles: `
     .dre-motivo, .dre-ayuda { margin: 0 0 10px; }
-    .dre-ayuda { color: #6b7782; }
+    .dre-ayuda { color: light-dark(#6b7782, #a6a6a6); }
     .dre-lista { display: flex; flex-direction: column; gap: 6px; }
     .dre-opcion {
       display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px;
-      border: 1px solid #e6eaee; border-radius: 8px; cursor: pointer;
+      border: 1px solid light-dark(#e6eaee, #35424e); border-radius: 8px; cursor: pointer;
       span { display: flex; flex-direction: column; }
-      small { color: #6b7782; }
+      small { color: light-dark(#6b7782, #a6a6a6); }
       input { margin-top: 4px; }
-      &.is-elegida { border-color: #c62828; background: #fff5f5; }
+      &.is-elegida { border-color: #c62828; background: light-dark(#fff5f5, #3f1818); }
     }
   `,
 })

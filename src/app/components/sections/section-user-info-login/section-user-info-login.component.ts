@@ -13,6 +13,7 @@ import { Router, RouterLink } from '@angular/router';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { MensajesBadgeService } from 'src/app/services/shared/mensajes-badge.service';
 import { MobileNavService } from 'src/app/services/shared/mobile-nav.service';
+import { TemaService } from 'src/app/services/shared/tema.service';
 import { debounceTime, merge } from 'rxjs';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -56,6 +57,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly mobileNav = inject(MobileNavService);
+  public readonly tema = inject(TemaService);
 
   public formGroup: FormGroup;
   public displayMenu: boolean = false;

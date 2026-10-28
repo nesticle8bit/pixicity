@@ -6,7 +6,7 @@
 
 .dip-total {
   font-weight: 500;
-  color: #5f6b75;
+  color: light-dark(#5f6b75, #aeaeae);
 }
 
 .dip-lista {
@@ -23,7 +23,7 @@
   padding: 8px 0;
 
   & + & {
-    border-top: 1px solid #e6eaee;
+    border-top: 1px solid light-dark(#e6eaee, #35424e);
   }
 }
 
@@ -33,12 +33,12 @@
   gap: 10px;
   min-width: 0;
   font-weight: 600;
-  color: #1f2a33;
+  color: light-dark(#1f2a33, #cad6df);
   text-decoration: none;
 
   &:hover .dip-nombre,
   &:focus-visible .dip-nombre {
-    color: #005a85;
+    color: light-dark(#005a85, #97d6f3);
     text-decoration: underline;
   }
 
@@ -59,20 +59,20 @@
   align-items: center;
   gap: 10px;
   font-size: 0.82rem;
-  color: #5f6b75;
+  color: light-dark(#5f6b75, #aeaeae);
 }
 
 .dip-puntos {
   padding: 1px 8px;
   border-radius: 999px;
-  background: #fff7e6;
-  color: #8a5a00;
+  background: light-dark(#fff7e6, #483a1b);
+  color: light-dark(#8a5a00, #f3d294);
 }
 
 .dip-vacio {
   padding: 16px 0;
   text-align: center;
-  color: #5f6b75;
+  color: light-dark(#5f6b75, #aeaeae);
 }
 
 .dip-mas {

@@ -9,7 +9,7 @@
 }
 
 .accordion-bg .mat-expansion-panel {
-  border: 1px solid #dde3e8;
+  border: 1px solid light-dark(#dde3e8, #394855);
   border-radius: 10px !important;
   box-shadow: none !important;
 }
@@ -19,7 +19,7 @@
 }
 
 .field {
-  border-bottom: 1px solid #eef1f3;
+  border-bottom: 1px solid light-dark(#eef1f3, #333f48);
   padding: 12px 0;
   margin-top: 0 !important;
 

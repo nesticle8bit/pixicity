@@ -39,7 +39,7 @@
 
                 @if (acciones.length === 0) {
                 <tr>
-                  <td colspan="3" class="text-center text-muted py-4" style="color:#777 !important;">
+                  <td colspan="3" class="text-center text-muted py-4" style="color:light-dark(#777, #a6a6a6) !important;">
                     Esperando actividad en vivo…
                   </td>
                 </tr>
@@ -54,7 +54,7 @@
         <h2 class="main-title my-2">
           <span>Estadísticas</span>
 
-          <strong class="float-end" style="background: #fff; margin-top: -2px; padding-left: 7px;">
+          <strong class="float-end" style="background: light-dark(#fff, #1e2124); margin-top: -2px; padding-left: 7px;">
             @if (play) {
             <button type="button" class="en-vivo-toggle" (click)="play = !play" aria-label="Pausar actualizaciones en vivo"><img loading="lazy" decoding="async" src="/assets/images/icons/icon_pause.png" alt="" aria-hidden="true"/></button>
             }

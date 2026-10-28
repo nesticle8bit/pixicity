@@ -41,7 +41,7 @@ ol li {
 // queda legible sobre fondo claro (WCAG AA) y conserva su tono.
 .sidebar-rango,
 .coment-rango {
-  color: color-mix(in srgb, var(--rango, currentColor) 50%, #000);
+  color: color-mix(in srgb, var(--rango, currentColor) 50%, light-dark(#000, #ededed));
 }
 
 // "Saltar al contenido": primer elemento enfocable de la página, visible solo con foco.

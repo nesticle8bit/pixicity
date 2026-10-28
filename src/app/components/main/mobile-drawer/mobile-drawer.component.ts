@@ -7,6 +7,7 @@ import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { MOBILE_MAX_WIDTH, MobileNavService } from 'src/app/services/shared/mobile-nav.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
+import { PreferenciaTema, TemaService } from 'src/app/services/shared/tema.service';
 import { isLinkActive, linksFor, NavLink } from '../main-nav.config';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { enNavegador } from '../../../shared/helpers/plataforma';
@@ -31,6 +32,12 @@ const SWIPE_CLOSE_PX = 70;
 })
 export class MobileDrawerComponent implements OnInit {
   nav = inject(MobileNavService);
+  tema = inject(TemaService);
+  readonly opcionesTema: { valor: PreferenciaTema; label: string; icono: string }[] = [
+    { valor: 'light', label: 'Claro', icono: 'ti-sun' },
+    { valor: 'dark', label: 'Oscuro', icono: 'ti-moon' },
+    { valor: 'sistema', label: 'Sistema', icono: 'ti-device-desktop' },
+  ];
   private securityService = inject(IHttpSecurityService);
   private signalrService = inject(SignalrService);
   private formBuilder = inject(FormBuilder);

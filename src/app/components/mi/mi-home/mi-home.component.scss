@@ -1,8 +1,8 @@
-$marca: #006595;
-$texto: #26323a;
-$tenue: #5d6b75;
-$borde: #e3e9ed;
-$fondo-suave: #f4f8fa;
+$marca: light-dark(#006595, #1e99d3);
+$texto: light-dark(#26323a, #c7d2da);
+$tenue: light-dark(#5d6b75, #aeaeae);
+$borde: light-dark(#e3e9ed, #354652);
+$fondo-suave: light-dark(#f4f8fa, #1d343f);
 
 .mi {
   padding-top: 12px;
@@ -135,7 +135,7 @@ $fondo-suave: #f4f8fa;
   }
 
   &--suave {
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     color: $marca;
 
     &:hover { background: $fondo-suave; }
@@ -154,7 +154,7 @@ $fondo-suave: #f4f8fa;
   padding: 16px;
   border: 1px solid $borde;
   border-radius: 12px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
 
   &__titulo {
     margin: 0 0 12px;
@@ -226,10 +226,10 @@ $fondo-suave: #f4f8fa;
   &:hover:not(:disabled) { background: #00527a; }
 
   &.is-siguiendo {
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     color: $marca;
 
-    &:hover:not(:disabled) { border-color: #c62828; color: #c62828; background: #fff; }
+    &:hover:not(:disabled) { border-color: #c62828; color: light-dark(#c62828, #e16b6b); background: light-dark(#fff, #1e2124); }
   }
 
   &:focus-visible {
@@ -255,13 +255,13 @@ $fondo-suave: #f4f8fa;
   margin-left: 4px;
   border: 0;
   border-radius: 50%;
-  background: #eef2f5;
+  background: light-dark(#eef2f5, #253440);
   color: $tenue;
   font-size: 0.9rem;
   vertical-align: middle;
   cursor: pointer;
 
-  &:hover { background: #e2e8ec; color: $texto; }
+  &:hover { background: light-dark(#e2e8ec, #2f3d47); color: $texto; }
   &:focus-visible { outline: 2px solid $marca; outline-offset: 2px; }
 }
 
@@ -274,16 +274,16 @@ $fondo-suave: #f4f8fa;
   width: 100%;
   margin-bottom: 14px;
   padding: 9px 14px;
-  border: 1px solid rgba($marca, 0.35);
+  border: 1px solid color-mix(in srgb, $marca 35%, transparent);
   border-radius: 999px;
-  background: #e8f3f9;
+  background: light-dark(#e8f3f9, #1c3a4b);
   font: inherit;
   font-size: 0.85rem;
   font-weight: 700;
   color: $marca;
   cursor: pointer;
 
-  &:hover { background: #dbedf6; }
+  &:hover { background: light-dark(#dbedf6, #204254); }
   &:focus-visible { outline: 2px solid $marca; outline-offset: 2px; }
 }
 
@@ -368,7 +368,7 @@ $fondo-suave: #f4f8fa;
   cursor: pointer;
 
   &.is-activa {
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     opacity: 1;
     color: $marca;
     box-shadow: 0 1px 2px rgba(16, 24, 40, 0.1);

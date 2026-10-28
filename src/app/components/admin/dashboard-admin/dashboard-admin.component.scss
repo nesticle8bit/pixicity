@@ -1,10 +1,10 @@
-$main: #0B6EA5;
-$accent: #004160;
-$ink: #2b3440;
-$muted: #5d6b75; // contraste AA sobre blanco (el anterior daba 3.6:1)
-$line: #e5e8ec;
-$surface: #fff;
-$alert: #c0392b;
+$main: light-dark(#0B6EA5, #2ba0e1);
+$accent: light-dark(#004160, #1777a4);
+$ink: light-dark(#2b3440, #c3ccd7);
+$muted: light-dark(#5d6b75, #aeaeae); // contraste AA sobre blanco (el anterior daba 3.6:1)
+$line: light-dark(#e5e8ec, #38414d);
+$surface: light-dark(#fff, #1e2124);
+$alert: light-dark(#c0392b, #dc6c61);
 
 :host {
   display: block;
@@ -36,7 +36,7 @@ $alert: #c0392b;
   }
 
   &__stamp {
-    color: #a3abb4;
+    color: light-dark(#a3abb4, #868686);
   }
 }
 
@@ -256,7 +256,7 @@ $alert: #c0392b;
     height: 1rem;
   }
 
-  &--up { color: #1e8f5a; }
+  &--up { color: light-dark(#1e8f5a, #8ce7bc); }
   &--down { color: $alert; }
 }
 
@@ -513,7 +513,7 @@ $alert: #c0392b;
 
   &__pts {
     font-weight: 700;
-    color: #1e8f5a;
+    color: light-dark(#1e8f5a, #8ce7bc);
     font-size: .78rem;
   }
 }
@@ -609,7 +609,7 @@ $alert: #c0392b;
 .adm-pill {
   padding: .12rem .45rem;
   border-radius: 20px;
-  background: #f1f3f5;
+  background: light-dark(#f1f3f5, #29313a);
   color: $muted;
   font-size: .7rem;
   font-weight: 600;
@@ -681,7 +681,7 @@ $alert: #c0392b;
 .adm-skeleton {
   min-height: 118px;
   border-color: transparent;
-  background: linear-gradient(100deg, #eef0f3 30%, #f7f8f9 50%, #eef0f3 70%);
+  background: linear-gradient(100deg, light-dark(#eef0f3, #2b323c) 30%, light-dark(#f7f8f9, #292d32) 50%, light-dark(#eef0f3, #2b323c) 70%);
   background-size: 200% 100%;
   animation: adm-shimmer 1.3s ease-in-out infinite;
 

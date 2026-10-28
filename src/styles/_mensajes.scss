@@ -16,17 +16,17 @@
   align-items: flex-start;
   gap: 8px;
   padding: 10px 10px 10px 4px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid light-dark(#eee, #393f45);
   border-left: 3px solid transparent;
   transition: background 0.15s;
 
   // Zebra: filas pares en gris, impares sin fondo (hover / no leído / seleccionado la sobrescriben).
   &--alt {
-    background: #f3f3f3;
+    background: light-dark(#f3f3f3, #2c3136);
   }
 
   &:hover {
-    background: #f5f8ff;
+    background: light-dark(#f5f8ff, #18243f);
   }
 
   &__avatar {
@@ -74,7 +74,7 @@
   }
 
   &__preview {
-    color: #666;
+    color: light-dark(#666, #b0b0b0);
     font-size: 13px;
   }
 }

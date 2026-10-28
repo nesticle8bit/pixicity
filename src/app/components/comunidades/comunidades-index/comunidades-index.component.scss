@@ -10,7 +10,7 @@
 
     input {
       flex: 1;
-      border: 1px solid #ccc;
+      border: 1px solid light-dark(#ccc, #4e575f);
       border-radius: 6px 0 0 6px;
       padding: 8px 10px;
       font-size: 13px;
@@ -39,11 +39,11 @@
     font-weight: 600;
     padding: 5px 12px;
     border-radius: 14px;
-    background: #eef1f3;
-    color: #555;
+    background: light-dark(#eef1f3, #2b353c);
+    color: light-dark(#555, #bababa);
 
     &:hover {
-      background: #dde6ea;
+      background: light-dark(#dde6ea, #2f434c);
     }
 
     &.active {
@@ -61,8 +61,8 @@
   .com-card {
     display: flex;
     flex-direction: column;
-    background: #fff;
-    border: 1px solid #e5e5e5;
+    background: light-dark(#fff, #1e2124);
+    border: 1px solid light-dark(#e5e5e5, #3e454c);
     border-radius: 10px;
     overflow: hidden;
     text-decoration: none;
@@ -101,15 +101,15 @@
       font-size: 15px;
       font-weight: 700;
       margin: 0 0 4px;
-      color: #222;
+      color: light-dark(#222, #d9d9d9);
     }
 
     &__cat {
       display: inline-block;
       font-size: 11px;
       font-weight: 600;
-      color: #006595;
-      background: #eaf6fc;
+      color: light-dark(#006595, #8ed2f2);
+      background: light-dark(#eaf6fc, #1b3948);
       padding: 1px 8px;
       border-radius: 10px;
       margin-bottom: 6px;
@@ -117,7 +117,7 @@
 
     &__desc {
       font-size: 12px;
-      color: #666;
+      color: light-dark(#666, #b0b0b0);
       line-height: 1.4;
       margin: 0 0 8px;
       display: -webkit-box;
@@ -130,7 +130,7 @@
       display: flex;
       gap: 14px;
       font-size: 12px;
-      color: #888;
+      color: light-dark(#888, #9c9c9c);
 
       i {
         margin-right: 2px;
@@ -150,10 +150,10 @@
       min-width: 30px;
       text-align: center;
       padding: 5px 8px;
-      border: 1px solid #ddd;
+      border: 1px solid light-dark(#ddd, #434b52);
       border-radius: 5px;
       font-size: 13px;
-      color: #555;
+      color: light-dark(#555, #bababa);
 
       &.active {
         background: #006595;

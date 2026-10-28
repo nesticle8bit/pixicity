@@ -7,10 +7,10 @@
 
 .inpie {
   padding: 10px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   height: 50px;
   border: solid;
-  border-color: rgb(255 255 255 / 0%) #ccc #ccc;
+  border-color: rgb(255 255 255 / 0%) light-dark(#ccc, #4e575f) light-dark(#ccc, #4e575f);
   border-width: 1px 1px 0;
 }
 
@@ -18,12 +18,12 @@
   margin: 0;
   padding: 0 8px;
   width: 240px;
-  border: 1px solid #CCC;
+  border: 1px solid light-dark(#CCC, #4e575f);
   border-radius: 30px;
 }
 
 input.bbcuerpo {
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   padding: 5px;
   border: 0;
   width: 195px;
@@ -36,7 +36,7 @@ input.bbboton {
   float: right;
   padding: 0;
   margin: 0;
-  background: url('/assets/images/magn.gif') center 8px no-repeat #fff;
+  background: url('/assets/images/magn.gif') center 8px no-repeat light-dark(#fff, #1e2124);
   width: 24px; // mínimo táctil (WCAG 2.5.8)
   height: 28px;
   border: 0;
@@ -45,7 +45,7 @@ input.bbboton {
 
 .footer {
   padding: 12px 0;
-  background: #FFF;
+  background: light-dark(#FFF, #1e2124);
   margin: 10px auto;
 
   & a {
@@ -55,10 +55,10 @@ input.bbboton {
 }
 
 .copyright {
-  color: #979797;
+  color: light-dark(#979797, #939393);
 
   & a {
-    color: #979797;
+    color: light-dark(#979797, #939393);
   }
 }
 
@@ -77,14 +77,14 @@ input.bbboton {
 }
 
 input.buscador {
-  background: #FFF !important;
+  background: light-dark(#FFF, #1e2124) !important;
   display: block;
   padding: 8px;
   width: 360px;
-  border-right: solid 1px #c6c6c6;
-  border-left: solid 1px #c6c6c6;
-  border-top: solid 1px #cecece;
-  border-bottom: solid 1px #a4a4a4;
+  border-right: solid 1px light-dark(#c6c6c6, #525b64);
+  border-left: solid 1px light-dark(#c6c6c6, #525b64);
+  border-top: solid 1px light-dark(#cecece, #4d555e);
+  border-bottom: solid 1px light-dark(#a4a4a4, #67737e);
   box-shadow: 0 1px 1px #d3d3d3;
   font-size: 13px;
   font-family: Helvetica, Arial;
@@ -98,8 +98,8 @@ input.buscador:focus {
 }
 
 a.ircielo {
-  color: #6b6b6b !important;
-  border-bottom: 1px dotted #999;
+  color: light-dark(#6b6b6b, #adadad) !important;
+  border-bottom: 1px dotted light-dark(#999, #6e7a87);
   float: right;
   text-decoration: none;
   margin: 7px 0;

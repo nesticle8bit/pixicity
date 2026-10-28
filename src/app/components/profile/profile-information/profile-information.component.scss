@@ -29,7 +29,7 @@
   grid-template-columns: 180px 1fr;
   gap: 12px;
   padding: 9px 10px;
-  border-bottom: 1px dotted #ccd5db;
+  border-bottom: 1px dotted light-dark(#ccd5db, #43545f);
   font-size: 0.88rem;
 
   dt {

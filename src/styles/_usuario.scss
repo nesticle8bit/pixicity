@@ -18,13 +18,13 @@
   }
 
   & .avatar-top h3 {
-    color: #4ea1f0;
+    color: light-dark(#4ea1f0, #51a0ec);
     font-size: 14px;
     margin: 0;
   }
 
   & .avatar-top p {
-    color: #545454;
+    color: light-dark(#545454, #bbbbbb);
     margin: 0;
     font-size: 12px;
     line-height: 15px;
@@ -51,10 +51,10 @@
 
   & a.gris,
   #ised a.gris {
-    background: #c8c8c8;
+    background: light-dark(#c8c8c8, #4b545c);
 
     &:hover {
-      background: #bebebe;
+      background: light-dark(#bebebe, #535c65);
     }
   }
 
@@ -70,13 +70,13 @@
 
 .bg {
   &-white {
-    background-color: #fff;
+    background-color: light-dark(#fff, #1e2124);
   }
 }
 
 .pixicity-popover.info {
   background: url('../assets/images/y.png') repeat-x silver;
-  border: 1px solid #ccc;
+  border: 1px solid light-dark(#ccc, #4e575f);
 }
 
 .pixicity-popover em {
@@ -86,7 +86,7 @@
 }
 
 .pixicity-popover.info em {
-  color: #000;
+  color: light-dark(#000, #ededed);
   text-shadow: 0 1px 0 #eee;
 }
 
@@ -205,7 +205,7 @@ li.usernameMenu:hover a.nick {
 
 .userInfoLogin ul li.logout {
   border-right: none;
-  border-left: 1px solid #dcdcdc;
+  border-left: 1px solid light-dark(#dcdcdc, #444b53);
   padding: 7px 10px;
 }
 
@@ -253,7 +253,7 @@ li.usernameMenu:hover a.nick {
 }
 
 .userInfoLogin ul li div.notificaciones-list ul li:first-child {
-  border-top: 0px solid #EEE !important;
+  border-top: 0px solid light-dark(#EEE, #393f45) !important;
 }
 
 img.punti {
@@ -274,7 +274,7 @@ a.nick span {
   width: 183px;
   height: 34px;
   font-size: 14px;
-  color: #6b6b6b;
+  color: light-dark(#6b6b6b, #adadad);
   border-radius: 0;
 }
 
@@ -298,7 +298,7 @@ a.nick span {
 }
 
 .onblur_effect {
-  color: #B1B1B1;
+  color: light-dark(#B1B1B1, #838383);
   font-family: Helvetica;
 }
 
@@ -321,11 +321,11 @@ a.nick span {
 #modalBody textarea {
   width: 100%;
   padding: 8px 10px;
-  background: #fff;
-  border-right: solid 1px #c6c6c6;
-  border-left: solid 1px #c6c6c6;
-  border-top: solid 1px #cecece;
-  border-bottom: solid 1px #a4a4a4;
+  background: light-dark(#fff, #1e2124);
+  border-right: solid 1px light-dark(#c6c6c6, #525b64);
+  border-left: solid 1px light-dark(#c6c6c6, #525b64);
+  border-top: solid 1px light-dark(#cecece, #4d555e);
+  border-bottom: solid 1px light-dark(#a4a4a4, #67737e);
   box-shadow: 0 1px 1px #d3d3d3;
   font-size: 13px;
   font-family: Helvetica, Arial;

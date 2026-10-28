@@ -5,27 +5,27 @@
   min-width: 0;
   max-width: 100%;
 
-  --re-border: #e0e0e0;
+  --re-border: light-dark(#e0e0e0, #414950);
   --re-radius: 4px;
-  --re-bg: #fff;
-  --re-text: #333;
-  --re-muted: #aaa;
-  --re-accent: #1976d2;
-  --re-toolbar-bg: #f8f8f8;
-  --re-toolbar-text: #444;
-  --re-toolbar-hover: #e3e3e3;
-  --re-toolbar-active: #e3ecf9;
-  --re-separator: #ddd;
-  --re-menu-bg: #fff;
-  --re-menu-hover: #f0f4ff;
+  --re-bg: light-dark(#fff, #1e2124);
+  --re-text: light-dark(#333, #cfcfcf);
+  --re-muted: light-dark(#aaa, #878787);
+  --re-accent: light-dark(#1976d2, #559ee7);
+  --re-toolbar-bg: light-dark(#f8f8f8, #292d32);
+  --re-toolbar-text: light-dark(#444, #c4c4c4);
+  --re-toolbar-hover: light-dark(#e3e3e3, #383e44);
+  --re-toolbar-active: light-dark(#e3ecf9, #1d314d);
+  --re-separator: light-dark(#ddd, #434b52);
+  --re-menu-bg: light-dark(#fff, #1e2124);
+  --re-menu-hover: light-dark(#f0f4ff, #192442);
   --re-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  --re-code-bg: #f0f0f0;
-  --re-quote-border: #ccc;
-  --re-quote-text: #555;
+  --re-code-bg: light-dark(#f0f0f0, #2f3439);
+  --re-quote-border: light-dark(#ccc, #4e575f);
+  --re-quote-text: light-dark(#555, #bababa);
   --re-bubble-bg: #2b2b2b;
   --re-bubble-text: #e8e8e8;
   --re-bubble-hover: rgba(255, 255, 255, 0.14);
-  --re-bubble-accent: #6cb6ff;
+  --re-bubble-accent: light-dark(#6cb6ff, #7eb6ed);
   --re-bubble-separator: rgba(255, 255, 255, 0.18);
   --re-bubble-input-bg: #1f1f1f;
 }
@@ -416,7 +416,7 @@
   // app-rich-editor-bubble, por eso estos estilos viven aquí (ngTemplateOutletContext → .is-dark).
   &__palette-section.is-dark {
     .rich-editor__palette-label {
-      color: #9a9a9a;
+      color: light-dark(#9a9a9a, #919191);
     }
 
     .rich-editor__swatches button.swatch {
@@ -496,7 +496,7 @@
     width: 12px;
     height: 12px;
     box-sizing: border-box;
-    border: 2px solid #fff;
+    border: 2px solid light-dark(#fff, #2e3338);
     border-radius: 50%;
     background: var(--re-accent);
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);

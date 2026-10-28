@@ -1,5 +1,5 @@
 import { expect, Locator, Page, test } from '@playwright/test';
-import { simularApi } from './api-simulada';
+import { simularApi, TEMA } from './api-simulada';
 
 /**
  * Editor de posts en un navegador real: imágenes insertadas donde está el cursor y cortar / copiar / pegar
@@ -21,7 +21,10 @@ test.beforeEach(async ({ page }) => {
   await page.route('**/api/fotos/imagenes', (r) => r.fulfill(ok(`/assets/images/avatar.png?n=${++subidas}`)));
   const sesion = { usuario: { id: 'MQ==', userName: 'lector_tres', rango: 'Usuario', avatar: '' }, token: `Bearer ${jwt}`, refreshToken: 'r' };
   await page.addInitScript((s) => localStorage.setItem('taringas', s), JSON.stringify(sesion));
-  await page.goto('/crear/post');
+  await page.route(/\/api\/comunidades\/por-nombre\/demo(\?|$)/, (r) =>
+    r.fulfill(ok({ id: 1, nombre: 'Comunidad Demo', nombreCorto: 'demo', esMiembro: true, rol: 'Miembro' })));
+  // En /crear/post no se suben imágenes (solo por URL): el editor se prueba en el de temas, que sí sube.
+  await page.goto(`/comunidades/${TEMA.comunidad.nombreCorto}/nuevo-tema`);
 });
 
 const editor = (page: Page) => page.locator('.rich-editor__content');
@@ -331,7 +334,15 @@ test('mientras sube la imagen se puede seguir escribiendo en otro lado sin que l
   await expect.poll(async () => (await estructura(ed)).filter((b) => b)).toEqual(['Arriba[img 1]', 'Abajo más']);
 });
 
+test('en el creador de posts no se suben imágenes: solo desde una URL', async ({ page }) => {
+  await page.goto('/crear/post');
+  await page.locator('.rich-editor__toolbar button[title="Insertar imagen"]').click();
+  await expect(page.getByRole('button', { name: 'Desde una URL' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Subir desde el equipo' })).toHaveCount(0);
+});
+
 test('al bajar en un post largo la barra del editor queda visible debajo de la barra de publicar', async ({ page }) => {
+  await page.goto('/crear/post');
   const ed = editor(page);
   await ed.click();
   for (let i = 0; i < 40; i++) await page.keyboard.press('Enter');

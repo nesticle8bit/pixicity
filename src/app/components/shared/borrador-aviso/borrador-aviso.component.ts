@@ -28,10 +28,10 @@ import { MatIcon } from '@angular/material/icon';
         gap: 8px 12px;
         padding: 10px 14px;
         margin-bottom: 12px;
-        border: 1px solid #b6d4fe;
+        border: 1px solid light-dark(#b6d4fe, #2a4770);
         border-radius: 6px;
-        background: #e7f1ff;
-        color: #084298;
+        background: light-dark(#e7f1ff, #1b2e48);
+        color: light-dark(#084298, #88b3f2);
         font-size: 14px;
       }
       .borrador-aviso__texto {

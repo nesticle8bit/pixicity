@@ -38,18 +38,18 @@
 
 .list-posts--zebra {
   padding: 7px 10px;
-  background: #f5f5f5;
-  border-top: #e0e0e0 1px solid;
+  background: light-dark(#f5f5f5, #2b3035);
+  border-top: light-dark(#e0e0e0, #414950) 1px solid;
   font-size: .76rem;
 
   &:nth-child(2n+1) {
-    border-top: #FFF 1px solid;
-    background: #FFF;
+    border-top: light-dark(#FFF, #2e3338) 1px solid;
+    background: light-dark(#FFF, #1e2124);
   }
 
   & strong {
     width: 21px;
-    color: #666;
+    color: light-dark(#666, #b0b0b0);
     font-weight: 700;
     margin-right: 2px;
   }
@@ -58,20 +58,20 @@
     font-weight: bold;
     text-shadow: 0 1px 0 #fff;
     // #69900f no llegaba a 4,5:1 sobre las filas cebra (Lighthouse/axe).
-    color: #4f720b;
+    color: light-dark(#4f720b, #d6f49b);
   }
 }
 
 .view-more-list {
-  background: #eff9fd;
+  background: light-dark(#eff9fd, #1a3844);
   text-align: center;
   border-radius: 0 0 5px 5px;
-  border-top: 1px solid #cfe9f4;
+  border-top: 1px solid light-dark(#cfe9f4, #275568);
   padding: 3px;
 }
 
 .tops-container {
-  border: #f0d35b solid 1px;
+  border: light-dark(#f0d35b, #a5913f) solid 1px;
 
   & .card-body {
     padding: 0;
@@ -79,15 +79,15 @@
 
   & .card-header {
     padding: 7px 10px;
-    border-top: 1px solid #FFF;
-    border-bottom: 1px solid #f0d35b;
-    background: #f9ecb7;
+    border-top: 1px solid light-dark(#FFF, #2e3338);
+    border-bottom: 1px solid light-dark(#f0d35b, #a5913f);
+    background: light-dark(#f9ecb7, #675a27);
     overflow: hidden;
     border-radius: 3px 3px 0 0;
 
     & h2 {
       text-shadow: 0 1px 0 rgb(255 255 255 / 70%);
-      color: #b59130;
+      color: light-dark(#b59130, #dbc076);
       float: left;
       padding-right: 10px;
       margin: 0;
@@ -108,7 +108,7 @@
 .text {
 
   &-rose {
-    color: #E1306C;
+    color: light-dark(#E1306C, #e65687);
   }
 }
 
@@ -121,7 +121,7 @@
 }
 
 .bg-white {
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
 }
 
 .align {

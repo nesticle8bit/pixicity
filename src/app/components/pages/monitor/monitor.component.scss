@@ -1,4 +1,4 @@
-$accent: #006595;
+$accent: light-dark(#006595, #1e99d3);
 
 // - Barra de búsqueda y filtros rápidos -
 .mon-toolbar {
@@ -19,13 +19,13 @@ $accent: #006595;
     left: 10px;
     top: 50%;
     transform: translateY(-50%);
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
   }
 
   input {
     width: 100%;
     padding: 7px 30px 7px 32px;
-    border: 1px solid #ddd;
+    border: 1px solid light-dark(#ddd, #434b52);
     border-radius: 8px;
     font-size: 13px;
     outline: none;
@@ -47,36 +47,36 @@ $accent: #006595;
     transform: translateY(-50%);
     border: none;
     background: none;
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
     cursor: pointer;
     padding: 2px;
 
     &:hover {
-      color: #333;
+      color: light-dark(#333, #cfcfcf);
     }
   }
 }
 
 .mon-chips {
   display: inline-flex;
-  border: 1px solid #ddd;
+  border: 1px solid light-dark(#ddd, #434b52);
   border-radius: 8px;
   overflow: hidden;
 
   button {
     border: none;
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     padding: 6px 10px;
     font-size: 12.5px;
-    color: #555;
+    color: light-dark(#555, #bababa);
     cursor: pointer;
 
     & + button {
-      border-left: 1px solid #ddd;
+      border-left: 1px solid light-dark(#ddd, #434b52);
     }
 
     &:hover {
-      background: #f4f4f4;
+      background: light-dark(#f4f4f4, #2c3135);
     }
 
     &.active {
@@ -92,7 +92,7 @@ $accent: #006595;
   align-items: center;
   justify-content: space-between;
   font-size: 12px;
-  color: #666;
+  color: light-dark(#666, #b0b0b0);
   margin-bottom: 6px;
 }
 
@@ -110,7 +110,7 @@ $accent: #006595;
   }
 
   &:disabled {
-    color: #bbb;
+    color: light-dark(#bbb, #7d7d7d);
     cursor: default;
   }
 }
@@ -132,14 +132,14 @@ $accent: #006595;
   align-items: flex-start;
   gap: 10px;
   padding: 10px 8px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid light-dark(#eee, #393f45);
 
   &:hover {
-    background: #fafafa;
+    background: light-dark(#fafafa, #272c30);
   }
 
   &--nueva {
-    background: #f2f8fc;
+    background: light-dark(#f2f8fc, #193243);
     box-shadow: inset 3px 0 0 $accent;
   }
 
@@ -171,7 +171,7 @@ $accent: #006595;
 // - Panel derecho -
 .mon-masivo {
   font-size: 12px;
-  color: #6b6b6b;
+  color: light-dark(#6b6b6b, #adadad);
   margin: 6px 0 4px;
 }
 
@@ -185,7 +185,7 @@ $accent: #006595;
     margin: 0 0 4px;
     font-size: 13px;
     font-weight: 700;
-    color: #333;
+    color: light-dark(#333, #cfcfcf);
     cursor: pointer;
   }
 

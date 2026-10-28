@@ -9,13 +9,13 @@ i.ti {
   gap: 10px;
   padding: 4px 10px 4px 4px;
   margin-bottom: 6px;
-  border-bottom: 1px solid #e5e5e5;
-  background: #fafafa;
+  border-bottom: 1px solid light-dark(#e5e5e5, #3e454c);
+  background: light-dark(#fafafa, #272c30);
 
   &__info {
     flex: 1;
     font-size: 13px;
-    color: #666;
+    color: light-dark(#666, #b0b0b0);
   }
 
   &__delete {
@@ -27,7 +27,7 @@ i.ti {
 
 .msg-item {
   &--unread {
-    background: #f4f9ff;
+    background: light-dark(#f4f9ff, #182a40);
     border-left-color: #3c8dbc;
 
     .msg-item__from,
@@ -37,7 +37,7 @@ i.ti {
   }
 
   &--selected {
-    background: #e8f0fe;
+    background: light-dark(#e8f0fe, #1b2b48);
   }
 
   &__check {
@@ -51,11 +51,11 @@ i.ti {
   }
 
   &__status {
-    color: #6b6b6b;
+    color: light-dark(#6b6b6b, #adadad);
     font-size: 13px;
 
     &--read {
-      color: #3c8dbc;
+      color: light-dark(#3c8dbc, #73afd2);
     }
   }
 
@@ -73,7 +73,7 @@ i.ti {
   display: flex;
   gap: 6px;
   margin: 10px 0;
-  border-bottom: 1px solid #e6eaee;
+  border-bottom: 1px solid light-dark(#e6eaee, #35424e);
 
   &__tab {
     display: inline-flex;
@@ -84,12 +84,12 @@ i.ti {
     border-bottom: 3px solid transparent;
     background: none;
     font-weight: 600;
-    color: #5f6b75;
+    color: light-dark(#5f6b75, #aeaeae);
     cursor: pointer;
 
     &.is-activa {
       border-bottom-color: #006595;
-      color: #005a85;
+      color: light-dark(#005a85, #97d6f3);
     }
 
     &:focus-visible {
@@ -102,9 +102,9 @@ i.ti {
     min-width: 20px;
     padding: 0 6px;
     border-radius: 999px;
-    background: #eef2f5;
+    background: light-dark(#eef2f5, #253440);
     font-size: 0.75rem;
-    color: #1f2a33;
+    color: light-dark(#1f2a33, #cad6df);
   }
 }
 
@@ -114,13 +114,13 @@ i.ti {
 }
 
 .msg-item__silenciada {
-  color: #5f6b75;
+  color: light-dark(#5f6b75, #aeaeae);
 }
 
 .msg-item__visto {
   margin-top: 2px;
   font-size: 0.75rem;
-  color: #1e7a45;
+  color: light-dark(#1e7a45, #99e6ba);
 }
 
 .msg-item__acciones {
@@ -140,13 +140,13 @@ i.ti {
   border-radius: 50%;
   background: transparent;
   font-size: 1.1rem;
-  color: #5f6b75;
+  color: light-dark(#5f6b75, #aeaeae);
   cursor: pointer;
 
   &:hover,
   &:focus-visible {
-    background: #eef2f5;
-    color: #005a85;
+    background: light-dark(#eef2f5, #253440);
+    color: light-dark(#005a85, #97d6f3);
   }
 
   &:focus-visible {

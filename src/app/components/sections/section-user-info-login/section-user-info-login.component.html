@@ -150,6 +150,13 @@
                     <a [routerLink]="['/favoritos']" class="vemas">Más</a>
                   </div>
                 </li>
+                <li class="tema">
+                  <a class="menu" role="button" tabindex="0" [matTooltip]="tema.efectivo() === 'dark' ? 'Tema claro' : 'Tema oscuro'"
+                    [matTooltipPosition]="'above'" [attr.aria-label]="tema.efectivo() === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+                    (click)="tema.alternar()" (keydown.enter)="tema.alternar()" (keydown.space)="tema.alternar(); $event.preventDefault()">
+                    <i class="ti" [class.ti-sun]="tema.efectivo() === 'dark'" [class.ti-moon]="tema.efectivo() !== 'dark'" aria-hidden="true"></i>
+                  </a>
+                </li>
                 <li class="usernameMenu" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
                   <a class="nick menu"
                     [routerLink]="['/perfil/' + currentUser.usuario.userName]">
@@ -183,5 +190,10 @@
           <div>
             <a class="registro float-end" [routerLink]="['/registro']" aria-label="Crear una cuenta"></a>
             <a class="identificarse float-end" [routerLink]="['/login']">Identificarme</a>
+            <button type="button" class="tema-invitado float-end" (click)="tema.alternar()"
+              [attr.aria-label]="tema.efectivo() === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+              [matTooltip]="tema.efectivo() === 'dark' ? 'Tema claro' : 'Tema oscuro'">
+              <i class="ti" [class.ti-sun]="tema.efectivo() === 'dark'" [class.ti-moon]="tema.efectivo() !== 'dark'" aria-hidden="true"></i>
+            </button>
           </div>
         }

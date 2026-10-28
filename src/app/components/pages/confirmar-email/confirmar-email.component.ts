@@ -52,17 +52,17 @@ type Estado = 'confirmando' | 'ok' | 'error';
       max-width: 480px;
       margin: 48px auto;
       padding: 32px 24px;
-      border: 1px solid #e3e9ed;
+      border: 1px solid light-dark(#e3e9ed, #354652);
       border-radius: 14px;
-      background: #fff;
+      background: light-dark(#fff, #1e2124);
       text-align: center;
     }
     .confirmar__icono { font-size: 3rem; }
-    .confirmar__icono--ok { color: #1e7f4f; }
-    .confirmar__icono--error { color: #b3261e; }
-    .confirmar__titulo { margin: 0; font-size: 1.35rem; font-weight: 800; color: #26323a; }
-    .confirmar__texto { margin: 0; color: #5d6b75; }
-    .confirmar__ayuda { margin: 4px 0 0; font-size: 0.82rem; color: #5d6b75; }
+    .confirmar__icono--ok { color: light-dark(#1e7f4f, #96e6be); }
+    .confirmar__icono--error { color: light-dark(#b3261e, #e87b75); }
+    .confirmar__titulo { margin: 0; font-size: 1.35rem; font-weight: 800; color: light-dark(#26323a, #c7d2da); }
+    .confirmar__texto { margin: 0; color: light-dark(#5d6b75, #aeaeae); }
+    .confirmar__ayuda { margin: 4px 0 0; font-size: 0.82rem; color: light-dark(#5d6b75, #aeaeae); }
     .confirmar__boton {
       margin-top: 10px;
       padding: 9px 20px;

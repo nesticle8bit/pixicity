@@ -1,9 +1,9 @@
-$marca: #006595;
-$texto: #26323a;
-$tenue: #5d6b75;
-$borde: #e3e9ed;
-$fondo-suave: #f4f8fa;
-$favorito: #b7791f;
+$marca: light-dark(#006595, #1e99d3);
+$texto: light-dark(#26323a, #c7d2da);
+$tenue: light-dark(#5d6b75, #aeaeae);
+$borde: light-dark(#e3e9ed, #354652);
+$fondo-suave: light-dark(#f4f8fa, #1d343f);
+$favorito: light-dark(#b7791f, #e1a650);
 
 .fav {
   padding-top: 12px;
@@ -72,13 +72,13 @@ $favorito: #b7791f;
   min-width: 20px;
   padding: 1px 6px;
   border-radius: 10px;
-  background: #e8eef2;
+  background: light-dark(#e8eef2, #273945);
   font-size: 0.72rem;
   text-align: center;
   color: $tenue;
 
   .is-activa & {
-    background: rgba($marca, 0.12);
+    background: color-mix(in srgb, $marca 12%, transparent);
     color: $marca;
   }
 }
@@ -110,13 +110,13 @@ $favorito: #b7791f;
     border: 1px solid $borde;
     border-radius: 8px;
     font-size: 0.88rem;
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     transition: border-color 0.12s ease, box-shadow 0.12s ease;
 
     &:focus {
       outline: none;
       border-color: $marca;
-      box-shadow: 0 0 0 3px rgba($marca, 0.15);
+      box-shadow: 0 0 0 3px color-mix(in srgb, $marca 15%, transparent);
     }
 
     // El botón propio reemplaza la "x" nativa del input search.
@@ -155,7 +155,7 @@ $favorito: #b7791f;
   padding: 4px 10px;
   border: 1px solid $borde;
   border-radius: 999px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   font: inherit;
   font-size: 0.8rem;
   color: $texto;
@@ -165,7 +165,7 @@ $favorito: #b7791f;
 
   img { flex: none; }
 
-  &:hover { border-color: rgba($marca, 0.5); }
+  &:hover { border-color: color-mix(in srgb, $marca 50%, transparent); }
 
   &.is-activa {
     border-color: $marca;
@@ -195,7 +195,7 @@ $favorito: #b7791f;
   border: 1px solid $borde;
   border-radius: 10px;
   overflow: hidden;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   transition: opacity 0.15s ease;
 
   &.is-cargando {
@@ -275,7 +275,7 @@ $favorito: #b7791f;
 .fav-item__tipo {
   padding: 0 6px;
   border-radius: 4px;
-  background: #e8eef2;
+  background: light-dark(#e8eef2, #273945);
   font-size: 0.7rem;
   font-weight: 600;
 }
@@ -321,9 +321,9 @@ $favorito: #b7791f;
 
 .fav-item__quitar {
   width: 32px;
-  color: #9aa7b0;
+  color: light-dark(#9aa7b0, #8a8a8a);
 
-  &:hover { background: #fdecec; color: #c62828; }
+  &:hover { background: light-dark(#fdecec, #461a1a); color: light-dark(#c62828, #e16b6b); }
 }
 
 .fav-item__deshacer {
@@ -332,7 +332,7 @@ $favorito: #b7791f;
   font-weight: 600;
   color: $marca;
 
-  &:hover { background: rgba($marca, 0.08); }
+  &:hover { background: color-mix(in srgb, $marca 8%, transparent); }
 }
 
 // Estados

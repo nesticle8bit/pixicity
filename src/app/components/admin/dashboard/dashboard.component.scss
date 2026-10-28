@@ -10,7 +10,7 @@
 
   &__aside {
     min-width: 0;
-    border-right: 1px solid #e5e8ec;
+    border-right: 1px solid light-dark(#e5e8ec, #38414d);
   }
 
   &__content {
@@ -24,5 +24,5 @@
 
 @media (max-width: 767px) {
   .adm-shell__grid { grid-template-columns: minmax(0, 1fr); }
-  .adm-shell__aside { border-right: 0; border-bottom: 1px solid #e5e8ec; }
+  .adm-shell__aside { border-right: 0; border-bottom: 1px solid light-dark(#e5e8ec, #38414d); }
 }

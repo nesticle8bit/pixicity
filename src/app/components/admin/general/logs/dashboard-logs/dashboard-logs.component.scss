@@ -9,9 +9,9 @@
   display: flex;
   flex-direction: column;
   padding: 0.75rem 1rem;
-  border: 1px solid #e2e2e2;
+  border: 1px solid light-dark(#e2e2e2, #40474e);
   border-radius: 8px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
 
   &__valor {
     font-size: 1.5rem;
@@ -21,15 +21,15 @@
 
   &__label {
     font-size: 0.8rem;
-    color: #6c757d;
+    color: light-dark(#6c757d, #a7a7a7);
   }
 
   &--alerta {
-    border-color: #f5c2c7;
-    background: #fff5f5;
+    border-color: light-dark(#f5c2c7, #6e2a30);
+    background: light-dark(#fff5f5, #3f1818);
 
     .logs-stat__valor {
-      color: #c53030;
+      color: light-dark(#c53030, #db6c6c);
     }
   }
 }
@@ -43,12 +43,12 @@
   list-style: none;
   padding: 0;
   margin: 0 0 1.25rem;
-  border: 1px solid #e2e2e2;
+  border: 1px solid light-dark(#e2e2e2, #40474e);
   border-radius: 8px;
   overflow: hidden;
 
   li + li {
-    border-top: 1px solid #eee;
+    border-top: 1px solid light-dark(#eee, #393f45);
   }
 }
 
@@ -59,12 +59,12 @@
   width: 100%;
   padding: 0.5rem 0.75rem;
   border: 0;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   text-align: left;
   cursor: pointer;
 
   &:hover {
-    background: #f7fafc;
+    background: light-dark(#f7fafc, #183040);
   }
 
   &__mensaje {
@@ -80,7 +80,7 @@
   }
 
   &__fecha {
-    color: #6c757d;
+    color: light-dark(#6c757d, #a7a7a7);
     font-size: 0.8rem;
     white-space: nowrap;
   }
@@ -96,13 +96,13 @@
 
 .logs-toggle {
   display: inline-flex;
-  border: 1px solid #d0d0d0;
+  border: 1px solid light-dark(#d0d0d0, #4c545c);
   border-radius: 6px;
   overflow: hidden;
 
   button {
     border: 0;
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     padding: 0.35rem 0.9rem;
     font-size: 0.85rem;
     cursor: pointer;
@@ -126,7 +126,7 @@
   cursor: pointer;
 
   &--activa {
-    background: #ebf4ff;
+    background: light-dark(#ebf4ff, #1a2e45);
   }
 }
 
@@ -146,7 +146,7 @@
 }
 
 .logs-detalle-fila > td {
-  background: #f8fafc;
+  background: light-dark(#f8fafc, #1a2c3d);
 }
 
 .logs-detalle {
@@ -160,7 +160,7 @@
     font-size: 0.85rem;
 
     dt {
-      color: #6c757d;
+      color: light-dark(#6c757d, #a7a7a7);
       font-weight: 600;
     }
 
@@ -182,7 +182,7 @@
   &__excepcion {
     font-family: monospace;
     font-size: 0.8rem;
-    color: #c53030;
+    color: light-dark(#c53030, #db6c6c);
   }
 
   &__stack {

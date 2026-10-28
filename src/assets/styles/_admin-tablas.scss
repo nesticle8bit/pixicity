@@ -1,8 +1,8 @@
 // Tablas del panel admin. Se aplican a toda tabla dentro del contenido del panel (.adm-shell__content), así las
 // ~18 tablas existentes mejoran sin reescribir su marcado. Las clases .adm-* son extras opcionales para cada tabla.
 
-$adm-accent: #006595;
-$adm-borde: #e8e8e8;
+$adm-accent: light-dark(#006595, #1e99d3);
+$adm-borde: light-dark(#e8e8e8, #3c434a);
 
 .adm-shell__content {
   .dashboard--title {
@@ -13,7 +13,7 @@ $adm-borde: #e8e8e8;
   .table-responsive {
     border: 1px solid $adm-borde;
     border-radius: 10px;
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     overflow-x: auto;
     max-height: 70vh;
     overflow-y: auto;
@@ -24,10 +24,10 @@ $adm-borde: #e8e8e8;
   }
 
   .table {
-    --bs-table-striped-bg: #fafbfc;
-    --bs-table-hover-bg: #f0f6fa;
+    --bs-table-striped-bg: light-dark(#fafbfc, #202b36);
+    --bs-table-hover-bg: light-dark(#f0f6fa, #1a3445);
     font-size: 13px;
-    color: #333;
+    color: light-dark(#333, #cfcfcf);
     vertical-align: middle;
 
     > thead > tr > th {
@@ -36,18 +36,18 @@ $adm-borde: #e8e8e8;
       z-index: 2;
       padding: 9px 10px;
       border-bottom: 1px solid $adm-borde;
-      background: #f6f8fa;
+      background: light-dark(#f6f8fa, #202d3a);
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      color: #6b7280;
+      color: light-dark(#6b7280, #a7a7a7);
       white-space: nowrap;
     }
 
     > tbody > tr > td {
       padding: 8px 10px;
-      border-color: #f0f0f0;
+      border-color: light-dark(#f0f0f0, #373e44);
     }
 
     > tbody > tr:last-child > td {
@@ -82,12 +82,12 @@ $adm-borde: #e8e8e8;
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    color: #666;
+    color: light-dark(#666, #b0b0b0);
     transition: background 0.15s;
 
     &:hover {
-      background: #eef2f5;
-      color: #222;
+      background: light-dark(#eef2f5, #253440);
+      color: light-dark(#222, #d9d9d9);
     }
   }
 
@@ -116,25 +116,25 @@ $adm-borde: #e8e8e8;
   gap: 3px;
   padding: 1px 8px;
   border-radius: 999px;
-  background: #eef0f2;
-  color: #555;
+  background: light-dark(#eef0f2, #2f3439);
+  color: light-dark(#555, #bababa);
   font-size: 11.5px;
   font-weight: 700;
   white-space: nowrap;
 
   &--ok {
-    background: #e3f6ec;
-    color: #1c7c4a;
+    background: light-dark(#e3f6ec, #1e4f35);
+    color: light-dark(#1c7c4a, #97e8be);
   }
 
   &--alerta {
-    background: #fff4e0;
-    color: #b26a00;
+    background: light-dark(#fff4e0, #4c3b1d);
+    color: light-dark(#b26a00, #f1c37f);
   }
 
   &--peligro {
-    background: #fdecea;
-    color: #c0392b;
+    background: light-dark(#fdecea, #47201b);
+    color: light-dark(#c0392b, #df796f);
   }
 
   &--info {
@@ -146,10 +146,10 @@ $adm-borde: #e8e8e8;
 /** Estado vacío de una tabla (sin datos o sin resultados para el filtro). */
 .adm-vacio {
   padding: 34px 16px;
-  border: 1px dashed #dcdcdc;
+  border: 1px dashed light-dark(#dcdcdc, #444b53);
   border-radius: 10px;
   text-align: center;
-  color: #666;
+  color: light-dark(#666, #b0b0b0);
   font-size: 13.5px;
 
   > i {

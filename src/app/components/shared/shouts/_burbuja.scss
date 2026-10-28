@@ -1,8 +1,8 @@
 // Globo ("nube") de los items del muro: lo comparten app-shout-card y app-post-card.
-$marca: #006595;
-$tenue: #5d6b75;
-$favorito: #b7791f;
-$reshout: #1e7f4f;
+$marca: light-dark(#006595, #1e99d3);
+$tenue: light-dark(#5d6b75, #aeaeae);
+$favorito: light-dark(#b7791f, #e1a650);
+$reshout: light-dark(#1e7f4f, #30c97d);
 
 .sc-compartido {
   display: flex;
@@ -35,7 +35,7 @@ $reshout: #1e7f4f;
     ::ng-deep img {
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid #fff;
+      border: 2px solid light-dark(#fff, #2e3338);
       box-shadow: 0 1px 4px rgba(16, 24, 40, 0.12);
     }
   }
@@ -46,8 +46,8 @@ $reshout: #1e7f4f;
   position: relative;
   flex: 1;
   min-width: 0;
-  background: #fff;
-  border: 1px solid #e9edf0;
+  background: light-dark(#fff, #1e2124);
+  border: 1px solid light-dark(#e9edf0, #34424c);
   border-radius: 14px;
   padding: 12px 16px;
   box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
@@ -61,9 +61,9 @@ $reshout: #1e7f4f;
     top: 16px;
     width: 14px;
     height: 14px;
-    background: #fff;
-    border-left: 1px solid #e9edf0;
-    border-bottom: 1px solid #e9edf0;
+    background: light-dark(#fff, #1e2124);
+    border-left: 1px solid light-dark(#e9edf0, #34424c);
+    border-bottom: 1px solid light-dark(#e9edf0, #34424c);
     transform: rotate(45deg);
     border-radius: 0 0 0 4px;
   }
@@ -121,7 +121,7 @@ $reshout: #1e7f4f;
     margin: 0;
     font-size: 0.92rem;
     line-height: 1.55;
-    color: #1f2a33;
+    color: light-dark(#1f2a33, #cad6df);
     overflow-wrap: anywhere;
     white-space: pre-wrap;
   }
@@ -134,7 +134,7 @@ $reshout: #1e7f4f;
     flex-wrap: wrap;
     margin-top: 11px;
     padding-top: 9px;
-    border-top: 1px solid #eef2f4;
+    border-top: 1px solid light-dark(#eef2f4, #30414a);
   }
 }
 
@@ -156,7 +156,7 @@ $reshout: #1e7f4f;
 
   i { font-size: 0.95rem; }
 
-  &:hover:not(:disabled) { background: #eef5f9; color: $marca; }
+  &:hover:not(:disabled) { background: light-dark(#eef5f9, #1b3747); color: $marca; }
 
   &:focus-visible {
     outline: 2px solid $marca;
@@ -168,19 +168,19 @@ $reshout: #1e7f4f;
   &--reshout.is-activo {
     color: $reshout;
 
-    &:hover:not(:disabled) { background: #e8f5ee; color: $reshout; }
+    &:hover:not(:disabled) { background: light-dark(#e8f5ee, #204a33); color: $reshout; }
   }
 
   &--favorito.is-activo {
     color: $favorito;
 
-    &:hover:not(:disabled) { background: #fdf6e7; color: #975a16; }
+    &:hover:not(:disabled) { background: light-dark(#fdf6e7, #493a1c); color: light-dark(#975a16, #edbc85); }
   }
 
   &--megusta.is-activo {
     color: $marca;
 
-    &:hover:not(:disabled) { background: #e6f1f7; }
+    &:hover:not(:disabled) { background: light-dark(#e6f1f7, #1d3c4d); }
   }
 
   /* Editar / denunciar: a la izquierda, separadas de las reacciones. */
@@ -200,7 +200,7 @@ $reshout: #1e7f4f;
   textarea {
     width: 100%;
     padding: 8px 10px;
-    border: 1px solid #c9d3da;
+    border: 1px solid light-dark(#c9d3da, #435662);
     border-radius: 8px;
     font: inherit;
     font-size: 0.92rem;

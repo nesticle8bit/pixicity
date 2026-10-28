@@ -21,11 +21,11 @@ import { UserAvatarComponent } from 'src/app/components/addons/user-avatar/user-
   styles: [`
     .menciones {
       list-style: none; margin: 0; padding: 4px; min-width: 220px; max-width: 300px; max-height: 260px; overflow-y: auto;
-      background: #fff; border: 1px solid #e1e5e8; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.14);
+      background: light-dark(#fff, #1e2124); border: 1px solid light-dark(#e1e5e8, #3f464d); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.14);
     }
     .menciones__opcion {
       display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 6px; cursor: pointer; font-size: 13px;
-      &:hover, &.is-activa { background: #eef5f9; color: #006595; }
+      &:hover, &.is-activa { background: light-dark(#eef5f9, #1b3747); color: light-dark(#006595, #8ed2f2); }
     }
   `],
 })

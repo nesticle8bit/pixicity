@@ -8,13 +8,13 @@
 
 .mod-toggle {
   display: inline-flex;
-  border: 1px solid #d0d0d0;
+  border: 1px solid light-dark(#d0d0d0, #4c545c);
   border-radius: 6px;
   overflow: hidden;
 
   button {
     border: 0;
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     padding: 0.35rem 0.9rem;
     font-size: 0.85rem;
     cursor: pointer;
@@ -62,7 +62,7 @@
   gap: 8px;
   padding: 8px 12px;
   margin-bottom: 8px;
-  background: #e7f1f7;
-  border: 1px solid #c9dfec;
+  background: light-dark(#e7f1f7, #1d3a4c);
+  border: 1px solid light-dark(#c9dfec, #2a556f);
   border-radius: 6px;
 }

@@ -6,8 +6,8 @@
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  background: #fff;
-  border: 1px solid #eaeef1;
+  background: light-dark(#fff, #1e2124);
+  border: 1px solid light-dark(#eaeef1, #33414c);
   border-radius: 16px;
   padding: 18px;
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 8px 24px rgba(16, 24, 40, 0.03);
@@ -18,7 +18,7 @@
     ::ng-deep img {
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid #fff;
+      border: 2px solid light-dark(#fff, #2e3338);
       box-shadow: 0 1px 4px rgba(16, 24, 40, 0.12);
     }
   }
@@ -31,25 +31,25 @@
   &__input {
     width: 100%;
     min-height: 52px;
-    border: 1px solid #e3e8ec;
+    border: 1px solid light-dark(#e3e8ec, #374550);
     border-radius: 12px;
     padding: 12px 14px;
     font-size: 0.95rem;
     line-height: 1.5;
-    color: #1f2a33;
+    color: light-dark(#1f2a33, #cad6df);
     resize: vertical;
     outline: none;
-    background: #f7f9fb;
+    background: light-dark(#f7f9fb, #1e2d3b);
     transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 
     &::placeholder {
-      color: #7b8891;
+      color: light-dark(#7b8891, #9d9d9d);
     }
 
     &:focus {
       border-color: #0085c4;
       box-shadow: 0 0 0 3px rgba(0, 133, 196, 0.12);
-      background: #fff;
+      background: light-dark(#fff, #1e2124);
     }
   }
 
@@ -59,13 +59,13 @@
     gap: 8px;
     margin-top: 8px;
     padding: 8px 12px;
-    border: 1px solid #e3e8ec;
+    border: 1px solid light-dark(#e3e8ec, #374550);
     border-radius: 10px;
-    background: #f7f9fb;
+    background: light-dark(#f7f9fb, #1e2d3b);
     transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 
     >i {
-      color: #006a9e;
+      color: light-dark(#006a9e, #8ad0f2);
       font-size: 1.05rem;
       flex-shrink: 0;
     }
@@ -73,7 +73,7 @@
     &:focus-within {
       border-color: #0085c4;
       box-shadow: 0 0 0 3px rgba(0, 133, 196, 0.12);
-      background: #fff;
+      background: light-dark(#fff, #1e2124);
     }
   }
 
@@ -84,10 +84,10 @@
     outline: none;
     background: transparent;
     font-size: 0.85rem;
-    color: #1f2a33;
+    color: light-dark(#1f2a33, #cad6df);
 
     &::placeholder {
-      color: #7b8891;
+      color: light-dark(#7b8891, #9d9d9d);
     }
   }
 
@@ -105,7 +105,7 @@
 
   &__hint {
     font-size: 0.78rem;
-    color: #5d6b75;
+    color: light-dark(#5d6b75, #aeaeae);
     margin-right: auto;
   }
 
@@ -113,7 +113,7 @@
     border: none;
     background: none;
     cursor: pointer;
-    color: #8a98a0;
+    color: light-dark(#8a98a0, #949494);
     padding: 4px;
     border-radius: 6px;
     display: inline-flex;
@@ -124,8 +124,8 @@
 
     &:hover,
     &[aria-expanded="true"] {
-      color: #006595;
-      background: #f1f4f6;
+      color: light-dark(#006595, #8ed2f2);
+      background: light-dark(#f1f4f6, #26333c);
     }
 
     &:disabled {
@@ -154,7 +154,7 @@
     cursor: pointer;
 
     &:focus-visible {
-      outline: 2px solid #fff;
+      outline: 2px solid light-dark(#fff, #2e3338);
       outline-offset: 2px;
     }
   }
@@ -165,11 +165,11 @@
     gap: 8px;
     margin-top: 8px;
     padding: 14px;
-    border: 1px dashed #c9d3db;
+    border: 1px dashed light-dark(#c9d3db, #425463);
     border-radius: 12px;
-    background: #f7f9fb;
+    background: light-dark(#f7f9fb, #1e2d3b);
     font-size: 0.9rem;
-    color: #1f2a33;
+    color: light-dark(#1f2a33, #cad6df);
 
     i {
       animation: sh-girar 1s linear infinite;
@@ -263,8 +263,8 @@
   margin: 0;
   padding: 4px;
   list-style: none;
-  background: #fff;
-  border: 1px solid #e3e8ec;
+  background: light-dark(#fff, #1e2124);
+  border: 1px solid light-dark(#e3e8ec, #374550);
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(16, 24, 40, 0.12);
 
@@ -277,17 +277,17 @@
     cursor: pointer;
 
     &.is-activo {
-      background: #eef6fb;
+      background: light-dark(#eef6fb, #1a3546);
     }
   }
 
   &__tag {
     font-weight: 600;
-    color: #006595;
+    color: light-dark(#006595, #8ed2f2);
   }
 
   &__num {
     font-size: 0.8rem;
-    color: #6b7782;
+    color: light-dark(#6b7782, #a6a6a6);
   }
 }

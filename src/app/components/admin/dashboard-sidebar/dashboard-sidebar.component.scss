@@ -1,9 +1,9 @@
-$main: #0B6EA5;
-$accent: #004160;
-$ink: #4a5560;
-$muted: #5d6b75; // contraste AA sobre blanco (el anterior, #949ca5, daba 2.8:1)
-$line: #e5e8ec;
-$alert: #c0392b;
+$main: light-dark(#0B6EA5, #2ba0e1);
+$accent: light-dark(#004160, #1777a4);
+$ink: light-dark(#4a5560, #bababa);
+$muted: light-dark(#5d6b75, #aeaeae); // contraste AA sobre blanco (el anterior, #949ca5, daba 2.8:1)
+$line: light-dark(#e5e8ec, #38414d);
+$alert: light-dark(#c0392b, #dc6c61);
 
 :host {
   display: block;
@@ -19,7 +19,7 @@ $alert: #c0392b;
   scrollbar-width: thin;
 
   &::-webkit-scrollbar { width: 6px; }
-  &::-webkit-scrollbar-thumb { background: #dfe3e8; border-radius: 3px; }
+  &::-webkit-scrollbar-thumb { background: light-dark(#dfe3e8, #343d48); border-radius: 3px; }
 
   /* - buscador - */
   &__search {
@@ -30,7 +30,7 @@ $alert: #c0392b;
     margin-bottom: .9rem;
     border: 1px solid $line;
     border-radius: 8px;
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
 
     &:focus-within {
       border-color: $main;
@@ -91,7 +91,7 @@ $alert: #c0392b;
     transition: .15s ease;
 
     &:hover {
-      background: #f4f6f8;
+      background: light-dark(#f4f6f8, #252f39);
       color: $accent;
     }
 
@@ -142,12 +142,12 @@ $alert: #c0392b;
         font-size: 1.15rem;
         width: 1.15rem;
         height: 1.15rem;
-        color: #a8b1ba;
+        color: light-dark(#a8b1ba, #838383);
         flex-shrink: 0;
       }
 
       &:hover {
-        background: #f2f5f8;
+        background: light-dark(#f2f5f8, #21303e);
         color: $accent;
 
         mat-icon { color: $main; }
@@ -202,7 +202,7 @@ $alert: #c0392b;
     padding: .5rem .8rem;
     border: 1px solid $line;
     border-radius: 8px;
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     color: $accent;
     font-size: .85rem;
     font-weight: 700;

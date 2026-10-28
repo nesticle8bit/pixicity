@@ -1,7 +1,7 @@
-$marca: #006595;
-$texto: #1f2a33;
-$suave: #6b7782;
-$borde: #e6eaee;
+$marca: light-dark(#006595, #1e99d3);
+$texto: light-dark(#1f2a33, #cad6df);
+$suave: light-dark(#6b7782, #a6a6a6);
+$borde: light-dark(#e6eaee, #35424e);
 
 .cm {
   max-width: 900px;
@@ -9,7 +9,7 @@ $borde: #e6eaee;
   padding: 24px;
   border: 1px solid $borde;
   border-radius: 16px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
 
   &__volver {
     display: inline-flex;
@@ -125,10 +125,10 @@ $borde: #e6eaee;
   &__motivo {
     padding: 2px 8px;
     border-radius: 999px;
-    background: #fff1f0;
+    background: light-dark(#fff1f0, #421c19);
     font-size: 0.8rem;
     font-weight: 600;
-    color: #b42318;
+    color: light-dark(#b42318, #ec7c74);
   }
 
   &__fecha,
@@ -167,7 +167,7 @@ $borde: #e6eaee;
 
   &__estado {
     font-weight: 600;
-    color: #1e7a45;
+    color: light-dark(#1e7a45, #99e6ba);
   }
 }
 
@@ -178,7 +178,7 @@ $borde: #e6eaee;
   padding: 5px 12px;
   border: 1px solid $marca;
   border-radius: 8px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   font-size: 0.85rem;
   font-weight: 700;
   color: $marca;
@@ -218,14 +218,14 @@ $borde: #e6eaee;
   &__rol {
     padding: 2px 8px;
     border-radius: 999px;
-    background: #eef6fb;
+    background: light-dark(#eef6fb, #1a3546);
     font-size: 0.75rem;
     font-weight: 700;
     color: $marca;
 
     &--creador {
-      background: #fff6e0;
-      color: #8a5a00;
+      background: light-dark(#fff6e0, #4c3e1d);
+      color: light-dark(#8a5a00, #f3d294);
     }
   }
 }
@@ -243,8 +243,8 @@ $borde: #e6eaee;
   margin-left: 4px;
   padding: 0 6px;
   border-radius: 999px;
-  background: #e9f7ef;
-  color: #1e7a45;
+  background: light-dark(#e9f7ef, #1c4b30);
+  color: light-dark(#1e7a45, #99e6ba);
   font-size: 0.75rem;
   font-weight: 700;
 }

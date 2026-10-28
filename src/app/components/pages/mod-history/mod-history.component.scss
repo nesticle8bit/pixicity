@@ -22,18 +22,18 @@
   white-space: nowrap;
 
   &--quita {
-    background: #fdecea;
-    color: #b02a37;
+    background: light-dark(#fdecea, #47201b);
+    color: light-dark(#b02a37, #df7983);
   }
 
   &--devuelve {
-    background: #e6f4ea;
-    color: #1e7b34;
+    background: light-dark(#e6f4ea, #214b2d);
+    color: light-dark(#1e7b34, #99e6ab);
   }
 
   &--cambia {
-    background: #e7f1f7;
-    color: #006595;
+    background: light-dark(#e7f1f7, #1d3a4c);
+    color: light-dark(#006595, #8ed2f2);
   }
 }
 
@@ -53,7 +53,7 @@
 }
 
 .mh-razon {
-  color: #6c757d;
+  color: light-dark(#6c757d, #a7a7a7);
   font-size: 0.85rem;
   margin-top: 2px;
 }

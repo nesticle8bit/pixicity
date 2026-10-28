@@ -57,7 +57,7 @@ import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
     }
 
     .confirmar {
-      --confirmar-color: #0b6ea5;
+      --confirmar-color: light-dark(#0b6ea5, #2ba0e1);
       position: fixed;
       top: 50%;
       left: 50%;
@@ -69,15 +69,15 @@ import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
       padding: 20px;
       border-top: 4px solid var(--confirmar-color);
       border-radius: 10px;
-      background: #fff;
+      background: light-dark(#fff, #1e2124);
       box-shadow: 0 20px 48px rgb(16 24 40 / 22%), 0 4px 10px rgb(16 24 40 / 10%);
-      color: #3d4852;
+      color: light-dark(#3d4852, #c2c2c2);
       transform: translate(-50%, -50%);
       animation: confirmar-entra 0.15s ease-out;
     }
 
     .confirmar--peligro {
-      --confirmar-color: #c0392b;
+      --confirmar-color: light-dark(#c0392b, #dc6c61);
     }
 
     .confirmar__cabecera {
@@ -95,7 +95,7 @@ import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
       width: 34px;
       height: 34px;
       border-radius: 50%;
-      background: color-mix(in srgb, var(--confirmar-color) 12%, #fff);
+      background: color-mix(in srgb, var(--confirmar-color) 12%, light-dark(#fff, #1e2124));
       color: var(--confirmar-color);
       font-size: 19px;
     }
@@ -103,7 +103,7 @@ import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
     .confirmar__titulo {
       flex: 1;
       margin: 0;
-      color: #1f2933;
+      color: light-dark(#1f2933, #cad5df);
       font-size: 16px;
       font-weight: 700;
     }
@@ -112,7 +112,7 @@ import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
       position: relative;
       border: 0;
       background: none;
-      color: #7b8794;
+      color: light-dark(#7b8794, #9c9c9c);
       font-size: 18px;
       line-height: 1;
       cursor: pointer;
@@ -124,7 +124,7 @@ import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
       }
 
       &:hover {
-        color: #1f2933;
+        color: light-dark(#1f2933, #cad5df);
       }
     }
 
@@ -141,7 +141,7 @@ import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
       width: 100%;
       margin: -4px 0 16px;
       padding: 8px 10px;
-      border: 1px solid #cbd2d9;
+      border: 1px solid light-dark(#cbd2d9, #46535f);
       border-radius: 6px;
       font: inherit;
       font-size: 14px;
@@ -163,16 +163,16 @@ import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
     .confirmar__boton {
       min-height: 36px;
       padding: 0 16px;
-      border: 1px solid #cbd2d9;
+      border: 1px solid light-dark(#cbd2d9, #46535f);
       border-radius: 6px;
-      background: #fff;
-      color: #3d4852;
+      background: light-dark(#fff, #1e2124);
+      color: light-dark(#3d4852, #c2c2c2);
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
 
       &:hover {
-        background: #f5f7fa;
+        background: light-dark(#f5f7fa, #1f2b3d);
       }
 
       &:focus-visible {

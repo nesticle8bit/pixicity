@@ -4,8 +4,8 @@
   margin-bottom: 1rem;
 }
 
-$blurple: #5865f2;
-$blurple-oscuro: #3c45c5;
+$blurple: light-dark(#5865f2, #616de9);
+$blurple-oscuro: light-dark(#3c45c5, #6a71d3);
 
 .discord {
   position: relative;
@@ -31,7 +31,7 @@ $blurple-oscuro: #3c45c5;
     box-shadow: 0 10px 24px rgba(60, 69, 197, 0.35);
 
     .discord__boton {
-      background: #fff;
+      background: light-dark(#fff, #1e2124);
       color: $blurple-oscuro;
     }
 

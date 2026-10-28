@@ -1,13 +1,13 @@
 // Piezas visuales compartidas por /perfil/:usuario y sus pestañas. Mismos tokens que /cuenta para que el perfil
 // público y la configuración se vean como una sola cosa.
 
-$marca: #006595;
-$marca-suave: #e6f1f7;
-$texto: #26323a;
-$tenue: #5d6b75;
-$borde: #dde3e8;
-$fondo-suave: #f6f8fa;
-$superficie: #fff;
+$marca: light-dark(#006595, #1e99d3);
+$marca-suave: light-dark(#e6f1f7, #1d3c4d);
+$texto: light-dark(#26323a, #c7d2da);
+$tenue: light-dark(#5d6b75, #aeaeae);
+$borde: light-dark(#dde3e8, #394855);
+$fondo-suave: light-dark(#f6f8fa, #202d3a);
+$superficie: light-dark(#fff, #1e2124);
 $radio: 12px;
 
 // Tarjeta base.
@@ -50,7 +50,7 @@ $radio: 12px;
 
   i {
     font-size: 2rem;
-    color: #a9b6bf;
+    color: light-dark(#a9b6bf, #818181);
   }
 
   p {
@@ -103,7 +103,7 @@ $radio: 12px;
     span {
       height: 64px;
       border-radius: $radio;
-      background: linear-gradient(90deg, #eef2f5 25%, #f7f9fb 50%, #eef2f5 75%) 0 0 / 200% 100%;
+      background: linear-gradient(90deg, light-dark(#eef2f5, #253440) 25%, light-dark(#f7f9fb, #1e2d3b) 50%, light-dark(#eef2f5, #253440) 75%) 0 0 / 200% 100%;
       animation: pf-brillo 1.2s infinite linear;
     }
   }

@@ -89,6 +89,8 @@ import { agregarColumna, agregarFila, celdaInicial, celdaVecina, crearTabla, qui
 })
 export class RichEditorComponent implements ControlValueAccessor, Validator, AfterViewInit, OnDestroy {
   readonly placeholder = input<string>('Escribe aquí...');
+  /** false: sin subir archivos (botón, pegar ni arrastrar); las imágenes solo entran por URL. */
+  readonly permitirSubida = input(true);
 
   readonly wrapperEl = viewChild.required<ElementRef<HTMLDivElement>>('wrapperEl');
   readonly toolbarEl = viewChild.required<ElementRef<HTMLDivElement>>('toolbarEl');
@@ -1672,6 +1674,10 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
   }
 
   private uploadImages(files: File[], at: PosicionGuardada | null): void {
+    if (!this.permitirSubida()) {
+      this.notificationService.warning('Aquí no se pueden subir imágenes; insértalas desde una URL', 'Imagen no permitida');
+      return;
+    }
     const valid = files.filter((f) => IMAGE_TYPES.includes(f.type) && f.size <= IMAGE_MAX_BYTES);
     if (valid.length < files.length) {
       this.notificationService.warning('Solo se permiten imágenes JPG, PNG, GIF o WEBP de hasta 8 MB', 'Imagen no válida');

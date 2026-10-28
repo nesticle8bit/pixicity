@@ -11,19 +11,19 @@
 
 .contacto-card {
     padding: 18px;
-    border: 1px solid #e6eaee;
+    border: 1px solid light-dark(#e6eaee, #35424e);
     border-radius: 12px;
-    background: #fff;
+    background: light-dark(#fff, #1e2124);
     font-size: 0.95rem;
     line-height: 1.55;
-    color: #3a4650;
+    color: light-dark(#3a4650, #bac5cd);
 
     p {
         margin: 0;
     }
 
     a {
-        color: #006595;
+        color: light-dark(#006595, #8ed2f2);
         font-weight: 600;
     }
 
@@ -34,15 +34,15 @@
         margin: 0 0 12px;
         font-size: 1.05rem;
         font-weight: 700;
-        color: #1f2a33;
+        color: light-dark(#1f2a33, #cad6df);
     }
 
     &--aviso {
-        border-color: #f3d9a4;
-        background: #fffaf0;
+        border-color: light-dark(#f3d9a4, #7e6430);
+        background: light-dark(#fffaf0, #423519);
 
         .contacto-card__titulo i {
-            color: #c27c0e;
+            color: light-dark(#c27c0e, #efbd6f);
         }
     }
 }
@@ -68,14 +68,14 @@
         width: 36px;
         height: 36px;
         border-radius: 10px;
-        background: #eef6fb;
-        color: #006595;
+        background: light-dark(#eef6fb, #1a3546);
+        color: light-dark(#006595, #8ed2f2);
         font-size: 1.15rem;
     }
 
     strong {
         display: block;
-        color: #1f2a33;
+        color: light-dark(#1f2a33, #cad6df);
     }
 }
 
@@ -97,7 +97,7 @@
 
         &:hover,
         &:focus-visible {
-            background: #f3f6f8;
+            background: light-dark(#f3f6f8, #23323c);
         }
     }
 }
@@ -106,9 +106,9 @@
     display: flex;
     gap: 8px;
     padding-top: 12px;
-    border-top: 1px solid #eef1f3;
+    border-top: 1px solid light-dark(#eef1f3, #333f48);
     font-size: 0.85rem;
-    color: #6b7782;
+    color: light-dark(#6b7782, #a6a6a6);
 }
 
 @media (max-width: 575.98px) {

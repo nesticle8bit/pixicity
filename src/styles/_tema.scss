@@ -1,0 +1,54 @@
+// Tema claro/oscuro. Los colores de los .scss usan light-dark(claro, oscuro), que sigue al color-scheme de <html>.
+// ThemeService pone data-theme="light|dark" en <html> ("sistema" ya llega resuelto); el script de index.html lo hace
+// antes de pintar, sin parpadeo. Sin atributo (SSR para bots) queda claro. data-bs-theme acompaña para Bootstrap.
+@use '@angular/material' as mat;
+
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+body {
+  color: light-dark(#212529, #dde2e6);
+}
+
+// Material: el tema prebuilt (indigo-pink) solo trae colores claros; en oscuro se pisan con su variante M2 oscura.
+$oscuro: mat.m2-define-dark-theme((
+  color: (
+    primary: mat.m2-define-palette(mat.$m2-indigo-palette),
+    accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400),
+  ),
+  typography: null,
+  density: null,
+));
+
+@mixin material-oscuro {
+  @include mat.all-component-colors($oscuro);
+  // Superficies de Material con el mismo gris que las tarjetas del sitio.
+  --mat-dialog-container-color: #1e2124;
+  --mat-menu-container-color: #24282c;
+  --mat-select-panel-background-color: #24282c;
+  --mat-autocomplete-background-color: #24282c;
+  --mat-bottom-sheet-container-background-color: #1e2124;
+  --mat-datepicker-calendar-container-background-color: #24282c;
+  --mat-card-elevated-container-color: #1e2124;
+  --mat-card-outlined-container-color: #1e2124;
+  --mat-expansion-container-background-color: #1e2124;
+  --mat-table-background-color: #1e2124;
+  --mat-paginator-container-background-color: #1e2124;
+  --mat-sidenav-container-background-color: #1e2124;
+  --mat-sidenav-content-background-color: transparent;
+  --mat-tab-header-pagination-icon-color: #dde2e6;
+}
+
+:root[data-theme='dark'] {
+  @include material-oscuro;
+
+  // Utilidades de Bootstrap con color fijo que se usan en las plantillas.
+  .bg-white { background-color: #1e2124 !important; }
+  .bg-light { background-color: #262b30 !important; }
+  .text-dark { color: #dde2e6 !important; }
+}

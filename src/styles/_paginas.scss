@@ -3,12 +3,12 @@
 .post {
   &-header {
     a {
-      color: #666;
+      color: light-dark(#666, #b0b0b0);
     }
 
     &-list {
       font-weight: 400;
-      color: #666;
+      color: light-dark(#666, #b0b0b0);
 
       & li {
         max-width: 180px;
@@ -25,15 +25,15 @@
       margin-left: 4px;
       padding: 2px 8px;
       border: none;
-      background: #fff;
-      color: #ababab;
+      background: light-dark(#fff, #1e2124);
+      color: light-dark(#ababab, #878787);
       border-radius: 3px;
     }
   }
 }
 
 .mite {
-  border: solid #ddd;
+  border: solid light-dark(#ddd, #434b52);
   border-width: 0 1px 1px;
   overflow: hidden;
   padding: 10px;
@@ -53,10 +53,10 @@
 }
 
 table.table-sm {
-  border: 1px solid #ddd;
+  border: 1px solid light-dark(#ddd, #434b52);
 
   & thead tr th {
-    background: #ebebeb;
+    background: light-dark(#ebebeb, #32383d);
     padding: 10px;
   }
 
@@ -65,18 +65,18 @@ table.table-sm {
   }
 
   &>tbody>tr:nth-of-type(odd) {
-    background: #fff !important;
+    background: light-dark(#fff, #1e2124) !important;
   }
 }
 
 .table>:not(:last-child)>:last-child>* {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid light-dark(#ddd, #434b52);
 }
 
 .lista-posts {
-  border-top: #E0E0E0 1px solid;
+  border-top: light-dark(#E0E0E0, #414950) 1px solid;
   padding: 7px 0 7px 10px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
 }
 
 .post-privado {
@@ -89,10 +89,10 @@ table.table-sm {
   position: absolute;
   top: -2px;
   right: 0;
-  background: url('/assets/images/ui/searchboxy.gif') no-repeat 5px 5px #FFF;
+  background: url('/assets/images/ui/searchboxy.gif') no-repeat 5px 5px light-dark(#FFF, #1e2124);
   padding: 4px 4px 4px 23px;
   width: 165px;
-  border: solid 1px #CCC;
+  border: solid 1px light-dark(#CCC, #4e575f);
   font-size: 12px;
 }
 
@@ -108,12 +108,12 @@ table.table-sm {
 
 .row-deleted {
   opacity: .5;
-  color: #525252;
+  color: light-dark(#525252, #bcbcbc);
 }
 
 .list-items {
   float: none !important;
-  border-bottom: 1px solid #f1f1f1;
+  border-bottom: 1px solid light-dark(#f1f1f1, #373d43);
   padding: 2px 10px 6px 10px;
   background: none !important;
   font-size: .7rem;
@@ -122,12 +122,12 @@ table.table-sm {
 .form-container {
 
   &--footer {
-    background: #e8e8e8;
-    border-top: 1px solid #d8d8d8;
+    background: light-dark(#e8e8e8, #343a40);
+    border-top: 1px solid light-dark(#d8d8d8, #464e56);
     padding: .5rem;
   }
 }
 
 .border-right {
-  border-right: 1px solid #dadada;
+  border-right: 1px solid light-dark(#dadada, #454d55);
 }

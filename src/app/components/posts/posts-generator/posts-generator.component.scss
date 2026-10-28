@@ -1,4 +1,4 @@
-$accent: #1976d2;
+$accent: light-dark(#1976d2, #559ee7);
 $accent-soft: rgba(25, 118, 210, 0.1);
 
 // - Cuerpo -
@@ -13,7 +13,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #9aa0a6;
+  color: light-dark(#9aa0a6, #8d8d8d);
 
   &:first-child {
     margin-top: 8px;
@@ -66,20 +66,20 @@ $accent-soft: rgba(25, 118, 210, 0.1);
     display: block;
     font-size: 14px;
     font-weight: 700;
-    color: #2b2b2b;
+    color: light-dark(#2b2b2b, #d3d3d3);
   }
 
   &__hint {
     margin: 2px 0 10px;
     font-size: 12px;
-    color: #8a9098;
+    color: light-dark(#8a9098, #969696);
     line-height: 1.4;
   }
 
   &__opt {
     font-weight: 400;
     font-size: 12px;
-    color: #8a9098;
+    color: light-dark(#8a9098, #969696);
   }
 
   &__error {
@@ -88,7 +88,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
     gap: 4px;
     margin: 6px 0 0;
     font-size: 12px;
-    color: #d32f2f;
+    color: light-dark(#d32f2f, #de6262);
   }
 }
 
@@ -99,21 +99,21 @@ $accent-soft: rgba(25, 118, 210, 0.1);
 // - Inputs modernos -
 .pg-input {
   width: 100%;
-  border: 1px solid #e2e6ea;
+  border: 1px solid light-dark(#e2e6ea, #3a454f);
   border-radius: 10px;
   padding: 10px 14px;
   font-size: 14px;
-  color: #333;
-  background: #fff;
+  color: light-dark(#333, #cfcfcf);
+  background: light-dark(#fff, #1e2124);
   transition: border-color 0.15s, box-shadow 0.15s;
   resize: vertical;
 
   &::placeholder {
-    color: #b5bbc2;
+    color: light-dark(#b5bbc2, #7d7d7d);
   }
 
   &:hover {
-    border-color: #cfd6dd;
+    border-color: light-dark(#cfd6dd, #42505d);
   }
 
   &:focus {
@@ -152,12 +152,12 @@ $accent-soft: rgba(25, 118, 210, 0.1);
     border: 0;
     border-radius: 50%;
     background: transparent;
-    color: #999;
+    color: light-dark(#999, #919191);
     cursor: pointer;
 
     &:hover {
-      background: #fdecea;
-      color: #d32f2f;
+      background: light-dark(#fdecea, #47201b);
+      color: light-dark(#d32f2f, #de6262);
     }
   }
 }
@@ -165,7 +165,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
 .pg-add {
   margin-top: 10px;
   padding: 6px 14px;
-  border: 1px dashed #90caf9;
+  border: 1px dashed light-dark(#90caf9, #336085);
   border-radius: 8px;
   background: rgba(25, 118, 210, 0.04);
   color: $accent;
@@ -185,8 +185,8 @@ $accent-soft: rgba(25, 118, 210, 0.1);
   gap: 6px;
 
   &__card {
-    background: #fff;
-    border: 1px solid #e2e6ea;
+    background: light-dark(#fff, #1e2124);
+    border: 1px solid light-dark(#e2e6ea, #3a454f);
     border-radius: 8px;
     padding: 8px 6px 6px;
     cursor: pointer;
@@ -194,7 +194,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
     transition: border-color 0.15s, box-shadow 0.15s, background 0.15s, transform 0.1s;
 
     &:hover {
-      border-color: #90caf9;
+      border-color: light-dark(#90caf9, #336085);
       box-shadow: 0 4px 12px rgba(25, 118, 210, 0.12);
       transform: translateY(-1px);
     }
@@ -211,7 +211,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
     margin-top: 5px;
     font-size: 11px;
     font-weight: 700;
-    color: #555;
+    color: light-dark(#555, #bababa);
   }
 
   // Miniatura compacta de cada separador dentro de la card
@@ -252,7 +252,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
 // - Footer -
 .pg-actions {
   padding: 14px 28px !important;
-  border-top: 1px solid #eef0f2;
+  border-top: 1px solid light-dark(#eef0f2, #373e44);
   gap: 10px;
   justify-content: flex-end;
 

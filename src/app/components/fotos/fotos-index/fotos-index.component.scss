@@ -13,7 +13,7 @@
 .foto-card {
   border-radius: 10px;
   overflow: hidden;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   box-shadow: 0 1px 4px rgba(0,0,0,.08);
   transition: box-shadow .22s, transform .22s;
 
@@ -30,7 +30,7 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  background: #e8e8e8;
+  background: light-dark(#e8e8e8, #343a40);
 
   img {
     width: 100%;
@@ -102,14 +102,14 @@
   display: block;
   font-weight: 600;
   font-size: .88rem;
-  color: #222;
+  color: light-dark(#222, #d9d9d9);
   text-decoration: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.3;
 
-  &:hover { color: #0062cc; }
+  &:hover { color: light-dark(#0062cc, #71adef); }
 }
 
 .foto-meta {
@@ -117,14 +117,14 @@
   align-items: center;
   justify-content: space-between;
   font-size: .76rem;
-  color: #6b6b6b;
+  color: light-dark(#6b6b6b, #adadad);
 }
 
 .foto-author {
   display: flex;
   align-items: center;
   gap: 5px;
-  color: #555;
+  color: light-dark(#555, #bababa);
   text-decoration: none;
   font-weight: 500;
   min-width: 0;
@@ -135,7 +135,7 @@
     white-space: nowrap;
   }
 
-  &:hover { color: #0062cc; }
+  &:hover { color: light-dark(#0062cc, #71adef); }
 }
 
 .foto-date {
@@ -155,16 +155,16 @@
 .page-btn {
   padding: 5px 11px;
   border-radius: 4px;
-  background: #eee;
+  background: light-dark(#eee, #30353b);
   cursor: pointer;
   font-size: .9rem;
   text-decoration: none;
-  color: #333;
+  color: light-dark(#333, #cfcfcf);
 
   &.active {
     background: #007bff;
     color: #fff;
   }
 
-  &:hover:not(.active) { background: #ddd; }
+  &:hover:not(.active) { background: light-dark(#ddd, #3c434a); }
 }

@@ -88,6 +88,9 @@ export const appConfig: ApplicationConfig = {
       // La barra se vacía: muestra cuánto le queda al aviso.
       progressAnimation: 'decreasing',
       closeButton: true,
+      // Los avisos traen HTML (p. ej. "te dieron <b>8</b> puntos"). Va por [innerHTML], que Angular sanea
+      // (quita <script>, on*="..." y javascript:), y el API ya sanea los mensajes de notificación.
+      enableHtml: true,
       // El mismo aviso repetido (p. ej. varias peticiones que fallan juntas) no se apila: se reinicia su tiempo.
       preventDuplicates: true,
       resetTimeoutOnDuplicate: true,

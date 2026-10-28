@@ -8,15 +8,15 @@
 
   .rank {
     &.gold {
-      color: #d4a017;
+      color: light-dark(#d4a017, #edc660);
     }
 
     &.silver {
-      color: #9aa3ab;
+      color: light-dark(#9aa3ab, #8c8c8c);
     }
 
     &.bronze {
-      color: #c0794a;
+      color: light-dark(#c0794a, #cd956f);
     }
   }
 }

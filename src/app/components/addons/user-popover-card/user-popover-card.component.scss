@@ -1,11 +1,11 @@
 .upop {
   width: 300px;
-  background: #fff;
+  background: light-dark(#fff, #1e2124);
   border-radius: 10px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, .18);
   border: 1px solid rgba(0, 0, 0, .06);
   font-size: .88rem;
-  color: #333;
+  color: light-dark(#333, #cfcfcf);
   overflow: hidden;
   animation: popIn .12s ease-out;
 }
@@ -34,7 +34,7 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+  background: linear-gradient(90deg, light-dark(#eee, #30353b) 25%, light-dark(#f5f5f5, #2b3035) 50%, light-dark(#eee, #30353b) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.2s infinite;
   flex-shrink: 0;
@@ -50,7 +50,7 @@
 .skel-line {
   height: 11px;
   border-radius: 6px;
-  background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+  background: linear-gradient(90deg, light-dark(#eee, #30353b) 25%, light-dark(#f5f5f5, #2b3035) 50%, light-dark(#eee, #30353b) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.2s infinite;
 }
@@ -82,8 +82,8 @@
   display: flex;
   gap: 12px;
   padding: 14px 14px 10px;
-  background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
-  border-bottom: 1px solid #f0f0f0;
+  background: linear-gradient(135deg, light-dark(#f8f9ff, #262b2f) 0%, light-dark(#fff, #1e2124) 100%);
+  border-bottom: 1px solid light-dark(#f0f0f0, #373e44);
 }
 
 .upop__avatar-wrap {
@@ -102,14 +102,14 @@
   width: 11px;
   height: 11px;
   border-radius: 50%;
-  border: 2px solid #fff;
+  border: 2px solid light-dark(#fff, #2e3338);
 
   &.online {
     background: #22c55e;
   }
 
   &.offline {
-    background: #9ca3af;
+    background: light-dark(#9ca3af, #646f7b);
   }
 }
 
@@ -134,20 +134,20 @@
 .upop__online-label {
   font-size: .72rem;
   font-weight: 500;
-  color: #9ca3af;
-  background: #f3f4f6;
+  color: light-dark(#9ca3af, #8a8a8a);
+  background: light-dark(#f3f4f6, #2b3035);
   padding: 1px 6px;
   border-radius: 10px;
 
   &.online {
-    color: #16a34a;
-    background: #dcfce7;
+    color: light-dark(#16a34a, #7eeea7);
+    background: light-dark(#dcfce7, #1e502f);
   }
 }
 
 .upop__fullname {
   font-size: .82rem;
-  color: #666;
+  color: light-dark(#666, #b0b0b0);
 }
 
 .upop__rango {
@@ -160,17 +160,17 @@
   align-items: center;
   gap: 5px;
   font-size: .8rem;
-  color: #666;
+  color: light-dark(#666, #b0b0b0);
 }
 
 // Message
 .upop__msg {
   padding: 8px 14px;
   font-size: .82rem;
-  color: #555;
+  color: light-dark(#555, #bababa);
   font-style: italic;
-  border-bottom: 1px solid #f0f0f0;
-  background: #fafafa;
+  border-bottom: 1px solid light-dark(#f0f0f0, #373e44);
+  background: light-dark(#fafafa, #272c30);
   display: flex;
   gap: 6px;
   align-items: flex-start;
@@ -186,7 +186,7 @@
 .upop__stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid light-dark(#f0f0f0, #373e44);
 }
 
 .upop__stat {
@@ -194,7 +194,7 @@
   flex-direction: column;
   align-items: center;
   padding: 9px 4px;
-  border-right: 1px solid #f0f0f0;
+  border-right: 1px solid light-dark(#f0f0f0, #373e44);
 
   &:last-child {
     border-right: none;
@@ -204,13 +204,13 @@
 .upop__stat-val {
   font-weight: 700;
   font-size: .95rem;
-  color: #222;
+  color: light-dark(#222, #d9d9d9);
   line-height: 1;
 }
 
 .upop__stat-lbl {
   font-size: .68rem;
-  color: #6b6b6b;
+  color: light-dark(#6b6b6b, #adadad);
   margin-top: 2px;
   text-align: center;
 }
@@ -225,7 +225,7 @@
 
 .upop__since {
   font-size: .78rem;
-  color: #6b6b6b;
+  color: light-dark(#6b6b6b, #adadad);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -234,7 +234,7 @@
 .upop__link {
   font-size: .82rem;
   font-weight: 600;
-  color: #2563eb;
+  color: light-dark(#2563eb, #5181ec);
   text-decoration: none;
 
   &:hover {
@@ -245,6 +245,6 @@
 .upop__error {
   padding: 16px;
   text-align: center;
-  color: #6b6b6b;
+  color: light-dark(#6b6b6b, #adadad);
   font-size: .85rem;
 }

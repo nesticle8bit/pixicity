@@ -7,9 +7,9 @@
   text-align: center;
   vertical-align: -2px;
 
-  &--foto { color: #8e44ad; }
-  &--shout { color: #006595; }
-  &--like { color: #d6336c; }
-  &--comunidad { color: #2f9e44; }
-  &--logro { color: #e8a200; }
+  &--foto { color: light-dark(#8e44ad, #b57ecc); }
+  &--shout { color: light-dark(#006595, #8ed2f2); }
+  &--like { color: light-dark(#d6336c, #df5e8b); }
+  &--comunidad { color: light-dark(#2f9e44, #85db95); }
+  &--logro { color: light-dark(#e8a200, #eec362); }
 }

@@ -51,9 +51,11 @@
         }
         @case ('image') {
         <div class="rich-editor__menu">
+          @if (permitirSubida()) {
           <button type="button" (click)="pickImage()">
             <mat-icon>upload</mat-icon> Subir desde el equipo
           </button>
+          }
           <button type="button" (click)="imageFromUrl()">
             <mat-icon>link</mat-icon> Desde una URL
           </button>
