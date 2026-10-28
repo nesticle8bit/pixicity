@@ -1,17 +1,17 @@
 <!-- El rol de diálogo lo pone el contenedor (panel del popover o bottom sheet). -->
 <div class="emojis" role="group" aria-label="Emojis">
   <div class="emojis__tabs" role="tablist" aria-label="Categorías">
-    @for (c of categorias(); track c.id) {
-    <button type="button" role="tab" class="emojis__tab" [class.is-activa]="c.id === activaId()"
-      [attr.aria-selected]="c.id === activaId()" [attr.title]="c.nombre" [attr.aria-label]="c.nombre"
-      (click)="activaId.set(c.id)">{{c.icono}}</button>
-    }
     @if (conEmotes()) {
     @for (g of gruposEmotes; track g.id) {
     <button type="button" role="tab" class="emojis__tab" [class.is-activa]="g.id === activaId()"
       [attr.aria-selected]="g.id === activaId()" [attr.title]="g.nombre" [attr.aria-label]="g.nombre"
-      (click)="activaId.set(g.id)"><img [src]="ruta + g.icono" alt="" class="emojis__tab-img"></button>
+      (click)="elegirPestana(g.id)"><img [src]="ruta + g.icono" alt="" class="emojis__tab-img"></button>
     }
+    }
+    @for (c of categorias(); track c.id) {
+    <button type="button" role="tab" class="emojis__tab" [class.is-activa]="c.id === activaId()"
+      [attr.aria-selected]="c.id === activaId()" [attr.title]="c.nombre" [attr.aria-label]="c.nombre"
+      (click)="elegirPestana(c.id)">{{c.icono}}</button>
     }
   </div>
 

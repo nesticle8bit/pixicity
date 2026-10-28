@@ -132,6 +132,9 @@ export const RUTA_EMOTES = '/assets/emotes/';
 
 const POR_CODIGO = new Map(GRUPOS_EMOTES.flatMap((g) => g.emotes).map((e) => [e.codigo, e]));
 
+/** El emote de un código (sin los dos puntos, sin importar mayúsculas), o undefined si no existe. */
+export const buscarEmote = (codigo: string): Emote | undefined => POR_CODIGO.get(codigo.toLowerCase());
+
 /**
  * Reemplaza los `:codigo:` conocidos por su GIF en HTML ya escapado. Solo toca el texto fuera de las etiquetas
  * (no rompe URLs ni atributos); los códigos que no existen quedan como texto.
@@ -143,7 +146,7 @@ export function reemplazarEmotes(html: string): string {
       i % 2
         ? parte
         : parte.replace(/:([a-zA-Z0-9]+):/g, (texto, codigo: string) => {
-            const e = POR_CODIGO.get(codigo.toLowerCase());
+            const e = buscarEmote(codigo);
             return e
               ? `<img class="emote" src="${RUTA_EMOTES}${e.archivo}" alt=":${e.codigo}:" title=":${e.codigo}:" loading="lazy">`
               : texto;

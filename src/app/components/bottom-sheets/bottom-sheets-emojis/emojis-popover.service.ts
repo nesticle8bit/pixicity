@@ -81,6 +81,8 @@ export class EmojisPopoverService {
 
     const picker = ref.attach(new ComponentPortal(BottomSheetsEmojisComponent));
     picker.instance.conEmotes.set(!!opciones.emotes);
+    // Pintar ya la pestaña inicial (emotes o emojis) para que el foco de abajo caiga en un botón que sigue ahí.
+    picker.changeDetectorRef.detectChanges();
     picker.instance.elegido.subscribe(opciones.alElegir);
     picker.instance.cerrar.subscribe(() => this.cerrar(true));
     ref.backdropClick().subscribe(() => this.cerrar(false));

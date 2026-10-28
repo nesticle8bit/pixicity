@@ -69,7 +69,7 @@
                   </div>
                 }
                 @if (m.contenido) {
-                  <div class="chat-bubble__content" [innerHTML]="m.contenido"></div>
+                  <div class="chat-bubble__content" [innerHTML]="conEmotes(m.contenido)"></div>
                 }
                 <small class="chat-bubble__meta">
                   {{m.fechaRegistro | date:'shortTime'}}

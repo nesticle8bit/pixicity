@@ -30,12 +30,20 @@ export class BottomSheetsEmojisComponent {
       ? [{ id: 'recientes', nombre: 'Usados recientemente', icono: '🕘', emojis: recientes }, ...CATEGORIAS_EMOJI]
       : CATEGORIAS_EMOJI;
   });
-  readonly activaId = signal(this.categorias()[0].id);
-  readonly activa = computed(() => this.categorias().find((c) => c.id === this.activaId()) ?? this.categorias()[0]);
-
   /** Emoticones de imagen de Taringa!: se inserta `:codigo:` y el comentario lo muestra como GIF. */
   readonly conEmotes = signal(false);
   readonly gruposEmotes = GRUPOS_EMOTES;
+
+  /** Pestaña elegida; sin elegir, la primera visible (los emotes van primero cuando se muestran). */
+  private readonly elegidaId = signal<string | null>(null);
+  readonly activaId = computed(
+    () => this.elegidaId() ?? (this.conEmotes() ? this.gruposEmotes[0].id : this.categorias()[0].id),
+  );
+  readonly activa = computed(() => this.categorias().find((c) => c.id === this.activaId()) ?? this.categorias()[0]);
+
+  elegirPestana(id: string): void {
+    this.elegidaId.set(id);
+  }
   readonly ruta = RUTA_EMOTES;
   readonly grupoEmotes = computed(() => this.gruposEmotes.find((g) => g.id === this.activaId()) ?? null);
 

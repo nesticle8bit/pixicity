@@ -107,6 +107,14 @@ img {
             border-radius: 8px;
             display: block;
         }
+
+        // :emotes: de Taringa!: en línea con el texto, sin el formato de las fotos.
+        ::ng-deep img.emote {
+            display: inline-block;
+            max-height: 3em;
+            border-radius: 0;
+            vertical-align: middle;
+        }
     }
 
     &__delete {

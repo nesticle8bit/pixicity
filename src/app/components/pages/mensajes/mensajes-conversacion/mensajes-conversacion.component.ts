@@ -16,6 +16,7 @@ import { UsuarioAvatarViewModel } from 'src/app/models/seguridad/seguridad-vm.mo
 import { DatePipe } from '@angular/common';
 import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 import { MatDialog } from '@angular/material/dialog';
+import { reemplazarEmotes } from 'src/app/shared/helpers/emotes';
 
 const PAGE_SIZE = 30;
 /** Imágenes por mensaje (igual que el API). */
@@ -59,6 +60,9 @@ export class MensajesConversacionComponent implements OnInit {
   private notificationService = inject(NotificationService);
   private signalrService = inject(SignalrService);
   private badgeService = inject(MensajesBadgeService);
+
+  /** Los :codigo: de los emotes de Taringa! se muestran como GIF. */
+  readonly conEmotes = reemplazarEmotes;
   private dialog = inject(MatDialog);
 
   private readonly destroyRef = inject(DestroyRef);

@@ -144,6 +144,7 @@ export class ShoutComposerComponent {
     await this.emojis.alternar(boton, {
       alElegir: (emoji) => this.insertarEmoji(emoji),
       noTapar: this.campoShout()?.nativeElement,
+      emotes: true,
       alCerrar: (porTeclado) => {
         this.emojisAbierto = false;
         if (porTeclado) this.campoShout()?.nativeElement.focus();
