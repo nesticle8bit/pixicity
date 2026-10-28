@@ -56,15 +56,15 @@ export class ModeracionApelacionesComponent implements OnInit {
     this.cargar();
   }
 
-  aceptar(a: Apelacion): void {
+  async aceptar(a: Apelacion): Promise<void> {
     const revierte = a.accionNombre?.toLowerCase().includes('baneado') ? 'se levanta el baneo' : 'se restaura el contenido';
-    if (!this.notificationService.confirm(`¿Aceptar la apelación de ${a.userName}? Al aceptarla ${revierte}.`)) return;
-    const respuesta = this.notificationService.prompt('Mensaje para el usuario (opcional):') ?? '';
+    if (!await this.notificationService.confirm(`¿Aceptar la apelación de ${a.userName}? Al aceptarla ${revierte}.`)) return;
+    const respuesta = await this.notificationService.prompt('Mensaje para el usuario (opcional):') ?? '';
     this.resolver(a, true, respuesta);
   }
 
-  rechazar(a: Apelacion): void {
-    const respuesta = this.notificationService.prompt(`¿Por qué se mantiene la decisión? (le llega a ${a.userName})`);
+  async rechazar(a: Apelacion): Promise<void> {
+    const respuesta = await this.notificationService.prompt(`¿Por qué se mantiene la decisión? (le llega a ${a.userName})`);
     if (!respuesta?.trim()) return;
     this.resolver(a, false, respuesta);
   }

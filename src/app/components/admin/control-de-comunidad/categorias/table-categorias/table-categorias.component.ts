@@ -93,9 +93,9 @@ export class TableCategoriasComponent implements OnInit {
   }
 
   /** Alterna eliminada/activa: una categoría eliminada no se ofrece al crear posts, pero sus posts siguen visibles. */
-  cambiarEstado(categoria: CategoriaAdmin): void {
+  async cambiarEstado(categoria: CategoriaAdmin): Promise<void> {
     const accion = categoria.eliminado ? 'recuperar' : 'eliminar';
-    if (!this.notificationService.confirm(`¿Seguro que deseas ${accion} la categoría "${categoria.nombre}"?`)) return;
+    if (!await this.notificationService.confirm(`¿Seguro que deseas ${accion} la categoría "${categoria.nombre}"?`)) return;
 
     this.parametrosService.cambiarEstadoCategoria(categoria.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((eliminada) => {
       categoria.eliminado = eliminada;

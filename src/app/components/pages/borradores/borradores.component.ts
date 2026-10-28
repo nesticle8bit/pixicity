@@ -80,10 +80,10 @@ export class BorradoresComponent implements OnInit {
     this.getBorradores(categoria.categoria.id);
   }
 
-  deleteBorrador(borrador: BorradorViewModel): void {
+  async deleteBorrador(borrador: BorradorViewModel): Promise<void> {
     const accion = !borrador.eliminado ? 'eliminar' : 'recuperar';
 
-    if (!this.notificationService.confirm(`¿Seguro que deseas ${accion} este borrador?`)) {
+    if (!await this.notificationService.confirm(`¿Seguro que deseas ${accion} este borrador?`)) {
       return;
     }
 

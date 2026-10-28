@@ -109,9 +109,11 @@ test('la imagen desde una URL va donde está el cursor', async ({ page }) => {
   await page.keyboard.type('Abajo');
   await page.keyboard.press('ArrowUp');
 
-  page.once('dialog', (d) => d.accept('http://localhost:4300/assets/images/avatar.png?n=9'));
   await page.getByRole('button', { name: 'Insertar imagen' }).click();
   await page.getByRole('button', { name: 'Desde una URL' }).click();
+  const dialogo = page.getByRole('alertdialog', { name: 'Insertar imagen' });
+  await dialogo.getByRole('textbox').fill('http://localhost:4300/assets/images/avatar.png?n=9');
+  await dialogo.getByRole('button', { name: 'Insertar' }).click();
 
   await expect.poll(async () => (await estructura(ed)).filter((b) => b)).toEqual(['Arriba', '[img 9]', 'Abajo']);
 });
@@ -292,8 +294,10 @@ test('un video seleccionado se corta con Ctrl+X', async ({ page }) => {
   await ed.click();
   await page.keyboard.type('Mirá esto');
   await page.keyboard.press('Enter');
-  page.once('dialog', (d) => d.accept('https://www.youtube.com/watch?v=dQw4w9WgXcQ'));
   await page.getByRole('button', { name: /YouTube/ }).click();
+  const dialogo = page.getByRole('alertdialog', { name: 'Insertar video' });
+  await dialogo.getByRole('textbox').fill('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+  await dialogo.getByRole('textbox').press('Enter');
   const video = ed.locator('figure.video-yt');
   await expect(video).toHaveCount(1);
 

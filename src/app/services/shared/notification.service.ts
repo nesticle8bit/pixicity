@@ -1,11 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { enNavegador } from '../../shared/helpers/plataforma';
+import { ConfirmarService } from './confirmar.service';
 
 /** Avisos al usuario. En el render del servidor (SSR para bots) no hay a quién mostrarlos: no hacen nada. */
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
   private toastr = inject(ToastrService);
+  private confirmar = inject(ConfirmarService);
   private readonly activo = enNavegador();
 
   success(message: string, title?: string): void {
@@ -24,11 +26,12 @@ export class NotificationService {
     if (this.activo) this.toastr.warning(message, title);
   }
 
-  confirm(message: string): boolean {
-    return this.activo && window.confirm(message);
+  /** Atajos al ConfirmarService (diálogo propio): para título, textos de botones, etc., usar ese directamente. */
+  confirm(message: string): Promise<boolean> {
+    return this.confirmar.confirmar(message);
   }
 
-  prompt(message: string): string | null {
-    return this.activo ? window.prompt(message) : null;
+  prompt(message: string): Promise<string | null> {
+    return this.confirmar.pedirTexto(message);
   }
 }

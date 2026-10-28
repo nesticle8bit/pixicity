@@ -140,8 +140,8 @@ export class DashboardLogsComponent implements OnInit {
       });
   }
 
-  resolverTodos(): void {
-    if (!this.notificationService.confirm(`¿Marcar como resueltos los ${this.totalCount} registros pendientes de este filtro?`)) return;
+  async resolverTodos(): Promise<void> {
+    if (!await this.notificationService.confirm(`¿Marcar como resueltos los ${this.totalCount} registros pendientes de este filtro?`)) return;
 
     this.appLogsService
       .resolverTodos(this.filtro)

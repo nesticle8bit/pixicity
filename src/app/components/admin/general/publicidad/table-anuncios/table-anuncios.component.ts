@@ -137,8 +137,8 @@ export class TableAnunciosComponent implements OnInit {
       });
   }
 
-  eliminar(anuncio: AnuncioAdmin): void {
-    if (!this.notificationService.confirm(`¿Eliminar el anuncio "${anuncio.nombre}"? Sus estadísticas también dejan de verse.`)) return;
+  async eliminar(anuncio: AnuncioAdmin): Promise<void> {
+    if (!await this.notificationService.confirm(`¿Eliminar el anuncio "${anuncio.nombre}"? Sus estadísticas también dejan de verse.`)) return;
     this.anunciosService
       .deleteAnuncio(anuncio.id)
       .pipe(takeUntilDestroyed(this.destroyRef))

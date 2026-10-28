@@ -16,6 +16,7 @@ import { MainSubmenuComponent } from './components/main/main-submenu/main-submen
 import { MainUltimasNoticiasComponent } from './components/main/main-ultimas-noticias/main-ultimas-noticias.component';
 import { MainFooterComponent } from './components/main/main-footer/main-footer.component';
 import { AvisoEmailComponent } from './components/shared/aviso-email/aviso-email.component';
+import { ConfirmarComponent } from './components/shared/confirmar/confirmar.component';
 import { SsrSalud } from './shared/helpers/ssr-salud';
 import { AnunciosService } from './services/shared/anuncios.service';
 import { ScriptsGlobalesService } from './services/shared/scripts-globales.service';
@@ -41,6 +42,7 @@ const DEFAULT_DESCRIPTION =
         AvisoEmailComponent,
         RouterOutlet,
         MainFooterComponent,
+        ConfirmarComponent,
     ],
 })
 export class AppComponent {

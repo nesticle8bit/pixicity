@@ -89,9 +89,9 @@ export class TableNoticiasComponent implements OnInit {
     });
   }
 
-  deleteNoticia(noticia: NoticiaAdmin): void {
+  async deleteNoticia(noticia: NoticiaAdmin): Promise<void> {
     const accion = noticia.eliminado ? 'recuperar' : 'eliminar';
-    if (this.notificationService.confirm(`¿Está seguro de ${accion} esta noticia?`)) {
+    if (await this.notificationService.confirm(`¿Está seguro de ${accion} esta noticia?`)) {
       this.noticiasService.deleteNoticias(noticia.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success(

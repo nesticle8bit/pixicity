@@ -242,9 +242,9 @@ export class ComunidadTemaViewComponent implements OnInit {
 
   // - Tema
 
-  eliminar(): void {
+  async eliminar(): Promise<void> {
     const tema = this.tema;
-    if (!tema || !confirm('¿Eliminar este tema? Esta acción no se puede deshacer.')) return;
+    if (!tema || !(await this.notificationService.confirm('¿Eliminar este tema? Esta acción no se puede deshacer.'))) return;
 
     this.comunidadesService.deleteTema(tema.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {

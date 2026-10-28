@@ -9,6 +9,7 @@ import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interfa
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
 import { sumarContexto } from 'src/app/services/shared/seo-title.strategy';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
@@ -47,6 +48,7 @@ export class FotoDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private seoService = inject(SEOService);
+  private confirmarService = inject(ConfirmarService);
 
   private readonly destroyRef = inject(DestroyRef);
 
@@ -158,8 +160,8 @@ export class FotoDetailComponent implements OnInit {
     });
   }
 
-  eliminar(): void {
-    if (!confirm('¿Eliminar esta foto?')) return;
+  async eliminar(): Promise<void> {
+    if (!(await this.confirmarService.confirmar('¿Eliminar esta foto?'))) return;
 
     this.fotosService.deleteFoto(this.fotoId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => this.router.navigate(['/fotos']),

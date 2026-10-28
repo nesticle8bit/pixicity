@@ -104,9 +104,9 @@ export class TablePostsComponent implements OnInit {
     });
   }
 
-  eliminarPost(postId: number, index: number): void {
-    if (this.notificationService.confirm('¿Seguro que deseas borrar este post?')) {
-      const razon = this.notificationService.prompt('Ingrese por favor la razón por la cual va a eliminar este post');
+  async eliminarPost(postId: number, index: number): Promise<void> {
+    if (await this.notificationService.confirm('¿Seguro que deseas borrar este post?')) {
+      const razon = await this.notificationService.prompt('Ingrese por favor la razón por la cual va a eliminar este post');
       if (razon) {
         this.postsService.deletePost(postId, razon).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response: boolean) => {
           if (response) {
@@ -118,8 +118,8 @@ export class TablePostsComponent implements OnInit {
     }
   }
 
-  recuperarPost(postId: number, index: number): void {
-    if (this.notificationService.confirm('¿Recuperar este post? Volverá a estar visible para todos.')) {
+  async recuperarPost(postId: number, index: number): Promise<void> {
+    if (await this.notificationService.confirm('¿Recuperar este post? Volverá a estar visible para todos.')) {
       this.postsService.recuperarPost(postId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok) => {
         if (ok) {
           this.notificationService.success('El post volvió a estar visible', 'Recuperado');

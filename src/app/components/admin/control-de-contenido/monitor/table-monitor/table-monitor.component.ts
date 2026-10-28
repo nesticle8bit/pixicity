@@ -138,9 +138,9 @@ export class TableMonitorComponent implements OnInit {
     this.getMonitors();
   }
 
-  deleteNotificacion(notificacion: MonitorAdmin): void {
+  async deleteNotificacion(notificacion: MonitorAdmin): Promise<void> {
     const accion = notificacion.eliminado ? 'recuperar' : 'eliminar';
-    if (this.notificationService.confirm(`¿Está seguro de ${accion} esta notificación?`)) {
+    if (await this.notificationService.confirm(`¿Está seguro de ${accion} esta notificación?`)) {
       this.logsService.deleteNotificacion(notificacion.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success(

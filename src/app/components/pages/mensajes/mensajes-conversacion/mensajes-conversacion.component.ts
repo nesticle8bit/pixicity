@@ -446,8 +446,8 @@ export class MensajesConversacionComponent implements OnInit {
   }
 
   // Oculta el mensaje solo para mí (el otro lo sigue viendo).
-  eliminarMensaje(mensaje: MensajeViewModel): void {
-    if (!confirm('¿Eliminar este mensaje? Solo se borrará para ti.')) {
+  async eliminarMensaje(mensaje: MensajeViewModel): Promise<void> {
+    if (!(await this.notificationService.confirm('¿Eliminar este mensaje? Solo se borrará para ti.'))) {
       return;
     }
 

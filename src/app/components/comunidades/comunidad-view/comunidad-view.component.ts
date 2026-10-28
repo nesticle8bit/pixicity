@@ -216,10 +216,10 @@ export class ComunidadViewComponent implements OnInit {
     });
   }
 
-  abandonar(): void {
+  async abandonar(): Promise<void> {
     const comunidad = this.comunidad;
     if (!comunidad) return;
-    if (!this.notificationService.confirm('¿Abandonar esta comunidad?')) return;
+    if (!await this.notificationService.confirm('¿Abandonar esta comunidad?')) return;
     this.comunidadesService.abandonar(comunidad.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       comunidad.soyMiembro = false;
       comunidad.miembrosCount = Math.max(0, comunidad.miembrosCount - 1);
@@ -242,10 +242,10 @@ export class ComunidadViewComponent implements OnInit {
       || this.currentUser?.usuario?.rango === 'Administrador';
   }
 
-  eliminarComunidad(): void {
+  async eliminarComunidad(): Promise<void> {
     const comunidad = this.comunidad;
     if (!comunidad) return;
-    if (!this.notificationService.confirm(`¿Eliminar la comunidad "${comunidad.nombre}"? Esta acción no se puede deshacer.`)) return;
+    if (!await this.notificationService.confirm(`¿Eliminar la comunidad "${comunidad.nombre}"? Esta acción no se puede deshacer.`)) return;
     this.comunidadesService.deleteComunidad(comunidad.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.notificationService.success('Comunidad eliminada', 'Listo');
       this.router.navigate(['/comunidades']);

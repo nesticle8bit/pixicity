@@ -152,8 +152,8 @@ export class DashboardModeracionComponent implements OnInit {
     });
   }
 
-  descartar(reporte: Reporte): void {
-    if (!this.notificationService.confirm('¿Descartar este reporte del listado?')) return;
+  async descartar(reporte: Reporte): Promise<void> {
+    if (!await this.notificationService.confirm('¿Descartar este reporte del listado?')) return;
     this.moderacionService.descartarReporte(reporte.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.notificationService.success('Reporte descartado', 'Moderación');
@@ -202,7 +202,7 @@ export class DashboardModeracionComponent implements OnInit {
     this.seleccion = this.todosSeleccionados ? new Set() : new Set(this.reportes.map((r) => r.id));
   }
 
-  atenderSeleccion(accion: AccionLote): void {
+  async atenderSeleccion(accion: AccionLote): Promise<void> {
     const ids = [...this.seleccion];
     if (ids.length === 0) return;
     const textos: Record<AccionLote, [string, string]> = {
@@ -210,7 +210,7 @@ export class DashboardModeracionComponent implements OnInit {
       descartar: [`¿Descartar ${ids.length} reporte(s)?`, 'descartados'],
       ocultar: [`¿Eliminar el contenido de ${ids.length} reporte(s)? Se avisará a cada autor.`, 'atendidos y su contenido eliminado'],
     };
-    if (!this.notificationService.confirm(textos[accion][0])) return;
+    if (!await this.notificationService.confirm(textos[accion][0])) return;
     this.moderacionService.atenderLote(ids, accion).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (cantidad) => {
         this.notificationService.success(`${cantidad} reporte(s) ${textos[accion][1]}`, 'Moderación');

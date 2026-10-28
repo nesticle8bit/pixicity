@@ -86,8 +86,8 @@ export class TableFotosComponent implements OnInit {
     this.getFotos();
   }
 
-  eliminarFoto(fotoId: number, index: number): void {
-    if (this.notificationService.confirm('¿Seguro que deseas borrar esta foto?')) {
+  async eliminarFoto(fotoId: number, index: number): Promise<void> {
+    if (await this.notificationService.confirm('¿Seguro que deseas borrar esta foto?')) {
       this.fotosService
         .deleteFoto(fotoId)
         .pipe(takeUntilDestroyed(this.destroyRef))

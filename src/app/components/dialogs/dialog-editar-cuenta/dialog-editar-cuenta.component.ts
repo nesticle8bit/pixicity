@@ -94,11 +94,11 @@ export class DialogEditarCuentaComponent implements OnInit {
     return (!!valor.userName && valor.userName.trim() !== this.userNameOriginal) || !!valor.nuevaPassword || !!valor.quitarDosFactores;
   }
 
-  guardar(): void {
+  async guardar(): Promise<void> {
     if (this.formGroup.invalid) return;
     const valor = this.formGroup.value;
     const renombra = valor.userName.trim() !== this.userNameOriginal;
-    if (renombra && !this.notificationService.confirm(
+    if (renombra && !await this.notificationService.confirm(
       `¿Renombrar a ${this.userNameOriginal} como ${valor.userName.trim()}? La dirección de su perfil cambia y las menciones viejas (@${this.userNameOriginal}) dejan de enlazarlo.`
     )) return;
 

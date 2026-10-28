@@ -384,8 +384,8 @@ export class ComentariosComponent {
     });
   }
 
-  eliminar(c: ComentarioVista): void {
-    if (!this.notificationService.confirm('¿Eliminar este comentario?')) return;
+  async eliminar(c: ComentarioVista): Promise<void> {
+    if (!await this.notificationService.confirm('¿Eliminar este comentario?')) return;
 
     this.acciones.eliminar(c.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       // El API borra también sus respuestas.

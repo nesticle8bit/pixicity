@@ -18,6 +18,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
 import {
   BLOCK_TAGS,
   CARET_GUARD,
@@ -102,6 +103,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
   private readonly fotosService = inject(IHttpFotosService);
   private readonly emojis = inject(EmojisPopoverService);
   private readonly notificationService = inject(NotificationService);
+  private readonly confirmarService = inject(ConfirmarService);
 
   disabled = false;
   isEmpty = true;
@@ -605,10 +607,17 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
     this.uploadSel = null;
   }
 
-  imageFromUrl(): void {
+  // El diálogo se lleva el foco: la posición va guardada en offsets de texto y se restaura al volver.
+  async imageFromUrl(): Promise<void> {
     this.openMenu = null;
     const sel = this.guardarPosicion();
-    const url = (prompt('URL de la imagen:') || '').trim();
+    const url = await this.confirmarService.pedirTexto({
+      titulo: 'Insertar imagen',
+      mensaje: 'URL de la imagen:',
+      placeholder: 'https://…',
+      aceptar: 'Insertar',
+      requerido: true,
+    });
     if (!url) return;
     if (!/^https?:\/\//i.test(url)) {
       this.notificationService.warning('La URL de la imagen debe empezar con http:// o https://', 'Imagen no válida');
@@ -624,10 +633,16 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
     this.afterChange();
   }
 
-  youtubeFromUrl(): void {
+  async youtubeFromUrl(): Promise<void> {
     this.openMenu = null;
     const sel = this.guardarPosicion();
-    const url = (prompt('Enlace del video de YouTube:') || '').trim();
+    const url = await this.confirmarService.pedirTexto({
+      titulo: 'Insertar video',
+      mensaje: 'Enlace del video de YouTube:',
+      placeholder: 'https://www.youtube.com/watch?v=…',
+      aceptar: 'Insertar',
+      requerido: true,
+    });
     if (!url) return;
     const video = videoYoutube(url);
     if (!video) {
@@ -1069,15 +1084,21 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
   }
 
   // Pie de foto: la imagen pasa a un <figure> (no editable) con <figcaption>; vacío lo quita
-  editImgCaption(): void {
+  async editImgCaption(): Promise<void> {
     const img = this.selectedImg;
     const wrap = img?.closest<HTMLElement>('.img-resizable');
     if (!img || !wrap) return;
     const figure = wrap.closest<HTMLElement>('figure.img-figure');
     const actual = figure?.querySelector('figcaption')?.textContent ?? '';
-    const texto = prompt('Pie de foto (déjalo vacío para quitarlo):', actual);
-    if (texto === null) return;
-    const caption = texto.trim();
+    const caption = await this.confirmarService.pedirTexto({
+      titulo: 'Pie de foto',
+      mensaje: 'Déjalo vacío para quitarlo.',
+      valor: actual,
+      aceptar: 'Guardar',
+      peligro: false,
+    });
+    // Mientras el diálogo estaba abierto la imagen pudo borrarse (o deshacerse) desde otro lado.
+    if (caption === null || !this.editor.contains(wrap)) return;
 
     if (figure && !caption) {
       // Sin pie: la imagen vuelve a un párrafo, con su alineación

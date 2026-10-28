@@ -319,10 +319,10 @@ export class PostsViewComponent implements OnInit {
     }
   }
 
-  eliminarPost(): void {
+  async eliminarPost(): Promise<void> {
     if (
       !this.post ||
-      !this.notificationService.confirm('¿Seguro que deseas borrar este post?')
+      !await this.notificationService.confirm('¿Seguro que deseas borrar este post?')
     ) {
       return;
     }
@@ -330,7 +330,7 @@ export class PostsViewComponent implements OnInit {
     // Staff borrando un post ajeno: la causa queda en la bitácora y el autor la ve en /apelaciones.
     let razon = '';
     if (this.esStaff && !this.esAutor) {
-      razon = this.notificationService.prompt('Causa de la eliminación (el autor la verá en sus apelaciones)')?.trim() ?? '';
+      razon = (await this.notificationService.prompt('Causa de la eliminación (el autor la verá en sus apelaciones)')) ?? '';
       if (!razon) {
         return;
       }

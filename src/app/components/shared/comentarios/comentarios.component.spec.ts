@@ -81,15 +81,15 @@ describe('ComentariosComponent', () => {
     expect(componente.arbol[0].respuestas?.map((r) => r.id)).toEqual([2, 10]);
   });
 
-  it('borrar un comentario quita también sus respuestas', () => {
+  it('borrar un comentario quita también sus respuestas', async () => {
     const notificaciones = TestBed.inject(NotificationService) as jasmine.SpyObj<NotificationService>;
-    notificaciones.confirm.and.returnValue(true);
+    notificaciones.confirm.and.resolveTo(true);
     acciones.eliminar.and.returnValue(of(true));
     componente.comentarios = [comentario({ id: 1 }), comentario({ id: 2, parentId: 1 }), comentario({ id: 3 })];
     let total = -1;
     componente.totalCambio.subscribe((t) => (total = t));
 
-    componente.eliminar(componente.arbol.find((c) => c.id === 1)!);
+    await componente.eliminar(componente.arbol.find((c) => c.id === 1)!);
 
     expect(componente.total).toBe(1);
     expect(total).toBe(1);

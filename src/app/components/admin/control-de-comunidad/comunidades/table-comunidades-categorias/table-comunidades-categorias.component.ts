@@ -170,11 +170,11 @@ export class TableComunidadesCategoriasComponent implements OnInit {
       });
   }
 
-  deleteCategoria(categoria: ComunidadCategoriaAdmin): void {
+  async deleteCategoria(categoria: ComunidadCategoriaAdmin): Promise<void> {
     if (categoria.comunidades > 0) return;
     const subs = categoria.subCategorias.length;
     const detalle = subs ? ` y sus ${subs} sub-categoría${subs === 1 ? '' : 's'}` : '';
-    if (!this.notificationService.confirm(`¿Eliminar la categoría "${categoria.nombre}"${detalle}?`)) return;
+    if (!await this.notificationService.confirm(`¿Eliminar la categoría "${categoria.nombre}"${detalle}?`)) return;
     this.comunidadesService
       .deleteCategoria(categoria.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -261,9 +261,9 @@ export class TableComunidadesCategoriasComponent implements OnInit {
     this.editandoSubId = null;
   }
 
-  deleteSub(sub: ComunidadSubCategoriaAdmin): void {
+  async deleteSub(sub: ComunidadSubCategoriaAdmin): Promise<void> {
     if (sub.comunidades > 0) return;
-    if (!this.notificationService.confirm(`¿Eliminar la sub-categoría "${sub.nombre}"?`)) return;
+    if (!await this.notificationService.confirm(`¿Eliminar la sub-categoría "${sub.nombre}"?`)) return;
     this.comunidadesService
       .deleteSubCategoria(sub.id)
       .pipe(takeUntilDestroyed(this.destroyRef))

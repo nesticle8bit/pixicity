@@ -91,8 +91,8 @@ export class TableSesionesComponent implements OnInit {
     });
   }
 
-  deleteSession(id: number): void {
-    if (this.notificationService.confirm('¿Está seguro de eliminar esta sesión del usuario?')) {
+  async deleteSession(id: number): Promise<void> {
+    if (await this.notificationService.confirm('¿Está seguro de eliminar esta sesión del usuario?')) {
       this.securityService.deleteSessionById(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if(response) {
           this.notificationService.success('La sesión ha sido eliminado correctamente', 'Eliminado');

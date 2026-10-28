@@ -147,8 +147,8 @@ export class TableAfiliadosComponent implements OnInit {
     });
   }
 
-  deleteAfiliado(afiliado: AfiliadoAdmin, index: number): void {
-    if (this.notificationService.confirm('¿Está seguro de eliminar esta afiliación?')) {
+  async deleteAfiliado(afiliado: AfiliadoAdmin, index: number): Promise<void> {
+    if (await this.notificationService.confirm('¿Está seguro de eliminar esta afiliación?')) {
       this.generalService.deleteAfiliado(afiliado.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success('La afiliación ha sido eliminada correctamente', 'Eliminado');

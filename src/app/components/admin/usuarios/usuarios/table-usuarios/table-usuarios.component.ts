@@ -112,9 +112,9 @@ export class TableUsuariosComponent implements OnInit {
     });
   }
 
-  deleteUser(usuario: UsuarioAdminViewModel): void {
+  async deleteUser(usuario: UsuarioAdminViewModel): Promise<void> {
     const accion = usuario.eliminado ? 'recuperar' : 'eliminar';
-    if (this.notificationService.confirm(`¿Está seguro de ${accion} el usuario?`)) {
+    if (await this.notificationService.confirm(`¿Está seguro de ${accion} el usuario?`)) {
       this.securityService.removeUsuario(usuario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success(
@@ -172,8 +172,8 @@ export class TableUsuariosComponent implements OnInit {
     });
   }
 
-  removeAvatar(usuario: UsuarioAdminViewModel): void {
-    if (this.notificationService.confirm('¿Está seguro de eliminar el avatar del usuario?')) {
+  async removeAvatar(usuario: UsuarioAdminViewModel): Promise<void> {
+    if (await this.notificationService.confirm('¿Está seguro de eliminar el avatar del usuario?')) {
       this.securityService.removeAvatar(usuario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success('El avatar del usuario ha sido eliminado correctamente', 'Eliminado');
@@ -189,8 +189,8 @@ export class TableUsuariosComponent implements OnInit {
     });
   }
 
-  confirmarEmail(usuario: UsuarioAdminViewModel): void {
-    if (!this.notificationService.confirm(`¿Marcar el correo de ${usuario.userName} como confirmado sin que abra el enlace?`)) return;
+  async confirmarEmail(usuario: UsuarioAdminViewModel): Promise<void> {
+    if (!await this.notificationService.confirm(`¿Marcar el correo de ${usuario.userName} como confirmado sin que abra el enlace?`)) return;
     this.securityService.confirmarEmailAdmin(usuario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok) => {
       if (ok) {
         usuario.emailConfirmado = true;

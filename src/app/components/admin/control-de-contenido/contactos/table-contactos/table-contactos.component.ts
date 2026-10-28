@@ -84,8 +84,8 @@ export class TableContactosComponent implements OnInit {
     this.getContactos();
   }
 
-  gestionarContacto(contacto: ContactoAdmin): void {
-    if (this.notificationService.confirm('¿Está seguro de gestionar este contacto?')) {
+  async gestionarContacto(contacto: ContactoAdmin): Promise<void> {
+    if (await this.notificationService.confirm('¿Está seguro de gestionar este contacto?')) {
       this.generalService.gestionarContacto(contacto.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success('El contacto ha sido gestionado correctamente', 'Gestionado');
@@ -95,8 +95,8 @@ export class TableContactosComponent implements OnInit {
     }
   }
 
-  deleteContacto(contacto: ContactoAdmin): void {
-    if (this.notificationService.confirm('¿Está seguro de eliminar este contacto?')) {
+  async deleteContacto(contacto: ContactoAdmin): Promise<void> {
+    if (await this.notificationService.confirm('¿Está seguro de eliminar este contacto?')) {
       this.generalService.deleteContacto(contacto.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success('El contacto ha sido eliminado correctamente', 'Eliminado');

@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { RichEditorComponent } from './rich-editor.component';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
 
 describe('RichEditorComponent', () => {
   let fixture: ComponentFixture<RichEditorComponent>;
@@ -321,16 +322,16 @@ describe('RichEditorComponent', () => {
       expect(editor.querySelector('figure')).toBeNull();
     });
 
-    it('el botón inserta el video del enlace y avisa si no es de YouTube', () => {
+    it('el botón inserta el video del enlace y avisa si no es de YouTube', async () => {
       setHtml('<p>x</p>');
       select('x', true);
-      const prompt = spyOn(window, 'prompt').and.returnValue('https://vimeo.com/1');
-      component.youtubeFromUrl();
+      const pedir = spyOn(TestBed.inject(ConfirmarService), 'pedirTexto').and.resolveTo('https://vimeo.com/1');
+      await component.youtubeFromUrl();
       expect(notifications.warning).toHaveBeenCalled();
       expect(editor.querySelector('figure')).toBeNull();
 
-      prompt.and.returnValue('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-      component.youtubeFromUrl();
+      pedir.and.resolveTo('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+      await component.youtubeFromUrl();
       expect(editor.querySelector('figure.video-yt')).not.toBeNull();
     });
 

@@ -29,14 +29,13 @@ test('usuarios: filtra por correo sin confirmar y lo confirma a mano', async ({ 
     confirmado = /usuarios\/(\d+)\//.exec(r.request().url())?.[1] ?? '';
     return r.fulfill(ok(true));
   });
-  page.on('dialog', (d) => d.accept());
-
   await page.goto('/administracion/usuarios');
   const fila = page.getByRole('row', { name: /nuevo@correo\.com/ });
   await expect(fila.getByText('Sin confirmar')).toBeVisible();
 
   await fila.getByRole('button', { name: 'Acciones' }).click();
   await page.getByRole('menuitem', { name: 'Marcar correo como confirmado' }).click();
+  await page.getByRole('alertdialog', { name: 'Confirmar' }).getByRole('button', { name: 'Aceptar' }).click();
   await expect.poll(() => confirmado).toBe('7');
   await expect(fila.getByText('Sin confirmar')).toBeHidden();
 });

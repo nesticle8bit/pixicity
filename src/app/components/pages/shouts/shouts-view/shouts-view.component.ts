@@ -251,9 +251,9 @@ export class ShoutsViewComponent implements OnInit {
     }
   }
 
-  eliminarShout(): void {
+  async eliminarShout(): Promise<void> {
     if (
-      !this.notificationService.confirm(
+      !await this.notificationService.confirm(
         '¿Seguro que deseas eliminar este shout?',
       )
     ) {

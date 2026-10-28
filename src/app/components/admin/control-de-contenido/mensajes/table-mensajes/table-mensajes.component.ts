@@ -97,8 +97,8 @@ export class TableMensajesComponent implements OnInit {
       });
   }
 
-  changeRemitente(mensaje: any): void {
-    const userName = this.notificationService.prompt('Ingresa el nombre de usuario del nuevo remitente de este mensaje, si no existe no se podrá cambiar');
+  async changeRemitente(mensaje: any): Promise<void> {
+    const userName = await this.notificationService.prompt('Ingresa el nombre de usuario del nuevo remitente de este mensaje, si no existe no se podrá cambiar');
     if (userName) {
       this.mensajesService.changeRemitente({ mensajeId: mensaje.id, userName }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {

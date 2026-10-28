@@ -76,10 +76,10 @@ export class TableShoutsComponent implements OnInit {
     });
   }
 
-  deleteShout(id: number, index: number): void {
-    if (!this.notificationService.confirm('¿Seguro que deseas eliminar este shout?')) return;
+  async deleteShout(id: number, index: number): Promise<void> {
+    if (!await this.notificationService.confirm('¿Seguro que deseas eliminar este shout?')) return;
     // La causa queda en /mod-history (se puede dejar vacía).
-    const razon = this.notificationService.prompt('¿Por qué lo eliminas? (queda en el historial de moderación)') || undefined;
+    const razon = await this.notificationService.prompt('¿Por qué lo eliminas? (queda en el historial de moderación)') || undefined;
     this.perfilService.deleteShout(id, razon).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {
         this.notificationService.success('El shout ha sido eliminado exitosamente', 'Eliminado');

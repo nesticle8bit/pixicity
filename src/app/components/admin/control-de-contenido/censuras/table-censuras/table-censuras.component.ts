@@ -83,10 +83,10 @@ export class TableCensurasComponent implements OnInit {
     });
   }
 
-  deleteCensura(censura: CensuraViewModel, index: number): void {
+  async deleteCensura(censura: CensuraViewModel, index: number): Promise<void> {
     if (!censura.id) return;
 
-    if (!this.notificationService.confirm(`¿Eliminar la palabra censurada "${censura.palabra}"?`)) {
+    if (!await this.notificationService.confirm(`¿Eliminar la palabra censurada "${censura.palabra}"?`)) {
       return;
     }
 

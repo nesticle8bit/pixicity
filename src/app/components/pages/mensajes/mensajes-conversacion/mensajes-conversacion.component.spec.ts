@@ -52,7 +52,7 @@ describe('MensajesConversacionComponent', () => {
       'archivarConversaciones',
     ]);
     router = jasmine.createSpyObj('Router', ['navigate']);
-    notificaciones = jasmine.createSpyObj('NotificationService', ['error', 'success', 'info']);
+    notificaciones = jasmine.createSpyObj('NotificationService', ['error', 'success', 'info', 'confirm']);
     signalr = {
       mensaje$: new Subject(),
       mensajesLeidos$: new Subject(),
@@ -203,11 +203,12 @@ describe('MensajesConversacionComponent', () => {
     crear({ mensajes: [msg(1), msg(2)], hayMas: false, bloqueado: false, otro: ana });
     mensajes.deleteMensajesById.and.returnValue(of(true));
 
-    spyOn(window, 'confirm').and.returnValue(false);
+    notificaciones.confirm.and.resolveTo(false);
     component.eliminarMensaje(component.mensajes[0]);
+    flush();
     expect(mensajes.deleteMensajesById).not.toHaveBeenCalled();
 
-    (window.confirm as jasmine.Spy).and.returnValue(true);
+    notificaciones.confirm.and.resolveTo(true);
     component.eliminarMensaje(component.mensajes[0]);
     flush();
 

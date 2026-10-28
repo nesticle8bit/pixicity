@@ -97,9 +97,9 @@ export class TablePaginasComponent implements OnInit {
     });
   }
 
-  deletePagina(pagina: PaginaAdmin): void {
+  async deletePagina(pagina: PaginaAdmin): Promise<void> {
     const accion = pagina.eliminado ? 'recuperar' : 'eliminar';
-    if (this.notificationService.confirm(`¿Está seguro de ${accion} esta página?`)) {
+    if (await this.notificationService.confirm(`¿Está seguro de ${accion} esta página?`)) {
       this.webService.deletePagina(pagina.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
         if (response) {
           this.notificationService.success(
