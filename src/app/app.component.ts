@@ -56,6 +56,8 @@ export class AppComponent {
   private readonly document = inject(DOCUMENT);
   // En el render del servidor (SSR, solo para bots) no hay window: ver isPlatformBrowser.
   private readonly esNavegador = isPlatformBrowser(inject(PLATFORM_ID));
+  /** La navegación en curso viene de atrás/adelante del navegador. */
+  private volviendo = false;
   // Respuesta HTTP del render en el servidor: permite devolver 404/403 reales a los bots.
   private readonly respuestaSsr = inject(RESPONSE_INIT, { optional: true });
   private readonly ssrSalud = inject(SsrSalud);
@@ -173,13 +175,15 @@ export class AppComponent {
       .subscribe((evt) => {
       if (evt instanceof NavigationStart) {
         this.seoService.iniciarNavegacion();
+        this.volviendo = evt.navigationTrigger === 'popstate';
         return;
       }
 
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
-      if (this.esNavegador) {
+      // Volviendo a /mi con atrás no se sube: el muro restaura su propio scroll.
+      if (this.esNavegador && !(this.volviendo && /^\/mi(\?|$)/.test(evt.urlAfterRedirects))) {
         window.scrollTo(0, 0);
       }
       // Canonical por defecto = URL absoluta actual (sin query params).

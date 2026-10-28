@@ -158,8 +158,7 @@ export class MiHomeComponent implements OnDestroy {
         this.items.set(previo.items);
         this.siguiente.set(previo.siguiente);
         this.cargando.set(false);
-        // Tras pintar la lista (y después del scroll al tope que pueda hacer la navegación).
-        setTimeout(() => requestAnimationFrame(() => window.scrollTo(0, previo.scrollY)));
+        this.restaurarScroll(previo.scrollY);
         return;
       }
       this.pedir.next({ reiniciar: true });
@@ -203,6 +202,28 @@ export class MiHomeComponent implements OnDestroy {
       this.observador.unobserve(fin);
       this.observador.observe(fin);
     });
+  }
+
+  /**
+   * Las imágenes cargan después y hasta entonces la página es más corta que antes: el scroll quedaría topado.
+   * Se reintenta en cada frame hasta llegar (o ~2 s), y se corta si el usuario se mueve por su cuenta.
+   */
+  private restaurarScroll(y: number): void {
+    const hasta = performance.now() + 2000;
+    let cortar = false;
+    const parar = () => (cortar = true);
+    window.addEventListener('wheel', parar, { once: true, passive: true });
+    window.addEventListener('touchstart', parar, { once: true, passive: true });
+    const paso = () => {
+      if (cortar) return;
+      window.scrollTo(0, y);
+      if (Math.abs(window.scrollY - y) > 2 && performance.now() < hasta) requestAnimationFrame(paso);
+      else {
+        window.removeEventListener('wheel', parar);
+        window.removeEventListener('touchstart', parar);
+      }
+    };
+    setTimeout(() => requestAnimationFrame(paso));
   }
 
   ngOnDestroy(): void {
