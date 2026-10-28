@@ -14,6 +14,11 @@
         }
 
         <div class="mi__tabs" role="tablist" aria-label="Qué mostrar" (keydown)="teclaPestanas($event)">
+          <button type="button" role="tab" id="mi-tab-activos" class="mi__tab" aria-controls="mi-muro"
+            [class.is-activa]="!tag() && alcance() === 'activos'" [attr.aria-selected]="!tag() && alcance() === 'activos'"
+            [attr.tabindex]="alcance() === 'activos' ? 0 : -1" (click)="cambiarAlcance('activos')">
+            <i class="ti ti-flame" aria-hidden="true"></i> Más activos
+          </button>
           <button type="button" role="tab" id="mi-tab-siguiendo" class="mi__tab" aria-controls="mi-muro"
             [class.is-activa]="!tag() && alcance() === 'siguiendo'" [attr.aria-selected]="!tag() && alcance() === 'siguiendo'"
             [attr.tabindex]="alcance() === 'siguiendo' ? 0 : -1" (click)="cambiarAlcance('siguiendo')">
@@ -23,11 +28,6 @@
             [class.is-activa]="!tag() && alcance() === 'todos'" [attr.aria-selected]="!tag() && alcance() === 'todos'"
             [attr.tabindex]="alcance() === 'todos' ? 0 : -1" (click)="cambiarAlcance('todos')">
             <i class="ti ti-world" aria-hidden="true"></i> Novedades
-          </button>
-          <button type="button" role="tab" id="mi-tab-activos" class="mi__tab" aria-controls="mi-muro"
-            [class.is-activa]="!tag() && alcance() === 'activos'" [attr.aria-selected]="!tag() && alcance() === 'activos'"
-            [attr.tabindex]="alcance() === 'activos' ? 0 : -1" (click)="cambiarAlcance('activos')">
-            <i class="ti ti-flame" aria-hidden="true"></i> Más activos
           </button>
         </div>
 

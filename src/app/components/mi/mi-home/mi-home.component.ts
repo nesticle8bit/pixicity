@@ -23,7 +23,7 @@ import { ShoutCardComponent } from '../../shared/shouts/shout-card/shout-card.co
 import { ShoutComposerComponent } from '../../shared/shouts/shout-composer/shout-composer.component';
 
 const POR_PAGINA = 15;
-const PESTANAS: AlcanceMuro[] = ['siguiendo', 'todos', 'activos'];
+const PESTANAS: AlcanceMuro[] = ['activos', 'siguiendo', 'todos'];
 const PERIODOS: PeriodoActivos[] = ['dia', 'semana', 'mes'];
 
 /**
@@ -136,9 +136,9 @@ export class MiHomeComponent implements OnDestroy {
       });
 
     combineLatest([this.route.paramMap, this.route.queryParamMap]).pipe(takeUntilDestroyed()).subscribe(([p, q]) => {
-      // Sin sesión no hay muro propio: Novedades o Más activos.
+      // Por defecto Más activos; sin sesión no hay muro propio (Siguiendo cae a Novedades).
       const ver = q.get('ver');
-      this.alcance.set(ver === 'activos' ? 'activos' : !this.haySesion || ver === 'novedades' ? 'todos' : 'siguiendo');
+      this.alcance.set(ver === 'novedades' ? 'todos' : ver === 'siguiendo' ? (this.haySesion ? 'siguiendo' : 'todos') : 'activos');
       const periodo = q.get('periodo') as PeriodoActivos | null;
       this.periodo.set(periodo && PERIODOS.includes(periodo) ? periodo : 'semana');
       this.tag.set((p.get('tag') ?? q.get('tag'))?.replace(/^#/, '').toLowerCase() || null);
@@ -202,7 +202,7 @@ export class MiHomeComponent implements OnDestroy {
         imageURL: '',
         tags: ['shouts', 'populares', 'comunidad'],
         noIndex: false,
-        canonical: `${environment.publicUrl}/mi?ver=activos`,
+        canonical: `${environment.publicUrl}/mi`,
       });
       return;
     }
@@ -226,14 +226,14 @@ export class MiHomeComponent implements OnDestroy {
     if (alcance === 'siguiendo' && !this.sesion.exigir('Inicia sesión para ver tu muro')) return;
     if (alcance === this.alcance() && !this.tag()) return;
     this.router.navigate(['/mi'], {
-      queryParams: { ver: alcance === 'todos' ? 'novedades' : alcance === 'activos' ? 'activos' : null },
+      queryParams: { ver: alcance === 'todos' ? 'novedades' : alcance === 'siguiendo' ? 'siguiendo' : null },
       replaceUrl: !this.tag(),
     });
   }
 
   cambiarPeriodo(periodo: PeriodoActivos): void {
     if (periodo === this.periodo()) return;
-    this.router.navigate(['/mi'], { queryParams: { ver: 'activos', periodo: periodo === 'semana' ? null : periodo }, replaceUrl: true });
+    this.router.navigate(['/mi'], { queryParams: { periodo: periodo === 'semana' ? null : periodo }, replaceUrl: true });
   }
 
   nombrePeriodo(periodo: PeriodoActivos): string {
