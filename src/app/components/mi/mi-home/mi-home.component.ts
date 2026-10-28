@@ -3,8 +3,8 @@ import { TimeAgoPipe } from 'src/app/shared/pipes/timeAgo.pipe';
 import { afterNextRender, Component, DestroyRef, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTooltip } from '@angular/material/tooltip';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { catchError, combineLatest, EMPTY, Subject, switchMap, tap } from 'rxjs';
+import { ActivatedRoute, NavigationStart, Router, RouterLink } from '@angular/router';
+import { catchError, combineLatest, EMPTY, filter, Subject, switchMap, tap } from 'rxjs';
 import { AlcanceMuro, OrdenTendencias, MiResumen, MuroItem, PeriodoActivos, SugerenciaUsuario, Tendencia } from 'src/app/models/mi/mi-vm.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
@@ -93,6 +93,7 @@ export class MiHomeComponent implements OnDestroy {
   private observador?: IntersectionObserver;
   /** URL de esta vista (al destruirse, router.url ya es la de destino). */
   private urlActual = '';
+  private scrollAlSalir = 0;
 
   constructor() {
     inject(DisplayComponentService).setDisplay({
@@ -140,6 +141,12 @@ export class MiHomeComponent implements OnDestroy {
         this.reobservarFin();
       });
 
+    // El scroll se toma al empezar a salir: para cuando se destruye el componente la página ya subió al tope.
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationStart), takeUntilDestroyed())
+      .subscribe(() => {
+        if (typeof window !== 'undefined') this.scrollAlSalir = window.scrollY;
+      });
     const volviendo = this.router.getCurrentNavigation()?.trigger === 'popstate';
     let primera = true;
     combineLatest([this.route.paramMap, this.route.queryParamMap]).pipe(takeUntilDestroyed()).subscribe(([p, q]) => {
@@ -229,7 +236,7 @@ export class MiHomeComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.observador?.disconnect();
     if (typeof window !== 'undefined' && this.items().length)
-      guardado = { url: this.urlActual, items: this.items(), siguiente: this.siguiente(), scrollY: window.scrollY };
+      guardado = { url: this.urlActual, items: this.items(), siguiente: this.siguiente(), scrollY: this.scrollAlSalir };
   }
 
   /** El muro "Siguiendo" es personal (noindex); Novedades y cada #hashtag son públicos e indexables. */
