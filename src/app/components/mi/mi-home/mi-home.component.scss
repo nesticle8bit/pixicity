@@ -246,11 +246,59 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   &:disabled { cursor: progress; opacity: 0.6; }
 }
 
+// En celular sugerencias y hashtags van antes del muro: filas horizontales deslizables para que ocupen poco alto.
 .mi-sugerencias-movil {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 10px;
+  margin-bottom: 16px;
+
+  .mi-card { padding: 10px 12px; }
+  .mi-card__titulo { margin-bottom: 8px; }
+  .mi-card__cabecera { margin-bottom: 8px; .mi-card__titulo { margin-bottom: 0; } }
+
+  .mi-sugerencias,
+  .mi-tendencias {
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  .mi-sugerencia {
+    flex: none;
+    width: 128px;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 6px;
+    border: 1px solid $borde;
+    border-radius: 10px;
+    text-align: center;
+    scroll-snap-align: start;
+  }
+
+  .mi-sugerencia__quien {
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    max-width: 100%;
+  }
+
+  .mi-sugerencia__nombre { max-width: 112px; }
+
+  .mi-tendencias li { flex: none; scroll-snap-align: start; }
+
+  .mi-tendencia {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: $fondo-suave;
+  }
+
+  .mi-tendencia__num { display: none; }
 }
 
 .mi__quitar-tag {

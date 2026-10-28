@@ -1,6 +1,5 @@
-import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { PortadaService } from 'src/app/services/shared/portada.service';
-import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { RouterLink } from '@angular/router';
@@ -9,15 +8,15 @@ import { CountryFlagComponent } from '../../addons/country-flag/country-flag.com
 import { GenreIconComponent } from '../../addons/genre-icon/genre-icon.component';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 
+/** Sin realtime (consumía bastante): la lista se actualiza al recargar el home. */
 @Component({
     selector: 'app-home-last-registered-users',
     templateUrl: './home-last-registered-users.component.html',
     styleUrls: ['./home-last-registered-users.component.scss'],
     imports: [RouterLink, UserPopoverDirective, CountryFlagComponent, GenreIconComponent, TimeAgoPipe]
 })
-export class HomeLastRegisteredUsersComponent implements OnInit, OnDestroy {
+export class HomeLastRegisteredUsersComponent implements OnInit {
   private securityService = inject(IHttpSecurityService);
-  private signalrService = inject(SignalrService);
 
   private readonly destroyRef = inject(DestroyRef);
   private portada = inject(PortadaService);
@@ -26,20 +25,11 @@ export class HomeLastRegisteredUsersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getLastRegisteredUsers();
-
-    this.signalrService.homeActualizado$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ lista, v }) => {
-      if (lista === 'usuarios') this.getLastRegisteredUsers(v);
-    });
-    this.signalrService.startHome();
   }
 
-  ngOnDestroy(): void {
-    this.signalrService.stopHome();
-  }
-
-  getLastRegisteredUsers(version?: number): void {
+  getLastRegisteredUsers(): void {
     this.portada
-      .tomar('usuariosRecientes', this.securityService.getLastRegisteredUsers(version))
+      .tomar('usuariosRecientes', this.securityService.getLastRegisteredUsers())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
         this.users = response;

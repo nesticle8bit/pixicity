@@ -26,6 +26,9 @@ const POR_PAGINA = 15;
 const PESTANAS: AlcanceMuro[] = ['activos', 'siguiendo', 'todos'];
 const PERIODOS: PeriodoActivos[] = ['dia', 'semana', 'mes'];
 
+/** Lista y scroll al salir de /mi: al volver con "atrás" se restauran en vez de recargar desde arriba. */
+let guardado: { url: string; items: MuroItem[]; siguiente: string | null; scrollY: number } | null = null;
+
 /**
  * /mi: el inicio personal. Muro con los shouts propios y de quienes sigues (más lo que comparten y sus posts nuevos)
  * o "Novedades" con los shouts de todo el sitio; al costado, el resumen del usuario y a quién seguir.
@@ -88,6 +91,8 @@ export class MiHomeComponent implements OnDestroy {
   private readonly pedir = new Subject<{ reiniciar: boolean }>();
   private readonly finDeLista = viewChild<ElementRef<HTMLElement>>('finDeLista');
   private observador?: IntersectionObserver;
+  /** URL de esta vista (al destruirse, router.url ya es la de destino). */
+  private urlActual = '';
 
   constructor() {
     inject(DisplayComponentService).setDisplay({
@@ -135,6 +140,8 @@ export class MiHomeComponent implements OnDestroy {
         this.reobservarFin();
       });
 
+    const volviendo = this.router.getCurrentNavigation()?.trigger === 'popstate';
+    let primera = true;
     combineLatest([this.route.paramMap, this.route.queryParamMap]).pipe(takeUntilDestroyed()).subscribe(([p, q]) => {
       // Por defecto Más activos; sin sesión no hay muro propio (Siguiendo cae a Novedades).
       const ver = q.get('ver');
@@ -143,6 +150,18 @@ export class MiHomeComponent implements OnDestroy {
       this.periodo.set(periodo && PERIODOS.includes(periodo) ? periodo : 'semana');
       this.tag.set((p.get('tag') ?? q.get('tag'))?.replace(/^#/, '').toLowerCase() || null);
       this.aplicarSEO();
+      this.urlActual = this.router.url;
+      const previo = primera && volviendo && guardado?.url === this.router.url ? guardado : null;
+      primera = false;
+      guardado = null;
+      if (previo) {
+        this.items.set(previo.items);
+        this.siguiente.set(previo.siguiente);
+        this.cargando.set(false);
+        // Tras pintar la lista (y después del scroll al tope que pueda hacer la navegación).
+        setTimeout(() => requestAnimationFrame(() => window.scrollTo(0, previo.scrollY)));
+        return;
+      }
       this.pedir.next({ reiniciar: true });
     });
 
@@ -188,6 +207,8 @@ export class MiHomeComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.observador?.disconnect();
+    if (typeof window !== 'undefined' && this.items().length)
+      guardado = { url: this.urlActual, items: this.items(), siguiente: this.siguiente(), scrollY: window.scrollY };
   }
 
   /** El muro "Siguiendo" es personal (noindex); Novedades y cada #hashtag son públicos e indexables. */
