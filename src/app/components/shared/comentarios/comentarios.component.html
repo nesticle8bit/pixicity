@@ -29,8 +29,9 @@
           <i class="ti ti-eye" aria-hidden="true"></i> Vista previa
         </button>
         <input #archivo_nuevo type="file" accept="image/*" hidden (change)="elegirImagen($event, 'nuevo', campoComentario)" />
-        <button type="button" class="coment-emoji" (click)="archivo_nuevo.click()" [disabled]="!!subiendoImagen"
-          matTooltip="Subir imagen" aria-label="Subir una imagen">
+        <button type="button" class="coment-emoji" [matMenuTriggerFor]="menuImagen"
+          [matMenuTriggerData]="{ campo: 'nuevo', archivo: archivo_nuevo, textarea: campoComentario }" [disabled]="!!subiendoImagen"
+          matTooltip="Agregar imagen" aria-label="Agregar una imagen">
           <i class="ti" [class.ti-photo]="subiendoImagen !== 'nuevo'" [class.ti-loader-2]="subiendoImagen === 'nuevo'" [class.girando]="subiendoImagen === 'nuevo'" aria-hidden="true"></i>
         </button>
         <button #botonEmojis type="button" class="coment-emoji" [class.is-abierto]="emojisAbierto" (click)="abrirEmojis(botonEmojis)"
@@ -71,6 +72,18 @@
   </ul>
   }
 </section>
+
+<!-- Agregar imagen: desde el equipo o desde un enlace -->
+<mat-menu #menuImagen="matMenu">
+  <ng-template matMenuContent let-campo="campo" let-archivo="archivo" let-textarea="textarea">
+    <button mat-menu-item type="button" (click)="archivo.click()">
+      <i class="ti ti-upload" aria-hidden="true"></i> Desde el PC
+    </button>
+    <button mat-menu-item type="button" (click)="imagenDesdeUrl(campo, textarea)">
+      <i class="ti ti-link" aria-hidden="true"></i> Desde una URL
+    </button>
+  </ng-template>
+</mat-menu>
 
 <!-- Comentario (raíz y respuesta) -->
 <ng-template #comentarioTpl let-c let-esRespuesta="esRespuesta">
@@ -133,8 +146,9 @@
           <textarea #campoEdicion appMenciones (paste)="alPegar($event, 'edicion')" [(ngModel)]="editText" rows="2" aria-label="Editar comentario"></textarea>
           <div class="coment-mini-actions">
             <input #archivo_edicion type="file" accept="image/*" hidden (change)="elegirImagen($event, 'edicion', campoEdicion)" />
-            <button type="button" class="coment-emoji" (click)="archivo_edicion.click()" [disabled]="!!subiendoImagen"
-              matTooltip="Subir imagen" aria-label="Subir una imagen">
+            <button type="button" class="coment-emoji" [matMenuTriggerFor]="menuImagen"
+              [matMenuTriggerData]="{ campo: 'edicion', archivo: archivo_edicion, textarea: campoEdicion }" [disabled]="!!subiendoImagen"
+              matTooltip="Agregar imagen" aria-label="Agregar una imagen">
               <i class="ti" [class.ti-photo]="subiendoImagen !== 'edicion'" [class.ti-loader-2]="subiendoImagen === 'edicion'" [class.girando]="subiendoImagen === 'edicion'" aria-hidden="true"></i>
             </button>
             <button class="boton azul" (click)="guardarEdicion(c)"
@@ -169,8 +183,9 @@
           <textarea #campoRespuesta appMenciones (paste)="alPegar($event, 'respuesta')" [(ngModel)]="replyText" rows="2" placeholder="Escribe una respuesta..." aria-label="Escribe una respuesta"></textarea>
           <div class="coment-mini-actions">
             <input #archivo_respuesta type="file" accept="image/*" hidden (change)="elegirImagen($event, 'respuesta', campoRespuesta)" />
-            <button type="button" class="coment-emoji" (click)="archivo_respuesta.click()" [disabled]="!!subiendoImagen"
-              matTooltip="Subir imagen" aria-label="Subir una imagen">
+            <button type="button" class="coment-emoji" [matMenuTriggerFor]="menuImagen"
+              [matMenuTriggerData]="{ campo: 'respuesta', archivo: archivo_respuesta, textarea: campoRespuesta }" [disabled]="!!subiendoImagen"
+              matTooltip="Agregar imagen" aria-label="Agregar una imagen">
               <i class="ti" [class.ti-photo]="subiendoImagen !== 'respuesta'" [class.ti-loader-2]="subiendoImagen === 'respuesta'" [class.girando]="subiendoImagen === 'respuesta'" aria-hidden="true"></i>
             </button>
             <button #botonEmojisRespuesta type="button" class="coment-emoji" [class.is-abierto]="emojisRespuestaAbierto"

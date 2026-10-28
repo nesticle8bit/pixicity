@@ -28,6 +28,12 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
 
 .mi__tabs { display: flex; gap: 4px; }
 
+// Hoy / Semana / Mes de "Más activos": fila propia debajo de las pestañas.
+.mi__periodos {
+  flex-basis: 100%;
+  margin-bottom: 8px;
+}
+
 .mi__tab {
   display: inline-flex;
   align-items: center;

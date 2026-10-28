@@ -1,11 +1,11 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (176).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (179).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2?v=799282ac77") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=da820b6a2a") format("woff2");
 }
 
 @font-face {
@@ -54,9 +54,11 @@
 .ti-bell-off:before { content: "\ece9"; }
 .ti-bell-ringing:before { content: "\ed07"; }
 .ti-book:before { content: "\ea39"; }
+.ti-brand-discord:before { content: "\ece3"; }
 .ti-brand-discord-filled:before { font-family: "tabler-icons-filled" !important; content: "\f7e4"; }
 .ti-brand-facebook:before { content: "\ec1a"; }
 .ti-brand-instagram:before { content: "\ec20"; }
+.ti-brand-lastfm:before { content: "\f001"; }
 .ti-brand-tiktok:before { content: "\ec73"; }
 .ti-brand-twitter:before { content: "\ec27"; }
 .ti-brand-whatsapp:before { content: "\ec74"; }
@@ -102,6 +104,7 @@
 .ti-filter:before { content: "\eaa5"; }
 .ti-flag:before { content: "\eaa6"; }
 .ti-flame:before { content: "\ec2c"; }
+.ti-flame-off:before { content: "\f12e"; }
 .ti-gender-female:before { content: "\f0e7"; }
 .ti-gender-male:before { content: "\f0ee"; }
 .ti-gender-neutrois:before { content: "\f0ef"; }

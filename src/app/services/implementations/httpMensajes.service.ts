@@ -155,6 +155,18 @@ export class HttpMensajesService implements IHttpMensajesService {
       );
   }
 
+  denunciarMensaje(id: number, motivo: string): Observable<boolean> {
+    return this.http
+      .post<ApiResponse<boolean>>(`${environment.api}/api/mensajes/${id}/denuncias`, { motivo })
+      .pipe(
+        map((response) => {
+          if (response.status === 200) return !!response.data;
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        }),
+        catchError(this.helper.errorHandler),
+      );
+  }
+
   subirImagenMensaje(file: File): Observable<string> {
     const formData = new FormData();
     formData.append('file', file);

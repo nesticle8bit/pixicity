@@ -17,6 +17,8 @@ export abstract class IHttpMensajesService {
   abstract archivarConversaciones(otroIds: number[], archivar: boolean): Observable<boolean>;
   abstract silenciarConversacion(otroId: number, silenciar: boolean): Observable<boolean>;
   /** Sube una imagen para adjuntar a un mensaje; devuelve su URL. */
+  /** Denuncia un mensaje recibido; lo ve el staff en la cola de reportes. */
+  abstract denunciarMensaje(id: number, motivo: string): Observable<boolean>;
   abstract subirImagenMensaje(file: File): Observable<string>;
   abstract getConversacion(params: ConversacionParams): Observable<ConversacionPage>;
   abstract deleteConversaciones(otroIds: number[]): Observable<boolean>;

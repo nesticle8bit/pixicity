@@ -10,6 +10,8 @@ import { SesionRequeridaService } from 'src/app/services/shared/sesion-requerida
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { FormsModule } from '@angular/forms';
 import { MatTooltip } from '@angular/material/tooltip';
+import { MatMenu, MatMenuContent, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
@@ -42,6 +44,8 @@ const HOSTS_IMAGENES = [environment.publicUrl, environment.api, 'https://taringa
   .filter((u) => /^https?:\/\//.test(u))
   .map((u) => new URL(u).host);
 const RUTA_IMAGEN_SUBIDA = /^\/images\/shouts\/[^/]+\/[0-9a-f]{32}\.webp$/;
+// Enlaces a imágenes de otros sitios (https y con extensión de imagen) también se muestran.
+const RUTA_IMAGEN_EXTERNA = /\.(jpe?g|png|gif|webp|avif)$/i;
 
 /** Campo de texto al que va la imagen subida. */
 type CampoImagen = 'nuevo' | 'respuesta' | 'edicion';
@@ -64,7 +68,8 @@ const MOTIVOS_DENUNCIA = ['Spam o publicidad', 'Contenido ofensivo', 'Acoso', 'I
         NgTemplateOutlet,
         RouterLink,
         UserPopoverDirective,
-        TimeAgoPipe, MencionesDirective
+        TimeAgoPipe, MencionesDirective,
+        MatMenu, MatMenuItem, MatMenuTrigger, MatMenuContent
     ],
 })
 export class ComentariosComponent {
@@ -75,6 +80,7 @@ export class ComentariosComponent {
   private readonly emojis = inject(EmojisPopoverService);
   private readonly dialog = inject(MatDialog);
   private readonly perfilService = inject(IHttpPerfilService);
+  private readonly confirmar = inject(ConfirmarService);
 
   private readonly campoComentario = viewChild<ElementRef<HTMLTextAreaElement>>('campoComentario');
   /** Solo hay una respuesta abierta a la vez, así que alcanza con una referencia. */
@@ -546,10 +552,28 @@ export class ComentariosComponent {
     else this.editText = nuevo;
   }
 
-  private esImagenSubida(url: string): boolean {
+  /** Pide la URL de una imagen y la deja en el texto como si se hubiera subido. */
+  async imagenDesdeUrl(campo: CampoImagen, textarea?: HTMLTextAreaElement): Promise<void> {
+    const url = (await this.confirmar.pedirTexto({
+      titulo: 'Imagen desde una URL',
+      mensaje: 'Pega el enlace de la imagen (https, terminado en .jpg, .png, .gif, .webp o .avif).',
+      placeholder: 'https://...',
+      aceptar: 'Agregar',
+      requerido: true,
+    }))?.trim();
+    if (!url) return;
+    if (!this.esImagen(url)) {
+      this.notificationService.error('El enlace no parece ser una imagen', 'Imagen');
+      return;
+    }
+    this.insertarImagen(campo, url, textarea);
+  }
+
+  private esImagen(url: string): boolean {
     try {
       const u = new URL(url.replace(/&amp;/g, '&'));
-      return HOSTS_IMAGENES.includes(u.host) && RUTA_IMAGEN_SUBIDA.test(u.pathname) && !u.search;
+      if (HOSTS_IMAGENES.includes(u.host) && RUTA_IMAGEN_SUBIDA.test(u.pathname) && !u.search) return true;
+      return u.protocol === 'https:' && RUTA_IMAGEN_EXTERNA.test(u.pathname);
     } catch {
       return false;
     }
@@ -557,7 +581,7 @@ export class ComentariosComponent {
 
   // - Formato
 
-  /** Escapa HTML y convierte URLs, @menciones y #hashtags en enlaces; las imágenes subidas al sitio se muestran. */
+  /** Escapa HTML y convierte URLs, @menciones y #hashtags en enlaces; los enlaces a imágenes se muestran. */
   formatear(texto: string): string {
     if (!texto) return '';
     const escapado = texto
@@ -566,7 +590,7 @@ export class ComentariosComponent {
       .replace(/>/g, '&gt;');
 
     const enlazado = escapado
-      .replace(/(https?:\/\/[^\s<]+)/g, (url) => this.esImagenSubida(url)
+      .replace(/(https?:\/\/[^\s<]+)/g, (url) => this.esImagen(url)
         ? `<a href="${url}" target="_blank" rel="noopener" class="coment-img"><img src="${url}" alt="Imagen del comentario" loading="lazy"></a>`
         : `<a href="${url}" target="_blank" rel="nofollow noopener">${url}</a>`)
       .replace(/(^|\s)@([a-zA-Z0-9_]+)/g, '$1<a href="/perfil/$2">@$2</a>');

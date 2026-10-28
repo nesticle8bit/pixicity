@@ -24,7 +24,23 @@
             [attr.tabindex]="alcance() === 'todos' ? 0 : -1" (click)="cambiarAlcance('todos')">
             <i class="ti ti-world" aria-hidden="true"></i> Novedades
           </button>
+          <button type="button" role="tab" id="mi-tab-activos" class="mi__tab" aria-controls="mi-muro"
+            [class.is-activa]="!tag() && alcance() === 'activos'" [attr.aria-selected]="!tag() && alcance() === 'activos'"
+            [attr.tabindex]="alcance() === 'activos' ? 0 : -1" (click)="cambiarAlcance('activos')">
+            <i class="ti ti-flame" aria-hidden="true"></i> Más activos
+          </button>
         </div>
+
+        @if (!tag() && alcance() === 'activos') {
+        <div class="mi-tags-tabs mi__periodos" role="tablist" aria-label="Período de los más activos" (keydown)="teclaPeriodos($event)">
+          @for (p of periodos; track p) {
+          <button type="button" role="tab" class="mi-tags-tab" [attr.data-periodo]="p" [class.is-activa]="periodo() === p"
+            [attr.aria-selected]="periodo() === p" [attr.tabindex]="periodo() === p ? 0 : -1" (click)="cambiarPeriodo(p)">
+            {{ nombrePeriodo(p) }}
+          </button>
+          }
+        </div>
+        }
       </header>
 
       @if (!haySesion) {
@@ -71,6 +87,14 @@
           <p>Tu muro está vacío.</p>
           <span class="mi__vacio-ayuda">Publica tu primer shout o sigue a alguien para ver lo que comparte.</span>
           <button type="button" class="mi-boton" (click)="cambiarAlcance('todos')">Ver novedades</button>
+        </div>
+        } @else if (alcance() === 'activos') {
+        <div class="mi__vacio">
+          <i class="ti ti-flame-off" aria-hidden="true"></i>
+          <p>Sin actividad {{ periodo() === 'dia' ? 'hoy' : periodo() === 'semana' ? 'esta semana' : 'este mes' }}.</p>
+          @if (periodo() !== 'mes') {
+          <button type="button" class="mi-boton" (click)="cambiarPeriodo('mes')">Ver el mes</button>
+          }
         </div>
         } @else {
         <div class="mi__vacio">

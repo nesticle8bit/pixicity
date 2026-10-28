@@ -12,6 +12,8 @@ export interface NavLink {
   rango?: ('Moderador' | 'Administrador')[];
   /** Se muestra como pestaña en la barra principal (el resto vive solo en el cajón móvil). */
   tab?: boolean;
+  /** Globo con lo pendiente (ver StaffBadgesService). */
+  badge?: 'moderacion' | 'administracion';
 }
 
 // Fuente única de la navegación principal: la usan la barra de pestañas (main-menu) y el cajón móvil.
@@ -29,6 +31,7 @@ export const NAV_LINKS: NavLink[] = [
     route: '/moderacion',
     rango: ['Moderador', 'Administrador'],
     tab: true,
+    badge: 'moderacion',
   },
   {
     label: 'Administración',
@@ -37,6 +40,7 @@ export const NAV_LINKS: NavLink[] = [
     matchRoute: '/administracion',
     rango: ['Administrador'],
     tab: true,
+    badge: 'administracion',
   },
 ];
 

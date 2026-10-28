@@ -166,12 +166,16 @@ describe('ComentariosComponent', () => {
     expect(html).toContain('<a href="https://x.com"');
   });
 
-  it('formatear muestra como imagen solo las subidas al sitio', () => {
+  it('formatear muestra como imagen las subidas al sitio y los enlaces https a imágenes', () => {
     const guid = 'a'.repeat(32);
     const propia = componente.formatear(`https://taringas.net/images/shouts/ana/${guid}.webp`);
-    const ajena = componente.formatear(`https://otro.com/images/shouts/ana/${guid}.webp`);
+    const externa = componente.formatear('https://i.imgur.com/abc.PNG');
+    const http = componente.formatear('http://otro.com/foto.jpg');
+    const pagina = componente.formatear('https://otro.com/foto.html');
 
     expect(propia).toContain('<img src="https://taringas.net/images/shouts/ana/');
-    expect(ajena).not.toContain('<img');
+    expect(externa).toContain('<img src="https://i.imgur.com/abc.PNG"');
+    expect(http).not.toContain('<img');
+    expect(pagina).not.toContain('<img');
   });
 });

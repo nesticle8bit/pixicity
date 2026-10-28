@@ -224,6 +224,12 @@ $accent: light-dark(#004160, #1777a4);
     font-size: .68rem;
     line-height: 18px;
     text-align: center;
+
+    &--inline {
+      position: static;
+      margin-left: auto;
+      border: 0;
+    }
   }
 
   &__section {

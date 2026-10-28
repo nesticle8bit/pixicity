@@ -5,7 +5,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { catchError, combineLatest, EMPTY, Subject, switchMap, tap } from 'rxjs';
-import { AlcanceMuro, OrdenTendencias, MiResumen, MuroItem, SugerenciaUsuario, Tendencia } from 'src/app/models/mi/mi-vm.model';
+import { AlcanceMuro, OrdenTendencias, MiResumen, MuroItem, PeriodoActivos, SugerenciaUsuario, Tendencia } from 'src/app/models/mi/mi-vm.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { IHttpMiService } from 'src/app/services/interfaces/httpMi.interface';
@@ -23,6 +23,8 @@ import { ShoutCardComponent } from '../../shared/shouts/shout-card/shout-card.co
 import { ShoutComposerComponent } from '../../shared/shouts/shout-composer/shout-composer.component';
 
 const POR_PAGINA = 15;
+const PESTANAS: AlcanceMuro[] = ['siguiendo', 'todos', 'activos'];
+const PERIODOS: PeriodoActivos[] = ['dia', 'semana', 'mes'];
 
 /**
  * /mi: el inicio personal. Muro con los shouts propios y de quienes sigues (más lo que comparten y sus posts nuevos)
@@ -59,6 +61,9 @@ export class MiHomeComponent implements OnDestroy {
   readonly haySesion = this.sesion.haySesion;
 
   readonly alcance = signal<AlcanceMuro>('siguiendo');
+  /** Ventana de la pestaña "Más activos" (?periodo=dia|semana|mes). */
+  readonly periodo = signal<PeriodoActivos>('semana');
+  readonly periodos = PERIODOS;
   readonly items = signal<MuroItem[]>([]);
   readonly siguiente = signal<string | null>(null);
   /** Primera carga de la pestaña (muestra el indicador grande). */
@@ -108,7 +113,10 @@ export class MiHomeComponent implements OnDestroy {
           }
         }),
         switchMap(({ reiniciar }) =>
-          this.miService.getMuro(this.alcance(), reiniciar ? null : this.siguiente(), POR_PAGINA, this.tag()).pipe(
+          (this.alcance() === 'activos' && !this.tag()
+            ? this.miService.getActivos(this.periodo(), reiniciar ? 1 : Number(this.siguiente()), POR_PAGINA)
+            : this.miService.getMuro(this.alcance(), reiniciar ? null : this.siguiente(), POR_PAGINA, this.tag())
+          ).pipe(
             catchError(() => {
               this.error.set(true);
               this.cargando.set(false);
@@ -128,8 +136,11 @@ export class MiHomeComponent implements OnDestroy {
       });
 
     combineLatest([this.route.paramMap, this.route.queryParamMap]).pipe(takeUntilDestroyed()).subscribe(([p, q]) => {
-      // Sin sesión no hay muro propio: siempre Novedades.
-      this.alcance.set(!this.haySesion || q.get('ver') === 'novedades' ? 'todos' : 'siguiendo');
+      // Sin sesión no hay muro propio: Novedades o Más activos.
+      const ver = q.get('ver');
+      this.alcance.set(ver === 'activos' ? 'activos' : !this.haySesion || ver === 'novedades' ? 'todos' : 'siguiendo');
+      const periodo = q.get('periodo') as PeriodoActivos | null;
+      this.periodo.set(periodo && PERIODOS.includes(periodo) ? periodo : 'semana');
       this.tag.set((p.get('tag') ?? q.get('tag'))?.replace(/^#/, '').toLowerCase() || null);
       this.aplicarSEO();
       this.pedir.next({ reiniciar: true });
@@ -183,6 +194,18 @@ export class MiHomeComponent implements OnDestroy {
   private aplicarSEO(): void {
     const tag = this.tag();
     const personal = !tag && this.alcance() === 'siguiendo';
+    if (!tag && this.alcance() === 'activos') {
+      this.seo.setSEO({
+        title: 'Shouts más activos',
+        description: 'Los shouts con más me gusta, comentarios y reshouts del día, la semana o el mes.',
+        type: 'website',
+        imageURL: '',
+        tags: ['shouts', 'populares', 'comunidad'],
+        noIndex: false,
+        canonical: `${environment.publicUrl}/mi?ver=activos`,
+      });
+      return;
+    }
     const base = `${environment.publicUrl}/mi`;
     this.seo.setSEO({
       title: tag ? `#${tag} · Shouts` : personal ? 'Mi muro' : 'Shouts: lo último de la comunidad',
@@ -203,9 +226,29 @@ export class MiHomeComponent implements OnDestroy {
     if (alcance === 'siguiendo' && !this.sesion.exigir('Inicia sesión para ver tu muro')) return;
     if (alcance === this.alcance() && !this.tag()) return;
     this.router.navigate(['/mi'], {
-      queryParams: { ver: alcance === 'todos' ? 'novedades' : null },
+      queryParams: { ver: alcance === 'todos' ? 'novedades' : alcance === 'activos' ? 'activos' : null },
       replaceUrl: !this.tag(),
     });
+  }
+
+  cambiarPeriodo(periodo: PeriodoActivos): void {
+    if (periodo === this.periodo()) return;
+    this.router.navigate(['/mi'], { queryParams: { ver: 'activos', periodo: periodo === 'semana' ? null : periodo }, replaceUrl: true });
+  }
+
+  nombrePeriodo(periodo: PeriodoActivos): string {
+    return periodo === 'dia' ? 'Hoy' : periodo === 'semana' ? 'Semana' : 'Mes';
+  }
+
+  /** Flechas entre Hoy / Semana / Mes. */
+  teclaPeriodos(e: KeyboardEvent): void {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    const i = PERIODOS.indexOf(this.periodo());
+    const otro = PERIODOS[(i + (e.key === 'ArrowRight' ? 1 : PERIODOS.length - 1)) % PERIODOS.length];
+    const lista = e.currentTarget as HTMLElement;
+    this.cambiarPeriodo(otro);
+    queueMicrotask(() => lista.querySelector<HTMLElement>(`[data-periodo="${otro}"]`)?.focus());
   }
 
   quitarTag(): void {
@@ -221,7 +264,10 @@ export class MiHomeComponent implements OnDestroy {
   teclaPestanas(e: KeyboardEvent): void {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
     e.preventDefault();
-    const otra: AlcanceMuro = this.alcance() === 'siguiendo' ? 'todos' : 'siguiendo';
+    // Sin sesión "Siguiendo" no está disponible: se salta.
+    const disponibles = this.haySesion ? PESTANAS : PESTANAS.filter((p) => p !== 'siguiendo');
+    const i = disponibles.indexOf(this.alcance());
+    const otra = disponibles[(i + (e.key === 'ArrowRight' ? 1 : disponibles.length - 1)) % disponibles.length];
     this.cambiarAlcance(otra);
     queueMicrotask(() => document.getElementById(`mi-tab-${otra}`)?.focus());
   }

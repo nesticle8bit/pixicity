@@ -53,6 +53,12 @@
                   matTooltip="Eliminar (solo para ti)" aria-label="Eliminar mensaje solo para mí">
                   <i class="ti ti-trash"></i>
                 </button>
+                @if (!m.esMio) {
+                  <button type="button" class="chat-bubble__report" (click)="denunciarMensaje(m)"
+                    matTooltip="Denunciar mensaje" aria-label="Denunciar este mensaje">
+                    <i class="ti ti-flag"></i>
+                  </button>
+                }
                 @if (imagenesDe(m).length) {
                   <div class="chat-fotos" [class.chat-fotos--varias]="imagenesDe(m).length > 1">
                     @for (img of imagenesDe(m); track img) {

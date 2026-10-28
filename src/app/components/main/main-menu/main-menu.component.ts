@@ -5,6 +5,7 @@ import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { isLinkActive, linksFor, NavLink } from '../main-nav.config';
 import { NgClass } from '@angular/common';
+import { StaffBadgesService } from 'src/app/services/shared/staff-badges.service';
 
 @Component({
     selector: 'main-menu',
@@ -15,6 +16,7 @@ import { NgClass } from '@angular/common';
 export class MainMenuComponent implements OnInit {
   private securityService = inject(IHttpSecurityService);
   private router = inject(Router);
+  private staffBadges = inject(StaffBadgesService);
 
   private readonly destroyRef = inject(DestroyRef);
 
@@ -32,6 +34,11 @@ export class MainMenuComponent implements OnInit {
 
   get tabs(): NavLink[] {
     return linksFor(this.currentUser?.usuario?.rango, true);
+  }
+
+  /** Lo pendiente de Moderación / Administración (0 si la pestaña no lleva globo). */
+  pendientes(link: NavLink): number {
+    return link.badge ? this.staffBadges[link.badge]() : 0;
   }
 
   isActive(link: NavLink): boolean {

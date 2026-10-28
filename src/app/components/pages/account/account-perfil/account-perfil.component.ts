@@ -76,6 +76,8 @@ export class AccountPerfilComponent {
     twitter: [''],
     tiktok: [''],
     youtube: [''],
+    lastfm: [''],
+    discord: [''],
     like1: [false],
     like2: [false],
     like3: [false],

@@ -193,6 +193,8 @@ export interface UsuarioPerfilViewModel {
   twitter: string;
   tiktok: string;
   youtube: string;
+  lastfm: string;
+  discord: string;
   like1: boolean;
   like2: boolean;
   like3: boolean;

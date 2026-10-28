@@ -15,6 +15,7 @@ import { MensajeViewModel } from 'src/app/models/mensajes/mensaje-vm.model';
 import { UsuarioAvatarViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { DatePipe } from '@angular/common';
 import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
+import { MatDialog } from '@angular/material/dialog';
 
 const PAGE_SIZE = 30;
 /** Imágenes por mensaje (igual que el API). */
@@ -32,6 +33,8 @@ const NEAR_BOTTOM = 80;
 // Cada cuánto se avisa "escribiendo…" al otro, y cuánto dura el indicador sin nuevos avisos.
 const TYPING_SEND_EVERY_MS = 2500;
 const TYPING_SHOW_FOR_MS = 3500;
+
+const MOTIVOS_DENUNCIA_MP = ['Spam o publicidad', 'Acoso o amenazas', 'Contenido ofensivo', 'Estafa o phishing', 'Contenido sexual', 'Otro'];
 
 @Component({
     selector: 'app-mensajes-conversacion',
@@ -56,6 +59,7 @@ export class MensajesConversacionComponent implements OnInit {
   private notificationService = inject(NotificationService);
   private signalrService = inject(SignalrService);
   private badgeService = inject(MensajesBadgeService);
+  private dialog = inject(MatDialog);
 
   private readonly destroyRef = inject(DestroyRef);
 
@@ -459,6 +463,21 @@ export class MensajesConversacionComponent implements OnInit {
           this.mensajes = this.mensajes.filter((m) => m.id !== mensaje.id);
           this.actualizarAsunto();
         }
+      });
+  }
+
+  // Solo los recibidos: el staff verá el contenido en la cola de reportes.
+  async denunciarMensaje(mensaje: MensajeViewModel): Promise<void> {
+    const { DialogMotivoDenunciaComponent } = await import('../../../dialogs/dialog-motivo-denuncia/dialog-motivo-denuncia.component');
+    this.dialog
+      .open(DialogMotivoDenunciaComponent, { width: '440px', maxWidth: '95vw', data: { que: 'mensaje', motivos: MOTIVOS_DENUNCIA_MP } })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((motivo?: string) => {
+        if (!motivo) return;
+        this.mensajesService.denunciarMensaje(mensaje.id, motivo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ok) => {
+          if (ok) this.notificationService.success('Denuncia enviada. El equipo de moderación la revisará.', 'Denuncia');
+        });
       });
   }
 

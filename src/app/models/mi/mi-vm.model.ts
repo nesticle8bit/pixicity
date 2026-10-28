@@ -1,6 +1,9 @@
 import { ShoutViewModel } from '../perfil/shout-vm.model';
 
-export type AlcanceMuro = 'siguiendo' | 'todos';
+export type AlcanceMuro = 'siguiendo' | 'todos' | 'activos';
+
+/** Ventana de "Más activos": shouts publicados en el último día, semana o mes. */
+export type PeriodoActivos = 'dia' | 'semana' | 'mes';
 
 export interface MuroPost {
   id: number;

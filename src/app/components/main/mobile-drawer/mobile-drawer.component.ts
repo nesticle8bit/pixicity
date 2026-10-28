@@ -1,3 +1,4 @@
+import { StaffBadgesService } from 'src/app/services/shared/staff-badges.service';
 import { Component, DestroyRef, effect, ElementRef, HostListener, inject, OnInit, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -44,6 +45,7 @@ export class MobileDrawerComponent implements OnInit {
   private router = inject(Router);
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly staffBadges = inject(StaffBadgesService);
 
   readonly closeBtn = viewChild<ElementRef<HTMLButtonElement>>('closeBtn');
 
@@ -163,6 +165,11 @@ export class MobileDrawerComponent implements OnInit {
   }
 
   /** "99+" para que el globo no se desborde. */
+  /** Lo pendiente de Moderación / Administración (0 si el link no lleva globo). */
+  pendientes(link: NavLink): number {
+    return link.badge ? this.staffBadges[link.badge]() : 0;
+  }
+
   contador(n: number): string {
     return n > 99 ? '99+' : String(n);
   }

@@ -121,7 +121,25 @@ img {
         cursor: pointer;
     }
 
+    &__report {
+        position: absolute;
+        top: 2px;
+        right: 22px;
+        border: 0;
+        background: transparent;
+        color: light-dark(#6b6b6b, #adadad);
+        font-size: .8rem;
+        opacity: 0;
+        cursor: pointer;
+
+        &:hover {
+            color: light-dark(#c0392b, #ff7b6b);
+        }
+    }
+
     &:hover &__delete,
+    &:hover &__report,
+    &__report:focus-visible,
     &__delete:focus-visible {
         opacity: 1;
     }

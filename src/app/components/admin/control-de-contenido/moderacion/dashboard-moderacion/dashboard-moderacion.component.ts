@@ -66,6 +66,7 @@ export class DashboardModeracionComponent implements OnInit {
     { id: 4, nombre: 'Comentarios de shout' },
     { id: 5, nombre: 'Comentarios de foto' },
     { id: 6, nombre: 'Shouts' },
+    { id: 7, nombre: 'Mensajes privados' },
   ];
 
   /** Tipo 6 (shout): el API manda en contextoUrl el autor, para enlazar a /shouts/{autor}/{id}. */

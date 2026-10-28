@@ -74,6 +74,9 @@
         <a [routerLink]="link.route" [class.active]="isActive(link)" [attr.aria-current]="isActive(link) ? 'page' : null"
           (click)="nav.close()">
           <i class="ti {{link.icon}}" aria-hidden="true"></i> {{link.label}}
+          @if (pendientes(link); as n) {
+            <b class="drawer__badge drawer__badge--inline" [attr.aria-label]="n + ' pendientes'">{{ contador(n) }}</b>
+          }
         </a>
       }
     </nav>

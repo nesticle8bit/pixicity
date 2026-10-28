@@ -14,7 +14,7 @@ import { PaginationService } from '../shared/pagination.service';
 import { ApiResponse, PaginatedData, PaginatedWithCategorias } from 'src/app/models/api/api-response.model';
 import { EstadisticasViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { FavoritoPostLista } from 'src/app/models/posts/post-vm.model';
-import { DashboardResumen, MetricasApi } from 'src/app/models/admin/dashboard.model';
+import { DashboardResumen, MetricasApi, StaffPendientes } from 'src/app/models/admin/dashboard.model';
 
 @Injectable()
 export class HttpGeneralService implements IHttpGeneralService {
@@ -36,6 +36,16 @@ export class HttpGeneralService implements IHttpGeneralService {
         }),
       )
       .pipe(catchError(this.helper.errorHandler));
+  }
+
+  // Sin errorHandler: el globo del menú falla en silencio.
+  getPendientesStaff(): Observable<StaffPendientes> {
+    return this.http.get<ApiResponse<StaffPendientes>>(`${environment.api}/api/dashboard/pendientes`).pipe(
+      map((response) => {
+        if (response.status === 200) return response.data!;
+        throw new Error(response.errors?.join(', ') ?? 'Error');
+      }),
+    );
   }
 
   getMetricasApi(minutos: number): Observable<MetricasApi> {

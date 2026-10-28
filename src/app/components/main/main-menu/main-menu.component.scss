@@ -2,6 +2,31 @@
 // así se llega con teclado y el área táctil es la pestaña completa.
 .main-menu--item {
   padding: 0;
+  position: relative;
+
+  // Mismo globo que el Monitor (.userInfoLogin .alertas): lo pendiente en Moderación / Administración.
+  .alertas {
+    position: absolute;
+    top: -9px;
+    right: -6px;
+    z-index: 10;
+
+    a {
+      display: block;
+      padding: 0 5px;
+      background: url('/assets/images/ui/bubble.png') top left;
+      color: #fff;
+      text-shadow: 0 -1px 0 #000;
+      font-size: 11px;
+      line-height: normal;
+    }
+
+    span {
+      display: block;
+      padding: 0 7px 5px 1px;
+      background: url('/assets/images/ui/bubble.png') top right;
+    }
+  }
 
   > a {
     display: block;
@@ -36,6 +61,12 @@
   // 44 px de ancho (objetivo táctil cómodo) y solo el gap de 4 px de la lista como separación: así entran las 7
   // pestañas de un administrador en 360 px. Con 48 px más el margen de list-inline-item la séptima quedaba fuera de
   // la pantalla y, sin barra de scroll, nadie sabía que estaba.
+  // La fila hace scroll horizontal (recorta lo que sobresale): el globo va dentro de la pestaña.
+  .main-menu--item .alertas {
+    top: 0;
+    right: 0;
+  }
+
   .main-menu--item {
     flex: 0 0 auto;
     min-width: 44px;

@@ -30,6 +30,22 @@
   }
 }
 
+// Usuario de Discord sin enlace: mismo aspecto que los enlaces, copia al hacer clic.
+button.redes__enlace {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.redes__copiar {
+  margin-left: auto;
+  font-size: 1rem !important;
+  opacity: .6;
+}
+
 .redes__nombre {
   font-size: 0.85rem;
   font-weight: 700;

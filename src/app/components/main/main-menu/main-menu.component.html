@@ -10,6 +10,13 @@
               <i class="ti {{link.icon}} d-sm-none" aria-hidden="true"></i>
               <span class="d-none d-sm-inline">{{link.label}}</span>
             </a>
+            @if (pendientes(link); as n) {
+              <div class="alertas" [attr.aria-label]="n + ' pendientes en ' + link.label">
+                <a [routerLink]="link.route" [title]="n + ' pendientes'" tabindex="-1">
+                  <span>{{ n > 99 ? '99+' : n }}</span>
+                </a>
+              </div>
+            }
           </li>
           }
 

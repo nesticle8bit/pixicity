@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ApiResponse } from 'src/app/models/api/api-response.model';
-import { AlcanceMuro, MiResumen, Muro, SugerenciaUsuario, Tendencia, OrdenTendencias } from 'src/app/models/mi/mi-vm.model';
+import { AlcanceMuro, MiResumen, Muro, SugerenciaUsuario, Tendencia, OrdenTendencias, MuroItem, PeriodoActivos } from 'src/app/models/mi/mi-vm.model';
 import { environment } from 'src/environments/environment';
 import { IHttpMiService } from '../interfaces/httpMi.interface';
 import { HelperService } from '../shared/helper.service';
@@ -33,6 +33,18 @@ export class HttpMiService implements IHttpMiService {
     return this.http
       .get<ApiResponse<Muro>>(`${environment.api}/api/mi/muro`, { params })
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getActivos(periodo: PeriodoActivos, pagina: number, cantidad = 15): Observable<Muro> {
+    const params = new HttpParams().set('periodo', periodo).set('pagina', pagina).set('cantidad', cantidad);
+    return this.http
+      .get<ApiResponse<{ items: MuroItem[]; hayMas: boolean }>>(`${environment.api}/api/mi/activos`, { params })
+      .pipe(map((r) => {
+        if (r.status !== 200) throw new Error(r.errors?.join(', ') ?? 'Error');
+        // Se ordena por actividad, no por fecha: el "cursor" es el número de la página siguiente.
+        return { items: r.data!.items, siguiente: r.data!.hayMas ? String(pagina + 1) : null };
+      }))
       .pipe(catchError(this.helper.errorHandler));
   }
 

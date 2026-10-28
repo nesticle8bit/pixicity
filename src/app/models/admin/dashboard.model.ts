@@ -57,6 +57,14 @@ export interface DashboardActividad {
   fechaRegistro: string;
 }
 
+/** Contadores de los globos del menú (GET /api/dashboard/pendientes). Contacto y errores: 0 para moderadores. */
+export interface StaffPendientes {
+  reportes: number;
+  apelaciones: number;
+  contactos: number;
+  errores24h: number;
+}
+
 export interface DashboardResumen {
   usuarios: DashboardMetrica;
   posts: DashboardMetrica;

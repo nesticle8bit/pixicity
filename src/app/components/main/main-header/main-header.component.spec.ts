@@ -1,3 +1,4 @@
+import { StaffBadgesService } from 'src/app/services/shared/staff-badges.service';
 import { Component, NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -58,6 +59,7 @@ describe('MainHeader + MobileDrawer (hamburguesa)', () => {
     imports: [ReactiveFormsModule, RouterModule, HostComponent, MainHeaderComponent, MobileDrawerComponent],
     schemas: [NO_ERRORS_SCHEMA],
     providers: [
+      { provide: StaffBadgesService, useValue: { moderacion: () => 0, administracion: () => 0 } },
         provideRouter([]),
         { provide: MobileNavService, useValue: nav },
         {

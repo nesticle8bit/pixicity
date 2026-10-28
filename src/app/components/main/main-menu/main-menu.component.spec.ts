@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { MainMenuComponent } from './main-menu.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { NAV_LINKS, linksFor } from '../main-nav.config';
+import { StaffBadgesService } from 'src/app/services/shared/staff-badges.service';
 
 @Component({
     template: '',
@@ -26,6 +27,7 @@ describe('MainMenuComponent (pestañas)', () => {
     imports: [RouterModule, MainMenuComponent, DummyComponent],
     schemas: [NO_ERRORS_SCHEMA],
     providers: [
+        { provide: StaffBadgesService, useValue: { moderacion: () => 3, administracion: () => 0 } },
         provideRouter([
             { path: '', component: DummyComponent },
             { path: 'tops', component: DummyComponent },
@@ -103,6 +105,15 @@ describe('MainMenuComponent (pestañas)', () => {
     await ir('/administracion/usuarios');
 
     expect(activos()).toEqual(['Administración']);
+  });
+
+  it('Moderación muestra el globo con lo pendiente; Administración sin pendientes no', async () => {
+    await build({ userName: 'admin', rango: 'Administrador' });
+    const globos = [...fixture.nativeElement.querySelectorAll('.alertas')] as HTMLElement[];
+
+    expect(globos.length).toBe(1);
+    expect(globos[0].closest('li')!.textContent).toContain('Moderación');
+    expect(globos[0].textContent!.trim()).toBe('3');
   });
 
   it('la pestaña activa se marca con aria-current', async () => {
