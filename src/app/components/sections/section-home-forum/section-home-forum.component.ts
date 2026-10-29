@@ -52,6 +52,8 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
 
   public categoria: string = '';
+  /** /novatos usa este mismo componente (data.novatos en la ruta): cambia solo el listado de posts. */
+  public readonly novatos: boolean = !!this.activatedRoute.snapshot.data['novatos'];
   public displayComponent: DisplayComponentModel = {
     mainMenu: true,
     footer: true,
@@ -68,6 +70,7 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
   private readonly cargaPortada = this.portada.iniciar(
     this.activatedRoute.snapshot.paramMap.get('categoria') ?? '',
     Number(this.activatedRoute.snapshot.queryParamMap.get('page')) || 1,
+    this.novatos,
   );
 
   constructor() {
@@ -77,6 +80,17 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
   }
 
   private setSeoHome(): void {
+    if (this.novatos) {
+      this.seoService.setSEO({
+        title: 'Novatos | Posts de los nuevos usuarios',
+        description: 'Los últimos posts de los usuarios novatos de Taringa!: lo que publican quienes recién se suman a la comunidad.',
+        tags: ['novatos', 'posts', 'taringa', 'comunidad'],
+        type: 'website',
+        imageURL: '',
+      });
+      return;
+    }
+
     this.seoService.setSEO({
       // Mismos textos que index.html (lo que Google muestra en el resultado de la portada).
       title: 'Taringa! - Inteligencia colectiva | Posts y comunidades',

@@ -21,14 +21,14 @@ export class HttpPostsService implements IHttpPostsService {
   private http = inject(HttpClient);
 
 
-  getPosts(categoria: string = '', version?: number): Observable<PaginatedData<PostListaViewModel>> {
+  getPosts(categoria: string = '', version?: number, novatos = false): Observable<PaginatedData<PostListaViewModel>> {
     if (!categoria) {
       categoria = '';
     }
 
     return this.http
       .get<ApiResponse<PaginatedData<PostListaViewModel>>>(
-        `${environment.api}/api/posts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${categoria}${version ? `&v=${version}` : ''}`,
+        `${environment.api}/api/posts?page=${this.paginationService.page}&pageCount=${this.paginationService.pageCount}&query=${categoria}${novatos ? '&novatos=true' : ''}${version ? `&v=${version}` : ''}`,
       )
       .pipe(
         map((response) => {

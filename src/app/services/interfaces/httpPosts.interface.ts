@@ -9,7 +9,8 @@ import { BorradorViewModel, CloudTagViewModel, PostListaViewModel, FavoritoAlter
 @Injectable()
 export abstract class IHttpPostsService {
   /** `version`: la de "homeActualizado", para saltear la caché del navegador. */
-  abstract getPosts(categoria?: string, version?: number): Observable<PaginatedData<PostListaViewModel>>;
+  /** `novatos`: solo posts de autores con rango Novato (/novatos); sin él, el resto (el home). */
+  abstract getPosts(categoria?: string, version?: number, novatos?: boolean): Observable<PaginatedData<PostListaViewModel>>;
   abstract getPostsAdmin(search: string, filtro?: AdminFiltro): Observable<PaginatedData<PostAdmin>>;
   abstract getPostsByUserId(userId: number): Observable<PaginatedData<PostViewModel>>;
   abstract getPostsByLoggedUser(search: string): Observable<PaginatedData<PostViewModel>>;

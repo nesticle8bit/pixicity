@@ -53,6 +53,9 @@ export class HomeLastPostsComponent implements OnInit, OnDestroy {
     return this._categoria;
   }
 
+  /** /novatos: solo posts de autores con rango Novato (el home muestra el resto). */
+  @Input() novatos = false;
+
   public stickyPosts: PostListaViewModel[] = [];
   public lastPosts: PostListaViewModel[] = [];
   public totalCount: number = 0;
@@ -158,9 +161,9 @@ export class HomeLastPostsComponent implements OnInit, OnDestroy {
 
     this.cargaGetPosts?.unsubscribe();
 
-    const pedido = this.postService.getPosts(categoria, version);
+    const pedido = this.postService.getPosts(categoria, version, this.novatos);
     // La primera página llega con /api/portada; las recargas en vivo (con versión) van siempre al endpoint.
-    this.cargaGetPosts = (version ? pedido : this.portada.tomarPosts(categoria, this.pageIndex + 1, pedido))
+    this.cargaGetPosts = (version ? pedido : this.portada.tomarPosts(categoria, this.pageIndex + 1, pedido, this.novatos))
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {

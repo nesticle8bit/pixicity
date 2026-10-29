@@ -34,6 +34,16 @@ export class DashboardConfigurationComponent implements OnInit {
   public formGroup: FormGroup;
   public administradores: AdminResumen[] = [];
 
+  /** Límites anti-spam: copia de AntiSpamService.Limite (api); si cambian allá, actualizar acá. */
+  public readonly multiplicadorConfianza = 3;
+  public readonly limitesPublicacion = [
+    { control: 'limiteNuevaPosts', que: 'Posts', ventana: 'por hora', normal: 10, porDefecto: 2 },
+    { control: 'limiteNuevaTemas', que: 'Temas de comunidad', ventana: 'por hora', normal: 15, porDefecto: 3 },
+    { control: 'limiteNuevaShouts', que: 'Shouts', ventana: 'cada 10 min', normal: 20, porDefecto: 5 },
+    { control: 'limiteNuevaComentarios', que: 'Comentarios', ventana: 'cada 10 min', normal: 40, porDefecto: 10 },
+    { control: 'limiteNuevaMensajes', que: 'Mensajes privados', ventana: 'por hora', normal: 60, porDefecto: 10 },
+  ] as const;
+
   constructor() {
     this.formGroup = this.formBuilder.group({
       siteName: [''],
@@ -52,6 +62,8 @@ export class DashboardConfigurationComponent implements OnInit {
       exigirConfirmacion: false,
       minutosPublicarSinConfirmar: [5, [Validators.min(0), Validators.max(10080)]],
       minPuntosEnlacesExternos: [1, [Validators.min(0), Validators.max(100000)]],
+      diasCuentaNueva: [3, [Validators.min(0), Validators.max(365)]],
+      ...Object.fromEntries(this.limitesPublicacion.map((l) => [l.control, [l.porDefecto, [Validators.min(1), Validators.max(1000)]]])),
     });
   }
 
@@ -81,6 +93,8 @@ export class DashboardConfigurationComponent implements OnInit {
           exigirConfirmacion: (configuracion.minutosPublicarSinConfirmar ?? 5) < 0,
           minutosPublicarSinConfirmar: Math.max(0, configuracion.minutosPublicarSinConfirmar ?? 5),
           minPuntosEnlacesExternos: Math.max(0, configuracion.minPuntosEnlacesExternos ?? 1),
+          diasCuentaNueva: configuracion.diasCuentaNueva ?? 3,
+          ...Object.fromEntries(this.limitesPublicacion.map((l) => [l.control, configuracion[l.control] ?? l.porDefecto])),
         });
 
         // this.formGroup.controls['url'].disable();
@@ -95,6 +109,10 @@ export class DashboardConfigurationComponent implements OnInit {
     formValue.minutosPublicarSinConfirmar = formValue.exigirConfirmacion ? -1 : Math.max(0, Number(formValue.minutosPublicarSinConfirmar) || 0);
     delete formValue.exigirConfirmacion;
     formValue.minPuntosEnlacesExternos = Math.max(0, Number(formValue.minPuntosEnlacesExternos) || 0);
+    formValue.diasCuentaNueva = Math.max(0, Number(formValue.diasCuentaNueva) || 0);
+    for (const l of this.limitesPublicacion) {
+      formValue[l.control] = Math.max(1, Number(formValue[l.control]) || l.porDefecto);
+    }
 
     this.generalService
       .updateConfiguracion(formValue)

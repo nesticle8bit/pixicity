@@ -35,7 +35,7 @@ type Seccion = Exclude<keyof PortadaViewModel, 'posts'>;
 
 interface Carga {
   datos$: Observable<PortadaViewModel | null>;
-  /** categoría|página del listado que trae la respuesta. */
+  /** categoría|página|novatos del listado que trae la respuesta. */
   posts: string;
   usadas: Set<string>;
 }
@@ -52,14 +52,15 @@ export class PortadaService {
   private carga: Carga | null = null;
 
   /** Devuelve la carga iniciada, para que `terminar` no cierre la de otra instancia de la portada. */
-  iniciar(categoria: string, pagina: number): object {
-    const params = new HttpParams()
+  iniciar(categoria: string, pagina: number, novatos = false): object {
+    let params = new HttpParams()
       .set('page', pagina)
       .set('pageCount', POSTS_POR_PAGINA_PORTADA)
       .set('query', categoria);
+    if (novatos) params = params.set('novatos', true);
 
     this.carga = {
-      posts: `${categoria}|${pagina}`,
+      posts: `${categoria}|${pagina}|${novatos}`,
       usadas: new Set(),
       datos$: this.http.get<ApiResponse<PortadaViewModel>>(`${environment.api}/api/portada`, { params }).pipe(
         map((response) => (response.status === 200 ? response.data ?? null : null)),
@@ -78,8 +79,8 @@ export class PortadaService {
     return this.desde(seccion, (datos) => datos[seccion], respaldo);
   }
 
-  tomarPosts(categoria: string, pagina: number, respaldo: Observable<PortadaViewModel['posts']>): Observable<PortadaViewModel['posts']> {
-    if (this.carga?.posts !== `${categoria}|${pagina}`) return respaldo;
+  tomarPosts(categoria: string, pagina: number, respaldo: Observable<PortadaViewModel['posts']>, novatos = false): Observable<PortadaViewModel['posts']> {
+    if (this.carga?.posts !== `${categoria}|${pagina}|${novatos}`) return respaldo;
     return this.desde('posts', (datos) => datos.posts, respaldo);
   }
 

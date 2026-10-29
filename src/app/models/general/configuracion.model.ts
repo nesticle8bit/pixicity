@@ -27,6 +27,13 @@ export interface ConfiguracionModel {
   minutosPublicarSinConfirmar: number;
   /** Puntos que necesita una cuenta nueva para enlazar a otros sitios; 0 = sin restricción. */
   minPuntosEnlacesExternos: number;
+  /** Días desde el registro en que la cuenta es "nueva"; 0 = desactivado. Con el correo confirmado nunca lo es. */
+  diasCuentaNueva: number;
+  limiteNuevaPosts: number;
+  limiteNuevaTemas: number;
+  limiteNuevaShouts: number;
+  limiteNuevaComentarios: number;
+  limiteNuevaMensajes: number;
 }
 
 export interface ContactoModel {

@@ -13,6 +13,8 @@ import { nombreDesdeSlug, tituloConParametro } from './services/shared/seo-title
 // con datos reales (post, perfil, shout, foto...) lo reemplazan con SEOService.setSEO al cargar.
 export const routes: Routes = [
   { path: '', component: SectionHomeForumComponent, title: 'Taringa! - Inteligencia colectiva | Posts y comunidades' },
+  // Igual que el home, pero el listado muestra solo los posts de usuarios con rango Novato (el home, el resto).
+  { path: 'novatos', component: SectionHomeForumComponent, title: 'Novatos | Posts de los nuevos usuarios', data: { novatos: true } },
   {
     path: 'registro',
     title: 'Crear cuenta',

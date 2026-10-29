@@ -125,7 +125,7 @@
                 <input id="dashboard-configuration-minutosSinConfirmar" type="number" min="0" max="10080" class="form-control"
                   formControlName="minutosPublicarSinConfirmar" aria-describedby="dashboard-configuration-minutosAyuda" style="max-width: 160px">
                 <small id="dashboard-configuration-minutosAyuda" class="text-muted">
-                  0 = puede publicar apenas se registra. Confirmar el correo siempre quita la espera; los límites anti-spam de cuenta nueva siguen aplicando.
+                  0 = puede publicar apenas se registra. Confirmar el correo siempre quita la espera y los límites de cuenta nueva.
                 </small>
               </div>
             }
@@ -137,6 +137,56 @@
                 Puntos que necesita una cuenta nueva (primeros días) para pegar enlaces externos. 0 = sin restricción. YouTube, Spotify y el propio sitio siempre se permiten.
               </small>
             </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label" for="dashboard-configuration-diasCuentaNueva">
+            Cuentas nuevas <br>
+            <i>Límites de publicación más bajos durante los primeros días</i>
+        </label>
+
+        <div class="col-sm-10">
+            <label for="dashboard-configuration-diasCuentaNueva">Días que dura una cuenta nueva</label>
+            <input id="dashboard-configuration-diasCuentaNueva" type="number" min="0" max="365" class="form-control"
+              formControlName="diasCuentaNueva" aria-describedby="dashboard-configuration-diasAyuda" style="max-width: 160px">
+            <small id="dashboard-configuration-diasAyuda" class="text-muted">
+              0 = desactivado. Confirmar el correo saca a la cuenta de este modo; admins y moderadores nunca tienen límites.
+            </small>
+
+            <div class="table-responsive mt-3">
+              <table class="table table-sm align-middle mb-1">
+                <thead>
+                  <tr>
+                    <th scope="col">Contenido</th>
+                    <th scope="col">Ventana</th>
+                    <th scope="col">Cuenta nueva</th>
+                    <th scope="col">Normal</th>
+                    <th scope="col">De confianza</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (l of limitesPublicacion; track l.control) {
+                    <tr>
+                      <td>{{ l.que }}</td>
+                      <td>{{ l.ventana }}</td>
+                      <td>
+                        <input type="number" min="1" max="1000" class="form-control form-control-sm" style="max-width: 90px"
+                          [formControlName]="l.control" [attr.aria-label]="l.que + ' por cuenta nueva'">
+                      </td>
+                      <td>{{ l.normal }}</td>
+                      <td>{{ l.normal * multiplicadorConfianza }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            <small class="text-muted">
+              Solo la columna "Cuenta nueva" se edita acá. "De confianza" = {{ multiplicadorConfianza }}× lo normal
+              (antigüedad y puntos mínimos, sin sanciones recientes).
+            </small>
         </div>
     </div>
 
