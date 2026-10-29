@@ -301,9 +301,10 @@ export class AccountComponent implements OnInit {
           genero: value.genero,
           paisId: value.paisId,
           estadoId: value.estadoId,
-          dia: fechaNacimiento[0],
-          mes: fechaNacimiento[1],
-          año: fechaNacimiento[2],
+          // Los selects usan números para día/año y '01'..'12' para el mes
+          dia: fechaNacimiento[0] ? Number(fechaNacimiento[0]) : undefined,
+          mes: fechaNacimiento[1] ? fechaNacimiento[1].padStart(2, '0') : undefined,
+          año: fechaNacimiento[2] ? Number(fechaNacimiento[2]) : undefined,
         });
         this.valoresCuentaOriginales = this.formGroupCuenta.getRawValue();
 
