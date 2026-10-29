@@ -12,12 +12,13 @@
     </div>
 
     <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+      <app-home-top-shouts />
+      <app-home-top-shouteros />
       <app-home-last-photos />
       <br>
       <!-- <app-home-last-shouts></app-home-last-shouts>
       <br> -->
-      <app-home-afiliados />
-      <br>
+
       <app-tags-cloud />
 
       <!-- Al final de la columna (en el celular, debajo de toda la lista): se cargan al acercarse. El widget de Discord
@@ -29,6 +30,8 @@
       <app-anuncio class="mb-3" ubicacion="portada-lateral" [categoriaSeo]="categoria" encabezado />
       <app-home-top-categorias />
       <app-home-last-registered-users />
+      <br>
+      <app-home-afiliados />
       } @placeholder {
       <div class="defer-hueco"></div>
       }

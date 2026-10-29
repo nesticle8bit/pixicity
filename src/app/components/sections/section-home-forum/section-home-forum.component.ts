@@ -15,6 +15,8 @@ import { HomeTopPostsComponent } from '../../home/home-top-posts/home-top-posts.
 import { HomeTopUsersComponent } from '../../home/home-top-users/home-top-users.component';
 import { HomeTopCategoriasComponent } from '../../home/home-top-categorias/home-top-categorias.component';
 import { HomeLastPhotosComponent } from '../../home/home-last-photos/home-last-photos.component';
+import { HomeTopShouterosComponent } from '../../home/home-top-shouteros/home-top-shouteros.component';
+import { HomeTopShoutsComponent } from '../../home/home-top-shouts/home-top-shouts.component';
 import { HomeAfiliadosComponent } from '../../home/home-afiliados/home-afiliados.component';
 import { TagsCloudComponent } from '../../addons/tags-cloud/tags-cloud.component';
 import { HomeDiscordComponent } from '../../home/home-discord/home-discord.component';
@@ -33,6 +35,8 @@ import { enNavegador } from '../../../shared/helpers/plataforma';
         HomeTopPostsComponent,
         HomeTopUsersComponent,
         HomeTopCategoriasComponent,
+        HomeTopShoutsComponent,
+        HomeTopShouterosComponent,
         HomeLastPhotosComponent,
         HomeAfiliadosComponent,
         TagsCloudComponent,

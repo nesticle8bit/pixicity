@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ApiResponse } from 'src/app/models/api/api-response.model';
-import { AlcanceMuro, MiResumen, Muro, SugerenciaUsuario, Tendencia, OrdenTendencias, MuroItem, PeriodoActivos } from 'src/app/models/mi/mi-vm.model';
+import { AlcanceMuro, MiResumen, Muro, SugerenciaUsuario, Tendencia, OrdenTendencias, MuroItem, PeriodoActivos, TopShoutero } from 'src/app/models/mi/mi-vm.model';
 import { environment } from 'src/environments/environment';
 import { IHttpMiService } from '../interfaces/httpMi.interface';
 import { HelperService } from '../shared/helper.service';
@@ -36,8 +36,17 @@ export class HttpMiService implements IHttpMiService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getActivos(periodo: PeriodoActivos, pagina: number, cantidad = 15): Observable<Muro> {
-    const params = new HttpParams().set('periodo', periodo).set('pagina', pagina).set('cantidad', cantidad);
+  getTopShouteros(periodo: string, cantidad = 5): Observable<TopShoutero[]> {
+    const params = new HttpParams().set('periodo', periodo).set('cantidad', cantidad);
+    return this.http
+      .get<ApiResponse<TopShoutero[]>>(`${environment.api}/api/mi/top-shouteros`, { params })
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getActivos(periodo: PeriodoActivos, pagina: number, cantidad = 15, nsfw = false): Observable<Muro> {
+    let params = new HttpParams().set('periodo', periodo).set('pagina', pagina).set('cantidad', cantidad);
+    if (nsfw) params = params.set('nsfw', true);
     return this.http
       .get<ApiResponse<{ items: MuroItem[]; hayMas: boolean }>>(`${environment.api}/api/mi/activos`, { params })
       .pipe(map((r) => {

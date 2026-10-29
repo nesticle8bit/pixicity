@@ -1,0 +1,26 @@
+<h2 class="main-title">
+  <span>TOP Shouteros</span>
+  <app-top-times-selector [selection]="periodo" (selectedDate)="dateChanges($event)"></app-top-times-selector>
+</h2>
+
+@if (top.length < 1) {
+  <section [attr.aria-busy]="loading">
+    <div class="alert alert-warning">
+      📢 <strong>Nadie ha publicado shouts en este período</strong>
+    </div>
+  </section>
+} @else {
+  @for (u of top; track u.userName; let i = $index) {
+    <article class="list-posts--zebra" [class.opacity-50]="loading">
+      <strong class="float-start rank" [class.gold]="i === 0" [class.silver]="i === 1"
+        [class.bronze]="i === 2">{{i + 1}}</strong>
+      <small>
+        <a [routerLink]="['/perfil', u.userName]" [appUserPopover]="u.userName">{{u.userName}}</a>
+      </small>
+      <span class="float-end value" matTooltip="Shouts publicados">
+        {{u.shouts}}
+      </span>
+    </article>
+  }
+  <br>
+}

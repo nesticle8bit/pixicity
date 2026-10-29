@@ -60,3 +60,10 @@ export interface SugerenciaUsuario {
   avatar: string | null;
   seguidores: number;
 }
+
+/** Puesto del top de usuarios por shouts publicados en el período. */
+export interface TopShoutero {
+  userName: string;
+  avatar: string | null;
+  shouts: number;
+}
