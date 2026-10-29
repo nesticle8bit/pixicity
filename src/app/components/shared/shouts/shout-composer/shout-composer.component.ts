@@ -13,6 +13,7 @@ import { ShoutMediaComponent } from '../../../addons/shout-media/shout-media.com
 import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.component';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { comprimirImagen } from 'src/app/shared/helpers/comprimir-imagen';
+import { embedEnlace } from 'src/app/components/addons/shout-media/shout-media.component';
 
 /** Clasificación en cliente para la vista previa (el backend la recalcula al guardar). */
 export function detectarTipoShout(url: string): string {
@@ -189,7 +190,16 @@ export class ShoutComposerComponent {
   /** Pegar una captura en el texto la sube como imagen del shout. */
   async alPegar(event: ClipboardEvent): Promise<void> {
     const file = [...(event.clipboardData?.files ?? [])].find((f) => f.type.startsWith('image/'));
-    if (!file) return;
+    if (!file) {
+      // Enlace multimedia pegado en el texto (video .mp4, YouTube, TikTok...): va al campo de enlace para que se vea.
+      const texto = event.clipboardData?.getData('text')?.trim() ?? '';
+      if (!this.formGroup.value.url && !this.imagenSubida() && /^https?:\/\/\S+$/i.test(texto)
+        && (detectarTipoShout(texto) !== 'Enlace' || embedEnlace(texto))) {
+        event.preventDefault();
+        this.formGroup.patchValue({ url: texto });
+      }
+      return;
+    }
     event.preventDefault();
     await this.subirImagen(file);
   }
