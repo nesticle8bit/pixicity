@@ -3,8 +3,11 @@ import { TimeAgoPipe } from 'src/app/shared/pipes/timeAgo.pipe';
 import { afterNextRender, Component, DestroyRef, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTooltip } from '@angular/material/tooltip';
-import { ActivatedRoute, NavigationStart, Router, RouterLink } from '@angular/router';
-import { catchError, combineLatest, EMPTY, filter, Subject, switchMap, tap } from 'rxjs';
+import { ActivatedRoute, NavigationStart, ParamMap, Router, RouterLink } from '@angular/router';
+import { catchError, combineLatest, EMPTY, filter, firstValueFrom, Subject, switchMap, tap } from 'rxjs';
+import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
+import { EDAD_NSFW, edadDesde } from 'src/app/shared/helpers/edad';
+import { NotificationService } from 'src/app/services/shared/notification.service';
 import { AlcanceMuro, OrdenTendencias, MiResumen, MuroItem, PeriodoActivos, SugerenciaUsuario, Tendencia } from 'src/app/models/mi/mi-vm.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
@@ -23,7 +26,7 @@ import { ShoutCardComponent } from '../../shared/shouts/shout-card/shout-card.co
 import { ShoutComposerComponent } from '../../shared/shouts/shout-composer/shout-composer.component';
 
 const POR_PAGINA = 15;
-const PESTANAS: AlcanceMuro[] = ['activos', 'siguiendo', 'todos'];
+const PESTANAS: AlcanceMuro[] = ['activos', 'siguiendo', 'todos', 'nsfw'];
 const PERIODOS: PeriodoActivos[] = ['dia', 'semana', 'mes'];
 
 /** Lista y scroll al salir de /mi: al volver con "atrás" se restauran en vez de recargar desde arriba. */
@@ -61,7 +64,12 @@ export class MiHomeComponent implements OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly seo = inject(SEOService);
   private readonly sesion = inject(SesionRequeridaService);
+  private readonly securityService = inject(IHttpSecurityService);
+  private readonly confirmar = inject(ConfirmarService);
+  private readonly notificaciones = inject(NotificationService);
   readonly haySesion = this.sesion.haySesion;
+  /** Ya confirmó ser mayor de edad en esta visita a /mi (no se vuelve a preguntar al ir y volver de pestaña). */
+  private nsfwConfirmado = false;
 
   readonly alcance = signal<AlcanceMuro>('siguiendo');
   /** Ventana de la pestaña "Más activos" (?periodo=dia|semana|mes). */
@@ -149,10 +157,18 @@ export class MiHomeComponent implements OnDestroy {
       });
     const volviendo = this.router.getCurrentNavigation()?.trigger === 'popstate';
     let primera = true;
-    combineLatest([this.route.paramMap, this.route.queryParamMap]).pipe(takeUntilDestroyed()).subscribe(([p, q]) => {
+    const aplicarRuta = (p: ParamMap, q: ParamMap): void => {
       // Por defecto Más activos; sin sesión no hay muro propio (Siguiendo cae a Novedades).
       const ver = q.get('ver');
-      this.alcance.set(ver === 'novedades' ? 'todos' : ver === 'siguiendo' ? (this.haySesion ? 'siguiendo' : 'todos') : 'activos');
+      // ?ver=nsfw directo (enlace, recarga): primero la verificación de edad; si no pasa, a Novedades.
+      if (ver === 'nsfw' && !this.nsfwConfirmado) {
+        this.verificarNsfw().then((ok) => {
+          if (ok) aplicarRuta(p, q);
+          else this.router.navigate(['/mi'], { queryParams: { ver: 'novedades' }, replaceUrl: true });
+        });
+        return;
+      }
+      this.alcance.set(ver === 'novedades' ? 'todos' : ver === 'nsfw' ? 'nsfw' : ver === 'siguiendo' ? (this.haySesion ? 'siguiendo' : 'todos') : 'activos');
       const periodo = q.get('periodo') as PeriodoActivos | null;
       this.periodo.set(periodo && PERIODOS.includes(periodo) ? periodo : 'semana');
       this.tag.set((p.get('tag') ?? q.get('tag'))?.replace(/^#/, '').toLowerCase() || null);
@@ -169,7 +185,8 @@ export class MiHomeComponent implements OnDestroy {
         return;
       }
       this.pedir.next({ reiniciar: true });
-    });
+    };
+    combineLatest([this.route.paramMap, this.route.queryParamMap]).pipe(takeUntilDestroyed()).subscribe(([p, q]) => aplicarRuta(p, q));
 
     if (this.haySesion) this.miService.getResumen().pipe(takeUntilDestroyed()).subscribe((r) => this.resumen.set(r));
     this.miService.getSugerencias(5).pipe(takeUntilDestroyed()).subscribe((s) => this.sugerencias.set(s));
@@ -242,7 +259,8 @@ export class MiHomeComponent implements OnDestroy {
   /** El muro "Siguiendo" es personal (noindex); Novedades y cada #hashtag son públicos e indexables. */
   private aplicarSEO(): void {
     const tag = this.tag();
-    const personal = !tag && this.alcance() === 'siguiendo';
+    // NSFW tampoco se indexa (contenido +18).
+    const personal = !tag && (this.alcance() === 'siguiendo' || this.alcance() === 'nsfw');
     if (!tag && this.alcance() === 'activos') {
       this.seo.setSEO({
         title: 'Shouts más activos',
@@ -257,7 +275,7 @@ export class MiHomeComponent implements OnDestroy {
     }
     const base = `${environment.publicUrl}/mi`;
     this.seo.setSEO({
-      title: tag ? `#${tag} · Shouts` : personal ? 'Mi muro' : 'Shouts: lo último de la comunidad',
+      title: tag ? `#${tag} · Shouts` : this.alcance() === 'nsfw' ? 'Shouts NSFW' : personal ? 'Mi muro' : 'Shouts: lo último de la comunidad',
       description: tag
         ? `Shouts con #${tag}: lo que la comunidad está diciendo sobre ${tag}.`
         : personal
@@ -271,13 +289,44 @@ export class MiHomeComponent implements OnDestroy {
     });
   }
 
-  cambiarAlcance(alcance: AlcanceMuro): void {
+  async cambiarAlcance(alcance: AlcanceMuro): Promise<void> {
     if (alcance === 'siguiendo' && !this.sesion.exigir('Inicia sesión para ver tu muro')) return;
     if (alcance === this.alcance() && !this.tag()) return;
+    if (alcance === 'nsfw' && !(await this.verificarNsfw())) return;
     this.router.navigate(['/mi'], {
-      queryParams: { ver: alcance === 'todos' ? 'novedades' : alcance === 'siguiendo' ? 'siguiendo' : null },
+      queryParams: { ver: alcance === 'todos' ? 'novedades' : alcance === 'activos' ? null : alcance },
       replaceUrl: !this.tag(),
     });
+  }
+
+  /**
+   * NSFW: sesión, fecha de nacimiento cargada (si falta, a /cuenta para ponerla), 18+ y aceptar la advertencia.
+   * Se pregunta una vez por visita a /mi.
+   */
+  private async verificarNsfw(): Promise<boolean> {
+    if (this.nsfwConfirmado) return true;
+    if (!this.sesion.exigir('Inicia sesión para ver el contenido NSFW')) return false;
+
+    const usuario = await firstValueFrom(this.securityService.getLoggedUserByJwt()).catch(() => null);
+    const edad = edadDesde(usuario?.fechaNacimiento);
+    if (edad === null) {
+      this.notificaciones.info('Para ver el contenido NSFW agrega tu fecha de nacimiento en tu cuenta.', 'NSFW');
+      this.router.navigate(['/cuenta']);
+      return false;
+    }
+    if (edad < EDAD_NSFW) {
+      this.notificaciones.error(`El contenido NSFW es solo para mayores de ${EDAD_NSFW} años.`, 'NSFW');
+      return false;
+    }
+
+    this.nsfwConfirmado = await this.confirmar.confirmar({
+      titulo: 'Contenido para mayores de edad',
+      mensaje: `Esta sección muestra shouts marcados como NSFW, con contenido solo apto para mayores de ${EDAD_NSFW} años. ¿Quieres continuar?`,
+      aceptar: `Soy mayor de ${EDAD_NSFW}, continuar`,
+      cancelar: 'Volver',
+      peligro: true,
+    });
+    return this.nsfwConfirmado;
   }
 
   cambiarPeriodo(periodo: PeriodoActivos): void {

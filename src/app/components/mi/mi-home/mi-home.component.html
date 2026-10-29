@@ -29,6 +29,12 @@
             [attr.tabindex]="alcance() === 'todos' ? 0 : -1" (click)="cambiarAlcance('todos')">
             <i class="ti ti-world" aria-hidden="true"></i> Novedades
           </button>
+          <button type="button" role="tab" id="mi-tab-nsfw" class="mi__tab" aria-controls="mi-muro"
+            [class.is-activa]="!tag() && alcance() === 'nsfw'" [attr.aria-selected]="!tag() && alcance() === 'nsfw'"
+            [attr.tabindex]="alcance() === 'nsfw' ? 0 : -1" (click)="cambiarAlcance('nsfw')"
+            title="Contenido para mayores de 18">
+            <i class="ti ti-eye-off" aria-hidden="true"></i> NSFW
+          </button>
         </div>
 
         @if (!tag() && alcance() === 'activos') {

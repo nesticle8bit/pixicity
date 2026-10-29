@@ -34,7 +34,7 @@
     opacity: .6;
 
     &:hover { background: light-dark(#f1f4f6, #26333c); opacity: 1; }
-    &.is-activa { background: light-dark(#e6f0f5, #1f3d4d); opacity: 1; box-shadow: inset 0 -2px 0 #006595; }
+    &.is-activa { background: light-dark(#e6f0f5, #1f3d4d); opacity: 1; }
   }
 
   &__titulo {

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnChanges, input, inject, signal } 
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { VisorImagenService } from '../visor-imagen/visor-imagen.service';
 import { embedYoutube, videoYoutube } from 'src/app/shared/helpers/youtube';
+import { NsfwService } from 'src/app/services/shared/nsfw.service';
 
 /**
  * Renderiza el media adjunto a un shout según su tipo:
@@ -29,6 +30,20 @@ export class ShoutMediaComponent implements OnChanges {
   /** La imagen no cargó (p. ej. la captura todavía se está generando): la tarjeta queda solo con el texto. */
   readonly imagenFallo = signal(false);
   readonly mediaDescripcion = input<string | null>(null);
+  /** Shout +18: la media se ve difuminada hasta que el usuario elige mostrarla. */
+  readonly nsfw = input(false);
+  readonly revelado = signal(false);
+
+  /** Preferencia de la cuenta (/cuenta → Contenido sensible): 18+ que eligió ver NSFW sin difuminar. */
+  private readonly preferencia = inject(NsfwService);
+
+  get oculto(): boolean { return this.nsfw() && !this.revelado() && !this.preferencia.mostrar(); }
+
+  revelar(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.revelado.set(true);
+  }
 
   // URLs de embed memoizadas (se recalculan SOLO cuando cambian los inputs,
   // no en cada ciclo de change detection — evita que el iframe parpadee/recargue).

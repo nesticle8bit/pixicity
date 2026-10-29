@@ -9,6 +9,8 @@ export interface UsuarioSesion {
   emailConfirmado?: boolean;
   /** Tema guardado en la cuenta: 'light', 'dark' o null (el del sistema). Ausente en sesiones anteriores. */
   tema?: 'light' | 'dark' | null;
+  /** Ve los shouts NSFW sin difuminar (solo 18+). Ausente en sesiones anteriores = difuminar. */
+  mostrarNsfw?: boolean;
 }
 
 export class JwtUserModel {

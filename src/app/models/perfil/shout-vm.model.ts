@@ -9,6 +9,8 @@ export interface ShoutViewModel {
   mediaTitulo: string | null;
   mediaImagen: string | null;
   mediaDescripcion: string | null;
+  /** +18: la media se ve difuminada hasta revelarla. */
+  nsfw?: boolean;
   /** Autor del shout. */
   avatar: { userName: string; avatar: string | null } | null;
   /** Dueño del muro donde se publicó (solo en el muro de /mi). */

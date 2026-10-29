@@ -1,5 +1,14 @@
 @if (tieneMedia) {
-<div class="shout-media">
+<div class="shout-media" [class.sm--oculto]="oculto">
+  @if (oculto) {
+    <!-- click.stop: revelar no debe abrir el detalle del shout. -->
+    <button type="button" class="sm-nsfw" (click)="revelar($event)" aria-label="Contenido NSFW: mostrar">
+      <span class="sm-nsfw__flair">NSFW</span>
+      <span class="sm-nsfw__texto">Contenido para mayores de 18</span>
+      <span class="sm-nsfw__ver"><i class="ti ti-eye" aria-hidden="true"></i> Mostrar</span>
+    </button>
+  }
+  <div class="sm-contenido" [attr.aria-hidden]="oculto || null" [attr.inert]="oculto || null">
   @if (esVideo && youtubeEmbed) {
     <div class="sm-embed sm-embed--video">
       <iframe [src]="youtubeEmbed" frameborder="0" loading="lazy"
@@ -38,5 +47,6 @@
       </div>
     </a>
   }
+  </div>
 </div>
 }

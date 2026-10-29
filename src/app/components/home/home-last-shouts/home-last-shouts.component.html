@@ -33,7 +33,7 @@
     }
 
     <app-shout-media [url]="shout.url" [tipo]="shout.tipo" [mediaTitulo]="shout.mediaTitulo"
-      [mediaImagen]="shout.mediaImagen" [mediaDescripcion]="shout.mediaDescripcion"></app-shout-media>
+      [mediaImagen]="shout.mediaImagen" [mediaDescripcion]="shout.mediaDescripcion" [nsfw]="!!shout.nsfw"></app-shout-media>
 
     @if (shout.perfil && shout.perfil !== shout.autor) {
     <span class="shout-target">en el perfil de {{shout.perfil}}</span>

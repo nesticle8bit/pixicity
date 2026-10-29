@@ -21,6 +21,7 @@
         <i class="ti ti-chevron-right" aria-label="en el muro de"></i>
         <a [routerLink]="['/perfil', perfil]" class="sc-bubble__user sc-bubble__user--perfil">{{ '@' }}{{ perfil }}</a>
         }
+        @if (shout().nsfw) { <span class="sc-nsfw" title="Contenido para mayores de 18">NSFW</span> }
       </span>
       <a class="sc-bubble__time" [routerLink]="enlace()"
         [matTooltip]="(shout().fechaRegistro | date: 'EEEE d \'de\' MMMM \'a las\' h:mm \', año\' y') ?? ''">
@@ -44,7 +45,7 @@
     }
 
     <app-shout-media [url]="shout().url" [tipo]="shout().tipo" [mediaTitulo]="shout().mediaTitulo"
-      [mediaImagen]="shout().mediaImagen" [mediaDescripcion]="shout().mediaDescripcion" />
+      [mediaImagen]="shout().mediaImagen" [mediaDescripcion]="shout().mediaDescripcion" [nsfw]="!!shout().nsfw" />
 
     <footer class="sc-bubble__footer">
       @if (puedeEditar() && !editando()) {

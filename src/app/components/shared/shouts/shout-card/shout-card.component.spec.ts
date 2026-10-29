@@ -1,7 +1,7 @@
 import { IHttpSilenciosService } from 'src/app/services/interfaces/httpSilencios.interface';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { NEVER, of, throwError } from 'rxjs';
 import { ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -27,7 +27,7 @@ describe('ShoutCardComponent', () => {
       providers: [
         provideRouter([]),
         { provide: IHttpPerfilService, useValue: perfil },
-        { provide: IHttpSecurityService, useValue: { getCurrentUser: () => ({ usuario: sesion ? { userName: sesion } : undefined, token: sesion ? 't' : '' }) } },
+        { provide: IHttpSecurityService, useValue: { getCurrentUser: () => ({ usuario: sesion ? { userName: sesion } : undefined, token: sesion ? 't' : '' }), getCurrentUserAsObservable: () => NEVER } },
         // Lo usa el popover de usuario de los enlaces @nombre (no se abre en estos tests).
         { provide: IHttpUsuarioPerfilService, useValue: {} },
         { provide: NotificationService, useValue: jasmine.createSpyObj('NotificationService', ['warning', 'info', 'success', 'error']) },

@@ -2,6 +2,58 @@
   margin-top: 8px;
 }
 
+//  NSFW: media difuminada con un botón encima hasta que se revela
+.sm--oculto {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+
+  .sm-contenido {
+    filter: blur(28px);
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+.sm-nsfw {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 120px;
+  border: 0;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+
+  &:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
+
+  &__ver {
+    padding: 4px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 999px;
+    font-weight: 600;
+  }
+
+  &:hover &__ver { background: rgba(255, 255, 255, 0.15); }
+}
+
+.sm-nsfw__flair {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 4px;
+  background: #c0392b;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
 //  Embeds (video / spotify) responsivos
 .sm-embed {
   position: relative;

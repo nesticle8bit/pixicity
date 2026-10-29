@@ -67,7 +67,18 @@ export class ShoutComposerComponent {
     perfilId: [0, Validators.required],
     tipo: 1,
     url: [''],
+    /** +18: solo enlaces externos (el API rechaza imágenes subidas) y la media se ve difuminada. */
+    nsfw: false,
   });
+
+  /** NSFW y subir imágenes se excluyen: con una imagen subida no se puede marcar, y marcado no se puede subir. */
+  alternarNsfw(): void {
+    if (this.imagenSubida()) {
+      this.notificaciones.error('Quita la imagen subida: los shouts NSFW solo admiten enlaces externos', 'NSFW');
+      return;
+    }
+    this.formGroup.patchValue({ nsfw: !this.formGroup.value.nsfw });
+  }
 
   /** Autocompletado de #hashtags: sugerencias para el tag que se está escribiendo. */
   readonly hashtags = signal<Tendencia[]>([]);
@@ -185,6 +196,10 @@ export class ShoutComposerComponent {
 
   private async subirImagen(file: File): Promise<void> {
     if (this.subiendoImagen()) return;
+    if (this.formGroup.value.nsfw) {
+      this.notificaciones.error('Los shouts NSFW no admiten imágenes subidas: pega un enlace externo', 'NSFW');
+      return;
+    }
     if (!file.type.startsWith('image/')) {
       this.notificaciones.error('Solo puedes subir imágenes', 'Archivo no válido');
       return;
@@ -227,7 +242,7 @@ export class ShoutComposerComponent {
         next: (response) => {
           this.enviando.set(false);
           if (response) {
-            this.formGroup.patchValue({ comentario: '', url: '' });
+            this.formGroup.patchValue({ comentario: '', url: '', nsfw: false });
             this.imagenSubida.set(false);
             this.cerrarHashtags();
             this.publicado.emit();

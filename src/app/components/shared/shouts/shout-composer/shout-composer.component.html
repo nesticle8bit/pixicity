@@ -43,7 +43,7 @@
     </div>
     } @else if (formGroup.value.url) {
     <div class="sh-composer__preview">
-      <app-shout-media [url]="formGroup.value.url" [tipo]="detectarTipo(formGroup.value.url)" />
+      <app-shout-media [url]="formGroup.value.url" [tipo]="detectarTipo(formGroup.value.url)" [nsfw]="!!formGroup.value.nsfw" />
       <button type="button" class="sh-composer__quitar" (click)="quitarMedia()"
         [attr.aria-label]="imagenSubida() ? 'Quitar la imagen' : 'Quitar el enlace'">
         <i class="ti ti-x" aria-hidden="true"></i>
@@ -53,11 +53,18 @@
 
     <div class="sh-composer__actions">
       <span class="sh-composer__hint">Comparte algo con la comunidad</span>
+      <button type="button" class="sh-composer__nsfw" [class.is-activo]="formGroup.value.nsfw" (click)="alternarNsfw()"
+        [attr.aria-pressed]="!!formGroup.value.nsfw" [disabled]="subiendoImagen()"
+        [title]="imagenSubida() ? 'Quita la imagen subida para marcarlo NSFW' : 'Contenido para mayores de 18: solo enlaces externos'">
+        NSFW
+      </button>
+      @if (!formGroup.value.nsfw) {
       <input #archivoImagen type="file" accept="image/*" hidden (change)="elegirImagen($event)" />
       <button type="button" class="sh-composer__emoji" (click)="archivoImagen.click()"
         [disabled]="subiendoImagen()" aria-label="Subir una imagen" title="Subir una imagen">
         <i class="ti" [class.ti-photo]="!subiendoImagen()" [class.ti-loader-2]="subiendoImagen()" aria-hidden="true"></i>
       </button>
+      }
       <button #botonEmojis type="button" class="sh-composer__emoji" (click)="abrirEmojis(botonEmojis)"
         aria-label="Agregar emoji" aria-haspopup="dialog" [attr.aria-expanded]="emojisAbierto">
         <i class="ti ti-mood-smile" aria-hidden="true"></i>

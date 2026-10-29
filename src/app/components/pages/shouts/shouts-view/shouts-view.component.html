@@ -36,7 +36,7 @@
                 <p class="sv-bubble__body"><app-texto-enlazado [texto]="shout.comentario" /></p>
 
                 <app-shout-media [url]="shout.url" [tipo]="shout.tipo" [mediaTitulo]="shout.mediaTitulo"
-                  [mediaImagen]="shout.mediaImagen" [mediaDescripcion]="shout.mediaDescripcion"></app-shout-media>
+                  [mediaImagen]="shout.mediaImagen" [mediaDescripcion]="shout.mediaDescripcion" [nsfw]="!!shout.nsfw"></app-shout-media>
 
                 <footer class="sv-bubble__footer">
                   <a class="sv-action sv-action--open"

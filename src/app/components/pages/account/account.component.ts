@@ -21,9 +21,10 @@ import { AccountPasswordComponent } from './account-password/account-password.co
 import { AccountDosFactoresComponent } from './account-dos-factores/account-dos-factores.component';
 import { AccountNotificacionesComponent } from './account-notificaciones/account-notificaciones.component';
 import { AccountMisDatosComponent } from './account-mis-datos/account-mis-datos.component';
+import { AccountNsfwComponent } from './account-nsfw/account-nsfw.component';
 import { ArrastrarFondoDirective, PosicionFondo } from 'src/app/shared/directives/arrastrar-fondo.directive';
 
-export type SeccionCuenta = 'datos' | 'perfil' | 'personalizacion' | 'password' | 'dos-factores' | 'bloqueados' | 'silenciados' | 'notificaciones' | 'mis-datos';
+export type SeccionCuenta = 'datos' | 'perfil' | 'personalizacion' | 'password' | 'dos-factores' | 'bloqueados' | 'silenciados' | 'notificaciones' | 'contenido' | 'mis-datos';
 
 interface Seccion {
   id: SeccionCuenta;
@@ -55,6 +56,7 @@ export const GRUPOS_CUENTA: { nombre: string; secciones: Seccion[] }[] = [
     nombre: 'Preferencias',
     secciones: [
       { id: 'notificaciones', label: 'Notificaciones', icono: 'notifications', descripcion: 'Elige qué avisos llegan a tu campana.' },
+      { id: 'contenido', label: 'Contenido sensible', icono: 'visibility', descripcion: 'Elige si ves los shouts NSFW sin difuminar.' },
       { id: 'mis-datos', label: 'Mis datos', icono: 'download', descripcion: 'Descarga una copia de todo lo que guardamos sobre ti.' },
     ],
   },
@@ -84,6 +86,7 @@ const FONDO_PAGINA_VALIDO = /^https?:\/\/\S+\.(jpe?g|png|gif|webp)(\?\S*)?$/i;
     AccountPasswordComponent,
     AccountDosFactoresComponent,
     AccountNotificacionesComponent,
+    AccountNsfwComponent,
     AccountMisDatosComponent,
     ArrastrarFondoDirective,
 ],

@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { NEVER, of } from 'rxjs';
 import { IHttpMiService } from 'src/app/services/interfaces/httpMi.interface';
 import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
@@ -24,7 +24,7 @@ describe('ShoutComposerComponent (imagen)', () => {
       providers: [
         { provide: IHttpPerfilService, useValue: perfil },
         { provide: IHttpMiService, useValue: { buscarHashtags: () => of([]) } },
-        { provide: IHttpSecurityService, useValue: { getCurrentUser: () => ({ usuario: { userName: 'yo' }, token: 't' }) } },
+        { provide: IHttpSecurityService, useValue: { getCurrentUser: () => ({ usuario: { userName: 'yo' }, token: 't' }), getCurrentUserAsObservable: () => NEVER } },
         { provide: NotificationService, useValue: notificaciones },
         { provide: EmojisPopoverService, useValue: {} },
       ],

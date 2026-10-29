@@ -50,6 +50,8 @@ export interface UsuarioViewModel {
   rango: RangoUsuarioViewModel;
   generoString: string;
   estado: EstadoViewModel;
+  /** Ve los shouts NSFW sin difuminar (se cambia en /cuenta → Contenido sensible). */
+  mostrarNsfw?: boolean;
 }
 
 /** Fila del listado de usuarios del panel admin (UsuarioAdminViewModel del API). */
