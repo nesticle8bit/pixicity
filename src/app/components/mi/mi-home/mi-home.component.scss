@@ -440,3 +440,25 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   font-size: 0.85rem;
   opacity: 0.7;
 }
+
+.mi-nsfw-reglas {
+  margin-bottom: 12px;
+  border-left: 3px solid light-dark(#d9534f, #e5736f);
+  font-size: 0.9rem;
+
+  &__titulo {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+    color: light-dark(#b52b27, #f08a86);
+  }
+
+  &__lista {
+    margin: 0 0 8px;
+    padding-left: 1.2rem;
+
+    li + li { margin-top: 2px; }
+  }
+
+  &__pie { color: light-dark(#666, #b0b0b0); font-size: 0.85rem; }
+}

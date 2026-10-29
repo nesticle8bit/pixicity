@@ -59,6 +59,23 @@
       </div>
       }
 
+      @if (!tag() && alcance() === 'nsfw') {
+      <section class="mi-card mi-nsfw-reglas" aria-labelledby="mi-nsfw-reglas-titulo">
+        <h2 id="mi-nsfw-reglas-titulo" class="mi-nsfw-reglas__titulo">
+          <i class="ti ti-alert-triangle" aria-hidden="true"></i> Reglas de la sección NSFW
+        </h2>
+        <p class="mb-2">Acá se permite <strong>desnudez y contenido sexual entre adultos</strong>. Nada ilegal:</p>
+        <ul class="mi-nsfw-reglas__lista">
+          <li><strong>Cero contenido con menores</strong> (CP). Se elimina, se banea la cuenta y se reporta a las autoridades.</li>
+          <li>Nada de gore, violencia real, mutilaciones ni maltrato animal.</li>
+          <li>Nada sin consentimiento: fotos íntimas filtradas, cámaras ocultas, <em>revenge porn</em> ni deepfakes de personas reales.</li>
+          <li>Nada de zoofilia, incesto, violencia sexual ni apología de delitos.</li>
+          <li>No publiques datos personales de nadie.</li>
+        </ul>
+        <p class="mi-nsfw-reglas__pie mb-0">Si ves algo que rompe estas reglas, denúncialo. Lo que no cumpla se borra sin aviso.</p>
+      </section>
+      }
+
       @if (resumen(); as yo) {
       <app-shout-composer class="mi__composer" [perfilId]="yo.id" (publicado)="alPublicar()" />
       }
