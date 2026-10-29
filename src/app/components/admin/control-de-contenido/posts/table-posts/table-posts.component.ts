@@ -1,3 +1,4 @@
+import { MatTooltip } from '@angular/material/tooltip';
 import { PostAdmin } from 'src/app/models/admin/filas-admin.model';
 import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
@@ -21,7 +22,7 @@ import { TimeAgoPipe } from '../../../../../shared/pipes/timeAgo.pipe';
     selector: 'app-table-posts',
     templateUrl: './table-posts.component.html',
     styleUrls: ['./table-posts.component.scss'],
-    imports: [
+    imports: [MatTooltip, 
         AdminFiltrosComponent,
         NgClass,
         RouterLink,

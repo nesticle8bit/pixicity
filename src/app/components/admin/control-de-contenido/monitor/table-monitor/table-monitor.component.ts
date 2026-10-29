@@ -67,6 +67,11 @@ export class TableMonitorComponent implements OnInit {
       { valor: 'Mencion', label: 'Menciones' },
       { valor: 'Shout', label: 'Shouts' },
       { valor: 'Rango', label: 'Rangos' },
+      { valor: 'ComunidadMiembro', label: 'Comunidad: miembros' },
+      { valor: 'ComunidadTema', label: 'Comunidad: temas' },
+      { valor: 'ComunidadRespuesta', label: 'Comunidad: respuestas' },
+      { valor: 'ComunidadVoto', label: 'Comunidad: votos' },
+      { valor: 'ComunidadRango', label: 'Comunidad: rangos' },
     ],
   };
 

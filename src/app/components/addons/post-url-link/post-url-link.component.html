@@ -1,4 +1,4 @@
-<a [routerLink]="['/posts/' + categoria().seo + '/' + post().id + '/' + post().url]" title="{{post().titulo}}" target="{{target()}}">
-    <img src="/assets/images/categorias/{{categoria().icono}}" title="{{categoria().nombre}}" alt="{{categoria().nombre}}" loading="lazy"/>
+<a [routerLink]="['/posts/' + categoria().seo + '/' + post().id + '/' + post().url]" matTooltip="{{post().titulo}}" aria-label="{{post().titulo}}" target="{{target()}}">
+    <img src="/assets/images/categorias/{{categoria().icono}}" matTooltip="{{categoria().nombre}}" alt="{{categoria().nombre}}" loading="lazy"/>
     {{post().titulo | truncate:[post().truncate]}}
 </a>

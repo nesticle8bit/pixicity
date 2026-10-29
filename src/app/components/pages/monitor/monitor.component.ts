@@ -83,6 +83,16 @@ export class MonitorComponent implements OnInit {
       tipos: [{ tipo: 'ComentarioSiguePost', label: 'Comentarios', icono: 'ma_blue_ball' }],
     },
     {
+      titulo: 'Comunidades',
+      tipos: [
+        { tipo: 'ComunidadMiembro', label: 'Miembros y seguidores', icono: 'ma_follow' },
+        { tipo: 'ComunidadTema', label: 'Temas nuevos', icono: 'ma_post' },
+        { tipo: 'ComunidadRespuesta', label: 'Respuestas', icono: 'ma_comment_resp' },
+        { tipo: 'ComunidadVoto', label: 'Votos', icono: 'ma_voto_positivo' },
+        { tipo: 'ComunidadRango', label: 'Rangos', icono: 'ma_monitor_rango' },
+      ],
+    },
+    {
       titulo: 'Otros',
       tipos: [
         { tipo: 'Shout', label: 'Shouts', icono: 'ma_status' },

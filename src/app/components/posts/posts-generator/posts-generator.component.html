@@ -61,7 +61,7 @@
                 [attr.aria-label]="'Imagen ' + (i + 1)" [formControlName]="i" />
               @if (imagenes.length > 1) {
               <button type="button" class="pg-imgitem__quitar" (click)="quitarImagen(i)"
-                [attr.aria-label]="'Quitar imagen ' + (i + 1)" title="Quitar">
+                [attr.aria-label]="'Quitar imagen ' + (i + 1)" matTooltip="Quitar">
                 <i class="ti ti-x"></i>
               </button>
               }

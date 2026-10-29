@@ -77,7 +77,7 @@
                 (click)="abrir(c)" (keydown.enter)="abrir(c)">
                 <div class="msg-item__head">
                   @if (c.noLeidos > 0) {
-                    <span class="msg-item__dot" title="Sin leer"></span>
+                    <span class="msg-item__dot" matTooltip="Sin leer"></span>
                   }
                   <a class="msg-item__from" [routerLink]="['/perfil/' + c.otro.userName]"
                     [appUserPopover]="c.otro.userName" (click)="$event.stopPropagation()">

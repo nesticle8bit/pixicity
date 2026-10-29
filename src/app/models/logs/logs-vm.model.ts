@@ -14,6 +14,8 @@ export interface MonitorViewModel {
   shoutId?: number | null;
   /** Autor del shout, para enlazar a /shouts/{autor}/{id}. */
   shoutAutor?: string | null;
+  /** Ruta del aviso cuando no hay post ni shout (temas y comunidades), con #fragmento opcional. */
+  enlace?: string | null;
   tipoString: string;
   // null en avisos del sistema (p. ej. moderación).
   usuarioQueHaceAccion: UsuarioViewModel | null;

@@ -9,7 +9,7 @@
         <strong class="float-start">
           {{i + 1}}
         </strong>
-        <a [routerLink]="['/perfil/' + usuario.userName]" title="{{usuario.userName}}" [appUserPopover]="usuario.userName">
+        <a [routerLink]="['/perfil/' + usuario.userName]" matTooltip="{{usuario.userName}}" aria-label="{{usuario.userName}}" [appUserPopover]="usuario.userName">
           <addon-country-flag [iso2]="usuario?.pais?.iso2"
           [title]="usuario?.pais?.nombre"></addon-country-flag>
           <app-genre-icon [genre]="usuario?.genero"></app-genre-icon>

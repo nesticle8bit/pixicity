@@ -111,7 +111,7 @@
               <span class="us-card__avatar">
                 <app-user-avatar [avatar]="usuario.avatar" [userName]="usuario.userName" [width]="72" [height]="72"></app-user-avatar>
                 <span class="us-card__estado" [class.us-card__estado--online]="usuario.enLinea"
-                  [attr.title]="usuario.enLinea ? 'En línea' : ultimaVez(usuario.activo)"></span>
+                  [matTooltip]="usuario.enLinea ? 'En línea' : ultimaVez(usuario.activo)"></span>
               </span>
               <strong class="us-card__nombre">{{ usuario.userName }}</strong>
             </a>

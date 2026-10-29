@@ -71,13 +71,16 @@
               @if (notificacion.post) {
               <a [routerLink]="['/posts/' + notificacion.post.categoria.seo + '/' + notificacion.post.id + '/' + notificacion.post.url]"
                 [fragment]="notificacion.comentarioId ? 'comentario-' + notificacion.comentarioId : undefined"
-                title="{{notificacion.post.titulo}}">
+                matTooltip="{{notificacion.post.titulo}}" aria-label="{{notificacion.post.titulo}}">
                 {{notificacion.post.titulo}}
               </a>
               } @else if (notificacion.shoutId && notificacion.shoutAutor) {
               <a [routerLink]="['/shouts', notificacion.shoutAutor, notificacion.shoutId]">&nbsp;Ver shout</a>
-              } @else if (notificacion.tipoString === 'Moderacion') {
-              <a routerLink="/paginas/protocolo">Ver protocolo</a>&nbsp;· <a routerLink="/apelaciones">Apelar</a>
+              } @else if (notificacion.enlace) {
+              <a [routerLink]="notificacion.enlace.split('#')[0]" [fragment]="notificacion.enlace.split('#')[1]">&nbsp;Ver</a>
+              }
+              @if (notificacion.tipoString === 'Moderacion') {
+              &nbsp;<a routerLink="/paginas/protocolo">Ver protocolo</a>&nbsp;· <a routerLink="/apelaciones">Apelar</a>
               }
             </div>
           </div>

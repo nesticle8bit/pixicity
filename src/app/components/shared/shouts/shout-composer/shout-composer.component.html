@@ -55,13 +55,13 @@
       <span class="sh-composer__hint">Comparte algo con la comunidad</span>
       <button type="button" class="sh-composer__nsfw" [class.is-activo]="formGroup.value.nsfw" (click)="alternarNsfw()"
         [attr.aria-pressed]="!!formGroup.value.nsfw" [disabled]="subiendoImagen()"
-        [title]="imagenSubida() ? 'Quita la imagen subida para marcarlo NSFW' : 'Contenido para mayores de 18: solo enlaces externos'">
+        [matTooltip]="imagenSubida() ? 'Quita la imagen subida para marcarlo NSFW' : 'Contenido para mayores de 18: solo enlaces externos'" [attr.aria-label]="imagenSubida() ? 'Quita la imagen subida para marcarlo NSFW' : 'Contenido para mayores de 18: solo enlaces externos'">
         NSFW
       </button>
       @if (!formGroup.value.nsfw) {
       <input #archivoImagen type="file" accept="image/*" hidden (change)="elegirImagen($event)" />
       <button type="button" class="sh-composer__emoji" (click)="archivoImagen.click()"
-        [disabled]="subiendoImagen()" aria-label="Subir una imagen" title="Subir una imagen">
+        [disabled]="subiendoImagen()" aria-label="Subir una imagen" matTooltip="Subir una imagen">
         <i class="ti" [class.ti-photo]="!subiendoImagen()" [class.ti-loader-2]="subiendoImagen()" aria-hidden="true"></i>
       </button>
       }

@@ -26,13 +26,13 @@
         @for (foto of fotos; track foto.id; let i = $index) {
           <tr [ngClass]="{'row-deleted': foto.eliminado}">
             <td>
-              <a [routerLink]="['/fotos/' + foto.userName + '/' + foto.id + '/' + foto.url]" title="{{foto.titulo}}">
+              <a [routerLink]="['/fotos/' + foto.userName + '/' + foto.id + '/' + foto.url]" matTooltip="{{foto.titulo}}" aria-label="{{foto.titulo}}">
                 <img [src]="foto | thumbFoto: 48" [alt]="foto.titulo" class="foto-thumb" loading="lazy" decoding="async"/>
               </a>
             </td>
             <td>{{foto.fechaRegistro | timeAgo}}</td>
             <td>
-              <a [routerLink]="['/fotos/' + foto.userName + '/' + foto.id + '/' + foto.url]" title="{{foto.titulo}}">
+              <a [routerLink]="['/fotos/' + foto.userName + '/' + foto.id + '/' + foto.url]" matTooltip="{{foto.titulo}}" aria-label="{{foto.titulo}}">
                 {{foto.titulo}}
               </a>
             </td>

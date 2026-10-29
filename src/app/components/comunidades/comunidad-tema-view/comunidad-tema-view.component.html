@@ -97,7 +97,7 @@
             <ul class="tema-side-list">
               @for (t of tema.temasUsuario; track t.id) {
               <li>
-                <a [routerLink]="['/comunidades', t.comunidadSlug, 'tema', t.id, t.url]" [title]="t.titulo">
+                <a [routerLink]="['/comunidades', t.comunidadSlug, 'tema', t.id, t.url]" [matTooltip]="t.titulo" [attr.aria-label]="t.titulo">
                   <span class="tema-side-list__title">{{t.titulo}}</span>
                   <span class="tema-side-list__meta"><i class="ti ti-eye"></i> {{t.visitantes}}</span>
                 </a>

@@ -1,3 +1,4 @@
+import { MatTooltip } from '@angular/material/tooltip';
 import { FotoAdmin } from 'src/app/models/admin/filas-admin.model';
 import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
@@ -21,7 +22,7 @@ import { ThumbFotoPipe } from '../../../../../shared/pipes/thumb.pipe';
     selector: 'app-table-fotos',
     templateUrl: './table-fotos.component.html',
     styleUrls: ['./table-fotos.component.scss'],
-    imports: [ThumbFotoPipe, 
+    imports: [MatTooltip, ThumbFotoPipe, 
         AdminFiltrosComponent,
         NgClass,
         RouterLink,

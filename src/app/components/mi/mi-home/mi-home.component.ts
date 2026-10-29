@@ -26,7 +26,7 @@ import { ShoutCardComponent } from '../../shared/shouts/shout-card/shout-card.co
 import { ShoutComposerComponent } from '../../shared/shouts/shout-composer/shout-composer.component';
 
 const POR_PAGINA = 15;
-const PESTANAS: AlcanceMuro[] = ['activos', 'siguiendo', 'todos', 'nsfw'];
+const PESTANAS: AlcanceMuro[] = ['activos', 'todos', 'siguiendo', 'nsfw'];
 const PERIODOS: PeriodoActivos[] = ['dia', 'semana', 'mes'];
 
 /** Lista y scroll al salir de /mi: al volver con "atrás" se restauran en vez de recargar desde arriba. */
@@ -34,8 +34,8 @@ let guardado: { url: string; items: MuroItem[]; siguiente: string | null; scroll
 
 /**
  * /mi: el inicio personal. Muro con los shouts propios y de quienes sigues (más lo que comparten y sus posts nuevos)
- * o "Novedades" con los shouts de todo el sitio; al costado, el resumen del usuario y a quién seguir.
- * Es pública: sin sesión se ven Novedades y los #hashtags (indexables); interactuar lleva al login.
+ * o "Recientes" con los shouts de todo el sitio; al costado, el resumen del usuario y a quién seguir.
+ * Es pública: sin sesión se ven Recientes y los #hashtags (indexables); interactuar lleva al login.
  */
 @Component({
   selector: 'app-mi-home',
@@ -158,17 +158,17 @@ export class MiHomeComponent implements OnDestroy {
     const volviendo = this.router.getCurrentNavigation()?.trigger === 'popstate';
     let primera = true;
     const aplicarRuta = (p: ParamMap, q: ParamMap): void => {
-      // Por defecto Más activos; sin sesión no hay muro propio (Siguiendo cae a Novedades).
+      // Por defecto Más activos; sin sesión no hay muro propio (Siguiendo cae a Recientes).
       const ver = q.get('ver');
-      // ?ver=nsfw directo (enlace, recarga): primero la verificación de edad; si no pasa, a Novedades.
+      // ?ver=nsfw directo (enlace, recarga): primero la verificación de edad; si no pasa, a Recientes.
       if (ver === 'nsfw' && !this.nsfwConfirmado) {
         this.verificarNsfw().then((ok) => {
           if (ok) aplicarRuta(p, q);
-          else this.router.navigate(['/mi'], { queryParams: { ver: 'novedades' }, replaceUrl: true });
+          else this.router.navigate(['/mi'], { queryParams: { ver: 'recientes' }, replaceUrl: true });
         });
         return;
       }
-      this.alcance.set(ver === 'novedades' ? 'todos' : ver === 'nsfw' ? 'nsfw' : ver === 'siguiendo' ? (this.haySesion ? 'siguiendo' : 'todos') : 'activos');
+      this.alcance.set(ver === 'recientes' || ver === 'novedades' ? 'todos' : ver === 'nsfw' ? 'nsfw' : ver === 'siguiendo' ? (this.haySesion ? 'siguiendo' : 'todos') : 'activos');
       const periodo = q.get('periodo') as PeriodoActivos | null;
       this.periodo.set(periodo && PERIODOS.includes(periodo) ? periodo : 'semana');
       this.tag.set((p.get('tag') ?? q.get('tag'))?.replace(/^#/, '').toLowerCase() || null);
@@ -256,7 +256,7 @@ export class MiHomeComponent implements OnDestroy {
       guardado = { url: this.urlActual, items: this.items(), siguiente: this.siguiente(), scrollY: this.scrollAlSalir };
   }
 
-  /** El muro "Siguiendo" es personal (noindex); Novedades y cada #hashtag son públicos e indexables. */
+  /** El muro "Siguiendo" es personal (noindex); Recientes y cada #hashtag son públicos e indexables. */
   private aplicarSEO(): void {
     const tag = this.tag();
     // NSFW tampoco se indexa (contenido +18).
@@ -285,7 +285,7 @@ export class MiHomeComponent implements OnDestroy {
       imageURL: '',
       tags: tag ? [tag, 'shouts'] : ['shouts', 'comunidad', 'tendencias'],
       noIndex: personal,
-      canonical: tag ? `${environment.publicUrl}/hashtag/${encodeURIComponent(tag)}` : `${base}?ver=novedades`,
+      canonical: tag ? `${environment.publicUrl}/hashtag/${encodeURIComponent(tag)}` : `${base}?ver=recientes`,
     });
   }
 
@@ -294,7 +294,7 @@ export class MiHomeComponent implements OnDestroy {
     if (alcance === this.alcance() && !this.tag()) return;
     if (alcance === 'nsfw' && !(await this.verificarNsfw())) return;
     this.router.navigate(['/mi'], {
-      queryParams: { ver: alcance === 'todos' ? 'novedades' : alcance === 'activos' ? null : alcance },
+      queryParams: { ver: alcance === 'todos' ? 'recientes' : alcance === 'activos' ? null : alcance },
       replaceUrl: !this.tag(),
     });
   }
@@ -350,7 +350,7 @@ export class MiHomeComponent implements OnDestroy {
   }
 
   quitarTag(): void {
-    this.router.navigate(['/mi'], { queryParams: { ver: this.haySesion ? null : 'novedades' } });
+    this.router.navigate(['/mi'], { queryParams: { ver: this.haySesion ? null : 'recientes' } });
   }
 
   verNuevos(): void {

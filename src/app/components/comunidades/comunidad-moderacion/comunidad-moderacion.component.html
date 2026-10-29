@@ -56,7 +56,7 @@
           <div class="cm-reporte__pie">
             <span class="cm-reporte__quien">Denunciado por {{ '@' }}{{ r.reportanteUserName }}
               @if (r.deConfianza) {
-              <span class="cm-reporte__confianza" title="Usuario de confianza"><i class="ti ti-shield-check" aria-hidden="true"></i> de confianza</span>
+              <span class="cm-reporte__confianza" matTooltip="Usuario de confianza"><i class="ti ti-shield-check" aria-hidden="true"></i> de confianza</span>
               }
             </span>
             @if (enlace(r); as url) {

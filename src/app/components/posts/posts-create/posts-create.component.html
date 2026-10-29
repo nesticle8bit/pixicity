@@ -17,7 +17,7 @@
           <i class="ti ti-circle-check"></i> Borrador guardado · {{ today | date:'hh:mm a' }}
         </span>
         } @else if (borrador?.guardadoEn; as guardado) {
-        <span class="cp-bar__saved cp-bar__saved--local" title="Se guarda solo mientras escribes; si cierras la pestaña, al volver puedes recuperarlo">
+        <span class="cp-bar__saved cp-bar__saved--local" matTooltip="Se guarda solo mientras escribes; si cierras la pestaña, al volver puedes recuperarlo">
           <i class="ti ti-device-floppy"></i> Guardado en este navegador · {{ guardado | date:'hh:mm a' }}
         </span>
         }
@@ -149,7 +149,7 @@
               @for (tag of etiquetas; track tag) {
               <mat-chip-row (removed)="removeTag(tag)" [class.cp-tag--auto]="autoTags.has(tag)">
                 @if (autoTags.has(tag)) {
-                <i class="ti ti-sparkles cp-tag__spark" title="Sugerida a partir del título"></i>
+                <i class="ti ti-sparkles cp-tag__spark" matTooltip="Sugerida a partir del título"></i>
                 }
                 {{ tag }}
                 <button matChipRemove [attr.aria-label]="'Quitar etiqueta ' + tag"><mat-icon>cancel</mat-icon></button>

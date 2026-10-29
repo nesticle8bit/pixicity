@@ -1,3 +1,4 @@
+import { MatTooltip } from '@angular/material/tooltip';
 import { EmojisPopoverService } from '../../bottom-sheets/bottom-sheets-emojis/emojis-popover.service';
 import {
   AfterViewInit,
@@ -85,7 +86,7 @@ import { agregarColumna, agregarFila, celdaInicial, celdaVecina, crearTabla, qui
         // guarda y el post salía sin la imagen).
         { provide: NG_VALIDATORS, useExisting: forwardRef(() => RichEditorComponent), multi: true },
     ],
-    imports: [MatIcon, NgTemplateOutlet, RichEditorBubbleComponent],
+    imports: [MatTooltip, MatIcon, NgTemplateOutlet, RichEditorBubbleComponent],
 })
 export class RichEditorComponent implements ControlValueAccessor, Validator, AfterViewInit, OnDestroy {
   readonly placeholder = input<string>('Escribe aquí...');

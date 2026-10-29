@@ -62,7 +62,7 @@ async function simularMi(page: Page): Promise<URL[]> {
   return muro;
 }
 
-test('/mi sin cuenta: muestra Novedades, invita a registrarse y un "me gusta" lleva al login', async ({ page }) => {
+test('/mi sin cuenta: muestra Recientes, invita a registrarse y un "me gusta" lleva al login', async ({ page }) => {
   const muro = await simularMi(page);
   await page.goto('/mi');
 

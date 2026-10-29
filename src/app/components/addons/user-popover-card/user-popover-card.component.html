@@ -26,7 +26,7 @@
         </app-user-avatar>
         <span class="upop__online-dot"
           [ngClass]="{'online': isOnline, 'offline': !isOnline}"
-          [title]="isOnline ? 'Online' : 'Offline'">
+          [matTooltip]="isOnline ? 'Online' : 'Offline'">
         </span>
       </div>
 

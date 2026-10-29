@@ -5,14 +5,14 @@
         <ul class="list-unstyled list-inline mb-0 pt-2" role="list">
           @for (link of tabs; track link.route) {
           <li class="list-inline-item main-menu--item" [ngClass]="{'main-menu--item--active': isActive(link)}">
-            <a [routerLink]="link.route" [title]="link.label" [attr.aria-label]="link.label"
+            <a [routerLink]="link.route" [matTooltip]="link.label" [attr.aria-label]="link.label"
               [attr.aria-current]="isActive(link) ? 'page' : null">
               <i class="ti {{link.icon}} d-sm-none" aria-hidden="true"></i>
               <span class="d-none d-sm-inline">{{link.label}}</span>
             </a>
             @if (pendientes(link); as n) {
               <div class="alertas" [attr.aria-label]="n + ' pendientes en ' + link.label">
-                <a [routerLink]="link.route" [title]="n + ' pendientes'" tabindex="-1">
+                <a [routerLink]="link.route" [matTooltip]="n + ' pendientes'" [attr.aria-label]="n + ' pendientes'" tabindex="-1">
                   <span>{{ n > 99 ? '99+' : n }}</span>
                 </a>
               </div>
@@ -24,14 +24,14 @@
           @if (!currentUser.usuario) {
           <li class="list-inline-item main-menu--item d-none d-md-block"
             [ngClass]="{'main-menu--item--active': isRouteActive('/login')}">
-            <a routerLink="/login" title="Iniciar sesión">
+            <a routerLink="/login" matTooltip="Iniciar sesión" aria-label="Iniciar sesión">
               <span>Iniciar sesión</span>
             </a>
           </li>
 
           <li class="list-inline-item main-menu--item main-menu--item--register d-none d-md-block"
             [ngClass]="{'main-menu--item--active': isRouteActive('/registro')}">
-            <a routerLink="/registro" title="Registrate Ya!">
+            <a routerLink="/registro" matTooltip="Registrate Ya!" aria-label="Registrate Ya!">
               <span>Registrate Ya!</span>
             </a>
           </li>

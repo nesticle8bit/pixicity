@@ -4,12 +4,12 @@
   <div class="rich-editor__palette-section" [class.is-dark]="oscura">
     <span class="rich-editor__palette-label">{{ palette.label }}</span>
     <div class="rich-editor__swatches" [class.is-highlight]="palette.prop === 'backgroundColor'">
-      <button type="button" class="swatch swatch--reset" [title]="palette.resetTitle"
+      <button type="button" class="swatch swatch--reset" [matTooltip]="palette.resetTitle"
         [attr.aria-label]="palette.resetTitle" (click)="applyStyle(palette.prop, null)">
         <mat-icon>format_color_reset</mat-icon>
       </button>
       @for (color of palette.colors; track color) {
-      <button type="button" class="swatch" [style.background]="color" [title]="color"
+      <button type="button" class="swatch" [style.background]="color" [matTooltip]="color"
         [attr.aria-label]="palette.label + ' ' + color" (click)="applyStyle(palette.prop, color)"></button>
       }
     </div>
@@ -25,7 +25,7 @@
       @for (item of group.items; track item.icon) {
       @if (isMenu(item)) {
       <div class="rich-editor__dropdown">
-        <button type="button" class="btn-dropdown" [title]="item.title" [attr.aria-label]="item.title"
+        <button type="button" class="btn-dropdown" [matTooltip]="item.title" [attr.aria-label]="item.title"
           aria-haspopup="true" [attr.aria-expanded]="openMenu === item.menu" [class.open]="openMenu === item.menu"
           [disabled]="disabled || sourceMode" (click)="toggleMenu(item.menu)">
           <mat-icon>{{ item.icon }}</mat-icon>
@@ -81,7 +81,7 @@
         }
       </div>
       } @else {
-      <button type="button" [title]="item.title" [attr.aria-label]="item.title"
+      <button type="button" [matTooltip]="item.title" [attr.aria-label]="item.title"
         [class.active]="!!item.mark && activeMarks.has(item.mark)"
         [attr.aria-pressed]="item.mark ? activeMarks.has(item.mark) : null" [disabled]="disabled || sourceMode"
         (click)="item.run()">
@@ -94,14 +94,14 @@
 
     <!-- Alterna entre el editor visual y el HTML fuente -->
     <button type="button" class="rich-editor__source-toggle" [class.active]="sourceMode"
-      [title]="sourceMode ? 'Volver al editor visual' : 'Ver código HTML'"
+      [matTooltip]="sourceMode ? 'Volver al editor visual' : 'Ver código HTML'"
       [attr.aria-label]="sourceMode ? 'Volver al editor visual' : 'Ver código HTML'" [attr.aria-pressed]="sourceMode"
       [disabled]="disabled" (click)="toggleSource()">
       <mat-icon>{{ sourceMode ? 'visibility' : 'data_object' }}</mat-icon>
     </button>
 
     <!-- Móvil: muestra/oculta los grupos secundarios -->
-    <button type="button" class="rich-editor__more" [title]="showMore ? 'Menos opciones' : 'Más opciones'"
+    <button type="button" class="rich-editor__more" [matTooltip]="showMore ? 'Menos opciones' : 'Más opciones'"
       [attr.aria-label]="showMore ? 'Menos opciones' : 'Más opciones'" [attr.aria-expanded]="showMore"
       [disabled]="disabled" (click)="showMore = !showMore">
       <mat-icon>{{ showMore ? 'expand_less' : 'more_horiz' }}</mat-icon>
@@ -141,17 +141,17 @@
     }
     <span class="info">
       {{ imgFrame.label }}
-      <button type="button" title="Ancho completo" (click)="setImgWidth('full')">100%</button>
-      <button type="button" title="Mitad del ancho" (click)="setImgWidth('half')">50%</button>
-      <button type="button" title="Tamaño automático" (click)="setImgWidth(null)">Auto</button>
+      <button type="button" matTooltip="Ancho completo" aria-label="Ancho completo" (click)="setImgWidth('full')">100%</button>
+      <button type="button" matTooltip="Mitad del ancho" aria-label="Mitad del ancho" (click)="setImgWidth('half')">50%</button>
+      <button type="button" matTooltip="Tamaño automático" aria-label="Tamaño automático" (click)="setImgWidth(null)">Auto</button>
       <span class="sep"></span>
-      <button type="button" class="icon" title="Alinear a la izquierda (texto al lado)" aria-label="Alinear a la izquierda"
+      <button type="button" class="icon" matTooltip="Alinear a la izquierda (texto al lado)" aria-label="Alinear a la izquierda"
         [class.active]="imgAlign === 'izq'" (click)="setImgAlign('izq')"><mat-icon>format_align_left</mat-icon></button>
-      <button type="button" class="icon" title="Centrar" aria-label="Centrar imagen"
+      <button type="button" class="icon" matTooltip="Centrar" aria-label="Centrar imagen"
         [class.active]="imgAlign === 'centro'" (click)="setImgAlign('centro')"><mat-icon>format_align_center</mat-icon></button>
-      <button type="button" class="icon" title="Alinear a la derecha (texto al lado)" aria-label="Alinear a la derecha"
+      <button type="button" class="icon" matTooltip="Alinear a la derecha (texto al lado)" aria-label="Alinear a la derecha"
         [class.active]="imgAlign === 'der'" (click)="setImgAlign('der')"><mat-icon>format_align_right</mat-icon></button>
-      <button type="button" class="icon" [title]="imgHasCaption ? 'Editar pie de foto' : 'Agregar pie de foto'"
+      <button type="button" class="icon" [matTooltip]="imgHasCaption ? 'Editar pie de foto' : 'Agregar pie de foto'"
         aria-label="Pie de foto" [class.active]="imgHasCaption" (click)="editImgCaption()"><mat-icon>short_text</mat-icon></button>
     </span>
   </div>
@@ -170,13 +170,13 @@
       }
     </select>
     } @else {
-    <button type="button" title="Agregar fila (Tab en la última celda)" (click)="tableAddRow()"><mat-icon>add</mat-icon> Fila</button>
-    <button type="button" title="Agregar columna" (click)="tableAddCol()"><mat-icon>add</mat-icon> Columna</button>
+    <button type="button" matTooltip="Agregar fila (Tab en la última celda)" aria-label="Agregar fila (Tab en la última celda)" (click)="tableAddRow()"><mat-icon>add</mat-icon> Fila</button>
+    <button type="button" matTooltip="Agregar columna" aria-label="Agregar columna" (click)="tableAddCol()"><mat-icon>add</mat-icon> Columna</button>
     <span class="sep"></span>
-    <button type="button" title="Quitar fila" (click)="tableDeleteRow()"><mat-icon>remove</mat-icon> Fila</button>
-    <button type="button" title="Quitar columna" (click)="tableDeleteCol()"><mat-icon>remove</mat-icon> Columna</button>
+    <button type="button" matTooltip="Quitar fila" aria-label="Quitar fila" (click)="tableDeleteRow()"><mat-icon>remove</mat-icon> Fila</button>
+    <button type="button" matTooltip="Quitar columna" aria-label="Quitar columna" (click)="tableDeleteCol()"><mat-icon>remove</mat-icon> Columna</button>
     <span class="sep"></span>
-    <button type="button" class="danger" title="Borrar tabla" aria-label="Borrar tabla" (click)="tableDelete()"><mat-icon>delete</mat-icon></button>
+    <button type="button" class="danger" matTooltip="Borrar tabla" aria-label="Borrar tabla" (click)="tableDelete()"><mat-icon>delete</mat-icon></button>
     }
   </div>
   }

@@ -1,3 +1,4 @@
+import { MatTooltip } from '@angular/material/tooltip';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,7 +17,7 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
     selector: 'app-tops',
     templateUrl: './tops.component.html',
     styleUrls: ['./tops.component.scss'],
-    imports: [
+    imports: [MatTooltip, 
         FormsModule,
         ReactiveFormsModule,
         RouterLink,

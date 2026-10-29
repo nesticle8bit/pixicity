@@ -28,9 +28,9 @@
                 @for (borrador of borradores; track borrador) {
                   <tr>
                     <td>
-                      <a [routerLink]="['/posts/actualizar/' + borrador.id]" title="{{borrador.titulo}}">
+                      <a [routerLink]="['/posts/actualizar/' + borrador.id]" matTooltip="{{borrador.titulo}}" aria-label="{{borrador.titulo}}">
                         <img src="/assets/images/categorias/{{borrador.categoria.icono}}"
-                          title="{{borrador.categoria.nombre}}" alt="{{borrador.categoria.nombre}}" loading="lazy"/>
+                          matTooltip="{{borrador.categoria.nombre}}" alt="{{borrador.categoria.nombre}}" loading="lazy"/>
                           {{borrador.titulo}}
                         </a>
                       </td>
@@ -76,7 +76,7 @@
                 <tr>
                   <td>
                     <a (click)="filterByCategory(categoria)"
-                      title="{{categoria.categoria.nombre}}" role="button" tabindex="0" (keydown.enter)="filterByCategory(categoria)" (keydown.space)="filterByCategory(categoria); $event.preventDefault()">
+                      matTooltip="{{categoria.categoria.nombre}}" aria-label="{{categoria.categoria.nombre}}" role="button" tabindex="0" (keydown.enter)="filterByCategory(categoria)" (keydown.space)="filterByCategory(categoria); $event.preventDefault()">
                       <img src="/assets/images/categorias/{{categoria.categoria.icono}}"
                         alt="{{categoria.categoria.nombre}}" loading="lazy"/>
                         {{categoria.categoria.nombre}} <span

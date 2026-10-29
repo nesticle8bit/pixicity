@@ -20,9 +20,9 @@
                       </strong>
                       <div class="ms-2">
                         <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
-                          title="{{post.titulo}}">
+                          matTooltip="{{post.titulo}}" aria-label="{{post.titulo}}">
                           <img src="/assets/images/categorias/{{post.categoria.icono}}"
-                            title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
+                            matTooltip="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
                             {{post.titulo | truncate:[65]}}
                           </a>
                         </div>
@@ -54,9 +54,9 @@
                         </strong>
                         <div class="ms-2">
                           <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
-                            title="{{post.titulo}}">
+                            matTooltip="{{post.titulo}}" aria-label="{{post.titulo}}">
                             <img src="/assets/images/categorias/{{post.categoria.icono}}"
-                              title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
+                              matTooltip="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
                               {{post.titulo | truncate:[65]}}
                             </a>
                           </div>
@@ -91,9 +91,9 @@
                           </strong>
                           <div class="ms-2">
                             <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
-                              title="{{post.titulo}}">
+                              matTooltip="{{post.titulo}}" aria-label="{{post.titulo}}">
                               <img src="/assets/images/categorias/{{post.categoria.icono}}"
-                                title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
+                                matTooltip="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
                                 {{post.titulo | truncate:[65]}}
                               </a>
                             </div>
@@ -125,9 +125,9 @@
                             </strong>
                             <div class="ms-2">
                               <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
-                                title="{{post.titulo}}">
+                                matTooltip="{{post.titulo}}" aria-label="{{post.titulo}}">
                                 <img src="/assets/images/categorias/{{post.categoria.icono}}"
-                                  title="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
+                                  matTooltip="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
                                   {{post.titulo | truncate:[65]}}
                                 </a>
                               </div>

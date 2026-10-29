@@ -16,7 +16,7 @@
         <a class="post" [class.post--eliminado]="$any(post).eliminado"
           [routerLink]="['/posts', post.categoria.seo, post.id, post.url]">
           <img class="post__categoria" [src]="'/assets/images/categorias/' + post.categoria.icono"
-            [alt]="post.categoria.nombre" [title]="post.categoria.nombre" width="16" height="16" loading="lazy" />
+            [alt]="post.categoria.nombre" [matTooltip]="post.categoria.nombre" width="16" height="16" loading="lazy" />
           <span class="post__cuerpo">
             <span class="post__titulo">{{ post.titulo }}</span>
             <span class="post__meta">
@@ -24,10 +24,10 @@
             </span>
           </span>
           <span class="post__numeros">
-            <span title="Puntos"><i class="ti ti-star" aria-hidden="true"></i> {{ post.puntos | number }}</span>
-            <span title="Comentarios"><i class="ti ti-message-dots" aria-hidden="true"></i> {{ post.comentarios | number }}</span>
+            <span matTooltip="Puntos"><i class="ti ti-star" aria-hidden="true"></i> {{ post.puntos | number }}</span>
+            <span matTooltip="Comentarios"><i class="ti ti-message-dots" aria-hidden="true"></i> {{ post.comentarios | number }}</span>
             @if (post.visitantes) {
-              <span title="Visitas"><i class="ti ti-eye" aria-hidden="true"></i> {{ post.visitantes | number }}</span>
+              <span matTooltip="Visitas"><i class="ti ti-eye" aria-hidden="true"></i> {{ post.visitantes | number }}</span>
             }
           </span>
         </a>

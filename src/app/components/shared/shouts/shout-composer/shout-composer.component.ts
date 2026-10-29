@@ -1,3 +1,4 @@
+import { MatTooltip } from '@angular/material/tooltip';
 import { AvisoProtocoloComponent } from '../../aviso-protocolo/aviso-protocolo.component';
 import { Component, DestroyRef, ElementRef, effect, inject, input, output, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -38,7 +39,7 @@ const MAX_BYTES_ORIGINAL = 20 * 1024 * 1024;
   selector: 'app-shout-composer',
   templateUrl: './shout-composer.component.html',
   styleUrls: ['./shout-composer.component.scss'],
-  imports: [ReactiveFormsModule, UserAvatarComponent, ShoutMediaComponent, AvisoProtocoloComponent],
+  imports: [MatTooltip, ReactiveFormsModule, UserAvatarComponent, ShoutMediaComponent, AvisoProtocoloComponent],
 })
 export class ShoutComposerComponent {
   private readonly formBuilder = inject(FormBuilder);

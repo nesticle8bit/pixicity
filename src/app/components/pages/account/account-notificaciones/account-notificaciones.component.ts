@@ -26,6 +26,15 @@ const TIPOS: { grupo: string; tipos: { tipo: string; label: string; detalle: str
     ],
   },
   {
+    grupo: 'Comunidades',
+    tipos: [
+      { tipo: 'ComunidadMiembro', label: 'Miembros', detalle: 'Alguien se une o sigue a una comunidad que administras' },
+      { tipo: 'ComunidadTema', label: 'Temas nuevos', detalle: 'Se crea un tema en una comunidad que administras' },
+      { tipo: 'ComunidadRespuesta', label: 'Respuestas', detalle: 'Comentan tu tema o responden tu comentario' },
+      { tipo: 'ComunidadVoto', label: 'Votos', detalle: 'Votan positivo tu tema o tu comentario' },
+    ],
+  },
+  {
     grupo: 'Gente y posts que sigues',
     tipos: [
       { tipo: 'Seguir', label: 'Nuevos seguidores', detalle: 'Alguien empieza a seguirte' },

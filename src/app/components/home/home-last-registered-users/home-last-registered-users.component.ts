@@ -1,3 +1,4 @@
+import { MatTooltip } from '@angular/material/tooltip';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { PortadaService } from 'src/app/services/shared/portada.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -13,7 +14,7 @@ import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
     selector: 'app-home-last-registered-users',
     templateUrl: './home-last-registered-users.component.html',
     styleUrls: ['./home-last-registered-users.component.scss'],
-    imports: [RouterLink, UserPopoverDirective, CountryFlagComponent, GenreIconComponent, TimeAgoPipe]
+    imports: [MatTooltip, RouterLink, UserPopoverDirective, CountryFlagComponent, GenreIconComponent, TimeAgoPipe]
 })
 export class HomeLastRegisteredUsersComponent implements OnInit {
   private securityService = inject(IHttpSecurityService);

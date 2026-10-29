@@ -420,8 +420,8 @@ test('mi: muestra el muro mezclado, carga más, comparte y sigue a una sugerenci
   // Seguir a alguien recarga el muro desde arriba.
   await expect.poll(() => pedidos.filter((p) => !p.url.searchParams.get('antes')).length).toBe(2);
 
-  await page.getByRole('tab', { name: 'Novedades' }).click();
-  await expect(page).toHaveURL(/\?ver=novedades/);
+  await page.getByRole('tab', { name: 'Recientes' }).click();
+  await expect(page).toHaveURL(/\?ver=recientes/);
   await expect.poll(() => pedidos.at(-1)?.url.searchParams.get('alcance')).toBe('todos');
 });
 

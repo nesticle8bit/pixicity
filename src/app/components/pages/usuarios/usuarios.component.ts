@@ -1,3 +1,4 @@
+import { MatTooltip } from '@angular/material/tooltip';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -38,7 +39,7 @@ const POR_PAGINA = 25;
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.scss'],
-  imports: [
+  imports: [MatTooltip, 
     RouterLink,
     UserPopoverDirective,
     UserAvatarComponent,

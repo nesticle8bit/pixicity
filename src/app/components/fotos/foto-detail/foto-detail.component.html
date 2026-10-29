@@ -97,7 +97,7 @@
             <div class="sidebar-grid">
               @for (otraFoto of foto.otrasFotosUsuario; track otraFoto.id) {
               <a [routerLink]="['/fotos', foto.usuario, otraFoto.id, otraFoto.url]" class="sidebar-thumb"
-                [title]="otraFoto.titulo">
+                [matTooltip]="otraFoto.titulo" [attr.aria-label]="otraFoto.titulo">
                 <img [src]="otraFoto | thumbFoto: 120" [alt]="otraFoto.titulo" loading="lazy">
                 <div class="sidebar-thumb-overlay">
                   <span class="overlay-title">{{otraFoto.titulo}}</span>

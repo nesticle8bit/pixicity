@@ -1,3 +1,4 @@
+import { MatTooltip } from '@angular/material/tooltip';
 import { Subscription } from 'rxjs';
 import { PerfilRef, SIN_PERFIL } from 'src/app/models/seguridad/seguridad-vm.model';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
@@ -14,7 +15,7 @@ import { PostViewModel } from 'src/app/models/posts/post-vm.model';
     selector: 'app-profile-posts',
     templateUrl: './profile-posts.component.html',
     styleUrls: ['./profile-posts.component.scss'],
-    imports: [
+    imports: [MatTooltip, 
         DecimalPipe,
         RouterLink,
         MatPaginator,

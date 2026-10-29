@@ -1,3 +1,4 @@
+import { MatTooltip } from '@angular/material/tooltip';
 import { Component, OnChanges, input } from '@angular/core';
 import { UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
@@ -10,7 +11,7 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
     selector: 'app-user-popover-card',
     templateUrl: './user-popover-card.component.html',
     styleUrls: ['./user-popover-card.component.scss'],
-    imports: [
+    imports: [MatTooltip, 
         UserAvatarComponent,
         NgClass,
         CountryFlagComponent,

@@ -2,9 +2,9 @@
   <section>
     <form [formGroup]="formGroup" (ngSubmit)="buscar()" class="d-none d-md-block"
       style="float:right; margin-top: 17px;">
-      <input type="text" id="ibuscadorq" name="q" aria-label="Buscar" placeholder="Buscar..." title="Buscar..." formControlName="search"
+      <input type="text" id="ibuscadorq" name="q" aria-label="Buscar" placeholder="Buscar..." matTooltip="Buscar..." formControlName="search"
         class="mini_ibuscador onblur_effect">
-        <input vspace="2" hspace="10" type="submit" alt="Buscar" value="" title="Buscar" class="mini_bbuscador" />
+        <input vspace="2" hspace="10" type="submit" alt="Buscar" value="" matTooltip="Buscar" class="mini_bbuscador" />
       </form>
       <div class="userInfoLogin">
         <ul>
@@ -47,6 +47,8 @@
                           }
                           @if (notificacion.shoutId && notificacion.shoutAutor) {
                             <a [routerLink]="['/shouts', notificacion.shoutAutor, notificacion.shoutId]">· ver</a>
+                          } @else if (notificacion.enlace) {
+                            <a [routerLink]="notificacion.enlace.split('#')[0]" [fragment]="notificacion.enlace.split('#')[1]">· ver</a>
                           }
                         </span>
                         <br>
@@ -65,7 +67,7 @@
               </div>
               @if (currentStats.notifications > 0) {
                 <div class="alertas" id="alerta_mon" style="top: -10px;">
-                  <a title="{{currentStats.notifications}} notificaciones">
+                  <a matTooltip="{{currentStats.notifications}} notificaciones" aria-label="{{currentStats.notifications}} notificaciones">
                     <span>{{currentStats.notifications}}</span>
                   </a>
                 </div>
@@ -117,14 +119,14 @@
                 </div>
                 @if (currentStats.messages > 0) {
                   <div class="alertas" id="alerta_mon" style="top: -10px;">
-                    <a title="{{currentStats.messages}} mensajes">
+                    <a matTooltip="{{currentStats.messages}} mensajes" aria-label="{{currentStats.messages}} mensajes">
                       <span>{{currentStats.messages}}</span>
                     </a>
                   </div>
                 }
               </li>
               <li class="favoritos" style="position:relative">
-                <a class="menu" title="Posts favoritos" (click)="verFavoritos()"
+                <a class="menu" matTooltip="Posts favoritos" (click)="verFavoritos()"
                   (clickOutside)="display.favoritos = false" aria-haspopup="true" [attr.aria-expanded]="display.favoritos" aria-label="Posts favoritos" role="button" tabindex="0" (keydown.enter)="verFavoritos()" (keydown.space)="verFavoritos(); $event.preventDefault()">
                   <i class="ti ti-star"></i>
                 </a>
@@ -138,7 +140,7 @@
                       @if (favorito.post; as post) {
                       <li class="list-items">
                         <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
-                          title="{{post.titulo}}">
+                          matTooltip="{{post.titulo}}" aria-label="{{post.titulo}}">
                           <img src="/assets/images/categorias/{{post.categoria.icono}}"
                             alt="" aria-hidden="true" loading="lazy"/>
                             {{post.titulo | truncate:[44]}}

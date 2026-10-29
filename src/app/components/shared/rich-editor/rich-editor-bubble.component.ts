@@ -1,3 +1,4 @@
+import { MatTooltip } from '@angular/material/tooltip';
 import { ChangeDetectionStrategy, Component, ElementRef, input, output, TemplateRef, viewChild } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { NgTemplateOutlet } from '@angular/common';
@@ -12,7 +13,7 @@ import { BubbleMode, EditorButton, InlineMark } from './rich-editor.config';
   templateUrl: './rich-editor-bubble.component.html',
   styleUrls: ['./rich-editor-bubble.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatIcon, NgTemplateOutlet],
+  imports: [MatTooltip, MatIcon, NgTemplateOutlet],
 })
 export class RichEditorBubbleComponent {
   readonly modo = input<BubbleMode | null>(null);

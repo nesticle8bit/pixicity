@@ -1,3 +1,4 @@
+import { MatTooltip } from '@angular/material/tooltip';
 import { ChangeDetectionStrategy, Component, OnInit, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
@@ -8,7 +9,7 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './post-url-link.component.html',
     styleUrls: ['./post-url-link.component.scss'],
-    imports: [RouterLink, TruncatePipe],
+    imports: [MatTooltip, RouterLink, TruncatePipe],
 })
 export class PostUrlLinkComponent implements OnInit {
   readonly post = input({

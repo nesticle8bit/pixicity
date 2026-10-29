@@ -19,20 +19,20 @@
             [attr.tabindex]="alcance() === 'activos' ? 0 : -1" (click)="cambiarAlcance('activos')">
             <i class="ti ti-flame" aria-hidden="true"></i> Más activos
           </button>
+          <button type="button" role="tab" id="mi-tab-todos" class="mi__tab" aria-controls="mi-muro"
+            [class.is-activa]="!tag() && alcance() === 'todos'" [attr.aria-selected]="!tag() && alcance() === 'todos'"
+            [attr.tabindex]="alcance() === 'todos' ? 0 : -1" (click)="cambiarAlcance('todos')">
+            <i class="ti ti-clock" aria-hidden="true"></i> Recientes
+          </button>
           <button type="button" role="tab" id="mi-tab-siguiendo" class="mi__tab" aria-controls="mi-muro"
             [class.is-activa]="!tag() && alcance() === 'siguiendo'" [attr.aria-selected]="!tag() && alcance() === 'siguiendo'"
             [attr.tabindex]="alcance() === 'siguiendo' ? 0 : -1" (click)="cambiarAlcance('siguiendo')">
             <i class="ti ti-users" aria-hidden="true"></i> Siguiendo
           </button>
-          <button type="button" role="tab" id="mi-tab-todos" class="mi__tab" aria-controls="mi-muro"
-            [class.is-activa]="!tag() && alcance() === 'todos'" [attr.aria-selected]="!tag() && alcance() === 'todos'"
-            [attr.tabindex]="alcance() === 'todos' ? 0 : -1" (click)="cambiarAlcance('todos')">
-            <i class="ti ti-world" aria-hidden="true"></i> Novedades
-          </button>
           <button type="button" role="tab" id="mi-tab-nsfw" class="mi__tab" aria-controls="mi-muro"
             [class.is-activa]="!tag() && alcance() === 'nsfw'" [attr.aria-selected]="!tag() && alcance() === 'nsfw'"
             [attr.tabindex]="alcance() === 'nsfw' ? 0 : -1" (click)="cambiarAlcance('nsfw')"
-            title="Contenido para mayores de 18">
+            matTooltip="Contenido para mayores de 18" aria-label="Contenido para mayores de 18">
             <i class="ti ti-eye-off" aria-hidden="true"></i> NSFW
           </button>
         </div>
@@ -109,7 +109,7 @@
           <i class="ti ti-users" aria-hidden="true"></i>
           <p>Tu muro está vacío.</p>
           <span class="mi__vacio-ayuda">Publica tu primer shout o sigue a alguien para ver lo que comparte.</span>
-          <button type="button" class="mi-boton" (click)="cambiarAlcance('todos')">Ver novedades</button>
+          <button type="button" class="mi-boton" (click)="cambiarAlcance('todos')">Ver recientes</button>
         </div>
         } @else if (alcance() === 'activos') {
         <div class="mi__vacio">

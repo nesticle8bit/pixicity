@@ -12,7 +12,7 @@
             </a>
           } @else {
             <button type="button" class="redes__enlace" (click)="copiar(red)" [attr.aria-label]="'Copiar usuario de ' + red.nombre + ': ' + red.usuario"
-              title="Copiar usuario">
+              matTooltip="Copiar usuario">
               <i class="ti {{ red.icono }}" aria-hidden="true"></i>
               <span class="redes__nombre">{{ red.nombre }}</span>
               <span class="redes__usuario">{{ red.usuario }}</span>

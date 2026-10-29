@@ -1,3 +1,4 @@
+import { MatTooltip } from '@angular/material/tooltip';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
@@ -11,7 +12,7 @@ import { StaffBadgesService } from 'src/app/services/shared/staff-badges.service
     selector: 'main-menu',
     templateUrl: './main-menu.component.html',
     styleUrls: ['./main-menu.component.scss'],
-    imports: [NgClass, RouterLink],
+    imports: [MatTooltip, NgClass, RouterLink],
 })
 export class MainMenuComponent implements OnInit {
   private securityService = inject(IHttpSecurityService);

@@ -34,7 +34,7 @@
               </span>
             </td>
             <td>
-              <span title="{{noticia.contenido}}" [innerHTML]="noticia.contenido | truncate:[110]"></span>
+              <span matTooltip="{{noticia.contenido}}" [innerHTML]="noticia.contenido | truncate:[110]"></span>
             </td>
             <td>
               {{noticia.eliminado ? 'Eliminado' : 'Activo'}}

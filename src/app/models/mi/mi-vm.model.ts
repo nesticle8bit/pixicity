@@ -1,6 +1,6 @@
 import { ShoutViewModel } from '../perfil/shout-vm.model';
 
-/** 'nsfw': como Novedades pero solo shouts +18 (pide sesión, edad cargada y ser mayor). */
+/** 'nsfw': como Recientes pero solo shouts +18 (pide sesión, edad cargada y ser mayor). */
 export type AlcanceMuro = 'siguiendo' | 'todos' | 'activos' | 'nsfw';
 
 /** Ventana de "Más activos": shouts publicados en el último día, semana o mes. */

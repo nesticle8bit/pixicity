@@ -1,3 +1,4 @@
+import { MatTooltip } from '@angular/material/tooltip';
 import { ShoutAdmin } from 'src/app/models/perfil/shout-vm.model';
 import { finalize } from 'rxjs';
 import { AdminFiltro, AdminFiltrosConfig } from 'src/app/models/admin/admin-filtro.model';
@@ -19,7 +20,7 @@ import { TruncatePipe } from '../../../../../shared/pipes/truncate.pipe';
     selector: 'app-table-shouts',
     templateUrl: './table-shouts.component.html',
     styleUrls: ['./table-shouts.component.scss'],
-    imports: [
+    imports: [MatTooltip, 
         AdminFiltrosComponent,
         NgClass,
         UserAvatarComponent,

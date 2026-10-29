@@ -211,7 +211,7 @@
               @for (error of resumen.erroresRecientes; track error.huella) {
                 <li>
                   <span class="adm-top__rank">{{error.cantidad}}×</span>
-                  <span class="adm-error__msg" [title]="error.mensaje">[{{error.origen}}] {{error.mensaje}}</span>
+                  <span class="adm-error__msg" [matTooltip]="error.mensaje">[{{error.origen}}] {{error.mensaje}}</span>
                 </li>
               }
             </ol>
