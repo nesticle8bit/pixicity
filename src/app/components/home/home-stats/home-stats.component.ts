@@ -27,7 +27,10 @@ export class HomeStatsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadStats();
 
-    if (enNavegador()) this.refreshTimer = setInterval(() => this.loadStats(), this.refreshMs);
+    if (enNavegador()) this.refreshTimer = setInterval(() => {
+      // Pestaña oculta: nadie mira el contador, no vale el pedido.
+      if (!document.hidden) this.loadStats();
+    }, this.refreshMs);
   }
 
   ngOnDestroy(): void {

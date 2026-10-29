@@ -50,7 +50,7 @@ export class StaffBadgesService {
   private iniciar(): void {
     this.activo = merge(
       this.refrescar$,
-      interval(REFRESCO_MS),
+      interval(REFRESCO_MS).pipe(filter(() => !document.hidden)),
       this.signalr.newReport$,
       this.signalr.reporteAtendido$,
       // Al atender contacto/errores/apelaciones en el panel no hay evento: se recalcula al moverse por él.

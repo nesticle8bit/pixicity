@@ -160,7 +160,9 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
     this.pingOnline();
 
     if (enNavegador()) this.onlineHeartbeatTimer = setInterval(
-      () => this.pingOnline(),
+      () => {
+        if (!document.hidden) this.pingOnline();
+      },
       this.onlineHeartbeatMs
     );
   }
