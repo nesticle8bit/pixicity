@@ -21,7 +21,7 @@
         <i class="ti ti-chevron-right" aria-label="en el muro de"></i>
         <a [routerLink]="['/perfil', perfil]" class="sc-bubble__user sc-bubble__user--perfil">{{ '@' }}{{ perfil }}</a>
         }
-        @if (shout().nsfw) { <span class="sc-nsfw" matTooltip="Contenido para mayores de 18">NSFW</span> }
+        @if (nsfw()) { <span class="sc-nsfw" matTooltip="Contenido para mayores de 18">NSFW</span> }
       </span>
       <a class="sc-bubble__time" [routerLink]="enlace()"
         [matTooltip]="(shout().fechaRegistro | date: 'EEEE d \'de\' MMMM \'a las\' h:mm \', año\' y') ?? ''">
@@ -45,7 +45,7 @@
     }
 
     <app-shout-media [url]="shout().url" [tipo]="shout().tipo" [mediaTitulo]="shout().mediaTitulo"
-      [mediaImagen]="shout().mediaImagen" [mediaDescripcion]="shout().mediaDescripcion" [nsfw]="!!shout().nsfw" />
+      [mediaImagen]="shout().mediaImagen" [mediaDescripcion]="shout().mediaDescripcion" [nsfw]="nsfw()" />
 
     <footer class="sc-bubble__footer">
       @if (puedeEditar() && !editando()) {
@@ -60,6 +60,18 @@
       <button type="button" class="sc-action sc-action--secundaria" (click)="silenciarAutor()"
         [matTooltip]="'Silenciar a @' + autor()" [attr.aria-label]="'Silenciar a ' + autor()">
         <i class="ti ti-volume-off" aria-hidden="true"></i>
+      </button>
+      }
+      @if (puedeModerar()) {
+      <button type="button" class="sc-action sc-action--secundaria" [class.is-activo]="nsfw()" [attr.aria-pressed]="nsfw()"
+        [disabled]="procesando()" (click)="alternarNsfw()"
+        [matTooltip]="nsfw() ? 'Quitar la marca NSFW' : 'Marcar como NSFW (+18)'"
+        [attr.aria-label]="nsfw() ? 'Quitar la marca NSFW' : 'Marcar como NSFW'">
+        <i class="ti ti-eye-off" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="sc-action sc-action--secundaria sc-action--eliminar" [disabled]="procesando()" (click)="eliminar()"
+        [matTooltip]="esMio() ? 'Eliminar' : 'Eliminar (moderación)'" aria-label="Eliminar shout">
+        <i class="ti ti-trash" aria-hidden="true"></i>
       </button>
       }
       <a class="sc-action" [routerLink]="enlace()" matTooltip="Comentar"

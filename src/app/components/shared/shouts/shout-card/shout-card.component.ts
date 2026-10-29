@@ -52,7 +52,10 @@ export class ShoutCardComponent {
   private readonly silencios = inject(IHttpSilenciosService);
   /** El autor quedó silenciado desde esta tarjeta: se oculta (el muro ya no lo traerá). */
   readonly oculto = signal(false);
-  private readonly usuarioActual = inject(IHttpSecurityService).getCurrentUser()?.usuario?.userName ?? null;
+  private readonly sesionActual = inject(IHttpSecurityService).getCurrentUser()?.usuario;
+  private readonly usuarioActual = this.sesionActual?.userName ?? null;
+  /** Moderadores y admins pueden eliminar o marcar NSFW cualquier shout (el API lo vuelve a verificar). */
+  readonly esStaff = this.sesionActual?.rango === 'Moderador' || this.sesionActual?.rango === 'Administrador';
 
   readonly shout = input.required<ShoutViewModel>();
   /** En un reshout del muro de /mi: quién lo compartió. */
@@ -69,6 +72,10 @@ export class ShoutCardComponent {
     return perfil && perfil !== this.autor() ? perfil : null;
   });
   readonly esMio = computed(() => !!this.usuarioActual && this.usuarioActual === this.autor());
+  readonly puedeModerar = computed(() => this.esMio() || this.esStaff);
+  /** Marca +18 mostrada: arranca con la del shout y cambia al marcarla desde acá. */
+  readonly nsfw = signal(false);
+  readonly procesando = signal(false);
 
   /** Texto mostrado: arranca con el del shout y cambia al guardar una edición. */
   readonly texto = signal('');
@@ -89,7 +96,51 @@ export class ShoutCardComponent {
       this.interacciones.set({ ...SIN_INTERACCIONES, ...s.interacciones });
       this.texto.set(s.comentario ?? '');
       this.editado.set(!!s.fechaActualiza);
+      this.nsfw.set(!!s.nsfw);
     });
+  }
+
+  async eliminar(): Promise<void> {
+    if (this.procesando()) return;
+    let razon: string | undefined;
+    if (this.esMio()) {
+      if (!(await this.notificationService.confirm('¿Eliminar este shout? No se puede deshacer.'))) return;
+    } else {
+      const respuesta = await this.notificationService.prompt('¿Por qué lo eliminas? (queda en el historial de moderación)');
+      if (respuesta === null || respuesta === undefined) return;
+      razon = respuesta || undefined;
+    }
+    this.procesando.set(true);
+    this.perfilService
+      .deleteShout(this.shout().id, razon)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.procesando.set(false);
+          this.oculto.set(true);
+          this.notificationService.success('Shout eliminado', 'Shouts');
+        },
+        error: () => this.procesando.set(false),
+      });
+  }
+
+  alternarNsfw(): void {
+    if (this.procesando()) return;
+    const nuevo = !this.nsfw();
+    this.procesando.set(true);
+    this.perfilService
+      .marcarShoutNsfw(this.shout().id, nuevo)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (quedo) => {
+          this.nsfw.set(quedo);
+          this.procesando.set(false);
+        },
+        error: (e: unknown) => {
+          this.procesando.set(false);
+          this.notificationService.error(e instanceof Error ? e.message : 'No se pudo cambiar la marca NSFW', 'Shouts');
+        },
+      });
   }
 
   empezarEdicion(): void {

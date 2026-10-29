@@ -16,3 +16,5 @@
   line-height: 18px;
   vertical-align: middle;
 }
+
+.sc-action--eliminar:hover:not(:disabled) { color: light-dark(#c62828, #e16b6b); }
