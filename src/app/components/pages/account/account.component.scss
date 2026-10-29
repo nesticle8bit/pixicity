@@ -396,10 +396,8 @@ $radio: 12px;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0 16px;
 
-  &--fecha {
-    grid-template-columns: 1fr 1.6fr 1.2fr;
-    gap: 8px;
-  }
+  // Mismas columnas que País / Estado / Género; solo suma separación vertical al apilarse
+  &--fecha { gap: 8px 16px; }
 }
 
 .cuenta__acciones {
@@ -475,11 +473,5 @@ $radio: 12px;
   .cuenta__panel-cuerpo {
     padding-left: 14px;
     padding-right: 14px;
-  }
-
-  .cuenta__grid--fecha {
-    grid-template-columns: 1fr 1fr;
-
-    > :last-child { grid-column: span 2; }
   }
 }
