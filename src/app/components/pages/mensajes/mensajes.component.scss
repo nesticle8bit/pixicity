@@ -26,9 +26,15 @@ i.ti {
 }
 
 .msg-item {
-  &--unread {
-    background: light-dark(#f4f9ff, #182a40);
+  // Sin leer: fondo azul marcado, por encima de la zebra (--alt) y del hover.
+  &--unread,
+  &--unread.msg-item--alt {
+    background: light-dark(#dcecfb, #1d3757);
     border-left-color: #3c8dbc;
+
+    &:hover {
+      background: light-dark(#cfe4f8, #234266);
+    }
 
     .msg-item__from,
     .msg-item__subject {

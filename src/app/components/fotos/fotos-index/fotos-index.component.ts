@@ -17,17 +17,19 @@ import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { ThumbFotoPipe } from '../../../shared/pipes/thumb.pipe';
 
 @Component({
-    selector: 'app-fotos-index',
-    templateUrl: './fotos-index.component.html',
-    styleUrls: ['./fotos-index.component.scss'],
-    imports: [CargandoComponent, ThumbFotoPipe, 
-        RouterLink,
-        AnuncioComponent,
-        UserPopoverDirective,
-        UserAvatarComponent,
-        NgClass,
-        TimeAgoPipe,
-    ],
+  selector: 'app-fotos-index',
+  templateUrl: './fotos-index.component.html',
+  styleUrls: ['./fotos-index.component.scss'],
+  imports: [
+    CargandoComponent,
+    ThumbFotoPipe,
+    RouterLink,
+    AnuncioComponent,
+    UserPopoverDirective,
+    UserAvatarComponent,
+    NgClass,
+    TimeAgoPipe,
+  ],
 })
 export class FotosIndexComponent implements OnInit {
   private displayService = inject(DisplayComponentService);
@@ -46,7 +48,7 @@ export class FotosIndexComponent implements OnInit {
   public userName: string = '';
 
   private page: number = 1;
-  private pageCount: number = 12;
+  private pageCount: number = 15;
 
   constructor() {
     this.displayService.setDisplay({
@@ -60,28 +62,31 @@ export class FotosIndexComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.securityService.getCurrentUser();
-    this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
-      this.userName = params['userName'] || '';
-      this.page = 1;
-      this.seoService.setSEO(
-        this.userName
-          ? {
-              title: `Fotos de ${this.userName}`,
-              description: `Galería de fotos de ${this.userName} en Taringa.`,
-              type: 'website',
-              imageURL: '',
-              tags: [this.userName, 'fotos', 'galería', 'taringas'],
-            }
-          : {
-              title: 'Fotos',
-              description: 'Explora las fotos compartidas por la comunidad de Taringa.',
-              type: 'website',
-              imageURL: '',
-              tags: ['fotos', 'galería', 'imágenes', 'taringas'],
-            }
-      );
-      this.loadFotos();
-    });
+    this.route.params
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        this.userName = params['userName'] || '';
+        this.page = 1;
+        this.seoService.setSEO(
+          this.userName
+            ? {
+                title: `Fotos de ${this.userName}`,
+                description: `Galería de fotos de ${this.userName} en Taringa.`,
+                type: 'website',
+                imageURL: '',
+                tags: [this.userName, 'fotos', 'galería', 'taringas'],
+              }
+            : {
+                title: 'Fotos',
+                description:
+                  'Explora las fotos compartidas por la comunidad de Taringa.',
+                type: 'website',
+                imageURL: '',
+                tags: ['fotos', 'galería', 'imágenes', 'taringas'],
+              },
+        );
+        this.loadFotos();
+      });
 
     this.route.queryParamMap
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -108,7 +113,9 @@ export class FotosIndexComponent implements OnInit {
         this.pagination = response?.pagination || {};
         this.loading = false;
       },
-      error: () => { this.loading = false; }
+      error: () => {
+        this.loading = false;
+      },
     });
   }
 

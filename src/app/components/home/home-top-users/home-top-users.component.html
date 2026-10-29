@@ -36,7 +36,8 @@
     @for (topUser of topUsers; track topUser; let first = $first; let i = $index) {
       <article class="list-posts--zebra">
         @if (!first) {
-          <strong class="float-start">{{i + 1}}</strong>
+          <strong class="float-start rank" [class.gold]="i === 0" [class.silver]="i === 1"
+            [class.bronze]="i === 2">{{i + 1}}</strong>
           <small>
             <a [routerLink]="['/perfil/' + topUser.userName]" [appUserPopover]="topUser.userName">
               {{topUser.userName}}

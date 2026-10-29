@@ -1,6 +1,11 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
@@ -15,12 +20,15 @@ import { UserPopoverDirective } from '../../../shared/directives/userPopover.dir
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { FollowButtonComponent } from '../../addons/follow-button/follow-button.component';
 import { SelectAutocompleteComponent } from '../../shared/select-autocomplete/select-autocomplete.component';
-import { SelectOptionDirective, SelectLabelDirective } from '../../shared/select-autocomplete/select-template.directives';
+import {
+  SelectOptionDirective,
+  SelectLabelDirective,
+} from '../../shared/select-autocomplete/select-template.directives';
 import { IHttpRangosService } from '../../../services/interfaces/httpRangos.interface';
 
 type Orden = 'recientes' | 'puntos' | 'activos';
 
-const POR_PAGINA = 24;
+const POR_PAGINA = 25;
 
 /**
  * /usuarios: directorio de la comunidad. Los filtros viven en la URL (?q, enLinea, genero, pais, rango, orden, page):
@@ -90,10 +98,17 @@ export class UsuariosComponent implements OnInit {
   });
 
   constructor() {
-    this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: true, submenu: true, background: '' });
+    this.displayService.setDisplay({
+      mainMenu: true,
+      footer: true,
+      searchFooter: true,
+      submenu: true,
+      background: '',
+    });
     this.seoService.setSEO({
       title: 'Usuarios',
-      description: 'Conoce a la comunidad: busca usuarios por nombre, país o rango y mira quién está en línea.',
+      description:
+        'Conoce a la comunidad: busca usuarios por nombre, país o rango y mira quién está en línea.',
       type: 'website',
       imageURL: '',
       tags: ['usuarios', 'comunidad', 'taringa'],
@@ -105,23 +120,28 @@ export class UsuariosComponent implements OnInit {
     this.getRangos();
 
     // URL -> formulario + carga.
-    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((p) => {
-      const num = (k: string) => (p.get(k) ? Number(p.get(k)) : null);
-      const orden = p.get('orden') as Orden | null;
-      this.formGroup.setValue(
-        {
-          q: p.get('q') ?? '',
-          enLinea: p.get('enLinea') === '1',
-          genero: p.get('genero') ?? '',
-          pais: num('pais'),
-          rango: num('rango'),
-          orden: orden && this.ordenes.some((o) => o.value === orden) ? orden : 'recientes',
-        },
-        { emitEvent: false }
-      );
-      this.pagina = Math.max(1, Number(p.get('page')) || 1);
-      this.getUsuarios();
-    });
+    this.route.queryParamMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((p) => {
+        const num = (k: string) => (p.get(k) ? Number(p.get(k)) : null);
+        const orden = p.get('orden') as Orden | null;
+        this.formGroup.setValue(
+          {
+            q: p.get('q') ?? '',
+            enLinea: p.get('enLinea') === '1',
+            genero: p.get('genero') ?? '',
+            pais: num('pais'),
+            rango: num('rango'),
+            orden:
+              orden && this.ordenes.some((o) => o.value === orden)
+                ? orden
+                : 'recientes',
+          },
+          { emitEvent: false },
+        );
+        this.pagina = Math.max(1, Number(p.get('page')) || 1);
+        this.getUsuarios();
+      });
 
     // Formulario -> URL. El buscador espera a que se deje de escribir; el resto se aplica al momento.
     this.formGroup.valueChanges
@@ -129,7 +149,7 @@ export class UsuariosComponent implements OnInit {
         map((v) => JSON.stringify(v)),
         distinctUntilChanged(),
         debounceTime(300),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => this.aplicarFiltros());
   }
@@ -156,13 +176,17 @@ export class UsuariosComponent implements OnInit {
   }
 
   limpiarFiltros(): void {
-    this.formGroup.patchValue({ q: '', enLinea: false, genero: '', pais: null, rango: null }, { emitEvent: false });
+    this.formGroup.patchValue(
+      { q: '', enLinea: false, genero: '', pais: null, rango: null },
+      { emitEvent: false },
+    );
     this.aplicarFiltros();
   }
 
   pageChange(event: PageEvent): void {
     this.aplicarFiltros(event.pageIndex + 1);
-    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (typeof window !== 'undefined')
+      window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   getUsuarios(): void {
@@ -200,19 +224,29 @@ export class UsuariosComponent implements OnInit {
 
   /** "Activo hace 2 h", "hace 3 días"… a partir de los minutos que da el API. */
   ultimaVez(minutos: number | null): string {
-    if (minutos === null || minutos === undefined) return 'Sin actividad reciente';
-    if (minutos < 60) return `Activo hace ${Math.max(1, Math.round(minutos))} min`;
+    if (minutos === null || minutos === undefined)
+      return 'Sin actividad reciente';
+    if (minutos < 60)
+      return `Activo hace ${Math.max(1, Math.round(minutos))} min`;
     const horas = minutos / 60;
     if (horas < 24) return `Activo hace ${Math.round(horas)} h`;
     const dias = Math.round(horas / 24);
-    return dias < 30 ? `Activo hace ${dias} ${dias === 1 ? 'día' : 'días'}` : 'Activo hace más de un mes';
+    return dias < 30
+      ? `Activo hace ${dias} ${dias === 1 ? 'día' : 'días'}`
+      : 'Activo hace más de un mes';
   }
 
   private getPaises(): void {
-    this.parametrosService.getPaisesDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => (this.paises = values ?? []));
+    this.parametrosService
+      .getPaisesDropdown()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((values) => (this.paises = values ?? []));
   }
 
   private getRangos(): void {
-    this.rangosService.getRangosDropdown().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => (this.rangos = values ?? []));
+    this.rangosService
+      .getRangosDropdown()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((values) => (this.rangos = values ?? []));
   }
 }

@@ -15,7 +15,8 @@
 @if (topPosts.length > 0) {
   @for (post of topPosts; track post; let i = $index) {
     <article class="list-posts--zebra" [ngClass]="{'opacity-50': loading}">
-      <strong class="float-start">{{i + 1}}</strong>
+      <strong class="float-start rank" [class.gold]="i === 0" [class.silver]="i === 1"
+        [class.bronze]="i === 2">{{i + 1}}</strong>
       <small>
         <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
           <img src="/assets/images/categorias/{{post.categoria.icono}}" matTooltip="{{post.categoria.nombre}}"

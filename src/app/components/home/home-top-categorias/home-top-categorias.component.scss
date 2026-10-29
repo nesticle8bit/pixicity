@@ -5,18 +5,4 @@
     vertical-align: text-bottom;
     margin-right: 4px;
   }
-
-  .rank {
-    &.gold {
-      color: light-dark(#d4a017, #edc660);
-    }
-
-    &.silver {
-      color: light-dark(#9aa3ab, #8c8c8c);
-    }
-
-    &.bronze {
-      color: light-dark(#c0794a, #cd956f);
-    }
-  }
 }

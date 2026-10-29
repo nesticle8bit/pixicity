@@ -137,3 +137,18 @@
 .img-avatar {
   width: 20px;
 }
+
+// Puesto 1/2/3 en los TOP de la portada (categorías, posts, usuarios).
+.rank {
+  &.gold {
+    color: light-dark(#d4a017, #edc660);
+  }
+
+  &.silver {
+    color: light-dark(#9aa3ab, #8c8c8c);
+  }
+
+  &.bronze {
+    color: light-dark(#c0794a, #cd956f);
+  }
+}
