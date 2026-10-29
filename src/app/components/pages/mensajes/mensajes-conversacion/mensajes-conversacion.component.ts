@@ -32,9 +32,6 @@ interface Adjunto {
 }
 // Distancia (px) al fondo bajo la cual se considera que el usuario "está siguiendo" el chat.
 const NEAR_BOTTOM = 80;
-// Cada cuánto se avisa "escribiendo…" al otro, y cuánto dura el indicador sin nuevos avisos.
-const TYPING_SEND_EVERY_MS = 2500;
-const TYPING_SHOW_FOR_MS = 3500;
 
 const MOTIVOS_DENUNCIA_MP = ['Spam o publicidad', 'Acoso o amenazas', 'Contenido ofensivo', 'Estafa o phishing', 'Contenido sexual', 'Otro'];
 
@@ -84,15 +81,12 @@ export class MensajesConversacionComponent implements OnInit {
   public enviando = false;
   public subiendo = false;
   public bloqueado = false;
-  public escribiendo = false;
   public silenciada = false;
   public adjuntos: Adjunto[] = [];
   private siguienteAdjunto = 1;
 
   private id?: number;
   private userName?: string;
-  private lastTypingSent = 0;
-  private typingTimer?: ReturnType<typeof setTimeout>;
 
   constructor() {
     // La ruta es /conversacion/:id (mensaje base) o /chat/:userName (chat nuevo / sin historial).
@@ -120,16 +114,7 @@ export class MensajesConversacionComponent implements OnInit {
       }
     });
 
-    this.signalrService.escribiendo$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((p) => {
-      if (this.otro && p?.porId === this.otro.id) {
-        this.escribiendo = true;
-        clearTimeout(this.typingTimer);
-        this.typingTimer = setTimeout(() => (this.escribiendo = false), TYPING_SHOW_FOR_MS);
-      }
-    });
-
     this.destroyRef.onDestroy(() => {
-      clearTimeout(this.typingTimer);
       this.adjuntos.forEach((a) => URL.revokeObjectURL(a.vista));
     });
   }
@@ -159,7 +144,6 @@ export class MensajesConversacionComponent implements OnInit {
         this.bloqueado = !!page?.bloqueado;
         this.silenciada = !!page?.silenciada;
         this.nuevosSinLeer = 0;
-        this.escribiendo = false;
         this.actualizarAsunto();
 
         // La carga inicial marca como leídos los recibidos: el contador del menú debe bajar.
@@ -231,10 +215,6 @@ export class MensajesConversacionComponent implements OnInit {
         this.mensajes = [...porId.values()].sort((a, b) => a.id - b.id);
         this.bloqueado = !!page?.bloqueado;
         this.actualizarAsunto();
-
-        if (nuevosAjenos > 0) {
-          this.escribiendo = false;
-        }
 
         this.badgeService.refresh();
 
@@ -372,18 +352,6 @@ export class MensajesConversacionComponent implements OnInit {
       e.preventDefault();
       this.responderMensaje();
     }
-  }
-
-  // Avisa "escribiendo…" al otro, como máximo una vez cada TYPING_SEND_EVERY_MS.
-  onTyping(): void {
-    const ahora = Date.now();
-
-    if (!this.otro || !this.respuesta.trim() || ahora - this.lastTypingSent < TYPING_SEND_EVERY_MS) {
-      return;
-    }
-
-    this.lastTypingSent = ahora;
-    this.signalrService.notifyTyping(this.otro.id);
   }
 
   /** Elegir imágenes: se suben enseguida y quedan como vista previa hasta enviar (con o sin texto). */

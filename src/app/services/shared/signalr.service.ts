@@ -27,7 +27,6 @@ export class SignalrService {
   private actividadSubject = new Subject<ActividadEnVivo>();
   private mensajeSubject = new Subject<MensajeEnVivo>();
   private mensajesLeidosSubject = new Subject<EventoDeUsuario>();
-  private escribiendoSubject = new Subject<EventoDeUsuario>();
   private shoutNuevoSubject = new Subject<{ shoutId: number; autor: string }>();
   private postVotadoSubject = new Subject<PostVotadoEnVivo>();
   private handlersBound = false;
@@ -50,8 +49,6 @@ export class SignalrService {
   public mensaje$: Observable<MensajeEnVivo> = this.mensajeSubject.asObservable();
   // El otro usuario leyó mis mensajes.
   public mensajesLeidos$: Observable<EventoDeUsuario> = this.mensajesLeidosSubject.asObservable();
-  // El otro usuario está escribiéndome.
-  public escribiendo$: Observable<EventoDeUsuario> = this.escribiendoSubject.asObservable();
   // Alguien que sigo publicó un shout (el muro de /mi ofrece "ver nuevos").
   public shoutNuevo$: Observable<{ shoutId: number; autor: string }> = this.shoutNuevoSubject.asObservable();
   // Alguien dio puntos a un post que tengo abierto.
@@ -122,7 +119,6 @@ export class SignalrService {
       this.connection.on('actividad', (payload: ActividadEnVivo) => this.actividadSubject.next(payload));
       this.connection.on('mensaje', (payload: MensajeEnVivo) => this.mensajeSubject.next(payload));
       this.connection.on('mensajesLeidos', (payload: EventoDeUsuario) => this.mensajesLeidosSubject.next(payload));
-      this.connection.on('escribiendo', (payload: EventoDeUsuario) => this.escribiendoSubject.next(payload));
       this.connection.on('postVotado', (payload: PostVotadoEnVivo) => this.postVotadoSubject.next(payload));
       this.connection.on('shoutNuevo', (payload: { shoutId: number; autor: string }) => this.shoutNuevoSubject.next(payload));
       // Un solo manejador de reconexión: antes cada start()/startEnVivo() agregaba uno más.
@@ -194,17 +190,6 @@ export class SignalrService {
     if (this.estado() === 'Connected') {
       try {
         await this.connection!.invoke('Subscribe', token);
-      } catch {
-        // ignorar
-      }
-    }
-  }
-
-  // Avisa al otro usuario que estoy escribiéndole. Efímero: si no hay conexión simplemente no hace nada.
-  async notifyTyping(otroId: number): Promise<void> {
-    if (this.estado() === 'Connected') {
-      try {
-        await this.connection!.invoke('Escribiendo', otroId);
       } catch {
         // ignorar
       }

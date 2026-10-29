@@ -171,14 +171,6 @@ img {
     }
 }
 
-.chat-typing {
-    min-height: 1.2rem;
-    padding: .2rem .5rem 0;
-    font-size: .75rem;
-    font-style: italic;
-    color: light-dark(#888, #9c9c9c);
-}
-
 /* --- Caja para escribir: píldora con herramientas, campo que crece y botón redondo de enviar --- */
 .chat-reply {
     display: flex;

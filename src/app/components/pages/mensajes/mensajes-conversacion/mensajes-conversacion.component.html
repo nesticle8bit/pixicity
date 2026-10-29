@@ -102,12 +102,6 @@
         }
       </div>
 
-      <div class="chat-typing" aria-live="polite">
-        @if (escribiendo) {
-          {{'@'}}{{otro?.userName}} está escribiendo…
-        }
-      </div>
-
       @if (bloqueado) {
         <div class="alert alert-warning py-2 mb-3" role="alert">
           No puedes enviar mensajes a este usuario.
@@ -145,7 +139,7 @@
         </div>
         <textarea #campoMensaje class="chat-reply__campo" rows="1" aria-label="Escribir un mensaje" [(ngModel)]="respuesta"
           placeholder="Escribe un mensaje…" [disabled]="!otro || bloqueado"
-          (ngModelChange)="onTyping(); ajustarAlto()" (keydown.enter)="onEnter($event)"
+          (ngModelChange)="ajustarAlto()" (keydown.enter)="onEnter($event)"
           (paste)="alPegar($event)"></textarea>
         <button type="button" class="chat-reply__enviar" (click)="responderMensaje()" [disabled]="!puedeEnviar"
           matTooltip="Enviar (Enter)" aria-label="Enviar mensaje">

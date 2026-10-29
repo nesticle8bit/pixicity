@@ -40,7 +40,7 @@ export interface MensajeEnVivo {
   silenciada?: boolean;
 }
 
-/** El otro usuario leyó mis mensajes, o me está escribiendo. */
+/** El otro usuario leyó mis mensajes. */
 export interface EventoDeUsuario {
   porId: number;
   /** En "mensajesLeidos": cuándo los leyó. */

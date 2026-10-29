@@ -32,8 +32,6 @@ describe('MensajesConversacionComponent', () => {
   let signalr: {
     mensaje$: Subject<any>;
     mensajesLeidos$: Subject<any>;
-    escribiendo$: Subject<any>;
-    notifyTyping: jasmine.Spy;
   };
 
   const crear = (primeraPagina: any) => {
@@ -56,8 +54,6 @@ describe('MensajesConversacionComponent', () => {
     signalr = {
       mensaje$: new Subject(),
       mensajesLeidos$: new Subject(),
-      escribiendo$: new Subject(),
-      notifyTyping: jasmine.createSpy('notifyTyping'),
     };
 
     await TestBed.configureTestingModule({
@@ -129,33 +125,6 @@ describe('MensajesConversacionComponent', () => {
 
     expect(component.mensajes[0].leido).toBeTrue();
     expect(component.mensajes[1].leido).toBeFalse();
-    flush();
-  }));
-
-  it('muestra "escribiendo" y lo oculta tras unos segundos', fakeAsync(() => {
-    crear({ mensajes: [], hayMas: false, bloqueado: false, otro: ana });
-
-    signalr.escribiendo$.next({ porId: 2 });
-    expect(component.escribiendo).toBeTrue();
-
-    tick(3600);
-    expect(component.escribiendo).toBeFalse();
-    flush();
-  }));
-
-  it('avisa "escribiendo" como máximo una vez cada 2.5s y solo con texto', fakeAsync(() => {
-    crear({ mensajes: [], hayMas: false, bloqueado: false, otro: ana });
-
-    component.respuesta = '';
-    component.onTyping();
-    expect(signalr.notifyTyping).not.toHaveBeenCalled();
-
-    component.respuesta = 'ho';
-    component.onTyping();
-    component.respuesta = 'hol';
-    component.onTyping();
-    expect(signalr.notifyTyping).toHaveBeenCalledTimes(1);
-    expect(signalr.notifyTyping).toHaveBeenCalledWith(2);
     flush();
   }));
 
