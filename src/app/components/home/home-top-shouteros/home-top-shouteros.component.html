@@ -14,9 +14,10 @@
     <article class="list-posts--zebra" [class.opacity-50]="loading">
       <strong class="float-start rank" [class.gold]="i === 0" [class.silver]="i === 1"
         [class.bronze]="i === 2">{{i + 1}}</strong>
-      <small>
-        <a [routerLink]="['/perfil', u.userName]" [appUserPopover]="u.userName">{{u.userName}}</a>
-      </small>
+      <a [routerLink]="['/perfil', u.userName]" [appUserPopover]="u.userName">
+        <addon-country-flag [iso2]="u.paisIso2" [title]="u.paisNombre ?? ''" />
+        <span>{{u.userName}}</span>
+      </a>
       <span class="float-end value" matTooltip="Shouts publicados">
         {{u.shouts}}
       </span>

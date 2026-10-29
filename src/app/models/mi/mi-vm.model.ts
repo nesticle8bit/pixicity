@@ -66,4 +66,6 @@ export interface TopShoutero {
   userName: string;
   avatar: string | null;
   shouts: number;
+  paisIso2: string | null;
+  paisNombre: string | null;
 }

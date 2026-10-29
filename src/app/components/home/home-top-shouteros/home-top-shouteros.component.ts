@@ -5,13 +5,14 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { IHttpMiService } from 'src/app/services/interfaces/httpMi.interface';
 import { TopShoutero } from 'src/app/models/mi/mi-vm.model';
 import { TopTimesSelectorComponent } from '../../sections/top-times-selector/top-times-selector.component';
+import { CountryFlagComponent } from '../../addons/country-flag/country-flag.component';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 
 /** Top 5 de usuarios por shouts publicados; arranca en el mes y cambia con el selector de tops. */
 @Component({
     selector: 'app-home-top-shouteros',
     templateUrl: './home-top-shouteros.component.html',
-    imports: [TopTimesSelectorComponent, RouterLink, MatTooltip, UserPopoverDirective],
+    imports: [TopTimesSelectorComponent, RouterLink, MatTooltip, UserPopoverDirective, CountryFlagComponent],
 })
 export class HomeTopShouterosComponent implements OnInit {
   private miService = inject(IHttpMiService);
