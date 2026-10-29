@@ -97,7 +97,7 @@
 
               <div class="cuenta__grid">
                 <div class="campo">
-                  <label>País</label>
+                  <label>País <span class="text-danger">*</span></label>
                   <app-select [items]="paises" formControlName="paisId" bindLabel="nombre" bindValue="id"
                     (change)="cambiarPais($event?.id)"></app-select>
                 </div>

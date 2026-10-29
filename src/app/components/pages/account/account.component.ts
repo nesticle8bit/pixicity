@@ -216,11 +216,11 @@ export class AccountComponent implements OnInit {
       userName: '',
       email: ['', Validators.email],
       paisId: [undefined, Validators.required],
-      estadoId: [undefined, Validators.required],
-      genero: [undefined, Validators.required],
-      dia: [undefined, Validators.required],
-      mes: [undefined, Validators.required],
-      año: [undefined, Validators.required],
+      estadoId: [undefined],
+      genero: [undefined],
+      dia: [undefined],
+      mes: [undefined],
+      año: [undefined],
     });
 
     this.formGroupPersonalizacion = this.formBuilder.group({
@@ -389,7 +389,9 @@ export class AccountComponent implements OnInit {
 
   updateUsuario(): void {
     const cuenta = Object.assign({}, this.formGroupCuenta.value);
-    cuenta.fechaNacimiento = `${cuenta.dia}/${cuenta.mes}/${cuenta.año}`;
+    cuenta.fechaNacimiento = cuenta.dia && cuenta.mes && cuenta.año
+      ? `${cuenta.dia}/${cuenta.mes}/${cuenta.año}`
+      : null;
 
     this.guardando.set(true);
     this.securityService.updateUsuario(cuenta).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
