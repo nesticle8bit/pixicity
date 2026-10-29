@@ -75,6 +75,20 @@
   iframe { height: 100%; position: absolute; inset: 0; }
 }
 
+.sm-embed--instagram {
+  max-width: 400px;
+  background: #fff;
+
+  iframe { height: 560px; }
+}
+
+.sm-embed--tiktok {
+  max-width: 325px;
+  aspect-ratio: 9 / 16;
+
+  iframe { height: 100%; position: absolute; inset: 0; }
+}
+
 .sm-embed--spotify {
   background: transparent;
 

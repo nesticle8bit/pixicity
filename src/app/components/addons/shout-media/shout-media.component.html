@@ -30,6 +30,12 @@
     <video class="sm-video" [src]="url()" controls playsinline preload="metadata" (click)="$event.stopPropagation()">
       <a [href]="url()" target="_blank" rel="noopener">Ver el video</a>
     </video>
+  } @else if (esEnlace && enlaceEmbed) {
+    <div [class]="'sm-embed ' + enlaceEmbed.clase">
+      <iframe [src]="enlaceEmbed.src" frameborder="0" loading="lazy" scrolling="no"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        allowfullscreen [title]="'Contenido de ' + hostname"></iframe>
+    </div>
   } @else if (esEnlace) {
     <a [href]="url()" target="_blank" rel="noopener" class="sm-card" [class.sm-card--grande]="!!mediaImagen() && !imagenFallo()">
       @if (mediaImagen(); as mediaImagen) {

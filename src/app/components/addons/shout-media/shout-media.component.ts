@@ -49,12 +49,15 @@ export class ShoutMediaComponent implements OnChanges {
   // no en cada ciclo de change detection — evita que el iframe parpadee/recargue).
   public youtubeEmbed: SafeResourceUrl | null = null;
   public spotifyEmbed: SafeResourceUrl | null = null;
+  /** Enlaces con reproductor propio (turbo.cr, Instagram, TikTok): el API los guarda como Enlace. */
+  public enlaceEmbed: { src: SafeResourceUrl; clase: string } | null = null;
   public hostname = '';
 
   ngOnChanges(): void {
     this.hostname = this.calcularHostname();
     this.youtubeEmbed = this.esVideo ? this.calcularYoutubeEmbed() : null;
     this.spotifyEmbed = this.esSpotify ? this.calcularSpotifyEmbed() : null;
+    this.enlaceEmbed = this.esEnlace ? this.calcularEnlaceEmbed() : null;
   }
 
   /** Clic normal: la imagen se abre en el visor de la plataforma. Ctrl/Cmd/Shift o la rueda abren otra pestaña (el href). */
@@ -97,4 +100,24 @@ export class ShoutMediaComponent implements OnChanges {
     if (!m) return null;
     return this.sanitizer.bypassSecurityTrustResourceUrl(`https://open.spotify.com/embed/${m[1]}/${m[2]}`);
   }
+
+  private calcularEnlaceEmbed(): { src: SafeResourceUrl; clase: string } | null {
+    const src = embedEnlace(this.url());
+    return src ? { src: this.sanitizer.bypassSecurityTrustResourceUrl(src.url), clase: src.clase } : null;
+  }
+}
+
+/**
+ * URL del reproductor embebido para enlaces conocidos; null = tarjeta Open Graph normal.
+ * Los cortos (vm.tiktok.com, instagr.am) no traen el id: quedan como tarjeta.
+ */
+export function embedEnlace(url: string | null): { url: string; clase: string } | null {
+  if (!url) return null;
+  let m = url.match(/^https?:\/\/(?:www\.)?turbo\.cr\/(?:embed|v|video|watch)\/([A-Za-z0-9_-]+)/i);
+  if (m) return { url: `https://turbo.cr/embed/${m[1]}`, clase: 'sm-embed--video' };
+  m = url.match(/^https?:\/\/(?:www\.)?instagram\.com\/(?:[\w.]+\/)?(p|reel|reels|tv)\/([A-Za-z0-9_-]+)/i);
+  if (m) return { url: `https://www.instagram.com/${m[1] === 'reels' ? 'reel' : m[1]}/${m[2]}/embed`, clase: 'sm-embed--instagram' };
+  m = url.match(/^https?:\/\/(?:www\.|m\.)?tiktok\.com\/(?:@[\w.-]+\/)?(?:video|embed(?:\/v2)?)\/(\d+)/i);
+  if (m) return { url: `https://www.tiktok.com/player/v1/${m[1]}`, clase: 'sm-embed--tiktok' };
+  return null;
 }

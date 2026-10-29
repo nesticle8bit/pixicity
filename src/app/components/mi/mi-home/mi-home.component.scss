@@ -26,7 +26,10 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   color: $texto;
 }
 
-.mi__tabs { display: flex; gap: 4px; }
+.mi__tabs {
+  display: flex;
+  gap: 4px;
+}
 
 // Hoy / Semana / Mes de "Más activos": fila propia debajo de las pestañas.
 .mi__periodos {
@@ -50,7 +53,9 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   cursor: pointer;
   transition: color 0.12s ease, border-color 0.12s ease;
 
-  &:hover { color: $marca; }
+  &:hover {
+    color: $marca;
+  }
 
   &.is-activa {
     color: $marca;
@@ -95,14 +100,25 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   text-align: center;
   color: $tenue;
 
-  > i { font-size: 2.2rem; color: #c3ced5; }
+  >i {
+    font-size: 2.2rem;
+    color: #c3ced5;
+  }
 
-  p { margin: 0; font-weight: 600; color: $texto; }
+  p {
+    margin: 0;
+    font-weight: 600;
+    color: $texto;
+  }
 
-  .mi-boton { margin-top: 8px; }
+  .mi-boton {
+    margin-top: 8px;
+  }
 }
 
-.mi__vacio-ayuda { font-size: 0.85rem; }
+.mi__vacio-ayuda {
+  font-size: 0.85rem;
+}
 
 .mi__mas {
   display: flex;
@@ -133,7 +149,9 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   cursor: pointer;
   transition: background 0.12s ease;
 
-  &:hover { background: #00527a; }
+  &:hover {
+    background: #00527a;
+  }
 
   &:focus-visible {
     outline: 2px solid $marca;
@@ -144,7 +162,9 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
     background: light-dark(#fff, #1e2124);
     color: $marca;
 
-    &:hover { background: $fondo-suave; }
+    &:hover {
+      background: $fondo-suave;
+    }
   }
 }
 
@@ -159,7 +179,7 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
 .mi-card {
   padding: 16px;
   border: 1px solid $borde;
-  border-radius: 12px;
+  // border-radius: 12px;
   background: light-dark(#fff, #1e2124);
 
   &__titulo {
@@ -193,9 +213,14 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
     color: inherit;
     text-decoration: none;
 
-    ::ng-deep img { border-radius: 50%; }
+    ::ng-deep img {
+      border-radius: 50%;
+    }
 
-    &:hover .mi-sugerencia__nombre { color: $marca; text-decoration: underline; }
+    &:hover .mi-sugerencia__nombre {
+      color: $marca;
+      text-decoration: underline;
+    }
   }
 
   &__nombre {
@@ -229,13 +254,19 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   cursor: pointer;
   transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
 
-  &:hover:not(:disabled) { background: #00527a; }
+  &:hover:not(:disabled) {
+    background: #00527a;
+  }
 
   &.is-siguiendo {
     background: light-dark(#fff, #1e2124);
     color: $marca;
 
-    &:hover:not(:disabled) { border-color: #c62828; color: light-dark(#c62828, #e16b6b); background: light-dark(#fff, #1e2124); }
+    &:hover:not(:disabled) {
+      border-color: #c62828;
+      color: light-dark(#c62828, #e16b6b);
+      background: light-dark(#fff, #1e2124);
+    }
   }
 
   &:focus-visible {
@@ -243,7 +274,10 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
     outline-offset: 2px;
   }
 
-  &:disabled { cursor: progress; opacity: 0.6; }
+  &:disabled {
+    cursor: progress;
+    opacity: 0.6;
+  }
 }
 
 // En celular sugerencias y hashtags van antes del muro: filas horizontales deslizables para que ocupen poco alto.
@@ -253,9 +287,21 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   gap: 10px;
   margin-bottom: 16px;
 
-  .mi-card { padding: 10px 12px; }
-  .mi-card__titulo { margin-bottom: 8px; }
-  .mi-card__cabecera { margin-bottom: 8px; .mi-card__titulo { margin-bottom: 0; } }
+  .mi-card {
+    padding: 10px 12px;
+  }
+
+  .mi-card__titulo {
+    margin-bottom: 8px;
+  }
+
+  .mi-card__cabecera {
+    margin-bottom: 8px;
+
+    .mi-card__titulo {
+      margin-bottom: 0;
+    }
+  }
 
   .mi-sugerencias,
   .mi-tendencias {
@@ -264,7 +310,10 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
     overflow-x: auto;
     scroll-snap-type: x proximity;
     scrollbar-width: none;
-    &::-webkit-scrollbar { display: none; }
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   .mi-sugerencia {
@@ -288,9 +337,14 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
     max-width: 100%;
   }
 
-  .mi-sugerencia__nombre { max-width: 112px; }
+  .mi-sugerencia__nombre {
+    max-width: 112px;
+  }
 
-  .mi-tendencias li { flex: none; scroll-snap-align: start; }
+  .mi-tendencias li {
+    flex: none;
+    scroll-snap-align: start;
+  }
 
   .mi-tendencia {
     padding: 5px 10px;
@@ -298,7 +352,9 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
     background: $fondo-suave;
   }
 
-  .mi-tendencia__num { display: none; }
+  .mi-tendencia__num {
+    display: none;
+  }
 }
 
 .mi__quitar-tag {
@@ -315,8 +371,15 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   vertical-align: middle;
   cursor: pointer;
 
-  &:hover { background: light-dark(#e2e8ec, #2f3d47); color: $texto; }
-  &:focus-visible { outline: 2px solid $marca; outline-offset: 2px; }
+  &:hover {
+    background: light-dark(#e2e8ec, #2f3d47);
+    color: $texto;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $marca;
+    outline-offset: 2px;
+  }
 }
 
 // "Hay N publicaciones nuevas": llegan en vivo y no se insertan solas para no mover lo que se está leyendo.
@@ -337,8 +400,14 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   color: $marca;
   cursor: pointer;
 
-  &:hover { background: light-dark(#dbedf6, #204254); }
-  &:focus-visible { outline: 2px solid $marca; outline-offset: 2px; }
+  &:hover {
+    background: light-dark(#dbedf6, #204254);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $marca;
+    outline-offset: 2px;
+  }
 }
 
 .mi-tendencias {
@@ -359,8 +428,15 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   border-radius: 8px;
   text-decoration: none;
 
-  &:hover, &.is-activa { background: $fondo-suave; }
-  &:focus-visible { outline: 2px solid $marca; outline-offset: 1px; }
+  &:hover,
+  &.is-activa {
+    background: $fondo-suave;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $marca;
+    outline-offset: 1px;
+  }
 
   &__tag {
     font-weight: 700;
@@ -377,13 +453,22 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
 }
 
 @media (max-width: 575.98px) {
-  .mi__tabs { width: 100%; }
-  .mi__tab { flex: 1; justify-content: center; }
+  .mi__tabs {
+    width: 100%;
+  }
+
+  .mi__tab {
+    flex: 1;
+    justify-content: center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .mi__tab,
-  .mi-seguir { transition: none; }
+  .mi-seguir {
+    transition: none;
+  }
 }
 
 .mi-invitado {
@@ -457,8 +542,13 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
     margin: 0 0 8px;
     padding-left: 1.2rem;
 
-    li + li { margin-top: 2px; }
+    li+li {
+      margin-top: 2px;
+    }
   }
 
-  &__pie { color: light-dark(#666, #b0b0b0); font-size: 0.85rem; }
+  &__pie {
+    color: light-dark(#666, #b0b0b0);
+    font-size: 0.85rem;
+  }
 }
