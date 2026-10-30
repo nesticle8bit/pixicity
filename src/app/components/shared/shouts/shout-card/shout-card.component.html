@@ -19,7 +19,7 @@
         <a [routerLink]="['/perfil', autor()]" class="sc-bubble__user" [appUserPopover]="autor()">{{ '@' }}{{ autor() }}</a>
         @if (muroAjeno(); as perfil) {
         <i class="ti ti-chevron-right" aria-label="en el muro de"></i>
-        <a [routerLink]="['/perfil', perfil]" class="sc-bubble__user sc-bubble__user--perfil">{{ '@' }}{{ perfil }}</a>
+        <a [routerLink]="['/perfil', perfil]" class="sc-bubble__user sc-bubble__user--perfil" [appUserPopover]="perfil">{{ '@' }}{{ perfil }}</a>
         }
         @if (nsfw()) { <span class="sc-nsfw" matTooltip="Contenido para mayores de 18">NSFW</span> }
         @if (enPerfil() && fijado()) {

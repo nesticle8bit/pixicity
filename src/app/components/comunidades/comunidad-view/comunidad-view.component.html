@@ -36,7 +36,7 @@
                   </li>
                 }
                 <li><strong>Creado:</strong> por
-                  <a [routerLink]="['/perfil', comunidad.creador]">{{comunidad.creador}}</a>
+                  <a [routerLink]="['/perfil', comunidad.creador]" [appUserPopover]="comunidad.creador">{{comunidad.creador}}</a>
                   {{comunidad.fechaRegistro | timeAgo}}
                 </li>
                 <li><strong>Acceso:</strong> {{comunidad.acceso === 1 ? 'Todos pueden ver la comunidad' : 'Sólo usuarios registrados'}}</li>
@@ -113,7 +113,7 @@
                     {{tema.titulo}}
                   </a>
                   <div class="tema-meta">
-                    por <a [routerLink]="['/perfil', tema.userName]">{{tema.userName}}</a>
+                    por <a [routerLink]="['/perfil', tema.userName]" [appUserPopover]="tema.userName">{{tema.userName}}</a>
                     · {{tema.fechaRegistro | timeAgo}}
                     · <i class="ti ti-eye"></i> {{tema.visitantes}}
                   </div>

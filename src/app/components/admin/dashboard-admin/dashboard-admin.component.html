@@ -144,7 +144,7 @@
                 <div class="adm-list__body">
                   <a [routerLink]="[postUrl(post)]" target="_blank" class="adm-list__title">{{post.titulo}}</a>
                   <small>
-                    <a [routerLink]="['/perfil/' + post.userName]" target="_blank">{{post.userName}}</a>
+                    <a [routerLink]="['/perfil/' + post.userName]" target="_blank" [appUserPopover]="post.userName">{{post.userName}}</a>
                     @if (post.categoria) { · {{post.categoria}} }
                     · {{post.fechaRegistro | timeAgo | lowercase}}
                   </small>

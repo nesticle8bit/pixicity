@@ -115,7 +115,7 @@
         <ul class="pm-gente__lista">
           @for (r of interacciones.recomendaron; track r.userName) {
           <li>
-            <a [routerLink]="['/perfil', r.userName]" class="pm-gente__usuario" [matTooltip]="'@' + r.userName"
+            <a [routerLink]="['/perfil', r.userName]" class="pm-gente__usuario" [appUserPopover]="r.userName"
               [attr.aria-label]="r.userName">
               <app-user-avatar [avatar]="r.avatar" [userName]="r.userName" [width]="28" [height]="28" />
             </a>

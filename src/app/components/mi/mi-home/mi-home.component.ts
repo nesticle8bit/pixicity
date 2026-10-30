@@ -73,7 +73,7 @@ export class MiHomeComponent implements OnDestroy {
 
   readonly alcance = signal<AlcanceMuro>('siguiendo');
   /** Ventana de la pestaña "Más activos" (?periodo=dia|semana|mes). */
-  readonly periodo = signal<PeriodoActivos>('semana');
+  readonly periodo = signal<PeriodoActivos>('dia');
   readonly periodos = PERIODOS;
   readonly items = signal<MuroItem[]>([]);
   readonly siguiente = signal<string | null>(null);
@@ -170,7 +170,7 @@ export class MiHomeComponent implements OnDestroy {
       }
       this.alcance.set(ver === 'recientes' || ver === 'novedades' ? 'todos' : ver === 'nsfw' ? 'nsfw' : ver === 'siguiendo' ? (this.haySesion ? 'siguiendo' : 'todos') : 'activos');
       const periodo = q.get('periodo') as PeriodoActivos | null;
-      this.periodo.set(periodo && PERIODOS.includes(periodo) ? periodo : 'semana');
+      this.periodo.set(periodo && PERIODOS.includes(periodo) ? periodo : 'dia');
       this.tag.set((p.get('tag') ?? q.get('tag'))?.replace(/^#/, '').toLowerCase() || null);
       this.aplicarSEO();
       this.urlActual = this.router.url;
@@ -331,7 +331,7 @@ export class MiHomeComponent implements OnDestroy {
 
   cambiarPeriodo(periodo: PeriodoActivos): void {
     if (periodo === this.periodo()) return;
-    this.router.navigate(['/mi'], { queryParams: { periodo: periodo === 'semana' ? null : periodo }, replaceUrl: true });
+    this.router.navigate(['/mi'], { queryParams: { periodo: periodo === 'dia' ? null : periodo }, replaceUrl: true });
   }
 
   nombrePeriodo(periodo: PeriodoActivos): string {

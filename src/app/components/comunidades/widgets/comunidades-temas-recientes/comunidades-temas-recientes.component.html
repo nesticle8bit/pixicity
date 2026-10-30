@@ -25,7 +25,7 @@
             <a class="ctr-com" [routerLink]="['/comunidades', tema.comunidadSlug]">
               <i class="ti ti-users-group"></i> {{tema.comunidadNombre}}
             </a>
-            · por <a [routerLink]="['/perfil', tema.userName]">{{tema.userName}}</a>
+            · por <a [routerLink]="['/perfil', tema.userName]" [appUserPopover]="tema.userName">{{tema.userName}}</a>
             · {{tema.fechaRegistro | timeAgo}}
             · <i class="ti ti-eye"></i> {{tema.visitantes}}
           </div>

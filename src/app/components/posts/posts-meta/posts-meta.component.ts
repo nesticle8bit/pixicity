@@ -27,11 +27,13 @@ const MAX_OPCIONES_PUNTOS = 10;
  * Debajo del contenido del post: dar puntos, seguir / favoritos / recomendar / denunciar y las estadísticas.
  * Sin sesión todo se ve, y cualquier acción lleva al login (y vuelve al post).
  */
+import { UserPopoverDirective } from 'src/app/shared/directives/userPopover.directive';
+
 @Component({
   selector: 'app-posts-meta',
   templateUrl: './posts-meta.component.html',
   styleUrls: ['./posts-meta.component.scss'],
-  imports: [MatTooltip, DecimalPipe, DatePipe, RouterLink, UserAvatarComponent],
+  imports: [UserPopoverDirective, MatTooltip, DecimalPipe, DatePipe, RouterLink, UserAvatarComponent],
 })
 export class PostsMetaComponent {
   private readonly securityService = inject(IHttpSecurityService);

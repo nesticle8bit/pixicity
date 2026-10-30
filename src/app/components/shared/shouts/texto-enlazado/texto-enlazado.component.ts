@@ -40,11 +40,13 @@ export function partirTexto(texto: string): Parte[] {
  * Texto de un shout con #hashtags (llevan a /hashtag/:tag) y @menciones (al perfil) como enlaces, y :emotes: como GIF.
  * Va dentro del elemento que ya da formato (white-space: pre-wrap); no agrega espacios propios.
  */
+import { UserPopoverDirective } from 'src/app/shared/directives/userPopover.directive';
+
 @Component({
   selector: 'app-texto-enlazado',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
-  template: `@for (p of partes(); track $index) {@switch (p.tipo) {@case ('tag') {<a class="te-tag" [routerLink]="['/hashtag', p.valor.toLowerCase()]">#{{ p.valor }}</a>}@case ('mencion') {<a class="te-mencion" [routerLink]="['/perfil', p.valor]">{{ '@' }}{{ p.valor }}</a>}@case ('emote') {<img class="emote" [src]="$any(p).src" [alt]="':' + p.valor + ':'" [title]="':' + p.valor + ':'" loading="lazy">}@default {{{ p.valor }}}}}`,
+  imports: [UserPopoverDirective, RouterLink],
+  template: `@for (p of partes(); track $index) {@switch (p.tipo) {@case ('tag') {<a class="te-tag" [routerLink]="['/hashtag', p.valor.toLowerCase()]">#{{ p.valor }}</a>}@case ('mencion') {<a class="te-mencion" [routerLink]="['/perfil', p.valor]" [appUserPopover]="p.valor">{{ '@' }}{{ p.valor }}</a>}@case ('emote') {<img class="emote" [src]="$any(p).src" [alt]="':' + p.valor + ':'" [title]="':' + p.valor + ':'" loading="lazy">}@default {{{ p.valor }}}}}`,
   styles: `
     :host { display: contents; }
     a { font-weight: 600; color: light-dark(#006595, #8ed2f2); text-decoration: none; }

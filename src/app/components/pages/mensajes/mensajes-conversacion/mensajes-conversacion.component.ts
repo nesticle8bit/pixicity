@@ -1,4 +1,5 @@
-import { Component, DestroyRef, ElementRef, inject, OnInit, viewChild } from '@angular/core';
+import { Component, computed, DestroyRef, ElementRef, inject, OnInit, signal, viewChild } from '@angular/core';
+import { catchError, filter, of, Subscription, switchMap, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.interface';
@@ -12,8 +13,12 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { MensajesSidebarComponent } from '../mensajes-sidebar/mensajes-sidebar.component';
 import { MensajeViewModel } from 'src/app/models/mensajes/mensaje-vm.model';
-import { UsuarioAvatarViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
-import { DatePipe } from '@angular/common';
+import { UsuarioAvatarViewModel, UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
+import { CountryFlagComponent } from '../../../addons/country-flag/country-flag.component';
+import { TimeAgoPipe } from '../../../../shared/pipes/timeAgo.pipe';
+import { enNavegador } from 'src/app/shared/helpers/plataforma';
+import { DatePipe, DecimalPipe, LowerCasePipe } from '@angular/common';
 import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { reemplazarEmotes } from 'src/app/shared/helpers/emotes';
@@ -36,6 +41,8 @@ const NEAR_BOTTOM = 80;
 
 const MOTIVOS_DENUNCIA_MP = ['Spam o publicidad', 'Acoso o amenazas', 'Contenido ofensivo', 'Estafa o phishing', 'Contenido sexual', 'Otro'];
 
+const MINUTOS_EN_LINEA = 15;
+
 @Component({
     selector: 'app-mensajes-conversacion',
     templateUrl: './mensajes-conversacion.component.html',
@@ -48,7 +55,11 @@ const MOTIVOS_DENUNCIA_MP = ['Spam o publicidad', 'Acoso o amenazas', 'Contenido
         FormsModule,
         MensajesSidebarComponent,
         DatePipe,
+        DecimalPipe,
+        LowerCasePipe,
         TruncatePipe,
+        TimeAgoPipe,
+        CountryFlagComponent,
     ],
 })
 export class MensajesConversacionComponent implements OnInit {
@@ -73,6 +84,23 @@ export class MensajesConversacionComponent implements OnInit {
   emojisAbierto = false;
 
   public mensajes: MensajeViewModel[] = [];
+
+  private readonly usuarioPerfilService = inject(IHttpUsuarioPerfilService);
+  /** Rango, país y números del otro para el encabezado. */
+  readonly infoOtro = signal<UsuarioInfoViewModel | null>(null);
+  /** Minutos desde la última actividad del otro (null = nunca se conectó; undefined = todavía no se sabe). */
+  readonly minutosOtro = signal<number | null | undefined>(undefined);
+  /** Mismo criterio que la tarjeta del usuario (app-user-popover-card): activo en los últimos 15 minutos. */
+  readonly enLinea = computed(() => {
+    const m = this.minutosOtro();
+    return m !== null && m !== undefined && m <= MINUTOS_EN_LINEA;
+  });
+  readonly ultimaVez = computed(() => {
+    const m = this.minutosOtro();
+    return m === null || m === undefined ? null : new Date(Date.now() - m * 60_000).toISOString();
+  });
+  private estadoDe: string | null = null;
+  private sondeoEstado?: Subscription;
   public otro?: UsuarioAvatarViewModel;
   public asunto: string = '';
   public hayMas = false;
@@ -141,6 +169,7 @@ export class MensajesConversacionComponent implements OnInit {
       .subscribe((page) => {
         this.mensajes = page?.mensajes ?? [];
         this.otro = page?.otro;
+        this.cargarEstadoOtro();
         this.hayMas = !!page?.hayMas;
         this.bloqueado = !!page?.bloqueado;
         this.silenciada = !!page?.silenciada;
@@ -214,6 +243,8 @@ export class MensajesConversacionComponent implements OnInit {
         }
 
         this.mensajes = [...porId.values()].sort((a, b) => a.id - b.id);
+        // Acaba de escribir: está en línea aunque el sondeo todavía no lo haya visto.
+        if (nuevosAjenos > 0) this.minutosOtro.set(0);
         this.bloqueado = !!page?.bloqueado;
         this.actualizarAsunto();
 
@@ -417,6 +448,32 @@ export class MensajesConversacionComponent implements OnInit {
   private quitarAdjuntos(): void {
     this.adjuntos.forEach((a) => URL.revokeObjectURL(a.vista));
     this.adjuntos = [];
+  }
+
+  /** Info y estado (en línea / última vez) del otro. El estado se vuelve a pedir cada minuto con la pestaña visible. */
+  private cargarEstadoOtro(): void {
+    const userName = this.otro?.userName;
+    if (!userName || userName === this.estadoDe) return;
+    this.estadoDe = userName;
+    this.infoOtro.set(null);
+    this.minutosOtro.set(undefined);
+
+    this.usuarioPerfilService
+      .getUsuarioInfo(userName)
+      .pipe(catchError(() => of(null)), takeUntilDestroyed(this.destroyRef))
+      .subscribe((info) => this.infoOtro.set(info ?? null));
+
+    this.sondeoEstado?.unsubscribe();
+    if (!enNavegador()) return;
+    this.sondeoEstado = timer(0, 60_000)
+      .pipe(
+        filter(() => !document.hidden),
+        switchMap(() => this.usuarioPerfilService.getUserStatus(userName).pipe(catchError(() => of(undefined)))),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((minutos) => {
+        if (minutos !== undefined) this.minutosOtro.set(minutos);
+      });
   }
 
   /** Imágenes adjuntas de un mensaje (el API las manda una por línea). */

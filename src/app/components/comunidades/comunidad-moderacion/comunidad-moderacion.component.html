@@ -43,7 +43,7 @@
           <div class="cm-reporte__cabecera">
             @if (r.autorUserName) {
             <app-user-avatar [avatar]="r.autorAvatar" [userName]="r.autorUserName" [width]="32" [height]="32" />
-            <a [routerLink]="['/perfil', r.autorUserName]" class="cm-reporte__autor">{{ '@' }}{{ r.autorUserName }}</a>
+            <a [routerLink]="['/perfil', r.autorUserName]" class="cm-reporte__autor" [appUserPopover]="r.autorUserName">{{ '@' }}{{ r.autorUserName }}</a>
             }
             <span class="cm-reporte__motivo"><i class="ti ti-flag" aria-hidden="true"></i> {{ r.motivo }}</span>
             <span class="cm-reporte__fecha">{{ r.fechaRegistro | timeAgo }}</span>
@@ -96,14 +96,14 @@
       <ul class="cm-equipo">
         <li class="cm-equipo__item">
           <app-user-avatar [avatar]="c.creadorAvatar" [userName]="c.creador ?? ''" [width]="36" [height]="36" />
-          <a [routerLink]="['/perfil', c.creador]">{{ '@' }}{{ c.creador }}</a>
+          <a [routerLink]="['/perfil', c.creador]" [appUserPopover]="c.creador">{{ '@' }}{{ c.creador }}</a>
           <span class="cm-equipo__rol cm-equipo__rol--creador">Creador</span>
         </li>
         @for (m of equipo() ?? []; track m.id) {
         @if (m.userName !== c.creador) {
         <li class="cm-equipo__item">
           <app-user-avatar [avatar]="m.avatar" [userName]="m.userName ?? ''" [width]="36" [height]="36" />
-          <a [routerLink]="['/perfil', m.userName]">{{ '@' }}{{ m.userName }}</a>
+          <a [routerLink]="['/perfil', m.userName]" [appUserPopover]="m.userName">{{ '@' }}{{ m.userName }}</a>
           <span class="cm-equipo__rol">Staff</span>
         </li>
         }

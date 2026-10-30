@@ -25,11 +25,13 @@ type Pestana = 'denuncias' | 'equipo';
  * /comunidades/:slug/moderacion: el panel del creador y del staff de la comunidad. Resuelven las denuncias de los
  * comentarios de su comunidad (eliminar citando la regla, descartar) sin depender del staff del sitio, y ven su equipo.
  */
+import { UserPopoverDirective } from 'src/app/shared/directives/userPopover.directive';
+
 @Component({
   selector: 'app-comunidad-moderacion',
   templateUrl: './comunidad-moderacion.component.html',
   styleUrl: './comunidad-moderacion.component.scss',
-  imports: [RouterLink, TimeAgoPipe, UserAvatarComponent, CargandoComponent],
+  imports: [UserPopoverDirective, RouterLink, TimeAgoPipe, UserAvatarComponent, CargandoComponent],
 })
 export class ComunidadModeracionComponent {
   private readonly comunidadesService = inject(IHttpComunidadesService);

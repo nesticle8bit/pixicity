@@ -23,12 +23,14 @@ type CategoriaConteo = { categoria: { id: number; icono: string; nombre: string 
 type Fila<T> = T & { quitado?: boolean; procesando?: boolean };
 
 const POR_PAGINA = 10;
+import { UserPopoverDirective } from 'src/app/shared/directives/userPopover.directive';
 
 @Component({
   selector: 'app-favoritos',
   templateUrl: './favoritos.component.html',
   styleUrls: ['./favoritos.component.scss'],
   imports: [
+    UserPopoverDirective,
     ReactiveFormsModule,
     RouterLink,
     MatTooltip,

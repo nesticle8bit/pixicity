@@ -2,20 +2,58 @@
   <div class="row">
     <div class="col-12 col-sm-6 col-md-9">
       <div class="chat-header mt-2">
-        <a class="back" [routerLink]="['/mensajes']"><i class="ti ti-circle-chevron-left"></i> Volver</a>
+        <a class="chat-header__volver" [routerLink]="['/mensajes']" matTooltip="Volver a mensajes" aria-label="Volver a mensajes">
+          <i class="ti ti-arrow-left" aria-hidden="true"></i>
+        </a>
 
         @if (otro) {
-          <app-user-avatar [avatar]="otro.avatar" [userName]="otro.userName" [height]="40"></app-user-avatar>
+          @let info = infoOtro();
+          <a class="chat-header__avatar" [class.is-en-linea]="enLinea()" [routerLink]="['/perfil', otro.userName]"
+            tabindex="-1" aria-hidden="true">
+            <app-user-avatar [avatar]="otro.avatar" [userName]="otro.userName" [width]="48" [height]="48"></app-user-avatar>
+            <span class="chat-header__punto"></span>
+          </a>
+
           <div class="chat-header__info">
-            <a [routerLink]="'/perfil/' + otro.userName" [appUserPopover]="otro.userName">{{'@'}}{{otro.userName}}</a>
+            <div class="chat-header__fila">
+              <a class="chat-header__nombre" [routerLink]="['/perfil', otro.userName]" [appUserPopover]="otro.userName">{{'@'}}{{otro.userName}}</a>
+              @if (info?.rango; as rango) {
+                <span class="chat-header__rango" [style.color]="rango.color">
+                  <img [src]="'/assets/images/icons/rangos/' + rango.icono" alt="" aria-hidden="true" width="14" height="14" loading="lazy" />
+                  {{rango.nombre}}
+                </span>
+              }
+              @if (info?.pais; as pais) {
+                <addon-country-flag [iso2]="pais.iso2" [title]="pais.nombre"></addon-country-flag>
+              }
+            </div>
+
+            <div class="chat-header__estado" role="status">
+              @if (enLinea()) {
+                <span class="chat-header__estado-texto is-en-linea">En línea</span>
+              } @else if (ultimaVez(); as vez) {
+                <span class="chat-header__estado-texto">Activo {{vez | timeAgo | lowercase}}</span>
+              } @else if (minutosOtro() === null) {
+                <span class="chat-header__estado-texto">Sin conexión reciente</span>
+              }
+              @if (info) {
+                <span class="chat-header__dato">{{(info.puntos ?? 0) | number}} puntos</span>
+                <span class="chat-header__dato">desde {{info.fechaRegistro | date:'MMM y'}}</span>
+              }
+            </div>
+
             @if (asunto) {
-              <small class="text-muted d-block cursor--help" matTooltip="{{asunto}}" matTooltipPosition="above">
-                {{asunto | truncate:[80]}}
+              <small class="chat-header__asunto cursor--help" matTooltip="{{asunto}}" matTooltipPosition="above">
+                <i class="ti ti-message-2" aria-hidden="true"></i> {{asunto | truncate:[80]}}
               </small>
             }
           </div>
 
           <div class="chat-header__acciones">
+            <a class="chat-header__accion" [routerLink]="['/perfil', otro.userName]" matTooltip="Ver perfil"
+              [attr.aria-label]="'Ver el perfil de ' + otro.userName">
+              <i class="ti ti-user" aria-hidden="true"></i>
+            </a>
             <button type="button" class="chat-header__accion" [class.is-activa]="silenciada" (click)="alternarSilencio()"
               [attr.aria-pressed]="silenciada" [matTooltip]="silenciada ? 'Activar avisos' : 'Silenciar conversación'"
               [attr.aria-label]="silenciada ? 'Activar avisos de esta conversación' : 'Silenciar esta conversación'">

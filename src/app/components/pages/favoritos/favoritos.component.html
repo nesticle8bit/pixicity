@@ -83,7 +83,7 @@
             <div class="fav-item__cuerpo">
               <a class="fav-item__titulo" [routerLink]="['/posts', f.categoria.seo, f.postId, f.url]">{{ f.titulo }}</a>
               <div class="fav-item__meta">
-                <span>por <a [routerLink]="['/perfil', f.autor]">{{ f.autor }}</a></span>
+                <span>por <a [routerLink]="['/perfil', f.autor]" [appUserPopover]="f.autor">{{ f.autor }}</a></span>
                 <span>publicado {{ f.postFechaRegistro | timeAgo }}</span>
                 <span>guardado {{ f.fechaRegistro | timeAgo }}</span>
               </div>
@@ -134,7 +134,7 @@
 
             <div class="fav-item__cuerpo">
               <div class="fav-item__meta fav-item__meta--arriba">
-                <a class="fav-item__usuario" [routerLink]="['/perfil', s.avatar?.userName]">{{ '@' }}{{ s.avatar?.userName }}</a>
+                <a class="fav-item__usuario" [routerLink]="['/perfil', s.avatar?.userName]" [appUserPopover]="s.avatar?.userName">{{ '@' }}{{ s.avatar?.userName }}</a>
                 <span>{{ s.fechaRegistro | timeAgo }}</span>
                 @if (s.tipo && s.tipo !== 'Texto') {
                 <span class="fav-item__tipo">{{ s.tipo }}</span>
