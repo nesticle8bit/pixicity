@@ -7,6 +7,7 @@ import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interface';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
 import { PostsMetaComponent } from './posts-meta.component';
 
 // Igual que posts-view: el componente se crea con el post ya cargado (dentro de @if), así que el setter de
@@ -43,6 +44,8 @@ describe('PostsMetaComponent', () => {
         { provide: IHttpSecurityService, useValue: { getCurrentUser: () => usuario } },
         { provide: MatDialog, useValue: dialogo },
         { provide: SignalrService, useValue: signalr },
+        // La directiva del popover (recomendadores) lo pide al crearse.
+        { provide: IHttpUsuarioPerfilService, useValue: { getUsuarioInfo: () => of(null), getUserStatus: () => of(null) } },
         { provide: NotificationService, useValue: jasmine.createSpyObj('NotificationService', ['info']) },
       ],
       schemas: [NO_ERRORS_SCHEMA],

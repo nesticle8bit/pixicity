@@ -9,6 +9,7 @@ import { IHttpMensajesService } from 'src/app/services/interfaces/httpMensajes.i
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
+import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
 
 const ana = { id: 2, userName: 'ana', avatar: '' };
 
@@ -64,6 +65,8 @@ describe('MensajesConversacionComponent', () => {
         { provide: Router, useValue: router },
         { provide: NotificationService, useValue: notificaciones },
         { provide: SignalrService, useValue: signalr },
+        // Encabezado: rango, país y estado del otro.
+        { provide: IHttpUsuarioPerfilService, useValue: { getUsuarioInfo: () => of(null), getUserStatus: () => of(null) } },
         { provide: DisplayComponentService, useValue: { setDisplay: () => { } } },
         { provide: ActivatedRoute, useValue: { paramMap: of(convertToParamMap({ userName: 'ana' })) } },
     ],
