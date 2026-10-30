@@ -178,6 +178,34 @@ test('shouts: en su perfil el autor fija un shout propio, se marca "Fijado" y el
   await expect(page.getByRole('menuitem', { name: 'Desfijar de mi perfil' })).toBeVisible();
 });
 
+test('mensajes: una URL de imagen en el texto se ve como imagen; si no carga, queda el texto', async ({ page, baseURL }) => {
+  await conSesion(page);
+  const otro = { id: 5, userName: AUTOR, avatar: null };
+  const yo = { id: 1, userName: 'lector_tres', avatar: null };
+  const imagen = `${baseURL}/assets/images/avatar.png`;
+  const rota = 'https://imagenes.ejemplo.com/no-existe.png';
+  await page.route(rota, (r) => r.fulfill({ status: 404, body: '' }));
+  const msg = (id: number, contenido: string) => ({
+    id, fechaRegistro: new Date().toISOString(), asunto: '', contenido, leido: true, eliminado: false,
+    esMio: false, usuarioDe: otro, usuarioA: yo,
+  });
+  await page.route('**/api/mensajes/conversacion**', (r) => r.fulfill(ok({
+    mensajes: [msg(1, imagen), msg(2, `mira esto ${imagen}`), msg(3, rota)], hayMas: false, bloqueado: false, otro,
+  })));
+
+  await page.goto(`/mensajes/chat/${AUTOR}`);
+  const burbujas = page.locator('.chat-bubble');
+  // Solo la URL: se ve la imagen y no se repite el texto.
+  await expect(burbujas.nth(0).locator('.chat-fotos img')).toHaveAttribute('src', imagen);
+  await expect(burbujas.nth(0).locator('.chat-bubble__content')).toHaveCount(0);
+  // Texto + URL: la imagen y el texto.
+  await expect(burbujas.nth(1).locator('.chat-fotos img')).toBeVisible();
+  await expect(burbujas.nth(1).getByText('mira esto')).toBeVisible();
+  // La que no carga se quita y vuelve a verse la URL como texto.
+  await expect(burbujas.nth(2).locator('.chat-fotos img')).toHaveCount(0);
+  await expect(burbujas.nth(2).getByText(rota)).toBeVisible();
+});
+
 test('mensajes: Enter envía, Shift+Enter hace salto de línea y el mensaje aparece en la conversación', async ({ page }) => {
   await conSesion(page);
   const otro = { id: 5, userName: AUTOR, avatar: null };

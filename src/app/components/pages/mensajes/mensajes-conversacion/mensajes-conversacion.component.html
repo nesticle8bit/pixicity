@@ -59,16 +59,18 @@
                     <i class="ti ti-flag"></i>
                   </button>
                 }
-                @if (imagenesDe(m).length) {
-                  <div class="chat-fotos" [class.chat-fotos--varias]="imagenesDe(m).length > 1">
-                    @for (img of imagenesDe(m); track img) {
-                      <a [href]="img" target="_blank" rel="noopener" class="chat-fotos__item" aria-label="Abrir imagen adjunta">
-                        <img [src]="img" alt="Imagen adjunta" loading="lazy" />
+                @let fotos = fotosDe(m);
+                @if (fotos.length) {
+                  <div class="chat-fotos" [class.chat-fotos--varias]="fotos.length > 1">
+                    @for (img of fotos; track img) {
+                      <!-- Adjuntas y URLs de imagen del texto. no-referrer: el sitio externo no ve desde qué conversación se pidió. -->
+                      <a [href]="img" target="_blank" rel="noopener noreferrer nofollow" class="chat-fotos__item" aria-label="Abrir imagen">
+                        <img [src]="img" alt="Imagen del mensaje" loading="lazy" referrerpolicy="no-referrer" (error)="fallidas.add(img)" />
                       </a>
                     }
                   </div>
                 }
-                @if (m.contenido) {
+                @if (m.contenido && !ocultarTexto(m)) {
                   <div class="chat-bubble__content" [innerHTML]="conEmotes(m.contenido)"></div>
                 }
                 <small class="chat-bubble__meta">

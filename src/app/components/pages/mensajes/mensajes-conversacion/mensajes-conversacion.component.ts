@@ -17,6 +17,7 @@ import { DatePipe } from '@angular/common';
 import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { reemplazarEmotes } from 'src/app/shared/helpers/emotes';
+import { imagenesEnTexto, soloUrlsDeImagen } from 'src/app/shared/helpers/imagenes-en-texto';
 import { EmojisPopoverService } from '../../../bottom-sheets/bottom-sheets-emojis/emojis-popover.service';
 
 const PAGE_SIZE = 30;
@@ -421,6 +422,31 @@ export class MensajesConversacionComponent implements OnInit {
   /** Imágenes adjuntas de un mensaje (el API las manda una por línea). */
   imagenesDe(m: { imagenes?: string | null }): string[] {
     return (m.imagenes ?? '').split('\n').map((i) => i.trim()).filter(Boolean);
+  }
+
+  /** Imágenes externas que no cargaron (la URL terminaba en .png pero no era una imagen): se ocultan. */
+  readonly fallidas = new Set<string>();
+  private readonly cacheFotos = new WeakMap<object, { fotos: string[]; soloUrls: boolean }>();
+
+  /** Adjuntas + URLs de imagen escritas en el texto, en ese orden y sin repetir. Se calcula una vez por mensaje. */
+  private fotosYTexto(m: MensajeViewModel): { fotos: string[]; soloUrls: boolean } {
+    let r = this.cacheFotos.get(m);
+    if (!r) {
+      const enTexto = imagenesEnTexto(m.contenido);
+      r = { fotos: [...new Set([...this.imagenesDe(m), ...enTexto])], soloUrls: soloUrlsDeImagen(m.contenido, enTexto) };
+      this.cacheFotos.set(m, r);
+    }
+    return r;
+  }
+
+  fotosDe(m: MensajeViewModel): string[] {
+    return this.fotosYTexto(m).fotos.filter((f) => !this.fallidas.has(f));
+  }
+
+  /** El texto es solo la URL de la imagen: basta con mostrar la imagen (salvo que no haya cargado). */
+  ocultarTexto(m: MensajeViewModel): boolean {
+    const r = this.fotosYTexto(m);
+    return r.soloUrls && r.fotos.every((f) => !this.fallidas.has(f));
   }
 
   /** El último mensaje mío que el otro ya vio: debajo va "Visto hace…". */
