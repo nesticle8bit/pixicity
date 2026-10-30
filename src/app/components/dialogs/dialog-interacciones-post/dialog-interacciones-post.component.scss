@@ -15,25 +15,24 @@
   list-style: none;
 }
 
+// Filas cebra como "Últimos Registrados" (.list-posts--zebra, global); aquí solo el reparto horizontal.
 .dip-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 8px 0;
+  gap: 6px;
+}
 
-  & + & {
-    border-top: 1px solid light-dark(#e6eaee, #35424e);
-  }
+.dip-pos {
+  flex-shrink: 0;
 }
 
 .dip-usuario {
   display: flex;
+  flex: 1;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
-  font-weight: 600;
-  color: light-dark(#1f2a33, #cad6df);
+  color: inherit;
   text-decoration: none;
 
   &:hover .dip-nombre,
@@ -58,15 +57,7 @@
   flex-shrink: 0;
   align-items: center;
   gap: 10px;
-  font-size: 0.82rem;
   color: light-dark(#5f6b75, #aeaeae);
-}
-
-.dip-puntos {
-  padding: 1px 8px;
-  border-radius: 999px;
-  background: light-dark(#fff7e6, #483a1b);
-  color: light-dark(#8a5a00, #f3d294);
 }
 
 .dip-vacio {

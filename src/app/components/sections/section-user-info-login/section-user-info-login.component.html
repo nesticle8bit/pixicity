@@ -45,8 +45,12 @@
                             <a routerLink="/paginas/protocolo">· ver protocolo</a>
                             <a routerLink="/apelaciones">· apelar</a>
                           }
-                          @if (notificacion.shoutId && notificacion.shoutAutor) {
-                            <a [routerLink]="['/shouts', notificacion.shoutAutor, notificacion.shoutId]">· ver</a>
+                          @if (notificacion.post) {
+                            <a [routerLink]="['/posts/' + notificacion.post.categoria.seo + '/' + notificacion.post.id + '/' + notificacion.post.url]"
+                              [fragment]="notificacion.comentarioId ? 'comentario-' + notificacion.comentarioId : undefined">· ver</a>
+                          } @else if (notificacion.shoutId && notificacion.shoutAutor) {
+                            <a [routerLink]="['/shouts', notificacion.shoutAutor, notificacion.shoutId]"
+                              [fragment]="notificacion.comentarioId ? 'comentario-' + notificacion.comentarioId : undefined">· ver</a>
                           } @else if (notificacion.enlace) {
                             <a [routerLink]="notificacion.enlace.split('#')[0]" [fragment]="notificacion.enlace.split('#')[1]">· ver</a>
                           }

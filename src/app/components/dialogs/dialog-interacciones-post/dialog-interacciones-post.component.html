@@ -1,22 +1,22 @@
-<h2 mat-dialog-title class="dip-titulo">
-  <i class="ti" [class.ti-award]="esVotos" [class.ti-speakerphone]="!esVotos" aria-hidden="true"></i>
+<h3 mat-dialog-title class="dip-titulo">
   {{ esVotos ? 'Le dieron puntos' : 'Recomendado por' }}
   <span class="dip-total">({{ total | number }})</span>
-</h2>
+</h3>
 
 <mat-dialog-content>
   <ul class="dip-lista">
-    @for (u of items; track u.userName) {
-    <li class="dip-item">
+    @for (u of items; track u.userName; let i = $index) {
+    <li class="list-posts--zebra dip-item">
+      <strong class="dip-pos">{{ i + 1 }}</strong>
       <a [routerLink]="['/perfil', u.userName]" mat-dialog-close class="dip-usuario">
-        <app-user-avatar [avatar]="u.avatar" [userName]="u.userName" [width]="36" [height]="36" />
+        <app-user-avatar [avatar]="u.avatar" [userName]="u.userName" [width]="20" [height]="20" />
         <span class="dip-nombre">{{ u.userName }}</span>
       </a>
       <span class="dip-meta">
+        <time [attr.datetime]="u.fecha" [matTooltip]="(u.fecha | date: 'dd.MM.yyyy HH:mm') ?? ''">{{ u.fecha | timeAgo }}</time>
         @if (esVotos) {
-        <strong class="dip-puntos">+{{ u.cantidad }}</strong>
+        <span class="value">+{{ u.cantidad }}</span>
         }
-        <time [attr.datetime]="u.fecha">{{ u.fecha | date: 'dd.MM.yyyy HH:mm' }}</time>
       </span>
     </li>
     } @empty {

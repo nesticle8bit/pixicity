@@ -324,10 +324,11 @@ export class ComentariosComponent {
     const contenido = this.replyText.trim();
     if (!contenido || this.replyEnviando) return;
 
-    // Las respuestas cuelgan siempre del comentario raíz.
+    // Las respuestas cuelgan siempre del comentario raíz; el API aplana, pero recibe el comentario respondido
+    // para avisarle a su autor (no solo al del raíz).
     const raiz = c.parentId ?? c.id;
     this.replyEnviando = true;
-    this.acciones.comentar(contenido, raiz).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    this.acciones.comentar(contenido, c.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (id) => {
         this.agregarLocal(id, contenido, raiz);
         this.replyEnviando = false;

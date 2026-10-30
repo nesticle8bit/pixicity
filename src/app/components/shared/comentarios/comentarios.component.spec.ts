@@ -69,7 +69,7 @@ describe('ComentariosComponent', () => {
     expect(componente.arbol.find((c) => c.id === 1)?.destacado).toBeTrue();
   });
 
-  it('responder a una respuesta envía el id del comentario raíz', () => {
+  it('responder a una respuesta envía el id respondido y la cuelga del raíz', () => {
     acciones.comentar.and.returnValue(of(10));
     componente.comentarios = [comentario({ id: 1 }), comentario({ id: 2, parentId: 1 })];
     const respuesta = componente.arbol[0].respuestas![0];
@@ -77,7 +77,7 @@ describe('ComentariosComponent', () => {
     componente.replyText = 'hola';
     componente.enviarRespuesta(respuesta);
 
-    expect(acciones.comentar).toHaveBeenCalledWith('hola', 1);
+    expect(acciones.comentar).toHaveBeenCalledWith('hola', 2);
     expect(componente.arbol[0].respuestas?.map((r) => r.id)).toEqual([2, 10]);
   });
 

@@ -75,7 +75,8 @@
                 {{notificacion.post.titulo}}
               </a>
               } @else if (notificacion.shoutId && notificacion.shoutAutor) {
-              <a [routerLink]="['/shouts', notificacion.shoutAutor, notificacion.shoutId]">&nbsp;Ver shout</a>
+              <a [routerLink]="['/shouts', notificacion.shoutAutor, notificacion.shoutId]"
+                [fragment]="notificacion.comentarioId ? 'comentario-' + notificacion.comentarioId : undefined">&nbsp;Ver shout</a>
               } @else if (notificacion.enlace) {
               <a [routerLink]="notificacion.enlace.split('#')[0]" [fragment]="notificacion.enlace.split('#')[1]">&nbsp;Ver</a>
               }

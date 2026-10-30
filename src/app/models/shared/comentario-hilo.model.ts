@@ -33,7 +33,7 @@ export interface ResultadoVotoComentario {
 
 /** Llamadas al API que <app-comentarios> necesita. Cada sección las implementa con su propio servicio. */
 export interface ComentariosAcciones {
-  /** Publica un comentario (parentId = id del comentario raíz al responder). Devuelve el id nuevo. */
+  /** Publica un comentario (parentId = id del comentario respondido; el API lo aplana al raíz). Devuelve el id nuevo. */
   comentar(contenido: string, parentId: number | null): Observable<number>;
   editar(id: number, contenido: string): Observable<unknown>;
   eliminar(id: number): Observable<unknown>;
