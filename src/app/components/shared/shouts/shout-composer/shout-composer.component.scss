@@ -222,6 +222,11 @@
     padding: 12px;
     border-radius: 14px;
 
+    // El avatar en su columna le quitaba ~60 px al campo de texto; en el celular el campo va a lo ancho.
+    &__avatar {
+      display: none;
+    }
+
     // Imagen y emoji juntos en una fila y "Compartir" a lo ancho debajo (en columna cada ícono ocupaba una fila).
     &__actions {
       flex-wrap: wrap;

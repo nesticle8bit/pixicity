@@ -124,6 +124,8 @@ export class TableMonitorComponent implements OnInit {
   }
 
   setURL(notificacion: MonitorAdmin, text: string): string {
+    // Avisos de fotos, shouts o temas no traen post: sin esto el enlace salía /posts/undefined/...
+    if (!notificacion?.post?.id) return text;
     return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}" title="${notificacion?.post?.titulo}">${text}</a>`;
   }
 

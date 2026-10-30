@@ -453,13 +453,53 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
 }
 
 @media (max-width: 575.98px) {
+  .mi {
+    padding-top: 8px;
+  }
+
+  .mi__head {
+    margin-bottom: 12px;
+  }
+
+  .mi__titulo {
+    margin-bottom: 4px;
+    font-size: 1.2rem;
+  }
+
+  // Cuatro pestañas no entran en 360 px: con flex: 1 "Más activos" partía en dos líneas y NSFW desbordaba la
+  // página (scroll horizontal). Ahora es una tira deslizable, cada pestaña en una línea.
   .mi__tabs {
-    width: 100%;
+    width: calc(100% + 12px);
+    margin-right: -12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   .mi__tab {
-    flex: 1;
-    justify-content: center;
+    flex: none;
+    padding: 10px 10px;
+    white-space: nowrap;
+  }
+
+  .mi__periodos {
+    align-self: flex-start;
+    flex-basis: auto;
+  }
+
+  .mi-tags-tab {
+    padding: 5px 14px;
+  }
+
+  .mi__composer {
+    margin-bottom: 14px;
+  }
+
+  .mi__lista {
+    gap: 12px;
   }
 }
 

@@ -205,9 +205,16 @@ export class SectionUserInfoLoginComponent implements OnInit {
     });
   }
 
+  /** Enlaza el texto al destino real del aviso: post, shout o el enlace guardado (fotos, temas). Sin destino queda como texto. */
   setURL(notificacion: MonitorViewModel, text: string, comentarioId?: number | null): string {
     const ancla = comentarioId ? `#comentario-${comentarioId}` : '';
-    return `<a href="/posts/${notificacion?.post?.categoria?.seo}/${notificacion.post?.id}/${notificacion.post?.url}${ancla}" title="${notificacion?.post?.titulo}">${text}</a>`;
+    const post = notificacion?.post;
+    if (post?.id)
+      return `<a href="/posts/${post.categoria?.seo}/${post.id}/${post.url}${ancla}" title="${post.titulo ?? ''}">${text}</a>`;
+    if (notificacion?.shoutId && notificacion.shoutAutor)
+      return `<a href="/shouts/${notificacion.shoutAutor}/${notificacion.shoutId}${ancla}">${text}</a>`;
+    if (notificacion?.enlace) return `<a href="${notificacion.enlace}">${text}</a>`;
+    return text;
   }
 
   setProfile(text: string): string {
