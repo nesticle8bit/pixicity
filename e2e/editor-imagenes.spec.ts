@@ -352,6 +352,9 @@ test('al bajar en un post largo la barra del editor queda visible debajo de la b
 
   const barra = await page.locator('.cp-bar').boundingBox();
   const toolbar = await page.locator('.rich-editor__toolbar').boundingBox();
-  expect(toolbar!.y).toBeGreaterThanOrEqual(barra!.y + barra!.height - 1);
+  // En el celular la barra de publicar va al pie: la toolbar no puede taparla desde arriba.
+  if (barra!.y > toolbar!.y) expect(toolbar!.y + toolbar!.height).toBeLessThanOrEqual(barra!.y + 1);
+  else expect(toolbar!.y).toBeGreaterThanOrEqual(barra!.y + barra!.height - 1);
+  await expect(page.locator('.cp-bar [type="submit"]')).toBeInViewport();
   await expect(page.getByRole('button', { name: 'Insertar imagen' })).toBeInViewport();
 });

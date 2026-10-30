@@ -85,9 +85,15 @@ const CLAVE = 'pixicity.protocoloVisto';
     @media (max-width: 575.98px) {
       .ap {
         flex-wrap: wrap;
+        gap: 8px 10px;
+      }
+      /* Con flex: 1 el texto se quedaba en una columna angosta junto al botón: ocupa toda la fila y el botón baja. */
+      .ap__cuerpo {
+        flex: 1 1 calc(100% - 2.2rem);
       }
       .ap__ok {
         margin-left: auto;
+        padding: 8px 16px;
       }
     }
   `,

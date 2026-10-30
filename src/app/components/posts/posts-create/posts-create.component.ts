@@ -109,13 +109,17 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
 
   constructor() {
     // La barra de acciones es fija arriba: la toolbar del editor (también fija) se pega debajo y no detrás. Se mide en
-    // vivo porque en el celular la barra ocupa dos filas.
+    // vivo porque su alto cambia; en el celular la barra va al pie (position: fixed) y la toolbar se pega arriba del todo.
     afterNextRender(() => {
       const barra = this.barra()?.nativeElement;
       if (!barra || typeof ResizeObserver === 'undefined') return;
-      const ajustar = () => this.host.nativeElement.style.setProperty('--rich-editor-sticky-top', `${barra.offsetHeight}px`);
+      const ajustar = () => {
+        const alPie = getComputedStyle(barra).position === 'fixed';
+        this.host.nativeElement.style.setProperty('--rich-editor-sticky-top', `${alPie ? 0 : barra.offsetHeight}px`);
+      };
       const observador = new ResizeObserver(ajustar);
       observador.observe(barra);
+      observador.observe(document.documentElement); // Cruzar el corte de 576 px (girar el teléfono) cambia la posición.
       ajustar();
       this.destroyRef.onDestroy(() => observador.disconnect());
     });

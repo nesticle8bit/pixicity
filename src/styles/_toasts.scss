@@ -135,6 +135,11 @@ $toasts: (
     left: 12px;
   }
 
+  // Crear post tiene la barra de publicar fija al pie: los avisos van encima y no tapan "Publicar".
+  body:has(.cp-bar) .toast-container.toast-top-right {
+    bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+
   .toast-container .ngx-toastr {
     width: 100%;
     max-width: none;

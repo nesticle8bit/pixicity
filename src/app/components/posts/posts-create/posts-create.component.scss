@@ -97,18 +97,60 @@ $bar-h: 58px;
     display: none;
   }
 
-  // Los botones de Material miden 64 px de mínimo aunque solo muestren el ícono: tapaban el chip "Nuevo post".
-  // En pantallas de 320 px las acciones bajan a otra fila en vez de encimarse.
+  // En el celular la barra baja al pie de la pantalla: queda al alcance del pulgar mientras se escribe y no le
+  // roba alto al editor arriba (su toolbar se pega al borde superior, ver --rich-editor-sticky-top en el .ts).
+  .cp {
+    padding-bottom: calc(#{$bar-h} + 24px + env(safe-area-inset-bottom));
+  }
+
   .cp-bar {
-    flex-wrap: wrap;
-    row-gap: 8px;
+    position: fixed;
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 900;
+    min-height: 0;
+    margin: 0;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+    border-top: 1px solid light-dark(#e6e6e6, #3e454b);
+    border-bottom: 0;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+
+    &__badge {
+      padding: 5px 10px;
+    }
 
     &__actions {
       margin-left: auto;
+      gap: 6px;
 
+      // Los botones de Material miden 64 px de mínimo aunque solo muestren el ícono.
       .mat-mdc-button-base {
-        min-width: 0;
+        min-width: 44px;
+        height: 40px;
         padding: 0 12px;
+      }
+
+      i {
+        margin-right: 0;
+        font-size: 18px;
+      }
+
+      [type='submit'] i {
+        margin-right: 4px;
+      }
+    }
+  }
+
+  // En 320 px el chip no entra junto a los tres botones: queda solo el ícono.
+  @media (max-width: 359.98px) {
+    .cp-bar__badge {
+      font-size: 0;
+      gap: 0;
+
+      i {
+        font-size: 15px;
       }
     }
   }
@@ -519,6 +561,42 @@ $bar-h: 58px;
   small {
     color: light-dark(#6b6b6b, #adadad);
     font-size: 12px;
+  }
+}
+
+// - Celular: tarjetas y pies más compactos (va al final para ganarle a las reglas base) -
+@media (max-width: 575.98px) {
+  .cp {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .cp-title__input {
+    font-size: 20px;
+    padding-right: 48px;
+  }
+
+  .cp-rail {
+    gap: 10px;
+  }
+
+  .cp-card {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  // El texto y "Sugerir del título" lado a lado dejaban dos columnas angostas.
+  .cp-tags-foot {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .cp-link-btn {
+    padding: 4px 0;
+  }
+
+  .cp-editor__head {
+    gap: 8px;
   }
 }
 
