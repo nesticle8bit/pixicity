@@ -157,6 +157,8 @@ test('emojis: se insertan donde está el cursor y el selector queda abierto para
   const enHoja = page.locator('mat-bottom-sheet-container[aria-label="Elegir emoji"]');
   await expect(enHoja).toHaveCount(info.project.name === 'movil' ? 1 : 0);
 
+  // Los comentarios abren en los emotes de Taringa!: los emojis Unicode están en "Caras".
+  await selector.getByRole('tab', { name: 'Caras' }).click();
   await selector.getByRole('button', { name: '😀' }).click();
   await selector.getByRole('button', { name: '😂' }).click();
   await expect(campo).toHaveValue('hola😀😂 mundo');

@@ -17,4 +17,21 @@
   vertical-align: middle;
 }
 
+// Shout fijado arriba del muro del perfil
+.sc-fijado {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 6px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: light-dark(#e8f3f9, #1c3a4b);
+  color: light-dark(#006595, #8ed2f2);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+
+  i { font-size: 12px; }
+}
+
 .sc-action--eliminar:hover:not(:disabled) { color: light-dark(#c62828, #e16b6b); }

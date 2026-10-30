@@ -55,3 +55,35 @@
 .ng-select.ng-select-borders .ng-select-container {
   border-radius: 4px 4px 0 0;
 }
+
+// Menú "Más opciones" de los shouts (app-shout-card): el panel vive en el overlay, fuera del componente.
+.sc-menu.mat-mdc-menu-panel {
+  min-width: 200px;
+
+  .mat-mdc-menu-item {
+    min-height: 40px;
+    font-size: 0.88rem;
+
+    .mat-mdc-menu-item-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    i {
+      font-size: 1.1rem;
+      color: light-dark(#5d6b75, #aeaeae);
+    }
+  }
+
+  .sc-menu__nota {
+    margin-left: 4px;
+    font-size: 0.72rem;
+    color: light-dark(#5d6b75, #aeaeae);
+  }
+
+  .sc-menu__peligro,
+  .sc-menu__peligro i {
+    color: light-dark(#c62828, #e16b6b);
+  }
+}

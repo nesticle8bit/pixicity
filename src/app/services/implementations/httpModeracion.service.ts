@@ -139,6 +139,14 @@ export class HttpModeracionService implements IHttpModeracionService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  /** Solo admins: la cierra sin respuesta ni aviso al usuario. */
+  descartarApelacion(id: number): Observable<boolean> {
+    return this.http
+      .put<ApiResponse<boolean>>(`${environment.api}/api/apelaciones/${id}/descarte`, {})
+      .pipe(this.unwrap<boolean>())
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   getAccionesHistorial(): Observable<AccionModeracion[]> {
     return this.http
       .get<ApiResponse<AccionModeracion[]>>(`${environment.api}/api/moderacion/historial/acciones`)

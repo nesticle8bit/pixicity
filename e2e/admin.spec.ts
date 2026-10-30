@@ -121,3 +121,44 @@ test('publicidad: crea un anuncio segmentado y lo lista con su estado y números
   await expect(fila.getByText('Activo')).toBeVisible();
   await expect(fila.getByText('2.5%')).toBeVisible(); // 5 clics / 200 impresiones
 });
+
+test('apelaciones: un admin la descarta sin aviso y sale de pendientes', async ({ page }) => {
+  const apelacion = {
+    id: 9, userName: 'quejoso', accionNombre: 'Shout eliminado', moderador: 'mod1', objetivo: 'Shout de quejoso', objetivoUrl: null,
+    detalle: 'Shout eliminado', razon: 'spam', mensaje: 'Mándenme puntos o me quejo otra vez', estado: 0, estadoNombre: 'Pendiente',
+    fechaRegistro: '2026-10-29T10:00:00Z',
+  };
+  await comoAdmin(page); // antes de las rutas propias: en Playwright gana la última registrada
+  let descartada = false;
+  let descarte = '';
+  await page.route(/\/api\/apelaciones(\?|$)/i, (r) =>
+    r.fulfill(ok({ ...pagina(descartada ? [] : [apelacion]), pendientes: descartada ? 0 : 1 })));
+  await page.route(/\/api\/apelaciones\/\d+\/descarte/i, (r) => {
+    descarte = /apelaciones\/(\d+)\//.exec(r.request().url())?.[1] ?? '';
+    descartada = true;
+    return r.fulfill(ok(true));
+  });
+
+  await page.goto('/moderacion/apelaciones');
+  const item = page.locator('.ma-item', { hasText: 'quejoso' });
+  await item.getByRole('button', { name: 'Descartar' }).click();
+  await page.getByRole('alertdialog', { name: 'Confirmar' }).getByRole('button', { name: 'Aceptar' }).click();
+  await expect.poll(() => descarte).toBe('9');
+  await expect(item).toBeHidden();
+  await expect(page.getByText('No hay apelaciones pendientes')).toBeVisible();
+});
+
+test('apelaciones: un moderador puede aceptar o rechazar, pero no ve "Descartar"', async ({ page }) => {
+  await simularApi(page);
+  const jwtMod = `${b64({ alg: 'HS256', typ: 'JWT' })}.${b64({ exp: 4102444800, unique_name: 'mod1', role: 'Moderador' })}.firma`;
+  const sesion = { usuario: { id: 'Mg==', userName: 'mod1', rango: 'Moderador', avatar: '' }, token: `Bearer ${jwtMod}`, refreshToken: 'r' };
+  await page.addInitScript((s) => localStorage.setItem('taringas', s), JSON.stringify(sesion));
+  await page.route(/\/api\/apelaciones(\?|$)/i, (r) => r.fulfill(ok({
+    ...pagina([{ id: 9, userName: 'quejoso', accionNombre: 'Shout eliminado', mensaje: 'Revisen por favor', estado: 0, estadoNombre: 'Pendiente', fechaRegistro: '2026-10-29T10:00:00Z' }]),
+    pendientes: 1,
+  })));
+
+  await page.goto('/moderacion/apelaciones');
+  await expect(page.locator('.ma-item', { hasText: 'quejoso' }).getByRole('button', { name: 'Rechazar' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Descartar' })).toHaveCount(0);
+});

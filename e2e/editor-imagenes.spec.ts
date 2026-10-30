@@ -278,7 +278,7 @@ test('cortar y pegar una imagen conserva el tamaño y la alineación elegidos', 
   await page.keyboard.type('Dos');
 
   await clicImagen(page, 1);
-  await page.getByRole('button', { name: '50%' }).click();
+  await page.getByRole('button', { name: 'Mitad del ancho' }).click();
   await page.getByRole('button', { name: 'Alinear a la derecha' }).click();
   const ancho = await imagen(page, 1).getAttribute('width');
   await clicImagen(page, 1);
@@ -336,7 +336,7 @@ test('mientras sube la imagen se puede seguir escribiendo en otro lado sin que l
 
 test('en el creador de posts no se suben imágenes: solo desde una URL', async ({ page }) => {
   await page.goto('/crear/post');
-  await page.locator('.rich-editor__toolbar button[title="Insertar imagen"]').click();
+  await page.locator('.rich-editor__toolbar button[aria-label="Insertar imagen"]').click();
   await expect(page.getByRole('button', { name: 'Desde una URL' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Subir desde el equipo' })).toHaveCount(0);
 });

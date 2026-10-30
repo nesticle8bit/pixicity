@@ -32,4 +32,5 @@ export abstract class IHttpModeracionService {
   abstract apelarBaneo(token: string, mensaje: string): Observable<number>;
   abstract getApelaciones(page: number, pageCount: number, soloPendientes: boolean): Observable<PaginaApelaciones>;
   abstract resolverApelacion(id: number, aceptar: boolean, respuesta: string): Observable<boolean>;
+  abstract descartarApelacion(id: number): Observable<boolean>;
 }

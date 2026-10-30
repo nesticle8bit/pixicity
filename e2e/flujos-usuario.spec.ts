@@ -125,6 +125,8 @@ test('shouts: publicar en el muro del perfil envía el texto y recarga el muro',
   await expect(compartir).toBeDisabled();
   await texto.fill('¡Hola muro!');
   await page.getByRole('button', { name: 'Agregar emoji' }).click();
+  // El selector abre en los emotes de Taringa!: los emojis Unicode están en "Caras".
+  await page.getByRole('dialog', { name: 'Elegir emoji' }).getByRole('tab', { name: 'Caras' }).click();
   await page.getByRole('dialog', { name: 'Elegir emoji' }).getByRole('button', { name: '😀' }).click();
   await page.keyboard.press('Escape');
   await expect(texto).toHaveValue('¡Hola muro!😀');
@@ -133,6 +135,47 @@ test('shouts: publicar en el muro del perfil envía el texto y recarga el muro',
   await expect.poll(() => shout).toEqual(expect.objectContaining({ comentario: '¡Hola muro!😀', perfilId: 5 }));
   await expect(texto).toHaveValue('');
   await expect.poll(() => cargasDelMuro).toBe(2);
+});
+
+test('shouts: en su perfil el autor fija un shout propio, se marca "Fijado" y el muro se recarga', async ({ page }) => {
+  await conSesion(page);
+  await page.route(/\/api\/usuarios\/por-nombre\/[^/?]+(\?|$)/, (r) =>
+    r.fulfill(ok({ id: 1, userName: 'lector_tres', avatar: null, profileBackground: '', rango: null, pais: null, postsCount: 0, seguidoresCount: 0 })));
+  const yo = { userName: 'lector_tres', avatar: null };
+  const shout = (id: number, comentario: string, fijado: boolean) => ({
+    id, perfilId: 1, usuarioId: 1, comentario, url: '', tipo: 'Texto', mediaTitulo: null, mediaImagen: null, mediaDescripcion: null,
+    fijado, avatar: yo, perfil: yo, fechaRegistro: '2026-10-01T10:00:00Z',
+  });
+  let fijado = false;
+  let cargasDelMuro = 0;
+  await page.route(/\/api\/shouts\/usuarios\/\d+/, (r) => {
+    cargasDelMuro++;
+    const shouts = [shout(1, 'El más nuevo', false), shout(2, 'Mi shout importante', fijado)];
+    if (fijado) shouts.reverse();
+    return r.fulfill(ok({ shouts, pagination: { totalCount: 2, pageSize: 10, currentPage: 1, totalPages: 1 } }));
+  });
+  let pedido: URL | undefined;
+  await page.route(/\/api\/shouts\/\d+\/fijado/, (r) => {
+    pedido = new URL(r.request().url());
+    fijado = pedido.searchParams.get('valor') === 'true';
+    return r.fulfill(ok(fijado));
+  });
+
+  await page.goto('/perfil/lector_tres');
+  const importante = page.locator('app-shout-card', { hasText: 'Mi shout importante' });
+  await expect(importante).toBeVisible();
+  await expect(page.getByText('Fijado', { exact: true })).toHaveCount(0);
+
+  // Las acciones secundarias están en el menú "Más opciones" (⋮).
+  await importante.getByRole('button', { name: 'Más opciones del shout' }).click();
+  await page.getByRole('menuitem', { name: 'Fijar en mi perfil' }).click();
+  await expect.poll(() => pedido?.pathname).toMatch(/\/api\/shouts\/2\/fijado$/);
+  await expect.poll(() => cargasDelMuro).toBe(2);
+  // Recargado: el fijado va primero, con su marca y el botón para soltarlo.
+  await expect(page.locator('app-shout-card').first()).toContainText('Mi shout importante');
+  await expect(page.locator('app-shout-card').first().getByText('Fijado', { exact: true })).toBeVisible();
+  await page.locator('app-shout-card').first().getByRole('button', { name: 'Más opciones del shout' }).click();
+  await expect(page.getByRole('menuitem', { name: 'Desfijar de mi perfil' })).toBeVisible();
 });
 
 test('mensajes: Enter envía, Shift+Enter hace salto de línea y el mensaje aparece en la conversación', async ({ page }) => {
@@ -170,7 +213,7 @@ test('mensajes: Enter envía, Shift+Enter hace salto de línea y el mensaje apar
 test('cuenta: cambiar de país obliga a elegir un estado de ese país y guarda los datos', async ({ page }) => {
   await conSesion(page);
   await page.route('**/api/usuarios/me', (r) => r.fulfill(ok({
-    userName: 'lector_tres', email: 'lector@ejemplo.com', avatar: null, genero: 'Masculino', paisId: 1, estadoId: 10, fechaNacimiento: '5/3/1990',
+    userName: 'lector_tres', email: 'lector@ejemplo.com', avatar: null, genero: 'Masculino', paisId: 1, estadoId: 10, fechaNacimiento: '5/03/1990',
   })));
   await page.route('**/api/usuarios/me/perfil', (r) => r.fulfill(ok({ perfil: null, background: '' })));
   await page.route('**/api/paises', (r) => r.fulfill(ok([{ id: 1, nombre: 'Argentina', iso2: 'AR' }, { id: 2, nombre: 'Chile', iso2: 'CL' }])));
@@ -195,7 +238,7 @@ test('cuenta: cambiar de país obliga a elegir un estado de ese país y guarda l
   await elegir(page, combos.nth(1), 'Santiago');
   await formulario.getByRole('button', { name: /Guardar/ }).click();
 
-  await expect.poll(() => guardado).toEqual(expect.objectContaining({ paisId: 2, estadoId: 20, fechaNacimiento: '5/3/1990' }));
+  await expect.poll(() => guardado).toEqual(expect.objectContaining({ paisId: 2, estadoId: 20, fechaNacimiento: '5/03/1990' }));
 });
 
 test('comentarios: @menciones sugiere usuarios y Enter completa el nombre', async ({ page }) => {
@@ -391,7 +434,7 @@ test('mi: muestra el muro mezclado, carga más, comparte y sigue a una sugerenci
   await page.route(/\/api\/shouts\/\d+\/reshout(\?|$)/i, (r) => (acciones.push('reshout'), r.fulfill(ok({ total: 3, activo: true }))));
   await page.route(/\/api\/usuarios\/seguimientos/i, (r) => (acciones.push('seguir:' + r.request().postDataJSON().userName), r.fulfill(ok(1))));
 
-  await page.goto('/mi');
+  await page.goto('/mi?ver=siguiendo'); // /mi abre en "Más activos"; este muro mezclado es el de Siguiendo
   await expect(page.getByText('compartió')).toBeVisible();
   await expect(page.getByRole('link', { name: /Post de alguien que sigo/ })).toHaveAttribute('href', '/posts/linux/77/post-de-alguien-que-sigo');
   await expect(page.getByText('Hola desde el muro')).toBeVisible();

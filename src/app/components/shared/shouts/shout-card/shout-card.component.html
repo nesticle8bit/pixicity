@@ -22,6 +22,9 @@
         <a [routerLink]="['/perfil', perfil]" class="sc-bubble__user sc-bubble__user--perfil">{{ '@' }}{{ perfil }}</a>
         }
         @if (nsfw()) { <span class="sc-nsfw" matTooltip="Contenido para mayores de 18">NSFW</span> }
+        @if (enPerfil() && fijado()) {
+        <span class="sc-fijado"><i class="ti ti-pin-filled" aria-hidden="true"></i> Fijado</span>
+        }
       </span>
       <a class="sc-bubble__time" [routerLink]="enlace()"
         [matTooltip]="(shout().fechaRegistro | date: 'EEEE d \'de\' MMMM \'a las\' h:mm \', año\' y') ?? ''">
@@ -48,32 +51,49 @@
       [mediaImagen]="shout().mediaImagen" [mediaDescripcion]="shout().mediaDescripcion" [nsfw]="nsfw()" />
 
     <footer class="sc-bubble__footer">
-      @if (puedeEditar() && !editando()) {
-      <button type="button" class="sc-action sc-action--secundaria" (click)="empezarEdicion()" matTooltip="Puedes editarlo durante 15 minutos">
-        <i class="ti ti-pencil" aria-hidden="true"></i> Editar
-      </button>
-      } @else if (!esMio()) {
-      <button type="button" class="sc-action sc-action--secundaria" (click)="denunciar()" matTooltip="Denunciar"
-        aria-label="Denunciar shout">
-        <i class="ti ti-flag" aria-hidden="true"></i>
-      </button>
-      <button type="button" class="sc-action sc-action--secundaria" (click)="silenciarAutor()"
-        [matTooltip]="'Silenciar a @' + autor()" [attr.aria-label]="'Silenciar a ' + autor()">
-        <i class="ti ti-volume-off" aria-hidden="true"></i>
+      <!-- Acciones secundarias (editar, fijar, denunciar, moderar…) en un menú: el pie queda solo con las reacciones. -->
+      @if (!editando() && (puedeEditar() || !esMio() || puedeFijar() || puedeModerar())) {
+      <button type="button" class="sc-action sc-action--secundaria sc-action--menu" [matMenuTriggerFor]="menuShout"
+        [disabled]="procesando()" matTooltip="Más opciones" aria-label="Más opciones del shout">
+        <i class="ti ti-dots-vertical" aria-hidden="true"></i>
       </button>
       }
-      @if (puedeModerar()) {
-      <button type="button" class="sc-action sc-action--secundaria" [class.is-activo]="nsfw()" [attr.aria-pressed]="nsfw()"
-        [disabled]="procesando()" (click)="alternarNsfw()"
-        [matTooltip]="nsfw() ? 'Quitar la marca NSFW' : 'Marcar como NSFW (+18)'"
-        [attr.aria-label]="nsfw() ? 'Quitar la marca NSFW' : 'Marcar como NSFW'">
-        <i class="ti ti-eye-off" aria-hidden="true"></i>
-      </button>
-      <button type="button" class="sc-action sc-action--secundaria sc-action--eliminar" [disabled]="procesando()" (click)="eliminar()"
-        [matTooltip]="esMio() ? 'Eliminar' : 'Eliminar (moderación)'" aria-label="Eliminar shout">
-        <i class="ti ti-trash" aria-hidden="true"></i>
-      </button>
-      }
+      <mat-menu #menuShout="matMenu" xPosition="after" class="sc-menu">
+        @if (puedeEditar()) {
+        <button mat-menu-item type="button" (click)="empezarEdicion()">
+          <i class="ti ti-pencil" aria-hidden="true"></i>
+          <span>Editar <small class="sc-menu__nota">15 min</small></span>
+        </button>
+        }
+        @if (puedeFijar()) {
+        <button mat-menu-item type="button" (click)="alternarFijado()">
+          <i class="ti" [class.ti-pin]="!fijado()" [class.ti-pinned-off]="fijado()" aria-hidden="true"></i>
+          <span>{{ fijado() ? 'Desfijar de mi perfil' : 'Fijar en mi perfil' }}</span>
+        </button>
+        }
+        @if (puedeModerar()) {
+        <button mat-menu-item type="button" (click)="alternarNsfw()">
+          <i class="ti ti-eye-off" aria-hidden="true"></i>
+          <span>{{ nsfw() ? 'Quitar la marca NSFW' : 'Marcar como NSFW (+18)' }}</span>
+        </button>
+        }
+        @if (!esMio()) {
+        <button mat-menu-item type="button" (click)="denunciar()">
+          <i class="ti ti-flag" aria-hidden="true"></i>
+          <span>Denunciar</span>
+        </button>
+        <button mat-menu-item type="button" (click)="silenciarAutor()">
+          <i class="ti ti-volume-off" aria-hidden="true"></i>
+          <span>Silenciar a {{ '@' }}{{ autor() }}</span>
+        </button>
+        }
+        @if (puedeModerar()) {
+        <button mat-menu-item type="button" class="sc-menu__peligro" (click)="eliminar()">
+          <i class="ti ti-trash" aria-hidden="true"></i>
+          <span>{{ esMio() ? 'Eliminar' : 'Eliminar (moderación)' }}</span>
+        </button>
+        }
+      </mat-menu>
       <a class="sc-action" [routerLink]="enlace()" matTooltip="Comentar"
         [attr.aria-label]="'Comentar (' + (interacciones().comentarios ?? 0) + ' comentarios)'">
         <i class="ti ti-messages" aria-hidden="true"></i> {{ interacciones().comentarios ?? 0 }}

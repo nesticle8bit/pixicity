@@ -43,9 +43,16 @@
       <div class="ma-item__acciones">
         <button type="button" class="btn btn-sm btn-success" (click)="aceptar(a)"><i class="ti ti-check" aria-hidden="true"></i> Aceptar</button>
         <button type="button" class="btn btn-sm btn-outline-danger" (click)="rechazar(a)"><i class="ti ti-x" aria-hidden="true"></i> Rechazar</button>
+        @if (esAdmin) {
+          <button type="button" class="btn btn-sm btn-outline-secondary ms-auto" (click)="descartar(a)"
+            title="Cerrarla sin revertir nada y sin avisarle a nadie">
+            <i class="ti ti-archive" aria-hidden="true"></i> Descartar
+          </button>
+        }
       </div>
     } @else {
-      <div class="small" [class.text-success]="a.estado === Estado.Aceptada" [class.text-danger]="a.estado === Estado.Rechazada">
+      <div class="small" [class.text-success]="a.estado === Estado.Aceptada" [class.text-danger]="a.estado === Estado.Rechazada"
+        [class.text-muted]="a.estado === Estado.Descartada">
         {{a.estadoNombre}} por {{a.atendidaPor}} @if (a.respuesta) { — «{{a.respuesta}}» }
       </div>
     }

@@ -189,6 +189,13 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  fijarShout(shoutId: number, fijar: boolean): Observable<boolean> {
+    return this.http
+      .put<ApiResponse<boolean>>(`${environment.api}/api/shouts/${shoutId}/fijado`, {}, { params: { valor: fijar } })
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   fijarShoutComentario(comentarioId: number): Observable<boolean> {
     return this.http
       .put<ApiResponse<boolean>>(`${environment.api}/api/shouts/comentarios/${comentarioId}/fijado`, {})

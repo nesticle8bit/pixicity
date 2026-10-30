@@ -28,6 +28,7 @@ export abstract class IHttpPerfilService {
   abstract editarShout(shoutId: number, contenido: string): Observable<boolean>;
   /** Marca (o desmarca) un shout como +18: autor, moderadores y admins. Devuelve cómo quedó. */
   abstract marcarShoutNsfw(shoutId: number, nsfw: boolean): Observable<boolean>;
+  abstract fijarShout(shoutId: number, fijar: boolean): Observable<boolean>;
   abstract getShoutInteracciones(shoutId: number): Observable<ShoutInteracciones>;
   abstract alternarMeGustaShout(shoutId: number): Observable<ShoutReaccion>;
   abstract alternarFavoritoShout(shoutId: number): Observable<ShoutReaccion>;

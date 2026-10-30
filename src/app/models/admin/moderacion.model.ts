@@ -81,6 +81,8 @@ export enum EstadoApelacion {
   Pendiente = 0,
   Aceptada = 1,
   Rechazada = 2,
+  /** Cerrada por un admin sin respuesta ni aviso. */
+  Descartada = 3,
 }
 
 /** Apelación de una acción de moderación (ApelacionViewModel). */

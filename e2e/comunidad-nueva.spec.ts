@@ -64,7 +64,7 @@ async function simularMi(page: Page): Promise<URL[]> {
 
 test('/mi sin cuenta: muestra Recientes, invita a registrarse y un "me gusta" lleva al login', async ({ page }) => {
   const muro = await simularMi(page);
-  await page.goto('/mi');
+  await page.goto('/mi?ver=recientes'); // sin ?ver abre en "Más activos"
 
   await expect(page.getByRole('heading', { name: 'Shouts', level: 1 })).toBeVisible();
   await expect(page.getByText('Únete a la conversación.')).toBeVisible();
@@ -77,7 +77,7 @@ test('/mi sin cuenta: muestra Recientes, invita a registrarse y un "me gusta" ll
 
 test('un #hashtag del shout abre su página propia /hashtag/:tag con el muro filtrado', async ({ page }) => {
   const muro = await simularMi(page);
-  await page.goto('/mi');
+  await page.goto('/mi?ver=recientes');
 
   await page.locator('app-shout-card').getByRole('link', { name: '#rock' }).click();
   await expect(page).toHaveURL(/\/hashtag\/rock$/);

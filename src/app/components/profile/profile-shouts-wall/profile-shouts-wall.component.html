@@ -1,7 +1,7 @@
 @if (shoutsList.length > 0) {
   <div class="sh-wall">
     @for (shout of shoutsList; track shout.id) {
-      <app-shout-card [shout]="shout" />
+      <app-shout-card [shout]="shout" [enPerfil]="true" (fijadoCambio)="getShouts()" />
     }
   </div>
 } @else {

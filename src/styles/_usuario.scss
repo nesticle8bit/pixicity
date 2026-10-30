@@ -114,6 +114,14 @@
   display: block;
 }
 
+// Celular: con left: 570px el globo de ayuda (registro) quedaba fuera de la pantalla y ensanchaba la página.
+// Debajo del campo tampoco sirve: aparece y desaparece con el foco y mueve todo lo que sigue. Se oculta.
+@media (max-width: 767.98px) {
+  .help {
+    display: none;
+  }
+}
+
 .pos {
   &-relative {
     position: relative;

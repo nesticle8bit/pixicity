@@ -4,6 +4,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { finalize } from 'rxjs';
 import { Apelacion, EstadoApelacion } from 'src/app/models/admin/moderacion.model';
 import { IHttpModeracionService } from 'src/app/services/interfaces/httpModeracion.interface';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 
@@ -19,6 +20,8 @@ export class ModeracionApelacionesComponent implements OnInit {
   private notificationService = inject(NotificationService);
   private readonly destroyRef = inject(DestroyRef);
 
+  /** Descartar es solo para admins (el API lo vuelve a verificar). */
+  readonly esAdmin = inject(IHttpSecurityService).getCurrentUser()?.usuario?.rango === 'Administrador';
   readonly Estado = EstadoApelacion;
   readonly apelaciones = signal<Apelacion[]>([]);
   readonly total = signal(0);
@@ -67,6 +70,18 @@ export class ModeracionApelacionesComponent implements OnInit {
     const respuesta = await this.notificationService.prompt(`¿Por qué se mantiene la decisión? (le llega a ${a.userName})`);
     if (!respuesta?.trim()) return;
     this.resolver(a, false, respuesta);
+  }
+
+  async descartar(a: Apelacion): Promise<void> {
+    if (!await this.notificationService.confirm(
+      `¿Descartar la apelación de ${a.userName}? Se cierra sin revertir nada y sin avisarle a nadie.`)) return;
+    this.moderacionService
+      .descartarApelacion(a.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.notificationService.success('Apelación descartada', 'Moderación');
+        this.cargar();
+      });
   }
 
   private resolver(a: Apelacion, aceptar: boolean, respuesta: string): void {

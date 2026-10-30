@@ -66,7 +66,7 @@ test('lista con dos columnas y aplica búsqueda, estado, periodo y tipos', async
 
   // Dos columnas en escritorio; en móvil se apilan.
   await expect(page.locator('.mon-toolbar')).toBeVisible();
-  await expect(page.locator('.mon-grupo')).toHaveCount(5);
+  await expect(page.locator('.mon-grupo')).toHaveCount(6);
   await expect(page.locator('.mon-item--nueva')).toHaveCount(1);
   await page.screenshot({ path: info.outputPath('monitor.png'), fullPage: true });
 
@@ -101,6 +101,6 @@ test('lista con dos columnas y aplica búsqueda, estado, periodo y tipos', async
 
 test('la respuesta enlaza al comentario', async ({ page }) => {
   await abrirMonitor(page);
-  const enlace = page.locator('.mon-item').first().locator(`a[title="${POST.titulo}"]`);
+  const enlace = page.locator('.mon-item').first().getByRole('link', { name: POST.titulo });
   await expect(enlace).toHaveAttribute('href', /#comentario-2$/);
 });

@@ -266,15 +266,10 @@ $reshout: light-dark(#1e7f4f, #30c97d);
     }
   }
 
-  // Seis acciones en ~270 px: con el relleno de escritorio el "me gusta" quedaba solo en otra línea.
-  // Las secundarias (denunciar, silenciar…) van juntas a la izquierda; el hueco queda antes de las reacciones
-  // (con margin-right: auto en cada una se separaban entre sí y empujaban el "me gusta" a otra fila).
+  // Cinco acciones en ~270 px: con el relleno de escritorio el "me gusta" quedaba solo en otra línea.
+  // Las secundarias viven en el menú ⋮ (único botón secundario), que conserva su margin-right: auto a la izquierda.
   .sc-action {
     padding: 6px 5px;
     white-space: nowrap;
-
-    &--secundaria { margin-right: 0; }
   }
-
-  .sc-action--secundaria + .sc-action:not(.sc-action--secundaria) { margin-left: auto; }
 }

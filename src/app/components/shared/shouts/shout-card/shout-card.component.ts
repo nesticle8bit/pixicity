@@ -1,9 +1,10 @@
 import { IHttpSilenciosService } from 'src/app/services/interfaces/httpSilencios.interface';
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatTooltip } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -42,7 +43,8 @@ const SIN_INTERACCIONES: ShoutInteracciones = {
   templateUrl: './shout-card.component.html',
   styleUrl: './shout-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, UserPopoverDirective, UserAvatarComponent, MatTooltip, ShoutMediaComponent, DatePipe, TextoEnlazadoComponent, FormsModule],
+  imports: [RouterLink, UserPopoverDirective, UserAvatarComponent, MatTooltip, MatMenu, MatMenuItem, MatMenuTrigger, ShoutMediaComponent, DatePipe,
+    TextoEnlazadoComponent, FormsModule],
 })
 export class ShoutCardComponent {
   private readonly perfilService = inject(IHttpPerfilService);
@@ -60,6 +62,10 @@ export class ShoutCardComponent {
   readonly shout = input.required<ShoutViewModel>();
   /** En un reshout del muro de /mi: quién lo compartió. */
   readonly compartidoPor = input<{ userName: string; avatar: string | null } | null>(null);
+  /** En el muro del perfil: muestra la marca "Fijado" y deja al autor fijar sus shouts de su propio muro. */
+  readonly enPerfil = input(false);
+  /** Se fijó o se soltó: hay uno por perfil, así que el muro se recarga (el anterior se suelta solo). */
+  readonly fijadoCambio = output<boolean>();
 
   readonly interacciones = signal<ShoutInteracciones>(SIN_INTERACCIONES);
   readonly enviando = signal<Marca | null>(null);
@@ -76,6 +82,9 @@ export class ShoutCardComponent {
   /** Marca +18 mostrada: arranca con la del shout y cambia al marcarla desde acá. */
   readonly nsfw = signal(false);
   readonly procesando = signal(false);
+  readonly fijado = signal(false);
+  /** Solo los shouts propios en el muro propio (el API lo vuelve a verificar). */
+  readonly puedeFijar = computed(() => this.enPerfil() && this.esMio() && !this.muroAjeno());
 
   /** Texto mostrado: arranca con el del shout y cambia al guardar una edición. */
   readonly texto = signal('');
@@ -97,7 +106,28 @@ export class ShoutCardComponent {
       this.texto.set(s.comentario ?? '');
       this.editado.set(!!s.fechaActualiza);
       this.nsfw.set(!!s.nsfw);
+      this.fijado.set(!!s.fijado);
     });
+  }
+
+  alternarFijado(): void {
+    if (this.procesando()) return;
+    this.procesando.set(true);
+    this.perfilService
+      .fijarShout(this.shout().id, !this.fijado())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (quedo) => {
+          this.fijado.set(quedo);
+          this.procesando.set(false);
+          this.notificationService.success(quedo ? 'Shout fijado en tu perfil' : 'Shout desfijado', 'Shouts');
+          this.fijadoCambio.emit(quedo);
+        },
+        error: (e: unknown) => {
+          this.procesando.set(false);
+          this.notificationService.error(e instanceof Error ? e.message : 'No se pudo fijar el shout', 'Shouts');
+        },
+      });
   }
 
   async eliminar(): Promise<void> {
