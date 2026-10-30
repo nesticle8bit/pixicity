@@ -12,13 +12,13 @@ import { nombreDesdeSlug, tituloConParametro } from './services/shared/seo-title
 // `title` y `data` (descripcion/noIndex) son el SEO por defecto de cada ruta (SeoTitleStrategy); las vistas
 // con datos reales (post, perfil, shout, foto...) lo reemplazan con SEOService.setSEO al cargar.
 export const routes: Routes = [
-  { path: '', component: SectionHomeForumComponent, title: 'Taringa! - Inteligencia colectiva | Posts y comunidades' },
+  { path: '', component: SectionHomeForumComponent, title: 'Taringas! - Inteligencia colectiva | Posts y comunidades' },
   // Igual que el home, pero el listado muestra solo los posts de usuarios con rango Novato (el home, el resto).
   { path: 'novatos', component: SectionHomeForumComponent, title: 'Novatos | Posts de los nuevos usuarios', data: { novatos: true } },
   {
     path: 'registro',
     title: 'Crear cuenta',
-    data: { descripcion: 'Creá tu cuenta gratis en Taringa!: publicá posts, sumate a comunidades, compartí fotos y shouts y ganá puntos.' },
+    data: { descripcion: 'Creá tu cuenta gratis en Taringas!: publicá posts, sumate a comunidades, compartí fotos y shouts y ganá puntos.' },
     loadComponent: () =>
       import('./components/pages/register/register.component').then(
         (m) => m.RegisterComponent,
@@ -272,7 +272,7 @@ export const routes: Routes = [
   {
     path: 'contacto',
     title: 'Contacto',
-    data: { descripcion: 'Escribile al equipo de Taringa!: consultas, sugerencias, reportes de contenido o publicidad.' },
+    data: { descripcion: 'Escribile al equipo de Taringas!: consultas, sugerencias, reportes de contenido o publicidad.' },
     loadComponent: () =>
       import('./components/pages/page-contacto/page-contacto.component').then(
         (m) => m.PageContactoComponent,

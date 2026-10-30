@@ -9,7 +9,7 @@ import { IHttpComentariosPostService } from '../../../services/interfaces/httpCo
     selector: 'app-home-last-comments',
     template: `
     <app-recent-comments-list [comentarios]="comentarios" [cargando]="cargando"
-      mensajeVacio="Aún no se han realizado comentarios en Taringa!" (actualizar)="getUltimosComentarios()">
+      mensajeVacio="Aún no se han realizado comentarios en Taringas!" (actualizar)="getUltimosComentarios()">
     </app-recent-comments-list>
   `,
     imports: [RecentCommentsListComponent],

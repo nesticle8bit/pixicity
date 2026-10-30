@@ -224,7 +224,7 @@ export class PostsViewComponent implements OnInit {
                 image: imagen ? [imagen] : undefined,
                 author: {
                   '@type': 'Person',
-                  name: value.post.usuario?.userName ?? 'Taringa!',
+                  name: value.post.usuario?.userName ?? 'Taringas!',
                   url: value.post.usuario?.userName
                     ? `${environment.publicUrl}/perfil/${value.post.usuario.userName}`
                     : undefined,
@@ -281,7 +281,7 @@ export class PostsViewComponent implements OnInit {
         {
           '@type': 'ListItem',
           position: 1,
-          name: 'Taringa!',
+          name: 'Taringas!',
           item: `${environment.publicUrl}/`,
         },
         {

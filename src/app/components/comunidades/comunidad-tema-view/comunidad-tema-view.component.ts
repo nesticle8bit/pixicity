@@ -159,7 +159,7 @@ export class ComunidadTemaViewComponent implements OnInit {
             image: imagen || undefined,
             author: {
               '@type': 'Person',
-              name: tema.userName ?? 'Taringa!',
+              name: tema.userName ?? 'Taringas!',
             },
             publisher: { '@id': `${environment.publicUrl}/#organization` },
             mainEntityOfPage: { '@type': 'WebPage', '@id': `${environment.publicUrl}${this.documento.location.pathname}` },
@@ -172,7 +172,7 @@ export class ComunidadTemaViewComponent implements OnInit {
           }, {
             '@type': 'BreadcrumbList',
             itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${environment.publicUrl}/` },
+              { '@type': 'ListItem', position: 1, name: 'Taringas!', item: `${environment.publicUrl}/` },
               { '@type': 'ListItem', position: 2, name: 'Comunidades', item: `${environment.publicUrl}/comunidades` },
               {
                 '@type': 'ListItem',

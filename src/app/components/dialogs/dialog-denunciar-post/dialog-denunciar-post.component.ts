@@ -56,7 +56,7 @@ export class DialogDenunciarPostComponent implements OnInit {
     label: 'Post demasiado pobre / Crap'
   },{
     id: 11,
-    label: 'Taringa! no es un foro'
+    label: 'Taringas! no es un foro'
   },{
     id: 12,
     label: 'No cumple con el protocolo'

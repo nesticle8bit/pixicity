@@ -113,7 +113,7 @@ export class ComunidadViewComponent implements OnInit {
             }, {
               '@type': 'BreadcrumbList',
               itemListElement: [
-                { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${environment.publicUrl}/` },
+                { '@type': 'ListItem', position: 1, name: 'Taringas!', item: `${environment.publicUrl}/` },
                 { '@type': 'ListItem', position: 2, name: 'Comunidades', item: `${environment.publicUrl}/comunidades` },
                 {
                   '@type': 'ListItem',

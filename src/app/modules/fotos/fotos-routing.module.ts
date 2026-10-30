@@ -10,7 +10,7 @@ import { tituloConParametro } from '../../services/shared/seo-title.strategy';
 // Cargado de forma diferida bajo /fotos (ver app-routing.module.ts). El orden importa: las rutas fijas
 // ("crear", "actualizar/:id") van antes que ":userName".
 const routes: Routes = [
-  { path: '', component: FotosIndexComponent, data: { descripcion: 'Las últimas fotos que comparte la comunidad de Taringa!: imágenes, memes, capturas y más.' } },
+  { path: '', component: FotosIndexComponent, data: { descripcion: 'Las últimas fotos que comparte la comunidad de Taringas!: imágenes, memes, capturas y más.' } },
   { path: 'crear', component: FotoCreateComponent, canActivate: [AuthGuard], title: 'Subir foto', data: { noIndex: true } },
   { path: 'actualizar/:id', component: FotoCreateComponent, canActivate: [AuthGuard], title: 'Editar foto', data: { noIndex: true } },
   { path: ':userName', component: FotosIndexComponent, title: tituloConParametro('userName', (u) => `Fotos de @${u}`) },

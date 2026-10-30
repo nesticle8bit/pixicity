@@ -3,42 +3,42 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Taringa! - Inteligencia colectiva | Posts y comunidades</title>
+  <title>Taringas! - Inteligencia colectiva | Posts y comunidades</title>
 
   <!-- Descripción del sitio para Google (resultado de búsqueda) y redes. La portada la vuelve a fijar en
        SectionHomeForumComponent.setSeoHome(): mantener ambos textos iguales. -->
   <meta name="description"
-    content="Compartí y descubrí posts, guías, fotos, videos y memes en Taringa!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos." />
+    content="Compartí y descubrí posts, guías, fotos, videos y memes en Taringas!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-  <meta name="author" content="Taringa!" />
-  <meta name="application-name" content="Taringa!" />
-  <meta name="apple-mobile-web-app-title" content="Taringa!" />
+  <meta name="author" content="Taringas!" />
+  <meta name="application-name" content="Taringas!" />
+  <meta name="apple-mobile-web-app-title" content="Taringas!" />
   <meta name="format-detection" content="telephone=no" />
 
   <link rel="canonical" href="https://taringas.net/" />
 
   <!-- Open Graph (Facebook, WhatsApp, Telegram, Discord, LinkedIn) -->
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Taringa!" />
+  <meta property="og:site_name" content="Taringas!" />
   <meta property="og:locale" content="es_AR" />
   <meta property="og:url" content="https://taringas.net/" />
-  <meta property="og:title" content="Taringa! - Inteligencia colectiva | Posts y comunidades" />
+  <meta property="og:title" content="Taringas! - Inteligencia colectiva | Posts y comunidades" />
   <meta property="og:description"
-    content="Compartí y descubrí posts, guías, fotos, videos y memes en Taringa!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos." />
+    content="Compartí y descubrí posts, guías, fotos, videos y memes en Taringas!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos." />
   <meta property="og:image" content="https://taringas.net/assets/images/og-image.jpg" />
   <meta property="og:image:secure_url" content="https://taringas.net/assets/images/og-image.jpg" />
   <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Taringa! - Inteligencia colectiva" />
+  <meta property="og:image:alt" content="Taringas! - Inteligencia colectiva" />
 
   <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Taringa! - Inteligencia colectiva | Posts y comunidades" />
+  <meta name="twitter:title" content="Taringas! - Inteligencia colectiva | Posts y comunidades" />
   <meta name="twitter:description"
-    content="Compartí y descubrí posts, guías, fotos, videos y memes en Taringa!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos." />
+    content="Compartí y descubrí posts, guías, fotos, videos y memes en Taringas!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos." />
   <meta name="twitter:image" content="https://taringas.net/assets/images/og-image.jpg" />
-  <meta name="twitter:image:alt" content="Taringa! - Inteligencia colectiva" />
+  <meta name="twitter:image:alt" content="Taringas! - Inteligencia colectiva" />
 
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -62,7 +62,7 @@
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
 
-  <link rel="alternate" type="application/rss+xml" title="Taringa! - Posts recientes" href="/rss" />
+  <link rel="alternate" type="application/rss+xml" title="Taringas! - Posts recientes" href="/rss" />
 
   <!-- Fondo del header: en móvil es el LCP y, como es un background del CSS, el navegador lo descubría recién
        cuando Angular pintaba el header. -->
@@ -73,14 +73,77 @@
        para los tres pesos. Lato 400 es el texto de todo el sitio: se pide desde el principio. -->
   <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/google/lato-400-latin.woff2" crossorigin>
   <style>
-    @font-face{font-family:'Lato';font-style:normal;font-weight:300;font-display:swap;src:url(/assets/fonts/google/lato-300-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
-    @font-face{font-family:'Lato';font-style:normal;font-weight:300;font-display:swap;src:url(/assets/fonts/google/lato-300-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-    @font-face{font-family:'Lato';font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/google/lato-400-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
-    @font-face{font-family:'Lato';font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/google/lato-400-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-    @font-face{font-family:'Lato';font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/google/lato-700-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
-    @font-face{font-family:'Lato';font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/google/lato-700-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-    @font-face{font-family:'Roboto';font-style:normal;font-weight:300 500;font-display:swap;src:url(/assets/fonts/google/roboto-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
-    @font-face{font-family:'Roboto';font-style:normal;font-weight:300 500;font-display:swap;src:url(/assets/fonts/google/roboto-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+    @font-face {
+      font-family: 'Lato';
+      font-style: normal;
+      font-weight: 300;
+      font-display: swap;
+      src: url(/assets/fonts/google/lato-300-latin-ext.woff2) format('woff2');
+      unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF
+    }
+
+    @font-face {
+      font-family: 'Lato';
+      font-style: normal;
+      font-weight: 300;
+      font-display: swap;
+      src: url(/assets/fonts/google/lato-300-latin.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD
+    }
+
+    @font-face {
+      font-family: 'Lato';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(/assets/fonts/google/lato-400-latin-ext.woff2) format('woff2');
+      unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF
+    }
+
+    @font-face {
+      font-family: 'Lato';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(/assets/fonts/google/lato-400-latin.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD
+    }
+
+    @font-face {
+      font-family: 'Lato';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url(/assets/fonts/google/lato-700-latin-ext.woff2) format('woff2');
+      unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF
+    }
+
+    @font-face {
+      font-family: 'Lato';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url(/assets/fonts/google/lato-700-latin.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD
+    }
+
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 300 500;
+      font-display: swap;
+      src: url(/assets/fonts/google/roboto-latin-ext.woff2) format('woff2');
+      unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF
+    }
+
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 300 500;
+      font-display: swap;
+      src: url(/assets/fonts/google/roboto-latin.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD
+    }
   </style>
   <!-- Material Icons y Tabler se sirven localmente desde styles.scss, no desde CDN -->
   <script type="application/ld+json">
@@ -91,9 +154,9 @@
         "@type": "WebSite",
         "@id": "https://taringas.net/#website",
         "url": "https://taringas.net/",
-        "name": "Taringa!",
+        "name": "Taringas!",
         "alternateName": "Taringa - Inteligencia colectiva",
-        "description": "Compartí y descubrí posts, guías, fotos, videos y memes en Taringa!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos.",
+        "description": "Compartí y descubrí posts, guías, fotos, videos y memes en Taringas!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos.",
         "inLanguage": "es",
         "publisher": { "@id": "https://taringas.net/#organization" },
         "potentialAction": {
@@ -108,7 +171,7 @@
       {
         "@type": "Organization",
         "@id": "https://taringas.net/#organization",
-        "name": "Taringa!",
+        "name": "Taringas!",
         "url": "https://taringas.net/",
         "logo": {
           "@type": "ImageObject",
@@ -134,9 +197,6 @@
 
 <body>
   <app-root></app-root>
-
-  <script defer src="https://analytics.juliopoveda.com/script.js"
-    data-website-id="b8844752-4540-40ed-a927-e094b5fd5a3e"></script>
 </body>
 
 </html>

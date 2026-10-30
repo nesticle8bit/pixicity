@@ -57,7 +57,7 @@ export class DialogAfiliarseComponent implements OnInit {
       .subscribe((response) => {
         if (response) {
           this.formGroupAfiliacion.patchValue({
-            codigo: `<a href="${environment.publicUrl}/?ref=${response}" target="_blank" title="Taringa!"><img src="${environment.publicUrl}/assets/images/logo_ref.png"></a>`,
+            codigo: `<a href="${environment.publicUrl}/?ref=${response}" target="_blank" title="Taringas!"><img src="${environment.publicUrl}/assets/images/logo_ref.png"></a>`,
           });
         }
       });

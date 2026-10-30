@@ -24,9 +24,9 @@ import { ScriptsGlobalesService } from './services/shared/scripts-globales.servi
 /** Tarjeta social del sitio (1200x630) para páginas sin imagen propia. */
 const DEFAULT_OG_IMAGE = '/assets/images/og-image.jpg';
 /** Mismos textos que index.html: los usan las páginas sin título o descripción propios. */
-const DEFAULT_TITLE = 'Taringa! - Inteligencia colectiva | Posts y comunidades';
+const DEFAULT_TITLE = 'Taringas! - Inteligencia colectiva | Posts y comunidades';
 const DEFAULT_DESCRIPTION =
-  'Compartí y descubrí posts, guías, fotos, videos y memes en Taringa!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos.';
+  'Compartí y descubrí posts, guías, fotos, videos y memes en Taringas!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos.';
 
 @Component({
     selector: 'app-root',
@@ -99,7 +99,7 @@ export class AppComponent {
       this.meta.updateTag({ name: 'twitter:title', content: titulo });
       this.meta.updateTag({
         property: 'og:site_name',
-        content: 'Taringa! - Inteligencia colectiva',
+        content: 'Taringas! - Inteligencia colectiva',
       });
 
       const descripcion = value.description || DEFAULT_DESCRIPTION;
@@ -137,7 +137,7 @@ export class AppComponent {
       } else {
         this.meta.removeTag("property='og:image:secure_url'");
       }
-      const alt = value.imageURL ? titulo : 'Taringa! - Inteligencia colectiva';
+      const alt = value.imageURL ? titulo : 'Taringas! - Inteligencia colectiva';
       this.meta.updateTag({ property: 'og:image:alt', content: alt });
       this.meta.updateTag({ name: 'twitter:image:alt', content: alt });
       if (value.imageURL) {

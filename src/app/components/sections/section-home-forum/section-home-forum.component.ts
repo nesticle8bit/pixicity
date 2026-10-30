@@ -87,7 +87,7 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
     if (this.novatos) {
       this.seoService.setSEO({
         title: 'Novatos | Posts de los nuevos usuarios',
-        description: 'Los últimos posts de los usuarios novatos de Taringa!: lo que publican quienes recién se suman a la comunidad.',
+        description: 'Los últimos posts de los usuarios novatos de Taringas!: lo que publican quienes recién se suman a la comunidad.',
         tags: ['novatos', 'posts', 'taringa', 'comunidad'],
         type: 'website',
         imageURL: '',
@@ -97,9 +97,9 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
 
     this.seoService.setSEO({
       // Mismos textos que index.html (lo que Google muestra en el resultado de la portada).
-      title: 'Taringa! - Inteligencia colectiva | Posts y comunidades',
+      title: 'Taringas! - Inteligencia colectiva | Posts y comunidades',
       description:
-        'Compartí y descubrí posts, guías, fotos, videos y memes en Taringa!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos.',
+        'Compartí y descubrí posts, guías, fotos, videos y memes en Taringas!, la comunidad de inteligencia colectiva. Sumate gratis, debatí y ganá puntos.',
       tags: ['taringa', 'comunidad', 'posts', 'memes', 'foros'],
       // 'website' es el unico og:type valido para una portada.
       type: 'website',

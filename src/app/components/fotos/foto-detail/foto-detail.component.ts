@@ -115,7 +115,7 @@ export class FotoDetailComponent implements OnInit {
             }, {
               '@type': 'BreadcrumbList',
               itemListElement: [
-                { '@type': 'ListItem', position: 1, name: 'Taringa!', item: `${environment.publicUrl}/` },
+                { '@type': 'ListItem', position: 1, name: 'Taringas!', item: `${environment.publicUrl}/` },
                 { '@type': 'ListItem', position: 2, name: 'Fotos', item: `${environment.publicUrl}/fotos` },
                 {
                   '@type': 'ListItem',

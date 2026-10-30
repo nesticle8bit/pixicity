@@ -33,7 +33,7 @@ export class HomeDiscordComponent implements OnInit {
   readonly variante = input<'cuadrado' | 'horizontal'>('cuadrado');
   readonly mostrarTitulo = input(true);
 
-  readonly nombre = signal('Taringa! en Discord');
+  readonly nombre = signal('Taringas! en Discord');
   readonly enLinea = signal<number | null>(null);
   readonly avatares = signal<{ id: string; nombre: string; url: string }[]>([]);
   readonly invitacion = signal(INVITACION);
