@@ -92,6 +92,12 @@
       </div>
     </div>
 
+    @if (puedeSeguir) {
+      <div class="upop__follow">
+        <app-follow-button [userName]="datos.userName" [icon]="true" (followingChange)="alCambiarSeguimiento($event)" />
+      </div>
+    }
+
     <!-- Footer -->
     <div class="upop__footer">
       <span class="upop__since">
