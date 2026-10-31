@@ -13,7 +13,7 @@ import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { AdminResumen, CuentaAdminModel, PerfilUsuarioViewModel, UsuarioAdminViewModel, UsuarioListadoViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { AdminResumen, CuentaAdminModel, PerfilUsuarioViewModel, SesionActivaViewModel, UsuarioAdminViewModel, UsuarioListadoViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { enNavegador } from '../../shared/helpers/plataforma';
 @Injectable()
 export class HttpSecurityService implements IHttpSecurityService {
@@ -303,6 +303,33 @@ export class HttpSecurityService implements IHttpSecurityService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getMisSesiones(): Observable<SesionActivaViewModel[]> {
+    return this.http.get<ApiResponse<SesionActivaViewModel[]>>(`${environment.api}/api/usuarios/me/sesiones`).pipe(
+      map((r) => {
+        if (r.status === 200) return r.data ?? [];
+        throw new Error(r.errors?.join(', ') || 'No se pudieron cargar las sesiones');
+      }),
+    );
+  }
+
+  cerrarMiSesion(sessionId: number): Observable<boolean> {
+    return this.http.delete<ApiResponse<boolean>>(`${environment.api}/api/usuarios/me/sesiones/${sessionId}`).pipe(
+      map((r) => {
+        if (r.status === 200) return true;
+        throw new Error(r.errors?.join(', ') || 'No se pudo cerrar la sesión');
+      }),
+    );
+  }
+
+  cerrarOtrasSesiones(): Observable<number> {
+    return this.http.delete<ApiResponse<{ cerradas: number }>>(`${environment.api}/api/usuarios/me/sesiones`).pipe(
+      map((r) => {
+        if (r.status === 200) return r.data?.cerradas ?? 0;
+        throw new Error(r.errors?.join(', ') || 'No se pudieron cerrar las sesiones');
+      }),
+    );
+  }
+
   confirmarEmail(token: string): Observable<{ userName: string }> {
     return this.http
       .post<ApiResponse<{ userName: string }>>(`${environment.api}/api/auth/email/confirmacion`, { token })
@@ -387,7 +414,16 @@ export class HttpSecurityService implements IHttpSecurityService {
   }
 
   logout(): void {
+    const token = this.currentUserSubject.value?.token;
     localStorage.removeItem('taringas');
+
+    // Invalida en el servidor la sesión de este dispositivo (las demás siguen abiertas). Se borra el storage antes
+    // de enviar: así el JwtInterceptor no intenta renovar el token, y si falla da igual, el refresh ya no está acá.
+    if (token) {
+      this.http
+        .delete(`${environment.api}/api/auth/sesion`, { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) })
+        .subscribe({ error: () => undefined });
+    }
 
     this.router.navigateByUrl('');
     this.currentUserSubject.next(new JwtUserModel(undefined, ''));

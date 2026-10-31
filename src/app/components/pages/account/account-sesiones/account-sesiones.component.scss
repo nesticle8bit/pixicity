@@ -1,0 +1,130 @@
+$marca: light-dark(#006595, #1e99d3);
+$tenue: light-dark(#5d6b75, #aeaeae);
+$peligro: light-dark(#b3261e, #f2b8b5);
+
+.ses {
+  max-width: 640px;
+  padding: 16px 4px;
+}
+
+.ses__texto {
+  margin: 0 0 12px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: $tenue;
+}
+
+.ses__lista {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+}
+
+.ses__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid light-dark(#e3e9ed, #354652);
+  border-radius: 10px;
+
+  &--actual {
+    border-color: $marca;
+    background: light-dark(#f4f8fa, #1d343f);
+  }
+}
+
+.ses__icono {
+  flex-shrink: 0;
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  color: $marca;
+}
+
+.ses__info {
+  display: grid;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ses__nombre {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: light-dark(#26323a, #c7d2da);
+}
+
+.ses__badge {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: $marca;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: light-dark(#fff, #10222b);
+}
+
+.ses__detalle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  font-size: 0.78rem;
+  color: $tenue;
+  overflow-wrap: anywhere;
+}
+
+.ses__activa {
+  font-weight: 700;
+  color: light-dark(#1e7f4f, #96e6be);
+}
+
+%boton-peligro {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid $peligro;
+  border-radius: 8px;
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  color: $peligro;
+  cursor: pointer;
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+
+  &:hover:not(:disabled) { background: light-dark(#fdecea, #3a1f1d); }
+  &:disabled { opacity: 0.6; cursor: default; }
+  &:focus-visible { outline: 2px solid $peligro; outline-offset: 2px; }
+}
+
+.ses__cerrar {
+  @extend %boton-peligro;
+  flex-shrink: 0;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+}
+
+.ses__todas {
+  @extend %boton-peligro;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+}
+
+// En el celular el botón queda solo con el ícono (zona táctil de 40px).
+@media (max-width: 480px) {
+  .ses__item { padding: 10px; gap: 10px; }
+  .ses__cerrar {
+    min-width: 40px;
+    min-height: 40px;
+    justify-content: center;
+
+    span { display: none; }
+  }
+}

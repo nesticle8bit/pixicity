@@ -165,6 +165,21 @@ export interface OnlineUsersListViewModel {
   total: number;
 }
 
+/** GET /api/usuarios/me/sesiones: un dispositivo con la cuenta abierta. */
+export interface SesionActivaViewModel {
+  id: number;
+  navegador: string;
+  sistema: string;
+  tipo: 'movil' | 'tablet' | 'escritorio';
+  ip: string;
+  /** ISO2; null si no se conoce. */
+  pais: string | null;
+  ciudad: string | null;
+  inicio: string;
+  activo: string;
+  actual: boolean;
+}
+
 export interface BloqueoViewModel {
   id: number;
   bloqueadoId: number;

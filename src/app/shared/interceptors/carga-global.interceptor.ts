@@ -62,6 +62,9 @@ export const SIN_LOADER: RegExp[] = [
   // Confirmación de correo y contraseña: la página y el aviso muestran su propio estado.
   'auth/email(/confirmacion|/reenvio)?',
   'auth/password(/restablecimiento)?',
+  // Logout: sale en segundo plano mientras ya se navega al inicio. La lista de sesiones de /cuenta tiene su estado.
+  'auth/sesion',
+  `usuarios/me/sesiones(/${ID})?`,
   'auth/captcha',
   // /mi tiene sus propios indicadores (muro, resumen y sugerencias).
   'mi/.*',

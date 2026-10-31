@@ -98,6 +98,18 @@ describe('HttpSecurityService (sesión)', () => {
     expect(service.getCurrentUser().token).toBe('t9');
   });
 
+  it('logout cierra en el servidor solo la sesión de este dispositivo', () => {
+    service.logout();
+
+    const req = backend.expectOne((r) => r.url.endsWith('/api/auth/sesion'));
+    expect(req.request.method).toBe('DELETE');
+    expect(req.request.headers.get('Authorization')).toBe('Bearer t1');
+    req.flush({ status: 200, errors: [], data: true });
+
+    expect(localStorage.getItem(CLAVE)).toBeNull();
+    expect(service.getCurrentUser().token).toBe('');
+  });
+
   it('sin refresh token falla sin llamar al API', () => {
     guardar({ usuario: {}, token: 't1' });
     window.dispatchEvent(new StorageEvent('storage', { key: CLAVE }));

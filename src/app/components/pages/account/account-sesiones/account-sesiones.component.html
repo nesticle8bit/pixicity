@@ -1,0 +1,68 @@
+<section class="ses">
+  <p class="ses__texto">
+    Estos son los dispositivos donde tu cuenta está abierta. Si no reconoces alguno, ciérralo y cambia tu contraseña.
+  </p>
+
+  @if (error()) {
+    <div class="alert alert-danger" role="alert">{{ error() }}</div>
+  }
+
+  @if (sesiones() === undefined) {
+    <p class="ses__texto">Cargando…</p>
+  } @else {
+    <ul class="ses__lista">
+      @for (s of sesiones(); track s.id) {
+        <li class="ses__item" [class.ses__item--actual]="s.actual">
+          <mat-icon class="ses__icono" aria-hidden="true">{{ icono(s) }}</mat-icon>
+
+          <div class="ses__info">
+            <span class="ses__nombre">
+              {{ s.navegador }} en {{ s.sistema }}
+              @if (s.actual) {
+                <span class="ses__badge">Este dispositivo</span>
+              }
+            </span>
+
+            <span class="ses__detalle">
+              @if (s.pais) {
+                <addon-country-flag [iso2]="s.pais" [title]="lugar(s)" />
+              }
+              @if (lugar(s)) {
+                <span>{{ lugar(s) }}</span>
+                <span aria-hidden="true">·</span>
+              }
+              <span>IP {{ s.ip }}</span>
+            </span>
+
+            <span class="ses__detalle">
+              @if (activaAhora(s)) {
+                <span class="ses__activa">Activa ahora</span>
+              } @else {
+                <span>Último uso: {{ s.activo | timeAgo }}</span>
+              }
+              <span aria-hidden="true">·</span>
+              <span>Inició sesión {{ (s.inicio | timeAgo).toLowerCase() }}</span>
+            </span>
+          </div>
+
+          @if (!s.actual) {
+            <button type="button" class="ses__cerrar" (click)="cerrar(s)" [disabled]="cerrando() !== null"
+              [attr.aria-label]="'Cerrar la sesión de ' + s.navegador + ' en ' + s.sistema">
+              <mat-icon aria-hidden="true">logout</mat-icon>
+              <span>Cerrar</span>
+            </button>
+          }
+        </li>
+      } @empty {
+        <li class="ses__texto">No hay sesiones abiertas.</li>
+      }
+    </ul>
+
+    @if (hayOtras()) {
+      <button type="button" class="ses__todas" (click)="cerrarOtras()" [disabled]="cerrando() !== null">
+        <mat-icon aria-hidden="true">devices</mat-icon>
+        Cerrar sesión en todos los demás dispositivos
+      </button>
+    }
+  }
+</section>

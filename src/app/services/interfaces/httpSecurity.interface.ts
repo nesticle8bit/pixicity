@@ -5,7 +5,7 @@ import { UserModel } from 'src/app/models/security/user.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
-import { AdminResumen, CuentaAdminModel, PerfilUsuarioViewModel, UsuarioAdminViewModel, UsuarioListadoViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { AdminResumen, CuentaAdminModel, PerfilUsuarioViewModel, SesionActivaViewModel, UsuarioAdminViewModel, UsuarioListadoViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 @Injectable()
 export abstract class IHttpSecurityService {
   abstract getCurrentUser(): JwtUserModel;
@@ -16,6 +16,11 @@ export abstract class IHttpSecurityService {
   abstract getUserByUserName(userName: string): Observable<PerfilUsuarioViewModel>;
   abstract getSesiones(filtro?: AdminFiltro): Observable<PaginatedData<unknown>>;
   abstract deleteSessionById(sessionId: number): Observable<boolean>;
+  /** Dispositivos con la cuenta abierta (/cuenta → Sesiones activas). */
+  abstract getMisSesiones(): Observable<SesionActivaViewModel[]>;
+  abstract cerrarMiSesion(sessionId: number): Observable<boolean>;
+  /** Cierra todas menos la de este dispositivo; devuelve cuántas cerró. */
+  abstract cerrarOtrasSesiones(): Observable<number>;
   abstract setUserToLocalStorage(obj: any): any;
   abstract registerUser(user: UserModel, captcha?: string): Observable<number>;
   /** Clave pública del captcha del registro; null si el API no lo pide. Nunca falla. */
