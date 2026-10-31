@@ -13,6 +13,7 @@
         @for (categoria of categorias; track categoria.seo) {
           <a [routerLink]="['/comunidades']" [queryParams]="{ categoria: categoria.seo, page: null }"
             queryParamsHandling="merge" [class.listo]="categoria.seo === seleccionada" (click)="display = false">
+            <img src="/assets/images/categorias/{{categoria.icono || iconoPorDefecto}}" class="image-middle me-1" alt="" aria-hidden="true" loading="lazy"/>
             {{categoria.nombre}}
           </a>
         }

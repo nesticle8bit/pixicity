@@ -85,6 +85,8 @@
       <button type="button" class="tx-card__toggle" [attr.aria-expanded]="estaAbierta(cat)"
         [attr.aria-controls]="'tx-body-' + cat.id" (click)="alternar(cat)" [disabled]="buscando">
         <span class="tx-card__pos">{{ i + 1 }}</span>
+        <img class="tx-card__icono" [src]="'/assets/images/categorias/' + (cat.icono || iconoPorDefecto)" alt=""
+          aria-hidden="true" width="16" height="16" loading="lazy" />
         <span class="tx-card__name" [class.is-match]="coincide(cat.nombre)">{{ cat.nombre }}</span>
         <code class="tx-card__seo">/{{ cat.seo }}</code>
         <mat-icon class="tx-card__chev">expand_more</mat-icon>

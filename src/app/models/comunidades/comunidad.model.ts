@@ -14,6 +14,8 @@ export interface ComunidadCategoria {
   id: number;
   nombre: string;
   seo: string;
+  /** Archivo de /assets/images/categorias; null en las que aún no tienen. */
+  icono: string | null;
   orden: number;
   subCategorias: ComunidadSubCategoria[];
 }
@@ -32,6 +34,7 @@ export interface ComunidadCategoriaGuardar {
   id?: number;
   nombre: string;
   seo?: string;
+  icono?: string | null;
   orden: number;
 }
 
@@ -228,6 +231,7 @@ export interface TemaReciente {
   comunidadNombre: string | null;
   comunidadSlug: string | null;
   categoriaNombre: string | null;
+  categoriaIcono: string | null;
 }
 
 export interface ComentarioReciente {

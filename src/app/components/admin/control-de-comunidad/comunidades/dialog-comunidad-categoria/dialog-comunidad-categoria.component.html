@@ -8,6 +8,21 @@
         maxlength="60" placeholder="Ej.: Videojuegos" cdkFocusInitial />
     </div>
 
+    <div class="mb-3">
+      <label class="form-label">Ícono <small class="text-muted">(el mismo set que las categorías de posts)</small></label>
+      <app-select [items]="iconos" formControlName="icono">
+        <ng-template appSelectLabel let-item="item">
+          <img src="/assets/images/categorias/{{item}}" class="image-middle me-1" alt="" aria-hidden="true" loading="lazy">
+          {{item}}
+        </ng-template>
+
+        <ng-template appSelectOption let-item="item">
+          <img src="/assets/images/categorias/{{item}}" class="image-middle me-1" alt="" aria-hidden="true" loading="lazy">
+          {{item}}
+        </ng-template>
+      </app-select>
+    </div>
+
     <div class="mb-1">
       <label class="form-label" for="dialog-comunidad-categoria-seo">URL <small class="text-muted">(opcional)</small></label>
       <input id="dialog-comunidad-categoria-seo" type="text" class="form-control" formControlName="seo" maxlength="60"

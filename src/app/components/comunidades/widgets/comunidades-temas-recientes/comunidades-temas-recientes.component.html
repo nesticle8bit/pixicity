@@ -21,8 +21,9 @@
   <div class="row">
     <div class="col-12 col-sm-12 col-md-7">
       <a class="lp-link" [routerLink]="['/comunidades', tema.comunidadSlug, 'tema', tema.id, tema.url]">
-        <i class="ti ti-users-group lp-icono" [matTooltip]="tema.comunidadNombre + (tema.categoriaNombre ? ' · ' + tema.categoriaNombre : '')"
-          matTooltipPosition="left" aria-hidden="true"></i>
+        <img width="16" height="16" src="/assets/images/categorias/{{tema.categoriaIcono || iconoPorDefecto}}"
+          [matTooltip]="tema.comunidadNombre + (tema.categoriaNombre ? ' · ' + tema.categoriaNombre : '')"
+          matTooltipPosition="left" [alt]="tema.categoriaNombre ?? ''" loading="lazy" />
         <span class="lp-titulo" (mouseenter)="tituloSiCortado($event, tema.titulo)">{{tema.titulo}}</span>
       </a>
     </div>

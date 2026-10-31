@@ -6,6 +6,9 @@ import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunid
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MatButton } from '@angular/material/button';
+import { SelectAutocompleteComponent } from '../../../../shared/select-autocomplete/select-autocomplete.component';
+import { SelectLabelDirective, SelectOptionDirective } from '../../../../shared/select-autocomplete/select-template.directives';
+import { ICONOS_CATEGORIAS } from 'src/app/shared/helpers/iconos-categorias';
 
 @Component({
     selector: 'app-dialog-comunidad-categoria',
@@ -17,6 +20,9 @@ import { MatButton } from '@angular/material/button';
         ReactiveFormsModule,
         CdkScrollable,
         MatDialogContent,
+        SelectAutocompleteComponent,
+        SelectLabelDirective,
+        SelectOptionDirective,
         MatDialogActions,
         MatButton,
         MatDialogClose,
@@ -32,12 +38,14 @@ export class DialogComunidadCategoriaComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   public formGroup: FormGroup;
+  public iconos = ICONOS_CATEGORIAS;
 
   constructor() {
     this.formGroup = this.fb.group({
       id: [this.data?.id ?? 0],
       nombre: [this.data?.nombre, Validators.required],
       seo: [this.data?.seo],
+      icono: [this.data?.icono ?? null],
     });
   }
 

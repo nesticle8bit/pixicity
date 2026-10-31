@@ -187,6 +187,10 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
     text-align: center;
   }
 
+  &__icono {
+    flex: none;
+  }
+
   &__name {
     overflow: hidden;
     text-overflow: ellipsis;

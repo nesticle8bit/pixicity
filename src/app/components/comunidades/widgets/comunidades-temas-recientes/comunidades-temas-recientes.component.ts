@@ -11,6 +11,7 @@ import { CategoriesSelectorComponent } from '../../../sections/categories-select
 import { UserPopoverDirective } from '../../../../shared/directives/userPopover.directive';
 import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.component';
 import { TimeAgoPipe } from '../../../../shared/pipes/timeAgo.pipe';
+import { ICONO_CATEGORIA_POR_DEFECTO } from 'src/app/shared/helpers/iconos-categorias';
 
 /** Temas recientes de /comunidades con el mismo formato que los posts recientes del home. */
 @Component({
@@ -36,6 +37,7 @@ export class ComunidadesTemasRecientesComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private carga?: Subscription;
 
+  public readonly iconoPorDefecto = ICONO_CATEGORIA_POR_DEFECTO;
   public readonly pageSize = 30;
   public readonly filasEsqueleto = Array.from({ length: this.pageSize });
 

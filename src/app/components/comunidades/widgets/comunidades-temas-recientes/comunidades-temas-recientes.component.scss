@@ -43,15 +43,10 @@
   gap: 6px;
   max-width: 100%;
   vertical-align: middle;
-}
 
-// Ocupa lo mismo que el ícono de categoría de los posts (16 px)
-.lp-icono {
-  flex: none;
-  width: 16px;
-  font-size: 16px;
-  line-height: 1;
-  color: light-dark(#0B6EA5, #8ed2f2);
+  img {
+    flex: none;
+  }
 }
 
 .lp-titulo {

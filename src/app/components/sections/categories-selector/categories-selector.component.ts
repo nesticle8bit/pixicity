@@ -5,12 +5,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpParametrosService } from 'src/app/services/interfaces/httpParametros.interface';
 import { IHttpComunidadesService } from 'src/app/services/interfaces/httpComunidades.interface';
 import { RouterLink } from '@angular/router';
+import { ICONO_CATEGORIA_POR_DEFECTO } from 'src/app/shared/helpers/iconos-categorias';
 
-/** Una opción del menú: con ícono en posts, solo el nombre en comunidades. */
+/** Una opción del menú (categoría de posts o de comunidades). */
 interface OpcionCategoria {
   nombre: string;
   seo: string;
-  icono?: string;
+  icono?: string | null;
 }
 
 @Component({
@@ -31,6 +32,7 @@ export class CategoriesSelectorComponent implements OnInit {
   /** SEO de la categoría elegida (solo comunidades): se muestra en el botón. */
   @Input() seleccionada = '';
 
+  public readonly iconoPorDefecto = ICONO_CATEGORIA_POR_DEFECTO;
   public display: boolean = false;
   public categorias: OpcionCategoria[] = [];
 

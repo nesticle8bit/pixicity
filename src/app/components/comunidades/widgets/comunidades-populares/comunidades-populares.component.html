@@ -3,31 +3,35 @@
   <app-top-times-selector [selection]="periodo" (selectedDate)="cambiarPeriodo($event)"></app-top-times-selector>
 </h2>
 
-@if (temas.length < 1) {
+@if (comunidades.length < 1) {
   <section [attr.aria-busy]="loading">
     <div class="alert alert-warning">
-      😳 <strong>Aún no hay temas populares en las comunidades.</strong>
+      😳 <strong>Aún no hay comunidades populares.</strong>
     </div>
   </section>
 }
 
-@if (temas.length > 0) {
-  @for (tema of temas; track tema.id; let i = $index) {
+@if (comunidades.length > 0) {
+  @for (comunidad of comunidades; track comunidad.id; let i = $index) {
     <article class="list-posts--zebra" [ngClass]="{'opacity-50': loading}">
       <strong class="float-start rank" [class.gold]="i === 0" [class.silver]="i === 1"
         [class.bronze]="i === 2">{{i + 1}}</strong>
       <small>
-        <a [routerLink]="['/comunidades', tema.comunidadSlug, 'tema', tema.id, tema.url]">
-          <span class="ms-1" matTooltip="{{tema.titulo}} · {{tema.comunidadNombre}}">{{tema.titulo | truncate:[40]}}</span>
+        <a [routerLink]="['/comunidades', comunidad.nombreCorto]" [matTooltip]="comunidad.categoria" matTooltipPosition="left">
+          @if (comunidad.imagen) {
+            <img class="cp-miniatura" [src]="comunidad.imagen | thumb: 48" alt="" aria-hidden="true"
+              height="16" width="16" loading="lazy"/>
+          }
+          <span class="ms-1">{{comunidad.nombre | truncate:[40]}}</span>
         </a>
       </small>
-      <span class="float-end value" matTooltip="Votos" matTooltipPosition="left">
-        {{tema.valor}}
+      <span class="float-end value" matTooltip="Miembros" matTooltipPosition="left">
+        {{comunidad.valor}}
       </span>
     </article>
   }
   <div class="view-more-list">
-    <a [routerLink]="['/tops/temas']">
+    <a [routerLink]="['/tops/comunidades']">
       Ver más
     </a>
   </div>

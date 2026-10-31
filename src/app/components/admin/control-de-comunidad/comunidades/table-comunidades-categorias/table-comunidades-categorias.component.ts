@@ -13,6 +13,7 @@ import { DialogComunidadCategoriaComponent } from '../dialog-comunidad-categoria
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
+import { ICONO_CATEGORIA_POR_DEFECTO } from 'src/app/shared/helpers/iconos-categorias';
 
 /**
  * Taxonomía de comunidades: categorías y sub-categorías. El orden se cambia arrastrando; las sub-categorías se
@@ -154,6 +155,9 @@ export class TableComunidadesCategoriasComponent implements OnInit {
   }
 
   //  Categorías
+
+  /** Las categorías sin ícono se ven con el de por defecto (igual que en la portada). */
+  readonly iconoPorDefecto = ICONO_CATEGORIA_POR_DEFECTO;
 
   upsertCategoria(categoria?: ComunidadCategoriaAdmin): void {
     const dialogRef = this.dialog.open(DialogComunidadCategoriaComponent, {
