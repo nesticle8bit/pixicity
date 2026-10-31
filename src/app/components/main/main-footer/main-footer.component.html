@@ -50,3 +50,9 @@
     <br><br>
   </div>
 </footer>
+
+@if (mostrarIrArriba()) {
+<button type="button" class="ir-arriba" aria-label="Ir arriba" title="Ir arriba" (click)="goToHeaven()">
+  <i class="ti ti-arrow-up" aria-hidden="true"></i>
+</button>
+}

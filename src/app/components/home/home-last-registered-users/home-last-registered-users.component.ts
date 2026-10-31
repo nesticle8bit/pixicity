@@ -11,10 +11,17 @@ import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 
 /** Sin realtime (consumía bastante): la lista se actualiza al recargar el home. */
 @Component({
-    selector: 'app-home-last-registered-users',
-    templateUrl: './home-last-registered-users.component.html',
-    styleUrls: ['./home-last-registered-users.component.scss'],
-    imports: [MatTooltip, RouterLink, UserPopoverDirective, CountryFlagComponent, GenreIconComponent, TimeAgoPipe]
+  selector: 'app-home-last-registered-users',
+  templateUrl: './home-last-registered-users.component.html',
+  styleUrls: ['./home-last-registered-users.component.scss'],
+  imports: [
+    MatTooltip,
+    RouterLink,
+    UserPopoverDirective,
+    CountryFlagComponent,
+    GenreIconComponent,
+    TimeAgoPipe,
+  ],
 })
 export class HomeLastRegisteredUsersComponent implements OnInit {
   private securityService = inject(IHttpSecurityService);

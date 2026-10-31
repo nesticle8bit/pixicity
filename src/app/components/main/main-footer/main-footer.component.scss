@@ -1,0 +1,50 @@
+.ir-arriba {
+  position: fixed;
+  right: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  z-index: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 41%);
+  color: #fff;
+  font-size: 22px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 25%);
+  cursor: pointer;
+  animation: ir-arriba-entrar .2s ease-out;
+  transition: background-color .15s, transform .15s;
+
+  &:hover {
+    background: rgb(0 0 0 / 60%);
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid light-dark(#006595, #6cbcec);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    transition: none;
+  }
+}
+
+// En el celular, crear/editar post tiene su barra fija al pie: el botón la taparía.
+@media (max-width: 767.98px) {
+  :host-context(body:has(.cp-bar)) .ir-arriba {
+    display: none;
+  }
+}
+
+@keyframes ir-arriba-entrar {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
