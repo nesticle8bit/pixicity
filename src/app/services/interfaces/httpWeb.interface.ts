@@ -7,11 +7,17 @@ import { Observable } from 'rxjs';
 import { TopPostModel } from 'src/app/models/web/topPost.model';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
 import { AfiliacionModel } from 'src/app/models/general/afiliacion.model';
+import { TopsComunidades, TopsResumen, TopsTemas, TopsUsuarios } from 'src/app/models/web/tops.model';
 
 @Injectable()
 export abstract class IHttpWebService {
   abstract getTopUsers(): Observable<TopUserModel[]>;
   abstract getTopPosts(date: string): Observable<TopPostModel[]>;
+  /** Rankings de /tops; `date`: hoy, ayer, ultimos7dias, mes o all. */
+  abstract getTopsResumen(date: string): Observable<TopsResumen>;
+  abstract getTopComunidades(date: string, categoriaId?: number): Observable<TopsComunidades>;
+  abstract getTopTemas(date: string, categoriaId?: number): Observable<TopsTemas>;
+  abstract getTopUsuariosRankings(date: string): Observable<TopsUsuarios>;
   abstract getAfiliados(): Observable<AfiliacionModel[]>;
   abstract changeAfiliadoActive(obj: { id: number; activo: boolean }): Observable<boolean>;
   abstract hitAfiliado(codigo: string): Observable<string>;

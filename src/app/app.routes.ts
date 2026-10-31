@@ -195,6 +195,15 @@ export const routes: Routes = [
       ),
   },
   {
+    // Pestañas del submenú de tops: posts, comunidades, temas o usuarios.
+    path: 'tops/:seccion',
+    title: tituloConParametro('seccion', (s) => `Tops de ${s}`),
+    loadComponent: () =>
+      import('./components/pages/tops/tops.component').then(
+        (m) => m.TopsComponent,
+      ),
+  },
+  {
     path: 'usuarios',
     title: 'Usuarios',
     loadComponent: () =>

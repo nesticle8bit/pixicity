@@ -1,3 +1,4 @@
+import { TopsPosts } from 'src/app/models/web/tops.model';
 import { ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
 import { PostAdmin } from 'src/app/models/admin/filas-admin.model';
 import { AdminFiltro } from 'src/app/models/admin/admin-filtro.model';
@@ -43,7 +44,7 @@ export abstract class IHttpPostsService {
   abstract buscarPosts(filtro: BusquedaPostsFiltro): Observable<BusquedaPostsResultado>;
   /** Shouts que coinciden ("#tag" busca el hashtag). Nunca falla: ante un error devuelve vacío. */
   abstract buscarShouts(q: string, cantidad?: number): Observable<{ shouts: ShoutViewModel[]; total: number }>;
-  abstract getTopPosts(date: string, categoriaId?: number): Observable<PostViewModel[]>;
+  abstract getTopPosts(date: string, categoriaId?: number): Observable<TopsPosts>;
   abstract seguirPost(postId: number): Observable<boolean>;
   abstract getCloudTags(): Observable<CloudTagViewModel[]>;
   abstract getBorradores(search: string, categoriaId: number): Observable<PaginatedWithCategorias<BorradorViewModel>>;

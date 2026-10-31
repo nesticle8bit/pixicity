@@ -3,209 +3,163 @@
     <div class="row">
       <div class="col-12 col-sm-12 col-md-9">
         <div class="row">
-          <div class="col-12 col-sm-12 col-md-6">
-            <div class="card tops-container mb-3">
-              <div class="card-header">
-                <h2>Top post con más puntos</h2>
-                <i class="icon moneda float-end"></i>
-              </div>
-
-              <div class="card-body">
-                @if (topPosts?.postsConMasPuntos?.length > 0) {
-                  @for (post of topPosts?.postsConMasPuntos; track post; let i = $index) {
-                    <article class="list-posts--zebra"
-                      >
-                      <strong class="float-start">
-                        {{i+1}}
-                      </strong>
-                      <div class="ms-2">
-                        <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
-                          matTooltip="{{post.titulo}}" aria-label="{{post.titulo}}">
-                          <img src="/assets/images/categorias/{{post.categoria.icono}}"
-                            matTooltip="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
-                            {{post.titulo | truncate:[65]}}
-                          </a>
-                        </div>
-                      </article>
-                    }
-                  }
-
-                  @if (topPosts?.postsConMasPuntos?.length < 1) {
-                    <div class="alert alert-warning m-2">
-                      😶‍🌫️ <strong>No hay nada por aquí</strong>
-                    </div>
-                  }
-                </div>
-              </div>
-
-              <div class="card tops-container mb-3">
-                <div class="card-header">
-                  <h2>Top post más comentarios</h2>
-                  <i class="i comentarios float-end"></i>
-                </div>
-
-                <div class="card-body">
-                  @if (topPosts?.postsConMasComentarios?.length > 0) {
-                    @for (post of topPosts?.postsConMasComentarios; track post; let i = $index) {
-                      <article class="list-posts--zebra"
-                        >
-                        <strong class="float-start">
-                          {{i+1}}
-                        </strong>
-                        <div class="ms-2">
-                          <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
-                            matTooltip="{{post.titulo}}" aria-label="{{post.titulo}}">
-                            <img src="/assets/images/categorias/{{post.categoria.icono}}"
-                              matTooltip="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
-                              {{post.titulo | truncate:[65]}}
-                            </a>
-                          </div>
-                        </article>
-                      }
-                    }
-
-                    @if (topPosts?.postsConMasComentarios?.length < 1) {
-                      <div class="alert alert-warning m-2"
-                        >
-                        😶‍🌫️ <strong>No hay nada por aquí</strong>
-                      </div>
-                    }
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12 col-sm-12 col-md-6">
+          @for (columna of columnas; track $index) {
+            <div class="col-12 col-sm-12 col-md-6">
+              @for (tarjeta of columna; track tarjeta.titulo) {
                 <div class="card tops-container mb-3">
                   <div class="card-header">
-                    <h2>Top post más favoritos</h2>
-                    <i class="i estrella-plus float-end"></i>
+                    <h2>{{tarjeta.titulo}}</h2>
+                    <i class="{{tarjeta.icono}} float-end" aria-hidden="true"></i>
                   </div>
 
                   <div class="card-body">
-                    @if (topPosts?.postsConMasFavoritos?.length > 0) {
-                      @for (post of topPosts?.postsConMasFavoritos; track post; let i = $index) {
-                        <article class="list-posts--zebra"
-                          >
-                          <strong class="float-start">
-                            {{i+1}}
-                          </strong>
-                          <div class="ms-2">
-                            <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
-                              matTooltip="{{post.titulo}}" aria-label="{{post.titulo}}">
-                              <img src="/assets/images/categorias/{{post.categoria.icono}}"
-                                matTooltip="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
-                                {{post.titulo | truncate:[65]}}
+                    @switch (tarjeta.tipo) {
+                      @case ('post') {
+                        @for (item of tarjeta.items; track item.id; let i = $index) {
+                          <article class="list-posts--zebra">
+                            <strong class="float-start">{{i+1}}</strong>
+                            <div class="ms-2">
+                              <a [routerLink]="['/posts/' + item.categoria.seo + '/' + item.id + '/' + item.url]"
+                                matTooltip="{{item.titulo}}" aria-label="{{item.titulo}}">
+                                <img src="/assets/images/categorias/{{item.categoria.icono}}"
+                                  matTooltip="{{item.categoria.nombre}}" alt="{{item.categoria.nombre}}" loading="lazy"/>
+                                {{item.titulo | truncate:[65]}}
                               </a>
                             </div>
                           </article>
                         }
                       }
-
-                      @if (topPosts?.postsConMasFavoritos?.length < 1) {
-                        <div class="alert alert-warning m-2">
-                          😶‍🌫️ <strong>No hay nada por aquí</strong>
-                        </div>
-                      }
-                    </div>
-                  </div>
-
-                  <div class="card tops-container mb-3">
-                    <div class="card-header">
-                      <h2>Top post con más seguidores</h2>
-                      <i class="i personas float-end"></i>
-                    </div>
-
-                    <div class="card-body">
-                      @if (topPosts?.postsConMasSeguidores?.length > 0) {
-                        @for (post of topPosts?.postsConMasSeguidores; track post; let i = $index) {
-                          <article class="list-posts--zebra"
-                            >
-                            <strong class="float-start">
-                              {{i+1}}
-                            </strong>
+                      @case ('comunidad') {
+                        @for (item of tarjeta.items; track item.id; let i = $index) {
+                          <article class="list-posts--zebra">
+                            <strong class="float-start">{{i+1}}</strong>
+                            <span class="float-end tops-valor">{{item.valor}}</span>
                             <div class="ms-2">
-                              <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
-                                matTooltip="{{post.titulo}}" aria-label="{{post.titulo}}">
-                                <img src="/assets/images/categorias/{{post.categoria.icono}}"
-                                  matTooltip="{{post.categoria.nombre}}" alt="{{post.categoria.nombre}}" loading="lazy"/>
-                                  {{post.titulo | truncate:[65]}}
-                                </a>
-                              </div>
-                            </article>
-                          }
+                              <a [routerLink]="['/comunidades', item.nombreCorto]" [matTooltip]="item.categoria"
+                                [attr.aria-label]="item.nombre">
+                                @if (item.imagen) {
+                                  <img class="tops-miniatura" [src]="item.imagen | thumb: 48" alt="" aria-hidden="true"
+                                    height="16" width="16" loading="lazy"/>
+                                }
+                                {{item.nombre | truncate:[55]}}
+                              </a>
+                            </div>
+                          </article>
                         }
+                      }
+                      @case ('tema') {
+                        @for (item of tarjeta.items; track item.id; let i = $index) {
+                          <article class="list-posts--zebra">
+                            <strong class="float-start">{{i+1}}</strong>
+                            <span class="float-end tops-valor">{{item.valor}}</span>
+                            <div class="ms-2">
+                              <a [routerLink]="['/comunidades', item.comunidadSlug, 'tema', item.id, item.url]"
+                                [matTooltip]="item.titulo + ' · ' + item.comunidadNombre" [attr.aria-label]="item.titulo">
+                                {{item.titulo | truncate:[55]}}
+                              </a>
+                            </div>
+                          </article>
+                        }
+                      }
+                      @case ('usuario') {
+                        @for (item of tarjeta.items; track item.id; let i = $index) {
+                          <article class="list-posts--zebra">
+                            <strong class="float-start">{{i+1}}</strong>
+                            <span class="float-end tops-valor">{{item.valor}}</span>
+                            <div class="ms-2">
+                              <app-user-avatar class="tops-miniatura" [avatar]="item.avatar" [userName]="item.userName"
+                                [height]="16" [width]="16" />
+                              <a [routerLink]="['/perfil/' + item.userName]" [appUserPopover]="item.userName">
+                                {{item.userName}}
+                              </a>
+                            </div>
+                          </article>
+                        }
+                      }
+                    }
 
-                        @if (topPosts?.postsConMasSeguidores?.length < 1) {
-                          <div class="alert alert-warning m-2"
-                            >
-                            😶‍🌫️ <strong>No hay nada por aquí</strong>
-                          </div>
-                        }
+                    @if (tarjeta.items?.length === 0) {
+                      <div class="alert alert-warning m-2">
+                        😶‍🌫️ <strong>No hay nada por aquí</strong>
                       </div>
-                    </div>
+                    }
                   </div>
                 </div>
-              </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
 
-              <div class="col-12 col-sm-12 col-md-3 dotted-border--left">
-                <h2 class="main-title my-2">
-                  <span>Filtros</span>
-                </h2>
+      <div class="col-12 col-sm-12 col-md-3 dotted-border--left">
+        <h2 class="main-title my-2">
+          <span>Filtros</span>
+        </h2>
 
-                <section class="mb-3">
-                  <label class="control-label">
-                    <span class="required"></span> Categoría
-                  </label>
+        @if (filtroCategoria === 'posts') {
+          <section class="mb-3">
+            <label class="control-label">
+              <span class="required"></span> Categoría
+            </label>
 
-                  <app-select [items]="categorias" bindLabel="nombre" bindValue="id" formControlName="categoria"
-                    (change)="getTopPosts(date)">
-                    <ng-template appSelectLabel let-item="item">
-                      <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
-                        [src]="'/assets/images/categorias/' + item?.icono" alt="" aria-hidden="true"loading="lazy"/>
-                        {{item.nombre}}
-                      </ng-template>
+            <app-select [items]="categorias" bindLabel="nombre" bindValue="id" formControlName="categoria"
+              (change)="cargar()">
+              <ng-template appSelectLabel let-item="item">
+                <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
+                  [src]="'/assets/images/categorias/' + item?.icono" alt="" aria-hidden="true" loading="lazy"/>
+                {{item.nombre}}
+              </ng-template>
 
-                      <ng-template appSelectOption let-item="item" let-index="index">
-                        <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
-                          [src]="'/assets/images/categorias/' + item?.icono" alt="" aria-hidden="true"loading="lazy"/>
-                          {{item.nombre}}
-                        </ng-template>
-                      </app-select>
-                    </section>
+              <ng-template appSelectOption let-item="item" let-index="index">
+                <img class="image-middle" style="margin-right: 2px;" height="15" width="15"
+                  [src]="'/assets/images/categorias/' + item?.icono" alt="" aria-hidden="true" loading="lazy"/>
+                {{item.nombre}}
+              </ng-template>
+            </app-select>
+          </section>
+        } @else if (filtroCategoria === 'comunidades') {
+          <section class="mb-3">
+            <label class="control-label">
+              <span class="required"></span> Categoría
+            </label>
 
-                    <section class="mb-3">
-                      <label class="control-label">
-                        <span class="required"></span> Periodo
-                      </label>
+            <app-select [items]="categoriasComunidad" bindLabel="nombre" bindValue="id" formControlName="categoria"
+              (change)="cargar()" />
+          </section>
+        }
 
-                      <br>
+        <section class="mb-3">
+          <label class="control-label">
+            <span class="required"></span> Periodo
+          </label>
 
-                        <mat-radio-group class="mt-1" color="primary" formControlName="date">
-                          <mat-radio-button class="d-block my-3" value="ayer" (click)="getTopPosts('ayer')">
-                            Ayer
-                          </mat-radio-button>
+          <br>
 
-                          <mat-radio-button class="d-block my-3" value="hoy" (click)="getTopPosts('hoy')">
-                            Hoy
-                          </mat-radio-button>
+          <mat-radio-group class="mt-1" color="primary" formControlName="date" (change)="cargar()">
+            <mat-radio-button class="d-block my-3" value="ayer">
+              Ayer
+            </mat-radio-button>
 
-                          <mat-radio-button class="d-block my-3" value="ultimos7dias"
-                            (click)="getTopPosts('ultimos7dias')">
-                            Últimos 7 días
-                          </mat-radio-button>
+            <mat-radio-button class="d-block my-3" value="hoy">
+              Hoy
+            </mat-radio-button>
 
-                          <mat-radio-button class="d-block my-3" value="mes" (click)="getTopPosts('mes')">
-                            Del mes
-                          </mat-radio-button>
+            <mat-radio-button class="d-block my-3" value="ultimos7dias">
+              Últimos 7 días
+            </mat-radio-button>
 
-                          <mat-radio-button class="d-block my-3" value="all" (click)="getTopPosts('all')">
-                            Todos los tiempos
-                          </mat-radio-button>
-                        </mat-radio-group>
-                      </section>
+            <mat-radio-button class="d-block my-3" value="mes">
+              Del mes
+            </mat-radio-button>
 
-                      <app-anuncio class="my-3" ubicacion="paginas-lateral" encabezado />
-                    </div>
-                  </div>
-                </div>
-              </form>
+            <mat-radio-button class="d-block my-3" value="all">
+              Todos los tiempos
+            </mat-radio-button>
+          </mat-radio-group>
+        </section>
+
+        <app-anuncio class="my-3" ubicacion="paginas-lateral" encabezado />
+      </div>
+    </div>
+  </div>
+</form>

@@ -40,6 +40,36 @@
           </a>
         </li>
       </ul>
+      } @else if (seccion === 'tops') {
+      <!-- Submenú de los tops -->
+      <ul class="list-unstyled list-inline mb-0 py-2">
+        <li class="list-inline-item sub-menu--item" routerLinkActive="sub-menu--item--active"
+          [routerLinkActiveOptions]="{exact: true}">
+          <a [routerLink]="['/tops']">
+            <span>Inicio</span>
+          </a>
+        </li>
+        <li class="list-inline-item sub-menu--item" routerLinkActive="sub-menu--item--active">
+          <a [routerLink]="['/tops/posts']">
+            <span>Posts</span>
+          </a>
+        </li>
+        <li class="list-inline-item sub-menu--item" routerLinkActive="sub-menu--item--active">
+          <a [routerLink]="['/tops/comunidades']">
+            <span>Comunidades</span>
+          </a>
+        </li>
+        <li class="list-inline-item sub-menu--item" routerLinkActive="sub-menu--item--active">
+          <a [routerLink]="['/tops/temas']">
+            <span>Temas</span>
+          </a>
+        </li>
+        <li class="list-inline-item sub-menu--item" routerLinkActive="sub-menu--item--active">
+          <a [routerLink]="['/tops/usuarios']">
+            <span>Usuarios</span>
+          </a>
+        </li>
+      </ul>
       } @else {
       <!-- Submenú general -->
       <ul class="list-unstyled list-inline mb-0 py-2">

@@ -1,3 +1,4 @@
+import { TopsPosts } from 'src/app/models/web/tops.model';
 import { ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
 import { PostAdmin } from 'src/app/models/admin/filas-admin.model';
 import { AdminFiltro, adminParams } from 'src/app/models/admin/admin-filtro.model';
@@ -423,7 +424,7 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getTopPosts(date: string, categoriaId?: number): Observable<PostViewModel[]> {
+  getTopPosts(date: string, categoriaId?: number): Observable<TopsPosts> {
     let search = '';
 
     if (categoriaId) {
@@ -431,7 +432,7 @@ export class HttpPostsService implements IHttpPostsService {
     }
 
     return this.http
-      .get<ApiResponse<PostViewModel[]>>(
+      .get<ApiResponse<TopsPosts>>(
         `${environment.api}/api/posts/top?date=${date}${search}`,
       )
       .pipe(

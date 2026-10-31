@@ -14,6 +14,7 @@ import { NotificationService } from '../shared/notification.service';
 import { TopUserModel } from 'src/app/models/web/topUser.model';
 import { TopPostModel } from 'src/app/models/web/topPost.model';
 import { AfiliacionModel } from 'src/app/models/general/afiliacion.model';
+import { TopsComunidades, TopsResumen, TopsTemas, TopsUsuarios } from 'src/app/models/web/tops.model';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
 
 
@@ -45,6 +46,40 @@ export class HttpWebService implements IHttpWebService {
   getTopPosts(date: string): Observable<TopPostModel[]> {
     return this.http
       .get<ApiResponse<TopPostModel[]>>(`${environment.api}/api/tops/posts?date=${date}`)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) {
+            return response.data!;
+          } else {
+            this.notificationService.error(response.errors.join(', '), 'Error');
+            throw new Error(response.errors?.join(', ') ?? 'Error');
+          }
+        }),
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getTopsResumen(date: string): Observable<TopsResumen> {
+    return this.getTops<TopsResumen>('resumen', date);
+  }
+
+  getTopComunidades(date: string, categoriaId?: number): Observable<TopsComunidades> {
+    return this.getTops<TopsComunidades>('comunidades', date, categoriaId);
+  }
+
+  getTopTemas(date: string, categoriaId?: number): Observable<TopsTemas> {
+    return this.getTops<TopsTemas>('temas', date, categoriaId);
+  }
+
+  getTopUsuariosRankings(date: string): Observable<TopsUsuarios> {
+    return this.getTops<TopsUsuarios>('usuarios/rankings', date);
+  }
+
+  private getTops<T>(ruta: string, date: string, categoriaId?: number): Observable<T> {
+    const categoria = categoriaId ? `&categoria=${categoriaId}` : '';
+
+    return this.http
+      .get<ApiResponse<T>>(`${environment.api}/api/tops/${ruta}?date=${date}${categoria}`)
       .pipe(
         map((response) => {
           if (response.status === 200) {

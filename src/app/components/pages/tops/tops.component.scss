@@ -1,0 +1,20 @@
+// Ícono tabler en la cabecera (las de posts usan los sprites de icons.scss).
+.tops-container .card-header .ti {
+  color: light-dark(#b59130, #dbc076);
+  font-size: 17px;
+  line-height: 18px;
+}
+
+.tops-valor {
+  margin-left: 6px;
+  font-weight: 700;
+  color: light-dark(#69900f, #d2f289);
+}
+
+.tops-miniatura {
+  display: inline-block;
+  margin-right: 3px;
+  vertical-align: text-bottom;
+  border-radius: 2px;
+  object-fit: cover;
+}

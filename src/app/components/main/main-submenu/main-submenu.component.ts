@@ -24,7 +24,7 @@ export class MainSubmenuComponent implements OnInit {
   public display!: DisplayComponentModel;
 
   /** Sección activa: define qué items del submenú se muestran */
-  public seccion: 'comunidades' | 'general' = 'general';
+  public seccion: 'comunidades' | 'tops' | 'general' = 'general';
 
   constructor() {
     this.currentUser = this.securityService.getCurrentUser();
@@ -54,6 +54,12 @@ export class MainSubmenuComponent implements OnInit {
   }
 
   private setSeccion(url: string): void {
-    this.seccion = url.startsWith('/comunidades') ? 'comunidades' : 'general';
+    if (url.startsWith('/comunidades')) {
+      this.seccion = 'comunidades';
+    } else if (url === '/tops' || url.startsWith('/tops/') || url.startsWith('/tops?')) {
+      this.seccion = 'tops';
+    } else {
+      this.seccion = 'general';
+    }
   }
 }
