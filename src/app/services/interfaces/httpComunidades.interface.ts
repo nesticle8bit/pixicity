@@ -71,7 +71,7 @@ export abstract class IHttpComunidadesService {
   abstract getComentariosRecientes(comunidadId: number, count?: number): Observable<ComentarioReciente[]>;
 
   // Widgets globales (portada)
-  abstract getTemasRecientes(count?: number): Observable<TemaReciente[]>;
+  abstract getTemasRecientes(page: number, pageCount: number, categoria?: string): Observable<PaginatedData<TemaReciente>>;
   abstract getComentariosRecientesGlobal(count?: number): Observable<ComentarioReciente[]>;
   abstract getTopComunidades(count?: number): Observable<ComunidadCard[]>;
   abstract getTopTemasGlobal(periodo?: string, count?: number): Observable<TemaTopGlobal[]>;

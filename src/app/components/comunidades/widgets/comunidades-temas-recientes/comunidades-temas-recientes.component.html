@@ -1,36 +1,69 @@
-<h2 class="main-title">
+<h2 class="main-title" style="margin-bottom: 11px">
   <span>Temas recientes</span>
+  <app-categories-selector tipo="comunidades" [seleccionada]="categoria"></app-categories-selector>
 </h2>
 
-@if (loading) {
-  <div class="text-center my-4"><app-cargando /></div>
+@if (!cargado) {
+<!-- Mismo alto que la lista mientras llega, para no empujar lo de abajo. -->
+@for (fila of filasEsqueleto; track $index) {
+<div class="lista-posts lp-esqueleto" aria-hidden="true"><span></span></div>
+}
 }
 
-@if (!loading && temas.length === 0) {
-  <div class="nada-amarillo">Aún no se han creado temas en las comunidades.</div>
+@if (cargado && temas.length === 0) {
+<div class="nada-amarillo">
+  {{categoria ? 'Aún no hay temas en las comunidades de esta categoría.' : 'Aún no se han creado temas en las comunidades.'}}
+</div>
 }
 
-@if (!loading && temas.length > 0) {
-  <div class="ctr-list">
-    @for (tema of temas; track tema.id) {
-      <article class="ctr-item">
-        <a class="ctr-avatar" [routerLink]="['/perfil', tema.userName]" [appUserPopover]="tema.userName">
-          <app-user-avatar [avatar]="tema.avatar" [userName]="tema.userName" [width]="40" [height]="40"></app-user-avatar>
-        </a>
-        <div class="ctr-body">
-          <a class="ctr-title" [routerLink]="['/comunidades', tema.comunidadSlug, 'tema', tema.id, tema.url]">
-            {{tema.titulo}}
-          </a>
-          <div class="ctr-meta">
-            <a class="ctr-com" [routerLink]="['/comunidades', tema.comunidadSlug]">
-              <i class="ti ti-users-group"></i> {{tema.comunidadNombre}}
-            </a>
-            · por <a [routerLink]="['/perfil', tema.userName]" [appUserPopover]="tema.userName">{{tema.userName}}</a>
-            · {{tema.fechaRegistro | timeAgo}}
-            · <i class="ti ti-eye"></i> {{tema.visitantes}}
-          </div>
-        </div>
-      </article>
-    }
+@for (tema of temas; track tema.id) {
+<article class="lista-posts">
+  <div class="row">
+    <div class="col-12 col-sm-12 col-md-7">
+      <a class="lp-link" [routerLink]="['/comunidades', tema.comunidadSlug, 'tema', tema.id, tema.url]">
+        <i class="ti ti-users-group lp-icono" [matTooltip]="tema.comunidadNombre + (tema.categoriaNombre ? ' · ' + tema.categoriaNombre : '')"
+          matTooltipPosition="left" aria-hidden="true"></i>
+        <span class="lp-titulo" (mouseenter)="tituloSiCortado($event, tema.titulo)">{{tema.titulo}}</span>
+      </a>
+    </div>
+    <div class="col-12 col-sm-12 col-md-2 text-end d-none d-md-block">
+      <small class="text-muted">{{tema.fechaRegistro | timeAgo}}</small>
+    </div>
+    <div class="col-12 col-sm-12 col-md-3 text-end d-none d-md-block">
+      @if (tema.userName) {
+      <a class="lp-autor" [routerLink]="['/perfil', tema.userName]" [attr.aria-label]="'Ver perfil de ' + tema.userName">
+        <app-user-avatar [class]="'img-avatar'" [avatar]="tema.avatar" [userName]="tema.userName"></app-user-avatar>
+        <small class="ms-1 pe-1 text-muted" [appUserPopover]="tema.userName">{{tema.userName}}</small>
+      </a>
+      }
+    </div>
   </div>
+</article>
 }
+
+<div class="row">
+  <div class="col-12">
+    @if (totalCount > pageSize) {
+    <mat-paginator [length]="totalCount" [pageSize]="pageSize" [pageIndex]="pageIndex" (page)="pageChange($event)">
+    </mat-paginator>
+    }
+
+    <!-- Paginación rastreable: mat-paginator son botones sin href. -->
+    <nav class="seo-pagination" aria-label="Paginación">
+      @if (pageIndex > 0) {
+      <a [routerLink]="[]" [queryParams]="queryParamsPara(pageIndex)" queryParamsHandling="merge" rel="prev">Anterior</a>
+      }
+
+      @if (totalPaginas > 1) {
+      @for (p of paginasVisibles; track p) {
+      <a [routerLink]="[]" [queryParams]="queryParamsPara(p)" queryParamsHandling="merge"
+        [attr.aria-current]="p === pageIndex + 1 ? 'page' : null">{{ p }}</a>
+      }
+      }
+
+      @if (pageIndex + 1 < totalPaginas) {
+      <a [routerLink]="[]" [queryParams]="queryParamsPara(pageIndex + 2)" queryParamsHandling="merge" rel="next">Siguiente</a>
+      }
+    </nav>
+  </div>
+</div>

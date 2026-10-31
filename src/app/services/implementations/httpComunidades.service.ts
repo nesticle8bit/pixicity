@@ -219,8 +219,9 @@ export class HttpComunidadesService implements IHttpComunidadesService {
   }
 
   // Widgets globales (portada)
-  getTemasRecientes(count: number = 10): Observable<TemaReciente[]> {
-    return this.get(`temas/recientes?count=${count}`);
+  getTemasRecientes(page: number, pageCount: number, categoria: string = ''): Observable<PaginatedData<TemaReciente>> {
+    const filtro = categoria ? `&categoria=${encodeURIComponent(categoria)}` : '';
+    return this.get(`temas/recientes?page=${page}&pageCount=${pageCount}${filtro}`);
   }
 
   getComentariosRecientesGlobal(count: number = 8): Observable<ComentarioReciente[]> {

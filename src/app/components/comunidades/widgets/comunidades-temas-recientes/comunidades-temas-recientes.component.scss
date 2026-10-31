@@ -1,44 +1,72 @@
-.ctr-list {
-  background: light-dark(#fff, #1e2124);
-  border: 1px solid light-dark(#e5e5e5, #3e454c);
-  border-radius: 8px;
-  overflow: hidden;
+// Mismo formato que app-home-last-posts (las filas .lista-posts son globales).
+.seo-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin: 8px 0 16px;
+
+  a {
+    padding: 4px 10px;
+    border: 1px solid rgba(0, 0, 0, .12);
+    border-radius: 4px;
+    font-size: 13px;
+    text-decoration: none;
+
+    &[aria-current='page'] {
+      font-weight: 600;
+      border-color: currentColor;
+    }
+  }
 }
 
-.ctr-item {
-  display: flex;
-  gap: 10px;
-  padding: 11px 14px;
-  border-bottom: 1px solid light-dark(#f0f0f0, #373e44);
+.lp-esqueleto {
+  height: 30px;
 
-  &:last-child { border-bottom: none; }
-  &:hover { background: light-dark(#f9fbfc, #1d303a); }
-
-  .ctr-avatar { flex: 0 0 auto; }
-
-  .ctr-body { flex: 1; min-width: 0; }
-
-  .ctr-title {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: light-dark(#1a1a1a, #dedede);
-    text-decoration: none;
-    line-height: 1.35;
-
-    &:hover { color: light-dark(#006595, #8ed2f2); }
+  @media (min-width: 768px) {
+    height: 31px;
   }
 
-  .ctr-meta {
-    font-size: 11.5px;
-    color: light-dark(#6b6b6b, #adadad);
-    margin-top: 3px;
+  span {
+    display: block;
+    width: 60%;
+    height: 10px;
+    margin-top: 4px;
+    border-radius: 3px;
+    background: light-dark(#e6e6e6, #363c42);
+  }
+}
 
-    a { color: light-dark(#006595, #8ed2f2); text-decoration: none; }
+.lp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  vertical-align: middle;
+}
 
-    .ctr-com {
-      font-weight: 600;
-      i { font-size: 12px; }
-    }
+// Ocupa lo mismo que el ícono de categoría de los posts (16 px)
+.lp-icono {
+  flex: none;
+  width: 16px;
+  font-size: 16px;
+  line-height: 1;
+  color: light-dark(#0B6EA5, #8ed2f2);
+}
+
+.lp-titulo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lp-autor {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 400;
+  text-decoration: none;
+
+  &:hover small {
+    text-decoration: underline;
   }
 }

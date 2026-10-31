@@ -1,0 +1,36 @@
+<h2 class="main-title">
+  <span>Populares</span>
+  <app-top-times-selector [selection]="periodo" (selectedDate)="cambiarPeriodo($event)"></app-top-times-selector>
+</h2>
+
+@if (temas.length < 1) {
+  <section [attr.aria-busy]="loading">
+    <div class="alert alert-warning">
+      😳 <strong>Aún no hay temas populares en las comunidades.</strong>
+    </div>
+  </section>
+}
+
+@if (temas.length > 0) {
+  @for (tema of temas; track tema.id; let i = $index) {
+    <article class="list-posts--zebra" [ngClass]="{'opacity-50': loading}">
+      <strong class="float-start rank" [class.gold]="i === 0" [class.silver]="i === 1"
+        [class.bronze]="i === 2">{{i + 1}}</strong>
+      <small>
+        <a [routerLink]="['/comunidades', tema.comunidadSlug, 'tema', tema.id, tema.url]">
+          <span class="ms-1" matTooltip="{{tema.titulo}} · {{tema.comunidadNombre}}">{{tema.titulo | truncate:[40]}}</span>
+        </a>
+      </small>
+      <span class="float-end value" matTooltip="Votos" matTooltipPosition="left">
+        {{tema.valor}}
+      </span>
+    </article>
+  }
+  <div class="view-more-list">
+    <a [routerLink]="['/tops/temas']">
+      Ver más
+    </a>
+  </div>
+}
+
+<br>

@@ -227,6 +227,7 @@ export interface TemaReciente {
   avatar: string | null;
   comunidadNombre: string | null;
   comunidadSlug: string | null;
+  categoriaNombre: string | null;
 }
 
 export interface ComentarioReciente {

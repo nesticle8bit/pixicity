@@ -4,6 +4,7 @@ import { SEOService } from 'src/app/services/shared/seo.service';
 import { ComunidadesTemasRecientesComponent } from '../widgets/comunidades-temas-recientes/comunidades-temas-recientes.component';
 import { ComunidadesStatsComponent } from '../widgets/comunidades-stats/comunidades-stats.component';
 import { ComunidadesUltimosComentariosComponent } from '../widgets/comunidades-ultimos-comentarios/comunidades-ultimos-comentarios.component';
+import { ComunidadesPopularesComponent } from '../widgets/comunidades-populares/comunidades-populares.component';
 import { ComunidadesTopComponent } from '../widgets/comunidades-top/comunidades-top.component';
 import { ComunidadesTopTemasComponent } from '../widgets/comunidades-top-temas/comunidades-top-temas.component';
 
@@ -15,6 +16,7 @@ import { ComunidadesTopTemasComponent } from '../widgets/comunidades-top-temas/c
         ComunidadesTemasRecientesComponent,
         ComunidadesStatsComponent,
         ComunidadesUltimosComentariosComponent,
+        ComunidadesPopularesComponent,
         ComunidadesTopComponent,
         ComunidadesTopTemasComponent,
     ],
