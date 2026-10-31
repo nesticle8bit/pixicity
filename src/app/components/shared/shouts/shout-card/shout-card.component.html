@@ -48,7 +48,8 @@
     }
 
     <app-shout-media [url]="shout().url" [tipo]="shout().tipo" [mediaTitulo]="shout().mediaTitulo"
-      [mediaImagen]="shout().mediaImagen" [mediaDescripcion]="shout().mediaDescripcion" [nsfw]="nsfw()" />
+      [mediaImagen]="shout().mediaImagen" [mediaDescripcion]="shout().mediaDescripcion" [nsfw]="nsfw()"
+      [bucle]="!!shout().bucle" />
 
     <footer class="sc-bubble__footer">
       <!-- Acciones secundarias (editar, fijar, denunciar, moderar…) en un menú: el pie queda solo con las reacciones. -->

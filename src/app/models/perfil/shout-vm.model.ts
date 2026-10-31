@@ -13,6 +13,8 @@ export interface ShoutViewModel {
   nsfw?: boolean;
   /** Fijado arriba del muro de su perfil por el autor (uno por perfil). */
   fijado?: boolean;
+  /** El video (YouTube o archivo) se repite al terminar. */
+  bucle?: boolean;
   /** Autor del shout. */
   avatar: { userName: string; avatar: string | null } | null;
   /** Dueño del muro donde se publicó (solo en el muro de /mi). */

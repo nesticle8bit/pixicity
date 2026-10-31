@@ -313,3 +313,13 @@
   &.is-activo { background: #c0392b; border-color: #c0392b; color: #fff; }
   &:disabled { opacity: 0.5; cursor: default; }
 }
+
+// Mismo pill que NSFW, en el azul del sitio.
+.sh-composer__bucle {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+
+  &:hover:not(:disabled) { border-color: light-dark(#0B6EA5, #2a8cc4); color: light-dark(#0B6EA5, #6cbcec); }
+  &.is-activo { background: light-dark(#0B6EA5, #2a8cc4); border-color: light-dark(#0B6EA5, #2a8cc4); color: #fff; }
+}

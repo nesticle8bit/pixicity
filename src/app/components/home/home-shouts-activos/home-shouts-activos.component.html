@@ -21,7 +21,16 @@
   @for (s of lista; track s.id; let i = $index) {
   <a [routerLink]="enlace(s)" class="carousel-slide" [class.active]="i === actual()"
     [attr.aria-hidden]="i !== actual() || null" [attr.tabindex]="i === actual() ? null : -1">
-    @if (imagen(s); as img) {
+    @if (s.tipo === 'VideoArchivo') {
+      <!-- El visible se reproduce sin sonido; el resto muestra su primer cuadro (#t=0.1) o nada si está lejos. -->
+      @if (i === actual()) {
+        <video class="ts-video" [src]="s.url" autoplay muted [muted]="true" loop playsinline preload="auto"
+          [class.ts-nsfw-img]="difuminar(s)" (loadeddata)="reproducir($event)"></video>
+      } @else if (cargarImagen(i)) {
+        <video class="ts-video" [src]="s.url + '#t=0.1'" muted [muted]="true" playsinline preload="metadata"
+          [class.ts-nsfw-img]="difuminar(s)"></video>
+      }
+    } @else if (imagen(s); as img) {
       <img [attr.src]="cargarImagen(i) ? img : null" alt="" decoding="async" loading="lazy" [class.ts-nsfw-img]="difuminar(s)">
     } @else {
       <div class="ts-texto" [class.ts-nsfw-img]="difuminar(s)">
@@ -33,6 +42,10 @@
       <span class="ts-flair">NSFW</span>
     }
 
+    @if (esVideo(s)) {
+      <span class="ts-play" aria-hidden="true"><i class="ti ti-player-play-filled"></i></span>
+    }
+
     <div class="carousel-progress" [class.running]="i === actual() && !pausado()" [class.paused]="pausado()"></div>
 
     <div class="carousel-overlay">
@@ -40,7 +53,7 @@
       <div class="overlay-rank">#{{ i + 1 }}</div>
       }
       <div class="overlay-body">
-        @if (imagen(s)) {
+        @if (imagen(s) || s.tipo === 'VideoArchivo') {
         <span class="overlay-title ts-comentario">{{ s.comentario }}</span>
         }
         <span class="overlay-author">{{ '@' }}{{ s.avatar?.userName }} · {{ s.fechaRegistro | timeAgo }}</span>

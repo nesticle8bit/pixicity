@@ -125,6 +125,16 @@ export class HomeShoutsActivosComponent {
     inject(DestroyRef).onDestroy(() => this.detener());
   }
 
+  /** YouTube o archivo de video: lleva el ícono de reproducir encima. */
+  esVideo(s: ShoutViewModel): boolean {
+    return (s.tipo === 'Video' && !!this.imagen(s)) || s.tipo === 'VideoArchivo';
+  }
+
+  /** Por si el navegador ignora el autoplay de un video insertado después de cargar la página. */
+  reproducir(event: Event): void {
+    (event.target as HTMLVideoElement).play().catch(() => undefined);
+  }
+
   difuminar(s: ShoutViewModel): boolean {
     return !!s.nsfw && !this.preferenciaNsfw.mostrar();
   }

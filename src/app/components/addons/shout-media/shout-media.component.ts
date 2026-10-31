@@ -33,6 +33,8 @@ export class ShoutMediaComponent implements OnChanges {
   /** Shout +18: la media se ve difuminada hasta que el usuario elige mostrarla. */
   readonly nsfw = input(false);
   readonly revelado = signal(false);
+  /** El video (YouTube o archivo) se repite al terminar. */
+  readonly bucle = input(false);
 
   /** Preferencia de la cuenta (/cuenta → Contenido sensible): 18+ que eligió ver NSFW sin difuminar. */
   private readonly preferencia = inject(NsfwService);
@@ -89,7 +91,7 @@ export class ShoutMediaComponent implements OnChanges {
     if (!url) return null;
     const video = videoYoutube(url);
     if (!video) return null;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(embedYoutube(video));
+    return this.sanitizer.bypassSecurityTrustResourceUrl(embedYoutube(video, false, this.bucle()));
   }
 
   private calcularSpotifyEmbed(): SafeResourceUrl | null {

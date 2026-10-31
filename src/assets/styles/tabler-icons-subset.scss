@@ -1,5 +1,5 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (181).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (182).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
@@ -13,7 +13,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-filled-subset.woff2?v=2611bf6741") format("woff2");
+  src: url("/assets/fonts/tabler-icons-filled-subset.woff2?v=d8f1655744") format("woff2");
 }
 
 .ti {
@@ -162,6 +162,7 @@
 .ti-pin:before { content: "\ec9c"; }
 .ti-pin-filled:before { font-family: "tabler-icons-filled" !important; content: "\f68d"; }
 .ti-pinned-off:before { content: "\ed5f"; }
+.ti-player-play-filled:before { font-family: "tabler-icons-filled" !important; content: "\f691"; }
 .ti-plus:before { content: "\eb0b"; }
 .ti-quote:before { content: "\efbe"; }
 .ti-refresh:before { content: "\eb13"; }

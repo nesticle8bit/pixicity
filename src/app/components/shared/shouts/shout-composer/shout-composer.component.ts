@@ -71,7 +71,15 @@ export class ShoutComposerComponent {
     url: [''],
     /** +18: solo enlaces externos (el API rechaza imágenes subidas) y la media se ve difuminada. */
     nsfw: false,
+    /** Repetir el video al terminar; el API lo ignora si la URL no es un video. */
+    bucle: false,
   });
+
+  /** El bucle solo se ofrece con videos (YouTube o archivo .mp4/.webm…). */
+  esVideo(url: string | undefined): boolean {
+    const tipo = detectarTipoShout(url ?? '');
+    return tipo === 'Video' || tipo === 'VideoArchivo';
+  }
 
   /** NSFW y subir imágenes se excluyen: con una imagen subida no se puede marcar, y marcado no se puede subir. */
   alternarNsfw(): void {
@@ -253,7 +261,7 @@ export class ShoutComposerComponent {
         next: (response) => {
           this.enviando.set(false);
           if (response) {
-            this.formGroup.patchValue({ comentario: '', url: '', nsfw: false });
+            this.formGroup.patchValue({ comentario: '', url: '', nsfw: false, bucle: false });
             this.imagenSubida.set(false);
             this.cerrarHashtags();
             this.publicado.emit();

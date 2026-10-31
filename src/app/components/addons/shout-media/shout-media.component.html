@@ -27,7 +27,7 @@
     </a>
   } @else if (esVideoArchivo) {
     <!-- click.stop: los controles no deben abrir el detalle del shout. -->
-    <video class="sm-video" [src]="url()" controls playsinline preload="metadata" (click)="$event.stopPropagation()">
+    <video class="sm-video" [src]="url()" controls playsinline preload="metadata" [loop]="bucle()" (click)="$event.stopPropagation()">
       <a [href]="url()" target="_blank" rel="noopener">Ver el video</a>
     </video>
   } @else if (esEnlace && enlaceEmbed) {

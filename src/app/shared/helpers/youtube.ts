@@ -62,10 +62,15 @@ export function miniaturaYoutube(id: string): string {
 }
 
 /** Reproductor sin cookies de seguimiento hasta que se reproduce. */
-export function embedYoutube(video: VideoYoutube, autoplay = false): string {
+export function embedYoutube(video: VideoYoutube, autoplay = false, bucle = false): string {
   const params = new URLSearchParams();
   if (autoplay) params.set('autoplay', '1');
   if (video.inicio) params.set('start', `${video.inicio}`);
+  // YouTube solo repite un video suelto si además es su propia lista de reproducción.
+  if (bucle) {
+    params.set('loop', '1');
+    params.set('playlist', video.id);
+  }
   const query = params.toString();
   return `https://www.youtube-nocookie.com/embed/${video.id}${query ? `?${query}` : ''}`;
 }
