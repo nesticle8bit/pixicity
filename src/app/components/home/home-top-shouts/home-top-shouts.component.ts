@@ -6,7 +6,7 @@ import { IHttpMiService } from 'src/app/services/interfaces/httpMi.interface';
 import { NsfwService } from 'src/app/services/shared/nsfw.service';
 import { ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
 import { enNavegador } from '../../../shared/helpers/plataforma';
-import { miniaturaYoutube, videoYoutube } from '../../../shared/helpers/youtube';
+import { enlaceShout, imagenShout } from '../../../shared/helpers/shout-imagen';
 
 /**
  * Top 5 de shouts de la semana (misma "actividad" que /mi → Más activos) en un carrusel como el de Top Fotos.
@@ -47,23 +47,12 @@ export class HomeTopShoutsComponent implements OnInit, OnDestroy {
     this.stopTimer();
   }
 
-  /** Imagen de fondo de la diapositiva: la foto, la miniatura de YouTube o la vista previa del enlace. */
-  imagen(s: ShoutViewModel): string | null {
-    if (s.tipo === 'Foto') return s.url;
-    if (s.tipo === 'Video') {
-      const video = videoYoutube(s.url);
-      return video ? miniaturaYoutube(video.id) : null;
-    }
-    return s.mediaImagen || null;
-  }
+  /** Imagen de fondo de la diapositiva. */
+  readonly imagen = imagenShout;
+  readonly enlace = enlaceShout;
 
   difuminar(s: ShoutViewModel): boolean {
     return !!s.nsfw && !this.preferenciaNsfw.mostrar();
-  }
-
-  /** El detalle vive en el muro donde se publicó. */
-  enlace(s: ShoutViewModel): (string | number)[] {
-    return ['/shouts', s.perfil?.userName ?? s.avatar?.userName ?? '', s.id];
   }
 
   togglePause(): void {

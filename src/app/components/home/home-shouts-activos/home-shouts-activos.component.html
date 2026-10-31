@@ -1,0 +1,73 @@
+<h2 class="main-title mb-2">
+  <span>{{ tituloVisible() }}</span>
+
+  <div class="float-end">
+    <img loading="lazy" decoding="async" class="cursor--pointer"
+      [src]="pausado() ? '/assets/images/icons/icon_play.png' : '/assets/images/icons/icon_pause.png'"
+      [matTooltip]="pausado() ? 'Reanudar' : 'Pausar'" style="background: light-dark(#fff, #1e2124); padding-left: 5px"
+      (click)="alternarPausa()" alt="" role="button" tabindex="0" [attr.aria-label]="pausado() ? 'Reanudar' : 'Pausar'"
+      (keydown.enter)="alternarPausa()" (keydown.space)="alternarPausa(); $event.preventDefault()">
+  </div>
+</h2>
+
+@let lista = shouts();
+
+@if (lista === undefined) {
+<div class="carousel-skeleton ts-alto"></div>
+} @else if (lista.length < 1) {
+<div class="alert alert-warning">💬 <strong>{{ mensajeVacio() }}</strong></div>
+} @else {
+<div class="carousel ts-alto" (mouseenter)="detener()" (mouseleave)="iniciar()">
+  @for (s of lista; track s.id; let i = $index) {
+  <a [routerLink]="enlace(s)" class="carousel-slide" [class.active]="i === actual()"
+    [attr.aria-hidden]="i !== actual() || null" [attr.tabindex]="i === actual() ? null : -1">
+    @if (imagen(s); as img) {
+      <img [attr.src]="cargarImagen(i) ? img : null" alt="" decoding="async" loading="lazy" [class.ts-nsfw-img]="difuminar(s)">
+    } @else {
+      <div class="ts-texto" [class.ts-nsfw-img]="difuminar(s)">
+        <p>{{ s.comentario }}</p>
+      </div>
+    }
+
+    @if (s.nsfw) {
+      <span class="ts-flair">NSFW</span>
+    }
+
+    <div class="carousel-progress" [class.running]="i === actual() && !pausado()" [class.paused]="pausado()"></div>
+
+    <div class="carousel-overlay">
+      @if (modo() === 'activos') {
+      <div class="overlay-rank">#{{ i + 1 }}</div>
+      }
+      <div class="overlay-body">
+        @if (imagen(s)) {
+        <span class="overlay-title ts-comentario">{{ s.comentario }}</span>
+        }
+        <span class="overlay-author">{{ '@' }}{{ s.avatar?.userName }} · {{ s.fechaRegistro | timeAgo }}</span>
+        @if (s.interacciones; as n) {
+        <div class="overlay-stats">
+          <span class="stat-pos"><i class="ti ti-heart"></i> {{ n.meGustas }}</span>
+          <span class="stat-views"><i class="ti ti-message-circle"></i> {{ n.comentarios ?? 0 }}</span>
+          <span class="stat-views"><i class="ti ti-repeat"></i> {{ n.reshouts ?? 0 }}</span>
+        </div>
+        }
+      </div>
+    </div>
+  </a>
+  }
+
+  @if (lista.length > 1) {
+  <button class="carousel-btn carousel-prev" (click)="anterior(); iniciar()" aria-label="Shout anterior">&#8249;</button>
+  <button class="carousel-btn carousel-next" (click)="siguiente(); iniciar()" aria-label="Shout siguiente">&#8250;</button>
+
+  <div class="carousel-dots">
+    @for (s of lista; track s.id; let i = $index) {
+    <span class="dot" [class.active]="i === actual()" (click)="irA(i)" role="button" tabindex="0"
+      [attr.aria-label]="'Ver shout ' + (i + 1)" [attr.aria-current]="i === actual()"
+      (keydown.enter)="irA(i)" (keydown.space)="irA(i); $event.preventDefault()"></span>
+    }
+  </div>
+  }
+</div>
+<br>
+}
