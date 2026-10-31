@@ -36,7 +36,7 @@ import {
   textOffset,
   unwrapNode,
 } from './rich-editor-dom';
-import { cleanPastedHtml, fijarDimensiones, imageNode, plainTextFragment, videoNode } from './rich-editor-paste';
+import { cleanPastedHtml, fijarDimensiones, imageLink, imageNode, isSafeHref, plainTextFragment, videoNode } from './rich-editor-paste';
 import { LENGUAJES_CODIGO } from 'src/app/shared/helpers/contenido-post';
 import { CLASE_VIDEO_YOUTUBE, VideoYoutube, videoYoutube } from 'src/app/shared/helpers/youtube';
 import { MatIcon } from '@angular/material/icon';
@@ -122,6 +122,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
   private selectedImg: HTMLImageElement | null = null;
   imgAlign: ImgAlign | null = null;
   imgHasCaption = false;
+  imgHasLink = false;
 
   // Barra contextual sobre el bloque de código o la tabla donde está el caret
   readonly lenguajes = LENGUAJES_CODIGO;
@@ -984,6 +985,8 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
       this.deselectImg();
       return;
     }
+    // La imagen enlazada no abre el enlace mientras se edita: el clic solo la selecciona
+    if (img.closest('a')) event.preventDefault();
     this.selectedImg = img;
     // La selección del navegador también queda sobre la imagen: así Ctrl+C / Ctrl+X y el menú contextual la copian
     // o cortan (antes solo se dibujaba el marco y se cortaba una selección vacía: "no pasaba nada").
@@ -1132,6 +1135,32 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
     this.commitImg();
   }
 
+  // Enlace de la imagen: el <a> envuelve solo al <img> (dentro de .img-resizable); vacío lo quita
+  async editImgLink(): Promise<void> {
+    const img = this.selectedImg;
+    if (!img) return;
+    const actual = img.closest('a');
+    const url = await this.confirmarService.pedirTexto({
+      titulo: 'Enlace de la imagen',
+      mensaje: 'Al hacer clic en la imagen se abre este enlace. Déjalo vacío para quitarlo.',
+      valor: actual?.getAttribute('href') ?? '',
+      aceptar: 'Guardar',
+      peligro: false,
+    });
+    // Mientras el diálogo estaba abierto la imagen pudo borrarse (o deshacerse) desde otro lado.
+    if (url === null || !this.editor.contains(img)) return;
+
+    const href = url.trim() ? this.normalizeUrl(url.trim()) : '';
+    if (href && !isSafeHref(href)) {
+      this.notificationService.warning('Usa un enlace que empiece con http:// o https://', 'Enlace no válido');
+      return;
+    }
+    if (!href) actual?.replaceWith(img);
+    else if (actual) actual.setAttribute('href', href);
+    else imageLink(img, href);
+    this.commitImg();
+  }
+
   private imgOuter(img: HTMLImageElement): HTMLElement {
     return img.closest<HTMLElement>('figure.img-figure') ?? img.closest<HTMLElement>('.img-resizable') ?? img;
   }
@@ -1143,6 +1172,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
     const cls = IMG_ALIGN_CLASSES.find((c) => outer.classList.contains(c));
     this.imgAlign = cls ? (cls.slice(4) as ImgAlign) : null;
     this.imgHasCaption = !!img.closest('figure.img-figure');
+    this.imgHasLink = !!img.closest('a');
   }
 
   // Ancho elegido + alto proporcional: con width y height el navegador reserva el espacio antes de que cargue la
@@ -1237,6 +1267,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
     this.imgFrame = null;
     this.imgAlign = null;
     this.imgHasCaption = false;
+    this.imgHasLink = false;
     this.cdr.markForCheck();
   }
 

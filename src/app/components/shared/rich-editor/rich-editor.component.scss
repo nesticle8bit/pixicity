@@ -394,6 +394,12 @@
           height: auto;
           pointer-events: none; // los clics van al span, no a la imagen
         }
+
+        // Imagen enlazada: el <a> no cambia el tamaño; el clic la selecciona (no navega)
+        a.img-enlace {
+          display: block;
+          cursor: pointer;
+        }
       }
 
       // Placeholder mientras sube una imagen (no se guarda en el valor)

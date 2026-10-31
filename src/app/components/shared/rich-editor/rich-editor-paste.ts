@@ -89,7 +89,7 @@ export function fijarDimensiones(img: HTMLImageElement): boolean {
   return true;
 }
 
-export function imageNode(src: string, alt = ''): HTMLElement {
+export function imageNode(src: string, alt = '', href = ''): HTMLElement {
   const img = document.createElement('img');
   img.src = src;
   if (alt) img.alt = alt;
@@ -97,8 +97,25 @@ export function imageNode(src: string, alt = ''): HTMLElement {
   const wrap = document.createElement('span');
   wrap.className = 'img-resizable';
   wrap.setAttribute('contenteditable', 'false');
-  wrap.appendChild(img);
+  wrap.appendChild(href ? imageLink(img, href) : img);
   return wrap;
+}
+
+/** Imagen con enlace: el <a> va DENTRO de .img-resizable, así tamaño, alineación y pie de foto no cambian. */
+export function imageLink(img: HTMLImageElement, href: string): HTMLAnchorElement {
+  const a = document.createElement('a');
+  a.className = 'img-enlace';
+  a.setAttribute('href', href);
+  a.setAttribute('target', '_blank');
+  a.setAttribute('rel', 'noopener noreferrer');
+  img.replaceWith(a);
+  a.appendChild(img);
+  return a;
+}
+
+/** <a> que solo envuelve imágenes (sin texto): el enlace pasa a cada imagen en vez de quedar alrededor del bloque. */
+function soloImagenes(a: HTMLElement): boolean {
+  return !!a.querySelector('img') && !a.textContent?.trim();
 }
 
 /** Video de YouTube como bloque no editable: miniatura enlazada que el post publicado cambia por el reproductor. */
@@ -196,7 +213,10 @@ function convertNode(node: Node, out: Node, inPre: boolean): void {
   if (name === 'IMG') {
     const src = (source.getAttribute('src') || '').trim();
     if (!isSafeImageSrc(src)) return;
-    const wrap = imageNode(src, source.getAttribute('alt') || '');
+    // Solo si el <a> no lleva texto: con texto el enlace ya se copia afuera (y no se anidan dos <a>)
+    const enlace = source.parentElement?.closest<HTMLElement>('a');
+    const href = enlace && soloImagenes(enlace) ? (enlace.getAttribute('href') || '').trim() : '';
+    const wrap = imageNode(src, source.getAttribute('alt') || '', isSafeHref(href) ? href : '');
     // Copiada del propio editor (cortar/pegar): conserva el tamaño elegido y la alineación
     const img = wrap.querySelector('img')!;
     for (const attr of ['width', 'height']) {
@@ -214,6 +234,11 @@ function convertNode(node: Node, out: Node, inPre: boolean): void {
   if (name === 'TD' || name === 'TH') {
     convertChildren(source, out, inPre);
     out.appendChild(document.createTextNode(' '));
+    return;
+  }
+
+  if (name === 'A' && soloImagenes(source)) {
+    convertChildren(source, out, inPre);
     return;
   }
 

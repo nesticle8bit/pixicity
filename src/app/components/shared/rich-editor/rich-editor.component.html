@@ -153,6 +153,8 @@
         [class.active]="imgAlign === 'der'" (click)="setImgAlign('der')"><mat-icon>format_align_right</mat-icon></button>
       <button type="button" class="icon" [matTooltip]="imgHasCaption ? 'Editar pie de foto' : 'Agregar pie de foto'"
         aria-label="Pie de foto" [class.active]="imgHasCaption" (click)="editImgCaption()"><mat-icon>short_text</mat-icon></button>
+      <button type="button" class="icon" [matTooltip]="imgHasLink ? 'Editar enlace de la imagen' : 'Enlazar la imagen'"
+        aria-label="Enlace de la imagen" [class.active]="imgHasLink" (click)="editImgLink()"><mat-icon>link</mat-icon></button>
     </span>
   </div>
   }

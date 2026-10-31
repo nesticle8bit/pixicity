@@ -52,7 +52,7 @@ export class PostsGeneratorComponent implements OnInit {
 
   public readonly dividers = [
     { id: 'lines', label: 'Líneas' },
-    { id: 'bar', label: 'Barra' },
+    // { id: 'bar', label: 'Barra' },
     { id: 'side', label: 'Lateral' },
     { id: 'pill', label: 'Píldora' },
     { id: 'underline', label: 'Subrayado' },

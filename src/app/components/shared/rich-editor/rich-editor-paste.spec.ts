@@ -19,6 +19,17 @@ describe('rich-editor-paste: imágenes copiadas del propio editor', () => {
     expect(out).toMatch(/^<figure class="img-figure img-centro" contenteditable="false"><span class="img-resizable" contenteditable="false"><img src="\/images\/x.png"><\/span><figcaption>Atardecer<\/figcaption><\/figure>$/);
   });
 
+  it('una imagen enlazada conserva el enlace dentro de la envoltura', () => {
+    const out = clean('<p><span class="img-resizable"><a class="img-enlace" href="https://x.com/"><img src="/images/x.png"></a></span></p>');
+    expect(out).toContain('<span class="img-resizable" contenteditable="false"><a class="img-enlace" href="https://x.com/" '
+      + 'target="_blank" rel="noopener noreferrer"><img src="/images/x.png"></a></span>');
+  });
+
+  it('un enlace con texto e imagen no anida dos <a>; uno inseguro se descarta', () => {
+    expect(clean('<p><a href="https://x.com/">ver <img src="/images/x.png"></a></p>').match(/<a /g)?.length).toBe(1);
+    expect(clean('<a href="javascript:alert(1)"><img src="/images/x.png"></a>')).not.toContain('<a');
+  });
+
   it('descarta tamaños absurdos', () => {
     expect(clean('<img src="/images/x.png" width="999999">')).not.toContain('width=');
   });
