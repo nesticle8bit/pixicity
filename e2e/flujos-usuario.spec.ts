@@ -754,11 +754,11 @@ test('mi en el celular: el muro primero, composer en línea o en hoja, pestañas
   await expect(page.locator('.mi-tirar.is-recargando')).toHaveCount(0);
   await expect(page.getByText('Shout número 10', { exact: true })).toBeAttached();
 
-  // Al bajar, las pestañas quedan pegadas arriba.
+  // Al bajar, las pestañas se van con el resto (no son fijas: todo el alto queda para los shouts).
   await page.evaluate(() => window.scrollTo(0, 1500));
   await page.waitForTimeout(400);
   const pestanas = await page.getByRole('tablist', { name: 'Qué mostrar' }).boundingBox();
-  expect(pestanas!.y).toBeLessThan(140);
+  expect(pestanas!.y + pestanas!.height).toBeLessThan(0);
 
   // El + abre el composer como hoja sin perder el lugar; Esc la cierra.
   const bajado = await page.evaluate(() => window.scrollY);

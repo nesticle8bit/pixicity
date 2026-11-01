@@ -245,21 +245,38 @@ $reshout: light-dark(#1e7f4f, #30c97d);
 }
 
 @media (max-width: 575.98px) {
-  // Avatar más chico: cada píxel de la columna del avatar se lo quitaba al texto.
-  .sc { gap: 8px; }
+  // A todo el ancho: el avatar entra en la burbuja, al lado del nombre, y el texto, el video y la imagen usan el ancho
+  // completo (con la columna del avatar al costado quedaban ~60 px menos para todo).
+  .sc {
+    position: relative;
+    display: block;
+  }
+
+  .sc__avatar {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    z-index: 1;
+  }
 
   .sc__avatar ::ng-deep img {
     width: 32px !important;
     height: 32px !important;
   }
 
-  .sc-compartido { margin-left: 40px; }
+  .sc-compartido { margin-left: 0; }
 
   .sc-bubble {
     border-radius: 12px;
     padding: 10px 12px;
 
-    &__tail { top: 10px; }
+    &__tail { display: none; }
+
+    &__head {
+      align-items: center;
+      min-height: 32px;
+      padding-left: 42px;
+    }
 
     &__footer {
       flex-wrap: nowrap;

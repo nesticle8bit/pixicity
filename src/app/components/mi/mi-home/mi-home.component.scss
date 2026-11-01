@@ -703,15 +703,10 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
     white-space: nowrap;
   }
 
-  // Pestañas fijas: se pegan arriba al bajar. Con el header visible van debajo de él (regla en styles/_movil.scss).
+  // Pestañas a lo ancho de la pantalla. No son fijas: al bajar se van con el resto y dejan todo el alto a los shouts.
   .mi__head {
-    position: sticky;
-    top: 0;
-    z-index: 25;
     margin: 0 -12px;
     padding: 0 12px;
-    background: light-dark(#fff, #1e2124);
-    transition: top 0.2s ease;
   }
 
   // Las cuatro entran a partes iguales, sin tira deslizable (NSFW quedaba fuera de la pantalla).
@@ -871,8 +866,10 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
     }
 
     ::ng-deep {
-      .sc {
-        gap: 10px;
+      // Sin burbuja: el avatar va en la esquina (sin el relleno de la burbuja) y el resto usa todo el ancho.
+      .sc__avatar {
+        top: 0;
+        left: 0;
       }
 
       .sc__avatar img {
@@ -881,8 +878,13 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
         border-radius: 50% !important;
       }
 
+      .sc-bubble__head {
+        min-height: 40px;
+        padding-left: 50px;
+      }
+
       .sc-compartido {
-        margin: 0 0 2px 50px;
+        margin: 0 0 4px;
       }
 
       .sc-bubble,
@@ -983,10 +985,5 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
       outline: 3px solid light-dark(#fff, #1e2124);
       outline-offset: -6px;
     }
-  }
-
-  // Debajo de las pestañas fijas (con el header visible baja más: styles/_movil.scss).
-  .mi-nuevos-flotante {
-    top: 60px;
   }
 }

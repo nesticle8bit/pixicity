@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnChanges, input, inject, signal } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { VisorImagenService } from '../visor-imagen/visor-imagen.service';
-import { embedYoutube, videoYoutube } from 'src/app/shared/helpers/youtube';
+import { embedYoutube, miniaturaYoutube, videoYoutube } from 'src/app/shared/helpers/youtube';
 import { NsfwService } from 'src/app/services/shared/nsfw.service';
 
 /**
  * Renderiza el media adjunto a un shout según su tipo:
- * - Video  -> embed de YouTube
+ * - Video  -> portada de YouTube (miniatura + play); el reproductor se carga al tocarla
  * - Spotify-> embed de Spotify
  * - Foto   -> imagen
  * - VideoArchivo -> <video> nativo (enlace directo a .mp4/.webm...)
@@ -17,6 +18,7 @@ import { NsfwService } from 'src/app/services/shared/nsfw.service';
     // Solo depende de sus inputs: se vuelve a evaluar únicamente cuando cambian.
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './shout-media.component.html',
+    imports: [NgTemplateOutlet],
     styleUrls: ['./shout-media.component.scss'],
 })
 export class ShoutMediaComponent implements OnChanges {
@@ -35,6 +37,9 @@ export class ShoutMediaComponent implements OnChanges {
   readonly revelado = signal(false);
   /** El video (YouTube o archivo) se repite al terminar. */
   readonly bucle = input(false);
+  /** Se tocó la portada: recién ahí se carga el reproductor (un iframe por video hacía pesado el muro y en el celular
+   *  se veía un cuadro negro hasta tocarlo). */
+  readonly reproduciendo = signal(false);
 
   /** Preferencia de la cuenta (/cuenta → Contenido sensible): 18+ que eligió ver NSFW sin difuminar. */
   private readonly preferencia = inject(NsfwService);
@@ -54,12 +59,27 @@ export class ShoutMediaComponent implements OnChanges {
   /** Enlaces con reproductor propio (turbo.cr, Instagram, TikTok): el API los guarda como Enlace. */
   public enlaceEmbed: { src: SafeResourceUrl; clase: string } | null = null;
   public hostname = '';
+  /** Imagen de la portada: la miniatura de YouTube o, en los demás reproductores, la imagen Open Graph del enlace. */
+  public portada: string | null = null;
+  /** Video directo con `#t=0.1`: sin eso el celular no dibuja el primer cuadro y se ve negro hasta tocarlo. */
+  public srcVideo: string | null = null;
 
   ngOnChanges(): void {
     this.hostname = this.calcularHostname();
     this.youtubeEmbed = this.esVideo ? this.calcularYoutubeEmbed() : null;
+    const video = this.esVideo ? videoYoutube(this.url()) : null;
+    this.portada = video ? miniaturaYoutube(video.id) : this.esEnlace ? this.mediaImagen() : null;
+    const url = this.url();
+    this.srcVideo = this.esVideoArchivo && url ? (url.includes('#') ? url : `${url}#t=0.1`) : null;
     this.spotifyEmbed = this.esSpotify ? this.calcularSpotifyEmbed() : null;
     this.enlaceEmbed = this.esEnlace ? this.calcularEnlaceEmbed() : null;
+  }
+
+  /** Tocar la portada carga el reproductor (YouTube arranca solo). Sin abrir el detalle del shout. */
+  reproducir(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.reproduciendo.set(true);
   }
 
   /** Clic normal: la imagen se abre en el visor de la plataforma. Ctrl/Cmd/Shift o la rueda abren otra pestaña (el href). */
@@ -91,7 +111,8 @@ export class ShoutMediaComponent implements OnChanges {
     if (!url) return null;
     const video = videoYoutube(url);
     if (!video) return null;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(embedYoutube(video, false, this.bucle()));
+    // Solo se usa después de tocar la portada: arranca a reproducir.
+    return this.sanitizer.bypassSecurityTrustResourceUrl(embedYoutube(video, true, this.bucle()));
   }
 
   private calcularSpotifyEmbed(): SafeResourceUrl | null {

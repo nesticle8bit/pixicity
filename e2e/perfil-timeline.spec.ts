@@ -83,3 +83,34 @@ test('perfil: la línea de tiempo mezcla todo, pliega las reacciones y carga má
     expect(desborde).toBeLessThanOrEqual(0);
   }
 });
+
+test('shouts con video: se ve la portada (sin reproducir) y al tocarla arranca; el .mp4 muestra su primer cuadro', async ({ page }) => {
+  await simularApi(page);
+  await page.route(/\/api\/usuarios\/por-nombre\/[^/?]+(\?|$)/, (r) =>
+    r.fulfill(ok({ id: 5, userName: AUTOR, avatar: null, profileBackground: '', rango: null, pais: null, postsCount: 0, seguidoresCount: 0 })));
+  await page.route(/i\.ytimg\.com/, (r) => r.fulfill({ path: 'src/assets/images/og-image.jpg' }));
+  // El reproductor de YouTube no se carga en la prueba: alcanza con ver que se pidió.
+  await page.route(/youtube-nocookie\.com/, (r) => r.fulfill({ body: '<html></html>', contentType: 'text/html' }));
+  const conMedia = (id: number, tipo: string, url: string) => {
+    const s = shout(id, `shout ${id}`, id);
+    return { ...s, shout: { ...s.shout, tipo, url, mediaTitulo: 'Mi video' } };
+  };
+  await page.route(/\/api\/usuarios\/\d+\/muro/, (r) => r.fulfill(ok({
+    fijado: null, siguiente: null,
+    items: [conMedia(1, 'Video', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'), conMedia(2, 'VideoArchivo', 'https://cdn.ejemplo.com/clip.mp4')],
+  })));
+
+  await page.goto(`/perfil/${AUTOR}`);
+  const youtube = page.locator('app-shout-card', { hasText: 'shout 1' });
+  // Antes de tocar: la miniatura del video, sin reproductor.
+  await expect(youtube.locator('img.sm-portada__img')).toHaveAttribute('src', 'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg');
+  await expect(youtube.locator('iframe')).toHaveCount(0);
+
+  await youtube.getByRole('button', { name: 'Reproducir Mi video' }).click();
+  await expect(youtube.locator('iframe')).toHaveAttribute('src', /youtube-nocookie\.com\/embed\/dQw4w9WgXcQ\?autoplay=1/);
+  // Tocar el video no abre el detalle del shout.
+  await expect(page).toHaveURL(new RegExp(`/perfil/${AUTOR}$`));
+
+  await expect(page.locator('app-shout-card', { hasText: 'shout 2' }).locator('video'))
+    .toHaveAttribute('src', 'https://cdn.ejemplo.com/clip.mp4#t=0.1');
+});

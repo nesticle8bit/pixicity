@@ -11,9 +11,13 @@
   <div class="sm-contenido" [attr.aria-hidden]="oculto || null" [attr.inert]="oculto || null">
   @if (esVideo && youtubeEmbed) {
     <div class="sm-embed sm-embed--video">
-      <iframe [src]="youtubeEmbed" frameborder="0" loading="lazy"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
+      @if (reproduciendo()) {
+        <iframe [src]="youtubeEmbed" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen [title]="mediaTitulo() || 'Video de YouTube'"></iframe>
+      } @else {
+        <ng-container *ngTemplateOutlet="portadaVideo" />
+      }
     </div>
   } @else if (esSpotify && spotifyEmbed) {
     <div class="sm-embed sm-embed--spotify">
@@ -27,14 +31,20 @@
     </a>
   } @else if (esVideoArchivo) {
     <!-- click.stop: los controles no deben abrir el detalle del shout. -->
-    <video class="sm-video" [src]="url()" controls playsinline preload="metadata" [loop]="bucle()" (click)="$event.stopPropagation()">
+    <video class="sm-video" [src]="srcVideo" [attr.poster]="mediaImagen() || null" controls playsinline preload="metadata" [loop]="bucle()"
+      (click)="$event.stopPropagation()">
       <a [href]="url()" target="_blank" rel="noopener">Ver el video</a>
     </video>
   } @else if (esEnlace && enlaceEmbed) {
     <div [class]="'sm-embed ' + enlaceEmbed.clase">
-      <iframe [src]="enlaceEmbed.src" frameborder="0" loading="lazy" scrolling="no"
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        allowfullscreen [title]="'Contenido de ' + hostname"></iframe>
+      <!-- Con imagen del enlace se muestra la portada; sin ella, el reproductor directo (no hay qué mostrar en su lugar). -->
+      @if (reproduciendo() || !portada || imagenFallo()) {
+        <iframe [src]="enlaceEmbed.src" frameborder="0" loading="lazy" scrolling="no"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          allowfullscreen [title]="'Contenido de ' + hostname"></iframe>
+      } @else {
+        <ng-container *ngTemplateOutlet="portadaVideo" />
+      }
     </div>
   } @else if (esEnlace) {
     <a [href]="url()" target="_blank" rel="noopener" class="sm-card" [class.sm-card--grande]="!!mediaImagen() && !imagenFallo()">
@@ -56,3 +66,15 @@
   </div>
 </div>
 }
+
+<!-- Portada de un video: su imagen con el botón de play. Tocarla carga el reproductor. -->
+<ng-template #portadaVideo>
+  <button type="button" class="sm-portada" (click)="reproducir($event)"
+    [attr.aria-label]="'Reproducir ' + (mediaTitulo() || 'el video')">
+    <img class="sm-portada__img" [src]="portada" alt="" loading="lazy" decoding="async" (error)="imagenFallo.set(true)">
+    <span class="sm-portada__play" aria-hidden="true"><i class="ti ti-player-play-filled"></i></span>
+    @if (mediaTitulo(); as titulo) {
+      <span class="sm-portada__titulo">{{ titulo }}</span>
+    }
+  </button>
+</ng-template>
