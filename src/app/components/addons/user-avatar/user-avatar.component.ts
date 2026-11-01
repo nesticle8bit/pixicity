@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, input, signal } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { NgStyle } from '@angular/common';
 import { ThumbPipe } from '../../../shared/pipes/thumb.pipe';
+import { avatarInicial } from '../../../shared/helpers/avatar-inicial';
 
 @Component({
     // Solo depende de sus @Input: se vuelve a evaluar únicamente cuando cambian (se usa en cada lista de la app).
@@ -22,6 +23,7 @@ export class UserAvatarComponent implements OnInit {
 
   @Input() set avatar(value: string | null | undefined) {
     this._avatar = value;
+    this.fallo.set(false);
   }
 
   get avatar(): string {
@@ -32,7 +34,11 @@ export class UserAvatarComponent implements OnInit {
 
   @Input() set userName(value: string | null | undefined) {
     this._userName = value;
+    this.fallo.set(false);
   }
+
+  /** La foto no cargó (borrada del disco, 404): se muestra la inicial en su lugar. */
+  readonly fallo = signal(false);
 
   get userName(): string {
     return this._userName ? this._userName : '';
@@ -44,8 +50,15 @@ export class UserAvatarComponent implements OnInit {
     return lado || 64;
   }
 
+  /** Sin foto subida (o si no carga): la inicial del usuario sobre su color, en vez de una imagen genérica. */
   get imageURL(): string {
-    return this.userName && this.avatar ? `${this.backendURL}/${this.userName}/${this.avatar}` : '/assets/images/avatar.png';
+    return this.userName && this.avatar && !this.fallo()
+      ? `${this.backendURL}/${this.userName}/${this.avatar}`
+      : avatarInicial(this.userName);
+  }
+
+  alFallar(): void {
+    if (this.avatar) this.fallo.set(true);
   }
 
   constructor() {}

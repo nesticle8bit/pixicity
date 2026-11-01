@@ -8,28 +8,61 @@
   [style.transform]="dragX() > 0 ? 'translateX(' + dragX() + 'px)' : null"
   (keydown.tab)="atraparFoco($event)" (keydown.shift.tab)="atraparFoco($event)"
   (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd()" (touchcancel)="onTouchEnd()">
-  <div class="drawer__head">
-    @if (currentUser.usuario) {
-      <a class="drawer__user" [routerLink]="['/perfil/' + currentUser.usuario.userName]" (click)="nav.close()">
-        <app-user-avatar [avatar]="currentUser.usuario.avatar" [userName]="currentUser.usuario.userName"
-          [height]="44" [width]="44"></app-user-avatar>
-        <span class="drawer__ident">
-          <span class="drawer__username">{{'@'}}{{currentUser.usuario.userName}}</span>
-          <span class="drawer__rango">{{ rango || 'Usuario' }} · Ver mi perfil</span>
-        </span>
-      </a>
-    } @else {
-      <span class="drawer__title">
-        <i class="ti ti-menu-2" aria-hidden="true"></i> Menú
-      </span>
-    }
-
-    <button type="button" class="drawer__close" #closeBtn (click)="nav.close()" aria-label="Cerrar menú">
-      <i class="ti ti-x" aria-hidden="true"></i>
-    </button>
-  </div>
+  <!-- Fijo arriba a la derecha: la cabecera se va con el scroll pero cerrar siempre queda a mano. -->
+  <button type="button" class="drawer__close" #closeBtn (click)="nav.close()" aria-label="Cerrar menú">
+    <i class="ti ti-x" aria-hidden="true"></i>
+  </button>
 
   <div class="drawer__body">
+    <!-- Cabecera como la del perfil: su banner (o el degradé de la marca), avatar montado encima, rango y números. -->
+    <header class="drawer__head">
+      <div class="drawer__banner" [class.drawer__banner--imagen]="bannerCss" [style.background-image]="bannerCss"
+        [style.background-position]="bannerPosicion">
+        @if (!currentUser.usuario) {
+          <img class="drawer__logo" src="/assets/images/logo.svg" alt="TAR!NGA" width="150" height="27">
+        }
+      </div>
+
+      @if (currentUser.usuario; as u) {
+        @let datos = info();
+        <div class="drawer__perfil">
+          <a class="drawer__avatar" [routerLink]="['/perfil', u.userName]" (click)="nav.close()" tabindex="-1" aria-hidden="true">
+            <app-user-avatar [avatar]="u.avatar" [userName]="u.userName" [height]="68" [width]="68" />
+          </a>
+
+          <a class="drawer__ident" [routerLink]="['/perfil', u.userName]" (click)="nav.close()">
+            <span class="drawer__username">{{ datos?.completeName || u.userName }}</span>
+            <span class="drawer__handle">{{ '@' }}{{ u.userName }} · Ver mi perfil</span>
+          </a>
+
+          <span class="drawer__rango" [style.--rango]="datos?.rango?.color || null">
+            @if (datos?.rango?.icono; as icono) {
+              <img [src]="'/assets/images/icons/rangos/' + icono" alt="" width="16" height="16">
+            } @else {
+              <i class="ti ti-award" aria-hidden="true"></i>
+            }
+            {{ datos?.rango?.nombre || rango || 'Usuario' }}
+          </span>
+
+          <div class="drawer__stats" [class.is-cargando]="!datos">
+            <a [routerLink]="['/perfil', u.userName]" (click)="nav.close()">
+              <b>{{ (datos?.puntos ?? 0) | number }}</b> Puntos
+            </a>
+            <a [routerLink]="['/perfil', u.userName]" [queryParams]="{ tab: 'posts' }" (click)="nav.close()">
+              <b>{{ (datos?.postsCount ?? 0) | number }}</b> Posts
+            </a>
+            <a [routerLink]="['/perfil', u.userName]" [queryParams]="{ tab: 'followers' }" (click)="nav.close()">
+              <b>{{ (datos?.seguidoresCount ?? 0) | number }}</b> Seguidores
+            </a>
+          </div>
+        </div>
+      } @else {
+        <div class="drawer__perfil drawer__perfil--invitado">
+          <span class="drawer__title">Menú</span>
+        </div>
+      }
+    </header>
+
     <form class="drawer__search" [formGroup]="formGroup" (ngSubmit)="buscar()" role="search">
       <i class="ti ti-search drawer__search-icono" aria-hidden="true"></i>
       <input type="search" formControlName="search" placeholder="Buscar posts, #tags o @usuarios"

@@ -32,6 +32,7 @@ import { ProfileInformationComponent } from '../../profile/profile-information/p
 import { PerfilSocialMediaButtonsComponent } from './perfil-social-media-buttons/perfil-social-media-buttons.component';
 import { PerfilUserFollowersComponent } from './perfil-user-followers/perfil-user-followers.component';
 import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
+import { urlCss } from 'src/app/shared/helpers/url-css';
 
 export type PestanaPerfil = 'shouts' | 'activity' | 'posts' | 'comments' | 'followers' | 'following' | 'information';
 
@@ -47,12 +48,6 @@ export const PESTANAS_PERFIL: { id: PestanaPerfil; label: string; icono: string 
 ];
 
 const PESTANA_INICIAL: PestanaPerfil = 'shouts';
-
-/** url("…") para CSS, sin comillas ni paréntesis que puedan cerrar el url() (la URL es texto del usuario). */
-function urlCss(url: string | null | undefined): string | null {
-  const limpia = (url ?? '').trim().replace(/["()\\]/g, '');
-  return /^https?:\/\//i.test(limpia) ? `url("${limpia}")` : null;
-}
 
 @Component({
     selector: 'app-perfil',

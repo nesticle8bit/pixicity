@@ -140,6 +140,10 @@ export interface UsuarioInfoViewModel {
   fechaRegistro: string;
   rango: RangoUsuarioViewModel | null;
   pais: { nombre: string; iso2: string } | null;
+  /** Banner del perfil (URL externa) y su posición en %. */
+  profileBackground?: string | null;
+  profileBackgroundPosX?: number;
+  profileBackgroundPosY?: number;
 }
 
 /** Lo que las secciones del perfil necesitan del dueño. Mientras el perfil carga llega SIN_PERFIL (id 0). */

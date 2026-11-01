@@ -7,6 +7,8 @@
 
 $main: light-dark(#0B6EA5, #2ba0e1);
 $accent: light-dark(#004160, #1777a4);
+// Texto activo: el $accent oscuro no llega a 4.5:1 sobre el fondo del tema oscuro.
+$activo: light-dark(#004160, #6cbcec);
 
 .drawer-backdrop {
   position: fixed;
@@ -49,77 +51,185 @@ $accent: light-dark(#004160, #1777a4);
     }
   }
 
+  // Cabecera tipo perfil: banner (el del usuario o el degradé de la marca) y la tarjeta con avatar montado encima.
   &__head {
+    position: relative;
+    margin-bottom: .25rem;
+    border-bottom: 1px solid light-dark(#e6eaee, #35424e);
+  }
+
+  &__banner {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: calc(104px + env(safe-area-inset-top, 0px));
+    padding-top: env(safe-area-inset-top, 0px);
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgb(255 255 255 / 18%), transparent 60%),
+      linear-gradient(135deg, #0b6ea5 0%, #004160 70%, #00283b 100%);
+    background-size: cover;
+
+    // Con imagen: se oscurece abajo para que el avatar (con su aro) se despegue de cualquier foto.
+    &--imagen {
+      background-size: cover;
+      background-repeat: no-repeat;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, rgb(0 0 0 / 30%), transparent 45%, rgb(0 0 0 / 35%));
+      }
+    }
+  }
+
+  &__logo {
+    width: 150px;
+    height: auto;
+    filter: drop-shadow(0 2px 6px rgb(0 0 0 / 30%));
+  }
+
+  &__perfil {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: .5rem;
-    padding: calc(.85rem + env(safe-area-inset-top, 0px)) 1rem .85rem;
-    background: $main;
-    color: #fff;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .35rem;
+    padding: 0 1rem .9rem;
+
+    &--invitado {
+      padding-top: .75rem;
+    }
+  }
+
+  &__avatar {
+    position: relative;
+    z-index: 1;
+    margin-top: -36px;
+    border-radius: 50%;
+    line-height: 0;
+
+    ::ng-deep img {
+      display: block;
+      border: 4px solid light-dark(#fff, #1e2124);
+      border-radius: 50% !important;
+      object-fit: cover;
+      box-shadow: 0 2px 10px rgb(0 0 0 / 18%);
+    }
   }
 
   &__ident {
     display: flex;
     flex-direction: column;
     min-width: 0;
+    max-width: 100%;
+    margin-top: .15rem;
     line-height: 1.25;
-  }
-
-  &__rango {
-    font-size: .75rem;
-    font-weight: 500;
-    opacity: .9;
-  }
-
-  &__user {
-    display: flex;
-    align-items: center;
-    gap: .7rem;
-    min-width: 0;
-    color: #fff;
-    font-weight: 700;
     text-decoration: none;
 
-    ::ng-deep img {
-      border: 2px solid rgb(255 255 255 / 80%);
-      border-radius: 50%;
-    }
-
     &:focus-visible {
-      outline: 2px solid light-dark(#fff, #2e3338);
+      outline: 2px solid $main;
       outline-offset: 2px;
-      border-radius: 8px;
+      border-radius: 6px;
     }
   }
 
   &__username {
     overflow: hidden;
+    color: light-dark(#14202a, #f1f3f5);
+    font-size: 1.1rem;
+    font-weight: 800;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  &__title {
+  &__handle {
+    overflow: hidden;
+    color: light-dark(#5f6b75, #aeb8c1);
+    font-size: .8rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Rango con su color (lo define el admin): el texto se oscurece/aclara hacia el tema para que siempre se lea,
+  // el fondo y el borde llevan el color tal cual.
+  &__rango {
+    --rango: #6b7780;
     display: inline-flex;
     align-items: center;
-    gap: .4rem;
-    font-size: 1.05rem;
-    font-weight: 700;
+    gap: .35rem;
+    padding: .2rem .65rem .2rem .45rem;
+    border: 1px solid color-mix(in srgb, var(--rango) 45%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--rango) 12%, transparent);
+    color: light-dark(color-mix(in srgb, var(--rango) 62%, #000), color-mix(in srgb, var(--rango) 55%, #fff));
+    font-size: .78rem;
+    font-weight: 800;
+
+    img {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+    }
+
+    i {
+      color: inherit;
+      font-size: 1rem;
+    }
+  }
+
+  &__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem 1rem;
+    margin-top: .2rem;
+    transition: opacity .2s;
+
+    &.is-cargando {
+      opacity: .45;
+    }
+
+    a {
+      color: light-dark(#5f6b75, #aeb8c1);
+      font-size: .82rem;
+      text-decoration: none;
+
+      b {
+        color: light-dark(#14202a, #f1f3f5);
+        font-weight: 800;
+      }
+
+      &:active {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__title {
+    color: light-dark(#14202a, #f1f3f5);
+    font-size: 1.15rem;
+    font-weight: 800;
   }
 
   &__close {
-    flex: 0 0 auto;
-    width: 44px;
-    height: 44px;
+    position: absolute;
+    top: calc(.6rem + env(safe-area-inset-top, 0px));
+    right: .6rem;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
     border: 0;
     border-radius: 50%;
-    background: transparent;
+    background: rgb(0 0 0 / 38%);
+    backdrop-filter: blur(6px);
     color: #fff;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     cursor: pointer;
 
     &:focus-visible {
-      outline: 2px solid light-dark(#fff, #2e3338);
+      outline: 2px solid #fff;
+      outline-offset: 2px;
     }
   }
 
@@ -144,7 +254,7 @@ $accent: light-dark(#004160, #1777a4);
       border-right: 0;
       border-radius: 10px 0 0 10px;
       background: light-dark(#f6f9fb, #1c303e);
-      font-size: 11px; // 16px evita el zoom automático de iOS al enfocar
+      font-size: 16px; // menos de 16px hace que iOS agrande la página al enfocar
 
       &:focus {
         border-color: $main;
@@ -180,41 +290,52 @@ $accent: light-dark(#004160, #1777a4);
     gap: .5rem;
     margin: 0 1rem .5rem;
 
+    // Íconos en círculo con la etiqueta abajo (como una barra de apps); el globo va sobre el círculo.
     a {
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
-      padding: .6rem .25rem;
-      border-radius: 8px;
-      border: 1px solid transparent;
-      background: light-dark(#eef5fa, #1b3446);
-      color: $accent;
-      font-size: .75rem;
+      gap: .3rem;
+      padding: .35rem 0;
+      border-radius: 12px;
+      color: light-dark(#33414c, #c9d3db);
+      font-size: .72rem;
       font-weight: 700;
       text-decoration: none;
-      transition: background-color .15s, border-color .15s;
 
       i {
-        font-size: 1.4rem;
+        display: grid;
+        place-items: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: light-dark(#eef5fa, #1b3446);
+        color: $main;
+        font-size: 1.35rem;
+        transition: background-color .15s, transform .1s;
       }
 
-      &:active {
+      &:active i {
+        transform: scale(.94);
         background: light-dark(#dcebf5, #203f54);
       }
 
       &.active {
-        border-color: $main;
-        background: light-dark(#fff, #1e2124);
+        color: $activo;
+
+        i {
+          background: $main;
+          color: #fff;
+        }
       }
     }
   }
 
   &__badge {
     position: absolute;
-    top: -4px;
-    right: 2px;
+    top: 0;
+    left: calc(50% + 8px);
     border: 2px solid light-dark(#fff, #2e3338);
     min-width: 18px;
     padding: 0 5px;
@@ -239,7 +360,7 @@ $accent: light-dark(#004160, #1777a4);
 
     h2 {
       margin: .5rem 1rem .25rem;
-      color: light-dark(#888, #9c9c9c);
+      color: light-dark(#5f6b75, #9ea9b2); // #888 sobre blanco no llegaba a 4.5:1
       font-size: .7rem;
       font-weight: 700;
       letter-spacing: .05em;
@@ -268,7 +389,7 @@ $accent: light-dark(#004160, #1777a4);
 
       &.active {
         background: light-dark(#eef5fa, #1b3446);
-        color: $accent;
+        color: $activo;
         font-weight: 700;
         box-shadow: inset 3px 0 0 $main;
       }
@@ -284,7 +405,7 @@ $accent: light-dark(#004160, #1777a4);
     margin: .25rem 1rem .5rem;
     border-radius: 10px;
     background: #95c317;
-    color: light-dark(#1f2d00, #e9f9c7);
+    color: #1f2d00;
     font-weight: 800;
     text-decoration: none;
 
@@ -390,6 +511,6 @@ $accent: light-dark(#004160, #1777a4);
 
   &__register {
     background: #95c317;
-    color: light-dark(#1f2d00, #e9f9c7); // el blanco sobre lima no llegaba a 2.1:1
+    color: #1f2d00; // el blanco sobre lima no llegaba a 2.1:1
   }
 }

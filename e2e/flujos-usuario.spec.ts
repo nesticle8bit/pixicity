@@ -315,9 +315,13 @@ test('comentarios: la vista previa muestra enlaces y menciones como quedarán pu
 
 test('comentarios: el formulario muestra mi avatar y las respuestas también tienen emojis', async ({ page }) => {
   await conSesion(page, 'lector_tres', 'mi-foto.jpg');
+  // La foto existe: se sirve una imagen real (si diera 404, el avatar caería a la inicial con color).
+  await page.route(/\/images\/.*avatars\/lector_tres\/mi-foto\.jpg/i, (r) => r.fulfill({ path: 'src/assets/images/avatar.png', contentType: 'image/png' }));
   await page.goto(`/posts/${POST.categoria.seo}/${POST.id}/${POST.url}`);
 
   await expect(page.locator('.coment-form__avatar img')).toHaveAttribute('src', /avatars\/lector_tres\/mi-foto\.jpg/);
+  // Los demás no tienen foto: inicial sobre un color, no una imagen genérica.
+  await expect(page.locator('#comentario-3 img[alt^="Avatar de"]').first()).toHaveAttribute('src', /^data:image\/svg\+xml/);
 
   await page.locator('#comentario-3').getByRole('button', { name: 'Responder' }).click();
   const respuesta = page.getByLabel('Escribe una respuesta');
@@ -650,4 +654,41 @@ test('editor de posts y shouts: el botón de emojis inserta en el cursor', async
   await expect(editor).toHaveText('Hola mundo😀😂');
   await page.keyboard.press('Escape');
   await expect(selector).toBeHidden();
+});
+
+test('menú del celular: cabecera con el banner del perfil, avatar, rango con su color e ícono y números', async ({ page }, info) => {
+  test.skip(info.project.name !== 'movil', 'el cajón solo existe en el celular');
+  await conSesion(page);
+  await simularMi(page);
+  const pedidosInfo: string[] = [];
+  await page.route(/\/api\/usuarios\/por-nombre\/lector_tres\/info/i, (r) => (pedidosInfo.push(r.request().url()), r.fulfill(ok({
+    userName: 'lector_tres', completeName: 'Lectora Tres', avatar: '', genero: '', mensajePersonal: '', puntos: 1234, postsCount: 12,
+    comentariosCount: 40, seguidoresCount: 7, fechaRegistro: '2026-01-01T00:00:00Z', pais: null,
+    rango: { id: 3, nombre: 'Great User', icono: 'greatUser.gif', color: '#0d9488' },
+    profileBackground: 'https://imagenes.test/banner.jpg', profileBackgroundPosX: 50, profileBackgroundPosY: 30,
+  }))));
+  await page.route('https://imagenes.test/**', (r) => r.fulfill({ path: 'src/assets/images/og-image.jpg', contentType: 'image/jpeg' }));
+
+  await page.goto('/mi?ver=recientes');
+  await expect(page.getByRole('button', { name: /^Abrir menú/ })).toBeVisible();
+  await page.waitForLoadState('networkidle');
+  const antesDeAbrir = pedidosInfo.length; // el lateral de /mi también la pide
+  await page.getByRole('button', { name: /^Abrir menú/ }).click();
+  const menu = page.getByRole('dialog', { name: 'Menú principal' });
+  await expect(menu).toBeVisible();
+
+  // Los datos se piden al abrir (rango, banner y números al día).
+  await expect(menu.getByText('Great User')).toBeVisible();
+  expect(pedidosInfo.length).toBe(antesDeAbrir + 1);
+  await expect(menu.locator('.drawer__rango img')).toHaveAttribute('src', '/assets/images/icons/rangos/greatUser.gif');
+  await expect(menu.locator('.drawer__banner')).toHaveCSS('background-image', /imagenes\.test\/banner\.jpg/);
+  await expect(menu.getByRole('link', { name: /Lectora Tres/ })).toHaveAttribute('href', '/perfil/lector_tres');
+  await expect(menu.getByRole('link', { name: /1,234 Puntos|1\.234 Puntos/ })).toBeVisible();
+  await expect(menu.getByRole('link', { name: /12 Posts/ })).toHaveAttribute('href', '/perfil/lector_tres?tab=posts');
+
+  const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).include('#mobile-drawer').analyze();
+  expect(axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`)).toEqual([]);
+
+  await menu.getByRole('button', { name: 'Cerrar menú' }).click();
+  await expect(menu).toBeHidden();
 });

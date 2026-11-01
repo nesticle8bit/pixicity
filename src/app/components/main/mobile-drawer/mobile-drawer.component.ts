@@ -1,17 +1,21 @@
 import { StaffBadgesService } from 'src/app/services/shared/staff-badges.service';
-import { Component, DestroyRef, effect, ElementRef, HostListener, inject, OnInit, signal, viewChild } from '@angular/core';
+import { Component, DestroyRef, effect, ElementRef, HostListener, inject, OnInit, signal, untracked, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { filter } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
+import { UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { urlCss } from 'src/app/shared/helpers/url-css';
 import { MOBILE_MAX_WIDTH, MobileNavService } from 'src/app/services/shared/mobile-nav.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { PreferenciaTema, TemaService } from 'src/app/services/shared/tema.service';
 import { isLinkActive, linksFor, NavLink } from '../main-nav.config';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { enNavegador } from '../../../shared/helpers/plataforma';
+import { DecimalPipe } from '@angular/common';
 
 // Cuánto (px) hay que arrastrar para que el gesto cuente, y cuánto para que al soltar se cierre.
 const SWIPE_START_PX = 12;
@@ -29,6 +33,7 @@ const SWIPE_CLOSE_PX = 70;
         FormsModule,
         ReactiveFormsModule,
         RouterLinkActive,
+        DecimalPipe,
     ],
 })
 export class MobileDrawerComponent implements OnInit {
@@ -40,6 +45,7 @@ export class MobileDrawerComponent implements OnInit {
     { valor: 'sistema', label: 'Sistema', icono: 'ti-device-desktop' },
   ];
   private securityService = inject(IHttpSecurityService);
+  private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
   private signalrService = inject(SignalrService);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
@@ -53,6 +59,9 @@ export class MobileDrawerComponent implements OnInit {
   public formGroup: FormGroup;
   // Desplazamiento (px) del cajón mientras se arrastra para cerrarlo.
   public readonly dragX = signal(0);
+  /** Rango (color e ícono), banner y números del usuario: se piden al abrir el cajón para que estén al día. */
+  readonly info = signal<UsuarioInfoViewModel | null>(null);
+  private cargaInfo?: Subscription;
 
   private touchStart?: { x: number; y: number };
   private swiping = false;
@@ -84,6 +93,7 @@ export class MobileDrawerComponent implements OnInit {
       document.body.style.overflow = open ? 'hidden' : '';
 
       if (open) {
+        untracked(() => this.cargarInfo());
         setTimeout(() => this.closeBtn()?.nativeElement.focus());
       } else if (wasOpen) {
         document.getElementById('mobile-nav-toggle')?.focus();
@@ -112,6 +122,30 @@ export class MobileDrawerComponent implements OnInit {
     if (this.nav.isOpen()) {
       this.nav.close();
     }
+  }
+
+  private cargarInfo(): void {
+    const userName = this.currentUser?.usuario?.userName;
+    if (!userName) {
+      this.info.set(null);
+      return;
+    }
+    if (this.info()?.userName !== userName) this.info.set(null);
+    this.cargaInfo?.unsubscribe();
+    this.cargaInfo = this.usuarioPerfilService
+      .getUsuarioInfo(userName)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({ next: (i) => this.info.set(i), error: () => undefined });
+  }
+
+  /** Banner del perfil; sin banner la cabecera usa el degradé de la marca. */
+  get bannerCss(): string | null {
+    return urlCss(this.info()?.profileBackground);
+  }
+
+  get bannerPosicion(): string {
+    const i = this.info();
+    return `${i?.profileBackgroundPosX ?? 50}% ${i?.profileBackgroundPosY ?? 50}%`;
   }
 
   get rango(): string | undefined {
