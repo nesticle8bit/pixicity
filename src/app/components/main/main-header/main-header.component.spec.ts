@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { provideRouter, RouterModule } from '@angular/router';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, NEVER, Subject } from 'rxjs';
 
 import { MainHeaderComponent } from './main-header.component';
 import { MobileDrawerComponent } from '../mobile-drawer/mobile-drawer.component';
@@ -13,6 +13,8 @@ import { MobileNavService } from 'src/app/services/shared/mobile-nav.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { SectionUserInfoLoginComponent } from '../../sections/section-user-info-login/section-user-info-login.component';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
+import { SugerenciaPushComponent } from '../../shared/sugerencia-push/sugerencia-push.component';
+import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
 
 // Igual que app.component.html: el cajón es hermano del header, no hijo.
 @Component({
@@ -71,6 +73,8 @@ describe('MainHeader + MobileDrawer (hamburguesa)', () => {
             },
         },
         { provide: SignalrService, useValue: { stop: () => { }, notification$: new Subject() } },
+        // Cabecera del cajón (puntos, posts, seguidores): sin respuesta, queda el esqueleto.
+        { provide: IHttpUsuarioPerfilService, useValue: { getUsuarioInfo: () => NEVER } },
     ],
 })
       // Solo las plantillas del header y del cajón: los hijos de otros contextos (info del usuario, avatar) se
@@ -80,7 +84,7 @@ describe('MainHeader + MobileDrawer (hamburguesa)', () => {
         add: { schemas: [NO_ERRORS_SCHEMA] },
       })
       .overrideComponent(MobileDrawerComponent, {
-        remove: { imports: [UserAvatarComponent] },
+        remove: { imports: [UserAvatarComponent, SugerenciaPushComponent] },
         add: { schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();

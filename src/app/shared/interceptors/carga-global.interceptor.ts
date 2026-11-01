@@ -18,6 +18,10 @@ export const SIN_LOADER: RegExp[] = [
   'notificaciones/recientes',
   'notificaciones/leidas',
   'notificaciones/estadisticas',
+  // Línea de tiempo del perfil: tiene su propio esqueleto y carga más al bajar.
+  `usuarios/${ID}/muro`,
+  // Notificaciones de escritorio: se sincronizan al arrancar y el interruptor de /cuenta tiene su propio estado.
+  'push(/[^?]*)?',
   // Mensajes: bandeja, conversación, envío, imágenes, archivar/silenciar... tienen su propio estado en pantalla
   // (el chat se refresca en vivo y el overlay lo tapaba). La tabla del admin sí lo muestra, como las demás.
   'mensajes(?!/admin)(/[^?]*)?',

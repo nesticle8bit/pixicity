@@ -57,7 +57,7 @@ export const GRUPOS_CUENTA: { nombre: string; secciones: Seccion[] }[] = [
   {
     nombre: 'Preferencias',
     secciones: [
-      { id: 'notificaciones', label: 'Notificaciones', icono: 'notifications', descripcion: 'Elige qué avisos llegan a tu campana.' },
+      { id: 'notificaciones', label: 'Notificaciones', icono: 'notifications', descripcion: 'Avisos en tu escritorio y qué llega a tu campana.' },
       { id: 'contenido', label: 'Contenido sensible', icono: 'visibility', descripcion: 'Elige si ves los shouts NSFW sin difuminar.' },
       { id: 'mis-datos', label: 'Mis datos', icono: 'download', descripcion: 'Descarga una copia de todo lo que guardamos sobre ti.' },
     ],

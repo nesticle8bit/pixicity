@@ -9,6 +9,7 @@ import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
 import { PerfilInfoResponse, PerfilUsuarioViewModel, SeguidoresResponse, UsuarioAvatarViewModel, UsuarioInfoViewModel, FondoPerfilRequest } from 'src/app/models/seguridad/seguridad-vm.model';
 import { ActividadLogsViewModel } from 'src/app/models/logs/logs-vm.model';
+import { FiltroMuroPerfil, MuroPerfil } from 'src/app/models/perfil/perfil-muro.model';
 import { IHttpUsuarioPerfilService } from '../interfaces/httpUsuarioPerfil.interface';
 
 /** Perfil de usuarios: info pública, perfil extendido, seguidores, avatar, fondo, actividad y estado en línea. */
@@ -224,6 +225,19 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
 
   exportarMisDatos(): Observable<Blob> {
     return this.http.get(`${environment.api}/api/usuarios/me/exportacion`, { responseType: 'blob' });
+  }
+
+  getMuroPerfil(usuarioId: number, antes: string | null, filtro: FiltroMuroPerfil, cantidad = 15): Observable<MuroPerfil> {
+    const params: Record<string, string | number> = { cantidad, filtro };
+    if (antes) params['antes'] = antes;
+    return this.http
+      .get<ApiResponse<MuroPerfil>>(`${environment.api}/api/usuarios/${usuarioId}/muro`, { params })
+      .pipe(
+        map((response) => {
+          if (response.status === 200) return response.data!;
+          throw new Error(response.errors?.join(', ') || 'No se pudo cargar el muro');
+        }),
+      );
   }
 
   getActividadUsuario(usuarioId: number, tipoActividad: number): Observable<ActividadLogsViewModel> {

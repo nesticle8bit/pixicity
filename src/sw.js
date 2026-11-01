@@ -2,6 +2,7 @@
  * Service worker de la app instalada (PWA). A propósito NO cachea nada: cada apertura va a la red, así un deploy se
  * ve al instante también en la app del celular (igual que en el navegador). Solo atiende las navegaciones para
  * mostrar una página propia cuando no hay conexión; el resto de las peticiones (API, assets, imágenes) no pasa por acá.
+ * También muestra las notificaciones de escritorio (Web Push), al final del archivo.
  *
  * Si se cambia este archivo, el navegador instala la versión nueva solo (lo revisa en cada navegación; nginx lo sirve
  * sin caché, ver nginx-custom.conf).
@@ -53,4 +54,54 @@ self.addEventListener('fetch', (event) => {
   if (req.method === 'GET' && new URL(req.url).pathname === '/assets/favicon/pwa-192.png') {
     event.respondWith(fetch(req).catch(() => caches.match(req)));
   }
+});
+
+/*
+ * Notificaciones de escritorio (Web Push): el API manda { titulo, cuerpo, url, tag } cifrado para este navegador cuando
+ * llega un mensaje privado o algo a la campana (ver PushEscritorioWriter). Con el sitio a la vista no se muestran: ahí
+ * la campana y el chat ya lo avisan en vivo.
+ */
+self.addEventListener('push', (event) => {
+  let aviso = {};
+  try {
+    aviso = event.data ? event.data.json() : {};
+  } catch {
+    // Sin datos legibles: se muestra el aviso genérico.
+  }
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((ventanas) => {
+      if (ventanas.some((v) => v.visibilityState === 'visible' && v.focused)) return undefined;
+      return self.registration.showNotification(aviso.titulo || 'Taringas!', {
+        body: aviso.cuerpo || 'Tienes novedades',
+        icon: '/assets/favicon/pwa-192.png',
+        // Android: la silueta blanca de la barra de estado.
+        badge: '/assets/favicon/badge-96.png',
+        // Mismo tag = reemplaza el anterior (varios mensajes seguidos de la misma persona) y vuelve a sonar.
+        tag: aviso.tag || undefined,
+        renotify: !!aviso.tag,
+        lang: 'es',
+        data: { url: aviso.url || '/monitor' },
+      });
+    }),
+  );
+});
+
+// Tocar la notificación: si el sitio está abierto lo enfoca y navega sin recargar (NotificacionesEscritorioService);
+// si no, abre una ventana nueva (o la app instalada) en esa ruta.
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const destino = new URL((event.notification.data && event.notification.data.url) || '/', self.location.origin);
+  if (destino.origin !== self.location.origin) return;
+  const ruta = destino.pathname + destino.search + destino.hash;
+
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((ventanas) => {
+      const ventana = ventanas.find((v) => new URL(v.url).origin === self.location.origin);
+      if (ventana) {
+        ventana.postMessage({ tipo: 'abrir', url: ruta });
+        return ventana.focus();
+      }
+      return self.clients.openWindow(ruta);
+    }),
+  );
 });

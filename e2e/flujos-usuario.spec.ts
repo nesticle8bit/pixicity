@@ -106,9 +106,9 @@ test('shouts: publicar en el muro del perfil envía el texto y recarga el muro',
   await page.route(/\/api\/usuarios\/por-nombre\/[^/?]+(\?|$)/, (r) =>
     r.fulfill(ok({ id: 5, userName: AUTOR, avatar: null, profileBackground: '', rango: null, pais: null, postsCount: 2, seguidoresCount: 7 })));
   let cargasDelMuro = 0;
-  await page.route(/\/api\/shouts\/usuarios\/\d+/, (r) => {
+  await page.route(/\/api\/usuarios\/\d+\/muro/, (r) => {
     cargasDelMuro++;
-    return r.fulfill(ok({ shouts: [], pagination: { totalCount: 0, pageSize: 10, currentPage: 1, totalPages: 0 } }));
+    return r.fulfill(ok({ items: [], siguiente: null, fijado: null }));
   });
   let shout: Record<string, unknown> | undefined;
   await page.route('**/api/shouts', (r) => {
@@ -148,11 +148,15 @@ test('shouts: en su perfil el autor fija un shout propio, se marca "Fijado" y el
   });
   let fijado = false;
   let cargasDelMuro = 0;
-  await page.route(/\/api\/shouts\/usuarios\/\d+/, (r) => {
+  const entrada = (s: ReturnType<typeof shout>) => ({
+    tipo: 'shout', clave: `shout-${s.id}`, fecha: s.fechaRegistro, shout: s, compartidoPor: null, post: null, actividad: null,
+  });
+  await page.route(/\/api\/usuarios\/\d+\/muro/, (r) => {
     cargasDelMuro++;
-    const shouts = [shout(1, 'El más nuevo', false), shout(2, 'Mi shout importante', fijado)];
-    if (fijado) shouts.reverse();
-    return r.fulfill(ok({ shouts, pagination: { totalCount: 2, pageSize: 10, currentPage: 1, totalPages: 1 } }));
+    // El fijado viene aparte (arriba de la línea de tiempo) y no se repite en la lista.
+    return r.fulfill(ok(fijado
+      ? { items: [entrada(shout(1, 'El más nuevo', false))], fijado: shout(2, 'Mi shout importante', true), siguiente: null }
+      : { items: [entrada(shout(1, 'El más nuevo', false)), entrada(shout(2, 'Mi shout importante', false))], fijado: null, siguiente: null }));
   });
   let pedido: URL | undefined;
   await page.route(/\/api\/shouts\/\d+\/fijado/, (r) => {

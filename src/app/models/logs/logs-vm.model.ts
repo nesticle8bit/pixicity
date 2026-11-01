@@ -57,3 +57,16 @@ export interface ActividadLogsViewModel {
   semana: ActividadViewModel[];
   mes: ActividadViewModel[];
 }
+
+/** Qué avisa un dispositivo con las notificaciones de escritorio. */
+export interface PreferenciasPush {
+  mensajes: boolean;
+  notificaciones: boolean;
+}
+
+/** PushSubscription del navegador (endpoint y claves) más sus preferencias: PUT api/push/suscripcion. */
+export interface SuscripcionPush extends PreferenciasPush {
+  endpoint: string;
+  p256dh: string;
+  auth: string;
+}

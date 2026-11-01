@@ -1,0 +1,123 @@
+<div class="tl-filtros" role="group" aria-label="Qué mostrar en la línea de tiempo">
+  @for (f of filtros; track f.id) {
+    <button type="button" class="tl-filtro" [class.activo]="filtro() === f.id" [attr.aria-pressed]="filtro() === f.id"
+      (click)="elegirFiltro(f.id)">
+      <i class="ti {{ f.icono }}" aria-hidden="true"></i> {{ f.label }}
+    </button>
+  }
+</div>
+
+@if (fijado(); as shout) {
+  <div class="tl-fijado">
+    <app-shout-card [shout]="shout" [enPerfil]="true" (fijadoCambio)="recargar()" />
+  </div>
+}
+
+@if (cargando()) {
+  <div class="pf-cargando" aria-hidden="true"><span></span><span></span></div>
+  <span class="visually-hidden" role="status">Cargando la línea de tiempo…</span>
+} @else if (error() && items().length === 0) {
+  <div class="pf-vacio">
+    <i class="ti ti-cloud-off" aria-hidden="true"></i>
+    <p>No se pudo cargar la línea de tiempo.</p>
+    <button type="button" class="tl-boton" (click)="reintentar()">Reintentar</button>
+  </div>
+} @else if (items().length === 0 && !fijado()) {
+  <div class="pf-vacio">
+    <i class="ti ti-timeline" aria-hidden="true"></i>
+    <p>{{ vacio() }}</p>
+  </div>
+} @else {
+  <ol class="tl" [attr.aria-label]="'Actividad de ' + (user()?.userName ?? '')">
+    @for (b of bloques(); track b.clave) {
+      @switch (b.tipo) {
+        @case ('dia') {
+          <li class="tl__dia"><h3><time [attr.datetime]="b.fecha">{{ b.etiqueta }}</time></h3></li>
+        }
+        @case ('grupo') {
+          <li class="tl__item tl__item--mas">
+            <span class="tl__punto tl__punto--mas" aria-hidden="true"><i class="ti ti-dots"></i></span>
+            <button type="button" class="tl__mas" (click)="abrirTanda(b.clave)">
+              Ver {{ b.ocultos }} {{ b.ocultos === 1 ? 'actividad más' : 'actividades más' }}
+            </button>
+          </li>
+        }
+        @default {
+          @let item = b.item;
+          @switch (item.tipo) {
+            @case ('post') {
+              <li class="tl__item tl__item--tarjeta">
+                <span class="tl__punto tl__punto--post" aria-hidden="true"><i class="ti ti-file-text"></i></span>
+                <app-post-card [post]="item.post!" [fecha]="item.fecha" />
+              </li>
+            }
+            @case ('actividad') {
+              @let a = item.actividad!;
+              @let i = icono(a);
+              <li class="tl__item tl__item--actividad">
+                <span class="tl__punto tl__punto--{{ i.tono }}" aria-hidden="true"><i class="ti {{ i.icono }}"></i></span>
+                <div class="tl__actividad">
+                  <p class="tl__texto">
+                    {{ a.accion }}
+                    @if (a.detalle) {
+                      <strong class="tl__detalle">{{ a.detalle }}</strong>
+                    }
+                    @if (a.url) {
+                      @if (a.titulo) {
+                        <a [routerLink]="a.url.split('#')[0]" [fragment]="a.url.split('#')[1]" class="tl__titulo">
+                          @if (a.avatar) {
+                            <app-user-avatar class="tl__avatar" [avatar]="a.avatar" [userName]="a.titulo" [width]="18" [height]="18" />
+                          }
+                          {{ a.titulo }}
+                        </a>
+                      }
+                    } @else if (a.titulo) {
+                      <strong>{{ a.titulo }}</strong>
+                    } @else {
+                      <em class="tl__no-disponible">ya no está disponible</em>
+                    }
+                    <time class="tl__fecha" [attr.datetime]="item.fecha">· {{ item.fecha | tiempoCorto }}</time>
+                  </p>
+                  @if (a.extracto) {
+                    @if (a.url) {
+                      <a class="tl__cita" [routerLink]="a.url.split('#')[0]" [fragment]="a.url.split('#')[1]">{{ a.extracto }}</a>
+                    } @else {
+                      <p class="tl__cita">{{ a.extracto }}</p>
+                    }
+                  }
+                </div>
+              </li>
+            }
+            @default {
+              <li class="tl__item tl__item--tarjeta">
+                <span class="tl__punto" [class.tl__punto--reshout]="item.tipo === 'reshout'" [class.tl__punto--shout]="item.tipo === 'shout'"
+                  aria-hidden="true">
+                  <i class="ti" [class.ti-repeat]="item.tipo === 'reshout'" [class.ti-message-circle-2]="item.tipo === 'shout'"></i>
+                </span>
+                <app-shout-card [shout]="item.shout!" [compartidoPor]="item.tipo === 'reshout' ? item.compartidoPor : null"
+                  [enPerfil]="item.tipo === 'shout'" (fijadoCambio)="recargar()" />
+              </li>
+            }
+          }
+        }
+      }
+    }
+  </ol>
+
+  @if (cargandoMas()) {
+    <div class="pf-cargando tl-mas-cargando" aria-hidden="true"><span></span></div>
+  } @else if (error()) {
+    <div class="tl-fin">
+      <p>No se pudo cargar más.</p>
+      <button type="button" class="tl-boton" (click)="reintentar()">Reintentar</button>
+    </div>
+  } @else if (siguiente()) {
+    <div class="tl-fin">
+      <button type="button" class="tl-boton tl-boton--suave" (click)="cargarMas()">Cargar más</button>
+    </div>
+  } @else if (items().length > 0) {
+    <p class="tl-fin tl-fin--final"><i class="ti ti-flag" aria-hidden="true"></i> Eso es todo.</p>
+  }
+}
+
+<div #finDeLista class="tl-centinela" aria-hidden="true"></div>

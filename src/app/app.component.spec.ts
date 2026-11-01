@@ -9,6 +9,7 @@ import { DisplayComponentService } from './services/shared/displayComponents.ser
 import { SEOService } from './services/shared/seo.service';
 import { AnunciosService } from './services/shared/anuncios.service';
 import { ScriptsGlobalesService } from './services/shared/scripts-globales.service';
+import { NotificacionesEscritorioService } from './services/shared/notificaciones-escritorio.service';
 
 describe('AppComponent', () => {
   let display$: BehaviorSubject<any>;
@@ -33,6 +34,7 @@ describe('AppComponent', () => {
         { provide: SEOService, useValue: { getSEO: () => seo$.asObservable(), iniciarNavegacion: () => {} } },
         { provide: AnunciosService, useValue: { precargar: () => {} } },
         { provide: ScriptsGlobalesService, useValue: { insertar: () => {} } },
+        { provide: NotificacionesEscritorioService, useValue: { iniciar: () => {} } },
     ],
 })
       // Solo se prueba la lógica del componente raíz (SEO y visibilidad de secciones).

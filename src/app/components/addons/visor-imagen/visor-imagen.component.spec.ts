@@ -2,9 +2,16 @@ import { TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { ShoutMediaComponent } from '../shout-media/shout-media.component';
 import { VisorImagenService } from './visor-imagen.service';
+import { NEVER } from 'rxjs';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 
 describe('Visor de imágenes (shouts)', () => {
   const URL = 'https://taringas.net/images/shouts/yo/abc.webp';
+
+  // ShoutMedia consulta NsfwService (preferencia de la sesión).
+  beforeEach(() => TestBed.configureTestingModule({
+    providers: [{ provide: IHttpSecurityService, useValue: { getCurrentUser: () => null, getCurrentUserAsObservable: () => NEVER } }],
+  }));
 
   afterEach(() => TestBed.inject(MatDialog).closeAll());
 

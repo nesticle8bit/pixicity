@@ -3,7 +3,7 @@ import { MonitorAdmin } from 'src/app/models/admin/filas-admin.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
-import { FiltroNotificaciones, MonitorViewModel, StatsViewModel } from 'src/app/models/logs/logs-vm.model';
+import { FiltroNotificaciones, MonitorViewModel, PreferenciasPush, StatsViewModel, SuscripcionPush } from 'src/app/models/logs/logs-vm.model';
 
 @Injectable()
 export abstract class IHttpLogsService {
@@ -16,4 +16,10 @@ export abstract class IHttpLogsService {
   /** Tipos de aviso que el usuario puede apagar y si están activos. */
   abstract getPreferencias(): Observable<{ tipo: string; activa: boolean }[]>;
   abstract setPreferencia(tipo: string, activa: boolean): Observable<boolean>;
+  /** Clave VAPID para suscribir el navegador a las notificaciones de escritorio; null si el servidor no las envía. */
+  abstract getClavePush(): Observable<string | null>;
+  /** Qué avisa este dispositivo (por el endpoint de su suscripción); null si no recibe avisos de esta cuenta. */
+  abstract getSuscripcionPush(endpoint: string): Observable<PreferenciasPush | null>;
+  abstract guardarSuscripcionPush(suscripcion: SuscripcionPush): Observable<boolean>;
+  abstract quitarSuscripcionPush(endpoint: string): Observable<boolean>;
 }

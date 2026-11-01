@@ -16,6 +16,7 @@
             </a>
             <div class="notificaciones-list" id="mon_list" [style.display]="display.monitor ? 'block' : 'none'">
               <div class="timoni">Notificaciones</div>
+              <app-sugerencia-push class="mon-push" />
               <ul>
                 @if (notificaciones.length < 1) {
                   <div class="errr">No hay notificaciones</div>

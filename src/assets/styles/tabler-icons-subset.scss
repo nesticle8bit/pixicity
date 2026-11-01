@@ -1,11 +1,11 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (183).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (191).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2?v=475a383951") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=636c0ff63e") format("woff2");
 }
 
 @font-face {
@@ -28,6 +28,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ti-activity:before { content: "\ed23"; }
 .ti-adjustments:before { content: "\ea03"; }
 .ti-adjustments-horizontal:before { content: "\ec38"; }
 .ti-alert-circle:before { content: "\ea05"; }
@@ -37,6 +38,7 @@
 .ti-archive:before { content: "\ea0b"; }
 .ti-arrow-back-up:before { content: "\eb77"; }
 .ti-arrow-big-down-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6c6"; }
+.ti-arrow-big-up:before { content: "\eddd"; }
 .ti-arrow-big-up-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6cf"; }
 .ti-arrow-down:before { content: "\ea16"; }
 .ti-arrow-left:before { content: "\ea19"; }
@@ -54,6 +56,7 @@
 .ti-bell-off:before { content: "\ece9"; }
 .ti-bell-ringing:before { content: "\ed07"; }
 .ti-book:before { content: "\ea39"; }
+.ti-bookmark:before { content: "\ea3a"; }
 .ti-brand-discord:before { content: "\ece3"; }
 .ti-brand-discord-filled:before { font-family: "tabler-icons-filled" !important; content: "\f7e4"; }
 .ti-brand-facebook:before { content: "\ec1a"; }
@@ -94,6 +97,7 @@
 .ti-device-desktop:before { content: "\ea89"; }
 .ti-device-floppy:before { content: "\eb62"; }
 .ti-device-mobile:before { content: "\ea8a"; }
+.ti-dots:before { content: "\ea95"; }
 .ti-dots-vertical:before { content: "\ea94"; }
 .ti-edit:before { content: "\ea98"; }
 .ti-external-link:before { content: "\ea99"; }
@@ -147,8 +151,10 @@
 .ti-message-2:before { content: "\eaec"; }
 .ti-message-2-off:before { content: "\f40b"; }
 .ti-message-circle:before { content: "\eaed"; }
+.ti-message-circle-2:before { content: "\eaed"; }
 .ti-message-dots:before { content: "\eaee"; }
 .ti-message-off:before { content: "\ed41"; }
+.ti-message-plus:before { content: "\ec9a"; }
 .ti-messages:before { content: "\eb6c"; }
 .ti-mood-empty:before { content: "\eeb5"; }
 .ti-mood-happy:before { content: "\eaf4"; }
@@ -192,6 +198,7 @@
 .ti-thumb-down:before { content: "\eb3b"; }
 .ti-thumb-up:before { content: "\eb3c"; }
 .ti-thumb-up-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6ab"; }
+.ti-timeline:before { content: "\f031"; }
 .ti-tool:before { content: "\eb40"; }
 .ti-trash:before { content: "\eb41"; }
 .ti-trophy:before { content: "\eb45"; }
@@ -205,6 +212,7 @@
 .ti-user-star:before { content: "\f7d1"; }
 .ti-users:before { content: "\ebf2"; }
 .ti-users-group:before { content: "\fa21"; }
+.ti-users-plus:before { content: "\fa0f"; }
 .ti-volume-off:before { content: "\f1c3"; }
 .ti-wand:before { content: "\ebcb"; }
 .ti-wifi:before { content: "\eb52"; }

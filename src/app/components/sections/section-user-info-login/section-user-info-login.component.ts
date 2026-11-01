@@ -24,6 +24,7 @@ import { TipoIconMonitorComponent } from '../../addons/tipo-icon-monitor/tipo-ic
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
+import { SugerenciaPushComponent } from '../../shared/sugerencia-push/sugerencia-push.component';
 
 @Component({
     selector: 'app-section-user-info-login',
@@ -42,6 +43,7 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
         DatePipe,
         TimeAgoPipe,
         TruncatePipe,
+        SugerenciaPushComponent,
     ],
 })
 export class SectionUserInfoLoginComponent implements OnInit {

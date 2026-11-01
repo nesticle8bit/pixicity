@@ -17,6 +17,7 @@ import { isLinkActive, linksFor, NavLink } from '../main-nav.config';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { enNavegador } from '../../../shared/helpers/plataforma';
 import { DecimalPipe } from '@angular/common';
+import { SugerenciaPushComponent } from '../../shared/sugerencia-push/sugerencia-push.component';
 
 // Cuánto (px) hay que arrastrar para que el gesto cuente, y cuánto para que al soltar se cierre.
 const SWIPE_START_PX = 12;
@@ -35,6 +36,7 @@ const SWIPE_CLOSE_PX = 70;
         ReactiveFormsModule,
         RouterLinkActive,
         DecimalPipe,
+        SugerenciaPushComponent,
     ],
 })
 export class MobileDrawerComponent implements OnInit {

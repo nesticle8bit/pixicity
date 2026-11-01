@@ -1,17 +1,18 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, viewChild } from '@angular/core';
 import { PerfilRef, SIN_PERFIL } from 'src/app/models/seguridad/seguridad-vm.model';
 import { ShoutComposerComponent } from '../../shared/shouts/shout-composer/shout-composer.component';
-import { ProfileShoutsWallComponent } from '../profile-shouts-wall/profile-shouts-wall.component';
+import { ProfileTimelineComponent } from '../profile-timeline/profile-timeline.component';
 
+/** Pestaña principal del perfil: escribir en el muro y la línea de tiempo con todo lo que hizo el usuario. */
 @Component({
   selector: 'app-profile-shouts',
   templateUrl: './profile-shouts.component.html',
   styleUrls: ['./profile-shouts.component.scss'],
-  imports: [ShoutComposerComponent, ProfileShoutsWallComponent],
+  imports: [ShoutComposerComponent, ProfileTimelineComponent],
 })
 export class ProfileShoutsComponent {
-  public reloadShouts = false;
   private _user: PerfilRef = SIN_PERFIL;
+  private readonly timeline = viewChild(ProfileTimelineComponent);
 
   @Input() set user(value: PerfilRef | null) {
     this._user = value ?? SIN_PERFIL;
@@ -21,9 +22,8 @@ export class ProfileShoutsComponent {
     return this._user;
   }
 
-  /** Al publicar, recarga el muro (el wall recarga cuando `load` pasa a true). */
+  /** Al publicar, la línea de tiempo vuelve a cargar desde arriba. */
   alPublicar(): void {
-    this.reloadShouts = false;
-    setTimeout(() => (this.reloadShouts = true));
+    this.timeline()?.recargar();
   }
 }

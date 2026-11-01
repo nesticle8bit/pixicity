@@ -414,6 +414,11 @@ $activo: light-dark(#004160, #6cbcec);
     }
   }
 
+  &__push {
+    display: block;
+    margin: 0 1rem .5rem;
+  }
+
   &__tema {
     display: flex;
     gap: .25rem;

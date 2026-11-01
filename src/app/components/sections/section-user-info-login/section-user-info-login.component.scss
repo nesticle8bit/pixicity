@@ -17,3 +17,8 @@ article>p {
 article>p>p {
     margin-bottom: -2rem !important;
 }
+// "Activar notificaciones de escritorio" arriba de la lista (solo mientras no se respondió el permiso).
+.mon-push {
+  display: block;
+  margin: 6px 8px 2px;
+}

@@ -10,7 +10,7 @@ import { catchError, map } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { FiltroNotificaciones, MonitorViewModel, StatsViewModel } from 'src/app/models/logs/logs-vm.model';
+import { FiltroNotificaciones, MonitorViewModel, PreferenciasPush, StatsViewModel, SuscripcionPush } from 'src/app/models/logs/logs-vm.model';
 
 @Injectable()
 export class HttpLogsService implements IHttpLogsService {
@@ -136,5 +136,29 @@ export class HttpLogsService implements IHttpLogsService {
     return this.http
       .put<ApiResponse<boolean>>(`${environment.api}/api/notificaciones/preferencias/${encodeURIComponent(tipo)}?activa=${activa}`, {})
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') || 'No se pudo guardar'); }));
+  }
+
+  getClavePush(): Observable<string | null> {
+    return this.http
+      .get<ApiResponse<{ clavePublica: string | null }>>(`${environment.api}/api/push/clave`)
+      .pipe(map((r) => r.data?.clavePublica ?? null));
+  }
+
+  getSuscripcionPush(endpoint: string): Observable<PreferenciasPush | null> {
+    return this.http
+      .get<ApiResponse<PreferenciasPush | null>>(`${environment.api}/api/push/suscripcion`, { params: { endpoint } })
+      .pipe(map((r) => r.data ?? null));
+  }
+
+  guardarSuscripcionPush(suscripcion: SuscripcionPush): Observable<boolean> {
+    return this.http
+      .put<ApiResponse<boolean>>(`${environment.api}/api/push/suscripcion`, suscripcion)
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') || 'No se pudo activar'); }));
+  }
+
+  quitarSuscripcionPush(endpoint: string): Observable<boolean> {
+    return this.http
+      .delete<ApiResponse<boolean>>(`${environment.api}/api/push/suscripcion`, { params: { endpoint } })
+      .pipe(map((r) => r.data ?? false));
   }
 }

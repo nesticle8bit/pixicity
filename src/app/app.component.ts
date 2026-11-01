@@ -19,6 +19,7 @@ import { AvisoEmailComponent } from './components/shared/aviso-email/aviso-email
 import { ConfirmarComponent } from './components/shared/confirmar/confirmar.component';
 import { AvisoVersionComponent } from './components/shared/aviso-version/aviso-version.component';
 import { AppInstalableService } from './services/shared/app-instalable.service';
+import { NotificacionesEscritorioService } from './services/shared/notificaciones-escritorio.service';
 import { SsrSalud } from './shared/helpers/ssr-salud';
 import { AnunciosService } from './services/shared/anuncios.service';
 import { ScriptsGlobalesService } from './services/shared/scripts-globales.service';
@@ -85,6 +86,8 @@ export class AppComponent {
     inject(ScriptsGlobalesService).insertar();
     // App instalable: service worker, aviso de instalación y deploys nuevos (solo en el navegador).
     inject(AppInstalableService).iniciar();
+    // Notificaciones de escritorio: se sincronizan al iniciar sesión y se dan de baja al cerrarla.
+    inject(NotificacionesEscritorioService).iniciar();
 
     this.displayComponentService
       .getDisplay()

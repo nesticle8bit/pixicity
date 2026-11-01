@@ -1,0 +1,328 @@
+@use '../perfil' as p;
+
+@include p.piezas-pestana;
+
+// Riel vertical: el centro de los puntos cae sobre la línea.
+$riel: 40px;
+$punto: 32px;
+$riel-movil: 30px;
+$punto-movil: 26px;
+
+:host {
+  display: block;
+  margin-top: 14px;
+}
+
+// - filtros: chips; en el celular se deslizan de costado sin romper la página.
+.tl-filtros {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 2px 0 6px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.tl-filtro {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid light-dark(#d4dde3, #354652);
+  border-radius: 999px;
+  background: light-dark(#fff, #1f262c);
+  color: light-dark(#3d4a54, #c7d2da);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  scroll-snap-align: start;
+
+  &:hover {
+    border-color: light-dark(#9fb3c2, #4f6372);
+  }
+
+  &.activo {
+    border-color: #005bb3;
+    background: #005bb3;
+    color: #fff;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #1e99d3;
+    outline-offset: 2px;
+  }
+}
+
+.tl-fijado {
+  margin-bottom: 18px;
+}
+
+// - línea de tiempo
+.tl {
+  position: relative;
+  margin: 0;
+  padding: 0 0 0 $riel;
+  list-style: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: calc($punto / 2 - 1px);
+    width: 2px;
+    border-radius: 2px;
+    background: light-dark(#e3e9ed, #2f3b44);
+  }
+}
+
+.tl__dia {
+  position: relative;
+  margin: 20px 0 10px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  h3 {
+    display: inline-block;
+    margin: 0 0 0 (-$riel);
+    padding: 3px 12px;
+    border: 1px solid light-dark(#e3e9ed, #354652);
+    border-radius: 999px;
+    background: light-dark(#f4f8fa, #1b2228);
+    color: light-dark(#4b5a65, #aebac4);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+}
+
+.tl__item {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.tl__punto {
+  position: absolute;
+  top: 4px;
+  left: -$riel;
+  display: grid;
+  place-items: center;
+  width: $punto;
+  height: $punto;
+  border: 3px solid light-dark(#fff, #16191c);
+  border-radius: 50%;
+  background: light-dark(#eef3f6, #26313a);
+  color: light-dark(#5d6b75, #aebac4);
+  font-size: 0.95rem;
+
+  &--shout { background: light-dark(#e3f0fb, #1b3247); color: #1e7bc4; }
+  &--reshout { background: light-dark(#e6f6ec, #183526); color: #1f9d55; }
+  &--post { background: light-dark(#eef7dc, #2a3418); color: light-dark(#5a7d00, #a6d13a); }
+  &--comentario { background: light-dark(#e3f0fb, #1b3247); color: #1e7bc4; }
+  &--reaccion { background: light-dark(#fde8ef, #3a1e28); color: light-dark(#d6336c, #f06595); }
+  &--comunidad { background: light-dark(#efe8fb, #2c2340); color: light-dark(#7048e8, #9775fa); }
+  &--gente { background: light-dark(#e8f3f8, #1c2d36); color: light-dark(#0b7285, #3bc9db); }
+  &--rango { background: light-dark(#fff4db, #3a301a); color: light-dark(#b07500, #fcc419); }
+  &--mas { color: light-dark(#7a8893, #8d9aa5); }
+}
+
+// Las tarjetas (shout, post) arrancan un poco más arriba que el punto: el punto queda junto al avatar.
+.tl__item--tarjeta .tl__punto {
+  top: 10px;
+}
+
+.tl__item--actividad {
+  min-height: $punto + 4px;
+  padding-top: 8px;
+}
+
+.tl__actividad {
+  min-width: 0;
+}
+
+.tl__texto {
+  margin: 0;
+  color: light-dark(#26323a, #c7d2da);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.tl__detalle {
+  padding: 0 6px;
+  border-radius: 6px;
+  background: light-dark(#eef7dc, #2a3418);
+  color: light-dark(#4a6a00, #a6d13a);
+  font-size: 0.82rem;
+}
+
+.tl__titulo {
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.tl__avatar {
+  display: inline-block;
+  margin-right: 2px;
+  vertical-align: -3px;
+}
+
+.tl__no-disponible {
+  color: light-dark(#7a8893, #8d9aa5);
+}
+
+.tl__fecha {
+  color: light-dark(#7a8893, #8d9aa5);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+// El comentario, como una cita que lleva a él.
+.tl__cita {
+  display: block;
+  margin: 6px 0 0;
+  padding: 8px 12px;
+  border-left: 3px solid light-dark(#b9d7ef, #2b4e6b);
+  border-radius: 0 10px 10px 0;
+  background: light-dark(#f4f8fa, #1b2228);
+  color: light-dark(#3d4a54, #c7d2da);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+
+  &:hover {
+    background: light-dark(#eaf2f7, #212a31);
+  }
+}
+
+.tl__item--mas {
+  padding-top: 6px;
+}
+
+.tl__mas {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px dashed light-dark(#c3d0d9, #3f505d);
+  border-radius: 999px;
+  background: transparent;
+  color: light-dark(#3d4a54, #c7d2da);
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  &:hover {
+    background: light-dark(#f4f8fa, #1b2228);
+  }
+}
+
+// - final de la lista
+.tl-fin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 0;
+  padding: 12px 0;
+  color: light-dark(#5d6b75, #aeaeae);
+  font-size: 0.88rem;
+
+  p {
+    margin: 0;
+  }
+}
+
+.tl-fin--final {
+  flex-direction: row;
+  justify-content: center;
+}
+
+.tl-boton {
+  min-height: 40px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: #005bb3;
+  color: #fff;
+  font-weight: 700;
+}
+
+.tl-boton--suave {
+  border: 1px solid light-dark(#d4dde3, #354652);
+  background: light-dark(#fff, #1f262c);
+  color: light-dark(#3d4a54, #c7d2da);
+}
+
+.tl-mas-cargando {
+  margin-left: $riel;
+}
+
+.tl-centinela {
+  height: 1px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #1e99d3;
+  outline-offset: 2px;
+}
+
+// - celular: riel más angosto, todo a lo ancho, zonas táctiles de 44px.
+@media (max-width: 575.98px) {
+  .tl {
+    padding-left: $riel-movil;
+
+    &::before {
+      left: calc($punto-movil / 2 - 1px);
+    }
+  }
+
+  .tl__dia h3 {
+    margin-left: -$riel-movil;
+  }
+
+  .tl__punto {
+    left: -$riel-movil;
+    width: $punto-movil;
+    height: $punto-movil;
+    border-width: 2px;
+    font-size: 0.8rem;
+  }
+
+  .tl__item--actividad {
+    min-height: $punto-movil + 4px;
+    padding-top: 5px;
+  }
+
+  .tl__texto {
+    font-size: 0.88rem;
+  }
+
+  .tl-filtros {
+    // Los chips llegan al borde de la pantalla para que se note que se deslizan.
+    margin-right: -12px;
+    padding-right: 12px;
+  }
+
+  .tl-filtro,
+  .tl__mas,
+  .tl-boton {
+    min-height: 44px;
+  }
+
+  .tl-mas-cargando {
+    margin-left: $riel-movil;
+  }
+}
