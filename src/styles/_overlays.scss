@@ -25,6 +25,25 @@
   }
 }
 
+// Selector de emojis en el celular (EmojisPopoverService): tarjeta flotante con aire a los lados y abajo, en vez de
+// una hoja pegada a los bordes de la pantalla. En pantallas medianas no pasa de 480 px.
+.cdk-overlay-pane.emojis-sheet {
+  width: min(calc(100vw - 24px), 480px);
+  max-width: none !important;
+  // !important: la estrategia de posición global de CDK pone margin-bottom: 0 en línea.
+  margin-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+
+  .mat-bottom-sheet-container {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+    padding: 4px 4px 6px;
+    border-radius: 16px;
+    box-shadow: 0 10px 32px rgb(0 0 0 / 28%);
+    overflow: hidden;
+  }
+}
+
 // Dialog moderno del Generador de Posts: esquinas redondeadas
 .pg-dialog {
   .mat-mdc-dialog-surface {

@@ -86,15 +86,36 @@
         <ng-container [ngTemplateOutlet]="tendenciasTpl" />
       </div>
 
-      @if (nuevos() > 0) {
-      <button type="button" class="mi__nuevos" (click)="verNuevos()" aria-live="polite">
-        <i class="ti ti-arrow-up" aria-hidden="true"></i>
-        {{ nuevos() === 1 ? 'Hay 1 publicación nueva' : 'Hay ' + nuevos() + ' publicaciones nuevas' }}
-      </button>
+      <!-- Lejos del principio, el aviso de nuevos flota arriba (sticky, de alto 0: no empuja la lista). -->
+      @if (nuevos() > 0 && lejosDelTope()) {
+      <div class="mi-nuevos-flotante">
+        <button type="button" class="mi-nuevos-pildora" (click)="verNuevos()">
+          <i class="ti ti-arrow-up" aria-hidden="true"></i>
+          @if (autoresNuevos().length) {
+          <span class="mi-nuevos-pildora__autores" aria-hidden="true">
+            @for (a of autoresNuevos(); track a.userName) {
+            <app-user-avatar [avatar]="a.avatar" [userName]="a.userName" [width]="22" [height]="22" />
+            }
+          </span>
+          }
+          <span>{{ textoNuevos() }}</span>
+        </button>
+      </div>
       }
 
-      <section id="mi-muro" role="tabpanel" [attr.aria-labelledby]="'mi-tab-' + alcance()"
+      <section #muro id="mi-muro" role="tabpanel" [attr.aria-labelledby]="'mi-tab-' + alcance()"
         [attr.aria-busy]="cargando() || cargandoMas()">
+        <div aria-live="polite">
+          @if (nuevos() > 0 && !cargando()) {
+          <button type="button" class="mi__nuevos" (click)="verNuevos()" [disabled]="cargandoNuevos()">
+            @if (cargandoNuevos()) {
+            <app-cargando texto="Cargando…" />
+            } @else {
+            {{ textoNuevos() }}
+            }
+          </button>
+          }
+        </div>
         @if (cargando()) {
         <div class="mi__estado"><app-cargando tamano="lg" texto="Cargando tu muro…" /></div>
         } @else if (error() && items().length === 0) {
@@ -148,8 +169,21 @@
           <button type="button" class="mi-boton mi-boton--suave" (click)="cargarMas()">Cargar más</button>
           }
         </div>
+        } @else if (alcance() === 'activos' && !tag()) {
+        <!-- "Más activos" solo cubre el período: al terminar se ofrece seguir con uno más largo o con todo lo reciente. -->
+        <div class="mi__fin mi__fin--activos">
+          <p>Eso es todo lo más activo {{ periodo() === 'dia' ? 'de hoy' : periodo() === 'semana' ? 'de la semana' : 'del mes' }}.</p>
+          <div class="d-flex flex-wrap justify-content-center gap-2">
+            @if (periodoMasLargo(); as otro) {
+            <button type="button" class="mi-boton mi-boton--suave" (click)="cambiarPeriodo(otro)">
+              Ver {{ otro === 'semana' ? 'la semana' : 'el mes' }}
+            </button>
+            }
+            <button type="button" class="mi-boton" (click)="cambiarAlcance('todos')">Ver todos los recientes</button>
+          </div>
+        </div>
         } @else {
-        <p class="mi__fin">No hay más publicaciones.</p>
+        <p class="mi__fin">Llegaste al final. No hay más publicaciones.</p>
         }
         }
       </section>

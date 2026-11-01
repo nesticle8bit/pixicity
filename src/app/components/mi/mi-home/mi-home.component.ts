@@ -4,7 +4,7 @@ import { afterNextRender, Component, DestroyRef, ElementRef, inject, OnDestroy, 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, NavigationStart, ParamMap, Router, RouterLink } from '@angular/router';
-import { catchError, combineLatest, EMPTY, filter, firstValueFrom, Subject, switchMap, tap } from 'rxjs';
+import { auditTime, catchError, combineLatest, debounceTime, EMPTY, filter, firstValueFrom, fromEvent, interval, merge, Subject, switchMap, tap } from 'rxjs';
 import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
 import { EDAD_NSFW, edadDesde } from 'src/app/shared/helpers/edad';
 import { NotificationService } from 'src/app/services/shared/notification.service';
@@ -26,11 +26,15 @@ import { ShoutCardComponent } from '../../shared/shouts/shout-card/shout-card.co
 import { ShoutComposerComponent } from '../../shared/shouts/shout-composer/shout-composer.component';
 
 const POR_PAGINA = 15;
+/** Lo que trae de una vez "Mostrar N shouts" (el máximo del API); si hay más, recarga el muro desde arriba. */
+const MAX_NUEVOS_EN_LINEA = 30;
+/** Cada cuánto se pregunta si hay shouts nuevos (solo con la pestaña del navegador visible). */
+const AVISO_CADA_MS = 30_000;
 const PESTANAS: AlcanceMuro[] = ['activos', 'todos', 'siguiendo', 'nsfw'];
 const PERIODOS: PeriodoActivos[] = ['dia', 'semana', 'mes'];
 
 /** Lista y scroll al salir de /mi: al volver con "atrás" se restauran en vez de recargar desde arriba. */
-let guardado: { url: string; items: MuroItem[]; siguiente: string | null; scrollY: number } | null = null;
+let guardado: { url: string; items: MuroItem[]; siguiente: string | null; corte: string | null; scrollY: number } | null = null;
 
 /**
  * /mi: el inicio personal. Muro con los shouts propios y de quienes sigues (más lo que comparten y sus posts nuevos)
@@ -90,14 +94,21 @@ export class MiHomeComponent implements OnDestroy {
   readonly recientes = signal<Tendencia[]>([]);
   readonly ordenTags = signal<OrdenTendencias>('mejores');
   readonly ordenes: OrdenTendencias[] = ['mejores', 'recientes'];
-  /** Shouts nuevos de gente que sigo, llegados en vivo desde que cargó el muro. */
+  /** Lo publicado por otros en esta pestaña después de la entrada más nueva de la lista (como el "Mostrar 9 posts" de X). */
   readonly nuevos = signal(0);
+  readonly autoresNuevos = signal<{ userName: string; avatar: string | null }[]>([]);
+  readonly cargandoNuevos = signal(false);
+  /** Ya se bajó más allá del principio del muro: el aviso pasa a ser una píldora flotante. */
+  readonly lejosDelTope = signal(false);
+  /** "Más activos": momento en que se armó el ranking (lo devuelve la primera página y se reenvía en las siguientes). */
+  private corte: string | null = null;
 
   readonly resumen = signal<MiResumen | null>(null);
   readonly sugerencias = signal<(SugerenciaUsuario & { siguiendo?: boolean; procesando?: boolean })[]>([]);
 
   private readonly pedir = new Subject<{ reiniciar: boolean }>();
   private readonly finDeLista = viewChild<ElementRef<HTMLElement>>('finDeLista');
+  private readonly muro = viewChild<ElementRef<HTMLElement>>('muro');
   private observador?: IntersectionObserver;
   /** URL de esta vista (al destruirse, router.url ya es la de destino). */
   private urlActual = '';
@@ -118,17 +129,18 @@ export class MiHomeComponent implements OnDestroy {
         tap(({ reiniciar }) => {
           this.error.set(false);
           if (reiniciar) {
-            this.nuevos.set(0);
+            this.limpiarNuevos();
             this.cargando.set(true);
             this.items.set([]);
             this.siguiente.set(null);
+            this.corte = null;
           } else {
             this.cargandoMas.set(true);
           }
         }),
         switchMap(({ reiniciar }) =>
           (this.alcance() === 'activos' && !this.tag()
-            ? this.miService.getActivos(this.periodo(), reiniciar ? 1 : Number(this.siguiente()), POR_PAGINA)
+            ? this.miService.getActivos(this.periodo(), reiniciar ? 1 : Number(this.siguiente()), POR_PAGINA, false, this.corte)
             : this.miService.getMuro(this.alcance(), reiniciar ? null : this.siguiente(), POR_PAGINA, this.tag())
           ).pipe(
             catchError(() => {
@@ -142,8 +154,10 @@ export class MiHomeComponent implements OnDestroy {
         takeUntilDestroyed(),
       )
       .subscribe((muro) => {
-        this.items.update((l) => [...l, ...muro.items]);
+        // Lo que ya está en la lista no se repite (un shout puede reaparecer si se borró o se movió algo entre páginas).
+        this.items.update((l) => [...l, ...this.sinRepetidos(muro.items, l)]);
         this.siguiente.set(muro.siguiente);
+        if (muro.corte) this.corte = muro.corte;
         this.cargando.set(false);
         this.cargandoMas.set(false);
         this.reobservarFin();
@@ -178,8 +192,10 @@ export class MiHomeComponent implements OnDestroy {
       primera = false;
       guardado = null;
       if (previo) {
+        this.limpiarNuevos();
         this.items.set(previo.items);
         this.siguiente.set(previo.siguiente);
+        this.corte = previo.corte;
         this.cargando.set(false);
         this.restaurarScroll(previo.scrollY);
         return;
@@ -193,16 +209,36 @@ export class MiHomeComponent implements OnDestroy {
     this.miService.getTendencias(8, 'mejores').pipe(takeUntilDestroyed()).subscribe((t) => this.tendencias.set(t));
     this.miService.getTendencias(8, 'recientes').pipe(takeUntilDestroyed()).subscribe((t) => this.recientes.set(t));
 
-    // Shout nuevo de alguien que sigo: no se mete en la lista (movería lo que estoy leyendo), se ofrece "ver nuevos".
     const signalr = inject(SignalrService);
     const token = inject(IHttpSecurityService).getCurrentUser()?.token;
     if (token) void signalr.start(token);
-    signalr.shoutNuevo$.pipe(takeUntilDestroyed()).subscribe(() => {
-      if (this.alcance() === 'siguiendo' && !this.tag()) this.nuevos.update((n) => n + 1);
-    });
 
-    // Al acercarse al final de la lista carga la página siguiente (el botón "Cargar más" queda como respaldo).
     afterNextRender(() => {
+      // Lo nuevo no se mete solo en la lista (movería lo que estoy leyendo): se ofrece "Mostrar N shouts".
+      // Se pregunta cada 30 s, al volver a la pestaña del navegador y enseguida si alguien que sigo publica (SignalR).
+      const visible = () => document.visibilityState === 'visible';
+      merge(interval(AVISO_CADA_MS), fromEvent(document, 'visibilitychange'), signalr.shoutNuevo$.pipe(debounceTime(1500)))
+        .pipe(
+          filter(() => visible() && this.claveAviso() !== null),
+          switchMap(() => {
+            const clave = this.claveAviso()!;
+            return this.miService.getNuevos(this.alcance(), this.items()[0].fecha, this.tag()).pipe(
+              // Si mientras tanto cambió la pestaña o se recargó la lista, la respuesta ya no aplica.
+              filter((n) => !!n && clave === this.claveAviso()),
+            );
+          }),
+          takeUntilDestroyed(this.destroyRef),
+        )
+        .subscribe((n) => {
+          this.nuevos.set(n!.cantidad);
+          this.autoresNuevos.set(n!.autores);
+        });
+
+      fromEvent(window, 'scroll', { passive: true })
+        .pipe(auditTime(150), takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => this.lejosDelTope.set((this.muro()?.nativeElement.getBoundingClientRect().top ?? 0) < 0));
+
+      // Al acercarse al final de la lista carga la página siguiente (el botón "Cargar más" queda como respaldo).
       if (typeof IntersectionObserver === 'undefined') return;
       this.observador = new IntersectionObserver(
         (entradas) => {
@@ -253,7 +289,7 @@ export class MiHomeComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.observador?.disconnect();
     if (typeof window !== 'undefined' && this.items().length)
-      guardado = { url: this.urlActual, items: this.items(), siguiente: this.siguiente(), scrollY: this.scrollAlSalir };
+      guardado = { url: this.urlActual, items: this.items(), siguiente: this.siguiente(), corte: this.corte, scrollY: this.scrollAlSalir };
   }
 
   /** El muro "Siguiendo" es personal (noindex); Recientes y cada #hashtag son públicos e indexables. */
@@ -334,6 +370,11 @@ export class MiHomeComponent implements OnDestroy {
     this.router.navigate(['/mi'], { queryParams: { periodo: periodo === 'dia' ? null : periodo }, replaceUrl: true });
   }
 
+  /** Al terminar "Más activos", el período siguiente para seguir bajando (null en el mes). */
+  periodoMasLargo(): PeriodoActivos | null {
+    return this.periodo() === 'dia' ? 'semana' : this.periodo() === 'semana' ? 'mes' : null;
+  }
+
   nombrePeriodo(periodo: PeriodoActivos): string {
     return periodo === 'dia' ? 'Hoy' : periodo === 'semana' ? 'Semana' : 'Mes';
   }
@@ -353,9 +394,63 @@ export class MiHomeComponent implements OnDestroy {
     this.router.navigate(['/mi'], { queryParams: { ver: this.haySesion ? null : 'recientes' } });
   }
 
+  /**
+   * Qué lista está mirando el aviso de nuevos: pestaña + entrada más nueva. Null cuando no corresponde avisar
+   * ("Más activos" se ordena por actividad, no por fecha; lista vacía o cargando).
+   */
+  private claveAviso(): string | null {
+    const primero = this.items()[0];
+    if (this.cargando() || !primero || (this.alcance() === 'activos' && !this.tag())) return null;
+    return `${this.alcance()}|${this.tag() ?? ''}|${primero.fecha}`;
+  }
+
+  private limpiarNuevos(): void {
+    this.nuevos.set(0);
+    this.autoresNuevos.set([]);
+  }
+
+  private sinRepetidos(nuevos: MuroItem[], lista: MuroItem[]): MuroItem[] {
+    const claves = new Set(lista.map((i) => this.claveItem(i)));
+    return nuevos.filter((i) => !claves.has(this.claveItem(i)));
+  }
+
+  /** "Mostrar 9 shouts" / "Mostrar 99+ shouts". */
+  textoNuevos(): string {
+    const n = this.nuevos();
+    return n === 1 ? 'Mostrar 1 shout' : `Mostrar ${n >= 99 ? '99+' : n} shouts`;
+  }
+
+  /** Suma lo nuevo arriba sin perder lo cargado. Si es demasiado para una página, recarga desde arriba. */
   verNuevos(): void {
-    this.pedir.next({ reiniciar: true });
+    if (this.cargandoNuevos()) return;
+    const desde = this.items()[0]?.fecha;
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (!desde || this.nuevos() > MAX_NUEVOS_EN_LINEA) {
+      this.pedir.next({ reiniciar: true });
+      return;
+    }
+    this.cargandoNuevos.set(true);
+    const clave = this.claveAviso();
+    this.miService
+      .getMuro(this.alcance(), null, MAX_NUEVOS_EN_LINEA, this.tag(), desde)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (muro) => {
+          this.cargandoNuevos.set(false);
+          if (clave !== this.claveAviso()) return; // cambió de pestaña mientras llegaba
+          // Página llena: puede haber más entre lo nuevo y lo que ya estaba; mejor recargar que dejar un hueco.
+          if (muro.siguiente) {
+            this.pedir.next({ reiniciar: true });
+            return;
+          }
+          this.limpiarNuevos();
+          this.items.update((l) => [...this.sinRepetidos(muro.items, l), ...l]);
+        },
+        error: () => {
+          this.cargandoNuevos.set(false);
+          if (clave === this.claveAviso()) this.pedir.next({ reiniciar: true });
+        },
+      });
   }
 
   /** Flechas izquierda/derecha entre pestañas (patrón ARIA de tabs). */

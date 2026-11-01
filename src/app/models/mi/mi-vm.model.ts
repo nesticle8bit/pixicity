@@ -31,6 +31,16 @@ export interface Muro {
   items: MuroItem[];
   /** Cursor de la página siguiente (null: no hay más). */
   siguiente: string | null;
+  /** Solo "Más activos": momento en que se armó el ranking; se reenvía al pedir las páginas siguientes. */
+  corte?: string;
+}
+
+/** Lo publicado por otros desde la entrada más nueva del muro ("Mostrar 9 shouts"). */
+export interface MuroNuevos {
+  /** Tope 99 (se muestra "99+"). */
+  cantidad: number;
+  /** Hasta 3, del más nuevo al más viejo. */
+  autores: { userName: string; avatar: string | null }[];
 }
 
 export interface MiResumen {

@@ -496,6 +496,46 @@ test('mi: muestra el muro mezclado, carga más, comparte y sigue a una sugerenci
   await expect.poll(() => pedidos.at(-1)?.url.searchParams.get('alcance')).toBe('todos');
 });
 
+test('mi: avisa "Mostrar N shouts" y los suma arriba sin recargar lo que ya estaba', async ({ page }) => {
+  await page.clock.install();
+  await conSesion(page);
+  const pedidos = await simularMi(page);
+  const consultasNuevos: URL[] = [];
+  // Registradas después de simularMi: Playwright prueba primero la última ruta.
+  await page.route(/\/api\/mi\/muro\/nuevos/i, (r) => {
+    consultasNuevos.push(new URL(r.request().url()));
+    return r.fulfill(ok({ cantidad: 1, autores: [{ userName: 'recien_llegado', avatar: null }] }));
+  });
+  const traerNuevos: URL[] = [];
+  await page.route(/\/api\/mi\/muro\?.*despues=/i, (r) => (traerNuevos.push(new URL(r.request().url())), r.fulfill(ok({
+    items: [{ tipo: 'shout', fecha: '2026-10-11T10:00:00Z', compartidoPor: null, post: null,
+      shout: { id: 9, comentario: 'Recién publicado', tipo: 'Texto', url: '', fechaRegistro: '2026-10-11T10:00:00Z',
+        avatar: { userName: 'recien_llegado', avatar: null }, perfil: { userName: 'recien_llegado', avatar: null },
+        interacciones: { meGustas: 0, favoritos: 0, comentarios: 0, reshouts: 0, meGusta: false, favorito: false, reshouteado: false } } }],
+    siguiente: null,
+  }))));
+
+  await page.goto('/mi?ver=siguiendo');
+  await expect(page.getByText('Hola desde el muro')).toBeVisible();
+  await page.clock.fastForward(31_000);
+
+  const mostrar = page.getByRole('button', { name: 'Mostrar 1 shout' });
+  await expect(mostrar).toBeVisible();
+  // Pregunta desde la entrada más nueva de la lista, en la misma pestaña.
+  expect(consultasNuevos.at(-1)?.searchParams.get('despues')).toBe('2026-10-10T10:00:00Z');
+  expect(consultasNuevos.at(-1)?.searchParams.get('alcance')).toBe('siguiendo');
+
+  const recargas = () => pedidos.filter((p) => !p.url.searchParams.get('antes')).length;
+  const recargasAntes = recargas();
+  await mostrar.click();
+  await expect(page.locator('.mi__lista > li').first()).toContainText('Recién publicado');
+  await expect(page.getByText('Hola desde el muro')).toBeVisible();
+  await expect(mostrar).toBeHidden();
+  // Solo pidió lo nuevo (con "despues"): no recargó el muro desde arriba.
+  expect(traerNuevos.map((u) => u.searchParams.get('despues'))).toEqual(['2026-10-10T10:00:00Z']);
+  expect(recargas()).toBe(recargasAntes);
+});
+
 test('correo sin confirmar: el aviso reenvía el enlace y el enlace del correo confirma la cuenta', async ({ page }) => {
   const sesion = {
     usuario: { id: 'MQ==', userName: 'lector_tres', rango: 'Usuario', avatar: '', emailConfirmado: false },

@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ApiResponse } from 'src/app/models/api/api-response.model';
-import { AlcanceMuro, MiResumen, Muro, SugerenciaUsuario, Tendencia, OrdenTendencias, MuroItem, PeriodoActivos, TopShoutero } from 'src/app/models/mi/mi-vm.model';
+import { AlcanceMuro, MiResumen, Muro, MuroNuevos, SugerenciaUsuario, Tendencia, OrdenTendencias, MuroItem, PeriodoActivos, TopShoutero } from 'src/app/models/mi/mi-vm.model';
 import { environment } from 'src/environments/environment';
 import { IHttpMiService } from '../interfaces/httpMi.interface';
 import { HelperService } from '../shared/helper.service';
@@ -26,9 +26,10 @@ export class HttpMiService implements IHttpMiService {
       .pipe(map((r) => (r.status === 200 ? r.data ?? [] : [])), catchError(() => of([])));
   }
 
-  getMuro(alcance: AlcanceMuro, antes: string | null, cantidad = 15, tag?: string | null): Observable<Muro> {
+  getMuro(alcance: AlcanceMuro, antes: string | null, cantidad = 15, tag?: string | null, despues?: string | null): Observable<Muro> {
     let params = new HttpParams().set('alcance', alcance).set('cantidad', cantidad);
     if (antes) params = params.set('antes', antes);
+    if (despues) params = params.set('despues', despues);
     if (tag) params = params.set('tag', tag);
     return this.http
       .get<ApiResponse<Muro>>(`${environment.api}/api/mi/muro`, { params })
@@ -44,15 +45,25 @@ export class HttpMiService implements IHttpMiService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  getActivos(periodo: PeriodoActivos, pagina: number, cantidad = 15, nsfw = false): Observable<Muro> {
+  getNuevos(alcance: AlcanceMuro, despues: string, tag?: string | null): Observable<MuroNuevos | null> {
+    let params = new HttpParams().set('alcance', alcance).set('despues', despues);
+    if (tag) params = params.set('tag', tag);
+    // Se consulta en segundo plano: si falla, simplemente no hay aviso (sin toast).
+    return this.http
+      .get<ApiResponse<MuroNuevos>>(`${environment.api}/api/mi/muro/nuevos`, { params })
+      .pipe(map((r) => (r.status === 200 ? r.data ?? null : null)), catchError(() => of(null)));
+  }
+
+  getActivos(periodo: PeriodoActivos, pagina: number, cantidad = 15, nsfw = false, corte?: string | null): Observable<Muro> {
     let params = new HttpParams().set('periodo', periodo).set('pagina', pagina).set('cantidad', cantidad);
     if (nsfw) params = params.set('nsfw', true);
+    if (corte) params = params.set('corte', corte);
     return this.http
-      .get<ApiResponse<{ items: MuroItem[]; hayMas: boolean }>>(`${environment.api}/api/mi/activos`, { params })
+      .get<ApiResponse<{ items: MuroItem[]; hayMas: boolean; corte: string }>>(`${environment.api}/api/mi/activos`, { params })
       .pipe(map((r) => {
         if (r.status !== 200) throw new Error(r.errors?.join(', ') ?? 'Error');
         // Se ordena por actividad, no por fecha: el "cursor" es el número de la página siguiente.
-        return { items: r.data!.items, siguiente: r.data!.hayMas ? String(pagina + 1) : null };
+        return { items: r.data!.items, siguiente: r.data!.hayMas ? String(pagina + 1) : null, corte: r.data!.corte };
       }))
       .pipe(catchError(this.helper.errorHandler));
   }

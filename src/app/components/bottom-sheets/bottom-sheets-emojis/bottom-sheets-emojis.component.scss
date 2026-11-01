@@ -92,14 +92,26 @@
   }
 }
 
-// Dentro del bottom sheet (móvil): ocupa el ancho y sin marco propio.
+// Dentro del bottom sheet (móvil): ocupa el ancho de la tarjeta (el margen lo da .emojis-sheet en _overlays.scss)
+// y sin marco propio. Las columnas se acomodan al ancho; los emotes (GIF anchos, como el auto o el cartel) piden más.
 :host-context(.mat-bottom-sheet-container) .emojis,
 :host-context(.emojis-sheet) .emojis {
   width: 100%;
   border: none;
   box-shadow: none;
 
-  .emojis__grilla { grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); height: 40vh; }
+  .emojis__tabs { padding: 6px 4px; }
+  .emojis__titulo { padding-inline: 8px; }
+
+  .emojis__grilla {
+    grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+    padding-inline: 4px;
+    height: min(40vh, 320px);
+  }
+
+  // Celdas de alto fijo (no cuadradas): con columnas anchas, aspect-ratio 1 dejaba filas altísimas y casi vacías.
+  .emojis__grilla--emotes { grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); }
+  .emojis__emote { aspect-ratio: auto; height: 50px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
