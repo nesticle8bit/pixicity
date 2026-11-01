@@ -56,7 +56,11 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon/favicon-96x96.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
-  <link rel="manifest" href="/assets/favicon/manifest.json">
+  <!-- App instalable (PWA): "Agregar a inicio" / "Instalar app". sw.js no cachea: los deploys se ven al instante. -->
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="/assets/favicon/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">

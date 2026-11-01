@@ -13,7 +13,7 @@
       </span>
       <a class="sc-bubble__time" [routerLink]="enlace()"
         [matTooltip]="(fecha() | date: 'EEEE d \'de\' MMMM \'a las\' h:mm \', año\' y') ?? ''">
-        <time [attr.datetime]="fecha()">{{ fecha() | date: 'd MMM, h:mm a' }}</time>
+        <time [attr.datetime]="fecha()"><span class="sc-fecha-larga">{{ fecha() | date: 'd MMM, h:mm a' }}</span><span class="sc-fecha-corta">{{ fecha() | tiempoCorto }}</span></time>
       </a>
     </header>
 

@@ -12,6 +12,7 @@ import { urlCss } from 'src/app/shared/helpers/url-css';
 import { MOBILE_MAX_WIDTH, MobileNavService } from 'src/app/services/shared/mobile-nav.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { PreferenciaTema, TemaService } from 'src/app/services/shared/tema.service';
+import { AppInstalableService } from 'src/app/services/shared/app-instalable.service';
 import { isLinkActive, linksFor, NavLink } from '../main-nav.config';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { enNavegador } from '../../../shared/helpers/plataforma';
@@ -39,6 +40,9 @@ const SWIPE_CLOSE_PX = 70;
 export class MobileDrawerComponent implements OnInit {
   nav = inject(MobileNavService);
   tema = inject(TemaService);
+  readonly app = inject(AppInstalableService);
+  /** iPhone: los pasos de "Agregar a inicio" (no hay diálogo de instalación). */
+  readonly ayudaIos = signal(false);
   readonly opcionesTema: { valor: PreferenciaTema; label: string; icono: string }[] = [
     { valor: 'light', label: 'Claro', icono: 'ti-sun' },
     { valor: 'dark', label: 'Oscuro', icono: 'ti-moon' },
@@ -232,6 +236,14 @@ export class MobileDrawerComponent implements OnInit {
       e.preventDefault();
       primero.focus();
     }
+  }
+
+  async instalarApp(): Promise<void> {
+    if (this.app.puedeInstalar()) {
+      if (await this.app.instalar()) this.nav.close();
+      return;
+    }
+    this.ayudaIos.update((v) => !v);
   }
 
   buscar(): void {

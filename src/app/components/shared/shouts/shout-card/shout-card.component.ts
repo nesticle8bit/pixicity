@@ -1,5 +1,6 @@
 import { IHttpSilenciosService } from 'src/app/services/interfaces/httpSilencios.interface';
 import { DatePipe } from '@angular/common';
+import { TiempoCortoPipe } from 'src/app/shared/pipes/tiempo-corto.pipe';
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
@@ -43,7 +44,7 @@ const SIN_INTERACCIONES: ShoutInteracciones = {
   templateUrl: './shout-card.component.html',
   styleUrl: './shout-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, UserPopoverDirective, UserAvatarComponent, MatTooltip, MatMenu, MatMenuItem, MatMenuTrigger, ShoutMediaComponent, DatePipe,
+  imports: [RouterLink, UserPopoverDirective, UserAvatarComponent, MatTooltip, MatMenu, MatMenuItem, MatMenuTrigger, ShoutMediaComponent, DatePipe, TiempoCortoPipe,
     TextoEnlazadoComponent, FormsModule],
 })
 export class ShoutCardComponent {

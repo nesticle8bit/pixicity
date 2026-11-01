@@ -1,4 +1,5 @@
 import { DatePipe } from '@angular/common';
+import { TiempoCortoPipe } from 'src/app/shared/pipes/tiempo-corto.pipe';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { MatTooltip } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
@@ -12,7 +13,7 @@ import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.com
   templateUrl: './post-card.component.html',
   styleUrl: './post-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MatTooltip, UserPopoverDirective, UserAvatarComponent, DatePipe],
+  imports: [RouterLink, MatTooltip, UserPopoverDirective, UserAvatarComponent, DatePipe, TiempoCortoPipe],
 })
 export class PostCardComponent {
   readonly post = input.required<MuroPost>();

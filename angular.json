@@ -31,6 +31,8 @@
             "assets": [
               "src/favicon.ico",
               "src/robots.txt",
+              "src/manifest.webmanifest",
+              "src/sw.js",
               "src/ads.txt",
               {
                 "glob": "**/*",
@@ -117,6 +119,8 @@
             "assets": [
               "src/favicon.ico",
               "src/robots.txt",
+              "src/manifest.webmanifest",
+              "src/sw.js",
               "src/assets"
             ],
             "styles": [

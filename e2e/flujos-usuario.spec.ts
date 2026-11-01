@@ -470,6 +470,8 @@ test('mi: muestra el muro mezclado, carga más, comparte y sigue a una sugerenci
   await expect(page.getByText('compartió')).toBeVisible();
   await expect(page.getByRole('link', { name: /Post de alguien que sigo/ })).toHaveAttribute('href', '/posts/linux/77/post-de-alguien-que-sigo');
   await expect(page.getByText('Hola desde el muro')).toBeVisible();
+  // En el celular el composer arranca cerrado en una línea: se abre al tocarla.
+  if (test.info().project.name === 'movil') await page.getByRole('button', { name: '¿Qué estás pensando?' }).click();
   await expect(page.getByLabel('¿Qué estás pensando?')).toBeVisible();
 
   const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).options({ iframes: false }).include('.mi').include('.mi-lateral')
@@ -691,4 +693,80 @@ test('menú del celular: cabecera con el banner del perfil, avatar, rango con su
 
   await menu.getByRole('button', { name: 'Cerrar menú' }).click();
   await expect(menu).toBeHidden();
+});
+
+test('mi en el celular: el muro primero, composer en línea o en hoja, pestañas fijas y sugerencias dentro del muro', async ({ page }, info) => {
+  test.skip(info.project.name !== 'movil', 'solo cambia en el celular');
+  await conSesion(page);
+  await simularMi(page);
+  // Diez shouts para que las sugerencias caigan después del 5.º y haya scroll.
+  await page.route(/\/api\/mi\/muro\?(?!.*antes=)(?!.*despues=)/i, (r) => r.fulfill(ok({
+    items: Array.from({ length: 10 }, (_, i) => ({
+      tipo: 'shout', fecha: `2026-10-${String(20 - i).padStart(2, '0')}T10:00:00Z`, compartidoPor: null, post: null,
+      shout: { id: 100 + i, comentario: `Shout número ${i + 1}`, tipo: 'Texto', url: '', fechaRegistro: `2026-10-${String(20 - i).padStart(2, '0')}T10:00:00Z`,
+        avatar: { userName: 'autor_demo', avatar: null }, perfil: { userName: 'autor_demo', avatar: null },
+        interacciones: { meGustas: 0, favoritos: 0, comentarios: 0, reshouts: 0, meGusta: false, favorito: false, reshouteado: false } },
+    })),
+    siguiente: null,
+  })));
+
+  await page.goto('/mi?ver=siguiendo');
+  await expect(page.getByText('Shout número 1', { exact: true })).toBeVisible();
+
+  // El composer no ocupa la pantalla: una línea; el título queda solo para lectores de pantalla.
+  const linea = page.getByRole('button', { name: '¿Qué estás pensando?' });
+  await expect(linea).toBeVisible();
+  await expect(page.getByLabel('¿Qué estás pensando?')).toBeHidden();
+  await expect(page.getByRole('heading', { level: 1, name: 'Mi' })).toHaveCSS('position', 'absolute');
+
+  // Las cuatro pestañas entran sin scroll lateral.
+  const ancho = await page.evaluate(() => document.documentElement.clientWidth);
+  const nsfw = await page.locator('#mi-tab-nsfw').boundingBox();
+  expect(nsfw!.x + nsfw!.width).toBeLessThanOrEqual(ancho);
+
+  // "A quién seguir" va después del 5.º shout, no arriba del muro.
+  const intercalado = page.locator('.mi__lista > li.mi-intercalado');
+  await expect(intercalado.getByRole('heading', { name: 'A quién seguir' })).toBeVisible();
+  expect(await intercalado.evaluate((li) => [li.previousElementSibling?.textContent, li.nextElementSibling?.textContent]))
+    .toEqual([expect.stringContaining('Shout número 5'), expect.stringContaining('Shout número 6')]);
+
+  // Fecha corta, como en X.
+  await expect(page.locator('.sc-fecha-corta').first()).toBeVisible();
+  await expect(page.locator('.sc-fecha-larga').first()).toBeHidden();
+
+  // Deslizar hacia abajo desde el tope pide lo nuevo (sin recargar toda la página).
+  const pedidosDespues: string[] = [];
+  page.on('request', (r) => { if (/\/api\/mi\/muro\?.*despues=/.test(r.url())) pedidosDespues.push(r.url()); });
+  await page.evaluate(async () => {
+    const toque = (y: number) => [new Touch({ identifier: 1, target: document.body, clientX: 150, clientY: y })];
+    window.dispatchEvent(new TouchEvent('touchstart', { touches: toque(120) }));
+    for (const y of [180, 260, 340, 420]) {
+      window.dispatchEvent(new TouchEvent('touchmove', { touches: toque(y) }));
+      await new Promise((r) => setTimeout(r, 16));
+    }
+    window.dispatchEvent(new TouchEvent('touchend', { touches: [] }));
+  });
+  await expect.poll(() => pedidosDespues.length).toBe(1);
+  await expect(page.locator('.mi-tirar.is-recargando')).toHaveCount(0);
+  await expect(page.getByText('Shout número 10', { exact: true })).toBeAttached();
+
+  // Al bajar, las pestañas quedan pegadas arriba.
+  await page.evaluate(() => window.scrollTo(0, 1500));
+  await page.waitForTimeout(400);
+  const pestanas = await page.getByRole('tablist', { name: 'Qué mostrar' }).boundingBox();
+  expect(pestanas!.y).toBeLessThan(140);
+
+  // El + abre el composer como hoja sin perder el lugar; Esc la cierra.
+  const bajado = await page.evaluate(() => window.scrollY);
+  expect(bajado).toBeGreaterThan(300);
+  await page.getByRole('button', { name: 'Nuevo shout' }).click();
+  const hoja = page.getByRole('dialog', { name: 'Nuevo shout' });
+  await expect(hoja).toBeVisible();
+  await expect(hoja.getByLabel('¿Qué estás pensando?')).toBeFocused();
+  expect(await page.evaluate(() => window.scrollY)).toBe(bajado); // no saltó arriba
+  await page.keyboard.press('Escape');
+  await expect(hoja).toBeHidden();
+
+  const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).include('.mi').exclude('.op-rango').analyze();
+  expect(axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`)).toEqual([]);
 });

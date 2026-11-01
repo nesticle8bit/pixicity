@@ -41,3 +41,21 @@
     line-height: 2;
   }
 }
+
+// /mi en el celular: sus pestañas y la píldora "Mostrar N shouts" son sticky y van debajo del header cuando está
+// visible (se esconde al bajar, ver MainHeaderComponent). El botón "Ir arriba" sube para no chocar con el +.
+@media (max-width: 767.98px) {
+  body:has(main-header:not(.header--hidden)) {
+    .mi__head {
+      top: 65px;
+    }
+
+    .mi-nuevos-flotante {
+      top: 125px;
+    }
+  }
+
+  body:has(.mi-fab) .ir-arriba {
+    bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+}

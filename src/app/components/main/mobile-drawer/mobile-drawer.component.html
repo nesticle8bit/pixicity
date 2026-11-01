@@ -132,6 +132,22 @@
       </div>
     }
 
+    <!-- App instalable: en Android/Chrome abre el diálogo del navegador; en iPhone explica cómo agregarla a inicio. -->
+    @if (!app.instalada() && (app.puedeInstalar() || app.esIos())) {
+      <div class="drawer__section">
+        <h2>App</h2>
+        <button type="button" (click)="instalarApp()" [attr.aria-expanded]="app.esIos() && !app.puedeInstalar() ? ayudaIos() : null">
+          <i class="ti ti-device-mobile" aria-hidden="true"></i> Instalar la app en el celular
+        </button>
+        @if (ayudaIos()) {
+          <p class="drawer__ayuda-ios">
+            En Safari toca <i class="ti ti-share" aria-label="Compartir"></i> <b>Compartir</b> y después
+            <b>Agregar a inicio</b>. Se abre como una app y se actualiza sola con el sitio.
+          </p>
+        }
+      </div>
+    }
+
     <div class="drawer__section">
       <h2 id="drawer-tema">Apariencia</h2>
       <div class="drawer__tema" role="radiogroup" aria-labelledby="drawer-tema">

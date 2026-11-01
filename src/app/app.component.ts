@@ -17,6 +17,8 @@ import { MainUltimasNoticiasComponent } from './components/main/main-ultimas-not
 import { MainFooterComponent } from './components/main/main-footer/main-footer.component';
 import { AvisoEmailComponent } from './components/shared/aviso-email/aviso-email.component';
 import { ConfirmarComponent } from './components/shared/confirmar/confirmar.component';
+import { AvisoVersionComponent } from './components/shared/aviso-version/aviso-version.component';
+import { AppInstalableService } from './services/shared/app-instalable.service';
 import { SsrSalud } from './shared/helpers/ssr-salud';
 import { AnunciosService } from './services/shared/anuncios.service';
 import { ScriptsGlobalesService } from './services/shared/scripts-globales.service';
@@ -43,6 +45,7 @@ const DEFAULT_DESCRIPTION =
         RouterOutlet,
         MainFooterComponent,
         ConfirmarComponent,
+        AvisoVersionComponent,
     ],
 })
 export class AppComponent {
@@ -80,6 +83,8 @@ export class AppComponent {
     // La lista de anuncios sale con las primeras peticiones: cuando una página pinta su espacio, ya está.
     inject(AnunciosService).precargar();
     inject(ScriptsGlobalesService).insertar();
+    // App instalable: service worker, aviso de instalación y deploys nuevos (solo en el navegador).
+    inject(AppInstalableService).iniciar();
 
     this.displayComponentService
       .getDisplay()

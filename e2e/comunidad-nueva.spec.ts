@@ -117,6 +117,8 @@ test('el composer de /mi autocompleta #hashtags con el teclado', async ({ page }
   await simularMi(page);
   await page.addInitScript((s) => localStorage.setItem('taringas', s), JSON.stringify(SESION));
   await page.goto('/mi');
+  // En el celular el composer arranca cerrado en una línea: se abre al tocarla.
+  if (test.info().project.name === 'movil') await page.getByRole('button', { name: '¿Qué estás pensando?' }).click();
 
   const campo = page.getByRole('combobox', { name: '¿Qué estás pensando?' });
   await campo.fill('Me encanta el #ro');

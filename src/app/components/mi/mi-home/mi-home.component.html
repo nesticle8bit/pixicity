@@ -1,6 +1,12 @@
 <div class="container container--home">
   <div class="row">
     <div class="col-12 col-md-8 mi">
+      <!-- Celular: deslizar hacia abajo desde el tope recarga el muro (indicador que crece con el dedo). -->
+      <div class="mi-tirar" [class.is-listo]="tirar() >= umbralTirar" [class.is-recargando]="recargando()"
+        [style.height.px]="recargando() ? 48 : tirar()" aria-hidden="true">
+        <i class="ti ti-refresh" [style.transform]="recargando() ? null : 'rotate(' + tirar() * 4 + 'deg)'"></i>
+      </div>
+
       <header class="mi__head">
         @if (tag(); as t) {
         <h1 class="mi__titulo">
@@ -10,14 +16,15 @@
           </button>
         </h1>
         } @else {
-        <h1 class="mi__titulo">{{ haySesion ? 'Mi' : 'Shouts' }}</h1>
+        <!-- En el celular el título solo queda para lectores de pantalla: la pantalla es para el muro. -->
+        <h1 class="mi__titulo mi__titulo--oculto-movil">{{ haySesion ? 'Mi' : 'Shouts' }}</h1>
         }
 
         <div class="mi__tabs" role="tablist" aria-label="Qué mostrar" (keydown)="teclaPestanas($event)">
           <button type="button" role="tab" id="mi-tab-activos" class="mi__tab" aria-controls="mi-muro"
             [class.is-activa]="!tag() && alcance() === 'activos'" [attr.aria-selected]="!tag() && alcance() === 'activos'"
             [attr.tabindex]="alcance() === 'activos' ? 0 : -1" (click)="cambiarAlcance('activos')">
-            <i class="ti ti-flame" aria-hidden="true"></i> Más activos
+            <i class="ti ti-flame" aria-hidden="true"></i> <span class="mi__tab-largo">Más activos</span><span class="mi__tab-corto">Activos</span>
           </button>
           <button type="button" role="tab" id="mi-tab-todos" class="mi__tab" aria-controls="mi-muro"
             [class.is-activa]="!tag() && alcance() === 'todos'" [attr.aria-selected]="!tag() && alcance() === 'todos'"
@@ -77,14 +84,29 @@
       }
 
       @if (resumen(); as yo) {
-      <app-shout-composer class="mi__composer" [perfilId]="yo.id" (publicado)="alPublicar()" />
+      <!-- Celular: el composer arranca cerrado en una línea (el muro primero); se abre ahí o como hoja desde el botón +. -->
+      @if (composer() !== 'linea') {
+      <button type="button" class="mi-composer-corto" (click)="abrirComposer('linea')">
+        <app-user-avatar [avatar]="yo.avatar" [userName]="yo.userName" [width]="36" [height]="36" />
+        <span class="mi-composer-corto__texto">¿Qué estás pensando?</span>
+        <i class="ti ti-photo" aria-hidden="true"></i>
+      </button>
       }
-
-      <!-- En móvil el lateral no se muestra (con el muro infinito quedaría inalcanzable): las sugerencias van acá. -->
-      <div class="d-md-none mi-sugerencias-movil">
-        <ng-container [ngTemplateOutlet]="sugerenciasTpl" />
-        <ng-container [ngTemplateOutlet]="tendenciasTpl" />
+      @if (composer() === 'hoja') {
+      <div class="mi-hoja-fondo" (click)="cerrarComposer()" aria-hidden="true"></div>
+      }
+      <div #composerCaja class="mi__composer-caja" [class.is-abierto]="composer() !== 'cerrado'" [class.is-hoja]="composer() === 'hoja'"
+        [attr.role]="composer() === 'hoja' ? 'dialog' : null" [attr.aria-modal]="composer() === 'hoja' ? 'true' : null"
+        [attr.aria-label]="composer() === 'hoja' ? 'Nuevo shout' : null">
+        <div class="mi-composer-cabecera">
+          <span>Nuevo shout</span>
+          <button type="button" class="mi-composer-cerrar" (click)="cerrarComposer()" aria-label="Cerrar el composer">
+            <i class="ti ti-x" aria-hidden="true"></i>
+          </button>
+        </div>
+        <app-shout-composer class="mi__composer" [perfilId]="yo.id" (publicado)="alPublicar()" />
       </div>
+      }
 
       <!-- Lejos del principio, el aviso de nuevos flota arriba (sticky, de alto 0: no empuja la lista). -->
       @if (nuevos() > 0 && lejosDelTope()) {
@@ -148,7 +170,7 @@
         }
         } @else {
         <ol class="mi__lista">
-          @for (item of items(); track claveItem(item)) {
+          @for (item of items(); track claveItem(item); let i = $index) {
           <li>
             @if (item.tipo === 'post' && item.post; as post) {
             <app-post-card [post]="post" [fecha]="item.fecha" />
@@ -156,6 +178,13 @@
             <app-shout-card [shout]="shout" [compartidoPor]="item.tipo === 'reshout' ? item.compartidoPor : null" />
             }
           </li>
+          <!-- Celular: a quién seguir y los hashtags van dentro del muro (como en X), no antes del primer shout. -->
+          @if (i === SUGERENCIAS_TRAS - 1) {
+          <li class="mi-intercalado mi-sugerencias-movil" aria-label="Sugerencias">
+            <ng-container [ngTemplateOutlet]="sugerenciasTpl" />
+            <ng-container [ngTemplateOutlet]="tendenciasTpl" />
+          </li>
+          }
           }
         </ol>
 
@@ -187,8 +216,21 @@
         }
         }
       </section>
+      @if (!cargando() && items().length < SUGERENCIAS_TRAS) {
+      <div class="mi-intercalado mi-intercalado--final mi-sugerencias-movil">
+        <ng-container [ngTemplateOutlet]="sugerenciasTpl" />
+        <ng-container [ngTemplateOutlet]="tendenciasTpl" />
+      </div>
+      }
       <div #finDeLista aria-hidden="true"></div>
     </div>
+
+    <!-- Celular: publicar desde cualquier punto del muro sin volver arriba. -->
+    @if (resumen() && composer() !== 'hoja') {
+    <button type="button" class="mi-fab" (click)="abrirComposer('hoja')" aria-label="Nuevo shout">
+      <i class="ti ti-pencil-plus" aria-hidden="true"></i>
+    </button>
+    }
 
     <aside class="d-none d-md-flex col-md-4 mi-lateral" aria-label="Tu perfil y sugerencias">
       @if (resumen(); as yo) {

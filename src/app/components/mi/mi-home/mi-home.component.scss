@@ -482,12 +482,6 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   margin-bottom: 10px;
 }
 
-// En móvil el header es sticky (65 px) y vuelve al subir: la píldora va debajo para no quedar tapada.
-@media (max-width: 767.98px) {
-  .mi-nuevos-flotante {
-    top: 75px;
-  }
-}
 
 .mi-tendencias {
   display: flex;
@@ -669,5 +663,330 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   &__pie {
     color: light-dark(#666, #b0b0b0);
     font-size: 0.85rem;
+  }
+}
+
+// ─── Celular (/mi como app): contenido primero, pestañas fijas, shouts a lo ancho y gestos ───────────────────────
+// En escritorio estas piezas no se ven: ahí está el lateral, el composer abierto y el scroll normal.
+.mi-tirar,
+.mi-composer-corto,
+.mi-composer-cabecera,
+.mi-hoja-fondo,
+.mi-intercalado,
+.mi-fab,
+.mi__tab-corto {
+  display: none;
+}
+
+@keyframes mi-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes mi-hoja-subir {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  // El h1 queda para lectores de pantalla y buscadores; en la pantalla, el muro.
+  .mi__titulo--oculto-movil {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  // Pestañas fijas: se pegan arriba al bajar. Con el header visible van debajo de él (regla en styles/_movil.scss).
+  .mi__head {
+    position: sticky;
+    top: 0;
+    z-index: 25;
+    margin: 0 -12px;
+    padding: 0 12px;
+    background: light-dark(#fff, #1e2124);
+    transition: top 0.2s ease;
+  }
+
+  // Las cuatro entran a partes iguales, sin tira deslizable (NSFW quedaba fuera de la pantalla).
+  .mi__tabs {
+    width: 100%;
+    margin-right: 0;
+    overflow: visible;
+  }
+
+  .mi__tab {
+    flex: 1 1 0;
+    justify-content: center;
+    min-width: 0;
+    padding: 12px 2px;
+    font-size: 0.86rem;
+
+    i {
+      display: none;
+    }
+  }
+
+  .mi__tab-largo {
+    display: none;
+  }
+
+  .mi__tab-corto {
+    display: inline;
+  }
+
+  // Composer cerrado: una línea que se abre al tocarla (antes ocupaba ~230 px antes del primer shout).
+  .mi-composer-corto {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 52px;
+    margin: 10px 0 12px;
+    padding: 7px 14px 7px 8px;
+    border: 1px solid $borde;
+    border-radius: 999px;
+    background: $fondo-suave;
+    font: inherit;
+    color: $tenue;
+    text-align: left;
+    cursor: text;
+
+    &__texto {
+      flex: 1;
+    }
+
+    i {
+      color: $marca;
+      font-size: 1.3rem;
+    }
+
+    ::ng-deep img {
+      border-radius: 50% !important;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $marca;
+      outline-offset: 2px;
+    }
+  }
+
+  .mi__composer-caja {
+    &:not(.is-abierto) {
+      display: none;
+    }
+
+    &.is-abierto:not(.is-hoja) {
+      margin: 10px 0 14px;
+    }
+
+    // Desde el botón +: hoja sobre el muro, así no se pierde lo que se estaba leyendo.
+    &.is-hoja {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1046;
+      max-height: 90dvh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
+      border-radius: 18px 18px 0 0;
+      background: light-dark(#fff, #1e2124);
+      box-shadow: 0 -8px 30px rgb(0 0 0 / 25%);
+      animation: mi-hoja-subir 0.2s ease-out;
+
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+      }
+    }
+  }
+
+  .mi-composer-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 6px;
+    font-weight: 800;
+    color: $texto;
+  }
+
+  .mi-composer-cerrar {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: $tenue;
+    font-size: 1.3rem;
+
+    &:active {
+      background: $fondo-suave;
+    }
+  }
+
+  .mi-hoja-fondo {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1045;
+    background: rgb(18 36 58 / 55%);
+  }
+
+  // Sugerencias y hashtags dentro del muro (después del 5.º) o al final si la lista es corta.
+  .mi-intercalado {
+    display: flex;
+    margin-bottom: 0;
+    padding: 14px 12px;
+    border-bottom: 1px solid $borde;
+    background: $fondo-suave;
+
+    .mi-card {
+      background: light-dark(#fff, #1e2124);
+    }
+
+    &--final {
+      margin: 16px -12px 0;
+      border-top: 1px solid $borde;
+    }
+  }
+
+  // Shouts a lo ancho: lista de borde a borde con separadores, sin burbuja (más ancho para el texto).
+  .mi__lista {
+    gap: 0;
+    margin: 0 -12px;
+    border-top: 1px solid $borde;
+
+    > li:not(.mi-intercalado) {
+      padding: 12px 12px 2px;
+      border-bottom: 1px solid $borde;
+    }
+
+    ::ng-deep {
+      .sc {
+        gap: 10px;
+      }
+
+      .sc__avatar img {
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+      }
+
+      .sc-compartido {
+        margin: 0 0 2px 50px;
+      }
+
+      .sc-bubble,
+      .sc-bubble:hover {
+        min-width: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .sc-bubble__tail {
+        display: none;
+      }
+
+      // Acciones repartidas a lo ancho (como en X) y con zona táctil de 44 px; el menú ⋮ al final.
+      .sc-bubble__footer {
+        justify-content: space-between;
+        margin-top: 0;
+        padding-top: 0;
+        border-top: 0;
+      }
+
+      .sc-action {
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+        padding: 0 6px;
+      }
+
+      .sc-action--menu {
+        order: 9;
+        margin: 0;
+      }
+
+      .sc-fecha-larga {
+        display: none;
+      }
+
+      .sc-fecha-corta {
+        display: inline;
+      }
+    }
+  }
+
+  .mi__mas,
+  .mi__fin {
+    padding-top: 16px;
+  }
+
+  // Deslizar para recargar: crece con el dedo; gira mientras recarga.
+  .mi-tirar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: $marca;
+    transition: height 0.12s ease-out;
+
+    i {
+      font-size: 1.5rem;
+      opacity: 0.45;
+    }
+
+    &.is-listo i,
+    &.is-recargando i {
+      opacity: 1;
+    }
+
+    &.is-recargando i {
+      animation: mi-girar 0.8s linear infinite;
+    }
+  }
+
+  // Botón + para publicar desde cualquier punto del muro.
+  .mi-fab {
+    display: grid;
+    place-items: center;
+    position: fixed;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    z-index: 900;
+    width: 56px;
+    height: 56px;
+    border: 0;
+    border-radius: 50%;
+    background: $marca;
+    box-shadow: 0 6px 18px rgb(0 0 0 / 28%);
+    color: #fff;
+    font-size: 1.5rem;
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &:focus-visible {
+      outline: 3px solid light-dark(#fff, #1e2124);
+      outline-offset: -6px;
+    }
+  }
+
+  // Debajo de las pestañas fijas (con el header visible baja más: styles/_movil.scss).
+  .mi-nuevos-flotante {
+    top: 60px;
   }
 }

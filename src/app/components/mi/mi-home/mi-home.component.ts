@@ -1,6 +1,6 @@
 import { DecimalPipe, NgTemplateOutlet } from '@angular/common';
 import { TimeAgoPipe } from 'src/app/shared/pipes/timeAgo.pipe';
-import { afterNextRender, Component, DestroyRef, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
+import { afterNextRender, Component, DestroyRef, ElementRef, HostListener, inject, NgZone, OnDestroy, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, NavigationStart, ParamMap, Router, RouterLink } from '@angular/router';
@@ -26,6 +26,12 @@ import { ShoutCardComponent } from '../../shared/shouts/shout-card/shout-card.co
 import { ShoutComposerComponent } from '../../shared/shouts/shout-composer/shout-composer.component';
 
 const POR_PAGINA = 15;
+/** Celular: "A quién seguir" y los hashtags se intercalan en el muro después de este shout (como en X). */
+const SUGERENCIAS_TRAS = 5;
+/** Ancho hasta el que aplican los cambios de celular (el mismo corte que el header y el cajón). */
+const MOVIL = '(max-width: 767.98px)';
+/** Cuánto (px, ya amortiguado) hay que tirar hacia abajo para recargar al soltar. */
+const UMBRAL_TIRAR = 64;
 /** Lo que trae de una vez "Mostrar N shouts" (el máximo del API); si hay más, recarga el muro desde arriba. */
 const MAX_NUEVOS_EN_LINEA = 30;
 /** Cada cuánto se pregunta si hay shouts nuevos (solo con la pestaña del navegador visible). */
@@ -100,6 +106,15 @@ export class MiHomeComponent implements OnDestroy {
   readonly cargandoNuevos = signal(false);
   /** Ya se bajó más allá del principio del muro: el aviso pasa a ser una píldora flotante. */
   readonly lejosDelTope = signal(false);
+  readonly SUGERENCIAS_TRAS = SUGERENCIAS_TRAS;
+  readonly umbralTirar = UMBRAL_TIRAR;
+  /** Celular: composer cerrado en una línea, abierto ahí ("linea") o como hoja desde el botón + ("hoja"). En escritorio siempre se ve. */
+  readonly composer = signal<'cerrado' | 'linea' | 'hoja'>('cerrado');
+  /** Deslizar para recargar: cuánto se tiró (px) y si está recargando. */
+  readonly tirar = signal(0);
+  readonly recargando = signal(false);
+  private readonly composerCaja = viewChild<ElementRef<HTMLElement>>('composerCaja');
+  private readonly zone = inject(NgZone);
   /** "Más activos": momento en que se armó el ranking (lo devuelve la primera página y se reenvía en las siguientes). */
   private corte: string | null = null;
 
@@ -147,6 +162,7 @@ export class MiHomeComponent implements OnDestroy {
               this.error.set(true);
               this.cargando.set(false);
               this.cargandoMas.set(false);
+              this.recargando.set(false);
               return EMPTY;
             }),
           ),
@@ -160,6 +176,7 @@ export class MiHomeComponent implements OnDestroy {
         if (muro.corte) this.corte = muro.corte;
         this.cargando.set(false);
         this.cargandoMas.set(false);
+        this.recargando.set(false);
         this.reobservarFin();
       });
 
@@ -234,6 +251,8 @@ export class MiHomeComponent implements OnDestroy {
           this.autoresNuevos.set(n!.autores);
         });
 
+      this.activarTirarParaRecargar();
+
       fromEvent(window, 'scroll', { passive: true })
         .pipe(auditTime(150), takeUntilDestroyed(this.destroyRef))
         .subscribe(() => this.lejosDelTope.set((this.muro()?.nativeElement.getBoundingClientRect().top ?? 0) < 0));
@@ -286,7 +305,87 @@ export class MiHomeComponent implements OnDestroy {
     setTimeout(() => requestAnimationFrame(paso));
   }
 
+  /**
+   * Deslizar hacia abajo desde el tope recarga (celular). Los touch van fuera de la zona: solo se actualizan señales
+   * mientras se tira, así el scroll normal no dispara detección de cambios en cada evento. El refresco nativo de Chrome
+   * (que recargaría la página entera) se desactiva con overscroll-behavior mientras se está en /mi.
+   */
+  private activarTirarParaRecargar(): void {
+    const html = document.documentElement;
+    html.style.overscrollBehaviorY = 'contain';
+    this.destroyRef.onDestroy(() => (html.style.overscrollBehaviorY = ''));
+
+    let inicio: number | null = null;
+    const alTocar = (e: TouchEvent) => {
+      const libre = window.scrollY <= 0 && !this.recargando() && this.composer() !== 'hoja' && document.body.style.overflow !== 'hidden';
+      inicio = libre && window.matchMedia(MOVIL).matches ? e.touches[0].clientY : null;
+    };
+    const alMover = (e: TouchEvent) => {
+      if (inicio === null) return;
+      const dy = e.touches[0].clientY - inicio;
+      // Amortiguado (la mitad del recorrido) y con tope, como el refresco nativo.
+      if (dy <= 0 || window.scrollY > 0) {
+        if (this.tirar()) this.tirar.set(0);
+        return;
+      }
+      this.tirar.set(Math.min(dy / 2, UMBRAL_TIRAR + 26));
+    };
+    const alSoltar = () => {
+      if (inicio === null) return;
+      inicio = null;
+      const listo = this.tirar() >= UMBRAL_TIRAR;
+      this.tirar.set(0);
+      if (listo) this.zone.run(() => this.refrescar());
+    };
+    this.zone.runOutsideAngular(() => {
+      window.addEventListener('touchstart', alTocar, { passive: true });
+      window.addEventListener('touchmove', alMover, { passive: true });
+      window.addEventListener('touchend', alSoltar, { passive: true });
+      window.addEventListener('touchcancel', alSoltar, { passive: true });
+    });
+    this.destroyRef.onDestroy(() => {
+      window.removeEventListener('touchstart', alTocar);
+      window.removeEventListener('touchmove', alMover);
+      window.removeEventListener('touchend', alSoltar);
+      window.removeEventListener('touchcancel', alSoltar);
+    });
+  }
+
+  /** Lo que hace deslizar para recargar: suma lo nuevo arriba si se puede; si no (Más activos, lista vacía), recarga. */
+  refrescar(): void {
+    this.recargando.set(true);
+    if (this.claveAviso() === null) {
+      this.pedir.next({ reiniciar: true });
+      return;
+    }
+    this.traerNuevos(() => this.recargando.set(false));
+  }
+
+  /** Abre el composer: en la línea de arriba o como hoja sobre el muro (botón +). El foco va directo al campo. */
+  abrirComposer(modo: 'linea' | 'hoja'): void {
+    const caja = this.composerCaja()?.nativeElement;
+    // Clases a mano antes del foco: en iOS el teclado solo se abre si el foco llega en el mismo toque.
+    caja?.classList.add('is-abierto');
+    if (modo === 'hoja') {
+      caja?.classList.add('is-hoja');
+      document.body.style.overflow = 'hidden';
+    }
+    caja?.querySelector<HTMLTextAreaElement>('textarea')?.focus({ preventScroll: modo === 'hoja' });
+    this.composer.set(modo);
+  }
+
+  cerrarComposer(): void {
+    if (this.composer() === 'hoja') document.body.style.overflow = '';
+    this.composer.set('cerrado');
+  }
+
+  @HostListener('document:keydown.escape')
+  alEscape(): void {
+    if (this.composer() === 'hoja') this.cerrarComposer();
+  }
+
   ngOnDestroy(): void {
+    if (this.composer() === 'hoja') document.body.style.overflow = '';
     this.observador?.disconnect();
     if (typeof window !== 'undefined' && this.items().length)
       guardado = { url: this.urlActual, items: this.items(), siguiente: this.siguiente(), corte: this.corte, scrollY: this.scrollAlSalir };
@@ -420,11 +519,16 @@ export class MiHomeComponent implements OnDestroy {
     return n === 1 ? 'Mostrar 1 shout' : `Mostrar ${n >= 99 ? '99+' : n} shouts`;
   }
 
-  /** Suma lo nuevo arriba sin perder lo cargado. Si es demasiado para una página, recarga desde arriba. */
+  /** "Mostrar N shouts": sube al principio y suma lo nuevo arriba. */
   verNuevos(): void {
-    if (this.cargandoNuevos()) return;
-    const desde = this.items()[0]?.fecha;
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.traerNuevos();
+  }
+
+  /** Suma lo nuevo arriba sin perder lo cargado. Si es demasiado para una página, recarga desde arriba. */
+  private traerNuevos(alTerminar?: () => void): void {
+    if (this.cargandoNuevos()) return alTerminar?.();
+    const desde = this.items()[0]?.fecha;
     if (!desde || this.nuevos() > MAX_NUEVOS_EN_LINEA) {
       this.pedir.next({ reiniciar: true });
       return;
@@ -437,6 +541,7 @@ export class MiHomeComponent implements OnDestroy {
       .subscribe({
         next: (muro) => {
           this.cargandoNuevos.set(false);
+          alTerminar?.();
           if (clave !== this.claveAviso()) return; // cambió de pestaña mientras llegaba
           // Página llena: puede haber más entre lo nuevo y lo que ya estaba; mejor recargar que dejar un hueco.
           if (muro.siguiente) {
@@ -448,6 +553,7 @@ export class MiHomeComponent implements OnDestroy {
         },
         error: () => {
           this.cargandoNuevos.set(false);
+          alTerminar?.();
           if (clave === this.claveAviso()) this.pedir.next({ reiniciar: true });
         },
       });
@@ -490,6 +596,7 @@ export class MiHomeComponent implements OnDestroy {
 
   /** Recarga el muro desde arriba (después de publicar). */
   alPublicar(): void {
+    this.cerrarComposer();
     if (this.alcance() !== 'siguiendo') {
       this.cambiarAlcance('siguiendo');
     } else {

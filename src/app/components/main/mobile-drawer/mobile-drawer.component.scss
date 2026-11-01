@@ -442,6 +442,20 @@ $activo: light-dark(#004160, #6cbcec);
     }
   }
 
+  &__ayuda-ios {
+    margin: .25rem 1rem .5rem;
+    padding: .65rem .75rem;
+    border-radius: 10px;
+    background: light-dark(#eef5fa, #1b3446);
+    color: light-dark(#1f2a33, #cad6df);
+    font-size: .85rem;
+    line-height: 1.45;
+
+    i {
+      color: $main;
+    }
+  }
+
   &__legal {
     display: flex;
     flex-wrap: wrap;
