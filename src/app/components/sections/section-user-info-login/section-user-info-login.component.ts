@@ -142,12 +142,15 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   verNotificaciones(): void {
-    // Al abrir el monitor el contador se va al instante (antes quedaba hasta recargar la página).
-    if (this.currentStats.notifications > 0) {
-      this.setNotificacionesAsReaded();
-    }
+    const habiaSinLeer = this.currentStats.notifications > 0;
 
+    // Trae todas las no leídas (más las últimas leídas hasta 60). Se marcan como leídas recién cuando llegan:
+    // si la marca ganaba la carrera, las nuevas venían ya leídas (sin resaltar) y solo entraban hasta el tope.
     this.httpLogs.getLastNotificaciones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+      if (habiaSinLeer || response?.some((n) => !n.leido)) {
+        this.setNotificacionesAsReaded();
+      }
+
       if (response) {
         response = response.map((notificacion) => {
           if (notificacion.mensaje) {

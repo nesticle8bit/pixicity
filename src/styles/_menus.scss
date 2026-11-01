@@ -52,9 +52,11 @@
   color: light-dark(#424242, #c6c6c6);
 }
 
+// Puede traer muchas (todas las no leídas o las últimas 60): más alto, y el scroll no arrastra la página.
 .notificaciones-list ul {
-  max-height: 285px;
+  max-height: min(420px, 70vh);
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .errr {
