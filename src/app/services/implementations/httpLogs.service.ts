@@ -156,6 +156,12 @@ export class HttpLogsService implements IHttpLogsService {
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') || 'No se pudo activar'); }));
   }
 
+  probarPush(endpoint: string): Observable<{ estado: number; entregado: boolean; vencida: boolean }> {
+    return this.http
+      .post<ApiResponse<{ estado: number; entregado: boolean; vencida: boolean }>>(`${environment.api}/api/push/pruebas`, {}, { params: { endpoint } })
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') || 'No se pudo enviar la prueba'); }));
+  }
+
   quitarSuscripcionPush(endpoint: string): Observable<boolean> {
     return this.http
       .delete<ApiResponse<boolean>>(`${environment.api}/api/push/suscripcion`, { params: { endpoint } })

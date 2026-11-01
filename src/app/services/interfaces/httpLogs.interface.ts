@@ -22,4 +22,6 @@ export abstract class IHttpLogsService {
   abstract getSuscripcionPush(endpoint: string): Observable<PreferenciasPush | null>;
   abstract guardarSuscripcionPush(suscripcion: SuscripcionPush): Observable<boolean>;
   abstract quitarSuscripcionPush(endpoint: string): Observable<boolean>;
+  /** Notificación de prueba a este dispositivo: `estado` es lo que respondió el servicio push del navegador. */
+  abstract probarPush(endpoint: string): Observable<{ estado: number; entregado: boolean; vencida: boolean }>;
 }

@@ -1,7 +1,7 @@
 <div class="tl-filtros" role="group" aria-label="Qué mostrar en la línea de tiempo">
   @for (f of filtros; track f.id) {
     <button type="button" class="tl-filtro" [class.activo]="filtro() === f.id" [attr.aria-pressed]="filtro() === f.id"
-      (click)="elegirFiltro(f.id)">
+      (click)="elegirFiltro(f.id, $event)">
       <i class="ti {{ f.icono }}" aria-hidden="true"></i> {{ f.label }}
     </button>
   }

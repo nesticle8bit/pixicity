@@ -87,3 +87,21 @@
     color: light-dark(#c62828, #e16b6b);
   }
 }
+
+// Interruptores (mat-slide-toggle) con el azul del sitio. Sin `color` salen con el "accent" del tema (rosa), y el tema
+// oscuro (_tema.scss) los repinta con más especificidad: por eso !important. Los color="warn" (acciones de riesgo en el
+// admin) quedan rojos.
+.mat-mdc-slide-toggle:not(.mat-warn) {
+  --mat-slide-toggle-selected-handle-color: light-dark(#005bb3, #63a9f0) !important;
+  --mat-slide-toggle-selected-hover-handle-color: light-dark(#004a92, #7db8f3) !important;
+  --mat-slide-toggle-selected-focus-handle-color: light-dark(#004a92, #7db8f3) !important;
+  --mat-slide-toggle-selected-pressed-handle-color: light-dark(#004a92, #7db8f3) !important;
+  --mat-slide-toggle-selected-track-color: light-dark(#7fb2e0, #2f5f8c) !important;
+  --mat-slide-toggle-selected-hover-track-color: light-dark(#7fb2e0, #2f5f8c) !important;
+  --mat-slide-toggle-selected-focus-track-color: light-dark(#7fb2e0, #2f5f8c) !important;
+  --mat-slide-toggle-selected-pressed-track-color: light-dark(#7fb2e0, #2f5f8c) !important;
+  --mat-slide-toggle-selected-hover-state-layer-color: light-dark(#005bb3, #63a9f0) !important;
+  --mat-slide-toggle-selected-focus-state-layer-color: light-dark(#005bb3, #63a9f0) !important;
+  --mat-slide-toggle-selected-pressed-state-layer-color: light-dark(#005bb3, #63a9f0) !important;
+  --mat-slide-toggle-selected-icon-color: light-dark(#fff, #0d2440) !important;
+}

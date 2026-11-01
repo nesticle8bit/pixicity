@@ -97,8 +97,12 @@ export class ProfileTimelineComponent {
     this.cargar(true);
   }
 
-  elegirFiltro(filtro: FiltroMuroPerfil): void {
-    if (filtro !== this.filtro()) this.filtro.set(filtro);
+  elegirFiltro(filtro: FiltroMuroPerfil, e?: Event): void {
+    if (filtro === this.filtro()) return;
+    this.filtro.set(filtro);
+    // Elegido desde abajo (los chips quedaron arriba de la pantalla): vuelve al principio de la lista nueva.
+    const filtros = (e?.currentTarget as HTMLElement | undefined)?.parentElement;
+    if (filtros && filtros.getBoundingClientRect().top < 0) filtros.scrollIntoView({ block: 'start' });
   }
 
   cargarMas(): void {

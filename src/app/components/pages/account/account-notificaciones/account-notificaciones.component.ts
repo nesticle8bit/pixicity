@@ -82,9 +82,35 @@ const TIPOS: { grupo: string; tipos: { tipo: string; label: string; detalle: str
                     aria-labelledby="nt-push-campana" (change)="cambiarPush('notificaciones', $event.checked)" />
                 </li>
               </ul>
-              <button type="button" class="nt__push-boton nt__push-boton--secundario" [disabled]="push.ocupado()" (click)="desactivarPush()">
-                <i class="ti ti-bell-off" aria-hidden="true"></i> Desactivar en este dispositivo
-              </button>
+              <p class="nt__detalle nt__push-nota-vista">
+                Mientras tengas Taringas! abierto y a la vista, los avisos se ven en la campana y no salen al escritorio.
+              </p>
+              <div class="nt__push-acciones">
+                <button type="button" class="nt__push-boton" [disabled]="probando() || push.ocupado()" (click)="probarPush()">
+                  <i class="ti ti-send" aria-hidden="true"></i> {{ probando() ? 'Enviando…' : 'Enviar una notificación de prueba' }}
+                </button>
+                <button type="button" class="nt__push-boton nt__push-boton--secundario" [disabled]="push.ocupado()" (click)="desactivarPush()">
+                  <i class="ti ti-bell-off" aria-hidden="true"></i> Desactivar en este dispositivo
+                </button>
+              </div>
+              @if (resultadoPrueba(); as r) {
+                <p class="nt__push-nota nt__push-resultado" role="status">
+                  <i class="ti" [class.ti-circle-check]="r === 'enviada'" [class.ti-alert-triangle]="r !== 'enviada'" aria-hidden="true"></i>
+                  @switch (r) {
+                    @case ('enviada') {
+                      <span>Enviada. Si no la ves en unos segundos, el sistema la está ocultando: revisa que <b>No molestar</b>
+                        esté apagado y que las notificaciones de tu navegador estén permitidas en la configuración de Windows,
+                        macOS o Android.</span>
+                    }
+                    @case ('vencida') {
+                      <span>Este navegador anuló la suscripción. Vuelve a activarlas en este dispositivo.</span>
+                    }
+                    @default {
+                      <span>El servicio de notificaciones del navegador rechazó el envío. Desactívalas y vuelve a activarlas.</span>
+                    }
+                  }
+                </p>
+              }
             }
             @case ('inactivo') {
               <button type="button" class="nt__push-boton" [disabled]="push.ocupado()" (click)="activarPush()">
@@ -146,6 +172,9 @@ const TIPOS: { grupo: string; tipos: { tipo: string; label: string; detalle: str
       &:disabled { opacity: 0.6; }
       &:focus-visible { outline: 2px solid #1e99d3; outline-offset: 2px; }
     }
+    .nt__push-acciones { display: flex; flex-wrap: wrap; gap: 0 10px; }
+    .nt__push-nota-vista { margin: 10px 0 0; }
+    .nt__push-resultado { margin-top: 12px; }
     .nt__push-boton--secundario {
       background: transparent; color: light-dark(#5d6b75, #aeaeae); border: 1px solid light-dark(#d4dde3, #354652);
     }
@@ -169,6 +198,8 @@ export class AccountNotificacionesComponent {
   private readonly notificationService = inject(NotificationService);
   private readonly destroyRef = inject(DestroyRef);
   readonly push = inject(NotificacionesEscritorioService);
+  readonly probando = signal(false);
+  readonly resultadoPrueba = signal<'enviada' | 'vencida' | 'rechazada' | null>(null);
 
   readonly grupos = TIPOS;
   private readonly activos = signal<Record<string, boolean>>({});
@@ -216,6 +247,18 @@ export class AccountNotificacionesComponent {
       await this.push.cambiar({ ...this.push.preferencias(), [cual]: activa });
     } catch {
       this.notificationService.error('No se pudo guardar la preferencia', 'Notificaciones');
+    }
+  }
+
+  async probarPush(): Promise<void> {
+    this.probando.set(true);
+    this.resultadoPrueba.set(null);
+    try {
+      this.resultadoPrueba.set(await this.push.probar());
+    } catch (e) {
+      this.notificationService.error(e instanceof Error ? e.message : 'No se pudo enviar la prueba', 'Notificaciones');
+    } finally {
+      this.probando.set(false);
     }
   }
 

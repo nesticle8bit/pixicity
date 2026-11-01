@@ -174,6 +174,26 @@ export class NotificacionesEscritorioService {
     }
   }
 
+  /**
+   * Notificación de prueba a este dispositivo. 'enviada': el servicio push la aceptó (si no aparece, la bloquea el
+   * sistema: No molestar o las notificaciones del navegador apagadas). 'vencida': el navegador anuló la suscripción.
+   */
+  async probar(): Promise<'enviada' | 'vencida' | 'rechazada'> {
+    const suscripcion = await (await this.registro())?.pushManager.getSubscription();
+    if (!suscripcion) {
+      this.estado.set('inactivo');
+      return 'vencida';
+    }
+    const r = await firstValueFrom(this.logs.probarPush(suscripcion.endpoint));
+    if (r.vencida) {
+      await suscripcion.unsubscribe().catch(() => undefined);
+      this.endpoint = null;
+      this.estado.set('inactivo');
+      return 'vencida';
+    }
+    return r.entregado ? 'enviada' : 'rechazada';
+  }
+
   async desactivar(): Promise<void> {
     this.ocupado.set(true);
     try {

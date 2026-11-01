@@ -73,8 +73,8 @@ test('perfil: la línea de tiempo mezcla todo, pliega las reacciones y carga má
   // Filtros: vuelve a pedir desde arriba con el filtro.
   const filtros = page.getByRole('group', { name: 'Qué mostrar en la línea de tiempo' });
   await filtros.getByRole('button', { name: 'Comentarios' }).click();
-  await expect.poll(() => pedidos.at(-1)?.searchParams.get('filtro')).toBe('comentarios');
-  expect(pedidos.at(-1)?.searchParams.get('antes')).toBeNull();
+  await expect.poll(() => pedidos.some((p) => p.searchParams.get('filtro') === 'comentarios')).toBe(true);
+  expect(pedidos.find((p) => p.searchParams.get('filtro') === 'comentarios')?.searchParams.get('antes')).toBeNull();
   await expect(filtros.getByRole('button', { name: 'Comentarios' })).toHaveAttribute('aria-pressed', 'true');
 
   if (info.project.name === 'movil') {

@@ -95,6 +95,16 @@ test('notificaciones de escritorio: se activan en /cuenta, se eligen por tipo y 
   await expect.poll(() => pedidos.filter((p) => p.metodo === 'PUT').at(-1)?.cuerpo?.['mensajes']).toBe(false);
   await expect(page.getByRole('switch', { name: 'Notificaciones', exact: true })).toBeChecked();
 
+  // Prueba: el servidor la manda a este dispositivo y cuenta qué respondió el servicio push.
+  let prueba: URL | undefined;
+  await page.route('**/api/push/pruebas**', (r) => {
+    prueba = new URL(r.request().url());
+    return r.fulfill({ json: { status: 200, errors: [], data: { estado: 201, entregado: true, vencida: false } } });
+  });
+  await page.getByRole('button', { name: 'Enviar una notificación de prueba' }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'Enviada.' })).toBeVisible();
+  expect(prueba?.searchParams.get('endpoint')).toBe(ENDPOINT);
+
   // Al volver a entrar se ve como quedó (lo trae del API por el endpoint de este navegador).
   await page.reload();
   await expect(page.getByRole('switch', { name: 'Mensajes privados' })).not.toBeChecked({ timeout: 15_000 });
@@ -135,6 +145,11 @@ test('notificaciones de escritorio: el aviso se muestra con el sitio cerrado y s
   await cdp.send('ServiceWorker.deliverPushMessage', { origin, registrationId, data: JSON.stringify({ titulo: 'x', tag: 'mon-1' }) });
   await page.waitForTimeout(1_000);
   expect(await notificaciones()).toBe(0);
+
+  // La de prueba se muestra igual (forzar), para poder probar con el sitio abierto.
+  await cdp.send('ServiceWorker.deliverPushMessage', { origin, registrationId, data: JSON.stringify({ titulo: '¡Funciona!', tag: 'prueba', forzar: true }) });
+  await expect.poll(notificaciones).toBe(1);
+  await page.evaluate(async () => (await (await navigator.serviceWorker.ready).getNotifications()).forEach((n) => n.close()));
 
   // Sin ninguna pestaña del sitio abierta: el service worker muestra el aviso con su enlace.
   await page.goto('about:blank');

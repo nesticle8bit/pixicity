@@ -70,7 +70,8 @@ self.addEventListener('push', (event) => {
   }
   event.waitUntil(
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((ventanas) => {
-      if (ventanas.some((v) => v.visibilityState === 'visible' && v.focused)) return undefined;
+      // La notificación de prueba de /cuenta se muestra igual (forzar).
+      if (!aviso.forzar && ventanas.some((v) => v.visibilityState === 'visible' && v.focused)) return undefined;
       return self.registration.showNotification(aviso.titulo || 'Taringas!', {
         body: aviso.cuerpo || 'Tienes novedades',
         icon: '/assets/favicon/pwa-192.png',
