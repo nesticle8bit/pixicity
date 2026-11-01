@@ -148,7 +148,8 @@ test('notificaciones de escritorio: el aviso se muestra con el sitio cerrado y s
 
   // La de prueba se muestra igual (forzar), para poder probar con el sitio abierto.
   await cdp.send('ServiceWorker.deliverPushMessage', { origin, registrationId, data: JSON.stringify({ titulo: '¡Funciona!', tag: 'prueba', forzar: true }) });
-  await expect.poll(notificaciones).toBe(1);
+  // DevTools entrega el push al service worker; con la suite entera corriendo puede tardar varios segundos.
+  await expect.poll(notificaciones, { timeout: 15_000 }).toBe(1);
   await page.evaluate(async () => (await (await navigator.serviceWorker.ready).getNotifications()).forEach((n) => n.close()));
 
   // Sin ninguna pestaña del sitio abierta: el service worker muestra el aviso con su enlace.
@@ -161,8 +162,7 @@ test('notificaciones de escritorio: el aviso se muestra con el sitio cerrado y s
     .poll(() =>
       page.evaluate(async () =>
         (await (await navigator.serviceWorker.ready).getNotifications()).map((n) => ({ titulo: n.title, cuerpo: n.body, tag: n.tag, url: n.data?.url, badge: n.badge })),
-      ),
-    )
+      ), { timeout: 15_000 })
     .toEqual([{ titulo: aviso.titulo, cuerpo: aviso.cuerpo, tag: aviso.tag, url: aviso.url, badge: expect.stringContaining('/assets/favicon/badge-96.png') }]);
 
   // Cerrar sesión: el API deja de avisar a este navegador (sin token y aunque la página se recargue enseguida).
