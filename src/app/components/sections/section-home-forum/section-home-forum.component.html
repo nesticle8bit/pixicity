@@ -9,16 +9,18 @@
       <app-home-last-comments />
       <app-home-top-posts />
       <app-home-top-users />
+      <app-home-top-categorias />
     </div>
 
     <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
       <!-- <app-home-top-shouts /> -->
-      <app-home-shouts-activos periodo="dia" [cantidad]="5" />
+      <!-- <app-home-shouts-activos periodo="dia" [cantidad]="5" /> -->
+      <app-home-ultimos-shouts />
       <app-home-top-shouteros />
       @if (fotosHabilitadas) {
       <app-home-last-photos />
       }
-      <br>
+
       <!-- <app-home-last-shouts></app-home-last-shouts>
       <br> -->
 
@@ -31,7 +33,8 @@
 
       <!-- Celular o escritorio lo elige cada anuncio (antes eran dos espacios: 160x600 y 300x250). -->
       <app-anuncio class="mb-3" ubicacion="portada-lateral" [categoriaSeo]="categoria" encabezado />
-      <app-home-top-categorias />
+
+      <!-- <app-home-ultimo-registrado /> -->
       <app-home-last-registered-users />
       <!-- <br>
       <app-home-afiliados /> -->

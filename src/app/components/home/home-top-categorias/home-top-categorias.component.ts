@@ -7,10 +7,10 @@ import { RouterLink } from '@angular/router';
 import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
-    selector: 'app-home-top-categorias',
-    templateUrl: './home-top-categorias.component.html',
-    styleUrls: ['./home-top-categorias.component.scss'],
-    imports: [RouterLink, MatTooltip],
+  selector: 'app-home-top-categorias',
+  templateUrl: './home-top-categorias.component.html',
+  styleUrls: ['./home-top-categorias.component.scss'],
+  imports: [RouterLink, MatTooltip],
 })
 export class HomeTopCategoriasComponent implements OnInit {
   private parametrosService = inject(IHttpParametrosService);
@@ -26,7 +26,7 @@ export class HomeTopCategoriasComponent implements OnInit {
 
   getTopCategorias(): void {
     this.portada
-      .tomar('topCategorias', this.parametrosService.getTopCategorias(10))
+      .tomar('topCategorias', this.parametrosService.getTopCategorias(5))
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => {
         this.categorias = value ?? [];

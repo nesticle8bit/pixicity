@@ -1,0 +1,78 @@
+<h2 class="main-title">
+  <span>Últimos shouts</span>
+  <a class="float-end us-ver" routerLink="/mi" [queryParams]="{ ver: 'recientes' }" matTooltip="Ver todos los shouts">
+    <i class="ti ti-chevron-right"></i>
+  </a>
+</h2>
+
+@let lista = shouts();
+
+@if (lista === undefined) {
+@for (_ of [1, 2, 3]; track $index) {
+<div class="us-skeleton"></div>
+}
+} @else if (lista.length < 1) { <div class="alert alert-warning">💬 <strong>Todavía no hay shouts</strong></div>
+  } @else {
+  <!-- Misma nube que app-shout-card (_burbuja.scss), en versión compacta y solo lectura. -->
+  <section class="us-lista mb-3">
+    @for (s of lista; track s.id) {
+    <article class="sc">
+      <a [routerLink]="['/perfil', s.avatar?.userName]" class="sc__avatar" [appUserPopover]="s.avatar?.userName ?? ''"
+        tabindex="-1" aria-hidden="true">
+        <app-user-avatar [avatar]="s.avatar?.avatar" [userName]="s.avatar?.userName" [width]="32" [height]="32" />
+      </a>
+
+      <div class="sc-bubble">
+        <span class="sc-bubble__tail" aria-hidden="true"></span>
+
+        <!-- Sin nombre ni fecha: el autor lo dice el avatar (con su popover). El texto va fuera del enlace porque
+             app-texto-enlazado arma sus propios enlaces (#tags, @menciones) y no se pueden anidar; también pone los emotes. -->
+        @if (s.comentario) {
+        <p class="sc-bubble__body"><app-texto-enlazado [texto]="s.comentario | truncate:[110]" /></p>
+        }
+        @if (s.tipo === 'VideoArchivo' || imagen(s) || (!s.comentario && media(s))) {
+        <a [routerLink]="enlace(s)" class="us-cuerpo" aria-label="Ver shout">
+          <!-- Media recortada a un alto fijo: se ve de qué se trata sin estirar la lista. -->
+          @if (s.tipo === 'VideoArchivo') {
+          <span class="us-miniatura">
+            <video [src]="s.url + '#t=0.1'" muted [muted]="true" playsinline preload="metadata"></video>
+            <i class="ti ti-player-play-filled us-play" aria-hidden="true"></i>
+          </span>
+          } @else if (imagen(s); as img) {
+          <span class="us-miniatura">
+            <img [src]="img" alt="" loading="lazy" decoding="async">
+            @if (s.tipo === 'Video') {
+            <i class="ti ti-player-play-filled us-play" aria-hidden="true"></i>
+            }
+          </span>
+          } @else if (!s.comentario && media(s); as m) {
+          <p class="sc-bubble__body us-media"><i class="ti {{ m.icono }}"></i> {{ m.texto }}</p>
+          }
+        </a>
+        }
+
+        @if (s.interacciones; as n) {
+        <footer class="sc-bubble__footer">
+          <!-- Sin NSFW: el muro "todos" ya los deja afuera en el API. -->
+          @if (s.comentario && !imagen(s) && s.tipo !== 'VideoArchivo' && media(s); as m) {
+          <span class="sc-action sc-action--dato sc-action--secundaria"><i class="ti {{ m.icono }}"
+              aria-hidden="true"></i></span>
+          }
+          <!-- Como en app-shout-card: los comentarios llevan al detalle (el texto ya no es enlace). -->
+          <a class="sc-action" [routerLink]="enlace(s)" matTooltip="Ver shout y comentarios"
+            [attr.aria-label]="'Ver shout (' + (n.comentarios ?? 0) + ' comentarios)'">
+            <i class="ti ti-messages" aria-hidden="true"></i> {{ n.comentarios ?? 0 }}
+          </a>
+          <span class="sc-action sc-action--dato" matTooltip="Compartidos">
+            <i class="ti ti-repeat" aria-hidden="true"></i> {{ n.reshouts ?? 0 }}
+          </span>
+          <span class="sc-action sc-action--dato" matTooltip="Me gusta">
+            <i class="ti ti-thumb-up" aria-hidden="true"></i> {{ n.meGustas }}
+          </span>
+        </footer>
+        }
+      </div>
+    </article>
+    }
+  </section>
+  }

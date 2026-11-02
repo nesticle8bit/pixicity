@@ -115,8 +115,10 @@
                 @if (fotos.length) {
                   <div class="chat-fotos" [class.chat-fotos--varias]="fotos.length > 1">
                     @for (img of fotos; track img) {
-                      <!-- Adjuntas y URLs de imagen del texto. no-referrer: el sitio externo no ve desde qué conversación se pidió. -->
-                      <a [href]="img" target="_blank" rel="noopener noreferrer nofollow" class="chat-fotos__item" aria-label="Abrir imagen">
+                      <!-- Adjuntas y URLs de imagen del texto. no-referrer: el sitio externo no ve desde qué conversación se pidió.
+                           Clic normal: visor de la plataforma; Ctrl/Cmd/Shift o la rueda abren otra pestaña (el href). -->
+                      <a [href]="img" target="_blank" rel="noopener noreferrer nofollow" class="chat-fotos__item" aria-label="Ver imagen"
+                        (click)="abrirFoto($event, img)">
                         <img [src]="img" alt="Imagen del mensaje" loading="lazy" referrerpolicy="no-referrer" (error)="fallidas.add(img)" />
                       </a>
                     }

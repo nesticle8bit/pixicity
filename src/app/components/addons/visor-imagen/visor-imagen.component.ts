@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export interface VisorImagenData {
   url: string;
   alt?: string;
+  sinReferrer?: boolean;
 }
 
 /**
@@ -28,6 +29,7 @@ export interface VisorImagenData {
       }
 
       <img class="visor__img" [class.is-cargada]="cargada()" [src]="data.url" [alt]="data.alt || 'Imagen'"
+        [attr.referrerpolicy]="data.sinReferrer ? 'no-referrer' : null"
         (load)="cargada.set(true)" (error)="fallo.set(true)" (click)="$event.stopPropagation()" />
     </div>
   `,

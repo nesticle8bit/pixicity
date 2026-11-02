@@ -8,7 +8,7 @@ import { TopTimesSelectorComponent } from '../../sections/top-times-selector/top
 import { CountryFlagComponent } from '../../addons/country-flag/country-flag.component';
 import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
 
-/** Top 5 de usuarios por shouts publicados; arranca en el mes y cambia con el selector de tops. */
+/** Top 3 de usuarios por puntos ganados con shouts (me gusta + votos en comentarios); cambia con el selector de tops. */
 @Component({
   selector: 'app-home-top-shouteros',
   templateUrl: './home-top-shouteros.component.html',
@@ -41,7 +41,7 @@ export class HomeTopShouterosComponent implements OnInit {
   private cargar(): void {
     this.loading = true;
     this.miService
-      .getTopShouteros(this.periodo, 5)
+      .getTopShouteros(this.periodo, 3)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (top) => {

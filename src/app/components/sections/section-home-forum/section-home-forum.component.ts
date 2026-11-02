@@ -24,6 +24,8 @@ import { TagsCloudComponent } from '../../addons/tags-cloud/tags-cloud.component
 import { HomeDiscordComponent } from '../../home/home-discord/home-discord.component';
 import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { HomeLastRegisteredUsersComponent } from '../../home/home-last-registered-users/home-last-registered-users.component';
+import { HomeUltimosShoutsComponent } from '../../home/home-ultimos-shouts/home-ultimos-shouts.component';
+import { HomeUltimoRegistradoComponent } from '../../home/home-ultimo-registrado/home-ultimo-registrado.component';
 import { enNavegador } from '../../../shared/helpers/plataforma';
 
 @Component({
@@ -46,6 +48,8 @@ import { enNavegador } from '../../../shared/helpers/plataforma';
         HomeDiscordComponent,
         AnuncioComponent,
         HomeLastRegisteredUsersComponent,
+        HomeUltimosShoutsComponent,
+        HomeUltimoRegistradoComponent,
     ],
 })
 export class SectionHomeForumComponent implements OnInit, OnDestroy {

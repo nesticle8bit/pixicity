@@ -6,7 +6,7 @@
 @if (top.length < 1) {
   <section [attr.aria-busy]="loading">
     <div class="alert alert-warning">
-      📢 <strong>Nadie ha publicado shouts en este período</strong>
+      📢 <strong>Nadie ha ganado puntos con shouts en este período</strong>
     </div>
   </section>
 } @else {
@@ -18,8 +18,8 @@
         <addon-country-flag [iso2]="u.paisIso2" [title]="u.paisNombre ?? ''" />
         <span>{{u.userName}}</span>
       </a>
-      <span class="float-end value" matTooltip="Shouts publicados">
-        {{u.shouts}}
+      <span class="float-end value" matTooltip="Puntos ganados con shouts">
+        {{u.puntos}}
       </span>
     </article>
   }

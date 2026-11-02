@@ -7,9 +7,10 @@ import { VisorImagenComponent, VisorImagenData } from './visor-imagen.component'
 export class VisorImagenService {
   private readonly dialog = inject(MatDialog);
 
-  abrir(url: string, alt?: string): MatDialogRef<VisorImagenComponent> {
+  /** `sinReferrer`: el sitio de la imagen no ve desde qué página se pidió (p. ej. las de los mensajes privados). */
+  abrir(url: string, alt?: string, opciones?: { sinReferrer?: boolean }): MatDialogRef<VisorImagenComponent> {
     return this.dialog.open(VisorImagenComponent, {
-      data: { url, alt } satisfies VisorImagenData,
+      data: { url, alt, sinReferrer: opciones?.sinReferrer } satisfies VisorImagenData,
       width: '100vw',
       height: '100dvh',
       maxWidth: '100vw',

@@ -1,0 +1,61 @@
+<h2 class="main-title">
+  <span>Nuevo en la comunidad</span>
+</h2>
+
+@let u = usuario();
+
+@if (u === undefined) {
+<div class="ur-skeleton mb-3"></div>
+} @else if (u) {
+<section class="ur mb-3">
+  <div class="ur-banner" [style.background-image]="u.profileBackground ? 'url(' + u.profileBackground + ')' : null"
+    [style.background-position]="(u.profileBackgroundPosX ?? 50) + '% ' + (u.profileBackgroundPosY ?? 50) + '%'"></div>
+
+  <div class="ur-cabecera">
+    <a [routerLink]="['/perfil', u.userName]" class="ur-avatar" [attr.aria-label]="u.userName">
+      <app-user-avatar [avatar]="u.avatar" [userName]="u.userName" [width]="56" [height]="56" />
+    </a>
+    <div class="ur-datos">
+      <a [routerLink]="['/perfil', u.userName]" class="ur-nombre">
+        {{ u.userName }}
+        <app-genre-icon [genre]="u.genero" />
+      </a>
+      @if (u.completeName) {
+      <span class="ur-completo">{{ u.completeName }}</span>
+      }
+      <span class="ur-linea">
+        @if (u.pais) {
+        <addon-country-flag [iso2]="u.pais.iso2" [title]="u.pais.nombre" />
+        <span>{{ u.pais.nombre }}</span>
+        <span aria-hidden="true">·</span>
+        }
+        <span matTooltip="Fecha de registro">Se unió {{ u.fechaRegistro | timeAgo }}</span>
+      </span>
+      @if (u.rango) {
+      <span class="ur-rango" [style.color]="u.rango.color">
+        @if (u.rango.icono) {
+        <img [src]="'/assets/images/icons/rangos/' + u.rango.icono" alt="" class="image-middle me-1" loading="lazy"
+          width="16" height="16">
+        }
+        {{ u.rango.nombre }}
+      </span>
+      }
+    </div>
+  </div>
+
+  @if (u.mensajePersonal) {
+  <p class="ur-mensaje"><i class="ti ti-quote"></i> {{ u.mensajePersonal | truncate:[100] }}</p>
+  }
+
+  <div class="ur-stats">
+    <span><strong>{{ u.postsCount || 0 }}</strong> Posts</span>
+    <span><strong>{{ u.comentariosCount || 0 }}</strong> Coment.</span>
+    <span><strong>{{ u.seguidoresCount || 0 }}</strong> Seguid.</span>
+    <span><strong>{{ u.puntos || 0 }}</strong> Puntos</span>
+  </div>
+
+  <a [routerLink]="['/perfil', u.userName]" class="btn btn-sm btn-primary ur-bienvenida">
+    <i class="ti ti-hand-stop"></i> Dale la bienvenida
+  </a>
+</section>
+}

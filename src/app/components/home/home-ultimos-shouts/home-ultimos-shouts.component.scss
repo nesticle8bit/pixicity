@@ -1,0 +1,136 @@
+@use '../../shared/shouts/burbuja';
+
+.us-ver {
+  color: inherit;
+  text-decoration: none;
+  padding: 0 4px;
+  background: light-dark(#fff, #1e2124);
+}
+
+.us-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+// La nube del muro, compacta para la columna angosta de la portada.
+.sc {
+  gap: 10px;
+}
+
+.sc-bubble {
+  padding: 8px 10px;
+  border-radius: 12px;
+
+  &__tail {
+    top: 10px;
+  }
+
+  &__head {
+    margin-bottom: 3px;
+  }
+
+  &__user {
+    font-size: 0.82rem;
+  }
+
+  &__body {
+    font-size: 0.82rem;
+    line-height: 1.4;
+  }
+
+  &__footer {
+    margin-top: 6px;
+    padding-top: 4px;
+  }
+}
+
+.sc-action {
+  padding: 3px 6px;
+  font-size: 0.72rem;
+
+  i {
+    font-size: 0.85rem;
+  }
+}
+
+.us-cuerpo {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.us-media {
+  color: light-dark(#5d6b75, #aeaeae);
+  font-style: italic;
+}
+
+.us-miniatura {
+  position: relative;
+  display: block;
+  height: 90px;
+  margin-top: 6px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: light-dark(#eee, #2b3035);
+
+  img,
+  video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.us-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.4rem;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+  pointer-events: none;
+}
+
+.us-skeleton {
+  height: 64px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, light-dark(#eee, #30353b) 25%, light-dark(#f5f5f5, #2b3035) 50%, light-dark(#eee, #30353b) 75%);
+  background-size: 200% 100%;
+  animation: us-brillo 1.2s infinite;
+}
+
+@keyframes us-brillo {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+// En el celular la nube del muro mete el avatar adentro; acá sobra espacio a lo ancho, así que va al lado.
+@media (max-width: 575.98px) {
+  .sc {
+    display: flex;
+  }
+
+  .sc__avatar {
+    position: static;
+  }
+
+  .sc-bubble {
+    &__tail {
+      display: block;
+    }
+
+    &__head {
+      min-height: 0;
+      padding-left: 0;
+    }
+  }
+}

@@ -26,6 +26,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { reemplazarEmotes } from 'src/app/shared/helpers/emotes';
 import { imagenesEnTexto, soloUrlsDeImagen } from 'src/app/shared/helpers/imagenes-en-texto';
 import { EmojisPopoverService } from '../../../bottom-sheets/bottom-sheets-emojis/emojis-popover.service';
+import { VisorImagenService } from '../../../addons/visor-imagen/visor-imagen.service';
 
 const PAGE_SIZE = 30;
 /** Imágenes por mensaje (igual que el API). */
@@ -87,6 +88,7 @@ export class MensajesConversacionComponent implements OnInit {
   /** Los :codigo: de los emotes de Taringa! se muestran como GIF. */
   readonly conEmotes = reemplazarEmotes;
   private dialog = inject(MatDialog);
+  private visor = inject(VisorImagenService);
 
   private readonly destroyRef = inject(DestroyRef);
 
@@ -602,6 +604,13 @@ export class MensajesConversacionComponent implements OnInit {
       this.cacheFotos.set(m, r);
     }
     return r;
+  }
+
+  /** Clic normal: la imagen se abre en el visor (sin referrer, igual que la miniatura). Con modificadores, el href. */
+  abrirFoto(event: MouseEvent, url: string): void {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    this.visor.abrir(url, 'Imagen del mensaje', { sinReferrer: true });
   }
 
   fotosDe(m: MensajeViewModel): string[] {

@@ -75,7 +75,7 @@ export interface SugerenciaUsuario {
 export interface TopShoutero {
   userName: string;
   avatar: string | null;
-  shouts: number;
+  puntos: number;
   paisIso2: string | null;
   paisNombre: string | null;
 }
