@@ -35,3 +35,31 @@
 }
 
 .sc-action--eliminar:hover:not(:disabled) { color: light-dark(#c62828, #e16b6b); }
+
+// "No me interesa": queda este aviso en lugar del shout hasta recargar
+.sc-oculto {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border: 1px dashed light-dark(#c9d6de, #3a4650);
+  border-radius: 10px;
+  color: light-dark(#4a5a66, #a9b6bf);
+  font-size: 13.5px;
+
+  span { flex: 1; }
+}
+
+.sc-oculto__deshacer {
+  min-height: 32px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: light-dark(#e8f3f9, #1c3a4b);
+  color: light-dark(#005a85, #8ed2f2);
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover:not(:disabled) { background: light-dark(#d6eaf5, #24485c); }
+}

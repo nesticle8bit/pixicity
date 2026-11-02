@@ -32,6 +32,7 @@
             </td>
             <td>
               {{shout.tipoString}}
+              @if (shout.nsfw) { <span class="ts-nsfw" matTooltip="Contenido para mayores de 18">NSFW</span> }
             </td>
             <td>
               <span matTooltip="{{shout.comentario}}">
@@ -57,6 +58,10 @@
               </button>
               <mat-menu #menu="matMenu">
                 @if (!shout.eliminado) {
+                  <button type="button" mat-menu-item (click)="alternarNsfw(shout)">
+                    <mat-icon>{{ shout.nsfw ? 'visibility' : 'visibility_off' }}</mat-icon>
+                    {{ shout.nsfw ? 'Quitar la marca NSFW' : 'Marcar como NSFW (+18)' }}
+                  </button>
                   <button type="button" mat-menu-item (click)="deleteShout(shout.id, i)">
                     <mat-icon>delete_outline</mat-icon>
                     Eliminar

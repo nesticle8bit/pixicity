@@ -1,4 +1,10 @@
-@if (!oculto()) {
+@if (ocultadoPorMi()) {
+<div class="sc-oculto" role="status">
+  <i class="ti ti-eye-off" aria-hidden="true"></i>
+  <span>Ocultaste este shout: no volverá a aparecer en tu muro.</span>
+  <button type="button" class="sc-oculto__deshacer" [disabled]="procesando()" (click)="alternarOcultar()">Deshacer</button>
+</div>
+} @else if (!oculto()) {
 @if (compartidoPor(); as por) {
 <p class="sc-compartido">
   <i class="ti ti-repeat" aria-hidden="true"></i>
@@ -76,6 +82,12 @@
         <button mat-menu-item type="button" (click)="alternarNsfw()">
           <i class="ti ti-eye-off" aria-hidden="true"></i>
           <span>{{ nsfw() ? 'Quitar la marca NSFW' : 'Marcar como NSFW (+18)' }}</span>
+        </button>
+        }
+        @if (puedeOcultar()) {
+        <button mat-menu-item type="button" (click)="alternarOcultar()">
+          <i class="ti ti-eye-off" aria-hidden="true"></i>
+          <span>No me interesa <small class="sc-menu__nota">ocultar de mi muro</small></span>
         </button>
         }
         @if (!esMio()) {

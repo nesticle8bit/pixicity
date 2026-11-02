@@ -92,6 +92,17 @@ export class TableShoutsComponent implements OnInit {
     });
   }
 
+  /** El API lo registra en /mod-history cuando no lo hace el autor. */
+  alternarNsfw(shout: ShoutAdmin): void {
+    this.perfilService.marcarShoutNsfw(shout.id, !shout.nsfw).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (quedo) => {
+        shout.nsfw = quedo;
+        this.notificationService.success(quedo ? 'Shout marcado como NSFW' : 'Se quitó la marca NSFW', 'Shouts');
+      },
+      error: (e: unknown) => this.notificationService.error(e instanceof Error ? e.message : 'No se pudo cambiar la marca NSFW', 'Shouts'),
+    });
+  }
+
   recoveryShout(id: number, index: number): void {
     this.perfilService.recoveryShout(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
       if (response) {

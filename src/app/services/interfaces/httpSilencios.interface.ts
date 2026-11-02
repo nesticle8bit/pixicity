@@ -8,4 +8,6 @@ export abstract class IHttpSilenciosService {
   abstract alternarUsuario(userName: string): Observable<boolean>;
   abstract agregarPalabra(palabra: string): Observable<boolean>;
   abstract quitarPalabra(id: number): Observable<boolean>;
+  /** Oculta un shout del muro de /mi ("No me interesa"), o lo vuelve a mostrar. Devuelve si quedó oculto. */
+  abstract ocultarShout(shoutId: number, ocultar: boolean): Observable<boolean>;
 }

@@ -84,6 +84,10 @@ export class ShoutCardComponent {
   readonly nsfw = signal(false);
   readonly procesando = signal(false);
   readonly fijado = signal(false);
+  /** "No me interesa": shouts ajenos fuera del perfil (en el perfil se ven todos igual; el filtro es del muro de /mi). */
+  readonly puedeOcultar = computed(() => !this.esMio() && !this.enPerfil());
+  /** Lo ocultó desde esta tarjeta: queda un aviso con "Deshacer" en su lugar. */
+  readonly ocultadoPorMi = signal(false);
   /** Solo los shouts propios en el muro propio (el API lo vuelve a verificar). */
   readonly puedeFijar = computed(() => this.enPerfil() && this.esMio() && !this.muroAjeno());
 
@@ -216,6 +220,25 @@ export class ShoutCardComponent {
             next: () => this.notificationService.success('Denuncia enviada. Gracias por reportar.', 'Denuncia'),
             error: (e: unknown) => this.notificationService.error(e instanceof Error ? e.message : 'No se pudo denunciar', 'Denuncia'),
           });
+      });
+  }
+
+  alternarOcultar(): void {
+    if (!this.sesion.exigir('Inicia sesión para ocultar shouts')) return;
+    if (this.procesando()) return;
+    this.procesando.set(true);
+    this.silencios
+      .ocultarShout(this.shout().id, !this.ocultadoPorMi())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (oculto) => {
+          this.ocultadoPorMi.set(oculto);
+          this.procesando.set(false);
+        },
+        error: (e: unknown) => {
+          this.procesando.set(false);
+          this.notificationService.error(e instanceof Error ? e.message : 'No se pudo ocultar el shout', 'Shouts');
+        },
       });
   }
 

@@ -36,6 +36,8 @@ export interface ShoutAdmin {
   url: string | null;
   fechaRegistro: string;
   tipoString: string;
+  /** Marcado +18: la media se muestra difuminada. */
+  nsfw: boolean;
   eliminado: boolean;
 }
 

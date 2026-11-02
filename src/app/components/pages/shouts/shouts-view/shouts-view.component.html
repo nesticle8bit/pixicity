@@ -100,7 +100,12 @@
           <h2>Herramientas</h2>
         </div>
 
-        <div class="row">
+        <div class="row g-2">
+          <div class="col-12 d-grid">
+            <button type="button" mat-stroked-button [disabled]="cambiandoNsfw()" (click)="alternarNsfw()">
+              <i class="ti ti-eye-off" aria-hidden="true"></i> {{ shout.nsfw ? 'Quitar la marca NSFW' : 'Marcar como NSFW (+18)' }}
+            </button>
+          </div>
           <div class="col-12 col-sm-12 d-grid gap-2 text-end" (click)="eliminarShout()" role="button" tabindex="0"
             (keydown.enter)="eliminarShout()" (keydown.space)="eliminarShout(); $event.preventDefault()">
             <button mat-flat-button color="danger">

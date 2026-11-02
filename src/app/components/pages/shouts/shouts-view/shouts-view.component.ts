@@ -251,6 +251,27 @@ export class ShoutsViewComponent implements OnInit {
     }
   }
 
+  readonly cambiandoNsfw = signal(false);
+
+  /** Autor, moderadores y admins marcan o quitan la marca +18 (el API lo vuelve a verificar y lo registra). */
+  alternarNsfw(): void {
+    if (this.cambiandoNsfw()) return;
+    this.cambiandoNsfw.set(true);
+    this.perfilService
+      .marcarShoutNsfw(this.shout.id, !this.shout.nsfw)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (quedo) => {
+          this.shout = { ...this.shout, nsfw: quedo };
+          this.cambiandoNsfw.set(false);
+        },
+        error: (e: unknown) => {
+          this.cambiandoNsfw.set(false);
+          this.notificationService.error(e instanceof Error ? e.message : 'No se pudo cambiar la marca NSFW', 'Shouts');
+        },
+      });
+  }
+
   async eliminarShout(): Promise<void> {
     if (
       !await this.notificationService.confirm(

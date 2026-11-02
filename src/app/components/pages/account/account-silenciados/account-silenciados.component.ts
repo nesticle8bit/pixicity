@@ -2,7 +2,7 @@ import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { PalabraSilenciada, UsuarioSilenciado } from 'src/app/models/seguridad/silencios.model';
+import { PalabraSilenciada, ShoutOculto, UsuarioSilenciado } from 'src/app/models/seguridad/silencios.model';
 import { IHttpSilenciosService } from 'src/app/services/interfaces/httpSilencios.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.component';
@@ -21,6 +21,7 @@ export class AccountSilenciadosComponent implements OnInit {
 
   readonly usuarios = signal<UsuarioSilenciado[]>([]);
   readonly palabras = signal<PalabraSilenciada[]>([]);
+  readonly shouts = signal<ShoutOculto[]>([]);
   readonly cargado = signal(false);
   nuevaPalabra = '';
   agregando = false;
@@ -37,6 +38,7 @@ export class AccountSilenciadosComponent implements OnInit {
         next: (s) => {
           this.usuarios.set(s.usuarios);
           this.palabras.set(s.palabras);
+          this.shouts.set(s.shouts ?? []);
           this.cargado.set(true);
         },
         error: () => this.cargado.set(true),
@@ -68,6 +70,13 @@ export class AccountSilenciadosComponent implements OnInit {
       .quitarPalabra(p.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.palabras.update((l) => l.filter((x) => x.id !== p.id)));
+  }
+
+  mostrarShout(s: ShoutOculto): void {
+    this.silencios
+      .ocultarShout(s.shoutId, false)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.shouts.update((l) => l.filter((x) => x.shoutId !== s.shoutId)));
   }
 
   dejarDeSilenciar(u: UsuarioSilenciado): void {

@@ -32,6 +32,11 @@ export class HttpSilenciosService implements IHttpSilenciosService {
     return this.http.delete<ApiResponse<boolean>>(`${this.base}/palabras/${id}`).pipe(this.datos<boolean>());
   }
 
+  ocultarShout(shoutId: number, ocultar: boolean): Observable<boolean> {
+    const url = `${this.base}/shouts/${shoutId}`;
+    return (ocultar ? this.http.put<ApiResponse<boolean>>(url, {}) : this.http.delete<ApiResponse<boolean>>(url)).pipe(this.datos<boolean>());
+  }
+
   private datos<T>(): OperatorFunction<ApiResponse<T>, T> {
     return (fuente) =>
       fuente.pipe(

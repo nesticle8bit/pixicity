@@ -43,3 +43,22 @@
   <p class="sil__vacio">No silenciaste a nadie. Puedes hacerlo desde el menú de cualquier shout.</p>
   }
 </section>
+
+<section class="sil__bloque" aria-labelledby="sil-shouts">
+  <h3 id="sil-shouts" class="sil__titulo">Shouts ocultos</h3>
+  @if (shouts().length) {
+  <ul class="sil__usuarios">
+    @for (s of shouts(); track s.shoutId) {
+    <li class="sil__usuario">
+      <app-user-avatar [avatar]="s.avatar" [userName]="s.autor" [width]="36" [height]="36" />
+      <a class="sil__shout" [routerLink]="['/shouts', s.autor, s.shoutId]">
+        <strong>{{ '@' }}{{ s.autor }}</strong> {{ s.extracto || 'Shout sin texto' }}
+      </a>
+      <button type="button" class="sil__boton sil__boton--suave" (click)="mostrarShout(s)">Mostrar de nuevo</button>
+    </li>
+    }
+  </ul>
+  } @else if (cargado()) {
+  <p class="sil__vacio">No ocultaste ningún shout. Usa "No me interesa" en el menú de un shout.</p>
+  }
+</section>

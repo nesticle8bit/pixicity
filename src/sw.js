@@ -69,17 +69,23 @@ self.addEventListener('push', (event) => {
     // Sin datos legibles: se muestra el aviso genérico.
   }
   event.waitUntil(
-    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((ventanas) => {
+    Promise.all([
+      self.clients.matchAll({ type: 'window', includeUncontrolled: true }),
+      aviso.tag ? self.registration.getNotifications({ tag: aviso.tag }) : Promise.resolve([]),
+    ]).then(([ventanas, previas]) => {
       // La notificación de prueba de /cuenta se muestra igual (forzar).
       if (!aviso.forzar && ventanas.some((v) => v.visibilityState === 'visible' && v.focused)) return undefined;
+      // Si la que reemplaza es de hace menos de un minuto (p. ej. llegaron varias juntas al prender la PC), se
+      // actualiza en silencio en vez de volver a sonar y saltar.
+      const reciente = previas.some((n) => Date.now() - n.timestamp < 60_000);
       return self.registration.showNotification(aviso.titulo || 'Taringas!', {
         body: aviso.cuerpo || 'Tienes novedades',
         icon: '/assets/favicon/pwa-192.png',
         // Android: la silueta blanca de la barra de estado.
         badge: '/assets/favicon/badge-96.png',
-        // Mismo tag = reemplaza el anterior (varios mensajes seguidos de la misma persona) y vuelve a sonar.
+        // Mismo tag = reemplaza el anterior: toda la campana comparte uno ("campana") y los mensajes, uno por conversación.
         tag: aviso.tag || undefined,
-        renotify: !!aviso.tag,
+        renotify: !!aviso.tag && !reciente,
         lang: 'es',
         data: { url: aviso.url || '/monitor' },
       });

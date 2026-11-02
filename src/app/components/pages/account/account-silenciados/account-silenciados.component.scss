@@ -108,3 +108,15 @@
   margin: 0;
   color: light-dark(#6b7782, #a6a6a6);
 }
+
+// Shout oculto: el extracto ocupa el espacio y se corta en una línea
+.sil__usuario a.sil__shout {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  strong { font-weight: 600; }
+}
