@@ -1,4 +1,7 @@
-import { PERFIL_VACIO, PerfilUsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import {
+  PERFIL_VACIO,
+  PerfilUsuarioViewModel,
+} from 'src/app/models/seguridad/seguridad-vm.model';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { environment } from 'src/environments/environment';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -34,12 +37,23 @@ import { PerfilUserFollowersComponent } from './perfil-user-followers/perfil-use
 import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { urlCss } from 'src/app/shared/helpers/url-css';
 
-export type PestanaPerfil = 'shouts' | 'activity' | 'posts' | 'comments' | 'followers' | 'following' | 'information';
+export type PestanaPerfil =
+  | 'shouts'
+  | 'activity'
+  | 'posts'
+  | 'comments'
+  | 'followers'
+  | 'following'
+  | 'information';
 
 /** Pestañas del perfil. La activa vive en ?tab= (salvo el muro, que es la de inicio) para poder enlazarla. */
-export const PESTANAS_PERFIL: { id: PestanaPerfil; label: string; icono: string }[] = [
+export const PESTANAS_PERFIL: {
+  id: PestanaPerfil;
+  label: string;
+  icono: string;
+}[] = [
   { id: 'shouts', label: 'Muro', icono: 'ti-message-circle' },
-  { id: 'activity', label: 'Actividad', icono: 'ti-antenna' },
+  // { id: 'activity', label: 'Actividad', icono: 'ti-antenna' },
   { id: 'posts', label: 'Posts', icono: 'ti-file-text' },
   { id: 'comments', label: 'Comentarios', icono: 'ti-message-dots' },
   { id: 'followers', label: 'Seguidores', icono: 'ti-users' },
@@ -50,39 +64,39 @@ export const PESTANAS_PERFIL: { id: PestanaPerfil; label: string; icono: string 
 const PESTANA_INICIAL: PestanaPerfil = 'shouts';
 
 @Component({
-    selector: 'app-perfil',
-    templateUrl: './perfil.component.html',
-    styleUrls: ['./perfil.component.scss'],
-    imports: [
-        RouterLink,
-        UserAvatarComponent,
-        GenreIconComponent,
-        CountryFlagComponent,
-        MatTooltip,
-        FollowButtonComponent,
-        SendMessageButtonComponent,
-        BanearUsuarioComponent,
-        ChangeRangoComponent,
-        ChangeAvatarComponent,
-        NgStyle,
-        UserOnlineStatusComponent,
-        ProfileActivityComponent,
-        ProfileShoutsComponent,
-        ProfilePostsComponent,
-        ProfileCommentsComponent,
-        ProfileFollowsComponent,
-        ProfileInformationComponent,
-        PerfilSocialMediaButtonsComponent,
-        PerfilUserFollowersComponent,
-        AnuncioComponent,
-        DatePipe,
-        DecimalPipe,
-    ],
-    host: {
-      // El fondo de página lo pinta app.component (desde la barra de noticias hasta el pie); aquí solo se marca
-      // para darle contraste a los títulos de las pestañas.
-      '[class.pf-con-fondo]': '!!fondoPaginaCss',
-    },
+  selector: 'app-perfil',
+  templateUrl: './perfil.component.html',
+  styleUrls: ['./perfil.component.scss'],
+  imports: [
+    RouterLink,
+    UserAvatarComponent,
+    GenreIconComponent,
+    CountryFlagComponent,
+    MatTooltip,
+    FollowButtonComponent,
+    SendMessageButtonComponent,
+    BanearUsuarioComponent,
+    ChangeRangoComponent,
+    ChangeAvatarComponent,
+    NgStyle,
+    UserOnlineStatusComponent,
+    ProfileActivityComponent,
+    ProfileShoutsComponent,
+    ProfilePostsComponent,
+    ProfileCommentsComponent,
+    ProfileFollowsComponent,
+    ProfileInformationComponent,
+    PerfilSocialMediaButtonsComponent,
+    PerfilUserFollowersComponent,
+    AnuncioComponent,
+    DatePipe,
+    DecimalPipe,
+  ],
+  host: {
+    // El fondo de página lo pinta app.component (desde la barra de noticias hasta el pie); aquí solo se marca
+    // para darle contraste a los títulos de las pestañas.
+    '[class.pf-con-fondo]': '!!fondoPaginaCss',
+  },
 })
 export class PerfilComponent implements OnInit {
   private readonly documento = inject(DOCUMENT);
@@ -96,7 +110,13 @@ export class PerfilComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  public display: DisplayComponentModel = { mainMenu: true, footer: true, searchFooter: true, submenu: false, background: ''};
+  public display: DisplayComponentModel = {
+    mainMenu: true,
+    footer: true,
+    searchFooter: true,
+    submenu: false,
+    background: '',
+  };
   /** Dueño del perfil: vacío hasta que llega del API (la plantilla lo lee desde el primer render). */
   public currentUser: PerfilUsuarioViewModel = PERFIL_VACIO;
   public loggedUser: JwtUserModel = this.securityService.getCurrentUser();
@@ -109,24 +129,40 @@ export class PerfilComponent implements OnInit {
 
   constructor() {
     // El fondo de página es del perfil: al salir se quita (no todas las páginas llaman a setDisplay y quedaría puesto).
-    this.destroyRef.onDestroy(() => this.displayService.setDisplay({ ...this.display, background: '', backgroundRepeat: undefined }));
+    this.destroyRef.onDestroy(() =>
+      this.displayService.setDisplay({
+        ...this.display,
+        background: '',
+        backgroundRepeat: undefined,
+      }),
+    );
 
-    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
-      this.getUserByUserName(values.get('userName') ?? '');
-    });
+    this.activatedRoute.paramMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((values) => {
+        this.getUserByUserName(values.get('userName') ?? '');
+      });
 
     // La pestaña sale de la URL: así los contadores, el menú y el botón atrás siempre coinciden.
-    this.activatedRoute.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
-      const tab = params.get('tab') as PestanaPerfil | null;
-      this.currentSelection = tab && PESTANAS_PERFIL.some((p) => p.id === tab) ? tab : PESTANA_INICIAL;
-    });
+    this.activatedRoute.queryParamMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        const tab = params.get('tab') as PestanaPerfil | null;
+        this.currentSelection =
+          tab && PESTANAS_PERFIL.some((p) => p.id === tab)
+            ? tab
+            : PESTANA_INICIAL;
+      });
 
     this.loggedUser = this.securityService.getCurrentUser();
   }
 
   /** Quien mira es otro usuario con sesión (puede seguir, escribir o bloquear). */
   get esAjeno(): boolean {
-    return !!this.loggedUser.usuario && this.loggedUser.usuario.userName !== this.currentUser.userName;
+    return (
+      !!this.loggedUser.usuario &&
+      this.loggedUser.usuario.userName !== this.currentUser.userName
+    );
   }
 
   /** Quien mira es staff: se muestran las herramientas de moderación (cada una valida su propio permiso). */
@@ -185,73 +221,83 @@ export class PerfilComponent implements OnInit {
     this.noEncontrado = false;
     this.bloqueoActivo = null;
 
-    this.securityService.getUserByUserName(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      // El API responde con error (400) cuando el usuario no existe.
-      error: () => this.perfilNoEncontrado(),
-      next: (value) => {
-        if (!value) {
-          this.perfilNoEncontrado();
-          return;
-        }
+    this.securityService
+      .getUserByUserName(userName)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        // El API responde con error (400) cuando el usuario no existe.
+        error: () => this.perfilNoEncontrado(),
+        next: (value) => {
+          if (!value) {
+            this.perfilNoEncontrado();
+            return;
+          }
 
-        this.currentUser = value;
-        this.cargando = false;
+          this.currentUser = value;
+          this.cargando = false;
 
-        // Fondo de página del usuario (app.component lo limpia de caracteres peligrosos y lo pinta).
-        this.display = {
-          ...this.display,
-          background: this.fondoPaginaCss ? (value.profilePageBackground ?? '') : '',
-          backgroundRepeat: value.profilePageBackgroundRepeat ?? 'repeat',
-        };
-        this.displayService.setDisplay(this.display);
+          // Fondo de página del usuario (app.component lo limpia de caracteres peligrosos y lo pinta).
+          this.display = {
+            ...this.display,
+            background: this.fondoPaginaCss
+              ? (value.profilePageBackground ?? '')
+              : '',
+            backgroundRepeat: value.profilePageBackgroundRepeat ?? 'repeat',
+          };
+          this.displayService.setDisplay(this.display);
 
-        const perfilVacio = !(this.currentUser.postsCount ?? 0) && !(this.currentUser.comentariosCount ?? 0);
-        this.seoService.setSEO({
-          noIndex: perfilVacio,
-          title: sumarContexto(
-            this.nombreVisible !== this.currentUser.userName
-              ? `${this.nombreVisible} (@${this.currentUser.userName})`
-              : `@${this.currentUser.userName}`,
-            'Perfil',
-          ),
-          description: `Perfil de ${this.currentUser.userName} en Taringa. Mira sus posts, shouts, seguidores y actividad en la comunidad.`,
-          type: 'profile',
-          imageURL: this.currentUser.avatar || '',
-          tags: [this.currentUser.userName, 'perfil', 'usuario', 'taringas'],
-          canonical: `${environment.publicUrl}${this.documento.location.pathname}`,
-          jsonLd: {
-            '@context': 'https://schema.org',
-            '@type': 'ProfilePage',
-            url: `${environment.publicUrl}${this.documento.location.pathname}`,
-            dateCreated: this.currentUser.fechaRegistro,
-            mainEntity: {
-              '@type': 'Person',
-              name: this.currentUser.userName,
-              alternateName: this.currentUser.userName,
-              image: this.currentUser.avatar || undefined,
-              url: `${environment.publicUrl}/perfil/${this.currentUser.userName}`,
-              interactionStatistic: [
-                {
-                  '@type': 'InteractionCounter',
-                  interactionType: 'https://schema.org/FollowAction',
-                  userInteractionCount: this.currentUser.seguidoresCount ?? 0,
-                },
-                {
-                  '@type': 'InteractionCounter',
-                  interactionType: 'https://schema.org/WriteAction',
-                  userInteractionCount: this.currentUser.postsCount ?? 0,
-                },
-              ],
+          const perfilVacio =
+            !(this.currentUser.postsCount ?? 0) &&
+            !(this.currentUser.comentariosCount ?? 0);
+          this.seoService.setSEO({
+            noIndex: perfilVacio,
+            title: sumarContexto(
+              this.nombreVisible !== this.currentUser.userName
+                ? `${this.nombreVisible} (@${this.currentUser.userName})`
+                : `@${this.currentUser.userName}`,
+              'Perfil',
+            ),
+            description: `Perfil de ${this.currentUser.userName} en Taringa. Mira sus posts, shouts, seguidores y actividad en la comunidad.`,
+            type: 'profile',
+            imageURL: this.currentUser.avatar || '',
+            tags: [this.currentUser.userName, 'perfil', 'usuario', 'taringas'],
+            canonical: `${environment.publicUrl}${this.documento.location.pathname}`,
+            jsonLd: {
+              '@context': 'https://schema.org',
+              '@type': 'ProfilePage',
+              url: `${environment.publicUrl}${this.documento.location.pathname}`,
+              dateCreated: this.currentUser.fechaRegistro,
+              mainEntity: {
+                '@type': 'Person',
+                name: this.currentUser.userName,
+                alternateName: this.currentUser.userName,
+                image: this.currentUser.avatar || undefined,
+                url: `${environment.publicUrl}/perfil/${this.currentUser.userName}`,
+                interactionStatistic: [
+                  {
+                    '@type': 'InteractionCounter',
+                    interactionType: 'https://schema.org/FollowAction',
+                    userInteractionCount: this.currentUser.seguidoresCount ?? 0,
+                  },
+                  {
+                    '@type': 'InteractionCounter',
+                    interactionType: 'https://schema.org/WriteAction',
+                    userInteractionCount: this.currentUser.postsCount ?? 0,
+                  },
+                ],
+              },
             },
-          },
-        });
+          });
 
-        // Solo con sesión y en un perfil ajeno (antes comparaba loggedUser.userName, que no existe: pedía siempre).
-        if (this.loggedUser.usuario && this.loggedUser.usuario.userName !== userName) {
-          this.loadBloqueo(userName);
-        }
-      },
-    });
+          // Solo con sesión y en un perfil ajeno (antes comparaba loggedUser.userName, que no existe: pedía siempre).
+          if (
+            this.loggedUser.usuario &&
+            this.loggedUser.usuario.userName !== userName
+          ) {
+            this.loadBloqueo(userName);
+          }
+        },
+      });
   }
 
   /** Perfil inexistente: 404 real para que Google no lo tome como soft 404. */
@@ -260,7 +306,11 @@ export class PerfilComponent implements OnInit {
     this.noEncontrado = true;
     this.currentUser = PERFIL_VACIO;
     // Si se llega desde otro perfil con fondo, no debe quedar puesto.
-    this.display = { ...this.display, background: '', backgroundRepeat: undefined };
+    this.display = {
+      ...this.display,
+      background: '',
+      backgroundRepeat: undefined,
+    };
     this.displayService.setDisplay(this.display);
     this.seoService.setSEO({
       title: 'Perfil no encontrado',
@@ -274,30 +324,51 @@ export class PerfilComponent implements OnInit {
   }
 
   loadBloqueo(userName: string): void {
-    this.bloqueosService.getBloqueoContraPerfil(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (bloqueo) => this.bloqueoActivo = bloqueo,
-      error: () => {}
-    });
+    this.bloqueosService
+      .getBloqueoContraPerfil(userName)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (bloqueo) => (this.bloqueoActivo = bloqueo),
+        error: () => {},
+      });
   }
 
   bloquearUsuario(): void {
-    this.bloqueosService.bloquearUsuario(this.currentUser.userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (id) => {
-        this.bloqueoActivo = { id, bloqueadoId: this.currentUser.id, userName: this.currentUser.userName, avatar: this.currentUser.avatar, fechaRegistro: new Date().toISOString() };
-        this.notificationService.success(`${this.currentUser.userName} ha sido bloqueado`, 'Bloqueado');
-      },
-      error: () => {}
-    });
+    this.bloqueosService
+      .bloquearUsuario(this.currentUser.userName)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (id) => {
+          this.bloqueoActivo = {
+            id,
+            bloqueadoId: this.currentUser.id,
+            userName: this.currentUser.userName,
+            avatar: this.currentUser.avatar,
+            fechaRegistro: new Date().toISOString(),
+          };
+          this.notificationService.success(
+            `${this.currentUser.userName} ha sido bloqueado`,
+            'Bloqueado',
+          );
+        },
+        error: () => {},
+      });
   }
 
   desbloquearUsuario(): void {
     if (!this.bloqueoActivo) return;
-    this.bloqueosService.desbloquearUsuario(this.bloqueoActivo.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
-        this.notificationService.success(`${this.currentUser.userName} ha sido desbloqueado`, 'Desbloqueado');
-        this.bloqueoActivo = null;
-      },
-      error: () => {}
-    });
+    this.bloqueosService
+      .desbloquearUsuario(this.bloqueoActivo.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.notificationService.success(
+            `${this.currentUser.userName} ha sido desbloqueado`,
+            'Desbloqueado',
+          );
+          this.bloqueoActivo = null;
+        },
+        error: () => {},
+      });
   }
 }

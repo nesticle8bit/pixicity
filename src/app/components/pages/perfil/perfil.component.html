@@ -142,7 +142,7 @@
         [attr.aria-labelledby]="'perfil-tab-' + currentSelection">
         @if (currentUser.id) {
         @switch (currentSelection) {
-        @case ('activity') { <app-profile-activity [user]="currentUser"></app-profile-activity> }
+        <!-- @case ('activity') { <app-profile-activity [user]="currentUser"></app-profile-activity> } -->
         @case ('posts') { <app-profile-posts [user]="currentUser"></app-profile-posts> }
         @case ('comments') { <app-profile-comments [user]="currentUser"></app-profile-comments> }
         @case ('followers') { <app-profile-follows tipo="seguidores" [user]="currentUser"></app-profile-follows> }
