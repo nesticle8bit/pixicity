@@ -4,6 +4,7 @@ import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { SeccionMuroPerfil } from 'src/app/models/perfil/perfil-muro.model';
 import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { FOTOS_HABILITADAS } from 'src/app/shared/helpers/secciones';
 
 /** Lo que se puede ocultar del muro, agrupado como lo ve el usuario (MuroPrivacidad.Seccion en el API). */
 const GRUPOS: { grupo: string; secciones: { id: SeccionMuroPerfil; label: string; detalle: string }[] }[] = [
@@ -12,7 +13,7 @@ const GRUPOS: { grupo: string; secciones: { id: SeccionMuroPerfil; label: string
     secciones: [
       { id: 'compartidos', label: 'Shouts compartidos', detalle: 'Los shouts de otros que compartes' },
       { id: 'posts', label: 'Posts', detalle: 'Los posts que publicas' },
-      { id: 'fotos', label: 'Fotos', detalle: 'Las fotos que subes' },
+      ...(FOTOS_HABILITADAS ? [{ id: 'fotos' as const, label: 'Fotos', detalle: 'Las fotos que subes' }] : []),
     ],
   },
   {

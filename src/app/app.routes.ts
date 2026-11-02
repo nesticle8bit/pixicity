@@ -7,6 +7,7 @@ import { ModeradorAuthorization } from './shared/guards/moderadorAuthorization.g
 import { AuthGuard } from './shared/guards/auth.guard';
 import { AuthLoggedUserGuard } from './shared/guards/auth.loggedUser.guard';
 import { nombreDesdeSlug, tituloConParametro } from './services/shared/seo-title.strategy';
+import { fotosHabilitadas } from './shared/helpers/secciones';
 
 // Solo el home, el post y el 404 van en el bundle inicial (son las páginas de entrada); el resto se carga al navegar.
 // `title` y `data` (descripcion/noIndex) son el SEO por defecto de cada ruta (SeoTitleStrategy); las vistas
@@ -263,6 +264,7 @@ export const routes: Routes = [
   {
     path: 'fotos',
     title: 'Fotos',
+    canMatch: [fotosHabilitadas],
     loadChildren: () =>
       import('./modules/fotos/fotos.module').then((m) => m.FotosModule),
   },

@@ -51,9 +51,11 @@
               </div>
             </div>
             <div class="sidebar-user-links">
-              <a [routerLink]="['/fotos', tema.userName]" class="sidebar-link-chip">
-                <i class="ti ti-photo"></i> Ver fotos
-              </a>
+              @if (fotosHabilitadas) {
+                <a [routerLink]="['/fotos', tema.userName]" class="sidebar-link-chip">
+                  <i class="ti ti-photo"></i> Ver fotos
+                </a>
+              }
               @if (!esMio) {
               <app-follow-button [userName]="tema.userName" [icon]="true"></app-follow-button>
               }

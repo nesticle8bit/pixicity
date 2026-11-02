@@ -1,3 +1,4 @@
+import { FOTOS_HABILITADAS } from 'src/app/shared/helpers/secciones';
 import { EnlazarHashtagsPipe } from 'src/app/shared/pipes/enlazarHashtags.pipe';
 import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { environment } from 'src/environments/environment';
@@ -70,6 +71,8 @@ function aHilo(c: TemaComentario): ComentarioHilo {
     ],
 })
 export class ComunidadTemaViewComponent implements OnInit {
+  /** La sección Fotos está cerrada (ver shared/helpers/secciones). */
+  readonly fotosHabilitadas = FOTOS_HABILITADAS;
   private readonly documento = inject(DOCUMENT);
   private readonly redireccionCanonica = inject(RedireccionCanonica);
   private displayService = inject(DisplayComponentService);

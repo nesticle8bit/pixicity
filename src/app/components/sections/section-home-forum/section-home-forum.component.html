@@ -15,7 +15,9 @@
       <!-- <app-home-top-shouts /> -->
       <app-home-shouts-activos periodo="dia" [cantidad]="5" />
       <app-home-top-shouteros />
+      @if (fotosHabilitadas) {
       <app-home-last-photos />
+      }
       <br>
       <!-- <app-home-last-shouts></app-home-last-shouts>
       <br> -->

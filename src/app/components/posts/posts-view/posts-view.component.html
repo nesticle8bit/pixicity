@@ -48,9 +48,11 @@
               </div>
             </div>
             <div class="sidebar-user-links">
-              <a [routerLink]="['/fotos', post.usuario.userName]" class="sidebar-link-chip">
-                <i class="ti ti-photo"></i> Ver fotos
-              </a>
+              @if (fotosHabilitadas) {
+                <a [routerLink]="['/fotos', post.usuario.userName]" class="sidebar-link-chip">
+                  <i class="ti ti-photo"></i> Ver fotos
+                </a>
+              }
               @if (!esAutor) {
               <app-follow-button [userName]="post.usuario.userName" [icon]="true"></app-follow-button>
               }

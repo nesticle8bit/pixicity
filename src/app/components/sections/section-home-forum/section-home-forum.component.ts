@@ -1,3 +1,4 @@
+import { FOTOS_HABILITADAS } from 'src/app/shared/helpers/secciones';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
@@ -48,6 +49,8 @@ import { enNavegador } from '../../../shared/helpers/plataforma';
     ],
 })
 export class SectionHomeForumComponent implements OnInit, OnDestroy {
+  /** La sección Fotos está cerrada (ver shared/helpers/secciones). */
+  readonly fotosHabilitadas = FOTOS_HABILITADAS;
   private displayService = inject(DisplayComponentService);
   private securityService = inject(IHttpSecurityService);
   private generalService = inject(IHttpGeneralService);

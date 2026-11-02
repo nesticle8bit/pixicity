@@ -1,4 +1,5 @@
 import { Router } from '@angular/router';
+import { FOTOS_HABILITADAS } from 'src/app/shared/helpers/secciones';
 
 export interface NavLink {
   label: string;
@@ -22,7 +23,7 @@ export const NAV_LINKS: NavLink[] = [
   { label: 'Posts', icon: 'ti-smart-home', route: '/', exact: true, tab: true },
   { label: 'TOPs', icon: 'ti-trophy', route: '/tops', tab: true },
   { label: 'Comunidades', icon: 'ti-users', route: '/comunidades', tab: true },
-  { label: 'Fotos', icon: 'ti-camera', route: '/fotos', tab: true },
+  ...(FOTOS_HABILITADAS ? [{ label: 'Fotos', icon: 'ti-camera', route: '/fotos', tab: true }] : []),
   { label: 'Buscador', icon: 'ti-search', route: '/buscar', exact: true },
   { label: 'Historial', icon: 'ti-history', route: '/mod-history', rango: ['Moderador', 'Administrador'] },
   {

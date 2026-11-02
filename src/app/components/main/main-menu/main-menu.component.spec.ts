@@ -66,7 +66,7 @@ describe('MainMenuComponent (pestañas)', () => {
     await build({ userName: 'yo', rango: 'Usuario' });
 
     const titulos = tabs().map((t) => t.querySelector('a')!.getAttribute('title'));
-    expect(titulos).toEqual(['Mi', 'Posts', 'TOPs', 'Comunidades', 'Fotos']);
+    expect(titulos).toEqual(['Mi', 'Posts', 'TOPs', 'Comunidades']);
   });
 
   it('administrador: agrega Administración, y reacciona al cambio de sesión sin recargar', async () => {
@@ -130,7 +130,7 @@ describe('main-nav.config', () => {
   it('las pestañas son un subconjunto de los enlaces', () => {
     const tabs = linksFor('Administrador', true).map((l) => l.label);
 
-    expect(tabs).toEqual(['Mi', 'Posts', 'TOPs', 'Comunidades', 'Fotos', 'Moderación', 'Administración']);
+    expect(tabs).toEqual(['Mi', 'Posts', 'TOPs', 'Comunidades', 'Moderación', 'Administración']);
     expect(NAV_LINKS.length).toBeGreaterThan(tabs.length);
   });
 
