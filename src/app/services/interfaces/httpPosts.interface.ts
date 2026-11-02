@@ -17,6 +17,8 @@ export abstract class IHttpPostsService {
   abstract getPostsByLoggedUser(search: string): Observable<PaginatedData<PostViewModel>>;
   abstract getStickyPosts(): Observable<PostListaViewModel[]>;
   abstract getPostById(postId: number): Observable<PostDetailResponse>;
+  /** Contenido de los recuadros de links ocultos; null si todavía no dio puntos ni comentó. */
+  abstract getLinksOcultos(postId: number): Observable<string[] | null>;
   abstract savePost(post: Partial<PostViewModel>): Observable<number>;
   abstract updatePost(post: Partial<PostViewModel>): Observable<number>;
   abstract deletePost(postId: number, razon: string): Observable<boolean>;

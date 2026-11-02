@@ -13,6 +13,7 @@ export interface EditorButton {
   title: string;
   run: () => void;
   mark?: InlineMark; // si se indica, el botón refleja el estado activo de esa marca
+  visible?: () => boolean; // si se indica y da false, el botón no se muestra
 }
 
 export interface MenuButton {
@@ -91,6 +92,8 @@ export const PLAIN_BLOCK_TAGS = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'PRE', 'BLO
 // Elementos de bloque que no son "líneas" de texto (se insertan entre bloques, nunca dentro de un <p>)
 export const STANDALONE_TAGS = ['UL', 'OL', 'HR', 'TABLE', 'FIGURE'];
 export const IMG_ALIGN_CLASSES = ['img-izq', 'img-centro', 'img-der'];
+// Recuadro cuyo contenido solo ve quien le dio puntos o comentó el post (LinksOcultosHelper en el API)
+export const LINKS_OCULTOS_CLASS = 'links-ocultos';
 export const TABLE_PICKER_SIZE = 6;
 
 // Mismas reglas que POST /api/fotos/imagenes (ImageUploadHelper.FotoMaxBytes)

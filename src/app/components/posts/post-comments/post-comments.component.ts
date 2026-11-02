@@ -1,4 +1,5 @@
-import { Subscription } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
+import { LinksOcultosService } from 'src/app/services/shared/links-ocultos.service';
 import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
@@ -47,6 +48,7 @@ export class PostCommentsComponent {
   private comentariosPostService = inject(IHttpComentariosPostService);
   private readonly securityService = inject(IHttpSecurityService);
   private readonly dialog = inject(MatDialog);
+  private readonly linksOcultos = inject(LinksOcultosService);
 
   private _post: PostDetalle | null = null;
 
@@ -65,8 +67,11 @@ export class PostCommentsComponent {
   }
 
   public readonly acciones: ComentariosAcciones = {
+    // Comentar (o responder) desbloquea los links ocultos del post.
     comentar: (contenido, parentId) =>
-      this.comentariosPostService.addComentario({ postId: this._post?.id, contenido, comentarioId: parentId ?? undefined }),
+      this.comentariosPostService
+        .addComentario({ postId: this._post?.id, contenido, comentarioId: parentId ?? undefined })
+        .pipe(tap((id) => id && this._post && this.linksOcultos.avisar(this._post.id))),
     editar: (id, contenido) => this.comentariosPostService.updateComentario({ id, contenido }),
     eliminar: (id) => this.comentariosPostService.deleteComentario(id),
     votar: (id, valor) => this.comentariosPostService.votarComentario(id, valor),

@@ -18,6 +18,7 @@ import { IHttpPostsService } from 'src/app/services/interfaces/httpPosts.interfa
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { SesionRequeridaService } from 'src/app/services/shared/sesion-requerida.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
+import { LinksOcultosService } from 'src/app/services/shared/links-ocultos.service';
 import { enNavegador } from 'src/app/shared/helpers/plataforma';
 
 /** Máximo de opciones en la barra de puntos, aunque el rango permita repartir más por día. */
@@ -41,6 +42,7 @@ export class PostsMetaComponent {
   private readonly dialog = inject(MatDialog);
   private readonly sesion = inject(SesionRequeridaService);
   private readonly signalr = inject(SignalrService);
+  private readonly linksOcultos = inject(LinksOcultosService);
   private readonly destroyRef = inject(DestroyRef);
   private cargaPuntos?: Subscription;
   private cargaInteracciones?: Subscription;
@@ -191,6 +193,7 @@ export class PostsMetaComponent {
         next: (ok) => {
           this.votando = false;
           if (!ok) return;
+          this.linksOcultos.avisar(this.post.id);
           this.puntosDados = puntos;
           // El servidor avisa "postVotado" (con el total absoluto) antes de responder: si ese aviso ya llegó, el total
           // incluye mi voto y sumar acá lo contaba dos veces. Nunca baja de "lo que había + mis puntos".

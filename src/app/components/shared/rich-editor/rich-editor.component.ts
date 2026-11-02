@@ -58,6 +58,7 @@ import {
   INLINE_SHORTCUTS,
   ImgAlign,
   InlineMark,
+  LINKS_OCULTOS_CLASS,
   MenuButton,
   PALETAS,
   PLAIN_BLOCK_TAGS,
@@ -92,6 +93,8 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
   readonly placeholder = input<string>('Escribe aquí...');
   /** false: sin subir archivos (botón, pegar ni arrastrar); las imágenes solo entran por URL. */
   readonly permitirSubida = input(true);
+  /** Botón "Ocultar links": solo en posts, que es donde el API los oculta hasta que el lector da puntos o comenta. */
+  readonly permitirLinksOcultos = input(false);
 
   readonly wrapperEl = viewChild.required<ElementRef<HTMLDivElement>>('wrapperEl');
   readonly toolbarEl = viewChild.required<ElementRef<HTMLDivElement>>('toolbarEl');
@@ -167,6 +170,10 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
       { icon: 'smart_display', title: 'Insertar video de YouTube (o pega el enlace)', run: () => this.youtubeFromUrl() },
       { menu: 'table', icon: 'table_chart', title: 'Insertar tabla' },
       { icon: 'mood', title: 'Insertar emoji', run: () => this.abrirEmojis() },
+      {
+        icon: 'lock', title: 'Ocultar links: solo los ve quien da puntos o comenta',
+        run: () => this.toggleLinksOcultos(), visible: () => this.permitirLinksOcultos(),
+      },
     ] },
     { secondary: true, items: [
       { menu: 'heading', icon: 'title', title: 'Encabezado (# espacio)' },
@@ -551,6 +558,50 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
       }
       return first;
     });
+  }
+
+  /**
+   * Mete los bloques de la selección en un recuadro de links ocultos, o lo quita si el cursor ya está en uno.
+   * Con el cursor en un renglón vacío queda un recuadro vacío para escribir o pegar los links.
+   */
+  toggleLinksOcultos(): void {
+    if (!this.currentRange()) this.placeCaretEnd();
+    this.structural(() => {
+      const r = this.currentRange();
+      if (!r) return null;
+
+      const actual = this.cajaLinksOcultos(r.startContainer);
+      if (actual) {
+        const primero = actual.firstElementChild as HTMLElement | null;
+        unwrapNode(actual);
+        return primero;
+      }
+
+      // Hijos directos del editor: un recuadro dentro de una lista o tabla no tendría sentido.
+      const elegidos = Array.from(this.editor.children).filter((el) => r.intersectsNode(el)) as HTMLElement[];
+      // Cursor al final del editor, fuera de todo bloque: recuadro nuevo con un renglón vacío.
+      if (!elegidos.length) elegidos.push(this.editor.appendChild(emptyParagraph()));
+
+      const caja = document.createElement('div');
+      caja.className = LINKS_OCULTOS_CLASS;
+      elegidos[0].before(caja);
+      for (const el of elegidos) {
+        // Si la selección toca otro recuadro, se funden en uno.
+        if (el.classList.contains(LINKS_OCULTOS_CLASS)) {
+          caja.append(...Array.from(el.childNodes));
+          el.remove();
+        } else {
+          caja.appendChild(el);
+        }
+      }
+      // Siempre un renglón debajo: si no, no hay cómo seguir escribiendo fuera del recuadro.
+      if (!caja.nextElementSibling) caja.after(emptyParagraph());
+      return caja.firstElementChild as HTMLElement | null;
+    });
+  }
+
+  private cajaLinksOcultos(node: Node | null): HTMLElement | null {
+    return closestWithin(node, this.editor, (el) => el.tagName === 'DIV' && el.classList.contains(LINKS_OCULTOS_CLASS));
   }
 
   toggleCodeBlock(): void {
@@ -1861,6 +1912,18 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
         p = emptyParagraph();
         quote.after(p);
       }
+      this.caretAtStart(p);
+      this.afterChange();
+      return true;
+    }
+
+    // Enter en el último renglón vacío de un recuadro de links ocultos: sale debajo del recuadro
+    const caja = this.cajaLinksOcultos(range.startContainer);
+    if (caja && line && line !== caja && line === caja.lastElementChild && isVisuallyEmpty(line)) {
+      line.remove();
+      const p = emptyParagraph();
+      caja.after(p);
+      if (!caja.firstElementChild) caja.remove();
       this.caretAtStart(p);
       this.afterChange();
       return true;

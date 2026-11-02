@@ -33,6 +33,8 @@ import { ContenidoPostDirective } from '../../../shared/directives/contenido-pos
 import { RedireccionCanonica } from '../../../shared/helpers/redireccion-canonica';
 import { AnunciosService } from '../../../services/shared/anuncios.service';
 import { partirContenido } from '../../ads/anuncios';
+import { completarLinksOcultos, LinksOcultosService, tieneLinksBloqueados } from '../../../services/shared/links-ocultos.service';
+import { filter, switchMap } from 'rxjs';
 import {
   indiceDeContenido,
   minutosDeLectura,
@@ -78,6 +80,7 @@ export class PostsViewComponent implements OnInit {
   private seoService = inject(SEOService);
   private router = inject(Router);
   private notificationService = inject(NotificationService);
+  private readonly linksOcultos = inject(LinksOcultosService);
 
   private readonly destroyRef = inject(DestroyRef);
 
@@ -115,6 +118,21 @@ export class PostsViewComponent implements OnInit {
 
   constructor() {
     this.currentUser = this.securityService.getCurrentUser();
+
+    // Dio puntos o comentó: se piden los links ocultos y se agregan al contenido (antes no estaban en el DOM).
+    this.linksOcultos.desbloqueo$
+      .pipe(
+        filter((id) => id === this.post?.id && tieneLinksBloqueados(this.post?.contenido)),
+        switchMap((id) => this.postService.getLinksOcultos(id)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((bloques) => {
+        if (!bloques?.length || !this.post) return;
+        // Se cambia el mismo objeto: los hijos con [post] (comentarios, puntos) no se recargan.
+        this.post.contenido = completarLinksOcultos(this.post.contenido, bloques);
+        if (this.contenidoPartido) this.contenidoPartido = partirContenido(this.post.contenido);
+        this.notificationService.success('Ya puedes ver los links del post', 'Links desbloqueados');
+      });
   }
 
   ngOnInit(): void {

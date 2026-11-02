@@ -201,6 +201,47 @@ $lenguajes: (
       margin-right: auto;
     }
   }
+
+  // Links ocultos: el contenido solo llega a quien le dio puntos o comentó el post (LinksOcultosHelper en el API)
+  .links-ocultos {
+    clear: both;
+    margin: 12px 0;
+    padding: 10px 14px;
+    border: 1px dashed light-dark(#c9a227, #a88a2c);
+    border-radius: 8px;
+    background: light-dark(#fffaeb, #2c2817);
+
+    &::before {
+      content: '🔓 Links para quien dio puntos o comentó';
+      display: block;
+      margin-bottom: 6px;
+      color: light-dark(#7a5d00, #e3c35f);
+      font: 600 12px/1.4 system-ui, sans-serif;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // Lo que llega vacío desde el API mientras el lector no dio puntos ni comentó
+  .links-ocultos--bloqueado {
+    padding: 18px 14px;
+    text-align: center;
+
+    &::before {
+      content: '🔒 Los links están ocultos';
+      margin-bottom: 2px;
+      font-size: 14px;
+    }
+
+    &::after {
+      content: 'Dale puntos o deja un comentario para verlos.';
+      display: block;
+      color: light-dark(#6b5a24, #c9b67a);
+      font-size: 13px;
+    }
+  }
 }
 
 // Colores de highlight.js (tema claro tipo GitHub); solo en el post publicado

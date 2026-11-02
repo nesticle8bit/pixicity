@@ -130,6 +130,16 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getLinksOcultos(postId: number): Observable<string[] | null> {
+    // Un 403 acá no es un error para mostrar: el voto o comentario todavía no se ve del otro lado.
+    return this.http
+      .get<ApiResponse<string[]>>(`${environment.api}/api/posts/${postId}/links-ocultos`)
+      .pipe(
+        map((response) => (response.status === 200 ? response.data ?? [] : null)),
+        catchError(() => of(null)),
+      );
+  }
+
   savePost(post: Partial<PostViewModel>): Observable<number> {
     return this.http
       .post<ApiResponse<number>>(`${environment.api}/api/posts`, post)

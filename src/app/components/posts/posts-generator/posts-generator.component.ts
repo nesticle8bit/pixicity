@@ -5,6 +5,7 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MatButton } from '@angular/material/button';
 import { videoYoutube } from 'src/app/shared/helpers/youtube';
 import { videoNode } from '../../shared/rich-editor/rich-editor-paste';
+import { LINKS_OCULTOS_CLASS } from '../../shared/rich-editor/rich-editor.config';
 
 // Vacío es válido (los videos son opcionales); con algo escrito tiene que ser un enlace de YouTube
 function enlaceYoutubeValidator(control: AbstractControl): ValidationErrors | null {
@@ -139,10 +140,11 @@ export class PostsGeneratorComponent implements OnInit {
     }
 
     const lineas = (form.links || '').split('\n').map((l: string) => l.trim()).filter((l: string) => !!l);
+    // Los links van ocultos: solo los ve quien le da puntos o comenta el post (el API no los manda a nadie más)
     if (lineas.length) {
       buildPost += this.sectionDivider('📥', 'Links de Descarga');
-      lineas.forEach((linea: string) => (buildPost += `${enlazar(linea)}<br/>`));
-      buildPost += `<br/><br/>`;
+      buildPost += `<div class="${LINKS_OCULTOS_CLASS}">${lineas.map((linea: string) => `<p>${enlazar(linea)}</p>`).join('')}</div>`;
+      buildPost += `<br/>`;
     }
 
     if (form.password) {

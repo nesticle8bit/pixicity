@@ -28,6 +28,11 @@ app-rich-editor .rich-editor__content {
     cursor: pointer;
   }
 
+  // Al escribir se explica qué hace el recuadro (en el post se ve la versión para el lector)
+  .links-ocultos::before {
+    content: '🔒 Links ocultos: solo los ve quien da puntos o comenta';
+  }
+
   .img-resizable.img-centro {
     display: table;
   }

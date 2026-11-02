@@ -218,6 +218,46 @@ describe('RichEditorComponent', () => {
     });
   });
 
+  describe('links ocultos', () => {
+    it('el botón solo aparece si el editor lo permite', () => {
+      const boton = () => fixture.nativeElement.querySelector('[aria-label^="Ocultar links"]');
+      expect(boton()).toBeNull();
+      fixture.componentRef.setInput('permitirLinksOcultos', true);
+      fixture.detectChanges();
+      expect(boton()).not.toBeNull();
+    });
+
+    it('envuelve los párrafos elegidos en el recuadro y deja un renglón debajo', () => {
+      setHtml('<p>intro</p><p>link uno</p><p>link dos</p>');
+      const range = document.createRange();
+      range.setStart(editor.children[1].firstChild!, 0);
+      range.setEnd(editor.children[2].firstChild!, 3);
+      editor.focus();
+      window.getSelection()!.removeAllRanges();
+      window.getSelection()!.addRange(range);
+
+      component.toggleLinksOcultos();
+
+      expect(content()).toBe('<p>intro</p><div class="links-ocultos"><p>link uno</p><p>link dos</p></div><p><br></p>');
+    });
+
+    it('con el cursor dentro, quita el recuadro', () => {
+      setHtml('<div class="links-ocultos"><p>link</p></div><p>fin</p>');
+      select('link');
+
+      component.toggleLinksOcultos();
+
+      expect(content()).toBe('<p>link</p><p>fin</p>');
+    });
+
+    it('Enter en el último renglón vacío sale del recuadro', () => {
+      setHtml('<div class="links-ocultos"><p>link</p><p><br></p></div>');
+      caretIn(editor.querySelector('.links-ocultos p:last-child')!);
+      key('Enter');
+      expect(content()).toBe('<div class="links-ocultos"><p>link</p></div><p><br></p>');
+    });
+  });
+
   describe('historial (cambios sin registrar)', () => {
     it('deshacer justo después de un cambio (antes del snapshot) vuelve un solo paso', () => {
       setHtml('<p>uno</p>');

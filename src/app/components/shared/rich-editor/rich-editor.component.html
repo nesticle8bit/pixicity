@@ -80,7 +80,7 @@
         }
         }
       </div>
-      } @else {
+      } @else if (item.visible?.() !== false) {
       <button type="button" [matTooltip]="item.title" [attr.aria-label]="item.title"
         [class.active]="!!item.mark && activeMarks.has(item.mark)"
         [attr.aria-pressed]="item.mark ? activeMarks.has(item.mark) : null" [disabled]="disabled || sourceMode"
