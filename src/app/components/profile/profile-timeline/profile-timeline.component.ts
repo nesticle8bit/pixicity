@@ -16,8 +16,9 @@ import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PerfilRef } from 'src/app/models/seguridad/seguridad-vm.model';
 import { ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
-import { ActividadMuro, FiltroMuroPerfil, MuroPerfilItem } from 'src/app/models/perfil/perfil-muro.model';
+import { ActividadMuro, FiltroMuroPerfil, MuroPerfilItem, SeccionMuroPerfil } from 'src/app/models/perfil/perfil-muro.model';
 import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
+import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { TiempoCortoPipe } from 'src/app/shared/pipes/tiempo-corto.pipe';
 import { ShoutCardComponent } from '../../shared/shouts/shout-card/shout-card.component';
 import { PostCardComponent } from '../../shared/shouts/post-card/post-card.component';
@@ -35,6 +36,14 @@ const FILTROS: { id: FiltroMuroPerfil; label: string; icono: string; vacio: stri
   { id: 'comunidades', label: 'Comunidades', icono: 'ti-users-group', vacio: 'Todavía no participa en comunidades.' },
 ];
 
+/** Un filtro se saca si el dueño ocultó todo lo que trae (los shouts nunca se ocultan). */
+const SECCIONES_DEL_FILTRO: Partial<Record<FiltroMuroPerfil, SeccionMuroPerfil[]>> = {
+  posts: ['posts'],
+  comentarios: ['comentarios'],
+  reacciones: ['puntos', 'favoritos', 'meGusta', 'seguimientos'],
+  comunidades: ['comunidades'],
+};
+
 /**
  * Línea de tiempo del perfil: shouts, compartidos, posts, comentarios y el resto de la actividad, mezclados por fecha.
  * Carga de a 15 al acercarse al final (scroll infinito, con "Cargar más" de respaldo), agrupa por día y pliega las
@@ -50,10 +59,18 @@ const FILTROS: { id: FiltroMuroPerfil; label: string; icono: string; vacio: stri
 export class ProfileTimelineComponent {
   private readonly usuarioPerfil = inject(IHttpUsuarioPerfilService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly sesion = inject(IHttpSecurityService).getCurrentUser()?.usuario?.userName ?? null;
 
   readonly user = input<PerfilRef | null>(null);
 
-  readonly filtros = FILTROS;
+  /** Lo que el dueño ocultó desde /cuenta (llega con cada página). */
+  readonly ocultas = signal<readonly SeccionMuroPerfil[]>([]);
+  readonly filtros = computed(() => {
+    const ocultas = new Set(this.ocultas());
+    return FILTROS.filter((f) => !SECCIONES_DEL_FILTRO[f.id]?.every((s) => ocultas.has(s)));
+  });
+  /** Mi propio perfil: el dueño ve el enlace a la privacidad del muro. */
+  readonly esPropio = computed(() => !!this.sesion && this.sesion === this.user()?.userName);
   readonly filtro = signal<FiltroMuroPerfil>('todo');
   readonly items = signal<MuroPerfilItem[]>([]);
   readonly fijado = signal<ShoutViewModel | null>(null);
@@ -73,9 +90,15 @@ export class ProfileTimelineComponent {
 
   constructor() {
     // Otro perfil u otro filtro: desde arriba.
+    let anterior = 0;
     effect(() => {
       const id = this.usuarioId();
       this.filtro();
+      // Lo oculto es de cada perfil.
+      if (id !== anterior) {
+        anterior = id;
+        untracked(() => this.ocultas.set([]));
+      }
       if (id) untracked(() => this.cargar(true));
     });
 
@@ -139,6 +162,12 @@ export class ProfileTimelineComponent {
       .getMuroPerfil(id, reiniciar ? null : this.siguiente(), this.filtro(), POR_PAGINA)
       .subscribe({
         next: (muro) => {
+          this.ocultas.set(muro.ocultas ?? []);
+          // El filtro elegido quedó oculto (lo cambió el dueño mientras tanto): vuelve a "Todo".
+          if (!this.filtros().some((f) => f.id === this.filtro())) {
+            this.filtro.set('todo');
+            return;
+          }
           if (reiniciar) {
             this.items.set(muro.items);
             this.fijado.set(muro.fijado ?? null);

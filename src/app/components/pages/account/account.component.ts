@@ -23,9 +23,10 @@ import { AccountSesionesComponent } from './account-sesiones/account-sesiones.co
 import { AccountNotificacionesComponent } from './account-notificaciones/account-notificaciones.component';
 import { AccountMisDatosComponent } from './account-mis-datos/account-mis-datos.component';
 import { AccountNsfwComponent } from './account-nsfw/account-nsfw.component';
+import { AccountMuroComponent } from './account-muro/account-muro.component';
 import { ArrastrarFondoDirective, PosicionFondo } from 'src/app/shared/directives/arrastrar-fondo.directive';
 
-export type SeccionCuenta = 'datos' | 'perfil' | 'personalizacion' | 'password' | 'dos-factores' | 'sesiones' | 'bloqueados' | 'silenciados' | 'notificaciones' | 'contenido' | 'mis-datos';
+export type SeccionCuenta = 'datos' | 'perfil' | 'muro' | 'personalizacion' | 'password' | 'dos-factores' | 'sesiones' | 'bloqueados' | 'silenciados' | 'notificaciones' | 'contenido' | 'mis-datos';
 
 interface Seccion {
   id: SeccionCuenta;
@@ -41,6 +42,7 @@ export const GRUPOS_CUENTA: { nombre: string; secciones: Seccion[] }[] = [
     secciones: [
       { id: 'datos', label: 'Datos de la cuenta', icono: 'account_circle', descripcion: 'Correo, ubicación y datos personales.' },
       { id: 'perfil', label: 'Perfil', icono: 'badge', descripcion: 'Lo que otros ven sobre ti en tu perfil público.' },
+      { id: 'muro', label: 'Privacidad del muro', icono: 'privacy_tip', descripcion: 'Elige qué se ve en la línea de tiempo de tu perfil.' },
       { id: 'personalizacion', label: 'Personalización', icono: 'palette', descripcion: 'Dale tu estilo al fondo de tu perfil.' },
     ],
   },
@@ -90,6 +92,7 @@ const FONDO_PAGINA_VALIDO = /^https?:\/\/\S+\.(jpe?g|png|gif|webp)(\?\S*)?$/i;
     AccountSesionesComponent,
     AccountNotificacionesComponent,
     AccountNsfwComponent,
+    AccountMuroComponent,
     AccountMisDatosComponent,
     ArrastrarFondoDirective,
 ],

@@ -1,11 +1,23 @@
 <div class="tl-filtros" role="group" aria-label="Qué mostrar en la línea de tiempo">
-  @for (f of filtros; track f.id) {
+  @for (f of filtros(); track f.id) {
     <button type="button" class="tl-filtro" [class.activo]="filtro() === f.id" [attr.aria-pressed]="filtro() === f.id"
       (click)="elegirFiltro(f.id, $event)">
       <i class="ti {{ f.icono }}" aria-hidden="true"></i> {{ f.label }}
     </button>
   }
 </div>
+
+@if (esPropio()) {
+  <a class="tl-privacidad" routerLink="/cuenta" [queryParams]="{ seccion: 'muro' }">
+    <i class="ti ti-eye-off" aria-hidden="true"></i>
+    @if (ocultas().length) {
+      Ocultaste {{ ocultas().length }} {{ ocultas().length === 1 ? 'parte' : 'partes' }} de tu muro: nadie las ve, ni tú.
+      <span class="tl-privacidad__accion">Cambiar</span>
+    } @else {
+      <span class="tl-privacidad__accion">Elige qué se ve en tu muro</span>
+    }
+  </a>
+}
 
 @if (fijado(); as shout) {
   <div class="tl-fijado">

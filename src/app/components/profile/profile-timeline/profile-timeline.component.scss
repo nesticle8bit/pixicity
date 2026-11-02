@@ -64,6 +64,31 @@ $punto-movil: 26px;
   margin-bottom: 18px;
 }
 
+// - solo el dueño: lo que ocultó desde /cuenta
+.tl-privacidad {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: -6px 0 14px;
+  font-size: 0.8rem;
+  color: light-dark(#5d6b75, #aeaeae);
+  text-decoration: none;
+
+  &:hover .tl-privacidad__accion {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #1e99d3;
+    outline-offset: 2px;
+  }
+}
+
+.tl-privacidad__accion {
+  color: light-dark(#005bb3, #63a9f0);
+  font-weight: 600;
+}
+
 // - línea de tiempo
 .tl {
   position: relative;

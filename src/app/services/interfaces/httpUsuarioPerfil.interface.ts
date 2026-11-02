@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
 import { ActividadLogsViewModel } from 'src/app/models/logs/logs-vm.model';
-import { FiltroMuroPerfil, MuroPerfil } from 'src/app/models/perfil/perfil-muro.model';
+import { FiltroMuroPerfil, MuroPerfil, SeccionMuroPerfil } from 'src/app/models/perfil/perfil-muro.model';
 import { PerfilInfoResponse, PerfilUsuarioViewModel, SeguidoresResponse, UsuarioAvatarViewModel, UsuarioInfoViewModel, FondoPerfilRequest } from 'src/app/models/seguridad/seguridad-vm.model';
 
 /** Perfil de usuarios: info pública, perfil extendido, seguidores, avatar, fondo, actividad y estado en línea. */
@@ -24,6 +24,10 @@ export abstract class IHttpUsuarioPerfilService {
   abstract getActividadUsuario(usuarioId: number, tipoActividad: number): Observable<ActividadLogsViewModel>;
   /** Línea de tiempo del perfil, hacia atrás desde `antes` (el `siguiente` de la página anterior). */
   abstract getMuroPerfil(usuarioId: number, antes: string | null, filtro: FiltroMuroPerfil, cantidad?: number): Observable<MuroPerfil>;
+  /** Partes de mi muro que oculté. */
+  abstract getMuroPrivacidad(): Observable<SeccionMuroPerfil[]>;
+  /** Reemplaza lo oculto de mi muro; devuelve lo que quedó guardado. */
+  abstract setMuroPrivacidad(ocultas: SeccionMuroPerfil[]): Observable<SeccionMuroPerfil[]>;
   /** Archivo JSON con todos los datos propios del usuario actual. */
   abstract exportarMisDatos(): Observable<Blob>;
   abstract changeBackgroundProfile(obj: FondoPerfilRequest): Observable<boolean>;

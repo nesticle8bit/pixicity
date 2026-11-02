@@ -5,6 +5,19 @@ import { ShoutViewModel } from './shout-vm.model';
 /** Secciones de la línea de tiempo del perfil (parámetro `filtro` de GET api/usuarios/{id}/muro). */
 export type FiltroMuroPerfil = 'todo' | 'shouts' | 'posts' | 'comentarios' | 'reacciones' | 'comunidades';
 
+/** Partes del muro que el dueño puede ocultar desde /cuenta (los shouts siempre se ven). Usuario.MuroOculto en el API. */
+export type SeccionMuroPerfil =
+  | 'compartidos'
+  | 'posts'
+  | 'comentarios'
+  | 'puntos'
+  | 'favoritos'
+  | 'meGusta'
+  | 'seguimientos'
+  | 'comunidades'
+  | 'fotos'
+  | 'rangos';
+
 /** Actividad de la línea de tiempo: lo de la pestaña Actividad más la clase del objeto y el texto de los comentarios. */
 export interface ActividadMuro extends ActividadViewModel {
   /** post, shout, foto, comunidad, tema, usuario, rango o comentario. */
@@ -31,4 +44,6 @@ export interface MuroPerfil {
   siguiente: string | null;
   /** Shout fijado por el dueño: solo en la primera página, y no se repite en la lista. */
   fijado: ShoutViewModel | null;
+  /** Lo que el dueño ocultó: sus filtros no se muestran. */
+  ocultas?: SeccionMuroPerfil[];
 }

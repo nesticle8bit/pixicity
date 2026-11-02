@@ -9,7 +9,7 @@ import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
 import { PerfilInfoResponse, PerfilUsuarioViewModel, SeguidoresResponse, UsuarioAvatarViewModel, UsuarioInfoViewModel, FondoPerfilRequest } from 'src/app/models/seguridad/seguridad-vm.model';
 import { ActividadLogsViewModel } from 'src/app/models/logs/logs-vm.model';
-import { FiltroMuroPerfil, MuroPerfil } from 'src/app/models/perfil/perfil-muro.model';
+import { FiltroMuroPerfil, MuroPerfil, SeccionMuroPerfil } from 'src/app/models/perfil/perfil-muro.model';
 import { IHttpUsuarioPerfilService } from '../interfaces/httpUsuarioPerfil.interface';
 
 /** Perfil de usuarios: info pública, perfil extendido, seguidores, avatar, fondo, actividad y estado en línea. */
@@ -221,6 +221,18 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
         })
       )
       .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getMuroPrivacidad(): Observable<SeccionMuroPerfil[]> {
+    return this.http
+      .get<ApiResponse<{ ocultas: SeccionMuroPerfil[] }>>(`${environment.api}/api/usuarios/me/muro-privacidad`)
+      .pipe(map((r) => r.data?.ocultas ?? []));
+  }
+
+  setMuroPrivacidad(ocultas: SeccionMuroPerfil[]): Observable<SeccionMuroPerfil[]> {
+    return this.http
+      .put<ApiResponse<{ ocultas: SeccionMuroPerfil[] }>>(`${environment.api}/api/usuarios/me/muro-privacidad`, { ocultas })
+      .pipe(map((r) => r.data?.ocultas ?? []));
   }
 
   exportarMisDatos(): Observable<Blob> {
