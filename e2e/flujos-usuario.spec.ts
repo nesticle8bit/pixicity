@@ -751,7 +751,7 @@ test('mi en el celular: el muro primero, composer en línea o en hoja, pestañas
     window.dispatchEvent(new TouchEvent('touchend', { touches: [] }));
   });
   await expect.poll(() => pedidosDespues.length).toBe(1);
-  await expect(page.locator('.mi-tirar.is-recargando')).toHaveCount(0);
+  await expect(page.locator('.tirar.is-recargando')).toHaveCount(0);
   await expect(page.getByText('Shout número 10', { exact: true })).toBeAttached();
 
   // Al bajar, las pestañas se van con el resto (no son fijas: todo el alto queda para los shouts).
@@ -773,4 +773,55 @@ test('mi en el celular: el muro primero, composer en línea o en hoja, pestañas
 
   const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).include('.mi').exclude('.op-rango').analyze();
   expect(axe.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`)).toEqual([]);
+});
+
+test('celular: deslizar hacia abajo recarga cualquier sección sin recargar la app', async ({ page }, info) => {
+  test.skip(info.project.name !== 'movil', 'el gesto es solo del celular');
+  await page.goto('/tops');
+  await page.waitForLoadState('networkidle');
+  await page.evaluate(() => ((window as unknown as { marca: number }).marca = 1));
+
+  const pedidos: string[] = [];
+  page.on('request', (r) => { if (/\/api\//.test(r.url())) pedidos.push(r.url()); });
+  await page.evaluate(async () => {
+    const toque = (y: number) => [new Touch({ identifier: 1, target: document.body, clientX: 150, clientY: y })];
+    window.dispatchEvent(new TouchEvent('touchstart', { touches: toque(120) }));
+    for (const y of [180, 260, 340, 420]) {
+      window.dispatchEvent(new TouchEvent('touchmove', { touches: toque(y) }));
+      await new Promise((r) => setTimeout(r, 16));
+    }
+    window.dispatchEvent(new TouchEvent('touchend', { touches: [] }));
+  });
+
+  // La página vuelve a pedir sus datos, pero es la misma app (no se recargó el documento).
+  await expect.poll(() => pedidos.length).toBeGreaterThan(0);
+  await expect(page.locator('.tirar.is-recargando')).toHaveCount(0);
+  expect(await page.evaluate(() => (window as unknown as { marca?: number }).marca)).toBe(1);
+  await expect(page).toHaveURL(/\/tops$/);
+});
+
+test('NSFW: la advertencia de mayor de edad se acepta una vez y queda guardada en la cuenta', async ({ page }) => {
+  await conSesion(page);
+  await simularMi(page);
+  let aceptado = false;
+  const avisos: string[] = [];
+  await page.route('**/api/usuarios/me', (r) => r.fulfill(ok({ userName: 'lector_tres', fechaNacimiento: '1/1/1990', nsfwAceptado: aceptado })));
+  await page.route('**/api/usuarios/me/nsfw-aviso', (r) => {
+    avisos.push(r.request().method());
+    aceptado = true;
+    return r.fulfill(ok({ nsfwAceptado: true }));
+  });
+
+  await page.goto('/mi?ver=nsfw');
+  const aviso = page.getByRole('alertdialog', { name: 'Contenido para mayores de edad' });
+  await aviso.getByRole('button', { name: /Soy mayor de 18/ }).click();
+  await expect.poll(() => avisos).toEqual(['PUT']);
+  await expect(page).toHaveURL(/ver=nsfw/);
+
+  // Otra visita (recarga): ya no pregunta.
+  await page.reload();
+  await expect(page).toHaveURL(/ver=nsfw/);
+  await page.waitForLoadState('networkidle');
+  await expect(page.getByRole('alertdialog', { name: 'Contenido para mayores de edad' })).toHaveCount(0);
+  expect(avisos).toEqual(['PUT']);
 });

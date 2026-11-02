@@ -23,6 +23,8 @@ import { NotificacionesEscritorioService } from './services/shared/notificacione
 import { SsrSalud } from './shared/helpers/ssr-salud';
 import { AnunciosService } from './services/shared/anuncios.service';
 import { ScriptsGlobalesService } from './services/shared/scripts-globales.service';
+import { TirarParaRecargarService } from './services/shared/tirar-para-recargar.service';
+import { TirarParaRecargarComponent } from './components/shared/tirar-para-recargar/tirar-para-recargar.component';
 
 /** Tarjeta social del sitio (1200x630) para páginas sin imagen propia. */
 const DEFAULT_OG_IMAGE = '/assets/images/og-image.jpg';
@@ -47,6 +49,7 @@ const DEFAULT_DESCRIPTION =
         MainFooterComponent,
         ConfirmarComponent,
         AvisoVersionComponent,
+        TirarParaRecargarComponent,
     ],
 })
 export class AppComponent {
@@ -88,6 +91,8 @@ export class AppComponent {
     inject(AppInstalableService).iniciar();
     // Notificaciones de escritorio: se sincronizan al iniciar sesión y se dan de baja al cerrarla.
     inject(NotificacionesEscritorioService).iniciar();
+    // Celular: deslizar hacia abajo desde el tope recarga la página, en todas las secciones.
+    if (this.esNavegador) inject(TirarParaRecargarService).activar();
 
     this.displayComponentService
       .getDisplay()

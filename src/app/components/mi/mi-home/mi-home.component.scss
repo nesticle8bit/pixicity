@@ -666,9 +666,8 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   }
 }
 
-// ─── Celular (/mi como app): contenido primero, pestañas fijas, shouts a lo ancho y gestos ───────────────────────
+//  Celular (/mi como app): contenido primero, pestañas fijas, shouts a lo ancho y gestos
 // En escritorio estas piezas no se ven: ahí está el lateral, el composer abierto y el scroll normal.
-.mi-tirar,
 .mi-composer-corto,
 .mi-composer-cabecera,
 .mi-hoja-fondo,
@@ -676,12 +675,6 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
 .mi-fab,
 .mi__tab-corto {
   display: none;
-}
-
-@keyframes mi-girar {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 @keyframes mi-hoja-subir {
@@ -934,30 +927,6 @@ $fondo-suave: light-dark(#f4f8fa, #1d343f);
   .mi__mas,
   .mi__fin {
     padding-top: 16px;
-  }
-
-  // Deslizar para recargar: crece con el dedo; gira mientras recarga.
-  .mi-tirar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    color: $marca;
-    transition: height 0.12s ease-out;
-
-    i {
-      font-size: 1.5rem;
-      opacity: 0.45;
-    }
-
-    &.is-listo i,
-    &.is-recargando i {
-      opacity: 1;
-    }
-
-    &.is-recargando i {
-      animation: mi-girar 0.8s linear infinite;
-    }
   }
 
   // Botón + para publicar desde cualquier punto del muro.

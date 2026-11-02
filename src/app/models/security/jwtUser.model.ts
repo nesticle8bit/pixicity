@@ -11,6 +11,7 @@ export interface UsuarioSesion {
   tema?: 'light' | 'dark' | null;
   /** Ve los shouts NSFW sin difuminar (solo 18+). Ausente en sesiones anteriores = difuminar. */
   mostrarNsfw?: boolean;
+  nsfwAceptado?: boolean;
 }
 
 export class JwtUserModel {

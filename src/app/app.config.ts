@@ -12,7 +12,7 @@ import {
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { Title } from '@angular/platform-browser';
-import { provideRouter, TitleStrategy } from '@angular/router';
+import { provideRouter, RouteReuseStrategy, TitleStrategy } from '@angular/router';
 import { provideToastr } from 'ngx-toastr';
 
 import { routes } from './app.routes';
@@ -64,6 +64,7 @@ import { getSpanishPaginatorIntl } from './shared/helpers/getSpanishPaginatorInt
 import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
 import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
 import { CargaGlobalInterceptor } from './shared/interceptors/carga-global.interceptor';
+import { RecargarRutaStrategy } from './services/shared/tirar-para-recargar.service';
 
 // Fechas, números y DatePipe en español (antes vivía en el constructor de AppModule).
 registerLocaleData(localeEs, 'es');
@@ -74,6 +75,8 @@ export const appConfig: ApplicationConfig = {
     // La app depende de zone.js (setTimeout/suscripciones que mutan estado): sin esto Angular 21 arranca zoneless.
     provideZoneChangeDetection(),
     provideRouter(routes),
+    // Deslizar para recargar vuelve a crear la ruta actual (ver TirarParaRecargarService).
+    { provide: RouteReuseStrategy, useExisting: RecargarRutaStrategy },
     // Cada ruta publica su title/descripcion como SEO por defecto (ver app.routes).
     { provide: TitleStrategy, useClass: SeoTitleStrategy },
     provideHttpClient(withFetch(), withInterceptorsFromDi()),

@@ -1,12 +1,6 @@
 <div class="container container--home">
   <div class="row">
     <div class="col-12 col-md-8 mi">
-      <!-- Celular: deslizar hacia abajo desde el tope recarga el muro (indicador que crece con el dedo). -->
-      <div class="mi-tirar" [class.is-listo]="tirar() >= umbralTirar" [class.is-recargando]="recargando()"
-        [style.height.px]="recargando() ? 48 : tirar()" aria-hidden="true">
-        <i class="ti ti-refresh" [style.transform]="recargando() ? null : 'rotate(' + tirar() * 4 + 'deg)'"></i>
-      </div>
-
       <header class="mi__head">
         @if (tag(); as t) {
         <h1 class="mi__titulo">

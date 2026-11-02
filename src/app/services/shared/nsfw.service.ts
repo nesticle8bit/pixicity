@@ -28,6 +28,11 @@ export class NsfwService {
     );
   }
 
+  /** Guarda en la cuenta que aceptó la advertencia de mayor de edad (el API vuelve a comprobar los 18+). */
+  aceptarAviso(): Observable<void> {
+    return this.http.put<ApiResponse<unknown>>(`${environment.api}/api/usuarios/me/nsfw-aviso`, {}).pipe(map(() => undefined));
+  }
+
   /** Sincroniza la sesión guardada con lo que dice la cuenta (p. ej. al cargar /cuenta). */
   recordar(valor: boolean): void {
     const actual = this.securityService.getCurrentUser();

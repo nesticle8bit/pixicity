@@ -52,6 +52,8 @@ export interface UsuarioViewModel {
   estado: EstadoViewModel;
   /** Ve los shouts NSFW sin difuminar (se cambia en /cuenta → Contenido sensible). */
   mostrarNsfw?: boolean;
+  /** Ya aceptó la advertencia de mayor de edad de /mi?ver=nsfw (no se le vuelve a mostrar). */
+  nsfwAceptado?: boolean;
 }
 
 /** Fila del listado de usuarios del panel admin (UsuarioAdminViewModel del API). */
