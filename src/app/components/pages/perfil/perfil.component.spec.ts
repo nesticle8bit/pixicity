@@ -7,6 +7,8 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SEOService } from 'src/app/services/shared/seo.service';
+import { MatDialog } from '@angular/material/dialog';
+import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
 import { PerfilComponent } from './perfil.component';
 
 describe('PerfilComponent', () => {
@@ -14,6 +16,7 @@ describe('PerfilComponent', () => {
   let getBloqueo: jasmine.Spy;
   let navigate: jasmine.Spy;
   let setDisplay: jasmine.Spy;
+  let cambiarFondo: jasmine.Spy;
 
   const perfil: PerfilUsuarioViewModel = { ...PERFIL_VACIO, id: 7, userName: 'juan', postsCount: 12, seguidoresCount: 30 };
 
@@ -39,10 +42,42 @@ describe('PerfilComponent', () => {
         { provide: NotificationService, useValue: jasmine.createSpyObj('NotificationService', ['success']) },
         { provide: DisplayComponentService, useValue: { setDisplay: (setDisplay = jasmine.createSpy('setDisplay')) } },
         { provide: SEOService, useValue: { setSEO } },
+        { provide: IHttpUsuarioPerfilService, useValue: { changeBackgroundProfile: (cambiarFondo = jasmine.createSpy('changeBackgroundProfile').and.returnValue(of(true))) } },
+        { provide: MatDialog, useValue: jasmine.createSpyObj('MatDialog', ['open']) },
       ],
     });
     return TestBed.runInInjectionContext(() => new PerfilComponent());
   }
+
+  it('solo el dueño puede editar avatar y portada', () => {
+    expect(crear('juan').esMio).toBeTrue();
+    TestBed.resetTestingModule();
+    expect(crear('pedro').esMio).toBeFalse();
+    TestBed.resetTestingModule();
+    expect(crear(null).esMio).toBeFalse();
+  });
+
+  it('la portada valida la URL y al guardar conserva el fondo de página', () => {
+    const c = crear('juan', of({ ...perfil, profilePageBackground: 'https://x.com/patron.gif', profilePageBackgroundRepeat: 'repeat-x' }));
+    c.editarBanner();
+    c.bannerUrl.set('https://x.com/foto.gif');
+    expect(c.bannerInvalida()).toBeTrue();
+    c.guardarBanner();
+    expect(cambiarFondo).not.toHaveBeenCalled();
+
+    c.bannerUrl.set('https://x.com/portada.jpg');
+    c.posBanner.set({ x: 20, y: 80 });
+    c.guardarBanner();
+    expect(cambiarFondo).toHaveBeenCalledWith({
+      profileBackground: 'https://x.com/portada.jpg',
+      profileBackgroundPosX: 20,
+      profileBackgroundPosY: 80,
+      profilePageBackground: 'https://x.com/patron.gif',
+      profilePageBackgroundRepeat: 'repeat-x',
+    });
+    expect(c.currentUser.profileBackground).toBe('https://x.com/portada.jpg');
+    expect(c.editandoBanner()).toBeFalse();
+  });
 
   it('publica en el JSON-LD los seguidores y posts reales (antes leía campos inexistentes y mandaba 0)', () => {
     crear(null);

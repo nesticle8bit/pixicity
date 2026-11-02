@@ -3,7 +3,7 @@
     <header class="bv__head">
       <p class="bv__saludo">¡Hola{{ usuario?.userName ? ', @' + usuario?.userName : '' }}! 👋</p>
       <h1 class="bv__titulo">Armemos tu muro</h1>
-      <p class="bv__sub">Tres pasos rápidos para que tu inicio no esté vacío. Puedes saltear cualquiera.</p>
+      <p class="bv__sub">Unos pasos rápidos para que tu inicio no esté vacío. Puedes saltear cualquiera.</p>
     </header>
 
     <ol class="bv-pasos" aria-label="Pasos">
@@ -32,6 +32,56 @@
     }
 
     @switch (paso()) {
+    @case ('perfil') {
+    <section class="bv-paso" aria-labelledby="bv-t-perfil">
+      <h2 id="bv-t-perfil" class="bv-paso__titulo">Ponle cara a tu perfil</h2>
+      <p class="bv-paso__ayuda">Así te ven los demás en tu perfil, tus shouts y comentarios.</p>
+
+      <div class="bv-perfil">
+        <div class="bv-perfil__portada" [class.is-vacia]="!portadaCss()" [style.background-image]="portadaCss()"
+          [style.background-position]="posPortada().x + '% ' + posPortada().y + '%'"
+          [appArrastrarFondo]="portadaValida() || portada()" [posicion]="posPortada()" (posicionChange)="moverPortada($event)">
+          @if (portadaCss()) {
+          <span class="bv-perfil__pista" aria-hidden="true"><i class="ti ti-arrows-move"></i> Arrastra para acomodar</span>
+          }
+        </div>
+        <!-- Atajo para el mouse; el botón con texto de al lado es el accesible -->
+        <button type="button" class="bv-perfil__avatar" (click)="cambiarAvatar()" tabindex="-1" aria-hidden="true">
+          <app-user-avatar [avatar]="avatar()" [userName]="usuario?.userName ?? ''" [width]="96" [height]="96" />
+          <span class="bv-perfil__avatar-editar" aria-hidden="true"><i class="ti ti-photo"></i></span>
+        </button>
+        <div class="bv-perfil__nombre">
+          <strong>{{ '@' }}{{ usuario?.userName }}</strong>
+          <button type="button" class="bv-boton-elegir" (click)="cambiarAvatar()">
+            <i class="ti ti-photo" aria-hidden="true"></i> {{ avatar() ? 'Cambiar avatar' : 'Subir avatar' }}
+          </button>
+        </div>
+      </div>
+
+      <form class="bv-portada-form" (ngSubmit)="guardarPortada()">
+        <label for="bv-portada-url" class="bv-portada-form__label">Portada (URL de una imagen .jpg o .png)</label>
+        <div class="bv-portada-form__fila">
+          <input id="bv-portada-url" name="portadaUrl" type="url" class="form-control" autocomplete="off"
+            placeholder="https://…/imagen.jpg" [ngModel]="portadaUrl()"
+            (ngModelChange)="portadaUrl.set($event); portadaGuardada.set(false)"
+            [attr.aria-invalid]="portadaInvalida()" aria-describedby="bv-portada-ayuda" />
+          <button type="submit" class="bv-boton" [disabled]="portadaInvalida() || guardandoPortada()">
+            {{ guardandoPortada() ? 'Guardando…' : 'Guardar portada' }}
+          </button>
+        </div>
+        <p id="bv-portada-ayuda" class="bv-portada-form__ayuda" [class.is-error]="portadaInvalida()" role="status">
+          @if (portadaInvalida()) {
+          Debe ser un enlace http(s) a una imagen .jpg o .png.
+          } @else if (portadaGuardada()) {
+          <i class="ti ti-circle-check" aria-hidden="true"></i> Portada guardada.
+          } @else {
+          Pega el enlace y mira la vista previa arriba.
+          }
+        </p>
+      </form>
+    </section>
+    }
+
     @case ('comunidades') {
     <section class="bv-paso" aria-labelledby="bv-t-comunidades">
       <h2 id="bv-t-comunidades" class="bv-paso__titulo">Únete a comunidades que te interesen</h2>
@@ -119,7 +169,7 @@
       <app-shout-composer [perfilId]="usuarioId" (publicado)="publicado.set(true)" />
       }
       <p class="bv-paso__ayuda mt-3">
-        También puedes <a routerLink="/cuenta" [queryParams]="{ seccion: 'perfil' }">completar tu perfil</a> con una foto y una descripción.
+        También puedes <a routerLink="/cuenta" [queryParams]="{ seccion: 'perfil' }">completar tu perfil</a> con una descripción y tus redes.
       </p>
     </section>
     }

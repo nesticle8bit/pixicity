@@ -9,7 +9,11 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { IHttpBloqueosService } from 'src/app/services/interfaces/httpBloqueos.interface';
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 import { BloqueoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
+import { ArrastrarFondoDirective, PosicionFondo } from 'src/app/shared/directives/arrastrar-fondo.directive';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NotificationService } from 'src/app/services/shared/notification.service';
@@ -35,7 +39,7 @@ import { ProfileInformationComponent } from '../../profile/profile-information/p
 import { PerfilSocialMediaButtonsComponent } from './perfil-social-media-buttons/perfil-social-media-buttons.component';
 import { PerfilUserFollowersComponent } from './perfil-user-followers/perfil-user-followers.component';
 import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
-import { urlCss } from 'src/app/shared/helpers/url-css';
+import { PORTADA_VALIDA, urlCss } from 'src/app/shared/helpers/url-css';
 
 export type PestanaPerfil =
   | 'shouts'
@@ -91,6 +95,8 @@ const PESTANA_INICIAL: PestanaPerfil = 'shouts';
     AnuncioComponent,
     DatePipe,
     DecimalPipe,
+    FormsModule,
+    ArrastrarFondoDirective,
   ],
   host: {
     // El fondo de página lo pinta app.component (desde la barra de noticias hasta el pie); aquí solo se marca
@@ -107,8 +113,21 @@ export class PerfilComponent implements OnInit {
   private notificationService = inject(NotificationService);
   private displayService = inject(DisplayComponentService);
   private seoService = inject(SEOService);
+  private usuarioPerfilService = inject(IHttpUsuarioPerfilService);
+  private dialog = inject(MatDialog);
 
   private readonly destroyRef = inject(DestroyRef);
+
+  /** Edición de la portada desde el propio perfil (lo mismo que "Fondo de perfil" en /cuenta). */
+  readonly editandoBanner = signal(false);
+  readonly guardandoBanner = signal(false);
+  readonly bannerUrl = signal('');
+  readonly posBanner = signal<PosicionFondo>({ x: 50, y: 50 });
+  /** URL suelta para la directiva de arrastre: solo si es válida. */
+  readonly bannerEdicionValida = computed(() => (PORTADA_VALIDA.test(this.bannerUrl().trim()) ? this.bannerUrl().trim() : ''));
+  readonly bannerEdicionCss = computed(() => urlCss(this.bannerEdicionValida()));
+  /** Vacía es válida: quita la portada. */
+  readonly bannerInvalida = computed(() => !!this.bannerUrl().trim() && !this.bannerEdicionValida());
 
   public display: DisplayComponentModel = {
     mainMenu: true,
@@ -163,6 +182,68 @@ export class PerfilComponent implements OnInit {
       !!this.loggedUser.usuario &&
       this.loggedUser.usuario.userName !== this.currentUser.userName
     );
+  }
+
+  /** Quien mira es el dueño: puede cambiar el avatar y la portada desde acá. */
+  get esMio(): boolean {
+    return !!this.loggedUser.usuario && !!this.currentUser.userName && this.loggedUser.usuario.userName === this.currentUser.userName;
+  }
+
+  editarBanner(): void {
+    this.bannerUrl.set(this.currentUser.profileBackground ?? '');
+    this.posBanner.set({ x: this.currentUser.profileBackgroundPosX ?? 50, y: this.currentUser.profileBackgroundPosY ?? 50 });
+    this.editandoBanner.set(true);
+    // El campo aparece en el siguiente render.
+    setTimeout(() => this.documento.getElementById('pf-banner-url')?.focus());
+  }
+
+  cancelarBanner(): void {
+    this.editandoBanner.set(false);
+  }
+
+  /** Guarda solo la portada: el fondo de página se reenvía tal cual (el API guarda todo junto). */
+  guardarBanner(): void {
+    if (this.bannerInvalida() || this.guardandoBanner()) return;
+    const url = this.bannerEdicionValida();
+    const { x, y } = this.posBanner();
+    this.guardandoBanner.set(true);
+    this.usuarioPerfilService
+      .changeBackgroundProfile({
+        profileBackground: url,
+        profileBackgroundPosX: x,
+        profileBackgroundPosY: y,
+        profilePageBackground: this.currentUser.profilePageBackground ?? '',
+        profilePageBackgroundRepeat: this.currentUser.profilePageBackgroundRepeat ?? 'repeat',
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (ok) => {
+          this.guardandoBanner.set(false);
+          if (!ok) return;
+          this.currentUser = { ...this.currentUser, profileBackground: url, profileBackgroundPosX: x, profileBackgroundPosY: y };
+          this.editandoBanner.set(false);
+          this.notificationService.success('Tu portada se actualizó', 'Perfil');
+        },
+        error: () => this.guardandoBanner.set(false),
+      });
+  }
+
+  /** Mismo diálogo que en /cuenta (subir y recortar); el cropper se carga recién al abrirlo. */
+  async cambiarAvatar(): Promise<void> {
+    const { DialogChangeAvatarComponent } = await import('../../dialogs/dialog-change-avatar/dialog-change-avatar.component');
+    this.dialog
+      .open(DialogChangeAvatarComponent, { width: '350px', maxWidth: '95vw', disableClose: true })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((avatar?: string) => {
+        if (!avatar) return;
+        this.currentUser = { ...this.currentUser, avatar };
+        const sesion = this.securityService.getCurrentUser();
+        if (sesion.usuario) {
+          sesion.usuario.avatar = avatar;
+          this.securityService.setUserToLocalStorage(sesion);
+        }
+      });
   }
 
   /** Quien mira es staff: se muestran las herramientas de moderación (cada una valida su propio permiso). */

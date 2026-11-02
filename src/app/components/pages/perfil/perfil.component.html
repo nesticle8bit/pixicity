@@ -9,11 +9,35 @@
   } @else {
   <!-- Cabecera: banner (fondo de perfil), avatar, identidad, acciones y números -->
   <header class="pf-hero" [class.pf-hero--cargando]="cargando">
+    @if (editandoBanner()) {
+    <!-- Edición de la portada: vista previa en vivo; se acomoda arrastrándola (igual que en /cuenta) -->
+    <div class="pf-hero__banner pf-hero__banner--editando" [style.background-image]="bannerEdicionCss()"
+      [style.background-position]="posBanner().x + '% ' + posBanner().y + '%'"
+      [appArrastrarFondo]="bannerEdicionValida()" [(posicion)]="posBanner">
+      @if (bannerEdicionValida()) {
+      <span class="pf-hero__banner-pista" aria-hidden="true"><i class="ti ti-arrows-move"></i> Arrastra para acomodar</span>
+      }
+    </div>
+    } @else {
     <div class="pf-hero__banner" [style.background-image]="bannerCss"
       [style.background-position]="currentUser.profileBackgroundPosX + '% ' + currentUser.profileBackgroundPosY + '%'">
+      @if (esMio) {
+      <button type="button" class="pf-hero__banner-editar" (click)="editarBanner()">
+        <i class="ti ti-photo" aria-hidden="true"></i> Cambiar portada
+      </button>
+      }
     </div>
+    }
 
     <div class="pf-hero__cuerpo">
+      @if (esMio) {
+      <button type="button" class="pf-hero__avatar pf-hero__avatar--editable" (click)="cambiarAvatar()"
+        aria-label="Cambiar avatar">
+        <app-user-avatar [avatar]="currentUser.avatar" [userName]="currentUser.userName" [height]="112"
+          [width]="112"></app-user-avatar>
+        <span class="pf-hero__avatar-editar" aria-hidden="true"><i class="ti ti-photo"></i></span>
+      </button>
+      } @else {
       <div class="pf-hero__avatar">
         <app-user-avatar [avatar]="currentUser.avatar" [userName]="currentUser.userName" [height]="112"
           [width]="112"></app-user-avatar>
@@ -21,6 +45,7 @@
         <app-user-online-status class="pf-hero__online" [userName]="currentUser.userName"></app-user-online-status>
         }
       </div>
+      }
 
       <div class="pf-hero__identidad">
         <h1 class="pf-hero__nombre">{{ nombreVisible }}</h1>
@@ -77,6 +102,24 @@
       </div>
       }
     </div>
+
+    @if (editandoBanner()) {
+    <form class="pf-banner-form" (ngSubmit)="guardarBanner()">
+      <label for="pf-banner-url" class="pf-banner-form__label">URL de la portada</label>
+      <div class="pf-banner-form__fila">
+        <input id="pf-banner-url" name="bannerUrl" type="url" class="form-control" autocomplete="off"
+          placeholder="https://…/imagen.jpg" [ngModel]="bannerUrl()" (ngModelChange)="bannerUrl.set($event)"
+          [attr.aria-invalid]="bannerInvalida()" aria-describedby="pf-banner-ayuda" />
+        <button type="button" class="pf-banner-form__boton pf-banner-form__boton--suave" (click)="cancelarBanner()">Cancelar</button>
+        <button type="submit" class="pf-banner-form__boton" [disabled]="bannerInvalida() || guardandoBanner()">
+          {{ guardandoBanner() ? 'Guardando…' : 'Guardar' }}
+        </button>
+      </div>
+      <p id="pf-banner-ayuda" class="pf-banner-form__ayuda" [class.pf-banner-form__ayuda--error]="bannerInvalida()">
+        {{ bannerInvalida() ? 'Debe ser un enlace http(s) a una imagen .jpg o .png.' : 'Imagen .jpg o .png. Déjalo vacío para quitar la portada.' }}
+      </p>
+    </form>
+    }
 
     @if (currentUser.mensajePersonal) {
     <blockquote class="pf-hero__mensaje">{{ currentUser.mensajePersonal }}</blockquote>

@@ -141,9 +141,13 @@ test('el login vuelve a la página pedida (returnUrl)', async ({ page }) => {
   await expect(page).toHaveURL(/\/bienvenida$/);
 });
 
-test('bienvenida guiada: unirse a comunidades, seguir gente y terminar en /mi', async ({ page }) => {
+test('bienvenida guiada: portada, unirse a comunidades, seguir gente y terminar en /mi', async ({ page }) => {
   await simularMi(page);
   const acciones: string[] = [];
+  await page.route('**/api/usuarios/me/fondo', (route) => {
+    acciones.push('portada:' + route.request().postDataJSON().profileBackground);
+    return ok(route, true);
+  });
   await page.route('**/api/comunidades/top**', (route) =>
     ok(route, [
       { id: 3, nombre: 'Comunidad Demo', nombreCorto: 'demo', descripcion: null, imagen: null, categoria: 'Varios', creador: 'ana', miembrosCount: 10, temasCount: 4, fechaRegistro: AHORA },
@@ -161,6 +165,16 @@ test('bienvenida guiada: unirse a comunidades, seguir gente y terminar en /mi', 
   await page.goto('/bienvenida');
 
   await expect(page.getByRole('heading', { name: 'Armemos tu muro' })).toBeVisible();
+  // Primer paso: avatar y portada.
+  await expect(page.getByRole('button', { name: 'Subir avatar' })).toBeVisible();
+  const portada = page.getByLabel(/Portada/);
+  await portada.fill('https://x.com/foto.gif');
+  await expect(page.getByText('Debe ser un enlace http(s) a una imagen .jpg o .png.')).toBeVisible();
+  await portada.fill('https://x.com/portada.jpg');
+  await page.getByRole('button', { name: 'Guardar portada' }).click();
+  await expect(page.getByText('Portada guardada.')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Siguiente' }).click();
   await page.getByRole('button', { name: 'Unirme a Comunidad Demo' }).click();
   await expect(page.getByRole('button', { name: 'Salir de Comunidad Demo' })).toHaveAttribute('aria-pressed', 'true');
 
@@ -172,5 +186,5 @@ test('bienvenida guiada: unirse a comunidades, seguir gente y terminar en /mi', 
   await expect(page.getByRole('heading', { name: 'Preséntate con tu primer shout' })).toBeVisible();
   await page.getByRole('button', { name: 'Ir a mi muro' }).click();
   await expect(page).toHaveURL(/\/mi$/);
-  expect(acciones).toEqual(['unirme', 'seguir']);
+  expect(acciones).toEqual(['portada:https://x.com/portada.jpg', 'unirme', 'seguir']);
 });

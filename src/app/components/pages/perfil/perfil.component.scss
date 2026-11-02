@@ -27,9 +27,129 @@
 }
 
 .pf-hero__banner {
+  position: relative;
   height: 170px;
   background: linear-gradient(120deg, #0b6ea5 0%, #004160 100%) center / cover no-repeat;
 }
+
+// Dueño del perfil: cambiar la portada y el avatar sin ir a /cuenta
+.pf-hero__banner-editar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover { background: rgba(0, 0, 0, 0.7); }
+  &:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+}
+
+.pf-hero__banner--editando { outline: 2px dashed p.$marca; outline-offset: -2px; }
+
+.pf-hero__banner-pista {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.pf-hero__avatar--editable {
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+
+  &:focus-visible { outline: 3px solid p.$marca; outline-offset: 2px; }
+}
+
+.pf-hero__avatar-editar {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 26px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.pf-hero__avatar--editable:hover .pf-hero__avatar-editar,
+.pf-hero__avatar--editable:focus-visible .pf-hero__avatar-editar { opacity: 1; }
+
+@media (hover: none) {
+  // En táctil no hay hover: queda una pista fija abajo.
+  .pf-hero__avatar-editar {
+    opacity: 1;
+    inset: auto 0 0 0;
+    height: 30px;
+    font-size: 18px;
+  }
+}
+
+.pf-banner-form {
+  margin: 16px 20px 0;
+  padding: 12px 14px;
+  border: 1px solid p.$borde;
+  border-radius: 10px;
+  background: p.$fondo-suave;
+}
+
+.pf-banner-form__label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.pf-banner-form__fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  .form-control { flex: 1 1 240px; min-width: 0; }
+}
+
+.pf-banner-form__boton {
+  min-height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: p.$marca;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.55; cursor: default; }
+}
+
+.pf-banner-form__boton--suave {
+  border: 1px solid p.$borde;
+  background: p.$superficie;
+  color: p.$texto;
+}
+
+.pf-banner-form__ayuda {
+  margin: 6px 0 0;
+  color: p.$tenue;
+  font-size: 12.5px;
+}
+
+.pf-banner-form__ayuda--error { color: light-dark(#b3261e, #f08a84); }
 
 .pf-hero__cuerpo {
   display: flex;
@@ -376,6 +496,7 @@
 
 @media (max-width: 767.98px) {
   .pf-hero__banner { height: 120px; }
+  .pf-banner-form { margin: 14px 16px 0; }
 
   .pf-hero__cuerpo {
     flex-direction: column;
