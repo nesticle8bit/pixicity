@@ -40,7 +40,7 @@ const FILTROS: { id: FiltroMuroPerfil; label: string; icono: string; vacio: stri
 const SECCIONES_DEL_FILTRO: Partial<Record<FiltroMuroPerfil, SeccionMuroPerfil[]>> = {
   posts: ['posts'],
   comentarios: ['comentarios'],
-  reacciones: ['puntos', 'favoritos', 'meGusta', 'seguimientos'],
+  reacciones: ['puntos', 'favoritos', 'recomendaciones', 'meGusta', 'seguimientos'],
   comunidades: ['comunidades'],
 };
 

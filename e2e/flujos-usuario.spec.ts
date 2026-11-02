@@ -57,7 +57,16 @@ test('registro: exige aceptar los términos y envía los datos', async ({ page }
   }));
 });
 
-test('fotos: votar positivo y después negativo actualiza ambos contadores', async ({ page }) => {
+test('fotos: la sección está cerrada, sin pestaña y los enlaces viejos caen a la portada', async ({ page }) => {
+  await page.goto(`/fotos/${AUTOR}/${FOTO.id}/${FOTO.url}`);
+  await expect(page).toHaveURL(/\/$/);
+  await page.goto('/crear/foto');
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByRole('link', { name: 'Fotos', exact: true })).toHaveCount(0);
+});
+
+// Mientras FOTOS_HABILITADAS (src/app/shared/helpers/secciones.ts) sea false la página no abre: el test queda para reabrirla.
+test.skip('fotos: votar positivo y después negativo actualiza ambos contadores', async ({ page }) => {
   await conSesion(page);
   const votos: number[] = [];
   await page.route('**/api/fotos/votos', (r) => {

@@ -27,7 +27,8 @@ const GRUPOS: { grupo: string; secciones: { id: SeccionMuroPerfil; label: string
     grupo: 'Reacciones',
     secciones: [
       { id: 'puntos', label: 'Puntos y votos', detalle: 'Los puntos que das a posts y los votos a comentarios' },
-      { id: 'favoritos', label: 'Favoritos y recomendaciones', detalle: 'Los posts que guardas o recomiendas' },
+      { id: 'favoritos', label: 'Favoritos', detalle: 'Los posts que guardas en favoritos' },
+      { id: 'recomendaciones', label: 'Recomendaciones', detalle: 'Los posts que recomiendas a tus seguidores' },
       { id: 'meGusta', label: 'Me gusta', detalle: 'Los shouts que te gustan' },
       { id: 'seguimientos', label: 'Seguimientos', detalle: 'Las personas y los posts que empiezas a seguir' },
     ],

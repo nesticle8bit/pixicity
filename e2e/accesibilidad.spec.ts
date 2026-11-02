@@ -18,7 +18,8 @@ const paginas: { nombre: string; ruta: string; espera?: string; rango?: 'Usuario
   { nombre: 'portada', ruta: '/' },
   { nombre: 'post', ruta: `/posts/${POST.categoria.seo}/${POST.id}/${POST.url}`, espera: 'h1.detail-main-title' },
   { nombre: 'tema', ruta: `/comunidades/${TEMA.comunidad.nombreCorto}/tema/${TEMA.id}/${TEMA.url}`, espera: 'h1.detail-main-title' },
-  { nombre: 'foto', ruta: `/fotos/${AUTOR}/${FOTO.id}/${FOTO.url}`, espera: 'h1.detail-main-title' },
+  // Fotos cerrada (FOTOS_HABILITADAS en src/app/shared/helpers/secciones.ts): volver a activar al reabrirla.
+  // { nombre: 'foto', ruta: `/fotos/${AUTOR}/${FOTO.id}/${FOTO.url}`, espera: 'h1.detail-main-title' },
   { nombre: 'login', ruta: '/login' },
   { nombre: 'registro', ruta: '/registro' },
   { nombre: 'buscar', ruta: '/buscar' },

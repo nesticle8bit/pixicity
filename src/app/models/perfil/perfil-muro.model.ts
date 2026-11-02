@@ -12,6 +12,7 @@ export type SeccionMuroPerfil =
   | 'comentarios'
   | 'puntos'
   | 'favoritos'
+  | 'recomendaciones'
   | 'meGusta'
   | 'seguimientos'
   | 'comunidades'

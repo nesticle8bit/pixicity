@@ -6,7 +6,8 @@ import { AUTOR, FOTO, POST, TEMA, simularApi } from './api-simulada';
 const paginas = [
   { nombre: 'post', ruta: `/posts/${POST.categoria.seo}/${POST.id}/${POST.url}`, titulo: POST.titulo, comentarios: 3 },
   { nombre: 'tema', ruta: `/comunidades/${TEMA.comunidad.nombreCorto}/tema/${TEMA.id}/${TEMA.url}`, titulo: TEMA.titulo, comentarios: 3 },
-  { nombre: 'foto', ruta: `/fotos/${AUTOR}/${FOTO.id}/${FOTO.url}`, titulo: FOTO.titulo, comentarios: 2 },
+  // Fotos cerrada (FOTOS_HABILITADAS en src/app/shared/helpers/secciones.ts): volver a activar al reabrirla.
+  // { nombre: 'foto', ruta: `/fotos/${AUTOR}/${FOTO.id}/${FOTO.url}`, titulo: FOTO.titulo, comentarios: 2 },
 ];
 
 async function sinScrollHorizontal(page: Page): Promise<void> {
