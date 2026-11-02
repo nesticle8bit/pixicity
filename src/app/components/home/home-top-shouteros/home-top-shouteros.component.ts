@@ -10,15 +10,21 @@ import { UserPopoverDirective } from '../../../shared/directives/userPopover.dir
 
 /** Top 5 de usuarios por shouts publicados; arranca en el mes y cambia con el selector de tops. */
 @Component({
-    selector: 'app-home-top-shouteros',
-    templateUrl: './home-top-shouteros.component.html',
-    imports: [TopTimesSelectorComponent, RouterLink, MatTooltip, UserPopoverDirective, CountryFlagComponent],
+  selector: 'app-home-top-shouteros',
+  templateUrl: './home-top-shouteros.component.html',
+  imports: [
+    TopTimesSelectorComponent,
+    RouterLink,
+    MatTooltip,
+    UserPopoverDirective,
+    CountryFlagComponent,
+  ],
 })
 export class HomeTopShouterosComponent implements OnInit {
   private miService = inject(IHttpMiService);
   private readonly destroyRef = inject(DestroyRef);
 
-  public periodo = 'mes';
+  public periodo = 'hoy';
   public loading = false;
   public top: TopShoutero[] = [];
 
@@ -34,9 +40,17 @@ export class HomeTopShouterosComponent implements OnInit {
 
   private cargar(): void {
     this.loading = true;
-    this.miService.getTopShouteros(this.periodo, 5).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (top) => { this.top = top; this.loading = false; },
-      error: () => { this.loading = false; },
-    });
+    this.miService
+      .getTopShouteros(this.periodo, 5)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (top) => {
+          this.top = top;
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+        },
+      });
   }
 }
