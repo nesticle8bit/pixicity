@@ -81,12 +81,26 @@
               <div class="chat-day"><span>{{m.fechaRegistro | date:'fullDate'}}</span></div>
             }
 
-            <div class="chat-row" [class.chat-row--mine]="m.esMio">
+            <div class="chat-row" [class.chat-row--mine]="m.esMio" [class.is-resaltado]="m.id === resaltadoId"
+              [attr.data-mensaje-id]="m.id" appDeslizarParaResponder (deslizado)="responder(m)">
+              <i class="ti ti-arrow-back-up chat-row__deslizar" aria-hidden="true"></i>
               @if (!m.esMio) {
                 <app-user-avatar [avatar]="m.usuarioDe.avatar" [userName]="m.usuarioDe.userName" [height]="32"></app-user-avatar>
               }
 
-              <div class="chat-bubble" [class.chat-bubble--mine]="m.esMio">
+              <div class="chat-bubble" [class.chat-bubble--mine]="m.esMio" (contextmenu)="abrirMenu($event, m)">
+                @if (!bloqueado) {
+                  <button type="button" class="chat-bubble__responder" (click)="responder(m)"
+                    matTooltip="Responder" aria-label="Responder a este mensaje">
+                    <i class="ti ti-arrow-back-up" aria-hidden="true"></i>
+                  </button>
+                }
+                @if (m.cita; as c) {
+                  <button type="button" class="chat-cita" [class.chat-cita--mia]="c.esMio" (click)="irAMensaje(c.id)"
+                    [attr.aria-label]="'Ir al mensaje citado de ' + (c.esMio ? 'ti' : c.userName)">
+                    <ng-container *ngTemplateOutlet="cuerpoCita; context: { $implicit: c }"></ng-container>
+                  </button>
+                }
                 <button type="button" class="chat-bubble__delete" (click)="eliminarMensaje(m)"
                   matTooltip="Eliminar (solo para ti)" aria-label="Eliminar mensaje solo para mí">
                   <i class="ti ti-trash"></i>
@@ -140,7 +154,43 @@
             <i class="ti ti-arrow-down"></i> {{nuevosSinLeer}} nuevo{{nuevosSinLeer === 1 ? '' : 's'}}
           </button>
         }
+
+        <!-- Ancla invisible del menú del clic derecho: se mueve a donde se hizo clic. -->
+        <span class="chat-menu-ancla" [style.left.px]="menuX" [style.top.px]="menuY"
+          [matMenuTriggerFor]="menuAcciones" #menuMensaje="matMenuTrigger" aria-hidden="true"></span>
+        <mat-menu #menuAcciones="matMenu" class="chat-menu">
+          <ng-template matMenuContent let-m="m">
+            @if (!bloqueado) {
+              <button type="button" mat-menu-item (click)="responder(m)"><i class="ti ti-arrow-back-up" aria-hidden="true"></i> Responder</button>
+            }
+            @if (tieneTexto(m)) {
+              <button type="button" mat-menu-item (click)="copiarTexto(m)"><i class="ti ti-copy" aria-hidden="true"></i> Copiar texto</button>
+            }
+            <button type="button" mat-menu-item (click)="eliminarMensaje(m)"><i class="ti ti-trash" aria-hidden="true"></i> Eliminar para mí</button>
+            @if (!m.esMio) {
+              <button type="button" mat-menu-item (click)="denunciarMensaje(m)"><i class="ti ti-flag" aria-hidden="true"></i> Denunciar</button>
+            }
+          </ng-template>
+        </mat-menu>
       </div>
+
+      <ng-template #cuerpoCita let-c>
+        <span class="chat-cita__texto">
+          <strong class="chat-cita__autor">{{ c.esMio ? 'Tú' : '@' + c.userName }}</strong>
+          <span class="chat-cita__cuerpo">
+            @if (c.eliminado) {
+              <i class="ti ti-trash" aria-hidden="true"></i> Mensaje eliminado
+            } @else if (c.texto) {
+              {{ c.texto }}
+            } @else if (c.imagen) {
+              <i class="ti ti-photo" aria-hidden="true"></i> Foto
+            }
+          </span>
+        </span>
+        @if (c.imagen && !c.eliminado) {
+          <img class="chat-cita__miniatura" [src]="c.imagen" alt="" loading="lazy" referrerpolicy="no-referrer" width="40" height="40" />
+        }
+      </ng-template>
 
       @if (bloqueado) {
         <div class="alert alert-warning py-2 mb-3" role="alert">
@@ -164,6 +214,20 @@
         </ul>
       }
 
+      @if (respondiendoA; as r) {
+        <div class="chat-respondiendo" role="status">
+          <i class="ti ti-arrow-back-up chat-respondiendo__icono" aria-hidden="true"></i>
+          <button type="button" class="chat-cita chat-respondiendo__cita" [class.chat-cita--mia]="r.esMio" (click)="irAMensaje(r.id)"
+            [attr.aria-label]="'Respondiendo a ' + (r.esMio ? 'tu mensaje' : r.userName) + '. Ir al mensaje'">
+            <ng-container *ngTemplateOutlet="cuerpoCita; context: { $implicit: r }"></ng-container>
+          </button>
+          <button type="button" class="chat-respondiendo__cerrar" (click)="cancelarRespuesta()"
+            matTooltip="Cancelar (Esc)" aria-label="Cancelar respuesta">
+            <i class="ti ti-x" aria-hidden="true"></i>
+          </button>
+        </div>
+      }
+
       <div class="chat-reply" [class.is-deshabilitado]="!otro || bloqueado">
         <input type="file" accept="image/*" multiple hidden #fileInput (change)="adjuntarImagen($event)" />
         <div class="chat-reply__herramientas">
@@ -179,7 +243,7 @@
         </div>
         <textarea #campoMensaje class="chat-reply__campo" rows="1" aria-label="Escribir un mensaje" [(ngModel)]="respuesta"
           placeholder="Escribe un mensaje…" [disabled]="!otro || bloqueado"
-          (ngModelChange)="ajustarAlto()" (keydown.enter)="onEnter($event)"
+          (ngModelChange)="ajustarAlto()" (keydown.enter)="onEnter($event)" (keydown.escape)="onEscape()"
           (paste)="alPegar($event)"></textarea>
         <button type="button" class="chat-reply__enviar" (click)="responderMensaje()" [disabled]="!puedeEnviar"
           matTooltip="Enviar (Enter)" aria-label="Enviar mensaje">

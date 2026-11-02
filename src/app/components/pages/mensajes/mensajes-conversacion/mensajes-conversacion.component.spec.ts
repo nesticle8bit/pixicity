@@ -148,6 +148,40 @@ describe('MensajesConversacionComponent', () => {
     expect(component.respuesta).toBe('');
   }));
 
+  it('responder a un mensaje lo cita en el envío y después limpia la barra', fakeAsync(() => {
+    const citado = msg(1, false, { usuarioDe: ana, contenido: 'nos vemos <b>el sábado</b><br>a las 8' });
+    crear({ mensajes: [citado], hayMas: false, bloqueado: false, otro: ana });
+    mensajes.sendMensajePrivado.and.returnValue(of({ type: 'id', message: '5' }));
+    fixture.detectChanges();
+    flush();
+
+    component.responder(citado);
+    expect(component.respondiendoA).toEqual(jasmine.objectContaining({ id: 1, userName: 'ana', esMio: false, texto: 'nos vemos el sábado a las 8' }));
+
+    component.respuesta = 'dale';
+    component.responderMensaje();
+    flush();
+
+    expect(mensajes.sendMensajePrivado).toHaveBeenCalledWith(jasmine.objectContaining({ contenido: 'dale', respuestaAId: 1 }));
+    expect(component.respondiendoA).toBeNull();
+  }));
+
+  it('Escape cancela la respuesta y no se puede responder si me bloquearon', fakeAsync(() => {
+    const citado = msg(1, false, { usuarioDe: ana });
+    crear({ mensajes: [citado], hayMas: false, bloqueado: false, otro: ana });
+    fixture.detectChanges();
+    flush();
+
+    component.responder(citado);
+    component.onEscape();
+    expect(component.respondiendoA).toBeNull();
+
+    component.bloqueado = true;
+    component.responder(citado);
+    expect(component.respondiendoA).toBeNull();
+    flush();
+  }));
+
   it('no envía si el otro usuario me bloqueó', fakeAsync(() => {
     crear({ mensajes: [], hayMas: false, bloqueado: true, otro: ana });
 

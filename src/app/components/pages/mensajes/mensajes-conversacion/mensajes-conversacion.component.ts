@@ -12,13 +12,15 @@ import { UserPopoverDirective } from '../../../../shared/directives/userPopover.
 import { MatTooltip } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { MensajesSidebarComponent } from '../mensajes-sidebar/mensajes-sidebar.component';
-import { MensajeViewModel } from 'src/app/models/mensajes/mensaje-vm.model';
+import { MensajeCita, MensajeViewModel } from 'src/app/models/mensajes/mensaje-vm.model';
+import { MatMenu, MatMenuContent, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { DeslizarParaResponderDirective } from './deslizar-para-responder.directive';
 import { UsuarioAvatarViewModel, UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
 import { CountryFlagComponent } from '../../../addons/country-flag/country-flag.component';
 import { TimeAgoPipe } from '../../../../shared/pipes/timeAgo.pipe';
 import { enNavegador } from 'src/app/shared/helpers/plataforma';
-import { DatePipe, DecimalPipe, LowerCasePipe } from '@angular/common';
+import { DatePipe, DecimalPipe, LowerCasePipe, NgTemplateOutlet } from '@angular/common';
 import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { reemplazarEmotes } from 'src/app/shared/helpers/emotes';
@@ -43,6 +45,11 @@ const MOTIVOS_DENUNCIA_MP = ['Spam o publicidad', 'Acoso o amenazas', 'Contenido
 
 const MINUTOS_EN_LINEA = 15;
 
+/** Igual que MensajeService.LargoCita en el API. */
+const LARGO_CITA = 140;
+/** Páginas hacia atrás que se cargan como mucho para llegar a un mensaje citado. */
+const PAGINAS_BUSCAR_CITA = 10;
+
 @Component({
     selector: 'app-mensajes-conversacion',
     templateUrl: './mensajes-conversacion.component.html',
@@ -60,6 +67,12 @@ const MINUTOS_EN_LINEA = 15;
         TruncatePipe,
         TimeAgoPipe,
         CountryFlagComponent,
+        MatMenu,
+        MatMenuContent,
+        MatMenuItem,
+        MatMenuTrigger,
+        NgTemplateOutlet,
+        DeslizarParaResponderDirective,
     ],
 })
 export class MensajesConversacionComponent implements OnInit {
@@ -80,6 +93,15 @@ export class MensajesConversacionComponent implements OnInit {
   readonly chatBody = viewChild<ElementRef<HTMLElement>>('chatBody');
   readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
   readonly campoMensaje = viewChild<ElementRef<HTMLTextAreaElement>>('campoMensaje');
+  readonly menuMensaje = viewChild<MatMenuTrigger>('menuMensaje');
+
+  /** Mensaje al que va a responder el próximo envío (barra "Respondiendo a…"). */
+  public respondiendoA: MensajeCita | null = null;
+  /** Mensaje citado al que se acaba de saltar: se resalta un momento. */
+  public resaltadoId: number | null = null;
+  /** Dónde se abre el menú del clic derecho. */
+  public menuX = 0;
+  public menuY = 0;
   private readonly emojis = inject(EmojisPopoverService);
   emojisAbierto = false;
 
@@ -174,6 +196,7 @@ export class MensajesConversacionComponent implements OnInit {
         this.bloqueado = !!page?.bloqueado;
         this.silenciada = !!page?.silenciada;
         this.nuevosSinLeer = 0;
+        this.respondiendoA = null;
         this.actualizarAsunto();
 
         // La carga inicial marca como leídos los recibidos: el contador del menú debe bajar.
@@ -184,7 +207,7 @@ export class MensajesConversacionComponent implements OnInit {
   }
 
   // Carga la página anterior y conserva la posición de lectura (no salta al tope).
-  cargarAnteriores(): void {
+  cargarAnteriores(alTerminar?: () => void): void {
     if (!this.hayMas || this.cargandoMas || this.mensajes.length < 1) {
       return;
     }
@@ -207,6 +230,7 @@ export class MensajesConversacionComponent implements OnInit {
             if (el) {
               el.scrollTop = el.scrollHeight - alturaPrevia + topPrevio;
             }
+            alTerminar?.();
           });
         },
         error: () => (this.cargandoMas = false),
@@ -309,11 +333,95 @@ export class MensajesConversacionComponent implements OnInit {
     const imagenes = this.adjuntos.filter((a) => a.url).map((a) => a.url!);
 
     // El contenido es HTML: sin esto Shift+Enter se perdería al renderizar.
-    this.enviar(texto.replace(/\r?\n/g, '<br>'), imagenes, () => {
+    this.enviar(texto.replace(/\r?\n/g, '<br>'), imagenes, this.respondiendoA?.id, () => {
       this.respuesta = '';
+      this.respondiendoA = null;
       this.quitarAdjuntos();
       setTimeout(() => this.ajustarAlto());
     });
+  }
+
+  /** Responder a un mensaje: queda arriba del campo hasta enviar o cancelar. */
+  responder(m: MensajeViewModel): void {
+    if (!this.otro || this.bloqueado) return;
+    this.respondiendoA = this.citaDe(m);
+    setTimeout(() => this.campoMensaje()?.nativeElement.focus());
+  }
+
+  cancelarRespuesta(): void {
+    this.respondiendoA = null;
+  }
+
+  onEscape(): void {
+    if (this.respondiendoA && !this.emojisAbierto) this.cancelarRespuesta();
+  }
+
+  /** La misma forma que arma el API para las citas, a partir de un mensaje cargado. */
+  private citaDe(m: MensajeViewModel): MensajeCita {
+    const texto = this.ocultarTexto(m) ? '' : this.textoPlano(m.contenido).replace(/\s+/g, ' ').trim();
+    return {
+      id: m.id,
+      userName: m.usuarioDe.userName,
+      esMio: !!m.esMio,
+      texto: texto.length > LARGO_CITA ? texto.slice(0, LARGO_CITA).trimEnd() + '…' : texto,
+      imagen: this.fotosDe(m)[0] ?? null,
+    };
+  }
+
+  /** Texto del HTML del mensaje, con los saltos de línea. DOMParser no pide las imágenes del contenido. */
+  private textoPlano(html: string): string {
+    if (!html || !enNavegador()) return '';
+    const conSaltos = html.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '\n');
+    return (new DOMParser().parseFromString(conSaltos, 'text/html').body.textContent ?? '').trim();
+  }
+
+  /** Clic derecho (o mantener apretado en Android) sobre un mensaje: Responder, Copiar, Eliminar, Denunciar. */
+  abrirMenu(event: MouseEvent, m: MensajeViewModel): void {
+    // Sobre un enlace, una imagen o texto seleccionado se deja el menú del navegador (abrir, copiar selección…).
+    const objetivo = event.target as HTMLElement | null;
+    if (objetivo?.closest('a, img') || window.getSelection()?.toString()) return;
+
+    const menu = this.menuMensaje();
+    if (!menu) return;
+    event.preventDefault();
+    this.menuX = event.clientX;
+    this.menuY = event.clientY;
+    menu.menuData = { m };
+    // El ancla se mueve en este ciclo; el menú se abre junto a ella en el siguiente.
+    setTimeout(() => menu.openMenu());
+  }
+
+  tieneTexto(m: MensajeViewModel): boolean {
+    return !this.ocultarTexto(m) && !!this.textoPlano(m.contenido);
+  }
+
+  async copiarTexto(m: MensajeViewModel): Promise<void> {
+    try {
+      await navigator.clipboard.writeText(this.textoPlano(m.contenido));
+      this.notificationService.success('Texto copiado', 'Copiar');
+    } catch {
+      this.notificationService.error('No se pudo copiar el texto', 'Copiar');
+    }
+  }
+
+  /** Salta al mensaje citado (cargando páginas anteriores si hace falta) y lo resalta un momento. */
+  irAMensaje(id: number, paginas = 0): void {
+    const el = this.chatBody()?.nativeElement.querySelector<HTMLElement>(`[data-mensaje-id="${id}"]`);
+    if (el) {
+      const suave = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      el.scrollIntoView({ block: 'center', behavior: suave ? 'smooth' : 'auto' });
+      this.resaltadoId = id;
+      setTimeout(() => {
+        if (this.resaltadoId === id) this.resaltadoId = null;
+      }, 1600);
+      return;
+    }
+
+    if (this.hayMas && paginas < PAGINAS_BUSCAR_CITA) {
+      this.cargarAnteriores(() => this.irAMensaje(id, paginas + 1));
+    } else {
+      this.notificationService.info('Ese mensaje ya no está en la conversación', 'Mensaje citado');
+    }
   }
 
   /** El campo crece con el texto hasta un tope (después scrollea) y vuelve a una línea al enviar. */
@@ -352,7 +460,7 @@ export class MensajesConversacionComponent implements OnInit {
     }
   }
 
-  private enviar(contenido: string, imagenes: string[], alExito?: () => void): void {
+  private enviar(contenido: string, imagenes: string[], respuestaAId?: number, alExito?: () => void): void {
     if (!this.otro || this.enviando || this.bloqueado) {
       return;
     }
@@ -360,7 +468,7 @@ export class MensajesConversacionComponent implements OnInit {
     this.enviando = true;
 
     this.mensajesService
-      .sendMensajePrivado({ aUserName: this.otro.userName, asunto: '', contenido, imagenes })
+      .sendMensajePrivado({ aUserName: this.otro.userName, asunto: '', contenido, imagenes, ...(respuestaAId ? { respuestaAId } : {}) })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
@@ -556,6 +664,7 @@ export class MensajesConversacionComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((ok: boolean) => {
         if (ok) {
+          if (this.respondiendoA?.id === mensaje.id) this.respondiendoA = null;
           this.mensajes = this.mensajes.filter((m) => m.id !== mensaje.id);
           this.actualizarAsunto();
         }

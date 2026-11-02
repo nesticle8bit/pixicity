@@ -12,8 +12,23 @@ export interface MensajeViewModel {
   imagenes?: string | null;
   eliminado: boolean;
   esMio?: boolean;
+  /** Mensaje al que responde y su resumen (puede ser más viejo que la página cargada). */
+  respuestaAId?: number | null;
+  cita?: MensajeCita | null;
   usuarioDe: UsuarioAvatarViewModel;
   usuarioA: UsuarioAvatarViewModel;
+}
+
+/** Lo que se ve del mensaje citado en la burbuja y en la barra "Respondiendo a…". */
+export interface MensajeCita {
+  id: number;
+  userName: string;
+  esMio: boolean;
+  /** Texto plano recortado. */
+  texto?: string | null;
+  imagen?: string | null;
+  /** Lo borré (o se eliminó): solo "Mensaje eliminado". */
+  eliminado?: boolean;
 }
 
 export interface ConversacionViewModel {
@@ -64,6 +79,8 @@ export interface SendMPViewModel {
   contenido: string;
   /** URLs devueltas por subirImagenMensaje (máximo 4). */
   imagenes?: string[];
+  /** Mensaje de la conversación al que responde. */
+  respuestaAId?: number;
 }
 
 export interface ResponseMPViewModel {

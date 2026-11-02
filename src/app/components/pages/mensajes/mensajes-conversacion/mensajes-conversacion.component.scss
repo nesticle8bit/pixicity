@@ -206,6 +206,8 @@ img {
     height: 55vh;
     min-height: 300px;
     overflow-y: auto;
+    // Al deslizar un mensaje para responder no debe aparecer scroll horizontal.
+    overflow-x: hidden;
     padding: 1rem .5rem;
     display: flex;
     flex-direction: column;
@@ -224,9 +226,219 @@ img {
     display: flex;
     align-items: flex-end;
     gap: .5rem;
+    position: relative;
+    // Deslizar a la derecha para responder (appDeslizarParaResponder); el scroll vertical sigue siendo del navegador.
+    touch-action: pan-y pinch-zoom;
+    transition: transform .2s ease;
+
+    &.is-deslizando {
+        transition: none;
+    }
 
     &--mine {
         justify-content: flex-end;
+    }
+
+    // Asoma desde la izquierda a medida que se desliza (queda fuera del área visible en reposo).
+    &__deslizar {
+        position: absolute;
+        left: -32px;
+        top: 50%;
+        display: grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        margin-top: -14px;
+        border-radius: 50%;
+        background: light-dark(#e6f1f7, #1d3c4d);
+        color: light-dark(#005a85, #97d6f3);
+        font-size: 1rem;
+        opacity: var(--deslizar, 0);
+        transform: scale(calc(.6 + var(--deslizar, 0) * .4));
+    }
+
+    // Al saltar a un mensaje citado.
+    &.is-resaltado .chat-bubble {
+        animation: chat-resaltar 1.6s ease;
+    }
+}
+
+@keyframes chat-resaltar {
+    0%, 40% { box-shadow: 0 0 0 3px color-mix(in srgb, light-dark(#006595, #1e99d3) 45%, transparent); }
+    100% { box-shadow: 0 0 0 3px transparent; }
+}
+
+/* --- Responder: botón al pasar el mouse, cita dentro de la burbuja y barra sobre el campo --- */
+.chat-bubble__responder {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 4px);
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin-top: -14px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: light-dark(#fff, #1e2124);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .18);
+    color: light-dark(#5f6b75, #aeaeae);
+    font-size: .95rem;
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity .15s ease;
+
+    .chat-bubble--mine & {
+        left: auto;
+        right: calc(100% + 4px);
+    }
+
+    &:hover {
+        color: light-dark(#005a85, #97d6f3);
+    }
+}
+
+.chat-row:hover .chat-bubble__responder,
+.chat-bubble__responder:focus-visible {
+    opacity: 1;
+}
+
+// Sin mouse no hay hover: se responde deslizando o manteniendo apretado.
+@media (hover: none) {
+    .chat-bubble__responder {
+        display: none;
+    }
+}
+
+.chat-cita {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    margin: 0 0 6px;
+    padding: 5px 8px;
+    border: 0;
+    border-left: 3px solid light-dark(#7d5bd0, #b49af0);
+    border-radius: 6px;
+    background: color-mix(in srgb, light-dark(#000, #fff) 6%, transparent);
+    color: inherit;
+    text-align: left;
+    font-size: 13px;
+    line-height: 1.3;
+    cursor: pointer;
+
+    &--mia {
+        border-left-color: light-dark(#006595, #1e99d3);
+    }
+
+    &:hover {
+        background: color-mix(in srgb, light-dark(#000, #fff) 10%, transparent);
+    }
+
+    &:focus-visible {
+        outline: 2px solid light-dark(#006595, #1e99d3);
+        outline-offset: 1px;
+    }
+
+    &__texto {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__autor {
+        display: block;
+        font-size: 12px;
+        color: light-dark(#6a46c4, #c5b2f5);
+    }
+
+    &--mia &__autor {
+        color: light-dark(#005a85, #8ed2f2);
+    }
+
+    &__cuerpo {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        color: light-dark(#4f5b64, #b9c2c9);
+    }
+
+    &__miniatura {
+        flex: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        object-fit: cover;
+    }
+}
+
+.chat-respondiendo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: .8rem 0 -.4rem;
+    padding: 6px 6px 6px 10px;
+    border: 1px solid light-dark(#dfe5ea, #3a4752);
+    border-radius: 14px;
+    background: light-dark(#f6f8fa, #262b30);
+
+    &__icono {
+        flex: none;
+        color: light-dark(#005a85, #97d6f3);
+        font-size: 1.1rem;
+    }
+
+    &__cita {
+        margin: 0;
+    }
+
+    &__cerrar {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: light-dark(#5f6b75, #aeaeae);
+        cursor: pointer;
+
+        &:hover {
+            background: light-dark(#e9eef2, #333d45);
+        }
+
+        &:focus-visible {
+            outline: 2px solid light-dark(#006595, #1e99d3);
+        }
+    }
+}
+
+// Ancla del menú del clic derecho: un punto fijo donde se hizo clic.
+.chat-menu-ancla {
+    position: fixed;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+::ng-deep .chat-menu .mat-mdc-menu-item i.ti {
+    margin-right: 8px;
+    font-size: 1.1rem;
+    vertical-align: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chat-row {
+        transition: none;
+    }
+
+    .chat-row.is-resaltado .chat-bubble {
+        animation: none;
+        outline: 3px solid color-mix(in srgb, light-dark(#006595, #1e99d3) 45%, transparent);
     }
 }
 
