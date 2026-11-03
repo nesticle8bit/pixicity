@@ -44,6 +44,12 @@ export class HttpLogsService implements IHttpLogsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getEnlaceNotificacion(id: number): Observable<string> {
+    return this.http
+      .get<ApiResponse<string>>(`${environment.api}/api/notificaciones/${id}/enlace`)
+      .pipe(map((r) => r.data ?? '/monitor'));
+  }
+
   getLastNotificaciones(): Observable<MonitorViewModel[]> {
     return this.http
       .get<ApiResponse<MonitorViewModel[]>>(`${environment.api}/api/notificaciones/recientes`)

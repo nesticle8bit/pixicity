@@ -39,7 +39,8 @@
     <div [class]="'sm-embed ' + enlaceEmbed.clase">
       <!-- Con imagen del enlace se muestra la portada; sin ella, el reproductor directo (no hay qué mostrar en su lugar). -->
       @if (reproduciendo() || !portada || imagenFallo()) {
-        <iframe [src]="enlaceEmbed.src" frameborder="0" loading="lazy" scrolling="no"
+        <iframe #embedFrame [src]="enlaceEmbed.src" frameborder="0" loading="lazy" scrolling="no"
+          [style.height.px]="altoEmbed()"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           allowfullscreen [title]="'Contenido de ' + hostname"></iframe>
       } @else {

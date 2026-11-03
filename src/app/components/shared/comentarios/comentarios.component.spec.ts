@@ -166,6 +166,25 @@ describe('ComentariosComponent', () => {
     expect(html).toContain('<a href="https://x.com"');
   });
 
+  it('formatear aplica negrita, cursiva, tachado y [texto](url)', () => {
+    const html = componente.formatear('**fuerte** *suave* ~~viejo~~ [mi web](https://x.com/a_b) 2*3*4');
+
+    expect(html).toContain('<strong>fuerte</strong>');
+    expect(html).toContain('<em>suave</em>');
+    expect(html).toContain('<del>viejo</del>');
+    expect(html).toContain('<a href="https://x.com/a_b" target="_blank" rel="nofollow noopener">mi web</a>');
+    // La URL del enlace con texto no se vuelve a enlazar sola, y un * entre números no es cursiva.
+    expect(html.match(/<a /g)?.length).toBe(1);
+    expect(html).toContain('2*3*4');
+  });
+
+  it('formatear no deja salir de los atributos ni enlaza javascript:', () => {
+    const html = componente.formatear('[x](https://a.com/"onmouseover="alert(1)) [y](javascript:alert(1))');
+
+    expect(html).not.toContain('"onmouseover');
+    expect(html).not.toContain('href="javascript');
+  });
+
   it('formatear muestra como imagen las subidas al sitio y los enlaces https a imágenes', () => {
     const guid = 'a'.repeat(32);
     const propia = componente.formatear(`https://taringas.net/images/shouts/ana/${guid}.webp`);

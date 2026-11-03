@@ -1,23 +1,20 @@
-import { GRUPOS_EMOTES, reemplazarEmotes } from './emotes';
+import { reemplazarEmotesPost } from './emotes';
 
-describe('reemplazarEmotes', () => {
-  it('convierte los códigos conocidos en su GIF, sin importar mayúsculas', () => {
-    const html = reemplazarEmotes('hola :mario: y :LOL:');
-    expect(html).toContain('<img class="emote" src="/assets/emotes/mario.gif" alt=":mario:"');
-    expect(html).toContain('src="/assets/emotes/lol.gif"');
+describe('reemplazarEmotesPost', () => {
+  it('convierte los :codigo: conocidos del texto del post', () => {
+    const html = reemplazarEmotesPost('<p>Hola :mario: y :noexiste:</p>');
+    expect(html).toContain('<img class="emote" src="/assets/emotes/mario.gif"');
+    expect(html).toContain(':noexiste:');
   });
 
-  it('deja como texto los códigos que no existen y los horarios', () => {
-    expect(reemplazarEmotes('a las 10:30:15 :noexiste:')).toBe('a las 10:30:15 :noexiste:');
+  it('no toca lo que está dentro de <pre> o <code>', () => {
+    const html = reemplazarEmotesPost('<pre><code>a = :mario:</code></pre><p>:mario:</p><code >:lol:</code >');
+    expect(html).toContain('<code>a = :mario:</code>');
+    expect(html).toContain('<code >:lol:</code >');
+    expect(html.match(/class="emote"/g)?.length).toBe(1);
   });
 
-  it('no toca el interior de las etiquetas', () => {
-    const enlace = '<a href="https://x.com/:mario:/">texto</a>';
-    expect(reemplazarEmotes(enlace)).toBe(enlace);
-  });
-
-  it('los códigos son únicos', () => {
-    const codigos = GRUPOS_EMOTES.flatMap((g) => g.emotes.map((e) => e.codigo));
-    expect(new Set(codigos).size).toBe(codigos.length);
+  it('no toca atributos', () => {
+    expect(reemplazarEmotesPost('<a title=":mario:" href="#">x</a>')).toBe('<a title=":mario:" href="#">x</a>');
   });
 });

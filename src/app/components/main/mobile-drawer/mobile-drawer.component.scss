@@ -117,6 +117,37 @@ $activo: light-dark(#004160, #6cbcec);
     }
   }
 
+  // Cámara montada abajo a la derecha del avatar (68px + aro de 4px). ::after agranda la zona táctil a 44px.
+  &__avatar-editar {
+    position: absolute;
+    z-index: 2;
+    // Relativo a __head: el avatar arranca en 104 - 36 = 68px bajo el banner y mide 76px con el aro.
+    top: calc(112px + env(safe-area-inset-top, 0px));
+    left: calc(1rem + 50px);
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 2px solid light-dark(#fff, #1e2124);
+    border-radius: 50%;
+    background: $main;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -7px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $main;
+      outline-offset: 2px;
+    }
+  }
+
   &__ident {
     display: flex;
     flex-direction: column;

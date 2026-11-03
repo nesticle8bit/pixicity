@@ -87,6 +87,22 @@ $toasts: (
   }
 }
 
+// Aviso que lleva a algún lado al tocarlo (notificación en vivo): se nota que es clicable.
+.toast-container .ngx-toastr.toast-accion {
+  cursor: pointer;
+
+  .toast-message::after {
+    content: ' Ver →';
+    color: var(--toast-color);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  &:hover .toast-message::after {
+    text-decoration: underline;
+  }
+}
+
 .toast-container .toast-close-button {
   position: absolute;
   top: 6px;

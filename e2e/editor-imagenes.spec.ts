@@ -334,11 +334,24 @@ test('mientras sube la imagen se puede seguir escribiendo en otro lado sin que l
   await expect.poll(async () => (await estructura(ed)).filter((b) => b)).toEqual(['Arriba[img 1]', 'Abajo más']);
 });
 
-test('en el creador de posts no se suben imágenes: solo desde una URL', async ({ page }) => {
+test('en el creador de posts se sube desde el equipo, a api/posts/imagenes y ya comprimida en WebP', async ({ page }) => {
+  let tipo = '';
+  await page.route('**/api/posts/imagenes', (r) => {
+    tipo = /Content-Type: (image\/\w+)/.exec(r.request().postData() ?? '')?.[1] ?? '';
+    return r.fulfill(ok('/assets/images/avatar.png?post=1'));
+  });
   await page.goto('/crear/post');
   await page.locator('.rich-editor__toolbar button[aria-label="Insertar imagen"]').click();
   await expect(page.getByRole('button', { name: 'Desde una URL' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Subir desde el equipo' })).toHaveCount(0);
+  const [selector] = await Promise.all([
+    page.waitForEvent('filechooser'),
+    page.getByRole('button', { name: 'Subir desde el equipo' }).click(),
+  ]);
+  await selector.setFiles({ name: 'foto.png', mimeType: 'image/png', buffer: PNG });
+
+  await expect(editor(page).locator('img[src*="post=1"]')).toHaveCount(1);
+  // Un PNG de 1×1 ya es mínimo: comprimirImagen lo deja tal cual si el WebP no pesa menos; lo importante es el endpoint.
+  expect(['image/png', 'image/webp']).toContain(tipo);
 });
 
 test('al bajar en un post largo la barra del editor queda visible debajo de la barra de publicar', async ({ page }) => {

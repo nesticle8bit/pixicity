@@ -29,6 +29,9 @@
           <a class="drawer__avatar" [routerLink]="['/perfil', u.userName]" (click)="nav.close()" tabindex="-1" aria-hidden="true">
             <app-user-avatar [avatar]="u.avatar" [userName]="u.userName" [height]="68" [width]="68" />
           </a>
+          <button type="button" class="drawer__avatar-editar" (click)="cambiarAvatar()" aria-label="Cambiar foto de perfil">
+            <i class="ti ti-camera" aria-hidden="true"></i>
+          </button>
 
           <a class="drawer__ident" [routerLink]="['/perfil', u.userName]" (click)="nav.close()">
             <span class="drawer__username">{{ datos?.completeName || u.userName }}</span>

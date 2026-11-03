@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnChanges, input, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, OnChanges, input, inject, signal, viewChild } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { VisorImagenService } from '../visor-imagen/visor-imagen.service';
@@ -64,7 +64,30 @@ export class ShoutMediaComponent implements OnChanges {
   /** Video directo con `#t=0.1`: sin eso el celular no dibuja el primer cuadro y se ve negro hasta tocarlo. */
   public srcVideo: string | null = null;
 
+  /** Alto que pidió el embed de Instagram (mensaje MEASURE); null = el del CSS hasta que avise. */
+  readonly altoEmbed = signal<number | null>(null);
+  private readonly embedFrame = viewChild<ElementRef<HTMLIFrameElement>>('embedFrame');
+
+  /**
+   * El embed de Instagram manda {type:'MEASURE', details:{height}} al cargar y al cambiar (lo mismo que usa su
+   * embed.js): con eso el iframe toma el alto justo y la foto, el carrusel o el reel se ven enteros, sin recorte.
+   */
+  @HostListener('window:message', ['$event'])
+  alMensaje(event: MessageEvent): void {
+    if (event.origin !== 'https://www.instagram.com') return;
+    const frame = this.embedFrame()?.nativeElement;
+    if (!frame || event.source !== frame.contentWindow) return;
+    let datos: unknown = event.data;
+    if (typeof datos === 'string') {
+      try { datos = JSON.parse(datos); } catch { return; }
+    }
+    const d = datos as { type?: string; details?: { height?: number } };
+    const alto = Number(d?.details?.height);
+    if (d?.type === 'MEASURE' && alto > 100 && alto < 4000) this.altoEmbed.set(Math.ceil(alto));
+  }
+
   ngOnChanges(): void {
+    this.altoEmbed.set(null);
     this.hostname = this.calcularHostname();
     this.youtubeEmbed = this.esVideo ? this.calcularYoutubeEmbed() : null;
     const video = this.esVideo ? videoYoutube(this.url()) : null;
@@ -138,8 +161,10 @@ export function embedEnlace(url: string | null): { url: string; clase: string } 
   if (!url) return null;
   let m = url.match(/^https?:\/\/(?:www\.)?turbo\.cr\/(?:embed|v|video|watch)\/([A-Za-z0-9_-]+)/i);
   if (m) return { url: `https://turbo.cr/embed/${m[1]}`, clase: 'sm-embed--video' };
-  m = url.match(/^https?:\/\/(?:www\.)?instagram\.com\/(?:[\w.]+\/)?(p|reel|reels|tv)\/([A-Za-z0-9_-]+)/i);
-  if (m) return { url: `https://www.instagram.com/${m[1] === 'reels' ? 'reel' : m[1]}/${m[2]}/embed`, clase: 'sm-embed--instagram' };
+  // Fotos, carruseles, reels e IGTV (también con el usuario delante, m. o con ?igsh= de "Compartir").
+  // /embed/captioned trae el texto del post; el reproductor del reel funciona dentro del iframe.
+  m = url.match(/^https?:\/\/(?:www\.|m\.)?instagram\.com\/(?:[\w.]+\/)?(p|reel|reels|tv)\/([A-Za-z0-9_-]+)/i);
+  if (m) return { url: `https://www.instagram.com/${m[1] === 'p' ? 'p' : m[1] === 'tv' ? 'tv' : 'reel'}/${m[2]}/embed/captioned/`, clase: 'sm-embed--instagram' };
   m = url.match(/^https?:\/\/(?:www\.|m\.)?tiktok\.com\/(?:@[\w.-]+\/)?(?:video|embed(?:\/v2)?)\/(\d+)/i);
   if (m) return { url: `https://www.tiktok.com/player/v1/${m[1]}`, clase: 'sm-embed--tiktok' };
   return null;

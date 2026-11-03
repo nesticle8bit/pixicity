@@ -389,31 +389,37 @@ describe('RichEditorComponent', () => {
       expect(editor.querySelector('.rich-editor__uploading')).toBeNull();
     });
 
-    it('muestra un placeholder mientras sube y lo reemplaza por la imagen', () => {
+    // La imagen se comprime (asíncrono) antes de subir: el pedido sale recién después.
+    const comprimida = () => new Promise((r) => setTimeout(r, 50));
+
+    it('muestra un placeholder mientras sube y lo reemplaza por la imagen', async () => {
       setHtml('<p>x</p>');
       select('x', true);
       component['uploadImages']([new File(['a'], 'a.png', { type: 'image/png' })], null);
       expect(editor.querySelector('.rich-editor__uploading')).not.toBeNull();
       expect(emitted[emitted.length - 1]).not.toContain('Subiendo');
 
+      await comprimida();
       upload$.next('/images/fotos/u/a.jpg');
       expect(editor.querySelector('.rich-editor__uploading')).toBeNull();
       expect(emitted[emitted.length - 1]).toContain('/images/fotos/u/a.jpg');
     });
 
-    it('el control es inválido mientras sube (el formulario no se envía sin la imagen)', () => {
+    it('el control es inválido mientras sube (el formulario no se envía sin la imagen)', async () => {
       setHtml('<p>x</p>');
       select('x', true);
       component['uploadImages']([new File(['a'], 'a.png', { type: 'image/png' })], null);
       expect(component.validate()).toEqual({ subiendoImagenes: true });
+      await comprimida();
       upload$.next('/images/fotos/u/a.jpg');
       expect(component.validate()).toBeNull();
     });
 
-    it('el cursor queda después de la imagen subida, no antes', () => {
+    it('el cursor queda después de la imagen subida, no antes', async () => {
       setHtml('<p>x</p>');
       select('x', true);
       component['uploadImages']([new File(['a'], 'a.png', { type: 'image/png' })], null);
+      await comprimida();
       upload$.next('/images/fotos/u/a.jpg');
       const range = window.getSelection()!.getRangeAt(0);
       const wrap = editor.querySelector('.img-resizable')!;

@@ -13,6 +13,8 @@ export abstract class IHttpPostsService {
   /** `novatos`: solo posts de autores con rango Novato (/novatos); sin él, el resto (el home). */
   abstract getPosts(categoria?: string, version?: number, novatos?: boolean): Observable<PaginatedData<PostListaViewModel>>;
   abstract getPostsAdmin(search: string, filtro?: AdminFiltro): Observable<PaginatedData<PostAdmin>>;
+  /** Imagen del editor de posts (ya comprimida en el navegador); devuelve su URL. */
+  abstract subirImagenPost(archivo: File): Observable<string>;
   abstract getPostsByUserId(userId: number): Observable<PaginatedData<PostViewModel>>;
   abstract getPostsByLoggedUser(search: string): Observable<PaginatedData<PostViewModel>>;
   abstract getStickyPosts(): Observable<PostListaViewModel[]>;

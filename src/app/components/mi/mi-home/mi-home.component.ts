@@ -38,7 +38,16 @@ const PESTANAS: AlcanceMuro[] = ['activos', 'todos', 'siguiendo', 'nsfw'];
 const PERIODOS: PeriodoActivos[] = ['dia', 'semana', 'mes'];
 
 /** Lista y scroll al salir de /mi: al volver con "atrás" se restauran en vez de recargar desde arriba. */
-let guardado: { url: string; items: MuroItem[]; siguiente: string | null; corte: string | null; scrollY: number } | null = null;
+let guardado: { url: string; items: MuroItem[]; siguiente: string | null; corte: string | null; scrollY: Posicion } | null = null;
+
+/**
+ * Dónde estaba al salir: el primer shout visible y a cuántos px del borde de arriba quedaba. Volver a ese shout
+ * aguanta que lo de arriba cambie de alto (imágenes, resumen, aviso de nuevos); `y` es el respaldo si no aparece.
+ */
+interface Posicion {
+  y: number;
+  ancla: { clave: string; top: number } | null;
+}
 
 /**
  * /mi: el inicio personal. Muro con los shouts propios y de quienes sigues (más lo que comparten y sus posts nuevos)
@@ -125,7 +134,7 @@ export class MiHomeComponent implements OnDestroy {
   private observador?: IntersectionObserver;
   /** URL de esta vista (al destruirse, router.url ya es la de destino). */
   private urlActual = '';
-  private scrollAlSalir = 0;
+  private scrollAlSalir: Posicion = { y: 0, ancla: null };
 
   constructor() {
     inject(DisplayComponentService).setDisplay({
@@ -182,7 +191,7 @@ export class MiHomeComponent implements OnDestroy {
     this.router.events
       .pipe(filter((e) => e instanceof NavigationStart), takeUntilDestroyed())
       .subscribe(() => {
-        if (typeof window !== 'undefined') this.scrollAlSalir = window.scrollY;
+        if (typeof window !== 'undefined') this.scrollAlSalir = this.tomarPosicion();
       });
     const volviendo = this.router.getCurrentNavigation()?.trigger === 'popstate';
     let primera = true;
@@ -287,22 +296,44 @@ export class MiHomeComponent implements OnDestroy {
    * Las imágenes cargan después y hasta entonces la página es más corta que antes: el scroll quedaría topado.
    * Se reintenta en cada frame hasta llegar (o ~2 s), y se corta si el usuario se mueve por su cuenta.
    */
-  private restaurarScroll(y: number): void {
+  private restaurarScroll(pos: Posicion): void {
     const hasta = performance.now() + 2000;
     let cortar = false;
+    let quieto = 0;
     const parar = () => (cortar = true);
+    const quitar = () => {
+      window.removeEventListener('wheel', parar);
+      window.removeEventListener('touchstart', parar);
+    };
     window.addEventListener('wheel', parar, { once: true, passive: true });
     window.addEventListener('touchstart', parar, { once: true, passive: true });
     const paso = () => {
-      if (cortar) return;
-      window.scrollTo(0, y);
-      if (Math.abs(window.scrollY - y) > 2 && performance.now() < hasta) requestAnimationFrame(paso);
-      else {
-        window.removeEventListener('wheel', parar);
-        window.removeEventListener('touchstart', parar);
-      }
+      if (cortar) return quitar();
+      const ancla = pos.ancla && document.querySelector<HTMLElement>(`[data-clave="${CSS.escape(pos.ancla.clave)}"]`);
+      // Con ancla se recalcula en cada frame: si una imagen de arriba termina de cargar, el shout se corre y se corrige.
+      const destino = ancla ? window.scrollY + ancla.getBoundingClientRect().top - pos.ancla!.top : pos.y;
+      if (Math.abs(window.scrollY - destino) > 2) {
+        window.scrollTo(0, destino);
+        quieto = 0;
+      } else quieto++;
+      // Sin ancla basta con llegar; con ancla se sigue vigilando un rato por lo que carga tarde.
+      const listo = ancla ? quieto > 30 : quieto > 0;
+      if (!listo && performance.now() < hasta) requestAnimationFrame(paso);
+      else quitar();
     };
     setTimeout(() => requestAnimationFrame(paso));
+  }
+
+  /** El primer elemento del muro que se ve (debajo del header fijo) y su distancia al borde de arriba. */
+  private tomarPosicion(): Posicion {
+    const y = window.scrollY;
+    const arriba = document.querySelector('main-header')?.getBoundingClientRect().bottom ?? 0;
+    const lis = this.muro()?.nativeElement.querySelectorAll<HTMLElement>('[data-clave]') ?? [];
+    for (const li of Array.from(lis)) {
+      const r = li.getBoundingClientRect();
+      if (r.bottom > Math.max(0, arriba)) return { y, ancla: { clave: li.dataset['clave']!, top: r.top } };
+    }
+    return { y, ancla: null };
   }
 
   /** Lo que hace deslizar para recargar: suma lo nuevo arriba si se puede; si no (Más activos, lista vacía), recarga. */

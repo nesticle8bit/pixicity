@@ -9,6 +9,8 @@ import { FiltroNotificaciones, MonitorViewModel, PreferenciasPush, StatsViewMode
 export abstract class IHttpLogsService {
   abstract getNotificaciones(filtro?: FiltroNotificaciones): Observable<PaginatedData<MonitorViewModel>>;
   abstract getLastNotificaciones(): Observable<MonitorViewModel[]>;
+  /** Adónde lleva la notificación (lo usa el aviso en vivo al tocarlo). */
+  abstract getEnlaceNotificacion(id: number): Observable<string>;
   abstract setNotificacionesAsReaded(): Observable<boolean>;
   abstract getStats(): Observable<StatsViewModel>;
   abstract getMonitorsAdmin(filtro?: AdminFiltro): Observable<PaginatedData<MonitorAdmin>>;

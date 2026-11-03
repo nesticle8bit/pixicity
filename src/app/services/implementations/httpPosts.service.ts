@@ -44,6 +44,15 @@ export class HttpPostsService implements IHttpPostsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  subirImagenPost(archivo: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', archivo);
+    return this.http
+      .post<ApiResponse<string>>(`${environment.api}/api/posts/imagenes`, formData)
+      .pipe(map((r) => { if (r.status === 200 && r.data) return r.data; throw new Error(r.errors?.join(', ') ?? 'No se pudo subir la imagen'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
   getPostsAdmin(search: string, filtro: AdminFiltro = {}): Observable<PaginatedData<PostAdmin>> {
     return this.http
       .get<ApiResponse<PaginatedData<PostAdmin>>>(

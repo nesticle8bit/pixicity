@@ -4,6 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { IHttpUsuarioPerfilService } from 'src/app/services/interfaces/httpUsuarioPerfil.interface';
@@ -55,6 +56,7 @@ export class MobileDrawerComponent implements OnInit {
   private signalrService = inject(SignalrService);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly staffBadges = inject(StaffBadgesService);
@@ -257,6 +259,25 @@ export class MobileDrawerComponent implements OnInit {
 
     this.nav.close();
     this.router.navigate(['/buscar', 'posts', q]);
+  }
+
+  /** Mismo diálogo que en el perfil y /cuenta. El cajón se cierra antes: su z-index taparía al diálogo. */
+  async cambiarAvatar(): Promise<void> {
+    this.nav.close();
+    const { DialogChangeAvatarComponent } = await import('../../dialogs/dialog-change-avatar/dialog-change-avatar.component');
+    this.dialog
+      .open(DialogChangeAvatarComponent, { width: '350px', maxWidth: '95vw', disableClose: true })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((avatar?: string) => {
+        if (!avatar) return;
+        const sesion = this.securityService.getCurrentUser();
+        if (sesion.usuario) {
+          sesion.usuario.avatar = avatar;
+          this.securityService.setUserToLocalStorage(sesion);
+          this.currentUser = { ...sesion, usuario: { ...sesion.usuario } };
+        }
+      });
   }
 
   cerrarSesion(): void {

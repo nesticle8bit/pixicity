@@ -186,6 +186,12 @@ $reshout: light-dark(#1e7f4f, #30c97d);
     &:hover:not(:disabled) { background: light-dark(#e6f1f7, #1d3c4d); }
   }
 
+  &--nomegusta.is-activo {
+    color: light-dark(#b42318, #ec7c74);
+
+    &:hover:not(:disabled) { background: light-dark(#fdecea, #4a2522); }
+  }
+
   /* Editar / denunciar: a la izquierda, separadas de las reacciones. */
   &--secundaria { margin-right: auto; }
 

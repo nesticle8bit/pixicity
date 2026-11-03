@@ -1,4 +1,5 @@
-import { Subscription } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
+import { ShoutsEstadoService } from 'src/app/services/shared/shouts-estado.service';
 import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ShoutComentarioViewModel, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
@@ -38,6 +39,7 @@ export class ShoutsCommentsComponent {
   private cargaCargar?: Subscription;
   private readonly perfilService = inject(IHttpPerfilService);
   private readonly securityService = inject(IHttpSecurityService);
+  private readonly estado = inject(ShoutsEstadoService);
 
   private _shout: ShoutViewModel | null = null;
 
@@ -58,10 +60,16 @@ export class ShoutsCommentsComponent {
   }
 
   public readonly acciones: ComentariosAcciones = {
+    // Comentar y borrar mueven el contador que muestra la tarjeta del shout al volver a la lista.
     comentar: (contenido, parentId) =>
-      this.perfilService.addShoutComentario({ shoutId: this._shout!.id, comentario: contenido, parentId: parentId ?? undefined }),
+      this.perfilService
+        .addShoutComentario({ shoutId: this._shout!.id, comentario: contenido, parentId: parentId ?? undefined })
+        .pipe(tap(() => this.estado.sumarComentarios(this._shout!.id, 1, this.totalComentarios))),
     editar: (id, contenido) => this.perfilService.editarShoutComentario(id, contenido),
-    eliminar: (id) => this.perfilService.deleteShoutComentario(id),
+    eliminar: (id) =>
+      this.perfilService
+        .deleteShoutComentario(id)
+        .pipe(tap(() => this.estado.sumarComentarios(this._shout!.id, -1, this.totalComentarios))),
     votar: (id, valor) => this.perfilService.votarShoutComentario(id, valor),
     fijar: (id) => this.perfilService.fijarShoutComentario(id),
     denunciar: (id, motivo) => this.perfilService.denunciarShoutComentario(id, motivo),

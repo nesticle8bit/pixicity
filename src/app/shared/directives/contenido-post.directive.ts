@@ -159,7 +159,7 @@ export class ContenidoPostDirective {
     }
     const img = event.target instanceof HTMLImageElement ? event.target : null;
     // Las imágenes que son enlaces siguen su enlace; los íconos chicos no se amplían
-    if (!img || img.closest('a') || img.naturalWidth < 120) return;
+    if (!img || img.closest('a') || img.classList.contains('emote') || img.naturalWidth < 120) return;
     event.preventDefault();
     this.abrirVisor(img);
   };

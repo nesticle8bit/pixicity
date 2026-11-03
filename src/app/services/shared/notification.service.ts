@@ -22,6 +22,13 @@ export class NotificationService {
     if (this.activo) this.toastr.info(message, title);
   }
 
+  /** Aviso que hace algo al tocarlo (p. ej. ir a la notificación). Tocarlo también lo cierra. */
+  infoConAccion(message: string, title: string, alTocar: () => void): void {
+    if (!this.activo) return;
+    const toast = this.toastr.info(message, title, { tapToDismiss: true, toastClass: 'ngx-toastr toast-accion' });
+    toast?.onTap.subscribe(() => alTocar());
+  }
+
   warning(message: string, title?: string): void {
     if (this.activo) this.toastr.warning(message, title);
   }

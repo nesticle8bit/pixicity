@@ -66,6 +66,9 @@ export interface ShoutInteracciones {
   favoritos: number;
   meGusta: boolean;
   favorito: boolean;
+  /** "No me gusta": no resta karma; solo baja al shout en Más activos y en el TOP de la portada. */
+  noMeGustas?: number;
+  noMeGusta?: boolean;
   comentarios?: number;
   reshouts?: number;
   reshouteado?: boolean;
@@ -75,6 +78,8 @@ export interface ShoutInteracciones {
 export interface ShoutReaccion {
   total: number;
   activo: boolean;
+  /** Me gusta y no me gusta: todas las cifras, porque marcar uno quita el otro. */
+  interacciones?: ShoutInteracciones;
 }
 
 export interface ShoutComentarioVoto {

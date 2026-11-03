@@ -20,18 +20,27 @@ import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.com
 import { TextoEnlazadoComponent } from '../texto-enlazado/texto-enlazado.component';
 import { ShareButtonsComponent } from '../../../addons/share-buttons/share-buttons.component';
 import { environment } from 'src/environments/environment';
+import { ShoutsEstadoService } from 'src/app/services/shared/shouts-estado.service';
 
 const VENTANA_EDICION_MS = 15 * 60 * 1000;
 const MOTIVOS_DENUNCIA = ['Spam o publicidad', 'Contenido ofensivo', 'Acoso', 'Información falsa', 'Contenido sexual', 'Otro'];
 
-type Marca = 'meGusta' | 'favorito' | 'reshouteado';
-type Total = 'meGustas' | 'favoritos' | 'reshouts';
+type Marca = 'meGusta' | 'noMeGusta' | 'favorito' | 'reshouteado';
+type Total = 'meGustas' | 'noMeGustas' | 'favoritos' | 'reshouts';
+
+/** Me gusta y no me gusta se excluyen: marcar uno desmarca el otro. */
+const OPUESTO: Partial<Record<Marca, [Marca, Total]>> = {
+  meGusta: ['noMeGusta', 'noMeGustas'],
+  noMeGusta: ['meGusta', 'meGustas'],
+};
 
 const SIN_INTERACCIONES: ShoutInteracciones = {
   meGustas: 0,
   favoritos: 0,
   meGusta: false,
   favorito: false,
+  noMeGustas: 0,
+  noMeGusta: false,
   comentarios: 0,
   reshouts: 0,
   reshouteado: false,
@@ -55,6 +64,7 @@ export class ShoutCardComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly sesion = inject(SesionRequeridaService);
   private readonly silencios = inject(IHttpSilenciosService);
+  private readonly estado = inject(ShoutsEstadoService);
   /** El autor quedó silenciado desde esta tarjeta: se oculta (el muro ya no lo traerá). */
   readonly oculto = signal(false);
   private readonly sesionActual = inject(IHttpSecurityService).getCurrentUser()?.usuario;
@@ -116,7 +126,8 @@ export class ShoutCardComponent {
   constructor() {
     effect(() => {
       const s = this.shout();
-      this.interacciones.set({ ...SIN_INTERACCIONES, ...s.interacciones });
+      // Lo hecho después de cargar la lista (aquí o en la página del shout) pisa lo que trajo el muro.
+      this.interacciones.set({ ...SIN_INTERACCIONES, ...s.interacciones, ...this.estado.de(s.id) });
       this.texto.set(s.comentario ?? '');
       this.editado.set(!!s.fechaActualiza);
       this.nsfw.set(!!s.nsfw);
@@ -270,6 +281,10 @@ export class ShoutCardComponent {
     this.alternar('meGusta', 'meGustas', 'Inicia sesión para dar me gusta', (id) => this.perfilService.alternarMeGustaShout(id));
   }
 
+  alternarNoMeGusta(): void {
+    this.alternar('noMeGusta', 'noMeGustas', 'Inicia sesión para votar', (id) => this.perfilService.alternarNoMeGustaShout(id));
+  }
+
   alternarFavorito(): void {
     this.alternar('favorito', 'favoritos', 'Inicia sesión para guardar en favoritos', (id) =>
       this.perfilService.alternarFavoritoShout(id),
@@ -286,14 +301,23 @@ export class ShoutCardComponent {
 
     const antes = this.interacciones();
     const activo = !antes[marca];
-    this.interacciones.set({ ...antes, [marca]: activo, [total]: Math.max(0, (antes[total] ?? 0) + (activo ? 1 : -1)) });
+    const optimista: ShoutInteracciones = { ...antes, [marca]: activo, [total]: Math.max(0, (antes[total] ?? 0) + (activo ? 1 : -1)) };
+    const opuesto = OPUESTO[marca];
+    if (activo && opuesto && antes[opuesto[0]]) {
+      optimista[opuesto[0]] = false;
+      optimista[opuesto[1]] = Math.max(0, (antes[opuesto[1]] ?? 0) - 1);
+    }
+    this.interacciones.set(optimista);
     this.enviando.set(marca);
 
     pedido(this.shout().id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (r) => {
-          this.interacciones.update((i) => ({ ...i, [marca]: r.activo, [total]: r.total }));
+          // Si el API manda todas las cifras se usan (cubre el otro voto que se quitó); si no, solo la de esta marca.
+          const cambio: Partial<ShoutInteracciones> = r.interacciones ?? { [marca]: r.activo, [total]: r.total };
+          this.interacciones.update((i) => ({ ...i, ...cambio }));
+          this.estado.actualizar(this.shout().id, cambio);
           this.enviando.set(null);
         },
         error: () => {

@@ -102,7 +102,7 @@
             </button>
           </div>
 
-          <app-rich-editor formControlName="contenido" [permitirSubida]="false" [permitirLinksOcultos]="true"
+          <app-rich-editor formControlName="contenido" [permitirSubida]="true" [subirImagen]="subirImagenPost" [permitirLinksOcultos]="true" [emotes]="!!formGroup.value?.smileys"
             [placeholder]="'Cuenta tu historia, comparte tu aporte…'"></app-rich-editor>
 
           @if (!hasContenido) {
@@ -191,6 +191,11 @@
           <div class="cp-toggle">
             <mat-slide-toggle color="primary" formControlName="esPrivado">Post privado</mat-slide-toggle>
             <small>Sólo usuarios registrados en Taringas! podrán verlo.</small>
+          </div>
+
+          <div class="cp-toggle">
+            <mat-slide-toggle color="primary" formControlName="smileys">Mostrar emotes</mat-slide-toggle>
+            <small>Los <code>:codigo:</code> del post se ven como emotes animados. Desactívalo si quieres que queden como texto.</small>
           </div>
         </section>
 

@@ -22,11 +22,20 @@ import { MatButton } from '@angular/material/button';
 import { DatePipe, DOCUMENT } from '@angular/common';
 import { TextoEnlazadoComponent } from '../../../shared/shouts/texto-enlazado/texto-enlazado.component';
 import { ShareButtonsComponent } from '../../../addons/share-buttons/share-buttons.component';
+import { ShoutsEstadoService } from 'src/app/services/shared/shouts-estado.service';
 
-type Marca = 'meGusta' | 'favorito' | 'reshouteado';
+type Marca = 'meGusta' | 'noMeGusta' | 'favorito' | 'reshouteado';
+type Total = 'meGustas' | 'noMeGustas' | 'favoritos' | 'reshouts';
+
+/** Me gusta y no me gusta se excluyen: marcar uno desmarca el otro. */
+const OPUESTO: Partial<Record<Marca, [Marca, Total]>> = {
+  meGusta: ['noMeGusta', 'noMeGustas'],
+  noMeGusta: ['meGusta', 'meGustas'],
+};
 
 const SIN_SESION: Record<Marca, string> = {
   meGusta: 'Inicia sesión para dar me gusta',
+  noMeGusta: 'Inicia sesión para votar',
   favorito: 'Inicia sesión para guardar en favoritos',
   reshouteado: 'Inicia sesión para compartir',
 };
@@ -60,6 +69,7 @@ export class ShoutsViewComponent implements OnInit {
   private notificationService = inject(NotificationService);
   private seoService = inject(SEOService);
   private sesion = inject(SesionRequeridaService);
+  private estado = inject(ShoutsEstadoService);
 
   public readonly publicUrl = environment.publicUrl;
 
@@ -125,6 +135,8 @@ export class ShoutsViewComponent implements OnInit {
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((i) => {
               this.interacciones.set(i);
+              // Recién traído del API: al volver a la lista, la tarjeta muestra esto y no lo de cuando cargó el muro.
+              this.estado.actualizar(shoutId, i);
               this.aplicarSEO();
             });
           this.cargarCompartidoPor(shoutId);
@@ -194,6 +206,10 @@ export class ShoutsViewComponent implements OnInit {
     this.alternar('meGusta', 'meGustas', (id) => this.perfilService.alternarMeGustaShout(id));
   }
 
+  alternarNoMeGusta(): void {
+    this.alternar('noMeGusta', 'noMeGustas', (id) => this.perfilService.alternarNoMeGustaShout(id));
+  }
+
   alternarFavorito(): void {
     this.alternar('favorito', 'favoritos', (id) => this.perfilService.alternarFavoritoShout(id));
   }
@@ -218,7 +234,7 @@ export class ShoutsViewComponent implements OnInit {
   /** Cambia el botón al instante; si el API falla vuelve al estado anterior. */
   private alternar(
     marca: Marca,
-    total: 'meGustas' | 'favoritos' | 'reshouts',
+    total: Total,
     pedido: (shoutId: number) => Observable<ShoutReaccion>,
     alTerminar?: () => void,
   ): void {
@@ -227,12 +243,20 @@ export class ShoutsViewComponent implements OnInit {
 
     const antes = this.interacciones();
     const activo = !antes[marca];
-    this.interacciones.set({ ...antes, [marca]: activo, [total]: Math.max(0, (antes[total] ?? 0) + (activo ? 1 : -1)) });
+    const optimista: ShoutInteracciones = { ...antes, [marca]: activo, [total]: Math.max(0, (antes[total] ?? 0) + (activo ? 1 : -1)) };
+    const opuesto = OPUESTO[marca];
+    if (activo && opuesto && antes[opuesto[0]]) {
+      optimista[opuesto[0]] = false;
+      optimista[opuesto[1]] = Math.max(0, (antes[opuesto[1]] ?? 0) - 1);
+    }
+    this.interacciones.set(optimista);
     this.enviando.set(marca);
 
     pedido(this.shout.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (r) => {
-        this.interacciones.update((i) => ({ ...i, [marca]: r.activo, [total]: r.total }));
+        const cambio: Partial<ShoutInteracciones> = r.interacciones ?? { [marca]: r.activo, [total]: r.total };
+        this.interacciones.update((i) => ({ ...i, ...cambio }));
+        this.estado.actualizar(this.shout.id, cambio);
         this.enviando.set(null);
         alTerminar?.();
       },

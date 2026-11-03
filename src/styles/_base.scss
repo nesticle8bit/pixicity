@@ -6,6 +6,12 @@ body {
   height: 100%;
 }
 
+// En html (no solo en body): así se propaga al viewport. Si no, en Chrome Android algo que desborda
+// ensancha el viewport de layout y lo position: fixed con right: 0 (el cajón móvil) queda cortado a la derecha.
+html {
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
   line-height: 1.5;

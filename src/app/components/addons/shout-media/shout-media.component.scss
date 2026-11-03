@@ -143,11 +143,19 @@
   aspect-ratio: 4 / 5;
 }
 
+// Alto inicial pensado para un reel (9:16 + cabecera y pie); al cargar, el embed avisa su alto real
+// (mensaje MEASURE) y el iframe se ajusta. Ancho como el de Instagram: más angosto el video se ve chico.
 .sm-embed--instagram {
-  max-width: 400px;
-  background: #fff;
+  max-width: 480px;
+  background: light-dark(#fff, #000);
+  border: 1px solid light-dark(#dbdbdb, #262626);
 
-  iframe { height: 560px; }
+  iframe {
+    display: block;
+    height: 720px;
+    max-height: none;
+    transition: height .2s ease;
+  }
 }
 
 .sm-embed--tiktok {

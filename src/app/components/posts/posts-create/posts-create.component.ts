@@ -71,6 +71,8 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   private displayService = inject(DisplayComponentService);
   private securityService = inject(IHttpSecurityService);
   private postService = inject(IHttpPostsService);
+  /** "Subir desde el equipo" del editor: la imagen llega ya comprimida y va a /images/posts/{usuario}/. */
+  readonly subirImagenPost = (archivo: File) => this.postService.subirImagenPost(archivo);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
   private dialog = inject(MatDialog);
@@ -142,7 +144,8 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       etiquetas: [],
       esPrivado: false,
       sinComentarios: false,
-      smileys: false,
+      // Emotes: activados en los posts nuevos (los viejos traen su valor, que era siempre false).
+      smileys: true,
       esBorrador: false,
     });
 
@@ -322,7 +325,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     this.dialog.open(DialogPrevisualizarPostComponent, {
       width: '850px',
       maxWidth: '95vw',
-      data: { titulo: this.formGroup.value?.titulo || '', contenido: this.formGroup.value?.contenido || '' },
+      data: { titulo: this.formGroup.value?.titulo || '', contenido: this.formGroup.value?.contenido || '', smileys: !!this.formGroup.value?.smileys },
     });
   }
 

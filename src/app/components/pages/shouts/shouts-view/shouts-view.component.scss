@@ -133,6 +133,12 @@
     &:hover { background: light-dark(#e6f1f7, #1d3c4d); }
   }
 
+  &--nomegusta.is-activo {
+    color: light-dark(#b42318, #ec7c74);
+
+    &:hover { background: light-dark(#fdecea, #4a2522); }
+  }
+
   &.is-activo i { animation: sv-pop 0.25s ease-out; }
 
   &--open {

@@ -73,10 +73,20 @@
                   <button type="button" class="sv-action sv-action--megusta" [class.is-activo]="interacciones().meGusta"
                     [attr.aria-pressed]="interacciones().meGusta" [disabled]="enviando() === 'meGusta'"
                     (click)="alternarMeGusta()"
-                    [matTooltip]="interacciones().meGusta ? 'Ya no me gusta' : 'Me gusta'"
+                    [matTooltip]="interacciones().meGusta ? 'Quitar me gusta' : 'Me gusta'"
                     [attr.aria-label]="'Me gusta (' + interacciones().meGustas + ')'">
                     <i class="ti" [class.ti-thumb-up]="!interacciones().meGusta"
                       [class.ti-thumb-up-filled]="interacciones().meGusta" aria-hidden="true"></i> {{interacciones().meGustas}}
+                  </button>
+                  <!-- Sin karma: solo baja al shout en Más activos y en el TOP de la portada. -->
+                  <button type="button" class="sv-action sv-action--nomegusta" [class.is-activo]="interacciones().noMeGusta"
+                    [attr.aria-pressed]="!!interacciones().noMeGusta" [disabled]="enviando() === 'noMeGusta'"
+                    (click)="alternarNoMeGusta()"
+                    [matTooltip]="interacciones().noMeGusta ? 'Quitar no me gusta' : 'No me gusta'"
+                    [attr.aria-label]="'No me gusta (' + (interacciones().noMeGustas ?? 0) + ')'">
+                    <i class="ti" [class.ti-thumb-down]="!interacciones().noMeGusta"
+                      [class.ti-thumb-down-filled]="interacciones().noMeGusta" aria-hidden="true"></i>
+                    @if (interacciones().noMeGustas) { {{interacciones().noMeGustas}} }
                   </button>
                 </footer>
 

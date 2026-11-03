@@ -136,11 +136,11 @@
             }
             <div class="contenido" [appContenidoPost]="post.contenido">
               @if (contenidoPartido; as partes) {
-              <span [innerHTML]="partes[0] | contenidoSeo:post.titulo | enlazarHashtags"></span>
+              <span [innerHTML]="partes[0] | emotesPost:post.smileys | contenidoSeo:post.titulo | enlazarHashtags"></span>
               <app-anuncio class="anuncio--en-contenido" ubicacion="post-medio" [categoriaId]="post.categoria.id" />
-              <span [innerHTML]="partes[1] | contenidoSeo:post.titulo | enlazarHashtags"></span>
+              <span [innerHTML]="partes[1] | emotesPost:post.smileys | contenidoSeo:post.titulo | enlazarHashtags"></span>
               } @else {
-              <span [innerHTML]="post.contenido | contenidoSeo:post.titulo | enlazarHashtags"></span>
+              <span [innerHTML]="post.contenido | emotesPost:post.smileys | contenidoSeo:post.titulo | enlazarHashtags"></span>
               }
             </div>
           </div>

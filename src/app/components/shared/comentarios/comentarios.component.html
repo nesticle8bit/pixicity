@@ -19,8 +19,10 @@
     <app-user-avatar class="coment-form__avatar" [avatar]="miAvatar" [userName]="miUsuario" [width]="38"
       [height]="38"></app-user-avatar>
     <div class="coment-form__campo">
-      <textarea #campoComentario appMenciones (paste)="alPegar($event, 'nuevo')" [(ngModel)]="nuevoComentario" rows="3"
-        placeholder="Escribe un comentario..." aria-label="Escribe un comentario"></textarea>
+      <ng-container *ngTemplateOutlet="barraFormato; context: { $implicit: 'nuevo', ta: campoComentario }"></ng-container>
+      <textarea #campoComentario appMenciones (paste)="alPegar($event, 'nuevo')" (keydown)="atajoFormato($event, 'nuevo')"
+        [(ngModel)]="nuevoComentario" rows="3" placeholder="Escribe un comentario..."
+        aria-label="Escribe un comentario"></textarea>
       @if (vistaPrevia && nuevoComentario.trim()) {
       <div class="coment-preview" aria-live="polite">
         <span class="coment-preview__titulo">Vista previa</span>
@@ -82,6 +84,20 @@
   </ul>
   }
 </section>
+
+<!-- Barra de formato sobre cada campo. mousedown con preventDefault: el textarea no pierde la selección. -->
+<ng-template #barraFormato let-campo let-ta="ta">
+  <div class="coment-formato" role="toolbar" aria-label="Formato del comentario">
+    <button type="button" (mousedown)="$event.preventDefault()" (click)="aplicarFormato(campo, ta, 'negrita')"
+      matTooltip="Negrita (Ctrl+B)" aria-label="Negrita"><i class="ti ti-bold" aria-hidden="true"></i></button>
+    <button type="button" (mousedown)="$event.preventDefault()" (click)="aplicarFormato(campo, ta, 'cursiva')"
+      matTooltip="Cursiva (Ctrl+I)" aria-label="Cursiva"><i class="ti ti-italic" aria-hidden="true"></i></button>
+    <button type="button" (mousedown)="$event.preventDefault()" (click)="aplicarFormato(campo, ta, 'tachado')"
+      matTooltip="Tachado" aria-label="Tachado"><i class="ti ti-strikethrough" aria-hidden="true"></i></button>
+    <button type="button" (mousedown)="$event.preventDefault()" (click)="insertarEnlace(campo, ta)"
+      matTooltip="Enlace (Ctrl+K)" aria-label="Agregar enlace"><i class="ti ti-link" aria-hidden="true"></i></button>
+  </div>
+</ng-template>
 
 <!-- Agregar imagen: desde el equipo o desde un enlace -->
 <mat-menu #menuImagen="matMenu">
@@ -156,8 +172,9 @@
 
         @if (editId === c.id) {
         <div class="coment-edit">
-          <textarea #campoEdicion appMenciones (paste)="alPegar($event, 'edicion')" [(ngModel)]="editText" rows="2"
-            aria-label="Editar comentario"></textarea>
+          <ng-container *ngTemplateOutlet="barraFormato; context: { $implicit: 'edicion', ta: campoEdicion }"></ng-container>
+          <textarea #campoEdicion appMenciones (paste)="alPegar($event, 'edicion')" (keydown)="atajoFormato($event, 'edicion')"
+            [(ngModel)]="editText" rows="2" aria-label="Editar comentario"></textarea>
           <div class="coment-mini-actions">
             <input #archivo_edicion type="file" accept="image/*" hidden
               (change)="elegirImagen($event, 'edicion', campoEdicion)" />
@@ -198,7 +215,9 @@
 
         @if (replyTo === c.id) {
         <div class="coment-reply">
-          <textarea #campoRespuesta appMenciones (paste)="alPegar($event, 'respuesta')" [(ngModel)]="replyText" rows="2"
+          <ng-container *ngTemplateOutlet="barraFormato; context: { $implicit: 'respuesta', ta: campoRespuesta }"></ng-container>
+          <textarea #campoRespuesta appMenciones (paste)="alPegar($event, 'respuesta')"
+            (keydown)="atajoFormato($event, 'respuesta')" [(ngModel)]="replyText" rows="2"
             placeholder="Escribe una respuesta..." aria-label="Escribe una respuesta"></textarea>
           <div class="coment-mini-actions">
             <input #archivo_respuesta type="file" accept="image/*" hidden

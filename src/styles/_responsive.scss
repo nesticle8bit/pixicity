@@ -27,6 +27,14 @@
 }
 
 @media (max-width: 767.98px) {
+  // Con menos de 16px el navegador del celular agranda la página al enfocar el campo (comentar, shoutear, buscar)
+  // y no la vuelve a su tamaño. !important: los estilos de cada componente ganan por especificidad.
+  input:not([type='checkbox'], [type='radio'], [type='range'], [type='file'], [type='color']),
+  textarea,
+  select,
+  [contenteditable='true'] {
+    font-size: max(16px, 1em) !important;
+  }
 
   .contenido {
     min-height: 0;

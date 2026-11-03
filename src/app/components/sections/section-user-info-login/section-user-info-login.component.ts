@@ -16,6 +16,7 @@ import { MobileNavService } from 'src/app/services/shared/mobile-nav.service';
 import { TemaService } from 'src/app/services/shared/tema.service';
 import { debounceTime, merge } from 'rxjs';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { IrANotificacionService } from 'src/app/services/shared/ir-a-notificacion.service';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ClickOutsideDirective } from '../../../shared/directives/clickOutside.directive';
 import { NgClass, DatePipe } from '@angular/common';
@@ -54,6 +55,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
   private signalrService = inject(SignalrService);
   private badgeService = inject(MensajesBadgeService);
   private toast = inject(NotificationService);
+  readonly irA = inject(IrANotificacionService);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
 
@@ -121,7 +123,18 @@ export class SectionUserInfoLoginComponent implements OnInit {
       .subscribe((payload) => {
         this.currentStats.notifications = (this.currentStats.notifications ?? 0) + 1;
         if (payload?.mensaje) {
-          this.toast.info(payload.mensaje, 'Nueva notificación');
+          // Tocar el aviso lleva adonde apunta (el API arma el mismo enlace que la campana y el push de escritorio).
+          const id = payload.id;
+          this.toast.infoConAccion(payload.mensaje, 'Nueva notificación', () => {
+            if (!id) {
+              void this.router.navigateByUrl('/monitor');
+              return;
+            }
+            this.httpLogs.getEnlaceNotificacion(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+              next: (enlace) => void this.irA.ir(enlace || '/monitor'),
+              error: () => void this.router.navigateByUrl('/monitor'),
+            });
+          });
         }
       });
 
@@ -130,6 +143,14 @@ export class SectionUserInfoLoginComponent implements OnInit {
     merge(this.signalrService.mensaje$, this.signalrService.mensajesLeidos$, this.badgeService.refresh$)
       .pipe(debounceTime(500), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.getStats());
+  }
+
+  /** Mismo enlace que arma el API (AvisosPush.Enlace): post o shout con #comentario-{id}, o el enlace propio del aviso. */
+  enlaceNotificacion(n: MonitorViewModel): string | null {
+    const hash = n.comentarioId ? `#comentario-${n.comentarioId}` : '';
+    if (n.post) return `/posts/${n.post.categoria.seo}/${n.post.id}/${n.post.url}${hash}`;
+    if (n.shoutId && n.shoutAutor) return `/shouts/${encodeURIComponent(n.shoutAutor)}/${n.shoutId}${hash}`;
+    return n.enlace?.startsWith('/') ? n.enlace : null;
   }
 
   getStats(): void {

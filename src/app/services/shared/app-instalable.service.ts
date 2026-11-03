@@ -1,5 +1,5 @@
 import { DestroyRef, inject, Injectable, signal } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
+import { NavigationError, NavigationStart, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { enNavegador } from 'src/app/shared/helpers/plataforma';
@@ -12,6 +12,16 @@ interface EventoInstalar extends Event {
 
 /** Cada cuánto se busca una versión nueva mientras la app está abierta y visible. */
 const REVISAR_CADA_MS = 15 * 60_000;
+
+/** Al volver de segundo plano después de este tiempo, un deploy nuevo se carga solo (sin aviso). */
+const RECARGA_SOLA_TRAS_MS = 2 * 60_000;
+const CLAVE_RECARGA_CHUNK = 'recarga-chunk';
+
+/** Error de cargar un chunk lazy que ya no existe (Chrome, Firefox y Safari lo dicen distinto). */
+export function esChunkViejo(error: unknown): boolean {
+  const texto = String((error as { message?: string })?.message ?? error ?? '');
+  return /dynamically imported module|Importing a module script failed|error loading dynamically imported|ChunkLoadError|Loading chunk [\w-]+ failed/i.test(texto);
+}
 
 /** Nombre del bundle principal en un HTML (`main-HASH.js`): cambia en cada deploy. */
 export function bundlePrincipal(html: string): string | null {
@@ -58,7 +68,7 @@ export class AppInstalableService {
 
     if ('serviceWorker' in navigator) {
       // Después de la carga: no compite con lo que ve el usuario al entrar.
-      window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => undefined), { once: true });
+      window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' }).catch(() => undefined), { once: true });
     }
 
     this.vigilarVersion();
@@ -86,20 +96,38 @@ export class AppInstalableService {
     const actual = [...document.scripts].map((s) => /\/?(main-[A-Za-z0-9]+\.js)$/.exec(s.src)?.[1]).find(Boolean) ?? null;
     if (!actual) return;
 
+    // Desde cuándo está en segundo plano: en el celular la app instalada queda viva días con el JS de entonces.
+    let ocultaDesde = document.visibilityState === 'hidden' ? Date.now() : 0;
+
     const revisar = async () => {
-      if (this.versionNueva() || document.visibilityState !== 'visible') return;
+      if (document.visibilityState !== 'visible') {
+        ocultaDesde ||= Date.now();
+        return;
+      }
+      const volvioDeFondo = ocultaDesde > 0 && Date.now() - ocultaDesde >= RECARGA_SOLA_TRAS_MS;
+      ocultaDesde = 0;
+      if (this.versionNueva()) {
+        if (volvioDeFondo) this.recargar();
+        return;
+      }
       try {
         const html = await (await fetch('/index.html', { cache: 'no-store' })).text();
         const publicado = bundlePrincipal(html);
-        if (publicado && publicado !== actual) this.versionNueva.set(true);
+        if (!publicado || publicado === actual) return;
+        this.versionNueva.set(true);
+        // Volvió a la app después de un rato: todavía no tocó nada, así que se actualiza sola sin perder nada.
+        // Si estaba usándola, queda el aviso y la próxima navegación carga la versión nueva.
+        if (volvioDeFondo && !this.escribiendo()) this.recargar();
       } catch {
         // Sin conexión: se vuelve a intentar en la próxima.
       }
     };
     document.addEventListener('visibilitychange', revisar);
+    window.addEventListener('online', revisar);
     const intervalo = setInterval(revisar, REVISAR_CADA_MS);
     this.destroyRef.onDestroy(() => {
       document.removeEventListener('visibilitychange', revisar);
+      window.removeEventListener('online', revisar);
       clearInterval(intervalo);
     });
 
@@ -107,5 +135,35 @@ export class AppInstalableService {
     this.router.events
       .pipe(filter((e): e is NavigationStart => e instanceof NavigationStart && this.versionNueva()))
       .subscribe((e) => window.location.assign(e.url));
+
+    // Si igual se adelantó al chequeo: la ruta (o un diálogo) pide un chunk que el deploy borró y la navegación
+    // fallaba en silencio (la app "quedaba rota" hasta reinstalarla). Se entra entera a esa misma ruta.
+    this.router.events
+      .pipe(filter((e): e is NavigationError => e instanceof NavigationError && esChunkViejo(e.error)))
+      .subscribe((e) => this.recargarPorChunk(e.url));
+    window.addEventListener('unhandledrejection', (e) => {
+      if (esChunkViejo(e.reason)) this.recargarPorChunk();
+    });
+  }
+
+  /** Hay un campo con texto en foco (comentario, shout a medio escribir): no se recarga solo. */
+  private escribiendo(): boolean {
+    const el = document.activeElement as HTMLInputElement | HTMLTextAreaElement | HTMLElement | null;
+    if (!el) return false;
+    if (el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement) return !!el.value;
+    return el.isContentEditable && !!el.textContent?.trim();
+  }
+
+  /** Una sola vez por minuto: si el chunk de verdad no existe (no es un deploy), no queda recargando en bucle. */
+  private recargarPorChunk(url?: string): void {
+    try {
+      const ultima = Number(sessionStorage.getItem(CLAVE_RECARGA_CHUNK) ?? 0);
+      if (Date.now() - ultima < 60_000) return;
+      sessionStorage.setItem(CLAVE_RECARGA_CHUNK, String(Date.now()));
+    } catch {
+      // Sin sessionStorage (modo privado estricto): se recarga igual, una vez.
+    }
+    if (url) window.location.assign(url);
+    else window.location.reload();
   }
 }

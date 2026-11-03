@@ -287,6 +287,21 @@ $lenguajes: (
   @include bloques;
   @include resaltado;
 
+  /* Emotes (:codigo: con la opción del post activada): en línea con el texto, no como imagen del post */
+  & img.emote {
+    display: inline-block !important;
+    width: auto !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: 3em;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    vertical-align: middle;
+    cursor: default;
+  }
+
   /* Botón "Copiar" de los bloques de código (lo agrega appContenidoPost) */
   & .code-copy {
     position: absolute;

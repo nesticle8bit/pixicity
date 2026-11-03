@@ -98,7 +98,12 @@ export const TABLE_PICKER_SIZE = 6;
 
 // Mismas reglas que POST /api/fotos/imagenes (ImageUploadHelper.FotoMaxBytes)
 export const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+/** Tope del archivo que se sube (ya comprimido); el que elige el usuario puede pesar hasta IMAGE_MAX_BYTES_ORIGINAL. */
 export const IMAGE_MAX_BYTES = 8 * 1024 * 1024;
+export const IMAGE_MAX_BYTES_ORIGINAL = 25 * 1024 * 1024;
+/** Ancho del contenido de un post con margen para pantallas densas (el API usa el mismo) y calidad WebP. */
+export const ANCHO_MAX_IMAGEN = 1280;
+export const CALIDAD_IMAGEN = 0.78;
 
 // Separación entre la selección y el bubble, y margen mínimo contra los bordes
 export const BUBBLE_GAP = 8;

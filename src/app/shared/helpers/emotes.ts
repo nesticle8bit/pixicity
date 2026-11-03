@@ -142,15 +142,37 @@ export const buscarEmote = (codigo: string): Emote | undefined => POR_CODIGO.get
 export function reemplazarEmotes(html: string): string {
   return html
     .split(/(<[^>]*>)/)
-    .map((parte, i) =>
-      i % 2
-        ? parte
-        : parte.replace(/:([a-zA-Z0-9]+):/g, (texto, codigo: string) => {
-            const e = buscarEmote(codigo);
-            return e
-              ? `<img class="emote" src="${RUTA_EMOTES}${e.archivo}" alt=":${e.codigo}:" title=":${e.codigo}:" loading="lazy">`
-              : texto;
-          }),
-    )
+    .map((parte, i) => (i % 2 ? parte : emotesEnTexto(parte)))
+    .join('');
+}
+
+function emotesEnTexto(texto: string): string {
+  return texto.replace(/:([a-zA-Z0-9]+):/g, (original, codigo: string) => {
+    const e = buscarEmote(codigo);
+    return e
+      ? `<img class="emote" src="${RUTA_EMOTES}${e.archivo}" alt=":${e.codigo}:" title=":${e.codigo}:" loading="lazy">`
+      : original;
+  });
+}
+
+/** Dentro de estas etiquetas un `:codigo:` es texto literal (código de ejemplo, por ejemplo). */
+const SIN_EMOTES = /^<\s*\/?\s*(pre|code|script|style|textarea)\b/i;
+
+/**
+ * Igual que reemplazarEmotes, para el HTML de un post: no toca lo que esté dentro de <pre> o <code>,
+ * donde `:algo:` suele ser parte del código.
+ */
+export function reemplazarEmotesPost(html: string): string {
+  let dentro = 0;
+  return html
+    .split(/(<[^>]*>)/)
+    .map((parte, i) => {
+      if (i % 2) {
+        const m = SIN_EMOTES.exec(parte);
+        if (m && !parte.endsWith('/>')) dentro = Math.max(0, dentro + (/^<\s*\//.test(parte) ? -1 : 1));
+        return parte;
+      }
+      return dentro ? parte : emotesEnTexto(parte);
+    })
     .join('');
 }

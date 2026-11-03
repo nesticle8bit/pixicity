@@ -165,7 +165,7 @@
         } @else {
         <ol class="mi__lista">
           @for (item of items(); track claveItem(item); let i = $index) {
-          <li>
+          <li [attr.data-clave]="claveItem(item)">
             @if (item.tipo === 'post' && item.post; as post) {
             <app-post-card [post]="post" [fecha]="item.fecha" />
             } @else if (item.shout; as shout) {

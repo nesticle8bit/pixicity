@@ -439,6 +439,44 @@
   vertical-align: middle;
 }
 
+// Barra de formato (negrita, cursiva, tachado, enlace) pegada arriba del campo.
+.coment-formato {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 4px;
+
+  button {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: light-dark(#5f6b75, #aeb8c1);
+    font-size: 1.05rem;
+    cursor: pointer;
+
+    &:hover {
+      background: light-dark(#eef2f5, #2a3036);
+      color: light-dark(#14202a, #f1f3f5);
+    }
+
+    &:focus-visible {
+      outline: 2px solid light-dark(#0B6EA5, #2ba0e1);
+      outline-offset: 1px;
+    }
+  }
+}
+
+.coment-body p ::ng-deep,
+.coment-preview p ::ng-deep {
+  del {
+    opacity: .75;
+  }
+}
+
 .coment-emoji .girando { animation: coment-girar 0.9s linear infinite; }
 .coment-emoji:disabled { cursor: default; opacity: 0.6; }
 

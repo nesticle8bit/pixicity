@@ -1,5 +1,6 @@
 import { FOTOS_HABILITADAS } from 'src/app/shared/helpers/secciones';
 import { EnlazarHashtagsPipe } from 'src/app/shared/pipes/enlazarHashtags.pipe';
+import { EmotesPostPipe } from 'src/app/shared/pipes/emotes-post.pipe';
 import { CargandoComponent } from '../../shared/cargando/cargando.component';
 import { environment } from 'src/environments/environment';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
@@ -66,6 +67,7 @@ import {
     TimeAgoPipe,
     ContenidoSeoPipe,
     EnlazarHashtagsPipe,
+    EmotesPostPipe,
     ContenidoPostDirective,
   ],
 })

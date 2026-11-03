@@ -1,11 +1,11 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (197).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (201).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2?v=eed1173056") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=8eb16b1439") format("woff2");
 }
 
 @font-face {
@@ -13,7 +13,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-filled-subset.woff2?v=d8f1655744") format("woff2");
+  src: url("/assets/fonts/tabler-icons-filled-subset.woff2?v=623fdcfdd4") format("woff2");
 }
 
 .ti {
@@ -56,6 +56,7 @@
 .ti-bell:before { content: "\ea35"; }
 .ti-bell-off:before { content: "\ece9"; }
 .ti-bell-ringing:before { content: "\ed07"; }
+.ti-bold:before { content: "\eb7b"; }
 .ti-book:before { content: "\ea39"; }
 .ti-bookmark:before { content: "\ea3a"; }
 .ti-brand-discord:before { content: "\ece3"; }
@@ -128,6 +129,7 @@
 .ti-id-badge-2:before { content: "\f076"; }
 .ti-inbox:before { content: "\eac4"; }
 .ti-info-circle:before { content: "\eac5"; }
+.ti-italic:before { content: "\eb93"; }
 .ti-key:before { content: "\eac7"; }
 .ti-layout-dashboard:before { content: "\f02c"; }
 .ti-layout-distribute-horizontal:before { content: "\ead5"; }
@@ -198,10 +200,12 @@
 .ti-stack-2:before { content: "\eef7"; }
 .ti-star:before { content: "\eb2e"; }
 .ti-star-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6a6"; }
+.ti-strikethrough:before { content: "\eb9e"; }
 .ti-sun:before { content: "\eb30"; }
 .ti-tags:before { content: "\ef86"; }
 .ti-target-off:before { content: "\f1ad"; }
 .ti-thumb-down:before { content: "\eb3b"; }
+.ti-thumb-down-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6aa"; }
 .ti-thumb-up:before { content: "\eb3c"; }
 .ti-thumb-up-filled:before { font-family: "tabler-icons-filled" !important; content: "\f6ab"; }
 .ti-timeline:before { content: "\f031"; }

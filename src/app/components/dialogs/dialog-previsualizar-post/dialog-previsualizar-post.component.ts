@@ -4,12 +4,15 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MatButton } from '@angular/material/button';
 import { ContenidoSeoPipe } from 'src/app/shared/pipes/contenidoSeo.pipe';
 import { EnlazarHashtagsPipe } from 'src/app/shared/pipes/enlazarHashtags.pipe';
+import { EmotesPostPipe } from 'src/app/shared/pipes/emotes-post.pipe';
 import { ContenidoPostDirective } from 'src/app/shared/directives/contenido-post.directive';
 import { minutosDeLectura } from 'src/app/shared/helpers/contenido-post';
 
 export interface PrevisualizarPostData {
   titulo: string;
   contenido: string;
+  /** Opción "Emotes" del post: los :codigo: se ven como GIF. */
+  smileys?: boolean;
 }
 
 /** El post tal como se verá publicado (mismos estilos y mejoras que la vista del post). */
@@ -20,7 +23,7 @@ export interface PrevisualizarPostData {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatDialogTitle, CdkScrollable, MatDialogContent, MatDialogActions, MatButton, MatDialogClose,
-    ContenidoSeoPipe, EnlazarHashtagsPipe, ContenidoPostDirective,
+    ContenidoSeoPipe, EnlazarHashtagsPipe, EmotesPostPipe, ContenidoPostDirective,
   ],
 })
 export class DialogPrevisualizarPostComponent {

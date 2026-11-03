@@ -585,19 +585,98 @@ export class ComentariosComponent {
 
   // - Formato
 
-  /** Escapa HTML y convierte URLs, @menciones y #hashtags en enlaces; los enlaces a imágenes y los :emotes: se muestran. */
+  /**
+   * Escapa HTML y convierte URLs, @menciones y #hashtags en enlaces; los enlaces a imágenes y los :emotes: se muestran.
+   * Formato básico (lo escribe la barra del campo): **negrita**, *cursiva*, ~~tachado~~ y [texto](https://enlace).
+   */
   formatear(texto: string): string {
     if (!texto) return '';
     const escapado = texto
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
 
-    const enlazado = escapado
-      .replace(/(https?:\/\/[^\s<]+)/g, (url) => this.esImagen(url)
+    // Los [texto](url) se apartan antes: si no, el enlazado automático volvería a enlazar la URL dentro del href.
+    const enlaces: string[] = [];
+    const conFormato = escapado
+      .replace(/\[([^\]\n]{1,200})\]\((https?:\/\/[^\s)]+)\)/g, (_m, txt: string, url: string) => {
+        enlaces.push(`<a href="${url}" target="_blank" rel="nofollow noopener">${txt}</a>`);
+        return `\u0001${enlaces.length - 1}\u0001`;
+      })
+      .replace(/\*\*(?=\S)([^\n]*?\S)\*\*/g, '<strong>$1</strong>')
+      .replace(/~~(?=\S)([^\n]*?\S)~~/g, '<del>$1</del>')
+      .replace(/(^|[^*\w])\*(?=[^\s*])([^*\n]*?[^\s*])\*(?![*\w])/g, '$1<em>$2</em>');
+
+    const enlazado = conFormato
+      .replace(/(https?:\/\/[^\s<\u0001]+)/g, (url) => this.esImagen(url)
         ? `<a href="${url}" target="_blank" rel="noopener" class="coment-img"><img src="${url}" alt="Imagen del comentario" loading="lazy"></a>`
         : `<a href="${url}" target="_blank" rel="nofollow noopener">${url}</a>`)
       .replace(/(^|\s)@([a-zA-Z0-9_]+)/g, '$1<a href="/perfil/$2">@$2</a>');
-    return reemplazarEmotes(enlazarHashtagsTexto(enlazado)).replace(/\n/g, '<br>');
+    return reemplazarEmotes(enlazarHashtagsTexto(enlazado))
+      .replace(/\u0001(\d+)\u0001/g, (_m, i: string) => enlaces[+i] ?? '')
+      .replace(/\n/g, '<br>');
+  }
+
+  // - Barra de formato
+
+  /** Envuelve la selección (o deja las marcas con el cursor en medio) con negrita, cursiva o tachado. */
+  aplicarFormato(campo: CampoImagen, textarea: HTMLTextAreaElement, tipo: 'negrita' | 'cursiva' | 'tachado'): void {
+    const marca = tipo === 'negrita' ? '**' : tipo === 'cursiva' ? '*' : '~~';
+    const texto = this.textoDe(campo);
+    const inicio = textarea.selectionStart ?? texto.length;
+    const fin = textarea.selectionEnd ?? texto.length;
+    const elegido = texto.slice(inicio, fin);
+    const nuevo = texto.slice(0, inicio) + marca + elegido + marca + texto.slice(fin);
+    this.ponerTexto(campo, textarea, nuevo, inicio + marca.length, inicio + marca.length + elegido.length);
+  }
+
+  /** Pide la URL (y el texto si no había nada elegido) y escribe [texto](url). */
+  async insertarEnlace(campo: CampoImagen, textarea: HTMLTextAreaElement): Promise<void> {
+    const texto = this.textoDe(campo);
+    const inicio = textarea.selectionStart ?? texto.length;
+    const fin = textarea.selectionEnd ?? texto.length;
+    const url = (await this.confirmar.pedirTexto({
+      titulo: 'Agregar enlace',
+      mensaje: 'Pega la dirección (https://...).',
+      placeholder: 'https://...',
+      aceptar: 'Agregar',
+      requerido: true,
+    }))?.trim();
+    if (!url) return;
+    if (!/^https?:\/\/\S+$/i.test(url)) {
+      this.notificationService.error('El enlace debe empezar con http:// o https://', 'Enlace');
+      return;
+    }
+    const elegido = texto.slice(inicio, fin).replace(/[[\]\n]/g, ' ').trim() || url;
+    const md = `[${elegido}](${url.replace(/\)/g, '%29')})`;
+    const nuevo = texto.slice(0, inicio) + md + texto.slice(fin);
+    this.ponerTexto(campo, textarea, nuevo, inicio + md.length, inicio + md.length);
+  }
+
+  private textoDe(campo: CampoImagen): string {
+    return campo === 'nuevo' ? this.nuevoComentario : campo === 'respuesta' ? this.replyText : this.editText;
+  }
+
+  private ponerTexto(campo: CampoImagen, textarea: HTMLTextAreaElement, nuevo: string, selIni: number, selFin: number): void {
+    if (campo === 'nuevo') this.nuevoComentario = nuevo;
+    else if (campo === 'respuesta') this.replyText = nuevo;
+    else this.editText = nuevo;
+    // Igual que con los emojis: se escribe en el DOM para dejar el cursor donde corresponde.
+    textarea.value = nuevo;
+    textarea.focus();
+    textarea.setSelectionRange(selIni, selFin);
+  }
+
+  /** Ctrl/Cmd + B, I o K dentro del campo. */
+  atajoFormato(event: KeyboardEvent, campo: CampoImagen): void {
+    if (!(event.ctrlKey || event.metaKey) || event.altKey) return;
+    const textarea = event.target as HTMLTextAreaElement;
+    const tecla = event.key.toLowerCase();
+    if (tecla === 'b') this.aplicarFormato(campo, textarea, 'negrita');
+    else if (tecla === 'i') this.aplicarFormato(campo, textarea, 'cursiva');
+    else if (tecla === 'k') void this.insertarEnlace(campo, textarea);
+    else return;
+    event.preventDefault();
   }
 }

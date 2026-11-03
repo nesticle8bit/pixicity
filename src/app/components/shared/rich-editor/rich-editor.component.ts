@@ -18,6 +18,8 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
+import { from, Observable, switchMap } from 'rxjs';
+import { comprimirImagen } from 'src/app/shared/helpers/comprimir-imagen';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
 import {
@@ -52,7 +54,10 @@ import {
   HISTORY_LIMIT,
   HistoryEntry,
   IMAGE_MAX_BYTES,
+  IMAGE_MAX_BYTES_ORIGINAL,
   IMAGE_TYPES,
+  ANCHO_MAX_IMAGEN,
+  CALIDAD_IMAGEN,
   IMG_ALIGN_CLASSES,
   INLINE_MARKS,
   INLINE_SHORTCUTS,
@@ -93,8 +98,12 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
   readonly placeholder = input<string>('Escribe aquí...');
   /** false: sin subir archivos (botón, pegar ni arrastrar); las imágenes solo entran por URL. */
   readonly permitirSubida = input(true);
+  /** A dónde se suben las imágenes (recibe el archivo ya comprimido y devuelve su URL). Por defecto, el de Fotos. */
+  readonly subirImagen = input<((archivo: File) => Observable<string>) | null>(null);
   /** Botón "Ocultar links": solo en posts, que es donde el API los oculta hasta que el lector da puntos o comenta. */
   readonly permitirLinksOcultos = input(false);
+  /** Pestaña de emotes en el selector de emojis: solo en posts con la opción "Mostrar emotes" (los temas no los muestran). */
+  readonly emotes = input(false);
 
   readonly wrapperEl = viewChild.required<ElementRef<HTMLDivElement>>('wrapperEl');
   readonly toolbarEl = viewChild.required<ElementRef<HTMLDivElement>>('toolbarEl');
@@ -634,6 +643,8 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
     this.emojiSel = this.guardarPosicion();
     void this.emojis.alternar(boton, {
       alElegir: (emoji) => this.insertarEmoji(emoji),
+      // Pestaña de emotes de Taringa: insertan `:codigo:`, que la vista del post muestra como GIF.
+      emotes: this.emotes(),
       alCerrar: (porTeclado) => {
         // Sin preventScroll el foco subía la página al principio del editor y el cursor quedaba fuera de la vista
         if (porTeclado) {
@@ -1756,14 +1767,17 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
     return blocks;
   }
 
+  private colaCompresion: Promise<unknown> = Promise.resolve();
+
   private uploadImages(files: File[], at: PosicionGuardada | null): void {
     if (!this.permitirSubida()) {
       this.notificationService.warning('Aquí no se pueden subir imágenes; insértalas desde una URL', 'Imagen no permitida');
       return;
     }
-    const valid = files.filter((f) => IMAGE_TYPES.includes(f.type) && f.size <= IMAGE_MAX_BYTES);
+    // El tope de 8 MB es del archivo ya comprimido (abajo): una foto de celular de 15 MB entra igual.
+    const valid = files.filter((f) => IMAGE_TYPES.includes(f.type) && f.size <= IMAGE_MAX_BYTES_ORIGINAL);
     if (valid.length < files.length) {
-      this.notificationService.warning('Solo se permiten imágenes JPG, PNG, GIF o WEBP de hasta 8 MB', 'Imagen no válida');
+      this.notificationService.warning('Solo se permiten imágenes JPG, PNG, GIF o WEBP de hasta 25 MB', 'Imagen no válida');
     }
     if (!valid.length) return;
 
@@ -1784,9 +1798,19 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
       this.uploads++;
       this.onValidatorChange();
 
-      this.fotosService
-        .uploadImage(file)
-        .pipe(takeUntilDestroyed(this.destroyRef))
+      // Se achica (ANCHO_MAX_IMAGEN) y se pasa a WebP en el navegador antes de subir: menos datos y menos espacio.
+      // El API la vuelve a recomprimir igual. Los GIF van tal cual para no perder la animación.
+      // En cadena: con varias a la vez, los pedidos salen en el orden de los archivos (no en el que termina cada una).
+      const comprimida: Promise<File> = this.colaCompresion.then(() => comprimirImagen(file, ANCHO_MAX_IMAGEN, CALIDAD_IMAGEN));
+      this.colaCompresion = comprimida.catch(() => undefined);
+      from(comprimida)
+        .pipe(
+          switchMap((comprimida) => {
+            if (comprimida.size > IMAGE_MAX_BYTES) throw new Error('La imagen sigue pesando más de 8 MB');
+            return (this.subirImagen() ?? ((f: File) => this.fotosService.uploadImage(f)))(comprimida);
+          }),
+          takeUntilDestroyed(this.destroyRef),
+        )
         .subscribe({
           next: (url) => this.finishUpload(id, url),
           error: () => this.finishUpload(id, null),
