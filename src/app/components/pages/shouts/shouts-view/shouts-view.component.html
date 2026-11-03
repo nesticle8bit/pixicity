@@ -79,6 +79,12 @@
                       [class.ti-thumb-up-filled]="interacciones().meGusta" aria-hidden="true"></i> {{interacciones().meGustas}}
                   </button>
                 </footer>
+
+                <div class="sv-compartir">
+                  <span class="sv-compartir__label">Compartir</span>
+                  <app-share-buttons [url]="publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id"
+                    [titulo]="'Shout de @' + shout.avatar.userName" [enShouts]="false" />
+                </div>
               </div>
             </div>
 

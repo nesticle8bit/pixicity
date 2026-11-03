@@ -120,6 +120,16 @@
         <i class="ti ti-repeat" aria-hidden="true"></i> {{ interacciones().reshouts ?? 0 }}
       </button>
 
+      <button type="button" class="sc-action sc-action--compartir" [matMenuTriggerFor]="menuCompartir"
+        matTooltip="Compartir en otras redes" aria-label="Compartir en otras redes">
+        <i class="ti ti-share" aria-hidden="true"></i>
+      </button>
+      <mat-menu #menuCompartir="matMenu" class="sc-menu sc-menu--compartir">
+        <div class="sc-compartir">
+          <app-share-buttons [url]="urlPublica()" [titulo]="tituloCompartir()" [enShouts]="false" />
+        </div>
+      </mat-menu>
+
       <button type="button" class="sc-action sc-action--favorito" [class.is-activo]="interacciones().favorito"
         [attr.aria-pressed]="interacciones().favorito" [disabled]="enviando() === 'favorito'" (click)="alternarFavorito()"
         [matTooltip]="interacciones().favorito ? 'Quitar de favoritos' : 'Agregar a favoritos'"

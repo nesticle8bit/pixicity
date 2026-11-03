@@ -246,6 +246,16 @@ export class PerfilComponent implements OnInit {
       });
   }
 
+  /** Staff: farmeo de puntos, puntos concentrados en una cuenta y posibles multicuentas (el diálogo se carga al usarlo). */
+  async analizarUsuario(): Promise<void> {
+    const { DialogAnalisisUsuarioComponent } = await import('../../dialogs/dialog-analisis-usuario/dialog-analisis-usuario.component');
+    this.dialog.open(DialogAnalisisUsuarioComponent, {
+      width: '860px',
+      maxWidth: '95vw',
+      data: { usuarioId: this.currentUser.id, userName: this.currentUser.userName },
+    });
+  }
+
   /** Quien mira es staff: se muestran las herramientas de moderación (cada una valida su propio permiso). */
   get esStaff(): boolean {
     const rango = this.loggedUser.usuario?.rango;

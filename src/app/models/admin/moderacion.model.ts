@@ -119,3 +119,68 @@ export interface MiModeracion {
 }
 
 export type PaginaApelaciones = PaginatedData<Apelacion> & { pendientes: number };
+
+/** Análisis de comportamiento de una cuenta (GET api/moderacion/usuarios/{id}/analisis). Indicios, no pruebas. */
+export type GravedadSenal = 'alta' | 'media' | 'baja';
+export type NivelAnalisis = 'Sin señales' | 'Bajo' | 'Medio' | 'Alto';
+
+export interface SenalAnalisis {
+  gravedad: GravedadSenal;
+  titulo: string;
+  detalle: string;
+  userName: string | null;
+}
+
+export interface ContraparteAnalisis {
+  usuarioId: number;
+  userName: string;
+  avatar: string | null;
+  fechaRegistro: string;
+  baneado: boolean;
+  puntos: number;
+  votos: number;
+  votosComentarios: number;
+  /** Parte (0-100) del flujo que corresponde a esta cuenta. */
+  porcentaje: number;
+  /** Solo en recibidos: parte de todo lo que da esa cuenta que va al analizado. */
+  dedicacion: number | null;
+  reciproco: number;
+  vinculada: boolean;
+  cuentaNueva: boolean;
+  sinActividad: boolean;
+}
+
+export interface FlujoPuntos {
+  total: number;
+  votosComentarios: number;
+  cuentas: number;
+  deCuentasNuevas: number;
+  top: ContraparteAnalisis[];
+}
+
+export interface CuentaVinculada {
+  usuarioId: number;
+  userName: string;
+  avatar: string | null;
+  fechaRegistro: string;
+  baneado: boolean;
+  ipsCompartidas: string[];
+  soloIpsCompartidasPorMuchos: boolean;
+  mismaRedRegistro: boolean;
+  mismoNavegador: boolean;
+  puntosLeDio: number;
+  puntosRecibio: number;
+}
+
+export interface AnalisisUsuario {
+  usuarioId: number;
+  userName: string;
+  fechaRegistro: string;
+  puntos: number;
+  nivel: NivelAnalisis;
+  puntaje: number;
+  senales: SenalAnalisis[];
+  puntosDados: FlujoPuntos;
+  puntosRecibidos: FlujoPuntos;
+  cuentasVinculadas: CuentaVinculada[];
+}

@@ -1,0 +1,121 @@
+<div class="au-cabecera">
+  <h2 mat-dialog-title>Análisis de {{ '@' }}{{ data.userName }}</h2>
+  <button type="button" class="au-cerrar" mat-dialog-close aria-label="Cerrar">
+    <i class="ti ti-x" aria-hidden="true"></i>
+  </button>
+</div>
+
+<mat-dialog-content class="au">
+  @if (analisis(); as a) {
+  <section class="au-resumen">
+    <span class="au-nivel au-nivel--{{ claseNivel(a.nivel) }}">
+      <i class="ti ti-shield-search" aria-hidden="true"></i> Riesgo: {{ a.nivel }}
+    </span>
+    <span class="au-dato">{{ a.puntos | number }} puntos</span>
+    <span class="au-dato">Registrado el {{ a.fechaRegistro | date: 'dd/MM/yyyy' }}</span>
+  </section>
+  <p class="au-aviso">
+    Son indicios para revisar a mano, no pruebas: una IP compartida puede ser una casa, un trabajo o un ciber.
+  </p>
+
+  <section aria-labelledby="au-senales">
+    <h3 id="au-senales" class="au-titulo">Señales</h3>
+    @if (a.senales.length) {
+    <ul class="au-senales">
+      @for (s of a.senales; track $index) {
+      <li class="au-senal au-senal--{{ s.gravedad }}">
+        <i class="ti {{ icono[s.gravedad] }}" aria-hidden="true"></i>
+        <div>
+          <strong>{{ s.titulo }}</strong>
+          <span>{{ s.detalle }}</span>
+        </div>
+      </li>
+      }
+    </ul>
+    } @else {
+    <p class="au-vacio"><i class="ti ti-circle-check" aria-hidden="true"></i> No se encontró nada sospechoso.</p>
+    }
+  </section>
+
+  <div class="au-flujos">
+    @for (f of [
+      { titulo: 'Puntos que recibe', flujo: a.puntosRecibidos, verbo: 'emisores', recibe: true },
+      { titulo: 'Puntos que da', flujo: a.puntosDados, verbo: 'destinatarios', recibe: false }
+    ]; track f.titulo) {
+    <section class="au-flujo">
+      <h3 class="au-titulo">{{ f.titulo }}</h3>
+      <p class="au-totales">
+        <strong>{{ f.flujo.total | number }}</strong> puntos ·
+        <strong>{{ f.flujo.votosComentarios | number }}</strong> votos a comentarios ·
+        <strong>{{ f.flujo.cuentas | number }}</strong> {{ f.verbo }}
+        @if (f.recibe && f.flujo.deCuentasNuevas) {
+        · <strong>{{ f.flujo.deCuentasNuevas | number }}</strong> de cuentas nuevas
+        }
+      </p>
+      @if (f.flujo.top.length) {
+      <ul class="au-lista">
+        @for (c of f.flujo.top; track c.usuarioId) {
+        <li class="au-fila">
+          <app-user-avatar [avatar]="c.avatar" [userName]="c.userName" [width]="28" [height]="28" />
+          <div class="au-fila__cuerpo">
+            <a [routerLink]="['/perfil', c.userName]" (click)="cerrar()">{{ '@' }}{{ c.userName }}</a>
+            <span class="au-chips">
+              @if (c.vinculada) { <span class="au-chip au-chip--alta">Misma conexión</span> }
+              @if (c.sinActividad) { <span class="au-chip au-chip--alta">Sin actividad</span> }
+              @if (c.cuentaNueva) { <span class="au-chip au-chip--media">Cuenta nueva</span> }
+              @if (c.dedicacion != null && c.dedicacion >= 60) { <span class="au-chip au-chip--media">Le da el {{ c.dedicacion }}% de sus puntos</span> }
+              @if (c.reciproco) { <span class="au-chip">Mutuo: {{ c.reciproco }}</span> }
+              @if (c.baneado) { <span class="au-chip">Baneado</span> }
+            </span>
+          </div>
+          <div class="au-fila__numeros">
+            <strong>{{ c.puntos }}</strong> <small>({{ c.porcentaje }}%)</small>
+            @if (c.votosComentarios) { <small>{{ c.votosComentarios }} votos com.</small> }
+          </div>
+        </li>
+        }
+      </ul>
+      } @else {
+      <p class="au-vacio">Sin movimientos.</p>
+      }
+    </section>
+    }
+  </div>
+
+  <section aria-labelledby="au-vinculadas">
+    <h3 id="au-vinculadas" class="au-titulo">Cuentas con la misma conexión</h3>
+    @if (a.cuentasVinculadas.length) {
+    <ul class="au-lista">
+      @for (c of a.cuentasVinculadas; track c.usuarioId) {
+      <li class="au-fila" [class.au-fila--debil]="c.soloIpsCompartidasPorMuchos">
+        <app-user-avatar [avatar]="c.avatar" [userName]="c.userName" [width]="28" [height]="28" />
+        <div class="au-fila__cuerpo">
+          <a [routerLink]="['/perfil', c.userName]" (click)="cerrar()">{{ '@' }}{{ c.userName }}</a>
+          <span class="au-chips">
+            @if (c.mismoNavegador) { <span class="au-chip au-chip--alta">Mismo navegador</span> }
+            @if (c.mismaRedRegistro) { <span class="au-chip au-chip--alta">Misma red de registro</span> }
+            @if (c.soloIpsCompartidasPorMuchos) { <span class="au-chip">IP pública (muchas cuentas)</span> }
+            @if (c.baneado) { <span class="au-chip">Baneado</span> }
+            <span class="au-chip">Registro {{ c.fechaRegistro | date: 'dd/MM/yyyy' }}</span>
+          </span>
+          @if (c.ipsCompartidas.length) {
+          <span class="au-ips">{{ c.ipsCompartidas.join(', ') }}</span>
+          }
+        </div>
+        <div class="au-fila__numeros">
+          <small>Le dio <strong>{{ c.puntosLeDio }}</strong></small>
+          <small>Recibió <strong>{{ c.puntosRecibio }}</strong></small>
+        </div>
+      </li>
+      }
+    </ul>
+    } @else {
+    <p class="au-vacio">Ninguna otra cuenta comparte IP ni red de registro.</p>
+    }
+  </section>
+  } @else if (error()) {
+  <p class="au-vacio">No se pudo analizar la cuenta.</p>
+  } @else {
+  <div class="au-cargando" role="status"><i class="ti ti-loader-2" aria-hidden="true"></i> Analizando la cuenta…</div>
+  }
+</mat-dialog-content>

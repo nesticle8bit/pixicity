@@ -1,0 +1,28 @@
+.compartir-shout__cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 12px;
+
+  h2 {
+    flex: 1;
+  }
+}
+
+.compartir-shout__cerrar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: light-dark(#555, #bbb);
+  font-size: 1.1rem;
+  cursor: pointer;
+
+  &:hover {
+    background: light-dark(rgba(0, 0, 0, .06), rgba(255, 255, 255, .08));
+  }
+}

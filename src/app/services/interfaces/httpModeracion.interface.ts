@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
-import { AccionLote, AccionModeracion, FiltroHistorial, MiModeracion, ModeracionLog, PaginaApelaciones, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
+import { AccionLote, AnalisisUsuario, AccionModeracion, FiltroHistorial, MiModeracion, ModeracionLog, PaginaApelaciones, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
 
 @Injectable()
 export abstract class IHttpModeracionService {
@@ -33,4 +33,6 @@ export abstract class IHttpModeracionService {
   abstract getApelaciones(page: number, pageCount: number, soloPendientes: boolean): Observable<PaginaApelaciones>;
   abstract resolverApelacion(id: number, aceptar: boolean, respuesta: string): Observable<boolean>;
   abstract descartarApelacion(id: number): Observable<boolean>;
+  /** Staff: farmeo, puntos concentrados y posibles multicuentas de una cuenta. */
+  abstract getAnalisisUsuario(usuarioId: number): Observable<AnalisisUsuario>;
 }

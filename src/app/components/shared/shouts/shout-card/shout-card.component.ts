@@ -18,6 +18,8 @@ import { UserPopoverDirective } from 'src/app/shared/directives/userPopover.dire
 import { ShoutMediaComponent } from '../../../addons/shout-media/shout-media.component';
 import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.component';
 import { TextoEnlazadoComponent } from '../texto-enlazado/texto-enlazado.component';
+import { ShareButtonsComponent } from '../../../addons/share-buttons/share-buttons.component';
+import { environment } from 'src/environments/environment';
 
 const VENTANA_EDICION_MS = 15 * 60 * 1000;
 const MOTIVOS_DENUNCIA = ['Spam o publicidad', 'Contenido ofensivo', 'Acoso', 'Información falsa', 'Contenido sexual', 'Otro'];
@@ -45,7 +47,7 @@ const SIN_INTERACCIONES: ShoutInteracciones = {
   styleUrl: './shout-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, UserPopoverDirective, UserAvatarComponent, MatTooltip, MatMenu, MatMenuItem, MatMenuTrigger, ShoutMediaComponent, DatePipe, TiempoCortoPipe,
-    TextoEnlazadoComponent, FormsModule],
+    TextoEnlazadoComponent, FormsModule, ShareButtonsComponent],
 })
 export class ShoutCardComponent {
   private readonly perfilService = inject(IHttpPerfilService);
@@ -73,6 +75,13 @@ export class ShoutCardComponent {
 
   readonly autor = computed(() => this.shout().avatar?.userName ?? '');
   readonly enlace = computed(() => ['/shouts', this.autor(), this.shout().id]);
+  /** Enlace absoluto y texto para compartir el shout en otras redes. */
+  readonly urlPublica = computed(() => `${environment.publicUrl}/shouts/${encodeURIComponent(this.autor())}/${this.shout().id}`);
+  readonly tituloCompartir = computed(() => {
+    const texto = (this.shout().comentario ?? '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    const extracto = texto.length > 120 ? texto.slice(0, 120).trimEnd() + '…' : texto;
+    return extracto ? `${extracto} — @${this.autor()}` : `Shout de @${this.autor()}`;
+  });
   /** Publicado en el muro de otro usuario ("@autor → @perfil"). */
   readonly muroAjeno = computed(() => {
     const perfil = this.shout().perfil?.userName;

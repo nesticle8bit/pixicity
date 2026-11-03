@@ -7,7 +7,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { AccionLote, AccionModeracion, FiltroHistorial, MiModeracion, ModeracionLog, PaginaApelaciones, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
+import { AccionLote, AnalisisUsuario, AccionModeracion, FiltroHistorial, MiModeracion, ModeracionLog, PaginaApelaciones, PaginaReportes, ReglaProtocolo, ReportesComunidad } from 'src/app/models/admin/moderacion.model';
 
 @Injectable()
 export class HttpModeracionService implements IHttpModeracionService {
@@ -101,6 +101,13 @@ export class HttpModeracionService implements IHttpModeracionService {
     return this.http
       .get<ApiResponse<PaginatedData<ModeracionLog>>>(`${environment.api}/api/moderacion/historial`, { params })
       .pipe(this.unwrap<PaginatedData<ModeracionLog>>())
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getAnalisisUsuario(usuarioId: number): Observable<AnalisisUsuario> {
+    return this.http
+      .get<ApiResponse<AnalisisUsuario>>(`${environment.api}/api/moderacion/usuarios/${usuarioId}/analisis`)
+      .pipe(this.unwrap<AnalisisUsuario>())
       .pipe(catchError(this.helper.errorHandler));
   }
 

@@ -1,5 +1,8 @@
 import { Component, input, inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTooltip } from '@angular/material/tooltip';
 import { NotificationService } from 'src/app/services/shared/notification.service';
+import { SesionRequeridaService } from 'src/app/services/shared/sesion-requerida.service';
 import { enNavegador } from '../../../shared/helpers/plataforma';
 
 type RedSocial = 'facebook' | 'twitter' | 'whatsapp';
@@ -8,14 +11,19 @@ type RedSocial = 'facebook' | 'twitter' | 'whatsapp';
     selector: 'app-share-buttons',
     templateUrl: './share-buttons.component.html',
     styleUrls: ['./share-buttons.component.scss'],
+    imports: [MatTooltip],
 })
 export class ShareButtonsComponent {
   private notificationService = inject(NotificationService);
+  private dialog = inject(MatDialog);
+  private sesion = inject(SesionRequeridaService);
 
   /** Título que acompaña al enlace (Twitter y WhatsApp). */
   readonly titulo = input<string>('');
   /** URL a compartir; por defecto la página actual. */
   readonly url = input<string>();
+  /** Botón "Compartir en mis shouts" (se apaga donde no tiene sentido, p. ej. en un shout, que ya tiene reshout). */
+  readonly enShouts = input(true);
 
   /** El menú nativo (Telegram, Instagram, etc.) existe sobre todo en móviles; en escritorio el botón no se muestra. */
   readonly puedeCompartirNativo = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
@@ -35,6 +43,18 @@ export class ShareButtonsComponent {
     };
 
     window.open(urls[red], '_blank', 'noopener,width=640,height=480,scrollbars=yes');
+  }
+
+  /** Abre el composer con el enlace adjunto para que el usuario agregue su texto antes de publicar. */
+  async compartirEnShouts(): Promise<void> {
+    if (!this.sesion.exigir('Inicia sesión para compartir en tus shouts')) return;
+    // El composer es pesado: el diálogo se carga solo cuando alguien lo usa.
+    const { DialogCompartirShoutComponent } = await import('../../dialogs/dialog-compartir-shout/dialog-compartir-shout.component');
+    this.dialog.open(DialogCompartirShoutComponent, {
+      width: '640px',
+      maxWidth: '95vw',
+      data: { url: this.enlace },
+    });
   }
 
   compartirNativo(): void {

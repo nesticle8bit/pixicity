@@ -188,3 +188,18 @@
     padding: 12px 14px;
   }
 }
+
+// Compartir el shout en otras redes, debajo de las reacciones
+.sv-compartir {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.sv-compartir__label {
+  color: light-dark(#666, #aaa);
+  font-size: 12px;
+  font-weight: 600;
+}

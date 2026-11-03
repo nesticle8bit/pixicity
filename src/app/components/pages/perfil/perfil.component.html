@@ -152,6 +152,12 @@
     @if (esStaff && currentUser.id) {
     <div class="pf-hero__staff" aria-label="Herramientas de moderación">
       <span class="pf-hero__staff-titulo"><i class="ti ti-shield" aria-hidden="true"></i> Moderación</span>
+      @if (esAjeno) {
+      <a class="button-uppercase bazul px-2 follow_user_post" (click)="analizarUsuario()" role="button" tabindex="0"
+        (keydown.enter)="analizarUsuario()" (keydown.space)="analizarUsuario(); $event.preventDefault()">
+        <i class="ti ti-shield-search"></i> Analizar cuenta
+      </a>
+      }
       <app-banear-usuario
         [data]="{ usuarioId: currentUser.id, nombre: currentUser.rango?.nombre }"></app-banear-usuario>
       @if (currentUser.rango) {

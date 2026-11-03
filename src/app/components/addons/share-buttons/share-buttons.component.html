@@ -1,4 +1,10 @@
 <span class="share-buttons">
+  @if (enShouts()) {
+    <button type="button" class="share-btn shouts" (click)="compartirEnShouts()"
+      matTooltip="Compartir en mis shouts" aria-label="Compartir en mis shouts">
+      <i class="ti ti-speakerphone"></i>
+    </button>
+  }
   <button type="button" class="share-btn facebook" (click)="compartir('facebook')"
     matTooltip="Compartir en Facebook" aria-label="Compartir en Facebook">
     <i class="ti ti-brand-facebook"></i>

@@ -1,11 +1,11 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (194).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (196).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2?v=166aba63b0") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=f09952baf2") format("woff2");
 }
 
 @font-face {
@@ -32,6 +32,7 @@
 .ti-adjustments:before { content: "\ea03"; }
 .ti-adjustments-horizontal:before { content: "\ec38"; }
 .ti-alert-circle:before { content: "\ea05"; }
+.ti-alert-octagon:before { content: "\ecc6"; }
 .ti-alert-triangle:before { content: "\ea06"; }
 .ti-antenna:before { content: "\f094"; }
 .ti-antenna-off:before { content: "\f3bb"; }
@@ -188,6 +189,7 @@
 .ti-shield:before { content: "\eb24"; }
 .ti-shield-check:before { content: "\eb22"; }
 .ti-shield-exclamation:before { content: "\f9c6"; }
+.ti-shield-search:before { content: "\f9cd"; }
 .ti-smart-home:before { content: "\ecde"; }
 .ti-sparkles:before { content: "\f6d7"; }
 .ti-speakerphone:before { content: "\ed61"; }

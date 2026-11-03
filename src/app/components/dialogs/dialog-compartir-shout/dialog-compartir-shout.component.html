@@ -1,0 +1,12 @@
+<div class="compartir-shout__cabecera">
+  <h2 mat-dialog-title>Compartir en mis shouts</h2>
+  <button type="button" class="compartir-shout__cerrar" mat-dialog-close aria-label="Cerrar">
+    <i class="ti ti-x" aria-hidden="true"></i>
+  </button>
+</div>
+
+<mat-dialog-content>
+  @if (perfilId) {
+    <app-shout-composer [perfilId]="perfilId" [enlaceInicial]="data.url" (publicado)="alPublicar()" />
+  }
+</mat-dialog-content>

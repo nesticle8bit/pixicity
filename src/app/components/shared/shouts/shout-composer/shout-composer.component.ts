@@ -51,6 +51,8 @@ export class ShoutComposerComponent {
 
   /** Muro donde se publica (el propio en /mi). */
   readonly perfilId = input.required<number>();
+  /** Enlace precargado (compartir un post o tema en los shouts): el usuario agrega su texto y publica. */
+  readonly enlaceInicial = input<string>('');
   readonly publicado = output<void>();
 
   readonly currentUser = inject(IHttpSecurityService).getCurrentUser();
@@ -97,6 +99,10 @@ export class ShoutComposerComponent {
 
   constructor() {
     effect(() => this.formGroup.patchValue({ perfilId: this.perfilId() }));
+    effect(() => {
+      const enlace = this.enlaceInicial();
+      if (enlace) this.formGroup.patchValue({ url: enlace });
+    });
 
     this.buscarTag
       .pipe(

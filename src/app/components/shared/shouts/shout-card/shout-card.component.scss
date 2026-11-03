@@ -36,6 +36,9 @@
 
 .sc-action--eliminar:hover:not(:disabled) { color: light-dark(#c62828, #e16b6b); }
 
+// Menú "Compartir": los botones de redes en fila
+.sc-compartir { padding: 6px 12px; }
+
 // "No me interesa": queda este aviso en lugar del shout hasta recargar
 .sc-oculto {
   display: flex;
