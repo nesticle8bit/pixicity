@@ -24,7 +24,7 @@ export class AuthLateralComponent {
   readonly stats = signal<EstadisticasViewModel | null>(null);
 
   readonly beneficios = [
-    { icono: 'ti-pencil', titulo: 'Publica', texto: 'Posts, shouts, fotos y temas en comunidades.' },
+    { icono: 'ti-pencil', titulo: 'Publica', texto: 'Posts, shouts y temas en comunidades.' },
     { icono: 'ti-message-circle', titulo: 'Participa', texto: 'Comenta, vota y da me gusta a lo mejor del sitio.' },
     { icono: 'ti-users', titulo: 'Conecta', texto: 'Sigue a otros usuarios y súmate a comunidades.' },
     { icono: 'ti-hash', titulo: 'Descubre', texto: 'Tendencias y #hashtags en tu muro personal.' },

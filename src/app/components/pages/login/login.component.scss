@@ -1,0 +1,147 @@
+// El formulario base (.login_box, .submit-btn) vive en styles/_login.scss; aquí, el panel y el paso de dos factores.
+
+.login-panel {
+  padding: 1.5rem;
+}
+
+// Segundo paso: código de la app de autenticación.
+.login-2fa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 360px;
+  font-weight: 400;
+  text-align: center;
+
+  .alert {
+    width: 100%;
+  }
+
+  .dot--ccc {
+    width: 100%;
+  }
+}
+
+.login-2fa__icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  background: light-dark(#e8f3f9, #1c3a4b);
+  color: light-dark(#006595, #8ed2f2);
+  font-size: 28px;
+}
+
+.login-2fa__titulo {
+  margin: 0 0 6px;
+  color: light-dark(#333, #cfcfcf);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.login-2fa__texto {
+  margin: 0 0 16px;
+  padding: 0;
+  color: light-dark(#555, #b5b5b5);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.login-2fa__codigo.form-control {
+  width: 100%;
+  max-width: 260px;
+  height: 54px;
+  // El espaciado entre dígitos también se agrega después del último: text-indent lo compensa para que quede centrado.
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  font-size: 26px;
+  font-variant-numeric: tabular-nums;
+
+  &::placeholder {
+    color: light-dark(#cfcfcf, #4a4f55);
+  }
+}
+
+.login-2fa__ayuda {
+  margin: 10px 0 16px;
+  padding: 0;
+  color: light-dark(#777, #9a9a9a);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.login-2fa__volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: light-dark(#006595, #8ed2f2);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: light-dark(rgba(0, 101, 149, .08), rgba(142, 210, 242, .1));
+  }
+}
+
+// Tablet: las columnas se apilan (al costado, la lateral quedaba de 200 px y partía cada palabra).
+@media (min-width: 576px) and (max-width: 991.98px) {
+  .login_box {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .login-lateral {
+    max-width: 560px;
+    margin: 24px auto 0;
+  }
+}
+
+// Celular: menos marco y campos a todo el ancho.
+@media (max-width: 575.98px) {
+  .bg-login {
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  // Con menos relleno en .bg-login, los márgenes negativos del .row asomaban 1 px fuera de la pantalla.
+  .login-panel {
+    margin-right: 0;
+    margin-left: 0;
+    padding: 20px 14px;
+  }
+
+  .main-login--head h1 {
+    font-size: 24px;
+  }
+
+  .login_box {
+    width: 100%;
+    max-width: 340px;
+  }
+
+  // 16 px evita que iOS haga zoom al tocar el campo.
+  .login_box .form-control:not(.login-2fa__codigo) {
+    height: 44px;
+    font-size: 16px;
+  }
+
+  .login-lateral {
+    margin-top: 24px;
+  }
+
+  .login-2fa__icono {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+}

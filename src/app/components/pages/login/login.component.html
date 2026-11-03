@@ -1,6 +1,6 @@
 <div class="container container--home bg-login mt-3">
-  <div class="row p-4 bg-white">
-    <div class="col-12 text-center main-login--head" [ngClass]="{'col-sm-12': hide()?.sidebar, 'col-sm-8': !hide()?.sidebar}">
+  <div class="row login-panel bg-white">
+    <div class="col-12 text-center main-login--head" [ngClass]="{'col-lg-12': hide()?.sidebar, 'col-lg-8': !hide()?.sidebar}">
       @if (!hide()?.sidebar) {
         <section>
           <h1>Bienvenido a Taringas!</h1>
@@ -13,24 +13,25 @@
       </div>
 
       @if (desafio2FA) {
-      <form (ngSubmit)="enviarCodigo2FA()" class="login_box mx-auto">
+      <form (ngSubmit)="enviarCodigo2FA()" class="login_box login-2fa mx-auto">
+        <span class="login-2fa__icono" aria-hidden="true"><i class="ti ti-shield-lock"></i></span>
+        <h2 class="login-2fa__titulo">Verificación en dos pasos</h2>
+        <p class="login-2fa__texto">Escribe el código de 6 dígitos que muestra tu app de autenticación.</p>
         @if (error) {
           <div class="alert alert-danger p-3 mb-3" role="alert"><span class="font-w-700">{{error}}</span></div>
         }
-        <p>Tu cuenta tiene verificación en dos pasos. Escribe el código de 6 dígitos de tu app de autenticación,
-          o uno de tus códigos de recuperación.</p>
-        <div class="mb-3">
-          <label for="codigo-2fa">Código de verificación</label>
-          <input id="codigo-2fa" type="text" name="codigo2FA" [(ngModel)]="codigo2FA" class="form-control mx-auto"
-            autocomplete="one-time-code" inputmode="text" maxlength="11" />
-        </div>
+        <label for="codigo-2fa" class="visually-hidden">Código de verificación</label>
+        <input id="codigo-2fa" type="text" name="codigo2FA" [(ngModel)]="codigo2FA"
+          class="form-control login-2fa__codigo" autocomplete="one-time-code" inputmode="text" autocapitalize="off"
+          spellcheck="false" maxlength="11" placeholder="000000" />
+        <p class="login-2fa__ayuda">¿No tienes el teléfono a mano? Escribe uno de tus códigos de recuperación.</p>
         <div class="dot--ccc">
           <input type="submit" class="submit-btn" [value]="verificando2FA ? 'Verificando…' : 'Verificar'"
             [disabled]="!codigo2FA.trim() || verificando2FA">
         </div>
-        <p class="text-center mt-2 mb-0">
-          <button type="button" class="btn btn-link p-0" (click)="cancelar2FA()">Volver</button>
-        </p>
+        <button type="button" class="login-2fa__volver" (click)="cancelar2FA()">
+          <i class="ti ti-arrow-left" aria-hidden="true"></i> Volver
+        </button>
       </form>
       } @else {
       <form [formGroup]="loginForm" (ngSubmit)="login()" class="login_box mx-auto">
@@ -77,12 +78,14 @@
 
         <div class="mb-3">
           <label for="nickname">Nombre de Usuario</label>
-          <input id="nickname" type="text" formControlName="userName" class="form-control mx-auto" />
+          <input id="nickname" type="text" formControlName="userName" class="form-control mx-auto" autocomplete="username"
+            autocapitalize="off" spellcheck="false" />
         </div>
 
         <div class="mb-3">
           <label for="password">Contraseña</label>
-          <input id="password" type="password" formControlName="password" class="form-control mx-auto" />
+          <input id="password" type="password" formControlName="password" class="form-control mx-auto"
+            autocomplete="current-password" />
         </div>
 
         @if (captchaSiteKey()) {
@@ -102,7 +105,7 @@
     </div>
 
     @if (!hide()?.sidebar) {
-      <div class="col-12 col-sm-4">
+      <div class="col-12 col-lg-4 login-lateral">
         <app-auth-lateral modo="login" />
       </div>
     }
