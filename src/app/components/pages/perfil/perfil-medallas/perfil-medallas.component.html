@@ -1,5 +1,5 @@
 @if (medallas().length) {
-<section class="pf-card" aria-labelledby="perfil-medallas-titulo">
+<section aria-labelledby="perfil-medallas-titulo">
   <!-- Igual que Seguidores: título a la izquierda sobre la línea punteada y el total a la derecha. -->
   <h2 class="main-title medallas__titulo" id="perfil-medallas-titulo">
     <span>Medallas</span>
@@ -8,13 +8,12 @@
 
   <ul class="medallas">
     @for (m of medallas(); track m.medallaId; let i = $index) {
-    @if (todas() || i < visibles) {
-    <li [class]="'medalla medalla--' + m.nivel.toLowerCase()">
+    @if (todas() || i < visibles) { <li [class]="'medalla medalla--' + m.nivel.toLowerCase()">
       <img [src]="src(m.imagen)" [alt]="m.titulo" width="34" height="34" loading="lazy" decoding="async"
         [matTooltip]="detalle(m) + ' · ' + (m.fecha | date: 'dd/MM/yyyy')" tabindex="0">
-    </li>
-    }
-    }
+      </li>
+      }
+      }
   </ul>
 
   @if (!todas() && medallas().length > visibles) {
