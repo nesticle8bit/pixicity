@@ -1,3 +1,25 @@
+@use '../../../profile/perfil' as p;
+
+// Cada caja del lateral define su tarjeta (ver perfil-user-followers).
+.pf-card {
+  @include p.tarjeta;
+  padding: 14px;
+}
+
+.medallas__titulo {
+  margin-bottom: 12px;
+
+  span {
+    background: p.$superficie;
+  }
+}
+
+.medallas__total {
+  float: right !important;
+  padding: 0 0 0 10px !important;
+  color: p.$marca !important;
+}
+
 .medallas {
   display: flex;
   flex-wrap: wrap;

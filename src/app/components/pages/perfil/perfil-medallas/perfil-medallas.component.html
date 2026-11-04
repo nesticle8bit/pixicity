@@ -1,7 +1,9 @@
 @if (medallas().length) {
 <section class="pf-card" aria-labelledby="perfil-medallas-titulo">
-  <h2 class="pf-card__titulo" id="perfil-medallas-titulo">
-    Medallas <small>{{ medallas().length }}</small>
+  <!-- Igual que Seguidores: título a la izquierda sobre la línea punteada y el total a la derecha. -->
+  <h2 class="main-title medallas__titulo" id="perfil-medallas-titulo">
+    <span>Medallas</span>
+    <span class="medallas__total">{{ medallas().length }}</span>
   </h2>
 
   <ul class="medallas">
