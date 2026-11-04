@@ -42,7 +42,7 @@ describe('PerfilComponent', () => {
         { provide: NotificationService, useValue: jasmine.createSpyObj('NotificationService', ['success']) },
         { provide: DisplayComponentService, useValue: { setDisplay: (setDisplay = jasmine.createSpy('setDisplay')) } },
         { provide: SEOService, useValue: { setSEO } },
-        { provide: IHttpUsuarioPerfilService, useValue: { changeBackgroundProfile: (cambiarFondo = jasmine.createSpy('changeBackgroundProfile').and.returnValue(of(true))) } },
+        { provide: IHttpUsuarioPerfilService, useValue: { changeBackgroundProfile: (cambiarFondo = jasmine.createSpy('changeBackgroundProfile').and.returnValue(of(true))), teSigue: () => of(false) } },
         { provide: MatDialog, useValue: jasmine.createSpyObj('MatDialog', ['open']) },
       ],
     });
