@@ -243,6 +243,11 @@ export class ComunidadTemaViewComponent implements OnInit {
     return (miId !== null && this.tema?.comunidad?.usuarioId === miId) || !!this.tema?.puedoModerar;
   }
 
+  /** Poner o quitar sticky: mods/admins del sitio y los admins de la propia comunidad. */
+  get puedeFijarTema(): boolean {
+    return this.esAdmin || this.esDuenoComunidad;
+  }
+
   // - Tema
 
   async eliminar(): Promise<void> {

@@ -157,15 +157,18 @@
           </div>
 
           <!-- Acciones del autor / staff -->
-          @if (puedeGestionar) {
+          @if (puedeGestionar || esDuenoComunidad) {
           <div class="detail-owner-actions tema-owner-actions">
+            @if (puedeGestionar) {
             <a [routerLink]="['/comunidades', tema.comunidad?.nombreCorto, 'tema', tema.id, 'editar']" class="boton azul">
               <i class="ti ti-pencil" aria-hidden="true"></i> Editar
             </a>
+            }
             <button type="button" class="boton rojo" (click)="eliminar()">
               <i class="ti ti-trash" aria-hidden="true"></i> Borrar
             </button>
-            @if (esAdmin) {
+            <!-- Fijar: staff del sitio y el dueño/staff de la comunidad (el API lo vuelve a verificar). -->
+            @if (puedeFijarTema) {
             <button type="button" class="boton" (click)="cambiarSticky()">
               <i class="ti ti-pin" aria-hidden="true"></i> {{ tema.sticky ? 'Quitar' : 'Poner' }} Sticky
             </button>
