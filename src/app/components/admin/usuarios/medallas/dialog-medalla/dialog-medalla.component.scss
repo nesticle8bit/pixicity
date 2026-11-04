@@ -1,0 +1,41 @@
+.dm-imagenes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-height: 190px;
+  overflow-y: auto;
+  padding: 6px;
+  border: 1px solid light-dark(#dee2e6, #414950);
+  border-radius: 6px;
+}
+
+.dm-imagen {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+
+  &:hover {
+    background: light-dark(#f1f4f6, #26333c);
+  }
+
+  &.is-elegida {
+    border-color: light-dark(#1976d2, #559ee7);
+    background: light-dark(#e3ecf9, #1d314d);
+  }
+}
+
+.dm-url {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  img {
+    flex-shrink: 0;
+  }
+}

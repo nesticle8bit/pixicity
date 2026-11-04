@@ -1,3 +1,4 @@
+import { srcMedalla } from 'src/app/models/seguridad/medalla.model';
 import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
 import { PaginationService } from 'src/app/services/shared/pagination.service';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
@@ -48,6 +49,8 @@ type Periodo = NonNullable<FiltroNotificaciones['periodo']>;
     ],
 })
 export class MonitorComponent implements OnInit {
+  /** Imagen propia del aviso (la medalla ganada), lista para el src. */
+  readonly srcImagen = srcMedalla;
   private displayService = inject(DisplayComponentService);
   paginationService = inject(PaginationService);
   private logsService = inject(IHttpLogsService);
@@ -97,6 +100,7 @@ export class MonitorComponent implements OnInit {
       tipos: [
         { tipo: 'Shout', label: 'Shouts', icono: 'ma_status' },
         { tipo: 'Rango', label: 'Cambios de rango', icono: 'ma_points' },
+        { tipo: 'Medalla', label: 'Medallas', icono: 'ma_monitor_rango' },
       ],
     },
   ];

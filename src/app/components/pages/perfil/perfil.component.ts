@@ -39,6 +39,7 @@ import { ProfileFollowsComponent } from '../../profile/profile-follows/profile-f
 import { ProfileInformationComponent } from '../../profile/profile-information/profile-information.component';
 import { PerfilSocialMediaButtonsComponent } from './perfil-social-media-buttons/perfil-social-media-buttons.component';
 import { PerfilUserFollowersComponent } from './perfil-user-followers/perfil-user-followers.component';
+import { PerfilMedallasComponent } from './perfil-medallas/perfil-medallas.component';
 import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { PORTADA_VALIDA, urlCss } from 'src/app/shared/helpers/url-css';
 
@@ -93,6 +94,7 @@ const PESTANA_INICIAL: PestanaPerfil = 'shouts';
     ProfileInformationComponent,
     PerfilSocialMediaButtonsComponent,
     PerfilUserFollowersComponent,
+    PerfilMedallasComponent,
     AnuncioComponent,
     DatePipe,
     DecimalPipe,

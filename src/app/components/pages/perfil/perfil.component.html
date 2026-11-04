@@ -211,6 +211,7 @@
 
     <aside class="col-12 col-lg-3 pf-lateral">
       <app-perfil-social-media-buttons [usuarioId]="currentUser.id"></app-perfil-social-media-buttons>
+      <app-perfil-medallas [userName]="currentUser.userName" />
       <app-perfil-user-followers [usuarioId]="currentUser.id"
         (verTodos)="seleccionar('followers')"></app-perfil-user-followers>
       <app-anuncio class="pf-lateral__ads" ubicacion="perfil-lateral" encabezado />

@@ -80,7 +80,8 @@ self.addEventListener('push', (event) => {
       const reciente = previas.some((n) => Date.now() - n.timestamp < 60_000);
       return self.registration.showNotification(aviso.titulo || 'Taringas!', {
         body: aviso.cuerpo || 'Tienes novedades',
-        icon: '/assets/favicon/pwa-192.png',
+        // Aviso con imagen propia (p. ej. la medalla ganada); si no, el logo del sitio.
+        icon: aviso.icono || '/assets/favicon/pwa-192.png',
         // Android: la silueta blanca de la barra de estado.
         badge: '/assets/favicon/badge-96.png',
         // Mismo tag = reemplaza el anterior: toda la campana comparte uno ("campana") y los mensajes, uno por conversación.

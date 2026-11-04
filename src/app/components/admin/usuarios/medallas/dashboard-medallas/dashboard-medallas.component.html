@@ -1,0 +1,81 @@
+<h1 class="dashboard--title">Medallas</h1>
+
+<div class="dmed-barra">
+  <input type="search" class="form-control" placeholder="Buscar por título, identificador o nivel"
+    aria-label="Buscar medallas" [ngModel]="busqueda()" (ngModelChange)="busqueda.set($event)">
+  <button type="button" mat-stroked-button (click)="repartir()" [disabled]="repartiendo()"
+    matTooltip="Las automáticas se reparten solas cada hora; esto adelanta la pasada">
+    <mat-icon>autorenew</mat-icon> {{ repartiendo() ? 'Repartiendo…' : 'Repartir ahora' }}
+  </button>
+  <button type="button" mat-flat-button color="primary" (click)="editar()">
+    <mat-icon>add_circle_outline</mat-icon> Agregar medalla
+  </button>
+</div>
+
+@if (cargando()) {
+<div class="adm-cargando" role="progressbar" aria-label="Cargando"></div>
+} @else if (!filtradas().length) {
+<div class="adm-vacio"><i class="ti ti-database-search" aria-hidden="true"></i>No hay medallas{{ busqueda() ? ' con esa búsqueda' : '' }}.</div>
+} @else {
+<div class="table-responsive">
+  <table class="table table-sm table-striped table-hover align-middle">
+    <thead>
+      <tr>
+        <th>Medalla</th>
+        <th>Nivel</th>
+        <th>Cómo se gana</th>
+        <th class="text-end">Orden</th>
+        <th class="text-end">Usuarios</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (m of filtradas(); track m.id) {
+      <tr [class.dmed-inactiva]="!m.activa">
+        <td>
+          <div class="dmed-medalla">
+            <img [src]="src(m.imagen)" alt="" width="34" height="34" loading="lazy">
+            <div>
+              <strong>{{ m.titulo }}</strong>
+              <small>{{ m.slug }}</small>
+            </div>
+          </div>
+        </td>
+        <td><span [class]="'dmed-nivel dmed-nivel--' + m.nivel.toLowerCase()">{{ m.nivel }}</span></td>
+        <td>
+          @if (m.regla) {
+          <span class="dmed-regla"><i class="ti ti-bolt" aria-hidden="true"></i> {{ regla(m) }}</span>
+          } @else {
+          <span class="dmed-manual">Manual</span>
+          }
+        </td>
+        <td class="text-end">{{ m.orden }}</td>
+        <td class="text-end">
+          <button type="button" class="dmed-usuarios" (click)="usuarios(m)" matTooltip="Ver y otorgar">
+            {{ m.otorgadas }}
+          </button>
+        </td>
+        <td>
+          <button type="button" class="dmed-estado" [class.is-activa]="m.activa" (click)="alternarActiva(m)"
+            [matTooltip]="m.activa ? 'Desactivar' : 'Activar'">
+            {{ m.activa ? 'Activa' : 'Inactiva' }}
+          </button>
+        </td>
+        <td class="text-end text-nowrap">
+          <button type="button" mat-icon-button (click)="usuarios(m)" matTooltip="Otorgar / quitar" aria-label="Otorgar o quitar">
+            <mat-icon>military_tech</mat-icon>
+          </button>
+          <button type="button" mat-icon-button (click)="editar(m)" matTooltip="Editar" aria-label="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button type="button" mat-icon-button color="warn" (click)="eliminar(m)" matTooltip="Borrar" aria-label="Borrar">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+}

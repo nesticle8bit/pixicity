@@ -1,0 +1,87 @@
+.dmed-barra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 12px;
+
+  input {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+
+.dmed-medalla {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  small {
+    color: light-dark(#6b7782, #a6a6a6);
+    overflow-wrap: anywhere;
+  }
+}
+
+.dmed-inactiva img {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+
+.dmed-nivel {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  &--bronce { background: light-dark(#f3e3d3, #4a3524); color: light-dark(#7a4a1e, #e8b88a); }
+  &--plata { background: light-dark(#e6e9ec, #39414a); color: light-dark(#4a5560, #cfd6dd); }
+  &--oro { background: light-dark(#fbefc4, #4a3f17); color: light-dark(#7a5d00, #f1d26b); }
+  &--platino { background: light-dark(#dcefee, #1e4240); color: light-dark(#1d6461, #8fdcd7); }
+  &--especial { background: light-dark(#ece3fa, #3a2d55); color: light-dark(#5b33a3, #c9b2f2); }
+}
+
+.dmed-usuarios,
+.dmed-estado {
+  padding: 2px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: light-dark(#eef2f5, #2a3036);
+  }
+}
+
+.dmed-usuarios {
+  color: light-dark(#006595, #8ed2f2);
+}
+
+.dmed-estado {
+  color: light-dark(#6b7782, #a6a6a6);
+
+  &.is-activa {
+    color: light-dark(#1e7d32, #7ed58b);
+  }
+}
+
+.dmed-regla {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.82rem;
+  color: light-dark(#1e5f8a, #8ed2f2);
+}
+
+.dmed-manual {
+  font-size: 0.82rem;
+  color: light-dark(#6b7782, #a6a6a6);
+}

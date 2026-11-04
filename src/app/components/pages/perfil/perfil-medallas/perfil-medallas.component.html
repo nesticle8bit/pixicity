@@ -1,0 +1,22 @@
+@if (medallas().length) {
+<section class="pf-card" aria-labelledby="perfil-medallas-titulo">
+  <h2 class="pf-card__titulo" id="perfil-medallas-titulo">
+    Medallas <small>{{ medallas().length }}</small>
+  </h2>
+
+  <ul class="medallas">
+    @for (m of medallas(); track m.medallaId; let i = $index) {
+    @if (todas() || i < visibles) {
+    <li [class]="'medalla medalla--' + m.nivel.toLowerCase()">
+      <img [src]="src(m.imagen)" [alt]="m.titulo" width="34" height="34" loading="lazy" decoding="async"
+        [matTooltip]="detalle(m) + ' · ' + (m.fecha | date: 'dd/MM/yyyy')" tabindex="0">
+    </li>
+    }
+    }
+  </ul>
+
+  @if (!todas() && medallas().length > visibles) {
+  <button type="button" class="medallas__todas" (click)="todas.set(true)">Ver todas</button>
+  }
+</section>
+}

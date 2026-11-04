@@ -1,0 +1,45 @@
+<h2 mat-dialog-title class="dmu-titulo">
+  <img [src]="src(medalla.imagen)" alt="" width="34" height="34"> {{ medalla.titulo }}
+</h2>
+
+<mat-dialog-content>
+  @if (medalla.activa) {
+  <form class="dmu-otorgar" (ngSubmit)="otorgar()">
+    <input type="text" class="form-control" name="userName" [(ngModel)]="userName" placeholder="@usuario"
+      aria-label="Usuario al que se le otorga" autocomplete="off" required>
+    <input type="text" class="form-control" name="motivo" [(ngModel)]="motivo" maxlength="300"
+      placeholder="Motivo (opcional, se ve en el perfil)" aria-label="Motivo">
+    <button mat-flat-button color="primary" type="submit" [disabled]="!userName.trim() || enviando()">
+      {{ enviando() ? 'Otorgando…' : 'Otorgar' }}
+    </button>
+  </form>
+  } @else {
+  <p class="text-muted">La medalla está desactivada: actívala para otorgarla.</p>
+  }
+
+  @if (cargando()) {
+  <div class="adm-cargando" role="progressbar" aria-label="Cargando"></div>
+  } @else if (!otorgadas().length) {
+  <p class="dmu-vacio">Nadie la tiene todavía.</p>
+  } @else {
+  <ul class="dmu-lista">
+    @for (o of otorgadas(); track o.usuarioId) {
+    <li>
+      <app-user-avatar [avatar]="o.avatar" [userName]="o.userName" [width]="32" [height]="32" />
+      <div class="dmu-lista__datos">
+        <a [routerLink]="['/perfil', o.userName]" mat-dialog-close>{{ '@' + o.userName }}</a>
+        <small>
+          {{ o.fecha | date: 'dd/MM/yyyy' }}@if (o.otorgadaPor) { · por {{ '@' + o.otorgadaPor }} }
+          @if (o.motivo) { · {{ o.motivo }} }
+        </small>
+      </div>
+      <button mat-button type="button" color="warn" (click)="quitar(o)" [attr.aria-label]="'Quitar a @' + o.userName">Quitar</button>
+    </li>
+    }
+  </ul>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

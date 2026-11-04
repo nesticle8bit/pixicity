@@ -4,6 +4,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { IHttpLogsService } from 'src/app/services/interfaces/httpLogs.interface';
 import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { MonitorViewModel } from 'src/app/models/logs/logs-vm.model';
+import { srcMedalla } from 'src/app/models/seguridad/medalla.model';
 import { MensajeViewModel } from 'src/app/models/mensajes/mensaje-vm.model';
 import { FavoritosViewModel } from 'src/app/models/posts/post-vm.model';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -48,6 +49,8 @@ import { SugerenciaPushComponent } from '../../shared/sugerencia-push/sugerencia
     ],
 })
 export class SectionUserInfoLoginComponent implements OnInit {
+  /** Imagen propia del aviso (la medalla ganada), lista para el src. */
+  readonly srcImagen = srcMedalla;
   private securityService = inject(IHttpSecurityService);
   private favoritosService = inject(IHttpFavoritosService);
   private mensajesService = inject(IHttpMensajesService);

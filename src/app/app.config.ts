@@ -55,6 +55,8 @@ import { IHttpWebService } from './services/interfaces/httpWeb.interface';
 import { IHttpAnunciosService } from './services/interfaces/httpAnuncios.interface';
 import { IHttpUsuarioPerfilService } from './services/interfaces/httpUsuarioPerfil.interface';
 import { IHttpRangosService } from './services/interfaces/httpRangos.interface';
+import { IHttpMedallasService } from './services/interfaces/httpMedallas.interface';
+import { HttpMedallasService } from './services/implementations/httpMedallas.service';
 import { IHttpComentariosPostService } from './services/interfaces/httpComentariosPost.interface';
 import { DisplayComponentService } from './services/shared/displayComponents.service';
 import { SEOService } from './services/shared/seo.service';
@@ -125,6 +127,7 @@ export const appConfig: ApplicationConfig = {
     { provide: IHttpSilenciosService, useClass: HttpSilenciosService },
     { provide: IHttpUsuarioPerfilService, useClass: HttpUsuarioPerfilService },
     { provide: IHttpRangosService, useClass: HttpRangosService },
+    { provide: IHttpMedallasService, useClass: HttpMedallasService },
     { provide: IHttpComentariosPostService, useClass: HttpComentariosPostService },
     { provide: ErrorHandler, useClass: ClientErrorHandler },
     { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },

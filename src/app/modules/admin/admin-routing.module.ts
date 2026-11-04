@@ -17,6 +17,7 @@ import { DashboardPaisesComponent } from '../../components/admin/control-de-cont
 import { DashboardSesionesComponent } from '../../components/admin/usuarios/sesiones/dashboard-sesiones/dashboard-sesiones.component';
 import { DashboardUsuariosComponent } from '../../components/admin/usuarios/usuarios/dashboard-usuarios/dashboard-usuarios.component';
 import { DashboardRangosComponent } from '../../components/admin/usuarios/rangos/dashboard-rangos/dashboard-rangos.component';
+import { DashboardMedallasComponent } from '../../components/admin/usuarios/medallas/dashboard-medallas/dashboard-medallas.component';
 import { DashboardShoutsComponent } from '../../components/admin/control-de-contenido/shouts/dashboard-shouts/dashboard-shouts.component';
 import { DashboardEstadisticasComponent } from '../../components/admin/control-de-comunidad/estadisticas/dashboard-estadisticas/dashboard-estadisticas.component';
 import { DashboardNoticiasComponent } from '../../components/admin/control-de-contenido/noticias/dashboard-noticias/dashboard-noticias.component';
@@ -54,6 +55,7 @@ const routes: Routes = [
       { path: 'shouts-denuncias', redirectTo: 'moderacion' },
       { path: 'usuarios', component: DashboardUsuariosComponent, title: 'Usuarios · Administración' },
       { path: 'rango-usuarios', component: DashboardRangosComponent, title: 'Rangos · Administración' },
+      { path: 'medallas', component: DashboardMedallasComponent, title: 'Medallas · Administración' },
       { path: 'shouts', component: DashboardShoutsComponent, title: 'Shouts · Administración' },
       { path: 'estadisticas', component: DashboardEstadisticasComponent, title: 'Estadísticas · Administración' },
       { path: 'noticias', component: DashboardNoticiasComponent, title: 'Noticias · Administración' },

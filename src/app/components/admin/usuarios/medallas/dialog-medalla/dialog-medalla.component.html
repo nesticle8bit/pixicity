@@ -1,0 +1,108 @@
+<h2 mat-dialog-title>{{ data ? 'Editar medalla' : 'Agregar medalla' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <mat-dialog-content>
+    <div class="mb-3">
+      <label class="form-label" for="medalla-titulo">Título</label>
+      <input id="medalla-titulo" type="text" class="form-control" formControlName="titulo" maxlength="80"
+        placeholder="Ej.: Más de 500 seguidores">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="medalla-slug">Identificador</label>
+      <input id="medalla-slug" type="text" class="form-control" formControlName="slug" maxlength="80"
+        placeholder="Se arma solo desde el título">
+      <small class="text-muted">Minúsculas, números y guiones. Vacío = se genera del título.</small>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="medalla-descripcion">Descripción</label>
+      <textarea id="medalla-descripcion" class="form-control" rows="2" formControlName="descripcion" maxlength="300"
+        placeholder="Se ve en el tooltip del perfil (opcional)"></textarea>
+    </div>
+
+    <div class="row">
+      <div class="col-6 mb-3">
+        <label class="form-label" for="medalla-nivel">Nivel</label>
+        <select id="medalla-nivel" class="form-select" formControlName="nivel">
+          @for (n of niveles; track n) {
+          <option [value]="n">{{ n }}</option>
+          }
+        </select>
+      </div>
+      <div class="col-6 mb-3">
+        <label class="form-label" for="medalla-orden">Orden</label>
+        <input id="medalla-orden" type="number" class="form-control" formControlName="orden">
+      </div>
+    </div>
+
+    <fieldset class="mb-3">
+      <legend class="form-label">Imagen</legend>
+      <div class="dm-imagenes" role="radiogroup" aria-label="Medallas de serie">
+        @for (img of deSerie; track img) {
+        <button type="button" class="dm-imagen" role="radio" [class.is-elegida]="form.value.imagen === img"
+          [attr.aria-checked]="form.value.imagen === img" (click)="elegirImagen(img)" [matTooltip]="img.slice(16, -4)">
+          <img [src]="src(img)" alt="" width="34" height="34" loading="lazy">
+        </button>
+        }
+      </div>
+      <label class="form-label mt-2" for="medalla-imagen">O una URL https propia</label>
+      <div class="dm-url">
+        <img [src]="src(form.value.imagen || deSerie[0])" alt="Vista previa" width="34" height="34">
+        <input id="medalla-imagen" type="text" class="form-control" formControlName="imagen" maxlength="500">
+      </div>
+    </fieldset>
+
+    <fieldset class="mb-3">
+      <legend class="form-label">Cómo se gana</legend>
+      <select id="medalla-regla" class="form-select" formControlName="regla" aria-label="Regla automática">
+        <option value="">Manual: la otorga un admin</option>
+        @for (r of reglas; track r.codigo) {
+        <option [value]="r.codigo">{{ r.esRanking ? 'Ranking: ' : 'Automática: ' }}{{ r.nombre }}</option>
+        }
+      </select>
+
+      @if (reglaElegida; as r) {
+      @if (r.esRanking) {
+      <div class="row mt-2">
+        <div class="col-6">
+          <label class="form-label" for="medalla-periodo">Período</label>
+          <select id="medalla-periodo" class="form-select" formControlName="periodo">
+            @for (p of periodos; track p[0]) {
+            <option [value]="p[0]">{{ p[1] }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label" for="medalla-puesto">Puesto</label>
+          <select id="medalla-puesto" class="form-select" formControlName="puesto">
+            <option [ngValue]="1">1º</option>
+            <option [ngValue]="2">2º</option>
+            <option [ngValue]="3">3º</option>
+          </select>
+        </div>
+      </div>
+      <small class="text-muted">Se reparte al cerrar cada período (una vez por período).</small>
+      } @else if (r.unidad) {
+      <label class="form-label mt-2" for="medalla-umbral">Cantidad de {{ r.unidad }}</label>
+      <input id="medalla-umbral" type="number" min="1" class="form-control" formControlName="umbral">
+      <small class="text-muted">Se revisa cada hora: quien la alcanza, la gana.</small>
+      } @else {
+      <small class="text-muted d-block mt-1">Se revisa cada hora: quien cumple la condición, la gana.</small>
+      }
+      }
+    </fieldset>
+
+    <div class="form-check">
+      <input id="medalla-activa" type="checkbox" class="form-check-input" formControlName="activa">
+      <label class="form-check-label" for="medalla-activa">Activa (se puede otorgar y se ve en los perfiles)</label>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>Cancelar</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || guardando">
+      {{ guardando ? 'Guardando…' : 'Guardar' }}
+    </button>
+  </mat-dialog-actions>
+</form>

@@ -16,6 +16,8 @@ export interface MonitorViewModel {
   shoutAutor?: string | null;
   /** Ruta del aviso cuando no hay post ni shout (temas y comunidades), con #fragmento opcional. */
   enlace?: string | null;
+  /** Imagen propia del aviso (la medalla ganada): se ve en lugar del avatar. */
+  imagen?: string | null;
   tipoString: string;
   // null en avisos del sistema (p. ej. moderación).
   usuarioQueHaceAccion: UsuarioViewModel | null;

@@ -56,15 +56,23 @@
       <ul class="mon-list" [class.mon-list--cargando]="cargando">
         @for (notificacion of notificaciones; track notificacion.id) {
         <li class="mon-item" [class.mon-item--nueva]="!notificacion.leido">
+          @if (notificacion.imagen) {
+          <!-- Aviso con imagen propia (la medalla ganada) en lugar del avatar. -->
+          <img class="mon-item__avatar mon-item__imagen" [src]="srcImagen(notificacion.imagen)" alt="" width="40" height="40"
+            loading="lazy">
+          } @else {
           <app-user-avatar class="mon-item__avatar" [avatar]="notificacion.usuarioQueHaceAccion?.avatar"
             [userName]="notificacion.usuarioQueHaceAccion?.userName" [width]="40" [height]="40">
           </app-user-avatar>
+          }
 
           <div class="mon-item__body">
-            <a class="mon-item__user" [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion?.userName]"
-              [appUserPopover]="notificacion.usuarioQueHaceAccion?.userName">
-              {{'@'}}{{notificacion.usuarioQueHaceAccion?.userName}}
+            @if (notificacion.usuarioQueHaceAccion) {
+            <a class="mon-item__user" [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion.userName]"
+              [appUserPopover]="notificacion.usuarioQueHaceAccion.userName">
+              {{'@'}}{{notificacion.usuarioQueHaceAccion.userName}}
             </a>
+            }
             <div class="mon-item__msg">
               <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
               <span [innerHTML]="notificacion.mensaje"></span>

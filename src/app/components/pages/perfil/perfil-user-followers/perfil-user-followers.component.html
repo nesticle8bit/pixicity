@@ -1,25 +1,27 @@
 @if (cargado) {
-  <section class="pf-card" aria-labelledby="perfil-seguidores-titulo">
-    <h2 class="pf-card__titulo" id="perfil-seguidores-titulo">
-      Seguidores <small>{{ totalCount | number }}</small>
-    </h2>
+<section class="pf-card" aria-labelledby="perfil-seguidores-titulo">
+  <!-- Como app-home-stats: título a la izquierda sobre la línea punteada y el total a la derecha. -->
+  <h2 class="main-title seguidores__titulo" id="perfil-seguidores-titulo">
+    <span>Seguidores</span>
+    <span class="seguidores__total">{{ totalCount | number }}</span>
+  </h2>
 
-    @if (followers.length === 0) {
-      <p class="seguidores__vacio">Todavía nadie lo sigue.</p>
-    } @else {
-      <ul class="seguidores">
-        @for (item of followers; track item.userName) {
-          <li>
-            <a [routerLink]="['/perfil', item.userName]" [appUserPopover]="item.userName" [attr.aria-label]="item.userName">
-              <app-user-avatar [avatar]="item.avatar" [userName]="item.userName" [height]="44" [width]="44"></app-user-avatar>
-            </a>
-          </li>
-        }
-      </ul>
-
-      @if (totalCount > followers.length) {
-        <button type="button" class="seguidores__todos" (click)="verTodos.emit()">Ver todos</button>
-      }
+  @if (followers.length === 0) {
+  <p class="seguidores__vacio">Todavía nadie lo sigue.</p>
+  } @else {
+  <ul class="seguidores">
+    @for (item of followers; track item.userName) {
+    <li>
+      <a [routerLink]="['/perfil', item.userName]" [appUserPopover]="item.userName" [attr.aria-label]="item.userName">
+        <app-user-avatar [avatar]="item.avatar" [userName]="item.userName" [height]="44" [width]="44"></app-user-avatar>
+      </a>
+    </li>
     }
-  </section>
+  </ul>
+
+  @if (totalCount > followers.length) {
+  <button type="button" class="seguidores__todos" (click)="verTodos.emit()">Ver todos</button>
+  }
+  }
+</section>
 }

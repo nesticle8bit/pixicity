@@ -11,6 +11,21 @@
   margin-bottom: 10px;
 }
 
+// .main-title es global (línea punteada de fondo); los textos tapan la línea con el color de la tarjeta.
+.seguidores__titulo {
+  margin-bottom: 12px;
+
+  span {
+    background: p.$superficie;
+  }
+}
+
+.seguidores__total {
+  float: right !important;
+  padding: 0 0 0 10px !important;
+  color: p.$marca !important;
+}
+
 .seguidores {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));

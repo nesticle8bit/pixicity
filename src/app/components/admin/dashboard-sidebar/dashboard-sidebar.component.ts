@@ -94,6 +94,7 @@ export class DashboardSidebarComponent implements OnInit {
       items: [
         { titulo: 'Usuarios', icono: 'group', ruta: '/administracion/usuarios' },
         { titulo: 'Rangos', icono: 'badge', ruta: '/administracion/rango-usuarios' },
+        { titulo: 'Medallas', icono: 'military_tech', ruta: '/administracion/medallas' },
         { titulo: 'Sesiones', icono: 'manage_accounts', ruta: '/administracion/sesiones' },
       ],
     },

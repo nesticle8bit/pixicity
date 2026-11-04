@@ -26,7 +26,9 @@
                     [ngClass]="{'sin-leer': !notificacion.leido}">
                     <div class="d-flex">
                       <div class="flex-shrink-0">
-                        @if (notificacion.usuarioQueHaceAccion) {
+                        @if (notificacion.imagen) {
+                          <img class="aviso-imagen" [src]="srcImagen(notificacion.imagen)" alt="" width="20" height="20" loading="lazy">
+                        } @else if (notificacion.usuarioQueHaceAccion) {
                           <app-user-avatar
                             matTooltip="{{notificacion.usuarioQueHaceAccion.userName}}"
                             [matTooltipPosition]="'before'"
