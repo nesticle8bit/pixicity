@@ -18,6 +18,7 @@ import { ComunidadesUltimosComentariosComponent } from '../../components/comunid
 import { ComunidadesTopComponent } from '../../components/comunidades/widgets/comunidades-top/comunidades-top.component';
 import { ComunidadesTopTemasComponent } from '../../components/comunidades/widgets/comunidades-top-temas/comunidades-top-temas.component';
 import { ComunidadesStatsComponent } from '../../components/comunidades/widgets/comunidades-stats/comunidades-stats.component';
+import { ComunidadesSideInfoComponent } from 'src/app/components/comunidades/widgets/comunidades-side-info/comunidades-side-info.component';
 
 @NgModule({
     imports: [
@@ -39,6 +40,7 @@ import { ComunidadesStatsComponent } from '../../components/comunidades/widgets/
         ComunidadesTopComponent,
         ComunidadesTopTemasComponent,
         ComunidadesStatsComponent,
+        ComunidadesSideInfoComponent
     ],
 })
 export class ComunidadesModule {}

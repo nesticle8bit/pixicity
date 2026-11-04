@@ -7,29 +7,38 @@ import { ComunidadesUltimosComentariosComponent } from '../widgets/comunidades-u
 import { ComunidadesPopularesComponent } from '../widgets/comunidades-populares/comunidades-populares.component';
 import { ComunidadesTopComponent } from '../widgets/comunidades-top/comunidades-top.component';
 import { ComunidadesTopTemasComponent } from '../widgets/comunidades-top-temas/comunidades-top-temas.component';
+import { ComunidadesSideInfoComponent } from '../widgets/comunidades-side-info/comunidades-side-info.component';
 
 @Component({
-    selector: 'app-comunidades-index',
-    templateUrl: './comunidades-index.component.html',
-    styleUrls: ['./comunidades-index.component.scss'],
-    imports: [
-        ComunidadesTemasRecientesComponent,
-        ComunidadesStatsComponent,
-        ComunidadesUltimosComentariosComponent,
-        ComunidadesPopularesComponent,
-        ComunidadesTopComponent,
-        ComunidadesTopTemasComponent,
-    ],
+  selector: 'app-comunidades-index',
+  templateUrl: './comunidades-index.component.html',
+  styleUrls: ['./comunidades-index.component.scss'],
+  imports: [
+    ComunidadesTemasRecientesComponent,
+    ComunidadesStatsComponent,
+    ComunidadesUltimosComentariosComponent,
+    ComunidadesPopularesComponent,
+    ComunidadesTopComponent,
+    ComunidadesTopTemasComponent,
+    ComunidadesSideInfoComponent,
+  ],
 })
 export class ComunidadesIndexComponent {
   private displayService = inject(DisplayComponentService);
   private seoService = inject(SEOService);
 
   constructor() {
-    this.displayService.setDisplay({ mainMenu: true, footer: true, searchFooter: true, submenu: true, background: '' });
+    this.displayService.setDisplay({
+      mainMenu: true,
+      footer: true,
+      searchFooter: true,
+      submenu: true,
+      background: '',
+    });
     this.seoService.setSEO({
       title: 'Comunidades',
-      description: 'Explora las comunidades de Taringa. Únete a temas que te interesan, participa y conecta con otros usuarios.',
+      description:
+        'Explora las comunidades de Taringa. Únete a temas que te interesan, participa y conecta con otros usuarios.',
       type: 'website',
       imageURL: '',
       tags: ['comunidades', 'foros', 'temas', 'taringas'],
