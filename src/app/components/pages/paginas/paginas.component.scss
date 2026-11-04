@@ -89,8 +89,61 @@
       padding-left: 1.5em !important;
     }
 
+    // _base.scss quita las viñetas a todo <li> del sitio: acá se devuelven (y cambian por nivel en las anidadas).
+    ul > li {
+      list-style: disc;
+    }
+
+    ul ul > li {
+      list-style: circle;
+    }
+
+    ul ul ul > li {
+      list-style: square;
+    }
+
+    ol > li {
+      list-style: decimal;
+    }
+
     li {
       margin-bottom: 0.4em !important;
+
+      &::marker {
+        color: light-dark(#006595, #8ed2f2);
+      }
+
+      > ul,
+      > ol {
+        margin: 0.4em 0 0 !important;
+      }
+    }
+
+    // Código en línea (los bloques <pre> conservan su propio formato).
+    :not(pre) > code {
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+      background: light-dark(#eef1f4, #2a3540);
+      color: light-dark(#b3261e, #ffb4a8);
+      font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+      font-size: 0.9em !important;
+      overflow-wrap: anywhere;
+    }
+
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      padding: 0.75em 1em;
+      border-radius: 6px;
+      background: light-dark(#f6f8fa, #202d3a);
+      font-size: 0.9em !important;
+    }
+
+    hr {
+      margin: 2em 0;
+      border: 0;
+      border-top: 1px solid light-dark(#e6eaee, #35424e);
+      opacity: 1;
     }
 
     a {
