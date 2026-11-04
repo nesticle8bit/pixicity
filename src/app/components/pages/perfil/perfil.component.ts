@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import {
   PERFIL_VACIO,
   PerfilUsuarioViewModel,
@@ -184,6 +185,20 @@ export class PerfilComponent implements OnInit {
     );
   }
 
+  /** Ese usuario sigue a quien mira: insignia verde "Te sigue" junto al @usuario. */
+  readonly teSigue = signal(false);
+  private cargaTeSigue?: Subscription;
+
+  private cargarTeSigue(userName: string): void {
+    this.teSigue.set(false);
+    this.cargaTeSigue?.unsubscribe();
+    if (!this.esAjeno || !userName) return;
+    this.cargaTeSigue = this.usuarioPerfilService
+      .teSigue(userName)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({ next: (s) => this.teSigue.set(!!s), error: () => undefined });
+  }
+
   /** Quien mira es el dueño: puede cambiar el avatar y la portada desde acá. */
   get esMio(): boolean {
     return !!this.loggedUser.usuario && !!this.currentUser.userName && this.loggedUser.usuario.userName === this.currentUser.userName;
@@ -326,6 +341,7 @@ export class PerfilComponent implements OnInit {
 
           this.currentUser = value;
           this.cargando = false;
+          this.cargarTeSigue(value.userName);
 
           // Fondo de página del usuario (app.component lo limpia de caracteres peligrosos y lo pinta).
           this.display = {

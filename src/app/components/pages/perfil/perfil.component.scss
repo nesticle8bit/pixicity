@@ -238,6 +238,14 @@
   }
 }
 
+// "Te sigue": la píldora del rango en verde. El texto un poco más oscuro/claro que el borde para que se lea (4.5:1).
+.pf-te-sigue {
+  --rango: #16a34a;
+  color: light-dark(#15803d, #6ee7a0);
+
+  i { font-size: 0.9rem; }
+}
+
 .pf-hero__meta {
   display: flex;
   flex-wrap: wrap;

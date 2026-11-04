@@ -64,6 +64,12 @@ export class HttpUsuarioPerfilService implements IHttpUsuarioPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  teSigue(userName: string): Observable<boolean> {
+    return this.http
+      .get<ApiResponse<boolean>>(`${environment.api}/api/usuarios/por-nombre/${encodeURIComponent(userName)}/te-sigue`)
+      .pipe(map((r) => !!r.data));
+  }
+
   isFollowingTheUser(userName: string): Observable<boolean> {
     return this.http
       .get<ApiResponse<boolean>>(

@@ -60,6 +60,10 @@
             {{ currentUser.rango.nombre }}
           </span>
           }
+          @if (teSigue()) {
+          <!-- Misma píldora que el rango, en verde: que no desentone al lado. -->
+          <span class="pf-rango pf-te-sigue"><i class="ti ti-user-check" aria-hidden="true"></i> Te sigue</span>
+          }
         </div>
 
         <ul class="pf-hero__meta">

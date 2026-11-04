@@ -48,7 +48,7 @@ export const SIN_LOADER: RegExp[] = [
   'afiliados/activos',
   'fotos/top',
   'estadisticas',
-  'usuarios/por-nombre/[^/?]+/(seguimiento|info|estado)',
+  'usuarios/por-nombre/[^/?]+/(seguimiento|te-sigue|info|estado)',
   // Pantallas con su propio indicador (app-cargando): el overlay de pantalla completa quedaba encima del anillo.
   `posts/${ID}`,
   `posts/${ID}/comentarios`,
