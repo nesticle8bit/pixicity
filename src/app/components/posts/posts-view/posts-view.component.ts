@@ -187,7 +187,8 @@ export class PostsViewComponent implements OnInit {
           ? partirContenido(this.post.contenido)
           : null;
         const indice = indiceDeContenido(this.post.contenido);
-        this.indice = indice.length >= 3 ? indice : [];
+        // El autor puede apagarlo en Opciones (Post.SinIndice).
+        this.indice = indice.length >= 3 && !value.post.sinIndice ? indice : [];
         this.minutosLectura = minutosDeLectura(this.post.contenido);
         this.getAutor(value.post.usuario?.userName);
 

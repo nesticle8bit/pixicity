@@ -168,6 +168,13 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
       { icon: 'format_italic', title: 'Cursiva (Ctrl+I)', mark: 'italic', run: () => this.italic() },
       { icon: 'format_underlined', title: 'Subrayado (Ctrl+U)', mark: 'underline', run: () => this.underline() },
       { icon: 'format_strikethrough', title: 'Tachado', mark: 'strike', run: () => this.strikeThrough() },
+      // Color y centrar a la vista: escondidos en "más" la gente no los encontraba ("ojalá se pueda centrar / cambiar de color").
+      { menu: 'color', icon: 'format_color_text', title: 'Color y resaltado' },
+    ] },
+    { items: [
+      { icon: 'format_align_left', title: 'Alinear izquierda', run: () => this.applyAlign('left') },
+      { icon: 'format_align_center', title: 'Centrar', run: () => this.applyAlign('center') },
+      { icon: 'format_align_right', title: 'Alinear derecha', run: () => this.applyAlign('right') },
     ] },
     { items: [
       { icon: 'format_list_bulleted', title: 'Lista de viñetas (- espacio)', run: () => this.bulletList() },
@@ -186,7 +193,6 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
     ] },
     { secondary: true, items: [
       { menu: 'heading', icon: 'title', title: 'Encabezado (# espacio)' },
-      { menu: 'color', icon: 'format_color_text', title: 'Color y resaltado' },
     ] },
     { secondary: true, items: [
       { icon: 'code', title: 'Código inline (`texto`)', mark: 'code', run: () => this.toggleCode() },
@@ -194,9 +200,6 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
       { icon: 'format_quote', title: 'Cita (> espacio)', run: () => this.toggleBlockquote() },
     ] },
     { secondary: true, items: [
-      { icon: 'format_align_left', title: 'Alinear izquierda', run: () => this.applyAlign('left') },
-      { icon: 'format_align_center', title: 'Centrar', run: () => this.applyAlign('center') },
-      { icon: 'format_align_right', title: 'Alinear derecha', run: () => this.applyAlign('right') },
       { icon: 'format_align_justify', title: 'Justificar', run: () => this.applyAlign('justify') },
     ] },
     { secondary: true, items: [

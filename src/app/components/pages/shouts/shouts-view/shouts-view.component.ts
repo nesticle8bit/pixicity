@@ -23,6 +23,7 @@ import { DatePipe, DOCUMENT } from '@angular/common';
 import { TextoEnlazadoComponent } from '../../../shared/shouts/texto-enlazado/texto-enlazado.component';
 import { ShareButtonsComponent } from '../../../addons/share-buttons/share-buttons.component';
 import { ShoutsEstadoService } from 'src/app/services/shared/shouts-estado.service';
+import { HomeUltimosShoutsComponent } from '../../../home/home-ultimos-shouts/home-ultimos-shouts.component';
 
 type Marca = 'meGusta' | 'noMeGusta' | 'favorito' | 'reshouteado';
 type Total = 'meGustas' | 'noMeGustas' | 'favoritos' | 'reshouts';
@@ -56,6 +57,7 @@ const SIN_SESION: Record<Marca, string> = {
     DatePipe,
     TextoEnlazadoComponent,
     ShareButtonsComponent,
+    HomeUltimosShoutsComponent,
   ],
 })
 export class ShoutsViewComponent implements OnInit {

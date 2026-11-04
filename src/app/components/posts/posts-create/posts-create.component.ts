@@ -144,6 +144,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       etiquetas: [],
       esPrivado: false,
       sinComentarios: false,
+      sinIndice: false,
       // Emotes: activados en los posts nuevos (los viejos traen su valor, que era siempre false).
       smileys: true,
       esBorrador: false,
@@ -293,6 +294,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
       smileys: post.smileys,
       esPrivado: post.esPrivado,
       sinComentarios: post.sinComentarios,
+      sinIndice: !!post.sinIndice,
       esBorrador: post.esBorrador,
     });
   }

@@ -134,7 +134,8 @@
 .upop__online-label {
   font-size: .72rem;
   font-weight: 500;
-  color: light-dark(#9ca3af, #8a8a8a);
+  // #9ca3af sobre #f3f4f6 no llegaba a 4.5:1 (axe en /mi).
+  color: light-dark(#5f6b75, #aeb8c1);
   background: light-dark(#f3f4f6, #2b3035);
   padding: 1px 6px;
   border-radius: 10px;
@@ -150,9 +151,31 @@
   color: light-dark(#666, #b0b0b0);
 }
 
+// El color del rango lo elige el admin (llega inline en --rango): el texto se oscurece/aclara hacia el tema para que
+// siempre se lea, como en el menú del celular.
 .upop__rango {
   font-size: .8rem;
   font-weight: 600;
+  color: light-dark(color-mix(in srgb, var(--rango, #6b7780) 62%, #000), color-mix(in srgb, var(--rango, #6b7780) 55%, #fff)) !important;
+}
+
+// Botón seguir: el verde global (.bverde) con texto blanco no llega al contraste; aquí uno más oscuro.
+.upop__follow ::ng-deep a.bverde,
+.upop__follow ::ng-deep a.bgris {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 34px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.upop__follow ::ng-deep a.bverde {
+  background: #15803d;
+  color: #fff;
+
+  &:hover { background: #166534; }
 }
 
 .upop__country {
@@ -251,4 +274,46 @@
   text-align: center;
   color: light-dark(#6b6b6b, #adadad);
   font-size: .85rem;
+}
+
+// Lateral de posts y shouts: misma tarjeta, a lo ancho de la columna y sin aspecto de popover flotante.
+.upop--lateral {
+  width: 100%;
+  box-shadow: 0 1px 3px rgb(16 24 40 / 6%);
+  border-color: light-dark(#e9edf0, #34424c);
+  animation: none;
+}
+
+// Franja con el fondo del perfil; el avatar se monta encima, como en el perfil y el menú del celular.
+.upop__banner {
+  height: 78px;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgb(255 255 255 / 18%), transparent 60%),
+    linear-gradient(135deg, #0b6ea5 0%, #004160 70%, #00283b 100%);
+
+  &--imagen {
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+}
+
+.upop--banner {
+  .upop__header {
+    align-items: flex-end;
+    background: none;
+    padding-top: 0;
+  }
+
+  .upop__avatar-wrap {
+    margin-top: -30px;
+
+    ::ng-deep img {
+      border: 3px solid light-dark(#fff, #1e2124);
+      box-shadow: 0 2px 8px rgb(0 0 0 / 18%);
+    }
+  }
+
+  .upop__skeleton {
+    margin-top: -24px;
+  }
 }

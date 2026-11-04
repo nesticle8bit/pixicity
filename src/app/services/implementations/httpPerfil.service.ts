@@ -37,6 +37,12 @@ export class HttpPerfilService implements IHttpPerfilService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
+  getShoutsDelAutor(shoutId: number, cantidad = 3): Observable<ShoutViewModel[]> {
+    return this.http
+      .get<ApiResponse<ShoutViewModel[]>>(`${environment.api}/api/shouts/${shoutId}/del-autor?cantidad=${cantidad}`)
+      .pipe(map((r) => r.data ?? []));
+  }
+
   getTopShouts(count: number = 6): Observable<any[]> {
     return this.http
       .get<ApiResponse<any[]>>(`${environment.api}/api/shouts/top?count=${count}`)

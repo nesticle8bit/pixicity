@@ -664,6 +664,8 @@ test('editor de posts y shouts: el botón de emojis inserta en el cursor', async
 
   await page.getByRole('button', { name: 'Insertar emoji' }).click();
   const selector = page.getByRole('dialog', { name: 'Elegir emoji' });
+  // Con "Mostrar emotes" activado (por defecto en posts nuevos) el selector abre en los emotes de Taringa.
+  await selector.getByRole('tab', { name: 'Caras' }).click();
   await selector.getByRole('button', { name: '😀' }).click();
   await selector.getByRole('button', { name: '😂' }).click();
   await expect(editor).toHaveText('Hola mundo😀😂');

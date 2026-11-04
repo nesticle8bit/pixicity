@@ -20,6 +20,8 @@ export interface PostViewModel {
   smileys: boolean;
   esPrivado: boolean;
   sinComentarios: boolean;
+  /** El autor desactivó el índice automático de títulos. */
+  sinIndice?: boolean;
   seguirPost: boolean;
   esBorrador: boolean;
   fechaRegistro: string;
@@ -126,6 +128,8 @@ export interface PostDetalle {
   esPrivado: boolean;
   seguirPost: boolean;
   sinComentarios: boolean;
+  /** El autor desactivó el índice automático de títulos. */
+  sinIndice?: boolean;
   esBorrador: boolean;
   categoria: { id: number; nombre: string; seo: string; icono: string };
   usuario: UsuarioPost;

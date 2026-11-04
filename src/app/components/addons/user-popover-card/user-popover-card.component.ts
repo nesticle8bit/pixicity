@@ -8,6 +8,7 @@ import { RouterLink } from '@angular/router';
 import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 import { FollowButtonComponent } from '../follow-button/follow-button.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
+import { urlCss } from 'src/app/shared/helpers/url-css';
 
 @Component({
     selector: 'app-user-popover-card',
@@ -28,6 +29,19 @@ export class UserPopoverCardComponent implements OnChanges {
   readonly userData = input<UsuarioInfoViewModel | null>(null);
   readonly activo = input<number | null>(null);
   readonly loading = input<boolean>(true);
+  /** Franja arriba con el fondo del perfil (o el degradé de la marca): la usa la tarjeta del autor en posts y shouts. */
+  readonly conBanner = input(false);
+  /** Ocupa el ancho de la columna (lateral de posts/shouts) en vez de flotar como popover. */
+  readonly lateral = input(false);
+
+  get bannerCss(): string | null {
+    return urlCss(this.userData()?.profileBackground);
+  }
+
+  get bannerPosicion(): string {
+    const d = this.userData();
+    return `${d?.profileBackgroundPosX ?? 50}% ${d?.profileBackgroundPosY ?? 50}%`;
+  }
 
   public isOnline: boolean = false;
 

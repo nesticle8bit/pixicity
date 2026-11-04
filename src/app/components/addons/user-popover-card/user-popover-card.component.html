@@ -1,5 +1,10 @@
 @let datos = userData();
-<div class="upop">
+<div class="upop" [class.upop--lateral]="lateral()" [class.upop--banner]="conBanner()">
+
+  @if (conBanner()) {
+    <div class="upop__banner" [class.upop__banner--imagen]="!!bannerCss" [style.background-image]="bannerCss"
+      [style.background-position]="bannerPosicion" aria-hidden="true"></div>
+  }
 
   <!-- Skeleton -->
   @if (loading()) {
@@ -43,7 +48,7 @@
         }
 
         @if (datos.rango) {
-          <span class="upop__rango" [style.color]="datos.rango.color">
+          <span class="upop__rango" [style.--rango]="datos.rango.color">
             <!-- <i class="ti ti-star me-1"></i> -->
              <img [src]="'/assets/images/icons/rangos/' + datos.rango.icono"
                   [alt]="datos.rango.nombre"

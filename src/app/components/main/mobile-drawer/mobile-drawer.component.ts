@@ -98,7 +98,7 @@ export class MobileDrawerComponent implements OnInit {
         return;
       }
 
-      document.body.style.overflow = open ? 'hidden' : '';
+      document.documentElement.style.overflow = open ? 'hidden' : '';
 
       if (open) {
         untracked(() => this.cargarInfo());
@@ -110,7 +110,7 @@ export class MobileDrawerComponent implements OnInit {
       wasOpen = open;
     });
 
-    this.destroyRef.onDestroy(() => enNavegador() && (document.body.style.overflow = ''));
+    this.destroyRef.onDestroy(() => enNavegador() && (document.documentElement.style.overflow = ''));
   }
 
   ngOnInit(): void {

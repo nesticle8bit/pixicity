@@ -17,8 +17,11 @@
     <app-user-avatar [avatar]="shout().avatar?.avatar" [userName]="autor()" [width]="48" [height]="48" />
   </a>
 
-  <div class="sc-bubble">
+  <div class="sc-bubble" (touchstart)="alTocar($event)" (touchend)="alSoltar($event)">
     <span class="sc-bubble__tail" aria-hidden="true"></span>
+    @if (corazon()) {
+    <span class="sc-doble-toque" aria-hidden="true"><i class="ti ti-thumb-up-filled"></i></span>
+    }
 
     <header class="sc-bubble__head">
       <span class="sc-bubble__quien">
@@ -138,14 +141,6 @@
           aria-hidden="true"></i> {{ interacciones().favoritos }}
       </button>
 
-      <button type="button" class="sc-action sc-action--megusta" [class.is-activo]="interacciones().meGusta"
-        [attr.aria-pressed]="interacciones().meGusta" [disabled]="enviando() === 'meGusta'" (click)="alternarMeGusta()"
-        [matTooltip]="interacciones().meGusta ? 'Quitar me gusta' : 'Me gusta'"
-        [attr.aria-label]="'Me gusta (' + interacciones().meGustas + ')'">
-        <i class="ti" [class.ti-thumb-up]="!interacciones().meGusta" [class.ti-thumb-up-filled]="interacciones().meGusta"
-          aria-hidden="true"></i> {{ interacciones().meGustas }}
-      </button>
-
       <!-- Sin karma: solo baja al shout en Más activos y en el TOP de la portada. -->
       <button type="button" class="sc-action sc-action--nomegusta" [class.is-activo]="interacciones().noMeGusta"
         [attr.aria-pressed]="!!interacciones().noMeGusta" [disabled]="enviando() === 'noMeGusta'"
@@ -154,6 +149,15 @@
         <i class="ti" [class.ti-thumb-down]="!interacciones().noMeGusta"
           [class.ti-thumb-down-filled]="interacciones().noMeGusta" aria-hidden="true"></i>
         @if (interacciones().noMeGustas) { {{ interacciones().noMeGustas }} }
+      </button>
+
+      <!-- Me gusta al final: el más usado queda a mano del pulgar. También con doble toque en la burbuja. -->
+      <button type="button" class="sc-action sc-action--megusta" [class.is-activo]="interacciones().meGusta"
+        [attr.aria-pressed]="interacciones().meGusta" [disabled]="enviando() === 'meGusta'" (click)="alternarMeGusta()"
+        [matTooltip]="interacciones().meGusta ? 'Quitar me gusta' : 'Me gusta'"
+        [attr.aria-label]="'Me gusta (' + interacciones().meGustas + ')'">
+        <i class="ti" [class.ti-thumb-up]="!interacciones().meGusta" [class.ti-thumb-up-filled]="interacciones().meGusta"
+          aria-hidden="true"></i> {{ interacciones().meGustas }}
       </button>
     </footer>
   </div>

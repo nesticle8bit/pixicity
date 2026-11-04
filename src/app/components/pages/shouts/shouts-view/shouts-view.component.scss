@@ -50,7 +50,12 @@
     margin-bottom: 6px;
   }
 
+  &__avatar-movil { display: none; }
+
   &__user {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     font-weight: 700;
     font-size: 0.95rem;
     color: light-dark(#006595, #8ed2f2);
@@ -181,17 +186,75 @@
 
 @media (max-width: 575.98px) {
   .sv-shout {
-    gap: 10px;
+    gap: 0;
 
-    &__avatar ::ng-deep img {
-      width: 42px !important;
-      height: 42px !important;
-    }
+    &__avatar { display: none; }
   }
 
   .sv-bubble {
     border-radius: 12px;
     padding: 12px 14px;
+
+    &__tail { display: none; }
+
+    &__avatar-movil {
+      display: block;
+      line-height: 0;
+
+      ::ng-deep img { border-radius: 50%; object-fit: cover; }
+    }
+
+    // Celular: las 6 acciones en una fila pareja (antes "Copiar URL" empujaba al resto y quedaban desordenadas
+    // en dos renglones), cada una con zona táctil de 44px. Copiar URL queda solo con el ícono.
+    &__footer {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 2px;
+      margin: 10px -6px 0;
+      padding-top: 6px;
+    }
+  }
+
+  .sv-action {
+    justify-content: center;
+    min-width: 0;
+    min-height: 44px;
+    padding: 0 2px;
+    font-size: 0.82rem;
+    border-radius: 10px;
+
+    i { font-size: 1.15rem; }
+
+    &--open {
+      margin-right: 0;
+    }
+
+    &__texto {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    // Sin hover en táctil: el fondo quedaba pegado después de tocar.
+    &:hover { background: none; }
+    &:active { background: light-dark(#eef5f9, #1b3747); }
+  }
+
+  .sv-compartir {
+    justify-content: center;
+  }
+}
+
+// Muy angosto (≤360px): números más chicos para que no se corten.
+@media (max-width: 360px) {
+  .sv-action {
+    gap: 3px;
+    font-size: 0.75rem;
+
+    i { font-size: 1.05rem; }
   }
 }
 

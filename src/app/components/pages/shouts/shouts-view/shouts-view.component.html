@@ -26,7 +26,11 @@
 
                 <header class="sv-bubble__head">
                   <a [routerLink]="['/perfil/' + shout?.avatar.userName]" class="sv-bubble__user"
-                    [appUserPopover]="shout.avatar.userName">{{'@'}}{{shout?.avatar.userName}}</a>
+                    [appUserPopover]="shout.avatar.userName">
+                    <!-- Celular: el avatar del costado se oculta (la burbuja gana el ancho) y va acá, chico. -->
+                    <app-user-avatar class="sv-bubble__avatar-movil" [avatar]="shout?.avatar?.avatar"
+                      [userName]="shout?.avatar.userName" [width]="28" [height]="28" aria-hidden="true" />
+                    {{'@'}}{{shout?.avatar.userName}}</a>
                   <span class="sv-bubble__time cursor--help"
                     matTooltip="{{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm \', año\' y'}}">
                     {{shout.fechaRegistro | date:'d MMM y, h:mm a'}}
@@ -40,12 +44,12 @@
                   [bucle]="!!shout.bucle"></app-shout-media>
 
                 <footer class="sv-bubble__footer">
-                  <a class="sv-action sv-action--open"
+                  <a class="sv-action sv-action--open" aria-label="Copiar URL del shout" matTooltip="Copiar URL"
                     (click)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id)" role="button"
                     tabindex="0"
                     (keydown.enter)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id)"
                     (keydown.space)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id); $event.preventDefault()">
-                    <i class="ti ti-link"></i> Copiar URL
+                    <i class="ti ti-link" aria-hidden="true"></i> <span class="sv-action__texto">Copiar URL</span>
                   </a>
 
                   <button type="button" class="sv-action" (click)="irAComentar()" matTooltip="Comentar"
@@ -70,14 +74,6 @@
                       aria-hidden="true"></i> {{interacciones().favoritos}}
                   </button>
 
-                  <button type="button" class="sv-action sv-action--megusta" [class.is-activo]="interacciones().meGusta"
-                    [attr.aria-pressed]="interacciones().meGusta" [disabled]="enviando() === 'meGusta'"
-                    (click)="alternarMeGusta()"
-                    [matTooltip]="interacciones().meGusta ? 'Quitar me gusta' : 'Me gusta'"
-                    [attr.aria-label]="'Me gusta (' + interacciones().meGustas + ')'">
-                    <i class="ti" [class.ti-thumb-up]="!interacciones().meGusta"
-                      [class.ti-thumb-up-filled]="interacciones().meGusta" aria-hidden="true"></i> {{interacciones().meGustas}}
-                  </button>
                   <!-- Sin karma: solo baja al shout en Más activos y en el TOP de la portada. -->
                   <button type="button" class="sv-action sv-action--nomegusta" [class.is-activo]="interacciones().noMeGusta"
                     [attr.aria-pressed]="!!interacciones().noMeGusta" [disabled]="enviando() === 'noMeGusta'"
@@ -87,6 +83,15 @@
                     <i class="ti" [class.ti-thumb-down]="!interacciones().noMeGusta"
                       [class.ti-thumb-down-filled]="interacciones().noMeGusta" aria-hidden="true"></i>
                     @if (interacciones().noMeGustas) { {{interacciones().noMeGustas}} }
+                  </button>
+                  <!-- Me gusta al final, como en las tarjetas del muro. -->
+                  <button type="button" class="sv-action sv-action--megusta" [class.is-activo]="interacciones().meGusta"
+                    [attr.aria-pressed]="interacciones().meGusta" [disabled]="enviando() === 'meGusta'"
+                    (click)="alternarMeGusta()"
+                    [matTooltip]="interacciones().meGusta ? 'Quitar me gusta' : 'Me gusta'"
+                    [attr.aria-label]="'Me gusta (' + interacciones().meGustas + ')'">
+                    <i class="ti" [class.ti-thumb-up]="!interacciones().meGusta"
+                      [class.ti-thumb-up-filled]="interacciones().meGusta" aria-hidden="true"></i> {{interacciones().meGustas}}
                   </button>
                 </footer>
 
@@ -108,6 +113,9 @@
 
     <div class="dotted-border--left col-12 col-sm-3 mt-3">
       <app-post-original-poster-info [userName]="shout.avatar?.userName"></app-post-original-poster-info>
+
+      <!-- Los últimos 3 del mismo autor, sin este; mismo diseño que "Últimos shouts" de la portada. -->
+      <app-home-ultimos-shouts [delShout]="shout.id" [autor]="shout.avatar?.userName" [cantidad]="3" />
 
       @if (shout.avatar.userName === currentUser?.usuario?.userName || currentUser?.usuario?.rango === 'Administrador'
       || currentUser?.usuario?.rango === 'Moderador') {

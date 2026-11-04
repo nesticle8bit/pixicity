@@ -18,6 +18,8 @@ export const SIN_LOADER: RegExp[] = [
   'notificaciones/recientes',
   'notificaciones/leidas',
   'notificaciones/estadisticas',
+  // Al tocar el aviso en vivo: navega enseguida, no hace falta tapar la pantalla.
+  `notificaciones/${ID}/enlace`,
   // Línea de tiempo del perfil: tiene su propio esqueleto y carga más al bajar.
   `usuarios/${ID}/muro`,
   // Notificaciones de escritorio: se sincronizan al arrancar y el interruptor de /cuenta tiene su propio estado.
@@ -59,10 +61,13 @@ export const SIN_LOADER: RegExp[] = [
   // Imágenes subidas desde el editor: muestra "Subiendo imagen…" donde va a quedar; el overlay de pantalla completa
   // tapaba el editor y bloqueaba los clics mientras subía.
   'fotos/imagenes',
+  'posts/imagenes',
   `fotos/${ID}/comentarios`,
+  // La vista del shout: el velo gris quedaba encima mientras llegaba (y al volver a ella, sobre la página ya armada).
+  `shouts/${ID}`,
   `shouts/${ID}/comentarios`,
   // Me gusta / favoritos de shouts: el botón responde al instante y el overlay lo taparía.
-  `shouts/${ID}/(interacciones|me-gusta|favorito|reshout|reshouts)`,
+  `shouts/${ID}/(interacciones|me-gusta|no-me-gusta|favorito|reshout|reshouts|del-autor)`,
   // Confirmación de correo y contraseña: la página y el aviso muestran su propio estado.
   'auth/email(/confirmacion|/reenvio)?',
   'auth/password(/restablecimiento)?',

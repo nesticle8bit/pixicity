@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { IHttpPerfilService } from 'src/app/services/interfaces/httpPerfil.interface';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -31,16 +32,25 @@ const MEDIA: Record<string, { icono: string; texto: string }> = {
 })
 export class HomeUltimosShoutsComponent {
   private readonly miService = inject(IHttpMiService);
+  private readonly perfilService = inject(IHttpPerfilService);
 
   readonly cantidad = input(5);
+  /**
+   * Página de un shout: en vez de los de toda la comunidad, los últimos del mismo autor sin ese shout
+   * ("Más shouts de @autor"). Mismo diseño que en la portada.
+   */
+  readonly delShout = input<number | null>(null);
+  readonly autor = input<string | null>(null);
 
   /** undefined = cargando. */
   readonly shouts = toSignal(
-    toObservable(this.cantidad).pipe(
-      // El muro mezcla posts y reshouts: se piden de más para que alcancen los shouts propios.
-      switchMap((cantidad) =>
-        this.miService.getMuro('todos', null, cantidad * 2).pipe(
-          map((m) => this.soloShouts(m, cantidad)),
+    toObservable(computed(() => ({ cantidad: this.cantidad(), delShout: this.delShout() }))).pipe(
+      switchMap(({ cantidad, delShout }) =>
+        (delShout
+          ? this.perfilService.getShoutsDelAutor(delShout, cantidad)
+          : // El muro mezcla posts y reshouts: se piden de más para que alcancen los shouts propios.
+            this.miService.getMuro('todos', null, cantidad * 2).pipe(map((m) => this.soloShouts(m, cantidad)))
+        ).pipe(
           catchError(() => of([] as ShoutViewModel[])),
           startWith(undefined),
         ),

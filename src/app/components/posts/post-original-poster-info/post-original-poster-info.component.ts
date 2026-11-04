@@ -4,33 +4,14 @@ import { JwtUserModel } from 'src/app/models/security/jwtUser.model';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
-import { RouterLink } from '@angular/router';
-import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
-import { MatTooltip } from '@angular/material/tooltip';
-import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
-import { NgStyle, DatePipe } from '@angular/common';
-import { UserOnlineStatusComponent } from '../../addons/user-online-status/user-online-status.component';
-import { CountryFlagComponent } from '../../addons/country-flag/country-flag.component';
-import { GenreIconComponent } from '../../addons/genre-icon/genre-icon.component';
-import { FollowButtonComponent } from '../../addons/follow-button/follow-button.component';
+import { UserPopoverCardComponent } from '../../addons/user-popover-card/user-popover-card.component';
 import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
 
 @Component({
     selector: 'app-post-original-poster-info',
     templateUrl: './post-original-poster-info.component.html',
     styleUrls: ['./post-original-poster-info.component.scss'],
-    imports: [
-    RouterLink,
-    UserPopoverDirective,
-    MatTooltip,
-    UserAvatarComponent,
-    NgStyle,
-    UserOnlineStatusComponent,
-    CountryFlagComponent,
-    GenreIconComponent,
-    FollowButtonComponent,
-    DatePipe
-],
+    imports: [UserPopoverCardComponent],
 })
 export class PostOriginalPosterInfoComponent implements OnInit {
   private securityService = inject(IHttpSecurityService);
@@ -69,17 +50,24 @@ export class PostOriginalPosterInfoComponent implements OnInit {
 
     this.cargaGetUsuarioInfo?.unsubscribe();
 
-    this.cargaGetUsuarioInfo = this.usuarioPerfilService.getUsuarioInfo(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      if (response) {
-        this.info = response;
-      }
+    this.cargando = true;
+    this.cargaGetUsuarioInfo = this.usuarioPerfilService.getUsuarioInfo(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (response) => {
+        if (response) this.info = response;
+        this.cargando = false;
+      },
+      error: () => (this.cargando = false),
+    });
+    // "En línea": los minutos desde la última actividad, igual que el popover.
+    this.cargaEstado?.unsubscribe();
+    this.cargaEstado = this.usuarioPerfilService.getUserStatus(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (minutos) => (this.activo = minutos ?? null),
+      error: () => (this.activo = null),
     });
   }
 
-  changeSeguidores(value: boolean): void {
-    if (this.info) {
-      // La tarjeta muestra seguidoresCount (antes se sumaba a un campo "seguidores" que no se mostraba).
-      this.info.seguidoresCount = Math.max(0, (this.info.seguidoresCount ?? 0) + (value ? 1 : -1));
-    }
-  }
+  public cargando = true;
+  public activo: number | null = null;
+  private cargaEstado?: Subscription;
+
 }

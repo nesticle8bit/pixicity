@@ -1,18 +1,28 @@
+@let lista = shouts();
+
+<!-- En la página de un shout, si el autor no tiene otros, no se muestra nada (ni el título). -->
+@if (!(delShout() && lista?.length === 0)) {
 <h2 class="main-title">
+  @if (delShout() && autor(); as a) {
+  <span>Más shouts de {{ '@' }}{{ a }}</span>
+  <a class="float-end us-ver" [routerLink]="['/perfil', a]" matTooltip="Ver el perfil" aria-label="Ver el perfil">
+    <i class="ti ti-chevron-right"></i>
+  </a>
+  } @else {
   <span>Últimos shouts</span>
   <a class="float-end us-ver" routerLink="/mi" [queryParams]="{ ver: 'recientes' }" matTooltip="Ver todos los shouts"
     aria-label="Ver todos los shouts">
     <i class="ti ti-chevron-right"></i>
   </a>
+  }
 </h2>
-
-@let lista = shouts();
+}
 
 @if (lista === undefined) {
 @for (_ of [1, 2, 3]; track $index) {
 <div class="us-skeleton"></div>
 }
-} @else if (lista.length < 1) { <div class="alert alert-warning">💬 <strong>Todavía no hay shouts</strong></div>
+} @else if (lista.length < 1) { @if (!delShout()) { <div class="alert alert-warning">💬 <strong>Todavía no hay shouts</strong></div> }
   } @else {
   <!-- Misma nube que app-shout-card (_burbuja.scss), en versión compacta y solo lectura. -->
   <section class="us-lista mb-3">

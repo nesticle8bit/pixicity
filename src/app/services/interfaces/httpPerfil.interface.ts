@@ -8,6 +8,8 @@ import { ShoutAdmin, ShoutComentarioViewModel, ShoutComentarioVoto, ShoutInterac
 export abstract class IHttpPerfilService {
   abstract getShouts(userId: number): Observable<PaginatedData<ShoutViewModel, 'shouts'>>;
   abstract getTopShouts(count?: number): Observable<any[]>;
+  /** Últimos shouts del autor de `shoutId`, sin ese (lateral de la página del shout). */
+  abstract getShoutsDelAutor(shoutId: number, cantidad?: number): Observable<ShoutViewModel[]>;
   abstract getShoutsAdmin(filtro?: AdminFiltro): Observable<PaginatedData<ShoutAdmin, 'shouts'>>;
   abstract createShout(shout: Partial<ShoutViewModel>): Observable<ShoutViewModel>;
   /** Sube una imagen para un shout (el API la deja en WebP de 1080 px máx.) y devuelve su URL pública. */

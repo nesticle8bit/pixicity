@@ -108,7 +108,7 @@ export class TirarParaRecargarService {
   /** Se puede empezar a tirar: en el tope, sin diálogos ni hojas abiertas, sin escribir y fuera de listas con scroll propio. */
   private libre(objetivo: EventTarget | null): boolean {
     if (window.scrollY > 0 || this.recargando() || !window.matchMedia(MOVIL).matches) return false;
-    if (document.body.style.overflow === 'hidden' || document.querySelector('.cdk-overlay-backdrop')) return false;
+    if (document.documentElement.style.overflow === 'hidden' || document.querySelector('.cdk-overlay-backdrop')) return false;
     if (SIN_TIRAR.test(this.router.url) || (this.propia?.puede && !this.propia.puede())) return false;
 
     const activo = document.activeElement as HTMLElement | null;

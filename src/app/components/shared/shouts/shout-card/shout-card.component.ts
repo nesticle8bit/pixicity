@@ -281,6 +281,47 @@ export class ShoutCardComponent {
     this.alternar('meGusta', 'meGustas', 'Inicia sesión para dar me gusta', (id) => this.perfilService.alternarMeGustaShout(id));
   }
 
+  /** Pulgar grande que aparece un momento al dar me gusta con doble toque. */
+  readonly corazon = signal(false);
+  private ultimoToque = 0;
+  private inicioToque: { x: number; y: number } | null = null;
+  private timerCorazon?: ReturnType<typeof setTimeout>;
+
+  alTocar(event: TouchEvent): void {
+    const t = event.touches[0];
+    this.inicioToque = event.touches.length === 1 && t ? { x: t.clientX, y: t.clientY } : null;
+  }
+
+  /**
+   * Doble toque en la burbuja (celular) = me gusta, como en Instagram. Solo marca: si ya le gustaba no lo quita.
+   * No cuenta sobre botones, enlaces, el reproductor o un campo, ni si el dedo se movió (era scroll).
+   */
+  alSoltar(event: TouchEvent): void {
+    const t = event.changedTouches[0];
+    const inicio = this.inicioToque;
+    this.inicioToque = null;
+    if (!t || !inicio || Math.hypot(t.clientX - inicio.x, t.clientY - inicio.y) > 12) {
+      this.ultimoToque = 0;
+      return;
+    }
+    const objetivo = event.target as HTMLElement | null;
+    if (objetivo?.closest('a, button, iframe, video, textarea, input, .sm-portada, .sm-nsfw, .mat-mdc-menu-panel')) {
+      this.ultimoToque = 0;
+      return;
+    }
+    const ahora = Date.now();
+    if (ahora - this.ultimoToque > 300) {
+      this.ultimoToque = ahora;
+      return;
+    }
+    this.ultimoToque = 0;
+    event.preventDefault(); // sin el zoom de doble toque del navegador
+    this.corazon.set(true);
+    clearTimeout(this.timerCorazon);
+    this.timerCorazon = setTimeout(() => this.corazon.set(false), 700);
+    if (!this.interacciones().meGusta) this.alternarMeGusta();
+  }
+
   alternarNoMeGusta(): void {
     this.alternar('noMeGusta', 'noMeGustas', 'Inicia sesión para votar', (id) => this.perfilService.alternarNoMeGustaShout(id));
   }

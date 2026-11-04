@@ -359,14 +359,14 @@ export class MiHomeComponent implements OnDestroy {
     caja?.classList.add('is-abierto');
     if (modo === 'hoja') {
       caja?.classList.add('is-hoja');
-      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
     }
     caja?.querySelector<HTMLTextAreaElement>('textarea')?.focus({ preventScroll: modo === 'hoja' });
     this.composer.set(modo);
   }
 
   cerrarComposer(): void {
-    if (this.composer() === 'hoja') document.body.style.overflow = '';
+    if (this.composer() === 'hoja') document.documentElement.style.overflow = '';
     this.composer.set('cerrado');
   }
 
@@ -376,7 +376,7 @@ export class MiHomeComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.composer() === 'hoja') document.body.style.overflow = '';
+    if (this.composer() === 'hoja') document.documentElement.style.overflow = '';
     this.observador?.disconnect();
     if (typeof window !== 'undefined' && this.items().length)
       guardado = { url: this.urlActual, items: this.items(), siguiente: this.siguiente(), corte: this.corte, scrollY: this.scrollAlSalir };
