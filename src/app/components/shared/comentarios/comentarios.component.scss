@@ -439,34 +439,80 @@
   vertical-align: middle;
 }
 
-// Barra de formato (negrita, cursiva, tachado, enlace) pegada arriba del campo.
+// Barra de formato pegada arriba del campo: mismo aspecto que la del rich-editor (fondo, grupos con separador,
+// botón activo en azul) y el textarea queda como su cuerpo.
 .coment-formato {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 2px;
-  margin-bottom: 4px;
+  padding: 4px 8px;
+  border: 1px solid light-dark(#ccc, #4e575f);
+  border-bottom-color: light-dark(#e0e0e0, #414950);
+  border-radius: 6px 6px 0 0;
+  background: light-dark(#f8f8f8, #292d32);
+  transition: border-color 0.15s;
+
+  &:has(+ textarea:focus) {
+    border-color: #0085c4;
+    border-bottom-color: light-dark(#e0e0e0, #414950);
+  }
+
+  + textarea {
+    border-top: 0 !important;
+    border-radius: 0 0 6px 6px !important;
+  }
+
+  &__grupo {
+    display: flex;
+    align-items: center;
+
+    &:not(:last-child)::after {
+      content: '';
+      width: 1px;
+      height: 20px;
+      margin: 0 4px;
+      background: light-dark(#ddd, #434b52);
+    }
+  }
 
   button {
     display: grid;
     place-items: center;
-    width: 32px;
-    height: 30px;
+    width: 30px;
+    height: 28px;
     padding: 0;
     border: 0;
-    border-radius: 6px;
+    border-radius: 3px;
     background: transparent;
-    color: light-dark(#5f6b75, #aeb8c1);
+    color: light-dark(#444, #c4c4c4);
     font-size: 1.05rem;
+    line-height: 1;
     cursor: pointer;
+    transition: background 0.15s, color 0.15s;
 
     &:hover {
-      background: light-dark(#eef2f5, #2a3036);
-      color: light-dark(#14202a, #f1f3f5);
+      background: light-dark(#e3e3e3, #383e44);
+      color: light-dark(#1976d2, #559ee7);
+    }
+
+    &.active {
+      background: light-dark(#e3ecf9, #1d314d);
+      color: light-dark(#1976d2, #559ee7);
     }
 
     &:focus-visible {
-      outline: 2px solid light-dark(#0B6EA5, #2ba0e1);
-      outline-offset: 1px;
+      outline: 2px solid light-dark(#1976d2, #559ee7);
+      outline-offset: -2px;
     }
+  }
+}
+
+// En el celular los botones crecen a zona táctil.
+@media (max-width: 575.98px) {
+  .coment-formato button {
+    width: 36px;
+    height: 36px;
   }
 }
 
@@ -474,6 +520,23 @@
 .coment-preview p ::ng-deep {
   del {
     opacity: .75;
+  }
+
+  code {
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    background: light-dark(#eef1f4, #2a3540);
+    color: light-dark(#b3261e, #ffb4a8);
+    font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+    font-size: 0.9em;
+    overflow-wrap: anywhere;
+  }
+
+  blockquote {
+    margin: 0.3em 0;
+    padding: 0.2em 0.8em;
+    border-left: 3px solid light-dark(#ccc, #4e575f);
+    color: light-dark(#555, #bababa);
   }
 }
 

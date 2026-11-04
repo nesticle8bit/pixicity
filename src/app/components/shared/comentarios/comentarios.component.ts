@@ -54,6 +54,17 @@ const RUTA_IMAGEN_EXTERNA = /\.(jpe?g|png|gif|webp|avif)$/i;
 /** Campo de texto al que va la imagen subida. */
 type CampoImagen = 'nuevo' | 'respuesta' | 'edicion';
 
+type FormatoComentario = 'negrita' | 'cursiva' | 'subrayado' | 'tachado' | 'codigo';
+
+/** Marcas que escribe la barra de formato; formatear() las convierte (Markdown o las etiquetas de html-basico). */
+const MARCAS_FORMATO: Record<FormatoComentario, [string, string]> = {
+  negrita: ['**', '**'],
+  cursiva: ['*', '*'],
+  subrayado: ['<u>', '</u>'],
+  tachado: ['~~', '~~'],
+  codigo: ['<code>', '</code>'],
+};
+
 const MOTIVOS_DENUNCIA = ['Spam o publicidad', 'Contenido ofensivo', 'Acoso', 'Información falsa', 'Contenido sexual', 'Otro'];
 
 /**
@@ -590,7 +601,8 @@ export class ComentariosComponent {
 
   /**
    * Escapa HTML (salvo las etiquetas de formato básico y <a href="https://..."> de html-basico) y convierte URLs, @menciones y #hashtags en enlaces; los enlaces a imágenes y los :emotes: se muestran.
-   * Formato básico (lo escribe la barra del campo): **negrita**, *cursiva*, ~~tachado~~ y [texto](https://enlace).
+   * Formato básico (lo escribe la barra del campo): **negrita**, *cursiva*, <u>subrayado</u>, ~~tachado~~,
+   * <code>código</code>, "> cita" al principio de la línea y [texto](https://enlace).
    */
   formatear(texto: string): string {
     if (!texto) return '';
@@ -616,20 +628,99 @@ export class ComentariosComponent {
       .replace(/(^|\s)@([a-zA-Z0-9_]+)/g, '$1<a href="/perfil/$2">@$2</a>');
     return reemplazarEmotes(enlazarHashtagsTexto(enlazado))
       .replace(/\u0001(\d+)\u0001/g, (_m, i: string) => enlaces[+i] ?? '')
+      // Citas: líneas que empiezan con "> " (las seguidas quedan en un solo bloque).
+      .replace(/(^|\n)&gt; ?([^\n]*)/g, '$1<blockquote>$2</blockquote>')
+      .replace(/<\/blockquote>\n<blockquote>/g, '<br>')
+      .replace(/<\/blockquote>\n/g, '</blockquote>')
       .replace(/\n/g, '<br>');
   }
 
   // - Barra de formato
 
-  /** Envuelve la selección (o deja las marcas con el cursor en medio) con negrita, cursiva o tachado. */
-  aplicarFormato(campo: CampoImagen, textarea: HTMLTextAreaElement, tipo: 'negrita' | 'cursiva' | 'tachado'): void {
-    const marca = tipo === 'negrita' ? '**' : tipo === 'cursiva' ? '*' : '~~';
+  /**
+   * Envuelve la selección (o deja las marcas con el cursor en medio). Si ya tenía ese formato, lo quita: como un
+   * botón de Word, el mismo clic pone y saca. Lo que escribe es lo que entiende formatear() (Markdown o HTML básico).
+   */
+  aplicarFormato(campo: CampoImagen, textarea: HTMLTextAreaElement, tipo: FormatoComentario): void {
+    const [abre, cierra] = MARCAS_FORMATO[tipo];
     const texto = this.textoDe(campo);
     const inicio = textarea.selectionStart ?? texto.length;
     const fin = textarea.selectionEnd ?? texto.length;
     const elegido = texto.slice(inicio, fin);
-    const nuevo = texto.slice(0, inicio) + marca + elegido + marca + texto.slice(fin);
-    this.ponerTexto(campo, textarea, nuevo, inicio + marca.length, inicio + marca.length + elegido.length);
+
+    // Marcas por fuera de la selección: **[hola]** → hola
+    if (this.envuelto(texto, inicio, fin, tipo)) {
+      const nuevo = texto.slice(0, inicio - abre.length) + elegido + texto.slice(fin + cierra.length);
+      this.ponerTexto(campo, textarea, nuevo, inicio - abre.length, fin - abre.length);
+      return;
+    }
+    // Marcas dentro de la selección: [**hola**] → hola
+    if (elegido.length >= abre.length + cierra.length && elegido.startsWith(abre) && elegido.endsWith(cierra)) {
+      const limpio = elegido.slice(abre.length, elegido.length - cierra.length);
+      this.ponerTexto(campo, textarea, texto.slice(0, inicio) + limpio + texto.slice(fin), inicio, inicio + limpio.length);
+      return;
+    }
+    const nuevo = texto.slice(0, inicio) + abre + elegido + cierra + texto.slice(fin);
+    this.ponerTexto(campo, textarea, nuevo, inicio + abre.length, inicio + abre.length + elegido.length);
+  }
+
+  /** Mover el cursor no cambia ningún dato: el evento solo hace que la barra recalcule qué botón está activo. */
+  alMoverCursor(): void {
+    /* vacío a propósito */
+  }
+
+  /** La selección (o el cursor) está entre las marcas de ese formato: el botón se ve activo. */
+  formatoActivo(campo: CampoImagen, textarea: HTMLTextAreaElement | null | undefined, tipo: FormatoComentario | 'cita'): boolean {
+    if (!textarea) return false;
+    const texto = this.textoDe(campo);
+    const inicio = textarea.selectionStart ?? 0;
+    const fin = textarea.selectionEnd ?? 0;
+    if (tipo === 'cita') return this.lineasDe(texto, inicio, fin).every((l) => l.startsWith('> '));
+    return this.envuelto(texto, inicio, fin, tipo);
+  }
+
+  private envuelto(texto: string, inicio: number, fin: number, tipo: FormatoComentario): boolean {
+    const [abre, cierra] = MARCAS_FORMATO[tipo];
+    if (!texto.slice(0, inicio).endsWith(abre) || !texto.slice(fin).startsWith(cierra)) return false;
+    // "*" de cursiva no es la mitad de un "**" de negrita (salvo ***negrita y cursiva***).
+    if (tipo === 'cursiva') {
+      const antes = texto.slice(0, inicio - 1);
+      return !antes.endsWith('*') || antes.endsWith('**');
+    }
+    return true;
+  }
+
+  private lineasDe(texto: string, inicio: number, fin: number): string[] {
+    const desde = texto.lastIndexOf('\n', inicio - 1) + 1;
+    const hasta = texto.indexOf('\n', fin);
+    return texto.slice(desde, hasta === -1 ? texto.length : hasta).split('\n');
+  }
+
+  /** Cita: antepone "> " a las líneas elegidas (o se lo quita si todas ya lo tenían). */
+  alternarCita(campo: CampoImagen, textarea: HTMLTextAreaElement): void {
+    const texto = this.textoDe(campo);
+    const inicio = textarea.selectionStart ?? texto.length;
+    const fin = textarea.selectionEnd ?? texto.length;
+    const desde = texto.lastIndexOf('\n', inicio - 1) + 1;
+    const corte = texto.indexOf('\n', fin);
+    const hasta = corte === -1 ? texto.length : corte;
+    const lineas = texto.slice(desde, hasta).split('\n');
+    const quitar = lineas.every((l) => l.startsWith('> '));
+    const bloque = lineas.map((l) => (quitar ? l.slice(2) : `> ${l}`)).join('\n');
+    const nuevo = texto.slice(0, desde) + bloque + texto.slice(hasta);
+    this.ponerTexto(campo, textarea, nuevo, desde, desde + bloque.length);
+  }
+
+  /** Escribe "@" en el cursor y abre la lista de usuarios (appMenciones escucha el input). */
+  insertarMencion(campo: CampoImagen, textarea: HTMLTextAreaElement): void {
+    const texto = this.textoDe(campo);
+    const inicio = textarea.selectionStart ?? texto.length;
+    const fin = textarea.selectionEnd ?? texto.length;
+    const antes = texto.slice(0, inicio);
+    const arroba = antes && !/\s$/.test(antes) ? ' @' : '@';
+    const nuevo = antes + arroba + texto.slice(fin);
+    this.ponerTexto(campo, textarea, nuevo, inicio + arroba.length, inicio + arroba.length);
+    textarea.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
   /** Pide la URL (y el texto si no había nada elegido) y escribe [texto](url). */
@@ -669,13 +760,15 @@ export class ComentariosComponent {
     textarea.setSelectionRange(selIni, selFin);
   }
 
-  /** Ctrl/Cmd + B, I o K dentro del campo. */
+  /** Ctrl/Cmd + B, I, U, E (código) o K (enlace) dentro del campo. */
   atajoFormato(event: KeyboardEvent, campo: CampoImagen): void {
     if (!(event.ctrlKey || event.metaKey) || event.altKey) return;
     const textarea = event.target as HTMLTextAreaElement;
     const tecla = event.key.toLowerCase();
     if (tecla === 'b') this.aplicarFormato(campo, textarea, 'negrita');
     else if (tecla === 'i') this.aplicarFormato(campo, textarea, 'cursiva');
+    else if (tecla === 'u') this.aplicarFormato(campo, textarea, 'subrayado');
+    else if (tecla === 'e') this.aplicarFormato(campo, textarea, 'codigo');
     else if (tecla === 'k') void this.insertarEnlace(campo, textarea);
     else return;
     event.preventDefault();

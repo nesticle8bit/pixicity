@@ -218,4 +218,62 @@ describe('ComentariosComponent', () => {
     expect(http).not.toContain('<img');
     expect(pagina).not.toContain('<img');
   });
+
+  // - Barra de formato
+
+  function campo(texto: string, inicio: number, fin = inicio): HTMLTextAreaElement {
+    const ta = document.createElement('textarea');
+    document.body.appendChild(ta);
+    componente.nuevoComentario = texto;
+    ta.value = texto;
+    ta.setSelectionRange(inicio, fin);
+    return ta;
+  }
+
+  it('la barra pone el formato y el mismo botón lo quita', () => {
+    const ta = campo('hola mundo', 0, 4);
+
+    componente.aplicarFormato('nuevo', ta, 'negrita');
+    expect(componente.nuevoComentario).toBe('**hola** mundo');
+    expect(componente.formatoActivo('nuevo', ta, 'negrita')).toBeTrue();
+    expect(componente.formatoActivo('nuevo', ta, 'cursiva')).toBeFalse();
+
+    componente.aplicarFormato('nuevo', ta, 'negrita');
+    expect(componente.nuevoComentario).toBe('hola mundo');
+    ta.remove();
+  });
+
+  it('subrayado y código escriben las etiquetas de html-basico; también se quitan con la marca elegida', () => {
+    const ta = campo('ver x', 4, 5);
+    componente.aplicarFormato('nuevo', ta, 'codigo');
+    expect(componente.nuevoComentario).toBe('ver <code>x</code>');
+
+    ta.setSelectionRange(4, componente.nuevoComentario.length);
+    componente.aplicarFormato('nuevo', ta, 'codigo');
+    expect(componente.nuevoComentario).toBe('ver x');
+
+    ta.setSelectionRange(0, 3);
+    componente.aplicarFormato('nuevo', ta, 'subrayado');
+    expect(componente.formatear(componente.nuevoComentario)).toContain('<u>ver</u>');
+    ta.remove();
+  });
+
+  it('cita antepone "> " a las líneas elegidas, se quita con otro clic y formatear la muestra como bloque', () => {
+    const ta = campo('uno\ndos\ntres', 1, 5);
+
+    componente.alternarCita('nuevo', ta);
+    expect(componente.nuevoComentario).toBe('> uno\n> dos\ntres');
+    expect(componente.formatear(componente.nuevoComentario)).toBe('<blockquote>uno<br>dos</blockquote>tres');
+
+    componente.alternarCita('nuevo', ta);
+    expect(componente.nuevoComentario).toBe('uno\ndos\ntres');
+    ta.remove();
+  });
+
+  it('mencionar escribe "@" separado de la palabra anterior', () => {
+    const ta = campo('hola', 4);
+    componente.insertarMencion('nuevo', ta);
+    expect(componente.nuevoComentario).toBe('hola @');
+    ta.remove();
+  });
 });

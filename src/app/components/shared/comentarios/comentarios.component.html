@@ -21,6 +21,7 @@
     <div class="coment-form__campo">
       <ng-container *ngTemplateOutlet="barraFormato; context: { $implicit: 'nuevo', ta: campoComentario }"></ng-container>
       <textarea #campoComentario appMenciones (paste)="alPegar($event, 'nuevo')" (keydown)="atajoFormato($event, 'nuevo')"
+        (keyup)="alMoverCursor()" (mouseup)="alMoverCursor()" (select)="alMoverCursor()"
         [(ngModel)]="nuevoComentario" rows="3" placeholder="Escribe un comentario..."
         aria-label="Escribe un comentario"></textarea>
       @if (vistaPrevia && nuevoComentario.trim()) {
@@ -86,16 +87,38 @@
 </section>
 
 <!-- Barra de formato sobre cada campo. mousedown con preventDefault: el textarea no pierde la selección. -->
+<!-- Barra de formato pegada arriba del campo, como la del editor de posts. Solo lo que sirve en un comentario:
+     formato de texto · código y cita · enlace y mención. Cada botón pone el formato o lo quita si ya estaba. -->
 <ng-template #barraFormato let-campo let-ta="ta">
-  <div class="coment-formato" role="toolbar" aria-label="Formato del comentario">
-    <button type="button" (mousedown)="$event.preventDefault()" (click)="aplicarFormato(campo, ta, 'negrita')"
-      matTooltip="Negrita (Ctrl+B)" aria-label="Negrita"><i class="ti ti-bold" aria-hidden="true"></i></button>
-    <button type="button" (mousedown)="$event.preventDefault()" (click)="aplicarFormato(campo, ta, 'cursiva')"
-      matTooltip="Cursiva (Ctrl+I)" aria-label="Cursiva"><i class="ti ti-italic" aria-hidden="true"></i></button>
-    <button type="button" (mousedown)="$event.preventDefault()" (click)="aplicarFormato(campo, ta, 'tachado')"
-      matTooltip="Tachado" aria-label="Tachado"><i class="ti ti-strikethrough" aria-hidden="true"></i></button>
-    <button type="button" (mousedown)="$event.preventDefault()" (click)="insertarEnlace(campo, ta)"
-      matTooltip="Enlace (Ctrl+K)" aria-label="Agregar enlace"><i class="ti ti-link" aria-hidden="true"></i></button>
+  <div class="coment-formato" role="toolbar" aria-label="Formato del comentario" (mousedown)="$event.preventDefault()">
+    <div class="coment-formato__grupo">
+      <button type="button" (click)="aplicarFormato(campo, ta, 'negrita')" [class.active]="formatoActivo(campo, ta, 'negrita')"
+        [attr.aria-pressed]="formatoActivo(campo, ta, 'negrita')" matTooltip="Negrita (Ctrl+B)" aria-label="Negrita">
+        <i class="ti ti-bold" aria-hidden="true"></i></button>
+      <button type="button" (click)="aplicarFormato(campo, ta, 'cursiva')" [class.active]="formatoActivo(campo, ta, 'cursiva')"
+        [attr.aria-pressed]="formatoActivo(campo, ta, 'cursiva')" matTooltip="Cursiva (Ctrl+I)" aria-label="Cursiva">
+        <i class="ti ti-italic" aria-hidden="true"></i></button>
+      <button type="button" (click)="aplicarFormato(campo, ta, 'subrayado')" [class.active]="formatoActivo(campo, ta, 'subrayado')"
+        [attr.aria-pressed]="formatoActivo(campo, ta, 'subrayado')" matTooltip="Subrayado (Ctrl+U)" aria-label="Subrayado">
+        <i class="ti ti-underline" aria-hidden="true"></i></button>
+      <button type="button" (click)="aplicarFormato(campo, ta, 'tachado')" [class.active]="formatoActivo(campo, ta, 'tachado')"
+        [attr.aria-pressed]="formatoActivo(campo, ta, 'tachado')" matTooltip="Tachado" aria-label="Tachado">
+        <i class="ti ti-strikethrough" aria-hidden="true"></i></button>
+    </div>
+    <div class="coment-formato__grupo">
+      <button type="button" (click)="aplicarFormato(campo, ta, 'codigo')" [class.active]="formatoActivo(campo, ta, 'codigo')"
+        [attr.aria-pressed]="formatoActivo(campo, ta, 'codigo')" matTooltip="Código (Ctrl+E)" aria-label="Código">
+        <i class="ti ti-code" aria-hidden="true"></i></button>
+      <button type="button" (click)="alternarCita(campo, ta)" [class.active]="formatoActivo(campo, ta, 'cita')"
+        [attr.aria-pressed]="formatoActivo(campo, ta, 'cita')" matTooltip="Cita" aria-label="Cita">
+        <i class="ti ti-quote" aria-hidden="true"></i></button>
+    </div>
+    <div class="coment-formato__grupo">
+      <button type="button" (click)="insertarEnlace(campo, ta)" matTooltip="Enlace (Ctrl+K)" aria-label="Agregar enlace">
+        <i class="ti ti-link" aria-hidden="true"></i></button>
+      <button type="button" (click)="insertarMencion(campo, ta)" matTooltip="Mencionar a alguien" aria-label="Mencionar a alguien">
+        <i class="ti ti-at" aria-hidden="true"></i></button>
+    </div>
   </div>
 </ng-template>
 
@@ -103,7 +126,7 @@
 <mat-menu #menuImagen="matMenu">
   <ng-template matMenuContent let-campo="campo" let-archivo="archivo" let-textarea="textarea">
     <button mat-menu-item type="button" (click)="archivo.click()">
-      <i class="ti ti-upload" aria-hidden="true"></i> Desde el PC
+      <i class="ti ti-upload" aria-hidden="true"></i> Desde el dispositivo
     </button>
     <button mat-menu-item type="button" (click)="imagenDesdeUrl(campo, textarea)">
       <i class="ti ti-link" aria-hidden="true"></i> Desde una URL
@@ -174,6 +197,7 @@
         <div class="coment-edit">
           <ng-container *ngTemplateOutlet="barraFormato; context: { $implicit: 'edicion', ta: campoEdicion }"></ng-container>
           <textarea #campoEdicion appMenciones (paste)="alPegar($event, 'edicion')" (keydown)="atajoFormato($event, 'edicion')"
+            (keyup)="alMoverCursor()" (mouseup)="alMoverCursor()" (select)="alMoverCursor()"
             [(ngModel)]="editText" rows="2" aria-label="Editar comentario"></textarea>
           <div class="coment-mini-actions">
             <input #archivo_edicion type="file" accept="image/*" hidden
@@ -217,7 +241,8 @@
         <div class="coment-reply">
           <ng-container *ngTemplateOutlet="barraFormato; context: { $implicit: 'respuesta', ta: campoRespuesta }"></ng-container>
           <textarea #campoRespuesta appMenciones (paste)="alPegar($event, 'respuesta')"
-            (keydown)="atajoFormato($event, 'respuesta')" [(ngModel)]="replyText" rows="2"
+            (keydown)="atajoFormato($event, 'respuesta')" (keyup)="alMoverCursor()" (mouseup)="alMoverCursor()"
+            (select)="alMoverCursor()" [(ngModel)]="replyText" rows="2"
             placeholder="Escribe una respuesta..." aria-label="Escribe una respuesta"></textarea>
           <div class="coment-mini-actions">
             <input #archivo_respuesta type="file" accept="image/*" hidden
