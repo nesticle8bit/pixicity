@@ -54,6 +54,45 @@ export interface MedallaUsuario {
   nivel: NivelMedalla;
   motivo: string | null;
   fecha: string;
+  /** Rankings: período ganado ('dia' | 'semana' | 'mes' | 'anio') y su inicio (fecha local). */
+  periodo?: string | null;
+  periodoInicio?: string | null;
+  /** Post con el que la ganó (ruta = SEO de la categoría). */
+  post?: MedallaContenido | null;
+  /** Comunidad con la que la ganó (ruta = nombre corto). */
+  comunidad?: MedallaContenido | null;
+}
+
+export interface MedallaContenido {
+  id: number;
+  titulo: string;
+  ruta: string;
+  slug?: string | null;
+}
+
+const MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+/** "27 de Enero de 2011" (sin pasar por la zona horaria: la fecha ya viene local). */
+function fechaLarga(iso: string, sumarDias = 0): string {
+  const [a, m, d] = iso.slice(0, 10).split('-').map(Number);
+  const f = new Date(Date.UTC(a, m - 1, d + sumarDias));
+  return `${f.getUTCDate()} de ${MESES[f.getUTCMonth()]} de ${f.getUTCFullYear()}`;
+}
+
+/**
+ * Cuándo se ganó, como en Taringa!: "Año 2007", "Septiembre de 2008", la semana por su domingo
+ * ("14 de Septiembre de 2008") y el día tal cual. Sin período, la fecha en que se otorgó.
+ */
+export function periodoMedalla(m: Pick<MedallaUsuario, 'periodo' | 'periodoInicio' | 'fecha'>): string {
+  const inicio = m.periodoInicio;
+  if (!inicio || !m.periodo) return fechaLarga(m.fecha);
+  const [a, mes] = inicio.slice(0, 10).split('-').map(Number);
+  switch (m.periodo) {
+    case 'anio': return `Año ${a}`;
+    case 'mes': return `${MESES[mes - 1]} de ${a}`;
+    case 'semana': return fechaLarga(inicio, 6);
+    default: return fechaLarga(inicio);
+  }
 }
 
 /** Usuario que tiene una medalla (panel admin). */

@@ -40,6 +40,7 @@ import { ProfileInformationComponent } from '../../profile/profile-information/p
 import { PerfilSocialMediaButtonsComponent } from './perfil-social-media-buttons/perfil-social-media-buttons.component';
 import { PerfilUserFollowersComponent } from './perfil-user-followers/perfil-user-followers.component';
 import { PerfilMedallasComponent } from './perfil-medallas/perfil-medallas.component';
+import { ProfileMedallasComponent } from '../../profile/profile-medallas/profile-medallas.component';
 import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { PORTADA_VALIDA, urlCss } from 'src/app/shared/helpers/url-css';
 
@@ -50,6 +51,7 @@ export type PestanaPerfil =
   | 'comments'
   | 'followers'
   | 'following'
+  | 'medals'
   | 'information';
 
 /** Pestañas del perfil. La activa vive en ?tab= (salvo el muro, que es la de inicio) para poder enlazarla. */
@@ -64,6 +66,7 @@ export const PESTANAS_PERFIL: {
   { id: 'comments', label: 'Comentarios', icono: 'ti-message-dots' },
   { id: 'followers', label: 'Seguidores', icono: 'ti-users' },
   { id: 'following', label: 'Siguiendo', icono: 'ti-user-check' },
+  { id: 'medals', label: 'Medallas', icono: 'ti-award' },
   { id: 'information', label: 'Información', icono: 'ti-info-circle' },
 ];
 
@@ -95,6 +98,7 @@ const PESTANA_INICIAL: PestanaPerfil = 'shouts';
     PerfilSocialMediaButtonsComponent,
     PerfilUserFollowersComponent,
     PerfilMedallasComponent,
+    ProfileMedallasComponent,
     AnuncioComponent,
     DatePipe,
     DecimalPipe,

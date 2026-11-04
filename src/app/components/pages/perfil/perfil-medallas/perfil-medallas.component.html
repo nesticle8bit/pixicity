@@ -6,18 +6,21 @@
     <span class="medallas__total">{{ medallas().length }}</span>
   </h2>
 
+  <!-- Una por medalla; si la ganó varias veces (rankings por período) lleva el contador. -->
   <ul class="medallas">
-    @for (m of medallas(); track m.medallaId; let i = $index) {
-    @if (todas() || i < visibles) { <li [class]="'medalla medalla--' + m.nivel.toLowerCase()">
-      <img [src]="src(m.imagen)" [alt]="m.titulo" width="34" height="34" loading="lazy" decoding="async"
-        [matTooltip]="detalle(m) + ' · ' + (m.fecha | date: 'dd/MM/yyyy')" tabindex="0">
-      </li>
+    @for (g of grupos(); track g.m.medallaId; let i = $index) {
+    @if (i < visibles) {
+    <li [class]="'medalla medalla--' + g.m.nivel.toLowerCase()">
+      <img [src]="src(g.m.imagen)" [alt]="g.m.titulo" width="34" height="34" loading="lazy" decoding="async"
+        [matTooltip]="detalle(g.m, g.veces)" tabindex="0">
+      @if (g.veces > 1) {
+      <span class="medalla__veces" aria-hidden="true">{{ g.veces }}</span>
       }
-      }
+    </li>
+    }
+    }
   </ul>
 
-  @if (!todas() && medallas().length > visibles) {
-  <button type="button" class="medallas__todas" (click)="todas.set(true)">Ver todas</button>
-  }
+  <button type="button" class="medallas__todas" (click)="verTodas.emit()">Ver todas</button>
 </section>
 }

@@ -1,0 +1,33 @@
+<h2 class="pf-titulo">
+  Medallas de {{ userName() }} <small>{{ medallas().length }}</small>
+</h2>
+
+@if (!cargado()) {
+<div class="pf-cargando" aria-hidden="true"><span></span><span></span><span></span></div>
+} @else if (medallas().length === 0) {
+<div class="pf-vacio">
+  <i class="ti ti-award" aria-hidden="true"></i>
+  <p><strong>{{ userName() }}</strong> todavía no ganó medallas.</p>
+</div>
+} @else {
+<ul class="pf-lista">
+  @for (m of medallas(); track $index) {
+  <li class="medalla">
+    <img class="medalla__img" [src]="src(m.imagen)" [alt]="m.titulo" width="34" height="34" loading="lazy">
+    <div class="medalla__txt">
+      <p class="medalla__titulo">
+        <strong>{{ m.titulo }}</strong> - <span class="medalla__gris">{{ periodo(m) }}</span>
+      </p>
+      <p class="medalla__detalle">
+        @if (m.post; as post) {
+        <a [routerLink]="['/posts', post.ruta, post.id, post.slug]">{{ post.titulo }}</a> -
+        } @else if (m.comunidad; as comunidad) {
+        <a [routerLink]="['/comunidades', comunidad.ruta]">{{ comunidad.titulo }}</a> -
+        }
+        <span class="medalla__gris">{{ m.motivo || m.descripcion }}</span>
+      </p>
+    </div>
+  </li>
+  }
+</ul>
+}

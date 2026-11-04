@@ -200,6 +200,7 @@
         @case ('comments') { <app-profile-comments [user]="currentUser"></app-profile-comments> }
         @case ('followers') { <app-profile-follows tipo="seguidores" [user]="currentUser"></app-profile-follows> }
         @case ('following') { <app-profile-follows tipo="siguiendo" [user]="currentUser"></app-profile-follows> }
+        @case ('medals') { <app-profile-medallas [userName]="currentUser.userName" /> }
         @case ('information') { <app-profile-information [user]="currentUser"></app-profile-information> }
         @default { <app-profile-shouts [user]="currentUser"></app-profile-shouts> }
         }
@@ -211,7 +212,7 @@
 
     <aside class="col-12 col-lg-3 pf-lateral">
       <app-perfil-social-media-buttons [usuarioId]="currentUser.id"></app-perfil-social-media-buttons>
-      <app-perfil-medallas [userName]="currentUser.userName" />
+      <app-perfil-medallas [userName]="currentUser.userName" (verTodas)="seleccionar('medals')" />
       <app-perfil-user-followers [usuarioId]="currentUser.id"
         (verTodos)="seleccionar('followers')"></app-perfil-user-followers>
       <app-anuncio class="pf-lateral__ads" ubicacion="perfil-lateral" encabezado />

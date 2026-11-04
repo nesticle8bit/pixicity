@@ -30,7 +30,27 @@
 }
 
 .medalla {
+  position: relative;
   list-style: none;
+
+  // Contador de veces ganada (rankings por período), en la esquina como un globo de notificación.
+  &__veces {
+    position: absolute;
+    right: -5px;
+    bottom: -4px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    border: 2px solid p.$superficie;
+    border-radius: 999px;
+    background: p.$marca;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 13px;
+    text-align: center;
+    pointer-events: none;
+  }
 
   img {
     display: block;

@@ -1,0 +1,47 @@
+@use '../perfil' as p;
+
+@include p.piezas-pestana;
+
+// Zebra, igual que en Posts y Comentarios.
+.pf-lista li:nth-child(even) { background: p.$fondo-suave; }
+
+.medalla {
+  @include p.fila;
+  align-items: center;
+  gap: 12px;
+  list-style: none;
+
+  &__img {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+  }
+
+  &__txt {
+    min-width: 0;
+  }
+
+  &__titulo,
+  &__detalle {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+
+  &__titulo strong {
+    color: p.$texto;
+  }
+
+  &__gris {
+    color: p.$tenue;
+  }
+
+  a {
+    color: p.$marca;
+    font-weight: 700;
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+  }
+}
