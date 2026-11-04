@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, input, signal, untracked } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MedallaUsuario, srcMedalla } from 'src/app/models/seguridad/medalla.model';
@@ -28,14 +28,18 @@ export class PerfilMedallasComponent {
   readonly visibles = VISIBLES;
 
   constructor() {
+    // El effect solo depende de userName; la petición va en untracked para que nada de lo que lea por dentro
+    // (interceptores, loader global) lo vuelva a disparar.
     effect(() => {
       const userName = this.userName();
-      this.medallas.set([]);
-      this.todas.set(false);
-      if (!userName) return;
-      this.medallasService.getMedallasUsuario(userName)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({ next: (m) => this.medallas.set(m ?? []), error: () => this.medallas.set([]) });
+      untracked(() => {
+        this.medallas.set([]);
+        this.todas.set(false);
+        if (!userName) return;
+        this.medallasService.getMedallasUsuario(userName)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({ next: (m) => this.medallas.set(m ?? []), error: () => this.medallas.set([]) });
+      });
     });
   }
 

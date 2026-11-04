@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, untracked } from '@angular/core';
 
 /** Lo mínimo que queda visible: sin esto una respuesta rápida lo hacía parpadear (igual que el minTime de ngx-ui-loader). */
 const MINIMO_MS = 300;
@@ -15,7 +15,9 @@ export class CargaGlobal {
   empezar(): void {
     this.pendientes++;
     clearTimeout(this.ocultar);
-    if (!this.visible()) {
+    // untracked: una petición lanzada dentro de un effect() no debe quedar suscrita a esta señal. Si no, el effect
+    // se vuelve a ejecutar al ocultarse el loader, pide otra vez y el loader no se va nunca (pasó con las medallas).
+    if (!untracked(this.visible)) {
       this.desde = Date.now();
       this.visible.set(true);
     }
