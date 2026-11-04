@@ -1,3 +1,4 @@
+import { PresenciaService } from './services/shared/presencia.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Meta, Title } from '@angular/platform-browser';
@@ -35,6 +36,7 @@ describe('AppComponent', () => {
         { provide: AnunciosService, useValue: { precargar: () => {} } },
         { provide: ScriptsGlobalesService, useValue: { insertar: () => {} } },
         { provide: NotificacionesEscritorioService, useValue: { iniciar: () => {} } },
+      { provide: PresenciaService, useValue: { iniciar: () => {} } },
     ],
 })
       // Solo se prueba la lógica del componente raíz (SEO y visibilidad de secciones).

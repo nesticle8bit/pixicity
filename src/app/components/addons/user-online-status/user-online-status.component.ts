@@ -5,6 +5,7 @@ import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.i
 import { NgClass } from '@angular/common';
 import { MatTooltip } from '@angular/material/tooltip';
 import { IHttpUsuarioPerfilService } from '../../../services/interfaces/httpUsuarioPerfil.interface';
+import { MINUTOS_EN_LINEA } from 'src/app/services/shared/presencia.service';
 
 @Component({
     selector: 'app-user-online-status',
@@ -34,7 +35,13 @@ export class UserOnlineStatusComponent implements OnInit {
 
   readonly class = input<string>('');
 
-  public activo: number = 0;
+  /** Minutos desde su última actividad; null = sin sesión activa. */
+  public activo: number | null = null;
+
+  /** Ojo con el 0 (activo hace menos de un minuto): antes `activo && …` lo daba por Offline. */
+  get enLinea(): boolean {
+    return this.activo !== null && this.activo <= MINUTOS_EN_LINEA;
+  }
 
   ngOnInit(): void {}
 
@@ -44,7 +51,7 @@ export class UserOnlineStatusComponent implements OnInit {
     this.cargaGetUserStatus?.unsubscribe();
 
     this.cargaGetUserStatus = this.usuarioPerfilService.getUserStatus(userName).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      this.activo = response ?? 0;
+      this.activo = response ?? null;
     });
   }
 }

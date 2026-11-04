@@ -9,6 +9,7 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 import { FollowButtonComponent } from '../follow-button/follow-button.component';
 import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { urlCss } from 'src/app/shared/helpers/url-css';
+import { MINUTOS_EN_LINEA } from 'src/app/services/shared/presencia.service';
 
 @Component({
     selector: 'app-user-popover-card',
@@ -48,7 +49,7 @@ export class UserPopoverCardComponent implements OnChanges {
   ngOnChanges(): void {
     const activo = this.activo();
     this.isOnline =
-      activo !== null && activo !== undefined && activo <= 15;
+      activo !== null && activo !== undefined && activo <= MINUTOS_EN_LINEA;
   }
 
   /** Mismo criterio que app-follow-button: con sesión y que no sea uno mismo (si no, la fila quedaría vacía). */

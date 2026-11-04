@@ -1,6 +1,5 @@
 import { FOTOS_HABILITADAS } from 'src/app/shared/helpers/secciones';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
-import { IHttpSecurityService } from 'src/app/services/interfaces/httpSecurity.interface';
 import { IHttpGeneralService } from 'src/app/services/interfaces/httpGeneral.interface';
 import { DisplayComponentModel } from 'src/app/models/shared/displayComponent.model';
 import { SEOService } from 'src/app/services/shared/seo.service';
@@ -26,7 +25,6 @@ import { AnuncioComponent } from '../../ads/anuncio/anuncio.component';
 import { HomeLastRegisteredUsersComponent } from '../../home/home-last-registered-users/home-last-registered-users.component';
 import { HomeUltimosShoutsComponent } from '../../home/home-ultimos-shouts/home-ultimos-shouts.component';
 import { HomeUltimoRegistradoComponent } from '../../home/home-ultimo-registrado/home-ultimo-registrado.component';
-import { enNavegador } from '../../../shared/helpers/plataforma';
 
 @Component({
     selector: 'app-section-home-forum',
@@ -56,7 +54,6 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
   /** La sección Fotos está cerrada (ver shared/helpers/secciones). */
   readonly fotosHabilitadas = FOTOS_HABILITADAS;
   private displayService = inject(DisplayComponentService);
-  private securityService = inject(IHttpSecurityService);
   private generalService = inject(IHttpGeneralService);
   private activatedRoute = inject(ActivatedRoute);
   private seoService = inject(SEOService);
@@ -75,9 +72,7 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
     background: '',
   };
 
-  // Heartbeat de presencia online (ms). Mantiene Activo fresco mientras el usuario sigue en la página.
-  private readonly onlineHeartbeatMs = 120000;
-  private onlineHeartbeatTimer: any = null;
+  // La presencia online ya no se manda desde acá: PresenciaService la manda en toda la app.
 
   // Pedida en el constructor, antes de que los widgets hijos pidan su parte.
   private readonly cargaPortada = this.portada.iniciar(
@@ -87,8 +82,6 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
   );
 
   constructor() {
-    this.sessionOnlineUser();
-
     this.setSeoHome();
   }
 
@@ -162,25 +155,5 @@ export class SectionHomeForumComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.portada.terminar(this.cargaPortada);
-    if (this.onlineHeartbeatTimer) {
-      clearInterval(this.onlineHeartbeatTimer);
-      this.onlineHeartbeatTimer = null;
-    }
-  }
-
-  sessionOnlineUser(): void {
-    // Primer ping inmediato + ping periódico para que el conteo refleje presencia real
-    this.pingOnline();
-
-    if (enNavegador()) this.onlineHeartbeatTimer = setInterval(
-      () => {
-        if (!document.hidden) this.pingOnline();
-      },
-      this.onlineHeartbeatMs
-    );
-  }
-
-  private pingOnline(): void {
-    this.securityService.sessionOnlineUser().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({ error: () => undefined });
   }
 }
