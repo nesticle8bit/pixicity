@@ -169,7 +169,8 @@
             @if (item.tipo === 'post' && item.post; as post) {
             <app-post-card [post]="post" [fecha]="item.fecha" />
             } @else if (item.shout; as shout) {
-            <app-shout-card [shout]="shout" [compartidoPor]="item.tipo === 'reshout' ? item.compartidoPor : null" />
+            <app-shout-card [shout]="shout" [compartidoPor]="item.tipo === 'reshout' ? item.compartidoPor : null"
+              [pausarVideos]="true" />
             }
           </li>
           <!-- Celular: a quién seguir y los hashtags van dentro del muro (como en X), no antes del primer shout. -->

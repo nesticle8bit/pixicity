@@ -62,9 +62,11 @@ export function miniaturaYoutube(id: string): string {
 }
 
 /** Reproductor sin cookies de seguimiento hasta que se reproduce. */
-export function embedYoutube(video: VideoYoutube, autoplay = false, bucle = false): string {
+/** `api`: habilita los comandos por postMessage (pauseVideo), para pausarlo desde la página. */
+export function embedYoutube(video: VideoYoutube, autoplay = false, bucle = false, api = false): string {
   const params = new URLSearchParams();
   if (autoplay) params.set('autoplay', '1');
+  if (api) params.set('enablejsapi', '1');
   if (video.inicio) params.set('start', `${video.inicio}`);
   // YouTube solo repite un video suelto si además es su propia lista de reproducción.
   if (bucle) {

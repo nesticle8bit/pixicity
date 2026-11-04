@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, OnChanges, input, inject, signal, viewChild } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, HostListener, OnChanges, input, inject, signal, viewChild } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { VisorImagenService } from '../visor-imagen/visor-imagen.service';
@@ -40,6 +40,13 @@ export class ShoutMediaComponent implements OnChanges {
   /** Se tocó la portada: recién ahí se carga el reproductor (un iframe por video hacía pesado el muro y en el celular
    *  se veía un cuadro negro hasta tocarlo). */
   readonly reproduciendo = signal(false);
+  /** Pausar el video cuando la tarjeta sale de la pantalla (muro de /mi). */
+  readonly pausarFueraDePantalla = input(false);
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly videoArchivo = viewChild<ElementRef<HTMLVideoElement>>('videoArchivo');
+  private readonly youtubeFrame = viewChild<ElementRef<HTMLIFrameElement>>('youtubeFrame');
 
   /** Preferencia de la cuenta (/cuenta → Contenido sensible): 18+ que eligió ver NSFW sin difuminar. */
   private readonly preferencia = inject(NsfwService);
@@ -98,6 +105,30 @@ export class ShoutMediaComponent implements OnChanges {
     this.enlaceEmbed = this.esEnlace ? this.calcularEnlaceEmbed() : null;
   }
 
+  /**
+   * Al salir de la pantalla (menos del 30 % visible) el video se pausa: el <video> y YouTube con pause (al volver se
+   * sigue desde ahí); los embeds de TikTok/Instagram/turbo.cr no aceptan comandos y vuelven a su portada.
+   */
+  constructor() {
+    afterNextRender(() => {
+      if (!this.pausarFueraDePantalla() || typeof IntersectionObserver === 'undefined') return;
+      const observador = new IntersectionObserver(
+        ([e]) => { if (e && e.intersectionRatio < 0.3) this.pausar(); },
+        { threshold: [0, 0.3] },
+      );
+      observador.observe(this.host.nativeElement);
+      this.destroyRef.onDestroy(() => observador.disconnect());
+    });
+  }
+
+  private pausar(): void {
+    const video = this.videoArchivo()?.nativeElement;
+    if (video && !video.paused) video.pause();
+    this.youtubeFrame()?.nativeElement.contentWindow?.postMessage(
+      JSON.stringify({ event: 'command', func: 'pauseVideo', args: [] }), '*');
+    if (this.esEnlace && this.reproduciendo() && this.portada && !this.imagenFallo()) this.reproduciendo.set(false);
+  }
+
   /** Tocar la portada carga el reproductor (YouTube arranca solo). Sin abrir el detalle del shout. */
   reproducir(event: Event): void {
     event.preventDefault();
@@ -135,7 +166,7 @@ export class ShoutMediaComponent implements OnChanges {
     const video = videoYoutube(url);
     if (!video) return null;
     // Solo se usa después de tocar la portada: arranca a reproducir.
-    return this.sanitizer.bypassSecurityTrustResourceUrl(embedYoutube(video, true, this.bucle()));
+    return this.sanitizer.bypassSecurityTrustResourceUrl(embedYoutube(video, true, this.bucle(), this.pausarFueraDePantalla()));
   }
 
   private calcularSpotifyEmbed(): SafeResourceUrl | null {

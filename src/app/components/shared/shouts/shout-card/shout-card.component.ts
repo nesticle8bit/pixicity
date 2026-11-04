@@ -78,6 +78,8 @@ export class ShoutCardComponent {
   readonly compartidoPor = input<{ userName: string; avatar: string | null } | null>(null);
   /** En el muro del perfil: muestra la marca "Fijado" y deja al autor fijar sus shouts de su propio muro. */
   readonly enPerfil = input(false);
+  /** Pausar el video del shout cuando sale de la pantalla (muro de /mi). */
+  readonly pausarVideos = input(false);
   /** Se fijó o se soltó: hay uno por perfil, así que el muro se recarga (el anterior se suelta solo). */
   readonly fijadoCambio = output<boolean>();
 

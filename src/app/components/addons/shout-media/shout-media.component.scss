@@ -1,3 +1,8 @@
+// Caja propia: el IntersectionObserver que pausa el video al salir de pantalla mide este elemento.
+:host {
+  display: block;
+}
+
 .shout-media {
   margin-top: 8px;
 }

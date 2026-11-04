@@ -12,7 +12,7 @@
   @if (esVideo && youtubeEmbed) {
     <div class="sm-embed sm-embed--video">
       @if (reproduciendo()) {
-        <iframe [src]="youtubeEmbed" frameborder="0"
+        <iframe #youtubeFrame [src]="youtubeEmbed" frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen [title]="mediaTitulo() || 'Video de YouTube'"></iframe>
       } @else {
@@ -31,7 +31,7 @@
     </a>
   } @else if (esVideoArchivo) {
     <!-- click.stop: los controles no deben abrir el detalle del shout. -->
-    <video class="sm-video" [src]="srcVideo" [attr.poster]="mediaImagen() || null" controls playsinline preload="metadata" [loop]="bucle()"
+    <video #videoArchivo class="sm-video" [src]="srcVideo" [attr.poster]="mediaImagen() || null" controls playsinline preload="metadata" [loop]="bucle()"
       (click)="$event.stopPropagation()">
       <a [href]="url()" target="_blank" rel="noopener">Ver el video</a>
     </video>
