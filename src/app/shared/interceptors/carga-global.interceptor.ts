@@ -49,6 +49,10 @@ export const SIN_LOADER: RegExp[] = [
   'fotos/top',
   'estadisticas',
   'usuarios/por-nombre/[^/?]+/(seguimiento|te-sigue|info|estado)',
+  // Medallas del lateral del perfil: si no tiene ninguna la caja ni aparece; no debe tapar la página.
+  'medallas/usuarios/por-nombre/[^/?]+',
+  // Votar en una encuesta de shout: los resultados aparecen en la misma tarjeta.
+  `shouts/${ID}/encuesta/votos`,
   // Pantallas con su propio indicador (app-cargando): el overlay de pantalla completa quedaba encima del anillo.
   `posts/${ID}`,
   `posts/${ID}/comentarios`,
