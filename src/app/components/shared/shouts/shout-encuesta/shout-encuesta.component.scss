@@ -1,0 +1,97 @@
+:host {
+  display: block;
+  margin-top: 10px;
+}
+
+.se__opciones,
+.se__resultados {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.se__opcion {
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid light-dark(#006595, #8ed2f2);
+  border-radius: 999px;
+  background: transparent;
+  color: light-dark(#006595, #8ed2f2);
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.15s;
+
+  &:hover:not(:disabled) {
+    background: light-dark(rgb(0 101 149 / 8%), rgb(142 210 242 / 12%));
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+}
+
+.se__resultado {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  color: light-dark(#1f2328, #e6edf3);
+}
+
+.se__barra {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 6px;
+  background: light-dark(#e3e8ec, #2d333b);
+  transition: width 0.4s ease-out;
+}
+
+.is-ganadora .se__barra {
+  background: light-dark(#b9dcec, #1f4a5e);
+}
+
+.se__texto,
+.se__pct {
+  position: relative;
+}
+
+.se__texto {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.is-ganadora .se__texto,
+.is-ganadora .se__pct {
+  font-weight: 700;
+}
+
+.se__pct {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.se__estado {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  color: light-dark(#59636e, #9198a1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .se__barra,
+  .se__opcion {
+    transition: none;
+  }
+}

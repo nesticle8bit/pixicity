@@ -2,7 +2,7 @@ import { AdminFiltro } from 'src/app/models/admin/admin-filtro.model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedData } from 'src/app/models/api/api-response.model';
-import { ShoutAdmin, ShoutComentarioViewModel, ShoutComentarioVoto, ShoutInteracciones, ShoutReaccion, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
+import { ShoutAdmin, ShoutComentarioViewModel, ShoutComentarioVoto, ShoutEncuesta, ShoutInteracciones, ShoutReaccion, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
 
 @Injectable()
 export abstract class IHttpPerfilService {
@@ -35,6 +35,8 @@ export abstract class IHttpPerfilService {
   abstract alternarMeGustaShout(shoutId: number): Observable<ShoutReaccion>;
   abstract alternarNoMeGustaShout(shoutId: number): Observable<ShoutReaccion>;
   abstract alternarFavoritoShout(shoutId: number): Observable<ShoutReaccion>;
+  /** Vota una opción de la encuesta del shout; devuelve los resultados ya con el voto. */
+  abstract votarEncuesta(shoutId: number, opcionId: number): Observable<ShoutEncuesta>;
   abstract alternarReshoutShout(shoutId: number): Observable<ShoutReaccion>;
   abstract getReshouts(shoutId: number, cantidad?: number): Observable<{ usuarios: { userName: string; avatar: string | null }[]; total: number }>;
   abstract getShoutsFavoritos(page: number, pageCount: number): Observable<PaginatedData<ShoutViewModel, 'shouts'>>;

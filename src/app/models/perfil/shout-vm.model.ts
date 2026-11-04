@@ -21,9 +21,23 @@ export interface ShoutViewModel {
   perfil?: { userName: string; avatar: string | null } | null;
   /** Contadores y lo que hizo el usuario actual (listas del perfil y de /mi). */
   interacciones?: ShoutInteracciones | null;
+  /** Encuesta del shout (null/ausente si no tiene). */
+  encuesta?: ShoutEncuesta | null;
+  /** Solo al crear: textos de las opciones (2 a 4) y duración en minutos. */
+  opcionesEncuesta?: string[];
+  duracionEncuestaMinutos?: number;
   fechaRegistro: string;
   /** Última edición del autor (null si nunca se editó). */
   fechaActualiza?: string | null;
+}
+
+/** Encuesta de un shout (estilo Twitter): resultados y la opción que votó el usuario actual. */
+export interface ShoutEncuesta {
+  cierre: string;
+  cerrada: boolean;
+  totalVotos: number;
+  miVoto: number | null;
+  opciones: { id: number; texto: string; votos: number }[];
 }
 
 /** Shout en el listado del panel admin (forma propia de GetShoutsAdmin). */

@@ -39,6 +39,11 @@
 
                 <p class="sv-bubble__body"><app-texto-enlazado [texto]="shout.comentario" /></p>
 
+                @if (shout.encuesta) {
+                <app-shout-encuesta [shoutId]="shout.id" [encuesta]="shout.encuesta"
+                  [esAutor]="!!currentUser?.usuario?.userName && shout.avatar?.userName === currentUser?.usuario?.userName" />
+                }
+
                 <app-shout-media [url]="shout.url" [tipo]="shout.tipo" [mediaTitulo]="shout.mediaTitulo"
                   [mediaImagen]="shout.mediaImagen" [mediaDescripcion]="shout.mediaDescripcion" [nsfw]="!!shout.nsfw"
                   [bucle]="!!shout.bucle"></app-shout-media>

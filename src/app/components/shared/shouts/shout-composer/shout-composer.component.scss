@@ -123,7 +123,8 @@
     }
 
     &:hover,
-    &[aria-expanded="true"] {
+    &[aria-expanded="true"],
+    &.is-activo {
       color: light-dark(#006595, #8ed2f2);
       background: light-dark(#f1f4f6, #26333c);
     }
@@ -322,4 +323,125 @@
 
   &:hover:not(:disabled) { border-color: light-dark(#0B6EA5, #2a8cc4); color: light-dark(#0B6EA5, #6cbcec); }
   &.is-activo { background: light-dark(#0B6EA5, #2a8cc4); border-color: light-dark(#0B6EA5, #2a8cc4); color: #fff; }
+}
+
+// Encuesta: de 2 a 4 opciones, duración y quitar.
+.sh-encuesta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0 0;
+  padding: 10px 12px;
+  border: 1px solid light-dark(#e3e8ec, #374550);
+  border-radius: 10px;
+  background: light-dark(#f7f9fb, #1e2d3b);
+  min-width: 0;
+
+  legend {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  &__fila {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__opcion {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 52px 8px 10px;
+    border: 1px solid light-dark(#d5dde3, #3c4b57);
+    border-radius: 8px;
+    background: light-dark(#fff, #1e2124);
+    color: light-dark(#1f2a33, #cad6df);
+    font-size: 16px; // 16px: iOS no hace zoom al enfocar
+
+    &:focus {
+      outline: none;
+      border-color: #0085c4;
+      box-shadow: 0 0 0 3px rgba(0, 133, 196, 0.12);
+    }
+  }
+
+  &__cuenta {
+    position: absolute;
+    right: 10px;
+    font-size: 0.72rem;
+    color: light-dark(#5d6b75, #aeaeae);
+    pointer-events: none;
+  }
+
+  &__fila:has(.sh-encuesta__quitar) .sh-encuesta__cuenta {
+    right: 46px;
+  }
+
+  &__quitar,
+  &__agregar,
+  &__cerrar {
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 6px;
+    color: light-dark(#5d6b75, #aeaeae);
+    min-height: 36px;
+  }
+
+  &__quitar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+
+    &:hover { color: #c0392b; }
+  }
+
+  &__pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  &__agregar {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 8px;
+    font-weight: 600;
+    color: light-dark(#006595, #8ed2f2);
+
+    &:hover { background: light-dark(#eef3f6, #26333c); }
+  }
+
+  &__duracion {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: light-dark(#1f2a33, #cad6df);
+
+    select {
+      min-height: 36px;
+      padding: 0 8px;
+      border: 1px solid light-dark(#d5dde3, #3c4b57);
+      border-radius: 6px;
+      background: light-dark(#fff, #1e2124);
+      color: inherit;
+      font-size: 16px;
+    }
+  }
+
+  &__cerrar {
+    margin-left: auto;
+    padding: 0 8px;
+
+    &:hover { color: #c0392b; }
+  }
 }

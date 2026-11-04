@@ -1,4 +1,7 @@
 import { enlazarHashtagsTexto } from 'src/app/shared/pipes/enlazarHashtags.pipe';
+import {
+  decodificarEntidades, enlaceHtml, ENLACE_HTML_ESCAPADO, escaparHtml, permitirEtiquetasBasicas,
+} from 'src/app/shared/helpers/html-basico';
 import { reemplazarEmotes } from 'src/app/shared/helpers/emotes';
 import { Component, DestroyRef, ElementRef, inject, Input, output, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -586,24 +589,22 @@ export class ComentariosComponent {
   // - Formato
 
   /**
-   * Escapa HTML y convierte URLs, @menciones y #hashtags en enlaces; los enlaces a imágenes y los :emotes: se muestran.
+   * Escapa HTML (salvo las etiquetas de formato básico y <a href="https://..."> de html-basico) y convierte URLs, @menciones y #hashtags en enlaces; los enlaces a imágenes y los :emotes: se muestran.
    * Formato básico (lo escribe la barra del campo): **negrita**, *cursiva*, ~~tachado~~ y [texto](https://enlace).
    */
   formatear(texto: string): string {
     if (!texto) return '';
-    const escapado = texto
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+    const escapado = escaparHtml(decodificarEntidades(texto));
 
-    // Los [texto](url) se apartan antes: si no, el enlazado automático volvería a enlazar la URL dentro del href.
+    // Los <a href> y [texto](url) se apartan antes: si no, el enlazado automático volvería a enlazar la URL del href.
     const enlaces: string[] = [];
-    const conFormato = escapado
-      .replace(/\[([^\]\n]{1,200})\]\((https?:\/\/[^\s)]+)\)/g, (_m, txt: string, url: string) => {
-        enlaces.push(`<a href="${url}" target="_blank" rel="nofollow noopener">${txt}</a>`);
-        return `\u0001${enlaces.length - 1}\u0001`;
-      })
+    const apartar = (url: string, txt: string): string => {
+      enlaces.push(enlaceHtml(url, permitirEtiquetasBasicas(txt)));
+      return `\u0001${enlaces.length - 1}\u0001`;
+    };
+    const conFormato = permitirEtiquetasBasicas(escapado
+      .replace(ENLACE_HTML_ESCAPADO, (_m, url: string, txt: string) => apartar(url, txt))
+      .replace(/\[([^\]\n]{1,200})\]\((https?:\/\/[^\s)]+)\)/g, (_m, txt: string, url: string) => apartar(url, txt)))
       .replace(/\*\*(?=\S)([^\n]*?\S)\*\*/g, '<strong>$1</strong>')
       .replace(/~~(?=\S)([^\n]*?\S)~~/g, '<del>$1</del>')
       .replace(/(^|[^*\w])\*(?=[^\s*])([^*\n]*?[^\s*])\*(?![*\w])/g, '$1<em>$2</em>');

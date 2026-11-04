@@ -18,6 +18,7 @@ import { UserPopoverDirective } from 'src/app/shared/directives/userPopover.dire
 import { ShoutMediaComponent } from '../../../addons/shout-media/shout-media.component';
 import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.component';
 import { TextoEnlazadoComponent } from '../texto-enlazado/texto-enlazado.component';
+import { ShoutEncuestaComponent } from '../shout-encuesta/shout-encuesta.component';
 import { ShareButtonsComponent } from '../../../addons/share-buttons/share-buttons.component';
 import { environment } from 'src/environments/environment';
 import { ShoutsEstadoService } from 'src/app/services/shared/shouts-estado.service';
@@ -56,7 +57,7 @@ const SIN_INTERACCIONES: ShoutInteracciones = {
   styleUrl: './shout-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, UserPopoverDirective, UserAvatarComponent, MatTooltip, MatMenu, MatMenuItem, MatMenuTrigger, ShoutMediaComponent, DatePipe, TiempoCortoPipe,
-    TextoEnlazadoComponent, FormsModule, ShareButtonsComponent],
+    TextoEnlazadoComponent, FormsModule, ShareButtonsComponent, ShoutEncuestaComponent],
 })
 export class ShoutCardComponent {
   private readonly perfilService = inject(IHttpPerfilService);

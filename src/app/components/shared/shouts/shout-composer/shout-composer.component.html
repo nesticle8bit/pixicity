@@ -7,7 +7,7 @@
 
   <div class="sh-composer__main">
     <div class="sh-composer__campo">
-      <textarea #campoShout class="sh-composer__input" rows="3" formControlName="comentario"
+      <textarea #campoShout class="sh-composer__input" rows="3" formControlName="comentario" maxlength="1500"
         aria-label="¿Qué estás pensando?" placeholder="¿Qué estás pensando? Usa #hashtags para sumarte a un tema"
         role="combobox" aria-autocomplete="list" aria-controls="sh-hashtags" [attr.aria-expanded]="hashtags().length > 0"
         [attr.aria-activedescendant]="hashtags().length ? 'sh-hashtag-' + hashtagActivo() : null"
@@ -28,7 +28,40 @@
       }
     </div>
 
-    @if (!imagenSubida()) {
+    @if (encuestaAbierta()) {
+    <fieldset class="sh-encuesta">
+      <legend class="visually-hidden">Encuesta</legend>
+      @for (o of opciones(); track $index; let i = $index) {
+      <div class="sh-encuesta__fila">
+        <input type="text" class="sh-encuesta__opcion" [value]="o" (input)="cambiarOpcion(i, $any($event.target).value)"
+          [maxLength]="maxTextoOpcion" [placeholder]="'Opción ' + (i + 1) + (i > 1 ? ' (opcional)' : '')"
+          [attr.aria-label]="'Opción ' + (i + 1)">
+        <span class="sh-encuesta__cuenta" aria-hidden="true">{{ o.length }}/{{ maxTextoOpcion }}</span>
+        @if (opciones().length > 2) {
+        <button type="button" class="sh-encuesta__quitar" (click)="quitarOpcion(i)" [attr.aria-label]="'Quitar la opción ' + (i + 1)">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+        }
+      </div>
+      }
+      <div class="sh-encuesta__pie">
+        @if (opciones().length < maxOpciones) {
+        <button type="button" class="sh-encuesta__agregar" (click)="agregarOpcion()">
+          <i class="ti ti-plus" aria-hidden="true"></i> Agregar opción
+        </button>
+        }
+        <label class="sh-encuesta__duracion">
+          Duración
+          <select [value]="duracion()" (change)="duracion.set(+$any($event.target).value)">
+            @for (d of duraciones; track d.minutos) {
+            <option [value]="d.minutos" [selected]="d.minutos === duracion()">{{ d.texto }}</option>
+            }
+          </select>
+        </label>
+        <button type="button" class="sh-encuesta__cerrar" (click)="cerrarEncuesta()">Quitar encuesta</button>
+      </div>
+    </fieldset>
+    } @else if (!imagenSubida()) {
     <div class="sh-composer__media">
       <i class="ti ti-link" aria-hidden="true"></i>
       <input type="url" class="sh-composer__url" formControlName="url"
@@ -53,7 +86,13 @@
     }
 
     <div class="sh-composer__actions">
-      <span class="sh-composer__hint">Comparte algo con la comunidad</span>
+      <span class="sh-composer__hint">
+        @if ((formGroup.value.comentario?.length ?? 0) > 1300) {
+        {{ formGroup.value.comentario?.length }}/1500
+        } @else {
+        Comparte algo con la comunidad
+        }
+      </span>
       <button type="button" class="sh-composer__nsfw" [class.is-activo]="formGroup.value.nsfw" (click)="alternarNsfw()"
         [attr.aria-pressed]="!!formGroup.value.nsfw" [disabled]="subiendoImagen()"
         [matTooltip]="imagenSubida() ? 'Quita la imagen subida para marcarlo NSFW' : 'Contenido para mayores de 18: solo enlaces externos'" [attr.aria-label]="imagenSubida() ? 'Quita la imagen subida para marcarlo NSFW' : 'Contenido para mayores de 18: solo enlaces externos'">
@@ -66,7 +105,13 @@
         <i class="ti ti-repeat" aria-hidden="true"></i> Bucle
       </button>
       }
-      @if (!formGroup.value.nsfw) {
+      <button type="button" class="sh-composer__emoji" [class.is-activo]="encuestaAbierta()" (click)="alternarEncuesta()"
+        [attr.aria-pressed]="encuestaAbierta()" [disabled]="subiendoImagen()"
+        [matTooltip]="encuestaAbierta() ? 'Quitar la encuesta' : 'Agregar una encuesta'"
+        [attr.aria-label]="encuestaAbierta() ? 'Quitar la encuesta' : 'Agregar una encuesta'">
+        <i class="ti ti-chart-bar" aria-hidden="true"></i>
+      </button>
+      @if (!formGroup.value.nsfw && !encuestaAbierta()) {
       <input #archivoImagen type="file" accept="image/*" hidden (change)="elegirImagen($event)" />
       <button type="button" class="sh-composer__emoji" (click)="archivoImagen.click()"
         [disabled]="subiendoImagen()" aria-label="Subir una imagen" matTooltip="Subir una imagen">

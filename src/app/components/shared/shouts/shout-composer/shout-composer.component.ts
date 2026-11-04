@@ -92,6 +92,57 @@ export class ShoutComposerComponent {
     this.formGroup.patchValue({ nsfw: !this.formGroup.value.nsfw });
   }
 
+  // - Encuesta (como en Twitter: de 2 a 4 opciones de hasta 25 caracteres, sin enlace ni imagen)
+
+  readonly maxOpciones = 4;
+  readonly maxTextoOpcion = 25;
+  readonly duraciones = [
+    { minutos: 5, texto: '5 minutos' },
+    { minutos: 60, texto: '1 hora' },
+    { minutos: 6 * 60, texto: '6 horas' },
+    { minutos: 24 * 60, texto: '1 día' },
+    { minutos: 3 * 24 * 60, texto: '3 días' },
+    { minutos: 7 * 24 * 60, texto: '7 días' },
+  ];
+  readonly encuestaAbierta = signal(false);
+  readonly opciones = signal<string[]>(['', '']);
+  readonly duracion = signal(24 * 60);
+
+  alternarEncuesta(): void {
+    if (this.encuestaAbierta()) {
+      this.cerrarEncuesta();
+      return;
+    }
+    if (this.formGroup.value.url || this.imagenSubida()) {
+      this.notificaciones.error('Quita el enlace o la imagen: un shout con encuesta no puede llevarlos', 'Encuesta');
+      return;
+    }
+    this.encuestaAbierta.set(true);
+  }
+
+  cerrarEncuesta(): void {
+    this.encuestaAbierta.set(false);
+    this.opciones.set(['', '']);
+    this.duracion.set(24 * 60);
+  }
+
+  cambiarOpcion(i: number, valor: string): void {
+    this.opciones.update((lista) => lista.map((o, j) => (j === i ? valor : o)));
+  }
+
+  agregarOpcion(): void {
+    if (this.opciones().length < this.maxOpciones) this.opciones.update((lista) => [...lista, '']);
+  }
+
+  quitarOpcion(i: number): void {
+    if (this.opciones().length > 2) this.opciones.update((lista) => lista.filter((_o, j) => j !== i));
+  }
+
+  /** Opciones escritas (sin las vacías). */
+  private opcionesLlenas(): string[] {
+    return this.opciones().map((o) => o.trim()).filter((o) => o);
+  }
+
   /** Autocompletado de #hashtags: sugerencias para el tag que se está escribiendo. */
   readonly hashtags = signal<Tendencia[]>([]);
   readonly hashtagActivo = signal(0);
@@ -208,7 +259,7 @@ export class ShoutComposerComponent {
     if (!file) {
       // Enlace multimedia pegado en el texto (video .mp4, YouTube, TikTok...): va al campo de enlace para que se vea.
       const texto = event.clipboardData?.getData('text')?.trim() ?? '';
-      if (!this.formGroup.value.url && !this.imagenSubida() && /^https?:\/\/\S+$/i.test(texto)
+      if (!this.formGroup.value.url && !this.imagenSubida() && !this.encuestaAbierta() && /^https?:\/\/\S+$/i.test(texto)
         && (detectarTipoShout(texto) !== 'Enlace' || embedEnlace(texto))) {
         event.preventDefault();
         this.formGroup.patchValue({ url: texto });
@@ -221,6 +272,10 @@ export class ShoutComposerComponent {
 
   private async subirImagen(file: File): Promise<void> {
     if (this.subiendoImagen()) return;
+    if (this.encuestaAbierta()) {
+      this.notificaciones.error('Un shout con encuesta no puede llevar imagen', 'Encuesta');
+      return;
+    }
     if (this.formGroup.value.nsfw) {
       this.notificaciones.error('Los shouts NSFW no admiten imágenes subidas: pega un enlace externo', 'NSFW');
       return;
@@ -259,9 +314,24 @@ export class ShoutComposerComponent {
     const shout = this.formGroup.getRawValue();
     if (!shout.comentario.trim() || !shout.perfilId || this.enviando() || this.subiendoImagen()) return;
 
+    const encuesta: Partial<ShoutViewModel> = {};
+    if (this.encuestaAbierta()) {
+      const opciones = this.opcionesLlenas();
+      if (opciones.length < 2) {
+        this.notificaciones.error('La encuesta necesita al menos 2 opciones', 'Encuesta');
+        return;
+      }
+      if (new Set(opciones.map((o) => o.toLowerCase())).size !== opciones.length) {
+        this.notificaciones.error('Las opciones no pueden repetirse', 'Encuesta');
+        return;
+      }
+      encuesta.opcionesEncuesta = opciones;
+      encuesta.duracionEncuestaMinutos = this.duracion();
+    }
+
     this.enviando.set(true);
     this.perfilService
-      .createShout(shout as unknown as Partial<ShoutViewModel>)
+      .createShout({ ...(shout as unknown as Partial<ShoutViewModel>), ...encuesta })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
@@ -269,6 +339,7 @@ export class ShoutComposerComponent {
           if (response) {
             this.formGroup.patchValue({ comentario: '', url: '', nsfw: false, bucle: false });
             this.imagenSubida.set(false);
+            this.cerrarEncuesta();
             this.cerrarHashtags();
             this.publicado.emit();
           }

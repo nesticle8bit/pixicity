@@ -1,0 +1,25 @@
+@if (encuesta(); as e) {
+<div class="se" role="group" aria-label="Encuesta">
+  @if (verResultados()) {
+  <ul class="se__resultados">
+    @for (o of e.opciones; track o.id) {
+    <li class="se__resultado" [class.is-ganadora]="o.votos > 0 && o.votos === maxVotos()" [class.is-mio]="o.id === e.miVoto">
+      <span class="se__barra" [style.width.%]="porcentaje(o.votos)" aria-hidden="true"></span>
+      <span class="se__texto">
+        {{ o.texto }}
+        @if (o.id === e.miVoto) {<i class="ti ti-circle-check" aria-label="Tu voto"></i>}
+      </span>
+      <span class="se__pct">{{ porcentaje(o.votos) | number: '1.0-0' }}%</span>
+    </li>
+    }
+  </ul>
+  } @else {
+  <div class="se__opciones">
+    @for (o of e.opciones; track o.id) {
+    <button type="button" class="se__opcion" [disabled]="votando()" (click)="votar(o.id)">{{ o.texto }}</button>
+    }
+  </div>
+  }
+  <p class="se__estado">{{ estado() }}</p>
+</div>
+}

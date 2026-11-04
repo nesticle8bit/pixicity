@@ -9,7 +9,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { ShoutAdmin, ShoutComentarioViewModel, ShoutComentarioVoto, ShoutInteracciones, ShoutReaccion, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
+import { ShoutAdmin, ShoutComentarioViewModel, ShoutComentarioVoto, ShoutEncuesta, ShoutInteracciones, ShoutReaccion, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
 
 @Injectable()
 export class HttpPerfilService implements IHttpPerfilService {
@@ -233,6 +233,13 @@ export class HttpPerfilService implements IHttpPerfilService {
   alternarMeGustaShout(shoutId: number): Observable<ShoutReaccion> {
     return this.http
       .post<ApiResponse<ShoutReaccion>>(`${environment.api}/api/shouts/${shoutId}/me-gusta`, {})
+      .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  votarEncuesta(shoutId: number, opcionId: number): Observable<ShoutEncuesta> {
+    return this.http
+      .post<ApiResponse<ShoutEncuesta>>(`${environment.api}/api/shouts/${shoutId}/encuesta/votos`, { opcionId })
       .pipe(map((r) => { if (r.status === 200) { return r.data!; } throw new Error(r.errors?.join(', ') ?? 'Error'); }))
       .pipe(catchError(this.helper.errorHandler));
   }

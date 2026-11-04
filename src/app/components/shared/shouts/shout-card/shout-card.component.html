@@ -44,7 +44,7 @@
 
     @if (editando()) {
     <form class="sc-edicion" (ngSubmit)="guardarEdicion()">
-      <textarea name="textoEdicion" [(ngModel)]="textoEdicion" rows="3" maxlength="2000" aria-label="Editar shout"></textarea>
+      <textarea name="textoEdicion" [(ngModel)]="textoEdicion" rows="3" maxlength="1500" aria-label="Editar shout"></textarea>
       <div class="sc-edicion__acciones">
         <button type="button" class="sc-action" (click)="editando.set(false)">Cancelar</button>
         <button type="submit" class="sc-edicion__guardar" [disabled]="!textoEdicion.trim() || guardandoEdicion()">
@@ -54,6 +54,10 @@
     </form>
     } @else if (texto()) {
     <p class="sc-bubble__body"><app-texto-enlazado [texto]="texto()" /></p>
+    }
+
+    @if (shout().encuesta; as encuesta) {
+    <app-shout-encuesta [shoutId]="shout().id" [encuesta]="encuesta" [esAutor]="esMio()" />
     }
 
     <app-shout-media [url]="shout().url" [tipo]="shout().tipo" [mediaTitulo]="shout().mediaTitulo"

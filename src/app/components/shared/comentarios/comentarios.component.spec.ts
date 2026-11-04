@@ -158,10 +158,31 @@ describe('ComentariosComponent', () => {
     expect(componente.puedeFijarComentario(respuesta)).toBeFalse();
   });
 
-  it('formatear escapa HTML y enlaza URLs y menciones', () => {
-    const html = componente.formatear('<b>hola</b> @ana https://x.com');
+  it('formatear deja el HTML básico, escapa el resto y no permite atributos', () => {
+    const html = componente.formatear(
+      '<b>negrita</b> <u>sub</u> <script>alert(1)</script> <b onclick="x()">no</b> <img src=x onerror=alert(1)> a &amp; b');
 
-    expect(html).toContain('&lt;b&gt;hola&lt;/b&gt;');
+    expect(html).toContain('<b>negrita</b>');
+    expect(html).toContain('<u>sub</u>');
+    expect(html).toContain('&lt;script&gt;');
+    expect(html).toContain('&lt;b onclick=');
+    expect(html).not.toContain('<img src=x');
+    expect(html).toContain('a &amp; b');
+  });
+
+  it('formatear acepta <a href="https://..."> y descarta javascript:', () => {
+    const bueno = componente.formatear('<a href="https://x.com/a?b=1&amp;c=2">mi web</a>');
+    const malo = componente.formatear('<a href="javascript:alert(1)">x</a>');
+
+    expect(bueno).toContain('<a href="https://x.com/a?b=1&amp;c=2" target="_blank" rel="nofollow noopener">mi web</a>');
+    expect(bueno.match(/<a /g)?.length).toBe(1);
+    expect(malo).not.toContain('<a href="javascript');
+  });
+
+  it('formatear escapa HTML y enlaza URLs y menciones', () => {
+    const html = componente.formatear('<div>hola</div> @ana https://x.com');
+
+    expect(html).toContain('&lt;div&gt;hola&lt;/div&gt;');
     expect(html).toContain('<a href="/perfil/ana">@ana</a>');
     expect(html).toContain('<a href="https://x.com"');
   });

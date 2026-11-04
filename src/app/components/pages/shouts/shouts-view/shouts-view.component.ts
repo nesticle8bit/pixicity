@@ -21,6 +21,7 @@ import { PostOriginalPosterInfoComponent } from '../../../posts/post-original-po
 import { MatButton } from '@angular/material/button';
 import { DatePipe, DOCUMENT } from '@angular/common';
 import { TextoEnlazadoComponent } from '../../../shared/shouts/texto-enlazado/texto-enlazado.component';
+import { ShoutEncuestaComponent } from '../../../shared/shouts/shout-encuesta/shout-encuesta.component';
 import { ShareButtonsComponent } from '../../../addons/share-buttons/share-buttons.component';
 import { ShoutsEstadoService } from 'src/app/services/shared/shouts-estado.service';
 import { HomeUltimosShoutsComponent } from '../../../home/home-ultimos-shouts/home-ultimos-shouts.component';
@@ -56,6 +57,7 @@ const SIN_SESION: Record<Marca, string> = {
     MatButton,
     DatePipe,
     TextoEnlazadoComponent,
+    ShoutEncuestaComponent,
     ShareButtonsComponent,
     HomeUltimosShoutsComponent,
   ],
