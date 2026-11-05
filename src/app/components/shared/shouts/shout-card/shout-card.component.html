@@ -36,8 +36,10 @@
         }
       </span>
       <a class="sc-bubble__time" [routerLink]="enlace()"
-        [matTooltip]="(shout().fechaRegistro | date: 'EEEE d \'de\' MMMM \'a las\' h:mm \', año\' y') ?? ''">
-        <time [attr.datetime]="shout().fechaRegistro"><span class="sc-fecha-larga">{{ shout().fechaRegistro | date: 'd MMM, h:mm a' }}</span><span class="sc-fecha-corta">{{ shout().fechaRegistro | tiempoCorto }}</span></time>
+        [matTooltip]="(shout().fechaRegistro | date: 'EEEE d \'de\' MMMM \'de\' y, h:mm a') ?? ''">
+        <!-- "hace X" (en celular la versión corta, "3 h"); la fecha y hora exactas al pasar el mouse. -->
+        <time [attr.datetime]="shout().fechaRegistro"
+          [attr.aria-label]="shout().fechaRegistro | date: 'EEEE d \'de\' MMMM \'de\' y, h:mm a'"><span class="sc-fecha-larga">{{ shout().fechaRegistro | timeAgo }}</span><span class="sc-fecha-corta">{{ shout().fechaRegistro | tiempoCorto }}</span></time>
         @if (editado()) { <span class="sc-bubble__editado">· editado</span> }
       </a>
     </header>

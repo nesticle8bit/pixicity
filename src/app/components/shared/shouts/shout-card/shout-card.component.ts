@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatTooltip } from '@angular/material/tooltip';
+import { TimeAgoPipe } from 'src/app/shared/pipes/timeAgo.pipe';
 import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ShoutInteracciones, ShoutReaccion, ShoutViewModel } from 'src/app/models/perfil/shout-vm.model';
@@ -56,7 +57,7 @@ const SIN_INTERACCIONES: ShoutInteracciones = {
   templateUrl: './shout-card.component.html',
   styleUrl: './shout-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, UserPopoverDirective, UserAvatarComponent, MatTooltip, MatMenu, MatMenuItem, MatMenuTrigger, ShoutMediaComponent, DatePipe, TiempoCortoPipe,
+  imports: [RouterLink, UserPopoverDirective, UserAvatarComponent, MatTooltip, MatMenu, MatMenuItem, MatMenuTrigger, ShoutMediaComponent, DatePipe, TiempoCortoPipe, TimeAgoPipe,
     TextoEnlazadoComponent, FormsModule, ShareButtonsComponent, ShoutEncuestaComponent],
 })
 export class ShoutCardComponent {
