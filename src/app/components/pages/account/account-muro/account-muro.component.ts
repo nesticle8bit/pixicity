@@ -37,6 +37,16 @@ const GRUPOS: { grupo: string; secciones: { id: SeccionMuroPerfil; label: string
     grupo: 'Logros',
     secciones: [{ id: 'rangos', label: 'Rangos', detalle: 'Cuando subes de rango' }],
   },
+  {
+    grupo: 'Presencia',
+    secciones: [
+      {
+        id: 'presencia',
+        label: 'Mostrar si estoy en línea',
+        detalle: 'Apagado: nadie ve si estás en línea ni hace cuánto te conectaste (perfil, chat, mensajes y usuarios en línea)',
+      },
+    ],
+  },
 ];
 
 /**

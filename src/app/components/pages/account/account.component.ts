@@ -354,6 +354,10 @@ export class AccountComponent implements OnInit {
 
     this.parametrosService.getEstadosByPais(paisId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((values) => {
       this.estados = values;
+      // Territorios con una sola región (Islas Vírgenes, Hong Kong...): se elige sola.
+      if (values.length === 1 && !this.formGroupCuenta.value.estadoId) {
+        this.formGroupCuenta.patchValue({ estadoId: values[0].id });
+      }
     });
   }
 

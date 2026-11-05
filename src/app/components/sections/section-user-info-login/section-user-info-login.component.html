@@ -1,203 +1,202 @@
 @if (currentUser.usuario) {
-  <section>
-    <form [formGroup]="formGroup" (ngSubmit)="buscar()" class="d-none d-md-block"
-      style="float:right; margin-top: 17px;">
-      <input type="text" id="ibuscadorq" name="q" aria-label="Buscar" placeholder="Buscar..." matTooltip="Buscar..." formControlName="search"
-        class="mini_ibuscador onblur_effect">
-        <input vspace="2" hspace="10" type="submit" alt="Buscar" value="" aria-label="Buscar" matTooltip="Buscar" class="mini_bbuscador" />
-      </form>
-      <div class="userInfoLogin">
-        <ul>
-          <li class="monitor" style="position: relative">
-            <a class="menu" #tooltip="matTooltip" matTooltip="Monitor"
-              [matTooltipPosition]="'above'" (click)="verNotificaciones();"
-              (clickOutside)="display.monitor = false" aria-haspopup="true" [attr.aria-expanded]="display.monitor" aria-label="Notificaciones" role="button" tabindex="0" (keydown.enter)="verNotificaciones()" (keydown.space)="verNotificaciones(); $event.preventDefault()">
-              <i class="ti ti-eye"></i>
-            </a>
-            <div class="notificaciones-list" id="mon_list" [style.display]="display.monitor ? 'block' : 'none'">
-              <div class="timoni">Notificaciones</div>
-              <app-sugerencia-push class="mon-push" />
-              <ul>
-                @if (notificaciones.length < 1) {
-                  <div class="errr">No hay notificaciones</div>
-                }
-                @for (notificacion of notificaciones; track notificacion) {
-                  <li class="list-items"
-                    [ngClass]="{'sin-leer': !notificacion.leido}">
-                    <div class="d-flex">
-                      <div class="flex-shrink-0">
-                        @if (notificacion.imagen) {
-                          <img class="aviso-imagen" [src]="srcImagen(notificacion.imagen)" alt="" width="20" height="20" loading="lazy">
-                        } @else if (notificacion.usuarioQueHaceAccion) {
-                          <app-user-avatar
-                            matTooltip="{{notificacion.usuarioQueHaceAccion.userName}}"
-                            [matTooltipPosition]="'before'"
-                            [avatar]="notificacion.usuarioQueHaceAccion.avatar"
-                            [userName]="notificacion.usuarioQueHaceAccion.userName"
-                          [height]="20"></app-user-avatar>
-                        }
-                      </div>
-                      <div class="flex-grow-1 ms-2">
-                        <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
-                        <span class="inner-text">
-                          <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion?.userName]" [appUserPopover]="notificacion.usuarioQueHaceAccion?.userName">
-                            {{notificacion.usuarioQueHaceAccion?.userName}}
-                          </a>
-                          <span [innerHTML]="notificacion.mensaje"></span>
-                          @if (notificacion.tipoString === 'Moderacion') {
-                            <a routerLink="/paginas/protocolo">· ver protocolo</a>
-                            <a routerLink="/apelaciones">· apelar</a>
-                          }
-                          <!-- href + irA en vez de routerLink: si es la página abierta, la recarga (routerLink no hacía nada). -->
-                          @if (enlaceNotificacion(notificacion); as enlace) {
-                            <a [href]="enlace" (click)="irA.alClic($event, enlace)">· ver</a>
-                          }
-                        </span>
-                        <br>
-                          <small class="text-muted cursor--help"
-                            matTooltip="{{notificacion.fechaRegistro | date:'medium'}}">
-                            {{notificacion.fechaRegistro | timeAgo}}
-                          </small>
-                        </div>
-                      </div>
-                    </li>
-                  }
-                </ul>
-                <a [routerLink]="['/monitor']" class="vemas">
-                  Más
-                </a>
-              </div>
-              @if (currentStats.notifications > 0) {
-                <div class="alertas" id="alerta_mon" style="top: -10px;">
-                  <a matTooltip="{{currentStats.notifications}} notificaciones" aria-label="{{currentStats.notifications}} notificaciones">
-                    <span>{{currentStats.notifications}}</span>
-                  </a>
-                </div>
-              }
-            </li>
-            <li class="mensajes" style="position:relative">
-              <a class="menu" #tooltip="matTooltip" matTooltip="Mensajes"
-                [matTooltipPosition]="'above'" (click)="verMensajes()" (clickOutside)="display.mensajes = false" aria-haspopup="true" [attr.aria-expanded]="display.mensajes" aria-label="Mensajes" role="button" tabindex="0" (keydown.enter)="verMensajes()" (keydown.space)="verMensajes(); $event.preventDefault()">
-                <i class="ti ti-mail"></i>
-              </a>
-              <div class="notificaciones-list" id="mon_list" [style.display]="display.mensajes ? 'block' : 'none'">
-                <div class="timoni">Mensajes directos</div>
-                <ul>
-                  @if (mensajes.length < 1) {
-                    <div class="errr">No hay mensajes</div>
-                  }
-                  @for (mensaje of mensajes; track mensaje) {
-                    <li class="list-items"
-                      [ngClass]="{'sin-leer': !mensaje.leido}">
-                      <div class="d-flex">
-                        <div class="flex-shrink-0">
-                          <app-user-avatar matTooltip="{{mensaje.usuarioDe.userName}}"
-                            [matTooltipPosition]="'before'" [avatar]="mensaje.usuarioDe.avatar"
-                          [userName]="mensaje.usuarioDe.userName" [height]="20"></app-user-avatar>
-                        </div>
-                        <div class="flex-grow-1 ms-2" [routerLink]="['/mensajes/conversacion/' + mensaje.id]">
-                          <!-- <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor> -->
-                          <span class="inner-text">
-                            <a [routerLink]="['/perfil/' + mensaje.usuarioDe.userName]" [appUserPopover]="mensaje.usuarioDe.userName">
-                              {{mensaje.usuarioDe.userName}}
-                            </a>
-                            <article class="cursor--pointer">
-                              <p [innerHTML]="mensaje.contenido | truncate:[30]"></p>
-                            </article>
-                          </span>
-                          <br>
-                            <small class="text-muted cursor--help"
-                              matTooltip="{{mensaje.fechaRegistro | date:'medium'}}">
-                              {{mensaje.fechaRegistro | timeAgo}}
-                            </small>
-                          </div>
-                        </div>
-                      </li>
-                    }
-                  </ul>
-                  <a [routerLink]="['/mensajes']" class="vemas">
-                    Más
-                  </a>
-                </div>
-                @if (currentStats.messages > 0) {
-                  <div class="alertas" id="alerta_mon" style="top: -10px;">
-                    <a matTooltip="{{currentStats.messages}} mensajes" aria-label="{{currentStats.messages}} mensajes">
-                      <span>{{currentStats.messages}}</span>
-                    </a>
-                  </div>
-                }
-              </li>
-              <li class="favoritos" style="position:relative">
-                <a class="menu" matTooltip="Posts favoritos" (click)="verFavoritos()"
-                  (clickOutside)="display.favoritos = false" aria-haspopup="true" [attr.aria-expanded]="display.favoritos" aria-label="Posts favoritos" role="button" tabindex="0" (keydown.enter)="verFavoritos()" (keydown.space)="verFavoritos(); $event.preventDefault()">
-                  <i class="ti ti-star"></i>
-                </a>
-                <div class="notificaciones-list" id="mon_list" [style.display]="display.favoritos ? 'block' : 'none'">
-                  <div class="timoni">Favoritos</div>
-                  <ul>
-                    @if (favoritos.length < 1) {
-                      <div class="errr">No hay favoritos</div>
-                    }
-                    @for (favorito of favoritos; track favorito.id) {
-                      @if (favorito.post; as post) {
-                      <li class="list-items">
-                        <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]"
-                          matTooltip="{{post.titulo}}" aria-label="{{post.titulo}}">
-                          <img src="/assets/images/categorias/{{post.categoria.icono}}"
-                            alt="" aria-hidden="true" loading="lazy"/>
-                            {{post.titulo | truncate:[44]}}
-                          </a>
-                        </li>
-                      }
-                      }
-                    </ul>
-                    <a [routerLink]="['/favoritos']" class="vemas">Más</a>
-                  </div>
-                </li>
-                <li class="tema">
-                  <a class="menu" role="button" tabindex="0" [matTooltip]="tema.efectivo() === 'dark' ? 'Tema claro' : 'Tema oscuro'"
-                    [matTooltipPosition]="'above'" [attr.aria-label]="tema.efectivo() === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
-                    (click)="tema.alternar()" (keydown.enter)="tema.alternar()" (keydown.space)="tema.alternar(); $event.preventDefault()">
-                    <i class="ti" [class.ti-sun]="tema.efectivo() === 'dark'" [class.ti-moon]="tema.efectivo() !== 'dark'" aria-hidden="true"></i>
-                  </a>
-                </li>
-                <li class="usernameMenu" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
-                  <a class="nick menu"
-                    [routerLink]="['/perfil/' + currentUser.usuario.userName]">
-                    <app-user-avatar [class]="'avamu'" [avatar]="currentUser.usuario.avatar"
-                    [userName]="currentUser.usuario.userName" [height]="20"></app-user-avatar>
-                    <span>{{currentUser.usuario.userName}}</span>
-                    <img loading="lazy" decoding="async" class="punti" src="/assets/images/ui/arrowd.png" alt="" aria-hidden="true"/>
-                  </a>
-                  <div class="menuver" style="top: 16px; z-index: 1;" [style.display]="displayMenu ? 'block' : 'none'"
-                    (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
-                    <a [routerLink]="['cuenta']" class="menu">
-                      Cuenta
-                    </a>
-                    <a class="menu" [routerLink]="['/borradores']">
-                      Borradores
-                    </a>
-                    <a class="menu" [routerLink]="['/apelaciones']">
-                      Apelaciones
-                    </a>
-                    <a class="menu" (click)="cerrarSesion()" role="button" tabindex="0" (keydown.enter)="cerrarSesion()" (keydown.space)="cerrarSesion(); $event.preventDefault()">
-                      Salir
-                    </a>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </section>
+<section>
+  <form [formGroup]="formGroup" (ngSubmit)="buscar()" class="d-none d-md-block" style="float:right; margin-top: 17px;">
+    <input type="text" id="ibuscadorq" name="q" aria-label="Buscar" placeholder="Buscar..." matTooltip="Buscar..."
+      formControlName="search" class="mini_ibuscador onblur_effect">
+    <input vspace="2" hspace="10" type="submit" alt="Buscar" value="" aria-label="Buscar" matTooltip="Buscar"
+      class="mini_bbuscador" />
+  </form>
+  <div class="userInfoLogin">
+    <ul>
+      <li class="monitor" style="position: relative">
+        <a class="menu" (click)="verNotificaciones();" (clickOutside)="display.monitor = false" aria-haspopup="true"
+          [attr.aria-expanded]="display.monitor" aria-label="Notificaciones" role="button" tabindex="0"
+          (keydown.enter)="verNotificaciones()" (keydown.space)="verNotificaciones(); $event.preventDefault()">
+          <i class="ti ti-eye"></i>
+        </a>
+        <div class="notificaciones-list" id="mon_list" [style.display]="display.monitor ? 'block' : 'none'">
+          <div class="timoni">Notificaciones</div>
+          <app-sugerencia-push class="mon-push" />
+          <ul>
+            @if (notificaciones.length < 1) { <div class="errr">No hay notificaciones
+        </div>
         }
-
-        @if (!currentUser.usuario) {
-          <div>
-            <a class="registro float-end" [routerLink]="['/registro']" aria-label="Crear una cuenta"></a>
-            <a class="identificarse float-end" [routerLink]="['/login']">Identificarme</a>
-            <button type="button" class="tema-invitado float-end" (click)="tema.alternar()"
-              [attr.aria-label]="tema.efectivo() === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
-              [matTooltip]="tema.efectivo() === 'dark' ? 'Tema claro' : 'Tema oscuro'">
-              <i class="ti" [class.ti-sun]="tema.efectivo() === 'dark'" [class.ti-moon]="tema.efectivo() !== 'dark'" aria-hidden="true"></i>
-            </button>
+        @for (notificacion of notificaciones; track notificacion) {
+      <li class="list-items" [ngClass]="{'sin-leer': !notificacion.leido}">
+        <div class="d-flex">
+          <div class="flex-shrink-0">
+            @if (notificacion.imagen) {
+            <img class="aviso-imagen" [src]="srcImagen(notificacion.imagen)" alt="" width="20" height="20"
+              loading="lazy">
+            } @else if (notificacion.usuarioQueHaceAccion) {
+            <app-user-avatar matTooltip="{{notificacion.usuarioQueHaceAccion.userName}}" [matTooltipPosition]="'before'"
+              [avatar]="notificacion.usuarioQueHaceAccion.avatar"
+              [userName]="notificacion.usuarioQueHaceAccion.userName" [height]="20"></app-user-avatar>
+            }
           </div>
-        }
+          <div class="flex-grow-1 ms-2">
+            <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor>
+            <span class="inner-text">
+              <a [routerLink]="['/perfil/' + notificacion.usuarioQueHaceAccion?.userName]"
+                [appUserPopover]="notificacion.usuarioQueHaceAccion?.userName">
+                {{notificacion.usuarioQueHaceAccion?.userName}}
+              </a>
+              <span [innerHTML]="notificacion.mensaje"></span>
+              @if (notificacion.tipoString === 'Moderacion') {
+              <a routerLink="/paginas/protocolo">· ver protocolo</a>
+              <a routerLink="/apelaciones">· apelar</a>
+              }
+              <!-- href + irA en vez de routerLink: si es la página abierta, la recarga (routerLink no hacía nada). -->
+              @if (enlaceNotificacion(notificacion); as enlace) {
+              <a [href]="enlace" (click)="irA.alClic($event, enlace)">· ver</a>
+              }
+            </span>
+            <br>
+            <small class="text-muted cursor--help" matTooltip="{{notificacion.fechaRegistro | date:'medium'}}">
+              {{notificacion.fechaRegistro | timeAgo}}
+            </small>
+          </div>
+        </div>
+      </li>
+      }
+    </ul>
+    <a [routerLink]="['/monitor']" class="vemas">
+      Más
+    </a>
+  </div>
+  @if (currentStats.notifications > 0) {
+  <div class="alertas" id="alerta_mon" style="top: -10px;">
+    <a matTooltip="{{currentStats.notifications}} notificaciones"
+      aria-label="{{currentStats.notifications}} notificaciones">
+      <span>{{currentStats.notifications}}</span>
+    </a>
+  </div>
+  }
+  </li>
+  <li class="mensajes" style="position:relative">
+    <a class="menu" (click)="verMensajes()" (clickOutside)="display.mensajes = false" aria-haspopup="true"
+      [attr.aria-expanded]="display.mensajes" aria-label="Mensajes" role="button" tabindex="0"
+      (keydown.enter)="verMensajes()" (keydown.space)="verMensajes(); $event.preventDefault()">
+      <i class="ti ti-mail"></i>
+    </a>
+    <div class="notificaciones-list" id="mon_list" [style.display]="display.mensajes ? 'block' : 'none'">
+      <div class="timoni">Mensajes directos</div>
+      <ul>
+        @if (mensajes.length < 1) { <div class="errr">No hay mensajes
+    </div>
+    }
+    @for (mensaje of mensajes; track mensaje) {
+  <li class="list-items" [ngClass]="{'sin-leer': !mensaje.leido}">
+    <div class="d-flex">
+      <div class="flex-shrink-0">
+        <app-user-avatar matTooltip="{{mensaje.usuarioDe.userName}}" [matTooltipPosition]="'before'"
+          [avatar]="mensaje.usuarioDe.avatar" [userName]="mensaje.usuarioDe.userName" [height]="20"></app-user-avatar>
+      </div>
+      <div class="flex-grow-1 ms-2" [routerLink]="['/mensajes/conversacion/' + mensaje.id]">
+        <!-- <app-tipo-icon-monitor [tipo]="notificacion.tipoString"></app-tipo-icon-monitor> -->
+        <span class="inner-text">
+          <a [routerLink]="['/perfil/' + mensaje.usuarioDe.userName]" [appUserPopover]="mensaje.usuarioDe.userName">
+            {{mensaje.usuarioDe.userName}}
+          </a>
+          <article class="cursor--pointer">
+            <p [innerHTML]="mensaje.contenido | truncate:[30]"></p>
+          </article>
+        </span>
+        <br>
+        <small class="text-muted cursor--help" matTooltip="{{mensaje.fechaRegistro | date:'medium'}}">
+          {{mensaje.fechaRegistro | timeAgo}}
+        </small>
+      </div>
+    </div>
+  </li>
+  }
+  </ul>
+  <a [routerLink]="['/mensajes']" class="vemas">
+    Más
+  </a>
+  </div>
+  @if (currentStats.messages > 0) {
+  <div class="alertas" id="alerta_mon" style="top: -10px;">
+    <a matTooltip="{{currentStats.messages}} mensajes" aria-label="{{currentStats.messages}} mensajes">
+      <span>{{currentStats.messages}}</span>
+    </a>
+  </div>
+  }
+  </li>
+  <li class="favoritos" style="position:relative">
+    <a class="menu" (click)="verFavoritos()" (clickOutside)="display.favoritos = false" aria-haspopup="true"
+      [attr.aria-expanded]="display.favoritos" aria-label="Posts favoritos" role="button" tabindex="0"
+      (keydown.enter)="verFavoritos()" (keydown.space)="verFavoritos(); $event.preventDefault()">
+      <i class="ti ti-star"></i>
+    </a>
+    <div class="notificaciones-list" id="mon_list" [style.display]="display.favoritos ? 'block' : 'none'">
+      <div class="timoni">Favoritos</div>
+      <ul>
+        @if (favoritos.length < 1) { <div class="errr">No hay favoritos
+    </div>
+    }
+    @for (favorito of favoritos; track favorito.id) {
+    @if (favorito.post; as post) {
+  <li class="list-items">
+    <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" matTooltip="{{post.titulo}}"
+      aria-label="{{post.titulo}}">
+      <img src="/assets/images/categorias/{{post.categoria.icono}}" alt="" aria-hidden="true" loading="lazy" />
+      {{post.titulo | truncate:[44]}}
+    </a>
+  </li>
+  }
+  }
+  </ul>
+  <a [routerLink]="['/favoritos']" class="vemas">Más</a>
+  </div>
+  </li>
+  <li class="tema">
+    <a class="menu" role="button" tabindex="0"
+      [attr.aria-label]="tema.efectivo() === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+      (click)="tema.alternar()" (keydown.enter)="tema.alternar()"
+      (keydown.space)="tema.alternar(); $event.preventDefault()">
+      <i class="ti" [class.ti-sun]="tema.efectivo() === 'dark'" [class.ti-moon]="tema.efectivo() !== 'dark'"
+        aria-hidden="true"></i>
+    </a>
+  </li>
+  <li class="usernameMenu" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
+    <a class="nick menu" [routerLink]="['/perfil/' + currentUser.usuario.userName]">
+      <app-user-avatar [class]="'avamu'" [avatar]="currentUser.usuario.avatar" [userName]="currentUser.usuario.userName"
+        [height]="20"></app-user-avatar>
+      <span>{{currentUser.usuario.userName}}</span>
+      <img loading="lazy" decoding="async" class="punti" src="/assets/images/ui/arrowd.png" alt="" aria-hidden="true" />
+    </a>
+    <div class="menuver" style="top: 16px; z-index: 1;" [style.display]="displayMenu ? 'block' : 'none'"
+      (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
+      <a [routerLink]="['cuenta']" class="menu">
+        Cuenta
+      </a>
+      <a class="menu" [routerLink]="['/borradores']">
+        Borradores
+      </a>
+      <a class="menu" [routerLink]="['/apelaciones']">
+        Apelaciones
+      </a>
+      <a class="menu" (click)="cerrarSesion()" role="button" tabindex="0" (keydown.enter)="cerrarSesion()"
+        (keydown.space)="cerrarSesion(); $event.preventDefault()">
+        Salir
+      </a>
+    </div>
+  </li>
+  </ul>
+  </div>
+</section>
+}
+
+@if (!currentUser.usuario) {
+<div>
+  <a class="registro float-end" [routerLink]="['/registro']" aria-label="Crear una cuenta"></a>
+  <a class="identificarse float-end" [routerLink]="['/login']">Identificarme</a>
+  <button type="button" class="tema-invitado float-end" (click)="tema.alternar()"
+    [attr.aria-label]="tema.efectivo() === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+    [matTooltip]="tema.efectivo() === 'dark' ? 'Tema claro' : 'Tema oscuro'">
+    <i class="ti" [class.ti-sun]="tema.efectivo() === 'dark'" [class.ti-moon]="tema.efectivo() !== 'dark'"
+      aria-hidden="true"></i>
+  </button>
+</div>
+}

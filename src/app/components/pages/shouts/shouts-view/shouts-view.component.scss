@@ -243,9 +243,6 @@
     &:active { background: light-dark(#eef5f9, #1b3747); }
   }
 
-  .sv-compartir {
-    justify-content: center;
-  }
 }
 
 // Muy angosto (≤360px): números más chicos para que no se corten.
@@ -259,12 +256,13 @@
 }
 
 // Compartir el shout en otras redes, debajo de las reacciones
-.sv-compartir {
+// Dentro del menú ⋮: "Compartir en" y los botones de redes bajo "Copiar URL".
+.sv-menu__compartir {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 16px 10px;
+  border-top: 1px solid light-dark(#e6eaee, #35424e);
 }
 
 .sv-compartir__label {

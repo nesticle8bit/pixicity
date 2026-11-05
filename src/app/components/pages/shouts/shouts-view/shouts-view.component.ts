@@ -3,6 +3,8 @@ import { environment } from 'src/environments/environment';
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ShoutInteracciones, ShoutReaccion } from 'src/app/models/perfil/shout-vm.model';
 import { Observable } from 'rxjs';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { TimeAgoPipe } from 'src/app/shared/pipes/timeAgo.pipe';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -47,6 +49,10 @@ const SIN_SESION: Record<Marca, string> = {
   templateUrl: './shouts-view.component.html',
   styleUrls: ['./shouts-view.component.scss'],
   imports: [
+    TimeAgoPipe,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger,
     RouterLink,
     UserPopoverDirective,
     UserAvatarComponent,

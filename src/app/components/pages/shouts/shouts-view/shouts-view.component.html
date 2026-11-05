@@ -7,11 +7,11 @@
       <div class="container container--home">
         <div class="row">
           <div class="col-12 p-3 pt-1">
-            <div class="titulaw">
+            <!-- <div class="titulaw">
               <h2>
                 {{shout?.fechaRegistro | date:'long'}}
               </h2>
-            </div>
+            </div> -->
 
             <div class="sv-shout">
               <a [routerLink]="['/perfil/' + shout?.avatar.userName]" class="sv-shout__avatar"
@@ -31,10 +31,12 @@
                     <app-user-avatar class="sv-bubble__avatar-movil" [avatar]="shout?.avatar?.avatar"
                       [userName]="shout?.avatar.userName" [width]="28" [height]="28" aria-hidden="true" />
                     {{'@'}}{{shout?.avatar.userName}}</a>
-                  <span class="sv-bubble__time cursor--help"
-                    matTooltip="{{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'a las\' h:mm \', año\' y'}}">
-                    {{shout.fechaRegistro | date:'d MMM y, h:mm a'}}
-                  </span>
+                  <!-- Solo "hace X"; la fecha y hora exactas al pasar el mouse (y para lectores de pantalla). -->
+                  <time class="sv-bubble__time cursor--help" [attr.datetime]="shout.fechaRegistro"
+                    matTooltip="{{shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'de\' y, h:mm a'}}"
+                    [attr.aria-label]="shout.fechaRegistro | date:'EEEE d \'de\' MMMM \'de\' y, h:mm a'">
+                    {{shout.fechaRegistro | timeAgo}}
+                  </time>
                 </header>
 
                 <p class="sv-bubble__body"><app-texto-enlazado [texto]="shout.comentario" /></p>
@@ -49,13 +51,22 @@
                   [bucle]="!!shout.bucle"></app-shout-media>
 
                 <footer class="sv-bubble__footer">
-                  <a class="sv-action sv-action--open" aria-label="Copiar URL del shout" matTooltip="Copiar URL"
-                    (click)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id)" role="button"
-                    tabindex="0"
-                    (keydown.enter)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id)"
-                    (keydown.space)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id); $event.preventDefault()">
-                    <i class="ti ti-link" aria-hidden="true"></i> <span class="sv-action__texto">Copiar URL</span>
-                  </a>
+                  <!-- Copiar URL y compartir en otras redes, juntos en un menú para despejar la barra. -->
+                  <button type="button" class="sv-action sv-action--open" [matMenuTriggerFor]="menuCompartir"
+                    matTooltip="Más opciones" aria-label="Más opciones: copiar URL y compartir">
+                    <i class="ti ti-dots-vertical" aria-hidden="true"></i>
+                  </button>
+                  <mat-menu #menuCompartir="matMenu" class="sv-menu">
+                    <button mat-menu-item type="button" (click)="clipboard(publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id)">
+                      <i class="ti ti-link" aria-hidden="true"></i>
+                      <span>Copiar URL</span>
+                    </button>
+                    <div class="sv-menu__compartir" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+                      <span class="sv-compartir__label">Compartir en</span>
+                      <app-share-buttons [url]="publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id"
+                        [titulo]="'Shout de @' + shout.avatar.userName" [enShouts]="false" />
+                    </div>
+                  </mat-menu>
 
                   <button type="button" class="sv-action" (click)="irAComentar()" matTooltip="Comentar"
                     [attr.aria-label]="'Comentar (' + (shoutsComments?.totalComentarios || 0) + ' comentarios)'">
@@ -99,12 +110,6 @@
                       [class.ti-thumb-up-filled]="interacciones().meGusta" aria-hidden="true"></i> {{interacciones().meGustas}}
                   </button>
                 </footer>
-
-                <div class="sv-compartir">
-                  <span class="sv-compartir__label">Compartir</span>
-                  <app-share-buttons [url]="publicUrl + '/shouts/' + shout.avatar.userName + '/' + shout.id"
-                    [titulo]="'Shout de @' + shout.avatar.userName" [enShouts]="false" />
-                </div>
               </div>
             </div>
 

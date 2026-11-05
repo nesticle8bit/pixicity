@@ -37,6 +37,27 @@ const AVISO_CADA_MS = 30_000;
 const PESTANAS: AlcanceMuro[] = ['activos', 'todos', 'siguiendo', 'nsfw'];
 const PERIODOS: PeriodoActivos[] = ['dia', 'semana', 'mes'];
 
+/** Última pestaña de /mi elegida en este navegador (comodidad: al volver a /mi se abre esa). */
+const CLAVE_ULTIMA_PESTANA = 'mi:ultima-pestana';
+const PESTANAS_RECORDABLES: AlcanceMuro[] = ['activos', 'todos', 'siguiendo'];
+
+function leerUltimaPestana(): AlcanceMuro | null {
+  try {
+    const v = localStorage.getItem(CLAVE_ULTIMA_PESTANA) as AlcanceMuro | null;
+    return v && PESTANAS_RECORDABLES.includes(v) ? v : null;
+  } catch {
+    return null;
+  }
+}
+
+function guardarUltimaPestana(alcance: AlcanceMuro): void {
+  try {
+    if (PESTANAS_RECORDABLES.includes(alcance)) localStorage.setItem(CLAVE_ULTIMA_PESTANA, alcance);
+  } catch {
+    // Sin almacenamiento (modo privado): se queda en Más activos.
+  }
+}
+
 /** Lista y scroll al salir de /mi: al volver con "atrás" se restauran en vez de recargar desde arriba. */
 let guardado: { url: string; items: MuroItem[]; siguiente: string | null; corte: string | null; scrollY: Posicion } | null = null;
 
@@ -198,6 +219,15 @@ export class MiHomeComponent implements OnDestroy {
     const aplicarRuta = (p: ParamMap, q: ParamMap): void => {
       // Por defecto Más activos; sin sesión no hay muro propio (Siguiendo cae a Recientes).
       const ver = q.get('ver');
+      // Entrar a /mi a secas abre la última pestaña elegida (NSFW nunca: pide la edad cada vez).
+      if (primera && !ver && !p.get('tag') && !q.get('tag')) {
+        const ultima = leerUltimaPestana();
+        if (ultima && ultima !== 'activos' && (ultima !== 'siguiendo' || this.haySesion)) {
+          primera = false;
+          this.router.navigate(['/mi'], { queryParams: { ver: ultima === 'todos' ? 'recientes' : ultima }, replaceUrl: true });
+          return;
+        }
+      }
       // ?ver=nsfw directo (enlace, recarga): primero la verificación de edad; si no pasa, a Recientes.
       if (ver === 'nsfw' && !this.nsfwConfirmado) {
         this.verificarNsfw().then((ok) => {
@@ -419,6 +449,7 @@ export class MiHomeComponent implements OnDestroy {
     if (alcance === 'siguiendo' && !this.sesion.exigir('Inicia sesión para ver tu muro')) return;
     if (alcance === this.alcance() && !this.tag()) return;
     if (alcance === 'nsfw' && !(await this.verificarNsfw())) return;
+    if (alcance !== 'nsfw') guardarUltimaPestana(alcance);
     this.router.navigate(['/mi'], {
       queryParams: { ver: alcance === 'todos' ? 'recientes' : alcance === 'activos' ? null : alcance },
       replaceUrl: !this.tag(),

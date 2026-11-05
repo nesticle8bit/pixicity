@@ -17,7 +17,9 @@ export type SeccionMuroPerfil =
   | 'seguimientos'
   | 'comunidades'
   | 'fotos'
-  | 'rangos';
+  | 'rangos'
+  /** No es del muro: oculta "en línea" y "activo hace X" (se guarda en la misma lista). */
+  | 'presencia';
 
 /** Actividad de la línea de tiempo: lo de la pestaña Actividad más la clase del objeto y el texto de los comentarios. */
 export interface ActividadMuro extends ActividadViewModel {

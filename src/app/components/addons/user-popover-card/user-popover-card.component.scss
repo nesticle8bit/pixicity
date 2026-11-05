@@ -301,10 +301,19 @@
 }
 
 .upop--banner {
+  // Como .pf-hero__cuerpo del perfil: la fila entera sube sobre la portada (el avatar queda más de la mitad
+  // encima) y el texto se queda abajo, junto al avatar.
   .upop__header {
+    position: relative;
+    z-index: 1;
     align-items: flex-end;
+    margin-top: -14px;
     background: none;
     padding-top: 0;
+  }
+
+  .upop__user-info {
+    padding-top: 18px;
   }
 
   // Como en el perfil: círculo con borde del color de la tarjeta, montado sobre la portada.
