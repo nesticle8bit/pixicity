@@ -1,161 +1,374 @@
-// Estilos compartidos de la lista (.msg-list / .msg-item): ver styles.scss.
-i.ti {
-  font-size: 13px;
+// /mensajes estilo WhatsApp: lista de conversaciones a la izquierda y el chat abierto a la derecha.
+// Mismos tokens y tarjeta que el perfil y las comunidades (_perfil.scss).
+@use '../../profile/perfil' as p;
+
+$alto-panel: calc(100dvh - 190px);
+
+.wa {
+  @include p.tarjeta;
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) 1fr;
+  height: $alto-panel;
+  min-height: 520px;
+  margin: 6px 0 16px;
+  overflow: hidden;
+  color: p.$texto;
 }
 
-.msg-toolbar {
+//  Lista
+
+.wa-lista {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  border-right: 1px solid p.$borde;
+  background: p.$superficie;
+}
+
+.wa-lista__cabecera {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 4px 10px 4px 4px;
-  margin-bottom: 6px;
-  border-bottom: 1px solid light-dark(#e5e5e5, #3e454c);
-  background: light-dark(#fafafa, #272c30);
-
-  &__info {
-    flex: 1;
-    font-size: 13px;
-    color: light-dark(#666, #b0b0b0);
-  }
-
-  &__delete {
-    padding: 0;
-    line-height: 33px;
-    min-width: 48px;
-  }
+  gap: 4px;
+  padding: 12px 10px 8px 16px;
 }
 
-.msg-item {
-  // Sin leer: fondo azul marcado, por encima de la zebra (--alt) y del hover.
-  &--unread,
-  &--unread.msg-item--alt {
-    background: light-dark(#dcecfb, #1d3757);
-    border-left-color: #3c8dbc;
-
-    &:hover {
-      background: light-dark(#cfe4f8, #234266);
-    }
-
-    .msg-item__from,
-    .msg-item__subject {
-      font-weight: 700;
-    }
-  }
-
-  &--selected {
-    background: light-dark(#e8f0fe, #1b2b48);
-  }
-
-  &__check {
-    flex: 0 0 auto;
-    margin-top: -6px;
-  }
-
-  // Con no leídos el preview (en vez del asunto, que ya no existe en el chat) va en negrita.
-  &--unread &__preview {
-    font-weight: 600;
-  }
-
-  &__status {
-    color: light-dark(#6b6b6b, #adadad);
-    font-size: 13px;
-
-    &--read {
-      color: light-dark(#3c8dbc, #73afd2);
-    }
-  }
-
-  &__dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #3c8dbc;
-    flex: 0 0 auto;
-  }
-}
-
-/* --- Carpetas: bandeja / archivadas --- */
-.msg-carpetas {
+.wa-lista__titulo {
   display: flex;
-  gap: 6px;
-  margin: 10px 0;
-  border-bottom: 1px solid light-dark(#e6eaee, #35424e);
-
-  &__tab {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 8px 12px;
-    border: 0;
-    border-bottom: 3px solid transparent;
-    background: none;
-    font-weight: 600;
-    color: light-dark(#5f6b75, #aeaeae);
-    cursor: pointer;
-
-    &.is-activa {
-      border-bottom-color: #006595;
-      color: light-dark(#005a85, #97d6f3);
-    }
-
-    &:focus-visible {
-      outline: 2px solid #006595;
-      outline-offset: 2px;
-    }
-  }
-
-  &__n {
-    min-width: 20px;
-    padding: 0 6px;
-    border-radius: 999px;
-    background: light-dark(#eef2f5, #253440);
-    font-size: 0.75rem;
-    color: light-dark(#1f2a33, #cad6df);
-  }
-}
-
-.msg-toolbar__archivar {
-  margin-left: auto;
-  margin-right: 6px;
-}
-
-.msg-item__silenciada {
-  color: light-dark(#5f6b75, #aeaeae);
-}
-
-.msg-item__visto {
-  margin-top: 2px;
-  font-size: 0.75rem;
-  color: light-dark(#1e7a45, #99e6ba);
-}
-
-.msg-item__acciones {
-  display: flex;
-  flex-shrink: 0;
+  flex: 1;
   align-items: center;
-  gap: 2px;
-  margin-left: 6px;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
 }
 
-.msg-item__accion {
+.wa-lista__badge {
+  min-width: 22px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: p.$marca;
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.wa-icono {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  flex: none;
+  width: 38px;
+  height: 38px;
   border: 0;
   border-radius: 50%;
   background: transparent;
-  font-size: 1.1rem;
-  color: light-dark(#5f6b75, #aeaeae);
+  font-size: 1.25rem;
+  color: p.$tenue;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+
+  &:hover:not(:disabled),
+  &.is-activa {
+    background: p.$marca-suave;
+    color: p.$marca;
+  }
+
+  &:disabled { opacity: .4; cursor: default; }
+  &:focus-visible { outline: 2px solid p.$marca; outline-offset: 1px; }
+
+  &--chico {
+    width: 32px;
+    height: 32px;
+    font-size: 1.05rem;
+  }
+
+  &--peligro:hover:not(:disabled) {
+    background: light-dark(#fdecea, #4a2422);
+    color: light-dark(#b3261e, #f08a84);
+  }
+}
+
+.wa-buscar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 12px 8px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: p.$fondo-suave;
+  color: p.$tenue;
+
+  &:focus-within {
+    border-color: p.$marca;
+    background: p.$superficie;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    height: 36px;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: p.$texto;
+    font: inherit;
+    font-size: .9rem;
+  }
+}
+
+.wa-carpetas {
+  display: flex;
+  gap: 6px;
+  padding: 0 12px 10px;
+  border-bottom: 1px solid p.$borde;
+}
+
+// Píldoras como los filtros de comunidades.
+.wa-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid p.$borde;
+  border-radius: 999px;
+  background: p.$superficie;
+  color: p.$tenue;
+  font-size: .82rem;
+  font-weight: 600;
   cursor: pointer;
 
-  &:hover,
-  &:focus-visible {
-    background: light-dark(#eef2f5, #253440);
-    color: light-dark(#005a85, #97d6f3);
+  &.is-activa {
+    border-color: transparent;
+    background: p.$marca-suave;
+    color: p.$marca;
   }
 
-  &:focus-visible {
-    outline: 2px solid #006595;
+  &:focus-visible { outline: 2px solid p.$marca; outline-offset: 2px; }
+
+  &__n {
+    min-width: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: p.$fondo-suave;
+    font-size: .7rem;
+    text-align: center;
   }
+}
+
+.wa-seleccion {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px 4px 4px;
+  border-bottom: 1px solid p.$borde;
+  background: p.$fondo-suave;
+
+  &__info {
+    flex: 1;
+    font-size: .85rem;
+    color: p.$tenue;
+  }
+}
+
+.wa-items {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+
+  &__vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 40px 16px;
+    text-align: center;
+    font-size: .9rem;
+    color: p.$tenue;
+
+    i { font-size: 2rem; color: light-dark(#a9b6bf, #818181); }
+  }
+}
+
+.wa-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid light-dark(#eef1f4, #2c3640);
+  transition: background .12s;
+
+  &:hover { background: p.$fondo-suave; }
+
+  &.is-activa {
+    background: p.$marca-suave;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: p.$marca;
+    }
+  }
+
+  &.is-elegida { background: light-dark(#e8f0fe, #1b2b48); }
+
+  &__check { flex: none; margin-left: 4px; }
+
+  &__enlace {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 10px 6px 10px 14px;
+    color: inherit;
+    text-decoration: none;
+
+    &:focus-visible { outline: 2px solid p.$marca; outline-offset: -2px; }
+  }
+
+  &__avatar {
+    flex: none;
+    line-height: 0;
+
+    ::ng-deep img {
+      width: 46px;
+      height: 46px;
+      object-fit: cover;
+      border-radius: 50% !important;
+    }
+  }
+
+  &__cuerpo {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__fila {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  &__nombre {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__fecha {
+    flex: none;
+    font-size: .72rem;
+    color: p.$tenue;
+  }
+
+  &__vista {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-size: .84rem;
+    color: p.$tenue;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    i { font-size: .95rem; vertical-align: -2px; }
+  }
+
+  &__estado.is-leido { color: light-dark(#0d6efd, #518fec); }
+
+  &__silencio { flex: none; font-size: .9rem; color: p.$tenue; }
+
+  &__n {
+    flex: none;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #22a35a;
+    color: #fff;
+    font-size: .72rem;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: center;
+
+    &.is-silenciada { background: light-dark(#9aa5ad, #5d6b75); }
+  }
+
+  &.is-sin-leer &__nombre { font-weight: 800; }
+  &.is-sin-leer &__vista { font-weight: 600; color: p.$texto; }
+  &.is-sin-leer &__fecha { font-weight: 700; color: #22a35a; }
+
+  // Acciones al pasar el mouse (en táctil quedan siempre a la vista).
+  &__acciones {
+    display: flex;
+    flex: none;
+    gap: 2px;
+    padding-right: 8px;
+    opacity: 0;
+    transition: opacity .12s;
+  }
+
+  &:hover &__acciones,
+  &:focus-within &__acciones { opacity: 1; }
+
+  @media (hover: none) {
+    &__acciones { opacity: 1; }
+  }
+}
+
+.wa-paginador {
+  flex: none;
+  border-top: 1px solid p.$borde;
+  background: p.$superficie;
+}
+
+//  Chat
+
+.wa-chat {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+}
+
+//  Celular: una cosa a la vez
+
+@media (max-width: 767.98px) {
+  .wa {
+    display: flex;
+    height: calc(100dvh - 130px);
+    min-height: 420px;
+    margin: 0 -12px 12px;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+
+  .wa-lista {
+    flex: 1;
+    border-right: 0;
+  }
+
+  .wa-chat { display: none; flex: 1; }
+
+  .wa--con-chat {
+    .wa-lista { display: none; }
+    .wa-chat { display: flex; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-icono, .wa-item, .wa-item__acciones { transition: none; }
 }

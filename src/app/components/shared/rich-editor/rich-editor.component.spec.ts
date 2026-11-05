@@ -401,8 +401,28 @@ describe('RichEditorComponent', () => {
 
       await comprimida();
       upload$.next('/images/fotos/u/a.jpg');
+      await comprimida(); // la cola entrega la imagen en la vuelta siguiente
       expect(editor.querySelector('.rich-editor__uploading')).toBeNull();
       expect(emitted[emitted.length - 1]).toContain('/images/fotos/u/a.jpg');
+    });
+
+    it('sube como mucho 10 por tanda, de a una, y la barra dice por cuál va', async () => {
+      setHtml('<p>x</p>');
+      select('x', true);
+      const files = Array.from({ length: 12 }, (_, i) => new File(['a'], `${i}.png`, { type: 'image/png' }));
+      component['uploadImages'](files, null);
+
+      expect(notifications.warning).toHaveBeenCalled();
+      expect(editor.querySelectorAll('.rich-editor__uploading').length).toBe(10);
+      expect(component.subidaTotal).toBe(10);
+
+      await comprimida();
+      expect(component.subidaActual).toBe(1);
+      upload$.next('/images/fotos/u/1.jpg');
+      await comprimida();
+      expect(component.subidaHecha).toBe(1);
+      expect(component.subidaActual).toBe(2);
+      expect(editor.querySelectorAll('.rich-editor__uploading').length).toBe(9);
     });
 
     it('el control es inválido mientras sube (el formulario no se envía sin la imagen)', async () => {
@@ -412,6 +432,7 @@ describe('RichEditorComponent', () => {
       expect(component.validate()).toEqual({ subiendoImagenes: true });
       await comprimida();
       upload$.next('/images/fotos/u/a.jpg');
+      await comprimida(); // la cola entrega la imagen en la vuelta siguiente
       expect(component.validate()).toBeNull();
     });
 
@@ -421,6 +442,7 @@ describe('RichEditorComponent', () => {
       component['uploadImages']([new File(['a'], 'a.png', { type: 'image/png' })], null);
       await comprimida();
       upload$.next('/images/fotos/u/a.jpg');
+      await comprimida(); // la cola entrega la imagen en la vuelta siguiente
       const range = window.getSelection()!.getRangeAt(0);
       const wrap = editor.querySelector('.img-resizable')!;
       expect(range.collapsed).toBeTrue();

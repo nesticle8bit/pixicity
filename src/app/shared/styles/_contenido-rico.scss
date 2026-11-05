@@ -18,6 +18,11 @@ $lenguajes: (
 );
 
 @mixin bloques($etiquetas: true) {
+  // Alineación del editor (clases: el [innerHTML] de Angular borra style="text-align")
+  .txt-centro { text-align: center; }
+  .txt-der { text-align: right; }
+  .txt-just { text-align: justify; }
+
   // Bloque de código estilo Teams: caja con borde, franja de acento y etiqueta del lenguaje
   pre {
     position: relative;

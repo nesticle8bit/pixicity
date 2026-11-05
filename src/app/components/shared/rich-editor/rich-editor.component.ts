@@ -18,7 +18,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { IHttpFotosService } from 'src/app/services/interfaces/httpFotos.interface';
-import { from, Observable, switchMap } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { comprimirImagen } from 'src/app/shared/helpers/comprimir-imagen';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { ConfirmarService } from 'src/app/services/shared/confirmar.service';
@@ -37,6 +37,8 @@ import {
   serializeHtml,
   textOffset,
   unwrapNode,
+  getAlign,
+  setAlign,
 } from './rich-editor-dom';
 import { cleanPastedHtml, fijarDimensiones, imageLink, imageNode, isSafeHref, plainTextFragment, videoNode } from './rich-editor-paste';
 import { LENGUAJES_CODIGO } from 'src/app/shared/helpers/contenido-post';
@@ -54,6 +56,7 @@ import {
   HISTORY_LIMIT,
   HistoryEntry,
   IMAGE_MAX_BYTES,
+  MAX_IMAGENES_POR_SUBIDA,
   IMAGE_MAX_BYTES_ORIGINAL,
   IMAGE_TYPES,
   ANCHO_MAX_IMAGEN,
@@ -276,6 +279,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
   }
 
   ngOnDestroy(): void {
+    this.destruido = true;
     clearTimeout(this.snapshotTimer);
     cancelAnimationFrame(this.scrollFrame);
     document.removeEventListener('scroll', this.onAnyScroll, true);
@@ -324,6 +328,10 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
     this.deselectImg();
     this.editor.innerHTML = html;
     this.migrateImageSizes();
+    // Posts viejos con style="text-align": pasan a clase (el style se pierde al mostrarse)
+    this.editor.querySelectorAll<HTMLElement>(BLOCK_TAGS.join(',')).forEach((b) => {
+      if (b.style.textAlign || b.hasAttribute('align')) setAlign(b, getAlign(b));
+    });
     this.normalizarRaiz();
     this.normalizeTrailing();
     this.lastEmitted = serializeHtml(this.editor);
@@ -692,7 +700,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
       this.notificationService.warning('La URL de la imagen debe empezar con http:// o https://', 'Imagen no válida');
       return;
     }
-    this.editor.focus();
+    this.editor.focus({ preventScroll: true });
     this.restaurarPosicion(sel);
     const frag = document.createDocumentFragment();
     const node = imageNode(url);
@@ -718,7 +726,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
       this.notificationService.warning('Pega un enlace de YouTube, por ejemplo https://www.youtube.com/watch?v=…', 'Video no válido');
       return;
     }
-    this.editor.focus();
+    this.editor.focus({ preventScroll: true });
     this.restaurarPosicion(sel);
     this.insertVideo(video);
     this.afterChange();
@@ -993,7 +1001,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
   applyAlign(value: string): void {
     this.structural(() => {
       const blocks = this.selectedBlocks();
-      blocks.forEach((b) => (b.style.textAlign = value === 'left' ? '' : value));
+      blocks.forEach((b) => setAlign(b, value));
       return blocks[0];
     });
   }
@@ -1017,7 +1025,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
     this.structural(() => {
       const blocks = this.selectedBlocks().filter((b) => b !== this.editor).map((b) => {
         b.removeAttribute('style');
-        b.removeAttribute('align');
+        setAlign(b, '');
         return PLAIN_BLOCK_TAGS.includes(b.tagName) ? this.renameBlock(b, 'p') : b;
       });
       blocks.forEach((b) => {
@@ -1494,7 +1502,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
     const link = this.linkEl;
     const sel = this.savedSel;
     this.hideBubble();
-    this.editor.focus();
+    this.editor.focus({ preventScroll: true });
 
     if (link?.isConnected) {
       if (url) link.setAttribute('href', this.normalizeUrl(url));
@@ -1511,7 +1519,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
   cancelLink(): void {
     const sel = this.savedSel;
     this.hideBubble();
-    this.editor.focus();
+    this.editor.focus({ preventScroll: true });
     this.restaurarPosicion(sel);
   }
 
@@ -1519,7 +1527,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
     const link = this.linkEl;
     const sel = this.savedSel ?? this.guardarPosicion();
     this.hideBubble();
-    this.editor.focus();
+    this.editor.focus({ preventScroll: true });
 
     if (link?.isConnected) {
       unwrapNode(link);
@@ -1639,7 +1647,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
   }
 
   private linkOffsets(url: string, sel: PosicionGuardada | null): void {
-    this.editor.focus();
+    this.editor.focus({ preventScroll: true });
     const range = this.restaurarPosicion(sel);
     if (!range) return;
 
@@ -1784,8 +1792,20 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
     }
     if (!valid.length) return;
 
-    this.editor.focus();
+    // Tope por tanda: con más, la cola tardaba demasiado y no se sabía por cuál iba.
+    if (valid.length > MAX_IMAGENES_POR_SUBIDA) {
+      this.notificationService.warning(
+        `Se suben las primeras ${MAX_IMAGENES_POR_SUBIDA}; agrega el resto en otra tanda`,
+        `Máximo ${MAX_IMAGENES_POR_SUBIDA} imágenes a la vez`,
+      );
+      valid.length = MAX_IMAGENES_POR_SUBIDA;
+    }
+
+    this.editor.focus({ preventScroll: true });
     if (!this.restaurarPosicion(at) && !this.currentRange()) this.placeCaretEnd();
+
+    // Progreso: se suma a lo que ya estuviera en cola (otra tanda pegada mientras subía la primera).
+    this.subidaTotal += valid.length;
 
     valid.forEach((file) => {
       const id = `${++this.uploadSeq}`;
@@ -1803,23 +1823,46 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
 
       // Se achica (ANCHO_MAX_IMAGEN) y se pasa a WebP en el navegador antes de subir: menos datos y menos espacio.
       // El API la vuelve a recomprimir igual. Los GIF van tal cual para no perder la animación.
-      // En cadena: con varias a la vez, los pedidos salen en el orden de los archivos (no en el que termina cada una).
-      const comprimida: Promise<File> = this.colaCompresion.then(() => comprimirImagen(file, ANCHO_MAX_IMAGEN, CALIDAD_IMAGEN));
-      this.colaCompresion = comprimida.catch(() => undefined);
-      from(comprimida)
-        .pipe(
-          switchMap((comprimida) => {
-            if (comprimida.size > IMAGE_MAX_BYTES) throw new Error('La imagen sigue pesando más de 8 MB');
-            return (this.subirImagen() ?? ((f: File) => this.fotosService.uploadImage(f)))(comprimida);
-          }),
-          takeUntilDestroyed(this.destroyRef),
-        )
-        .subscribe({
-          next: (url) => this.finishUpload(id, url),
-          error: () => this.finishUpload(id, null),
-        });
+      // De a UNA (comprimir → subir → la siguiente): antes se comprimían en fila pero se subían todas a la vez y con
+      // 10 fotos grandes la página se trababa. Así se puede seguir escribiendo y la barra dice por cuál va.
+      this.colaCompresion = this.colaCompresion.then(() => this.subirUna(file, id));
     });
     this.afterChange();
+  }
+
+  private async subirUna(file: File, id: string): Promise<void> {
+    if (this.destruido) return;
+    this.subidaActual = this.subidaHecha + 1;
+    this.cdr.markForCheck();
+    // Un respiro entre imágenes para que el navegador pinte y atienda el teclado.
+    await new Promise((r) => setTimeout(r));
+    let url: string | null = null;
+    try {
+      const comprimida = await comprimirImagen(file, ANCHO_MAX_IMAGEN, CALIDAD_IMAGEN);
+      if (comprimida.size > IMAGE_MAX_BYTES) throw new Error('La imagen sigue pesando más de 8 MB');
+      const subir = this.subirImagen() ?? ((f: File) => this.fotosService.uploadImage(f));
+      if (!this.destruido) url = await firstValueFrom(subir(comprimida));
+    } catch {
+      url = null;
+    }
+    if (this.destruido) return;
+    this.subidaHecha++;
+    if (this.subidaHecha >= this.subidaTotal) {
+      this.subidaTotal = 0;
+      this.subidaHecha = 0;
+      this.subidaActual = 0;
+    }
+    this.finishUpload(id, url);
+  }
+
+  /** Barra de "Subiendo imagen N de M" (0 = no hay subidas). */
+  subidaTotal = 0;
+  subidaHecha = 0;
+  subidaActual = 0;
+  private destruido = false;
+
+  get subidaPorcentaje(): number {
+    return this.subidaTotal ? Math.round((this.subidaHecha / this.subidaTotal) * 100) : 0;
   }
 
   // Se busca el placeholder por id: un deshacer pudo haber recreado el nodo
@@ -2062,7 +2105,8 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
   private renameBlock(block: HTMLElement, tag: string): HTMLElement {
     if (block.tagName === tag.toUpperCase()) return block;
     const el = document.createElement(tag);
-    if (block.style.textAlign) el.style.textAlign = block.style.textAlign;
+    const align = getAlign(block);
+    if (align) setAlign(el, align);
     while (block.firstChild) el.appendChild(block.firstChild);
     block.replaceWith(el);
     return el;
@@ -2214,7 +2258,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
   }
 
   private placeCaretEnd(): void {
-    this.editor.focus();
+    this.editor.focus({ preventScroll: true });
     this.caretAtEnd(this.editor);
   }
 
@@ -2239,7 +2283,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
   }
 
   private afterChange(): void {
-    this.editor.focus();
+    this.editor.focus({ preventScroll: true });
     this.emit();
     this.recordHistory();
     this.cdr.markForCheck();
@@ -2354,7 +2398,7 @@ export class RichEditorComponent implements ControlValueAccessor, Validator, Aft
     this.normalizarRaiz();
     this.emit();
     this.hideBubble();
-    this.editor.focus();
+    this.editor.focus({ preventScroll: true });
     if (entry?.sel) this.restoreOffsets(entry.sel);
     else this.caretAtEnd(this.editor);
     this.cdr.markForCheck();

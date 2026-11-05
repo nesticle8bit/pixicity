@@ -1,145 +1,140 @@
 <div class="container container--home">
-  <div class="row">
-    <div class="col-12 col-sm-6 col-md-9">
-      <h2 class="main-title">
-        <span>Mensajes privados</span>
+  <!-- Estilo WhatsApp: conversaciones a la izquierda, el chat abierto a la derecha (ruta hija).
+       En celular se ve una cosa a la vez: la lista, o el chat con su botón de volver. -->
+  <div class="wa" [class.wa--con-chat]="chatAbierto">
+    <aside class="wa-lista" aria-label="Conversaciones">
+      <header class="wa-lista__cabecera">
+        <h1 class="wa-lista__titulo">
+          Mensajes
+          @if (unreadCount > 0) {
+            <span class="wa-lista__badge" [attr.aria-label]="unreadCount + ' sin leer'">{{unreadCount}}</span>
+          }
+        </h1>
+        <button type="button" class="wa-icono" (click)="enviarMP()" matTooltip="Mensaje nuevo" aria-label="Mensaje nuevo">
+          <i class="ti ti-message-plus" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="wa-icono" [class.is-activa]="modoSeleccion" (click)="alternarSeleccion()"
+          [matTooltip]="modoSeleccion ? 'Terminar selección' : 'Seleccionar conversaciones'"
+          [attr.aria-pressed]="modoSeleccion" aria-label="Seleccionar conversaciones">
+          <i class="ti" [class.ti-checkbox]="!modoSeleccion" [class.ti-x]="modoSeleccion" aria-hidden="true"></i>
+        </button>
+      </header>
 
-        <strong class="float-end text-info" style="background: light-dark(#fff, #1e2124); padding-left: 7px;">
-          {{totalCount}}
-        </strong>
-      </h2>
+      <div class="wa-buscar">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <input type="search" [(ngModel)]="filtro" placeholder="Buscar por usuario o mensaje" aria-label="Buscar conversación" />
+      </div>
 
-      <div class="msg-carpetas" role="tablist" aria-label="Carpetas de mensajes">
-        <button type="button" role="tab" class="msg-carpetas__tab" [class.is-activa]="!archivadas"
+      <div class="wa-carpetas" role="tablist" aria-label="Carpetas de mensajes">
+        <button type="button" role="tab" class="wa-chip" [class.is-activa]="!archivadas"
           [attr.aria-selected]="!archivadas" (click)="verCarpeta(false)">
           <i class="ti ti-inbox" aria-hidden="true"></i> Bandeja
         </button>
-        <button type="button" role="tab" class="msg-carpetas__tab" [class.is-activa]="archivadas"
+        <button type="button" role="tab" class="wa-chip" [class.is-activa]="archivadas"
           [attr.aria-selected]="archivadas" (click)="verCarpeta(true)">
           <i class="ti ti-archive" aria-hidden="true"></i> Archivadas
           @if (totalArchivadas > 0) {
-            <span class="msg-carpetas__n">{{totalArchivadas}}</span>
+            <span class="wa-chip__n">{{totalArchivadas}}</span>
           }
         </button>
       </div>
 
-      @if (conversaciones.length < 1) {
-        <div class="nada-gris my-3">
-          {{ archivadas ? 'No tienes conversaciones archivadas.' : 'Aún no tienes conversaciones.' }}
+      @if (modoSeleccion && conversaciones.length > 0) {
+        <div class="wa-seleccion">
+          <mat-checkbox color="primary" [checked]="allSelected" [indeterminate]="someSelected"
+            (change)="toggleAll($event.checked)" aria-label="Seleccionar todas las conversaciones">
+          </mat-checkbox>
+          <span class="wa-seleccion__info">{{selectedCount}} seleccionada{{selectedCount === 1 ? '' : 's'}}</span>
+          <button type="button" class="wa-icono" [disabled]="selectedCount < 1" (click)="archivar()"
+            [matTooltip]="archivadas ? 'Devolver a la bandeja' : 'Archivar'"
+            [attr.aria-label]="archivadas ? 'Devolver a la bandeja las seleccionadas' : 'Archivar seleccionadas'">
+            <i class="ti" [class.ti-archive]="!archivadas" [class.ti-inbox]="archivadas" aria-hidden="true"></i>
+          </button>
+          <button type="button" class="wa-icono wa-icono--peligro" [disabled]="selectedCount < 1" (click)="deleteConversaciones()"
+            matTooltip="Eliminar" aria-label="Eliminar conversaciones seleccionadas">
+            <i class="ti ti-trash" aria-hidden="true"></i>
+          </button>
         </div>
       }
 
-      @if (conversaciones.length > 0) {
-        <div class="msg-toolbar">
-          <mat-checkbox color="primary" class="msg-toolbar__all"
-            [checked]="allSelected" [indeterminate]="someSelected"
-            (change)="toggleAll($event.checked)" aria-label="Seleccionar todas las conversaciones">
-          </mat-checkbox>
-
-          <span class="msg-toolbar__info">
-            @if (selectedCount > 0) {
-              {{selectedCount}} seleccionada{{selectedCount === 1 ? '' : 's'}}
-            } @else {
-              @if (unreadCount > 0) {
-                <strong>{{unreadCount}}</strong> sin leer
-              } @else {
-                Todo leído
-              }
-            }
-          </span>
-
-          <button type="button" mat-stroked-button class="msg-toolbar__archivar"
-            [disabled]="selectedCount < 1" (click)="archivar()"
-            [matTooltip]="archivadas ? 'Devolver a la bandeja' : 'Archivar seleccionadas'"
-            [attr.aria-label]="archivadas ? 'Devolver a la bandeja las seleccionadas' : 'Archivar conversaciones seleccionadas'">
-            <i class="ti" [class.ti-archive]="!archivadas" [class.ti-inbox]="archivadas" aria-hidden="true"></i>
-          </button>
-
-          <button type="button" mat-flat-button color="warn" class="msg-toolbar__delete"
-            [disabled]="selectedCount < 1" (click)="deleteConversaciones()"
-            matTooltip="Eliminar conversaciones seleccionadas" aria-label="Eliminar conversaciones seleccionadas">
-            <i class="ti ti-trash"></i>
-          </button>
-        </div>
-
-        <ul class="msg-list">
-          @for (c of conversaciones; track c.otro.id; let even = $even) {
-            <li class="msg-item" [class.msg-item--alt]="even" [class.msg-item--unread]="c.noLeidos > 0" [class.msg-item--selected]="c.selected">
-              <mat-checkbox color="primary" class="msg-item__check" [(ngModel)]="c.selected"
+      <ul class="wa-items">
+        @for (c of visibles; track c.otro.id) {
+          <li class="wa-item" [class.is-activa]="c.otro.userName === activo" [class.is-sin-leer]="c.noLeidos > 0"
+            [class.is-elegida]="c.selected">
+            @if (modoSeleccion) {
+              <mat-checkbox color="primary" class="wa-item__check" [(ngModel)]="c.selected"
                 [attr.aria-label]="'Seleccionar conversación con ' + c.otro.userName">
               </mat-checkbox>
-
-              <app-user-avatar class="msg-item__avatar" [avatar]="c.otro.avatar"
-                [userName]="c.otro.userName" [height]="40">
-              </app-user-avatar>
-
-              <div class="msg-item__body" role="link" tabindex="0"
-                (click)="abrir(c)" (keydown.enter)="abrir(c)">
-                <div class="msg-item__head">
-                  @if (c.noLeidos > 0) {
-                    <span class="msg-item__dot" matTooltip="Sin leer"></span>
-                  }
-                  <a class="msg-item__from" [routerLink]="['/perfil/' + c.otro.userName]"
-                    [appUserPopover]="c.otro.userName" (click)="$event.stopPropagation()">
-                    {{'@'}}{{c.otro.userName}}
-                  </a>
-                  @if (c.noLeidos > 0) {
-                    <span class="badge" [class.bg-primary]="!c.silenciada" [class.bg-secondary]="c.silenciada"
-                      [attr.aria-label]="c.noLeidos + ' sin leer'">{{c.noLeidos}}</span>
-                  }
-                  @if (c.silenciada) {
-                    <i class="ti ti-bell-off msg-item__silenciada" matTooltip="Silenciada: sin avisos" aria-label="Silenciada"></i>
-                  }
-                  <span class="msg-item__date text-muted cursor--help"
-                    matTooltip="{{c.fechaRegistro | date:'medium'}}">
+            }
+            <a class="wa-item__enlace" [routerLink]="['/mensajes/chat', c.otro.userName]" (click)="abrir(c, $event)"
+              [attr.aria-current]="c.otro.userName === activo ? 'page' : null">
+              <span class="wa-item__avatar">
+                <app-user-avatar [avatar]="c.otro.avatar" [userName]="c.otro.userName" [width]="46" [height]="46"></app-user-avatar>
+              </span>
+              <span class="wa-item__cuerpo">
+                <span class="wa-item__fila">
+                  <span class="wa-item__nombre">{{'@'}}{{c.otro.userName}}</span>
+                  <time class="wa-item__fecha" [attr.datetime]="c.fechaRegistro" [matTooltip]="(c.fechaRegistro | date:'medium') ?? ''">
                     {{c.fechaRegistro | timeAgo}}
+                  </time>
+                </span>
+                <span class="wa-item__fila">
+                  <span class="wa-item__vista">
+                    @if (c.esMio) {
+                      <i class="ti wa-item__estado" [class.ti-checks]="c.leido" [class.ti-check]="!c.leido"
+                        [class.is-leido]="c.leido" [attr.aria-label]="c.leido ? 'Leído' : 'Enviado'"></i>
+                    }
+                    @if (esSoloImagen(c)) {
+                      <i class="ti ti-photo" aria-hidden="true"></i>
+                    }
+                    {{vistaPrevia(c)}}
                   </span>
-                </div>
-                <div class="msg-item__preview">
-                  @if (c.esMio) {
-                    <i class="ti msg-item__status" [class.ti-checks]="c.leido" [class.ti-check]="!c.leido"
-                      [class.msg-item__status--read]="c.leido"
-                      [attr.aria-label]="c.leido ? 'Leído' : 'Enviado, sin leer'"
-                      [matTooltip]="c.leido ? (c.fechaLeido ? 'Visto el ' + (c.fechaLeido | date:'medium') : 'Leído por el destinatario') : 'Aún sin leer'"></i>
-                    Tú:
+                  @if (c.silenciada) {
+                    <i class="ti ti-bell-off wa-item__silencio" matTooltip="Silenciada" aria-label="Silenciada"></i>
                   }
-                  @if (esSoloImagen(c)) {
-                    <i class="ti ti-photo" aria-hidden="true"></i>
+                  @if (c.noLeidos > 0) {
+                    <span class="wa-item__n" [class.is-silenciada]="c.silenciada" [attr.aria-label]="c.noLeidos + ' sin leer'">{{c.noLeidos}}</span>
                   }
-                  {{vistaPrevia(c)}}
-                </div>
-                @if (c.esMio && c.leido && c.fechaLeido) {
-                  <div class="msg-item__visto">Visto {{c.fechaLeido | timeAgo}}</div>
-                }
-              </div>
+                </span>
+              </span>
+            </a>
 
-              <div class="msg-item__acciones">
-                <button type="button" class="msg-item__accion" (click)="silenciar(c)"
+            @if (!modoSeleccion) {
+              <span class="wa-item__acciones">
+                <button type="button" class="wa-icono wa-icono--chico" (click)="silenciar(c)"
                   [matTooltip]="c.silenciada ? 'Activar avisos' : 'Silenciar'"
                   [attr.aria-label]="(c.silenciada ? 'Activar avisos de ' : 'Silenciar a ') + c.otro.userName">
                   <i class="ti" [class.ti-bell-off]="!c.silenciada" [class.ti-bell]="c.silenciada" aria-hidden="true"></i>
                 </button>
-                <button type="button" class="msg-item__accion" (click)="archivar(c)"
+                <button type="button" class="wa-icono wa-icono--chico" (click)="archivar(c)"
                   [matTooltip]="archivadas ? 'Devolver a la bandeja' : 'Archivar'"
                   [attr.aria-label]="(archivadas ? 'Desarchivar conversación con ' : 'Archivar conversación con ') + c.otro.userName">
                   <i class="ti" [class.ti-archive]="!archivadas" [class.ti-inbox]="archivadas" aria-hidden="true"></i>
                 </button>
-              </div>
-            </li>
-          }
-        </ul>
-      }
+              </span>
+            }
+          </li>
+        } @empty {
+          <li class="wa-items__vacio">
+            <i class="ti" [class.ti-archive]="archivadas" [class.ti-message-off]="!archivadas" aria-hidden="true"></i>
+            @if (filtro.trim()) {
+              Nada coincide con «{{filtro.trim()}}».
+            } @else {
+              {{ archivadas ? 'No tienes conversaciones archivadas.' : 'Aún no tienes conversaciones.' }}
+            }
+          </li>
+        }
+      </ul>
 
-      @if (conversaciones.length > 0) {
-        <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount"
-          [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)"
-          >
+      @if (totalCount > paginationService.pageCount) {
+        <mat-paginator class="wa-paginador" [length]="totalCount" [pageSize]="paginationService.pageCount"
+          [hidePageSize]="true" (page)="pageChange($event)" aria-label="Páginas de conversaciones">
         </mat-paginator>
       }
-    </div>
+    </aside>
 
-    <section class="col-12 col-sm-6 col-md-3 dotted-border--left">
-      <app-mensajes-sidebar></app-mensajes-sidebar>
+    <section class="wa-chat" aria-label="Conversación">
+      <router-outlet />
     </section>
   </div>
 </div>

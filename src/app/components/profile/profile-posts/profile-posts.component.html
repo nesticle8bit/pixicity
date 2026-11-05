@@ -35,14 +35,6 @@
     }
   </ul>
 
-  @if (totalCount > paginationService.pageCount) {
-    <mat-paginator [length]="totalCount" [pageSize]="paginationService.pageCount" [pageIndex]="pageIndex"
-      [pageSizeOptions]="paginationService.selectItemsPerPage" (page)="pageChange($event)"
-      aria-label="Páginas de posts">
-    </mat-paginator>
-  }
-
-  <!-- Enlaces reales a cada página: los buscadores no usan el paginador -->
   @if (totalPaginas.length > 1) {
     <nav class="seo-pagination" aria-label="Paginación de posts">
       @for (p of totalPaginas; track p) {

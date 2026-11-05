@@ -1,6 +1,10 @@
 import { AvisoProtocoloComponent } from '../../shared/aviso-protocolo/aviso-protocolo.component';
 import { afterNextRender, Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, viewChild } from '@angular/core';
 import { slugUrl } from 'src/app/shared/helpers/slug';
+import { DecimalPipe } from '@angular/common';
+
+/** Igual que PostValidator.MaxContenido en el API (cuenta el HTML, no solo el texto). */
+export const LARGO_MAX_CONTENIDO_POST = 100_000;
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, map, of, switchMap } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -47,6 +51,7 @@ const MAX_AUTO_TAGS = 6;
     templateUrl: './posts-create.component.html',
     styleUrls: ['./posts-create.component.scss'],
     imports: [
+        DecimalPipe,
         AvisoProtocoloComponent,
         BorradorAvisoComponent,
         FormsModule,
@@ -139,7 +144,7 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
     this.formGroup = this.formBuilder.group({
       id: 0,
       titulo: ['', [Validators.required, Validators.maxLength(80)]],
-      contenido: ['', Validators.required],
+      contenido: ['', [Validators.required, Validators.maxLength(LARGO_MAX_CONTENIDO_POST)]],
       categoriaId: [undefined, Validators.required],
       etiquetas: [],
       esPrivado: false,
@@ -198,6 +203,18 @@ export class PostsCreateComponent implements OnInit, OnDestroy {
   }
 
   // - Progreso -
+  readonly largoMax = LARGO_MAX_CONTENIDO_POST;
+
+  /** Largo del HTML guardado: es lo que valida el API (etiquetas incluidas). */
+  get largoContenido(): number {
+    return (this.formGroup.value?.contenido || '').length;
+  }
+
+  /** Aviso desde el 90 % del tope. */
+  get cercaDelLimite(): boolean {
+    return this.largoContenido >= this.largoMax * 0.9;
+  }
+
   get hasContenido(): boolean {
     const html: string = this.formGroup.value?.contenido || '';
     return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim().length > 0 || /<(img|iframe|video)/i.test(html);

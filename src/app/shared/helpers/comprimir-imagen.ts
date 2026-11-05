@@ -14,10 +14,20 @@ export async function comprimirImagen(file: File, anchoMax = ANCHO_MAX_SHOUT, ca
 
   try {
     // imageOrientation respeta la rotación EXIF de las fotos de celular.
-    const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+    let bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
     const escala = Math.min(1, anchoMax / bitmap.width);
     const ancho = Math.round(bitmap.width * escala);
     const alto = Math.round(bitmap.height * escala);
+    // El achique lo hace el navegador fuera del hilo principal: un drawImage de una foto de 4000 px trababa la página.
+    if (escala < 1) {
+      try {
+        const chico = await createImageBitmap(bitmap, { resizeWidth: ancho, resizeHeight: alto, resizeQuality: 'high' });
+        bitmap.close?.();
+        bitmap = chico;
+      } catch {
+        // Sin soporte de resize: drawImage escala igual (más lento).
+      }
+    }
 
     const canvas = document.createElement('canvas');
     canvas.width = ancho;

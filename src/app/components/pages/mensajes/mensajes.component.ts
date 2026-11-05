@@ -8,14 +8,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { MensajesBadgeService } from 'src/app/services/shared/mensajes-badge.service';
-import { Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogEnviarMPComponent } from 'src/app/components/dialogs/dialog-enviar-mp/dialog-enviar-mp.component';
+import { MensajesListaService } from './mensajes-lista.service';
 import { ConversacionFila } from 'src/app/models/mensajes/mensaje-vm.model';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { MatButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
-import { UserPopoverDirective } from '../../../shared/directives/userPopover.directive';
-import { MensajesSidebarComponent } from './mensajes-sidebar/mensajes-sidebar.component';
 import { DatePipe } from '@angular/common';
 import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
 
@@ -25,14 +26,12 @@ import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
     styleUrls: ['./mensajes.component.scss'],
     imports: [
         MatCheckbox,
-        MatButton,
         MatTooltip,
         FormsModule,
         UserAvatarComponent,
         RouterLink,
-        UserPopoverDirective,
+        RouterOutlet,
         MatPaginator,
-        MensajesSidebarComponent,
         DatePipe,
         TimeAgoPipe,
     ],
@@ -55,14 +54,32 @@ export class MensajesComponent implements OnInit {
   /** Carpeta visible: bandeja de entrada o archivadas. */
   public archivadas = false;
   public totalArchivadas = 0;
+  /** Usuario del chat abierto a la derecha (se resalta en la lista); null = ninguno. */
+  public activo: string | null = null;
+  /** Hay un chat en la ruta hija: en celular se ve el chat y no la lista. */
+  public chatAbierto = false;
+  /** Checkboxes para archivar/eliminar varias a la vez (como "Seleccionar chats" de WhatsApp). */
+  public modoSeleccion = false;
+  public filtro = '';
+
+  private dialog = inject(MatDialog);
+  private lista = inject(MensajesListaService);
 
   constructor() {
     this.displaySections();
 
-    this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
+    this.paginationService.change({ pageIndex: 0, pageSize: 20, length: 0 });
     this.formGroup = this.formBuilder.group({});
 
+    this.leerRuta();
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationEnd), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.leerRuta());
+
     this.getConversaciones();
+
+    // Lo que hago en el chat de la derecha (enviar, leer, archivar, silenciar) se refleja en la lista.
+    this.lista.cambio$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.getConversaciones());
 
     // Mensaje nuevo (o enviado desde otra pestaña): refresca la bandeja sin recargar la página.
     this.signalrService.mensaje$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.getConversaciones());
@@ -153,8 +170,38 @@ export class MensajesComponent implements OnInit {
     this.conversaciones.forEach((c) => (c.selected = checked));
   }
 
-  abrir(conversacion: ConversacionFila): void {
-    this.router.navigate(['/mensajes/chat', conversacion.otro.userName]);
+  /** El enlace navega solo; aquí se baja el contador al momento (el API los marca leídos al abrir). */
+  abrir(conversacion: ConversacionFila, event?: MouseEvent): void {
+    if (this.modoSeleccion) {
+      event?.preventDefault();
+      conversacion.selected = !conversacion.selected;
+      return;
+    }
+    conversacion.noLeidos = 0;
+  }
+
+  alternarSeleccion(): void {
+    this.modoSeleccion = !this.modoSeleccion;
+    if (!this.modoSeleccion) this.toggleAll(false);
+  }
+
+  enviarMP(): void {
+    this.dialog.open(DialogEnviarMPComponent, { width: '780px', disableClose: true, data: {} });
+  }
+
+  /** Conversaciones de la página filtradas por el buscador (usuario o texto del último mensaje). */
+  get visibles(): ConversacionFila[] {
+    const q = this.filtro.trim().toLowerCase();
+    if (!q) return this.conversaciones;
+    return this.conversaciones.filter(
+      (c) => c.otro.userName.toLowerCase().includes(q) || this.vistaPrevia(c).toLowerCase().includes(q),
+    );
+  }
+
+  private leerRuta(): void {
+    const ruta = this.router.parseUrl(this.router.url).root.children['primary']?.segments.map((s) => s.path) ?? [];
+    this.chatAbierto = ruta.length > 1;
+    this.activo = ruta[1] === 'chat' && ruta[2] ? decodeURIComponent(ruta[2]) : null;
   }
 
   // Vista previa en texto plano: el contenido es HTML y truncarlo cortaría etiquetas a la mitad.

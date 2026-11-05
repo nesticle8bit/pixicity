@@ -2,7 +2,7 @@
 // que el editor sabe manejar. Word, Google Docs y las páginas web traen estilos,
 // clases, fuentes y metadatos que no deben terminar en el post.
 
-import { BLOCK_TAGS } from './rich-editor-dom';
+import { BLOCK_TAGS, getAlign, setAlign } from './rich-editor-dom';
 import {
   CLASE_VIDEO_YOUTUBE,
   enlaceYoutube,
@@ -69,8 +69,8 @@ function buildElement(source: HTMLElement, tag: string): HTMLElement | null {
     el.setAttribute('rel', 'noopener noreferrer');
   }
 
-  const align = (source.style.textAlign || source.getAttribute('align') || '').toLowerCase();
-  if (BLOCK_TAGS.includes(tag.toUpperCase()) && ALIGNS.includes(align)) el.style.textAlign = align;
+  const align = getAlign(source);
+  if (BLOCK_TAGS.includes(tag.toUpperCase()) && ALIGNS.includes(align)) setAlign(el, align);
 
   return el;
 }

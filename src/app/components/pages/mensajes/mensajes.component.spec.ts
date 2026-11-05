@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { DefaultUrlSerializer, Router } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
 import { MensajesComponent } from './mensajes.component';
@@ -40,7 +40,9 @@ describe('MensajesComponent (bandeja de conversaciones)', () => {
   beforeEach(async () => {
     mensajes = jasmine.createSpyObj('IHttpMensajesService', ['getConversaciones', 'deleteConversaciones', 'archivarConversaciones', 'silenciarConversacion']);
     notificaciones = jasmine.createSpyObj('NotificationService', ['success', 'error']);
-    router = jasmine.createSpyObj('Router', ['navigate']);
+    // El marco lee la URL para saber qué chat está abierto a la derecha.
+    router = jasmine.createSpyObj('Router', ['navigate', 'parseUrl'], { url: '/mensajes/chat/user3', events: new Subject() });
+    router.parseUrl.and.callFake((u: string) => new DefaultUrlSerializer().parse(u));
     mensaje$ = new Subject();
     leidos$ = new Subject();
 
@@ -72,10 +74,29 @@ describe('MensajesComponent (bandeja de conversaciones)', () => {
     expect(component.unreadCount).toBe(5);
   });
 
-  it('abrir navega al chat con el usuario', () => {
+  it('marca como activo el chat de la URL', () => {
+    expect(component.activo).toBe('user3');
+    expect(component.chatAbierto).toBeTrue();
+  });
+
+  it('abrir baja el contador de la fila (el enlace navega solo)', () => {
     component.abrir(component.conversaciones[0]);
 
-    expect(router.navigate).toHaveBeenCalledWith(['/mensajes/chat', 'user1']);
+    expect(component.conversaciones[0].noLeidos).toBe(0);
+  });
+
+  it('en modo selección, abrir alterna la selección en vez de navegar', () => {
+    component.alternarSeleccion();
+    const ev = new MouseEvent('click');
+    component.abrir(component.conversaciones[1], ev);
+
+    expect(component.conversaciones[1].selected).toBeTrue();
+    expect(ev.defaultPrevented).toBeFalse(); // evento no cancelable: lo importante es que no bajó el contador
+  });
+
+  it('el buscador filtra por usuario', () => {
+    component.filtro = 'user2';
+    expect(component.visibles.map((c) => c.otro.userName)).toEqual(['user2']);
   });
 
   it('un mensaje en vivo recarga la bandeja y conserva la selección', () => {

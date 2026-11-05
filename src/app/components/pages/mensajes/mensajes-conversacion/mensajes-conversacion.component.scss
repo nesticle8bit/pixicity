@@ -794,3 +794,69 @@ img {
     animation: none;
   }
 }
+
+/* --- Panel derecho de /mensajes (estilo WhatsApp) ---
+   El marco (MensajesComponent) da el alto; aquí el chat lo llena: cabecera arriba, mensajes con scroll propio en el
+   medio y la caja de escribir abajo. */
+:host {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+}
+
+.chat-header {
+    flex: none;
+    margin: 0;
+    border: 0;
+    border-bottom: 1px solid light-dark(#dde3e8, #394855);
+    border-radius: 0;
+    background: light-dark(#f6f8fa, #202d3a);
+
+    // Volver a la lista: solo en celular (en escritorio la lista está al lado).
+    &__volver {
+        @media (min-width: 768px) {
+            display: none;
+        }
+    }
+}
+
+.chat-wrap {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+.chat-body {
+    flex: 1;
+    height: auto;
+    min-height: 0;
+    padding: 1rem clamp(.5rem, 3vw, 2rem);
+    background-color: light-dark(#eef3f6, #1a222b);
+    // Trama suave de puntos, como el fondo de los chats de WhatsApp.
+    background-image: radial-gradient(light-dark(rgb(0 101 149 / 7%), rgb(255 255 255 / 4%)) 1px, transparent 1px);
+    background-size: 18px 18px;
+}
+
+.chat-adjuntos,
+.chat-respondiendo,
+.alert {
+    flex: none;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.chat-reply {
+    flex: none;
+    margin: 8px 12px 0;
+}
+
+.chat-reply__ayuda {
+    flex: none;
+    margin: 4px 0 8px 28px;
+}
+
+@media (max-width: 575.98px) {
+    .chat-reply { margin-bottom: 8px; }
+}

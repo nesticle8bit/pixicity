@@ -107,12 +107,21 @@
       <mat-icon>{{ showMore ? 'expand_less' : 'more_horiz' }}</mat-icon>
     </button>
 
-    @if (uploads > 0) {
-    <span class="rich-editor__status" role="status">
-      <mat-icon>cloud_upload</mat-icon> Subiendo {{ uploads }} {{ uploads === 1 ? 'imagen' : 'imágenes' }}…
-    </span>
-    }
   </div>
+
+  <!-- Subida de imágenes: de a una, con la barra diciendo por cuál va (se puede seguir escribiendo). -->
+  @if (subidaTotal > 0) {
+  <div class="rich-editor__subida" role="status" aria-live="polite">
+    <span class="rich-editor__subida-texto">
+      <mat-icon>cloud_upload</mat-icon>
+      Subiendo imagen {{ subidaActual }} de {{ subidaTotal }}…
+    </span>
+    <span class="rich-editor__subida-barra" role="progressbar" aria-label="Progreso de la subida"
+      [attr.aria-valuenow]="subidaHecha" aria-valuemin="0" [attr.aria-valuemax]="subidaTotal">
+      <span [style.width.%]="subidaPorcentaje"></span>
+    </span>
+  </div>
+  }
 
   <input #fileInputEl type="file" hidden multiple accept="image/jpeg,image/png,image/gif,image/webp"
     (change)="onFilesChosen(fileInputEl)" />

@@ -55,7 +55,7 @@ describe('rich-editor-paste', () => {
 
   it('normaliza tags equivalentes y conserva la alineación', () => {
     expect(clean('<div align="center"><b>a</b><i>b</i><strike>c</strike></div>'))
-      .toBe('<p style="text-align: center;"><strong>a</strong><em>b</em><s>c</s></p>');
+      .toBe('<p class="txt-centro"><strong>a</strong><em>b</em><s>c</s></p>');
   });
 
   it('enlaces: solo esquemas seguros, siempre en pestaña nueva', () => {

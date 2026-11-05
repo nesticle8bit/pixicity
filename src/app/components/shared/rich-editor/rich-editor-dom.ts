@@ -13,6 +13,26 @@ export const CARET_GUARD = '​';
 
 export const isElement = (node: Node | null): node is HTMLElement => node instanceof HTMLElement;
 
+// Alineación de bloques como clase, no `style`: el [innerHTML] de Angular borra los atributos style y el post
+// publicado (y la vista previa) quedaba siempre a la izquierda aunque en el editor se viera centrado.
+export const ALIGN_CLASSES: Record<string, string> = { center: 'txt-centro', right: 'txt-der', justify: 'txt-just' };
+
+export function getAlign(el: HTMLElement): string {
+  const cls = Object.keys(ALIGN_CLASSES).find((k) => el.classList.contains(ALIGN_CLASSES[k]));
+  return cls ?? (el.style.textAlign || el.getAttribute('align') || '').toLowerCase();
+}
+
+/** Deja `value` ('left' o '' = sin alineación) como clase y quita la forma vieja (style / align). */
+export function setAlign(el: HTMLElement, value: string): void {
+  el.classList.remove(...Object.values(ALIGN_CLASSES));
+  el.style.textAlign = '';
+  el.removeAttribute('align');
+  const cls = ALIGN_CLASSES[value];
+  if (cls) el.classList.add(cls);
+  if (!el.getAttribute('class')) el.removeAttribute('class');
+  if (el.getAttribute('style') !== null && el.style.length === 0) el.removeAttribute('style');
+}
+
 export function isBlock(node: Node | null): boolean {
   return isElement(node) && BLOCK_TAGS.includes(node.tagName);
 }

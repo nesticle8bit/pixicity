@@ -11,7 +11,7 @@ import { UserAvatarComponent } from '../../../addons/user-avatar/user-avatar.com
 import { UserPopoverDirective } from '../../../../shared/directives/userPopover.directive';
 import { MatTooltip } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
-import { MensajesSidebarComponent } from '../mensajes-sidebar/mensajes-sidebar.component';
+import { MensajesListaService } from '../mensajes-lista.service';
 import { MensajeCita, MensajeViewModel } from 'src/app/models/mensajes/mensaje-vm.model';
 import { MatMenu, MatMenuContent, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { DeslizarParaResponderDirective } from './deslizar-para-responder.directive';
@@ -61,7 +61,6 @@ const PAGINAS_BUSCAR_CITA = 10;
         UserPopoverDirective,
         MatTooltip,
         FormsModule,
-        MensajesSidebarComponent,
         DatePipe,
         DecimalPipe,
         LowerCasePipe,
@@ -84,6 +83,7 @@ export class MensajesConversacionComponent implements OnInit {
   private notificationService = inject(NotificationService);
   private signalrService = inject(SignalrService);
   private badgeService = inject(MensajesBadgeService);
+  private lista = inject(MensajesListaService);
 
   /** Los :codigo: de los emotes de Taringa! se muestran como GIF. */
   readonly conEmotes = reemplazarEmotes;
@@ -203,6 +203,7 @@ export class MensajesConversacionComponent implements OnInit {
 
         // La carga inicial marca como leídos los recibidos: el contador del menú debe bajar.
         this.badgeService.refresh();
+        this.lista.avisar();
 
         setTimeout(() => this.scrollToBottom());
       });
@@ -275,6 +276,7 @@ export class MensajesConversacionComponent implements OnInit {
         this.actualizarAsunto();
 
         this.badgeService.refresh();
+        this.lista.avisar();
 
         if (forzarScroll || seguia) {
           this.nuevosSinLeer = 0;
@@ -479,6 +481,7 @@ export class MensajesConversacionComponent implements OnInit {
           if (response?.type === 'id') {
             alExito?.();
             this.mergeLatest(true);
+            this.lista.avisar();
           } else if (response?.message) {
             this.notificationService.error(response.message, 'Error');
           }
@@ -643,6 +646,7 @@ export class MensajesConversacionComponent implements OnInit {
         if (!ok) return;
         this.silenciada = silenciar;
         this.badgeService.refresh();
+        this.lista.avisar();
         this.notificationService.success(
           silenciar ? 'No te avisaremos de sus mensajes nuevos' : 'Vuelves a recibir avisos',
           silenciar ? 'Conversación silenciada' : 'Avisos activados',
@@ -658,6 +662,7 @@ export class MensajesConversacionComponent implements OnInit {
       .subscribe((ok) => {
         if (!ok) return;
         this.notificationService.success('Vuelve a la bandeja si te escriben de nuevo.', 'Conversación archivada');
+        this.lista.avisar();
         this.router.navigate(['/mensajes']);
       });
   }

@@ -97,6 +97,8 @@ export const LINKS_OCULTOS_CLASS = 'links-ocultos';
 export const TABLE_PICKER_SIZE = 6;
 
 // Mismas reglas que POST /api/fotos/imagenes (ImageUploadHelper.FotoMaxBytes)
+/** Imágenes por tanda (elegir archivos, pegar o soltar): se suben de a una con barra de progreso. */
+export const MAX_IMAGENES_POR_SUBIDA = 10;
 export const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 /** Tope del archivo que se sube (ya comprimido); el que elige el usuario puede pesar hasta IMAGE_MAX_BYTES_ORIGINAL. */
 export const IMAGE_MAX_BYTES = 8 * 1024 * 1024;

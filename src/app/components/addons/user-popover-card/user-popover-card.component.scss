@@ -90,8 +90,8 @@
   position: relative;
   flex-shrink: 0;
 
-  img {
-    border-radius: 50%;
+  ::ng-deep img {
+    border-radius: 50% !important;
   }
 }
 
@@ -285,8 +285,11 @@
 }
 
 // Franja con el fondo del perfil; el avatar se monta encima, como en el perfil y el menú del celular.
+// Misma proporción que .pf-hero__banner del perfil (≈1116×170 en escritorio): con `cover` y la misma posición en %
+// el recorte de la portada es el mismo; con un alto fijo se veía otro pedazo de la imagen.
 .upop__banner {
-  height: 78px;
+  aspect-ratio: 1116 / 170;
+  min-height: 46px;
   background:
     radial-gradient(120% 90% at 100% 0%, rgb(255 255 255 / 18%), transparent 60%),
     linear-gradient(135deg, #0b6ea5 0%, #004160 70%, #00283b 100%);
@@ -304,13 +307,29 @@
     padding-top: 0;
   }
 
+  // Como en el perfil: círculo con borde del color de la tarjeta, montado sobre la portada.
   .upop__avatar-wrap {
+    z-index: 1;
+    width: 70px;
+    height: 70px;
     margin-top: -30px;
+    border: 3px solid light-dark(#fff, #1e2124);
+    border-radius: 50%;
+    background: light-dark(#fff, #1e2124);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 18%);
 
+    // !important: la imagen trae .rounded de Bootstrap, que fija su radio con !important.
     ::ng-deep img {
-      border: 3px solid light-dark(#fff, #1e2124);
-      box-shadow: 0 2px 8px rgb(0 0 0 / 18%);
+      display: block;
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 50% !important;
     }
+  }
+
+  .upop__online-dot {
+    z-index: 2;
   }
 
   .upop__skeleton {

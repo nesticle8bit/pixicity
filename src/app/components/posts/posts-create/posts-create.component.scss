@@ -631,3 +631,30 @@ $bar-h: 58px;
     gap: 4px;
   }
 }
+
+// Aviso de largo: desde el 90 % del tope del API (100.000 caracteres de HTML).
+.cp-limite {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 8px 12px;
+  border: 1px solid light-dark(#f0d48a, #6b5520);
+  border-radius: 8px;
+  background: light-dark(#fff8e1, #3a3016);
+  color: light-dark(#7a5b00, #f3d47e);
+  font-size: .85rem;
+
+  &__n {
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+  }
+
+  &--pasado {
+    border-color: light-dark(#f1b0ab, #7a2c27);
+    background: light-dark(#fdecea, #4a2422);
+    color: light-dark(#b3261e, #f08a84);
+  }
+}

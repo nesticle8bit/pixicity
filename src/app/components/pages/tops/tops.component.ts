@@ -35,8 +35,10 @@ interface FilasPorTipo {
 
 /** Una tarjeta "tops-container": `tipo` elige cómo se dibuja cada fila; `items` queda undefined mientras carga. */
 type TarjetaTop = {
-  [K in keyof FilasPorTipo]: { titulo: string; icono: string; tipo: K; items?: FilasPorTipo[K][] };
+  [K in keyof FilasPorTipo]: { titulo: string; icono: string; tipo: K; items?: FilasPorTipo[K][]; campo?: CampoPost };
 }[keyof FilasPorTipo];
+
+type CampoPost = 'puntos' | 'cantidadComentarios' | 'favoritos' | 'seguidores';
 
 type FilaTop = FilasPorTipo[keyof FilasPorTipo];
 
@@ -168,10 +170,10 @@ export class TopsComponent implements OnInit {
     switch (this.seccion) {
       case 'posts':
         return [
-          { titulo: 'Top post con más puntos', icono: 'icon moneda', tipo: 'post' },
-          { titulo: 'Top post más comentarios', icono: 'i comentarios', tipo: 'post' },
-          { titulo: 'Top post más favoritos', icono: 'i estrella-plus', tipo: 'post' },
-          { titulo: 'Top post con más seguidores', icono: 'i personas', tipo: 'post' },
+          { titulo: 'Top post con más puntos', icono: 'icon moneda', tipo: 'post', campo: 'puntos' },
+          { titulo: 'Top post más comentarios', icono: 'i comentarios', tipo: 'post', campo: 'cantidadComentarios' },
+          { titulo: 'Top post más favoritos', icono: 'i estrella-plus', tipo: 'post', campo: 'favoritos' },
+          { titulo: 'Top post con más seguidores', icono: 'i personas', tipo: 'post', campo: 'seguidores' },
         ];
       case 'comunidades':
         return [
@@ -191,7 +193,7 @@ export class TopsComponent implements OnInit {
         ];
       default:
         return [
-          { titulo: 'Top post con más puntos', icono: 'icon moneda', tipo: 'post' },
+          { titulo: 'Top post con más puntos', icono: 'icon moneda', tipo: 'post', campo: 'puntos' },
           { titulo: 'Comunidades más populares', icono: 'ti ti-users-group', tipo: 'comunidad' },
           { titulo: 'Temas más votados', icono: 'ti ti-thumb-up', tipo: 'tema' },
           { titulo: 'Top usuario con más puntos', icono: 'icon moneda', tipo: 'usuario' },

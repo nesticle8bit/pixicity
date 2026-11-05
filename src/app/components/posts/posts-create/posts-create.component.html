@@ -105,6 +105,18 @@
           <app-rich-editor formControlName="contenido" [permitirSubida]="true" [subirImagen]="subirImagenPost" [permitirLinksOcultos]="true" [emotes]="!!formGroup.value?.smileys"
             [placeholder]="'Cuenta tu historia, comparte tu aporte…'"></app-rich-editor>
 
+          @if (cercaDelLimite) {
+          <p class="cp-limite" [class.cp-limite--pasado]="largoContenido > largoMax" role="status" aria-live="polite">
+            <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+            @if (largoContenido > largoMax) {
+              Te pasaste del límite por {{ (largoContenido - largoMax) | number }} caracteres: acorta el post para poder publicarlo.
+            } @else {
+              Te estás acercando al límite: quedan {{ (largoMax - largoContenido) | number }} caracteres.
+            }
+            <span class="cp-limite__n">{{ largoContenido | number }} / {{ largoMax | number }}</span>
+          </p>
+          }
+
           @if (!hasContenido) {
           <p class="cp-empty-hint">
             <i class="ti ti-bulb"></i>

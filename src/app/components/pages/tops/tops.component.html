@@ -18,6 +18,7 @@
                         @for (item of tarjeta.items; track item.id; let i = $index) {
                           <article class="list-posts--zebra">
                             <strong class="float-start">{{i+1}}</strong>
+                            <span class="float-end tops-valor">{{item[tarjeta.campo ?? 'puntos']}}</span>
                             <div class="ms-2">
                               <a [routerLink]="['/posts/' + item.categoria.seo + '/' + item.id + '/' + item.url]"
                                 matTooltip="{{item.titulo}}" aria-label="{{item.titulo}}">

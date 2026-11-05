@@ -1,8 +1,6 @@
-<div class="container container--home">
-  <div class="row">
-    <div class="col-12 col-sm-6 col-md-9">
-      <div class="chat-header mt-2">
-        <a class="chat-header__volver" [routerLink]="['/mensajes']" matTooltip="Volver a mensajes" aria-label="Volver a mensajes">
+<!-- Panel derecho de /mensajes (la lista de conversaciones la pone MensajesComponent a la izquierda). -->
+      <div class="chat-header">
+        <a class="chat-header__volver" [routerLink]="['/mensajes']" matTooltip="Volver a la lista" aria-label="Volver a la lista de conversaciones">
           <i class="ti ti-arrow-left" aria-hidden="true"></i>
         </a>
 
@@ -253,10 +251,3 @@
         </button>
       </div>
       <p class="chat-reply__ayuda"><kbd>Enter</kbd> envía · <kbd>Shift</kbd> + <kbd>Enter</kbd> nueva línea</p>
-    </div>
-
-    <section class="col-12 col-sm-6 col-md-3 dotted-border--left">
-      <app-mensajes-sidebar></app-mensajes-sidebar>
-    </section>
-  </div>
-</div>
