@@ -1,311 +1,193 @@
-<header class="adm-head">
-  <div>
-    <h1 class="adm-head__title">Panel de control</h1>
-    <p class="adm-head__sub">
-      {{saludo}}, <strong>{{currentUser?.usuario?.userName}}</strong>.
-      @if (actualizado) {
-        <span class="adm-head__stamp">· actualizado {{actualizado | timeAgo | lowercase}}</span>
-      }
-    </p>
-  </div>
-
-  <button type="button" class="adm-btn" (click)="refrescar()" [disabled]="cargando">
-    <mat-icon [class.adm-spin]="cargando">refresh</mat-icon>
-    {{cargando ? 'Actualizando…' : 'Actualizar'}}
-  </button>
-</header>
-
 @if (error) {
-  <div class="adm-alert">
-    <mat-icon>error_outline</mat-icon>
+  <div class="pc-alerta" role="alert">
+    <mat-icon aria-hidden="true">error_outline</mat-icon>
     <span>{{error}}</span>
-    <button type="button" class="adm-btn adm-btn--sm" (click)="refrescar()">Reintentar</button>
+    <button type="button" class="pc-boton" (click)="refrescar()">Reintentar</button>
   </div>
 }
 
 @if (!resumen && cargando) {
-  <div class="adm-grid adm-grid--kpi">
-    @for (i of [1,2,3,4]; track i) {
-      <div class="adm-card adm-skeleton"></div>
-    }
-  </div>
-  <div class="adm-card adm-skeleton adm-skeleton--tall mt-3"></div>
+  <div class="pc-esqueleto pc-esqueleto--franja" role="progressbar" aria-label="Cargando el panel"></div>
+  <div class="pc-esqueleto" aria-hidden="true"></div>
 }
 
 @if (resumen) {
-  <!-- KPIs -->
-  <section class="adm-grid adm-grid--kpi">
-    @for (kpi of kpis; track trackByClave($index, kpi)) {
-      <a class="adm-card adm-kpi" [routerLink]="[kpi.ruta]" [style.--kpi-color]="kpi.color">
-        <div class="adm-kpi__top">
-          <span class="adm-kpi__icon"><mat-icon>{{kpi.icono}}</mat-icon></span>
-          <span class="adm-kpi__label">{{kpi.titulo}}</span>
-        </div>
+  <!-- Lo que espera al staff: el color de la franja dice el estado antes de leer -->
+  <section class="pc-franja" [class]="'pc-franja pc-franja--' + estado" aria-labelledby="pc-titular">
+    <div class="pc-franja__cola">
+      <h1 id="pc-titular" class="pc-franja__titular">{{titular}}</h1>
+      <p class="pc-franja__sub">{{subtitular}}</p>
 
-        <div class="adm-kpi__value">{{kpi.metrica.total | number}}</div>
-
-        <div class="adm-kpi__foot">
-          <span class="adm-delta"
-            [class.adm-delta--up]="(kpi.metrica.variacion ?? 0) > 0"
-            [class.adm-delta--down]="(kpi.metrica.variacion ?? 0) < 0"
-            [matTooltip]="kpi.metrica.ultimos7 + ' en 7 días · ' + kpi.metrica.previos7 + ' los 7 previos'">
-            @if (kpi.metrica.variacion === null) {
-              <mat-icon>remove</mat-icon> sin datos
-            } @else {
-              <mat-icon>{{kpi.metrica.variacion >= 0 ? 'trending_up' : 'trending_down'}}</mat-icon>
-              {{kpi.metrica.variacion > 0 ? '+' : ''}}{{kpi.metrica.variacion}}%
-            }
-          </span>
-          <span class="adm-kpi__hint">+{{kpi.metrica.ultimos7 | number}} / 7 días</span>
-        </div>
-
-        @if (kpi.serie.length) {
-          <app-admin-sparkline [valores]="kpi.serie" [color]="kpi.color" [alto]="34"></app-admin-sparkline>
-        }
-      </a>
-    }
-  </section>
-
-  <div class="adm-grid adm-grid--main mt-3">
-    <div class="adm-col">
-      <!-- Cola de moderación -->
-      <section class="adm-card">
-        <header class="adm-card__head">
-          <h2><mat-icon>shield</mat-icon> Cola de moderación</h2>
-          @if (resumen.totalPendientes > 0) {
-            <span class="adm-pill adm-pill--alert">{{resumen.totalPendientes}} pendientes</span>
+      @if (resumen.pendientes.length) {
+        <ul class="pc-cola">
+          @for (p of resumen.pendientes; track p.clave) {
+            <li>
+              <a [routerLink]="[p.ruta]">
+                <strong class="pc-cola__cantidad">{{p.cantidad | number}}</strong>
+                <span class="pc-cola__titulo">{{p.titulo}}</span>
+                <span class="pc-cola__espera" [class.pc-cola__espera--urgente]="esUrgente(p.esperaHoras)">{{espera(p.esperaHoras)}}</span>
+                <mat-icon aria-hidden="true">chevron_right</mat-icon>
+              </a>
+            </li>
           }
-        </header>
-
-        @if (resumen.pendientes.length === 0) {
-          <div class="adm-empty">
-            <mat-icon>task_alt</mat-icon>
-            <p>Todo al día. No hay denuncias ni contactos sin atender.</p>
-          </div>
-        } @else {
-          <ul class="adm-queue">
-            @for (p of resumen.pendientes; track p.clave) {
-              <li>
-                <a [routerLink]="[p.ruta]" [class.adm-queue--urgent]="esUrgente(p.esperaHoras)">
-                  <mat-icon>{{p.icono}}</mat-icon>
-                  <span class="adm-queue__title">
-                    {{p.titulo}}
-                    <small>el más antiguo {{espera(p.esperaHoras)}}</small>
-                  </span>
-                  <span class="adm-queue__count">{{p.cantidad}}</span>
-                  <mat-icon class="adm-queue__go">chevron_right</mat-icon>
-                </a>
-              </li>
-            }
-          </ul>
-        }
-      </section>
-
-      <!-- Actividad de 14 días -->
-      <section class="adm-card mt-3">
-        <header class="adm-card__head">
-          <h2><mat-icon>insights</mat-icon> Actividad · últimos 14 días</h2>
-          <span class="adm-legend">
-            <i class="adm-dot adm-dot--posts"></i> Posts
-            <i class="adm-dot adm-dot--com"></i> Comentarios
-            <i class="adm-dot adm-dot--users"></i> Usuarios
-          </span>
-        </header>
-
-        <div class="adm-bars">
-          @for (dia of resumen.serie; track dia.fecha) {
-            <div class="adm-bars__day"
-              [matTooltip]="(dia.fecha | date:'EEE d MMM') + ' · ' + dia.posts + ' posts, ' + dia.comentarios + ' comentarios, ' + dia.usuarios + ' usuarios'">
-              <div class="adm-bars__stack">
-                <span class="adm-bars__bar adm-bars__bar--com" [style.height.%]="alturaBarra(dia.comentarios)"></span>
-                <span class="adm-bars__bar adm-bars__bar--posts" [style.height.%]="alturaBarra(dia.posts)"></span>
-                <span class="adm-bars__bar adm-bars__bar--users" [style.height.%]="alturaBarra(dia.usuarios)"></span>
-              </div>
-              <small>{{dia.fecha | date:'d'}}</small>
-            </div>
-          }
-        </div>
-      </section>
-
-      <!-- Últimos posts -->
-      <section class="adm-card mt-3">
-        <header class="adm-card__head">
-          <h2><mat-icon>fact_check</mat-icon> Últimos posts</h2>
-          <a class="adm-card__link" [routerLink]="['/administracion/posts']">Ver todos</a>
-        </header>
-
-        @if (resumen.ultimosPosts.length === 0) {
-          <div class="adm-empty"><mat-icon>inbox</mat-icon><p>Todavía no hay posts publicados.</p></div>
-        } @else {
-          <ul class="adm-list">
-            @for (post of resumen.ultimosPosts; track trackById($index, post)) {
-              <li>
-                <app-user-avatar [class]="'adm-avatar'" [avatar]="post.avatar" [userName]="post.userName" [height]="30"></app-user-avatar>
-                <div class="adm-list__body">
-                  <a [routerLink]="[postUrl(post)]" target="_blank" class="adm-list__title">{{post.titulo}}</a>
-                  <small>
-                    <a [routerLink]="['/perfil/' + post.userName]" target="_blank" [appUserPopover]="post.userName">{{post.userName}}</a>
-                    @if (post.categoria) { · {{post.categoria}} }
-                    · {{post.fechaRegistro | timeAgo | lowercase}}
-                  </small>
-                </div>
-                <div class="adm-list__stats">
-                  <span matTooltip="Puntos"><mat-icon>bolt</mat-icon>{{post.puntos}}</span>
-                  <span matTooltip="Comentarios"><mat-icon>chat_bubble_outline</mat-icon>{{post.comentarios}}</span>
-                  <span matTooltip="Visitas"><mat-icon>visibility</mat-icon>{{post.visitas}}</span>
-                </div>
-              </li>
-            }
-          </ul>
-        }
-      </section>
+        </ul>
+      }
     </div>
 
-    <aside class="adm-col adm-col--side">
-      <!-- Online -->
-      <section class="adm-card adm-online">
-        <header class="adm-card__head">
-          <h2><mat-icon>podcasts</mat-icon> En línea ahora</h2>
-        </header>
+    <div class="pc-franja__vivo">
+      <p class="pc-vivo__numero">{{resumen.onlineTotal | number}}</p>
+      <p class="pc-vivo__etiqueta">personas conectadas</p>
+      <div class="pc-vivo__barra" role="img" [attr.aria-label]="proporcionRecord + '% del récord de ' + resumen.recordOnline">
+        <span [style.width.%]="proporcionRecord"></span>
+      </div>
+      <dl class="pc-vivo__datos">
+        <div><dt>Registrados</dt><dd>{{resumen.onlineRegistrados | number}}</dd></div>
+        <div><dt>Invitados</dt><dd>{{resumen.onlineInvitados | number}}</dd></div>
+        <div><dt>Récord</dt><dd>{{resumen.recordOnline | number}}</dd></div>
+      </dl>
+      <button type="button" class="pc-actualizar" (click)="refrescar()" [disabled]="cargando">
+        <mat-icon [class.pc-gira]="cargando" aria-hidden="true">refresh</mat-icon>
+        @if (actualizado && !cargando) { Actualizado {{actualizado | timeAgo | lowercase}} } @else { Actualizando… }
+      </button>
+    </div>
+  </section>
 
-        <div class="adm-online__value">
-          <span class="adm-online__dot"></span>{{resumen.onlineTotal | number}}
-        </div>
+  <!-- Pulso de la comunidad: cada métrica es a la vez dato y selector del gráfico -->
+  <section class="pc-pulso" aria-labelledby="pc-pulso-titulo">
+    <h2 id="pc-pulso-titulo" class="pc-titulo">Pulso de 14 días</h2>
 
-        <ul class="adm-kv">
-          <li><span>Registrados</span><strong>{{resumen.onlineRegistrados | number}}</strong></li>
-          <li><span>Invitados</span><strong>{{resumen.onlineInvitados | number}}</strong></li>
-          <li><span>Récord histórico</span><strong>{{resumen.recordOnline | number}}</strong></li>
-          <li><span>Usuarios baneados</span><strong>{{resumen.usuariosBaneados | number}}</strong></li>
-        </ul>
-      </section>
+    <div class="pc-metricas" role="group" aria-label="Métrica del gráfico">
+      @for (m of metricas; track m.clave) {
+        <button type="button" class="pc-metrica" [class.pc-metrica--activa]="metricaActiva === m.clave"
+          [attr.aria-pressed]="metricaActiva === m.clave" (click)="metricaActiva = m.clave">
+          <span class="pc-metrica__titulo">{{m.titulo}}</span>
+          <strong class="pc-metrica__valor">{{m.datos.ultimos7 | number}}</strong>
+          <span class="pc-metrica__nota">
+            en 7 días
+            @if (m.datos.variacion !== null) {
+              <b [class.sube]="m.datos.variacion > 0" [class.baja]="m.datos.variacion < 0">{{m.datos.variacion > 0 ? '+' : ''}}{{m.datos.variacion}}%</b>
+            }
+          </span>
+          <span class="pc-metrica__total">{{m.datos.total | number}} en total</span>
+        </button>
+      }
+    </div>
 
-      <!-- Registros y confirmación de correo -->
-      <section class="adm-card mt-3">
-        <header class="adm-card__head">
-          <h2><mat-icon>mark_email_read</mat-icon> Registros (30 días)</h2>
-        </header>
+    <div class="pc-grafico">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" role="img" [attr.aria-label]="descripcionGrafico">
+        <polygon class="pc-grafico__area" [attr.points]="area"></polygon>
+        <polyline class="pc-grafico__linea" [attr.points]="linea" vector-effect="non-scaling-stroke"></polyline>
+      </svg>
+      <span class="pc-grafico__pico">{{picoSerie | number}}</span>
+      <div class="pc-grafico__dias" aria-hidden="true">
+        @for (dia of serie; track dia.fecha) {
+          <span [matTooltip]="(dia.fecha | date:'EEE d MMM') + ': ' + valorDia(dia) + ' ' + (tituloMetrica | lowercase)"><small>{{dia.fecha | date:'d'}}</small></span>
+        }
+      </div>
+    </div>
+    <a class="pc-enlace" [routerLink]="[rutaMetrica]">Abrir {{tituloMetrica | lowercase}}</a>
+  </section>
 
-        <ul class="adm-kv">
-          <li><span>Nuevos usuarios</span><strong>{{resumen.registrados30 | number}}</strong></li>
-          <li><span>Confirmaron el correo</span><strong>{{resumen.confirmados30 | number}}</strong></li>
-          <li>
-            <span>Tasa de confirmación</span>
-            <strong>{{ resumen.registrados30 ? ((resumen.confirmados30 / resumen.registrados30) | percent:'1.0-0') : '—' }}</strong>
-          </li>
-        </ul>
-      </section>
-
-      <!-- Errores recientes (solo administradores) -->
-      @if (resumen.errores24h !== null && resumen.errores24h !== undefined) {
-        <section class="adm-card mt-3">
-          <header class="adm-card__head">
-            <h2><mat-icon>bug_report</mat-icon> Errores (24 h): {{resumen.errores24h | number}}</h2>
-            <a class="adm-card__link" [routerLink]="['/administracion/logs']">Ver logs</a>
-          </header>
-
-          @if (resumen.erroresRecientes.length === 0) {
-            <div class="adm-empty"><mat-icon>check_circle</mat-icon><p>Sin errores sin resolver.</p></div>
-          } @else {
-            <ol class="adm-top">
-              @for (error of resumen.erroresRecientes; track error.huella) {
-                <li>
-                  <span class="adm-top__rank">{{error.cantidad}}×</span>
-                  <span class="adm-error__msg" [matTooltip]="error.mensaje">[{{error.origen}}] {{error.mensaje}}</span>
-                </li>
-              }
-            </ol>
+  <div class="pc-columnas">
+    <section aria-labelledby="pc-top">
+      <h2 id="pc-top" class="pc-titulo">Lo más votado de la semana</h2>
+      @if (resumen.topPostsSemana.length) {
+        <ol class="pc-top">
+          @for (post of resumen.topPostsSemana; track post.id) {
+            <li>
+              <span class="pc-top__puntos">{{post.puntos | number}}</span>
+              <div class="pc-fila__cuerpo">
+                <a [routerLink]="[postUrl(post)]" target="_blank" class="pc-fila__titulo">{{post.titulo}}</a>
+                <small>{{post.userName}}, {{post.comentarios | number}} comentarios, {{post.visitas | number}} visitas</small>
+              </div>
+            </li>
           }
-        </section>
+        </ol>
+      } @else {
+        <p class="pc-vacio">Esta semana todavía no hay posts.</p>
       }
 
-      <!-- Top de la semana -->
-      <section class="adm-card mt-3">
-        <header class="adm-card__head">
-          <h2><mat-icon>local_fire_department</mat-icon> Top de la semana</h2>
-        </header>
+      <h2 class="pc-titulo pc-titulo--separado">Últimos posts</h2>
+      @if (resumen.ultimosPosts.length) {
+        <ul class="pc-lista">
+          @for (post of resumen.ultimosPosts; track post.id) {
+            <li>
+              <app-user-avatar [avatar]="post.avatar" [userName]="post.userName" [height]="30"></app-user-avatar>
+              <div class="pc-fila__cuerpo">
+                <a [routerLink]="[postUrl(post)]" target="_blank" class="pc-fila__titulo">{{post.titulo}}</a>
+                <small>{{post.userName}}, {{post.fechaRegistro | timeAgo | lowercase}}</small>
+              </div>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="pc-vacio">Todavía no hay posts publicados.</p>
+      }
+      <a class="pc-enlace" routerLink="/administracion/posts">Ver todos los posts</a>
+    </section>
 
-        @if (resumen.topPostsSemana.length === 0) {
-          <div class="adm-empty"><mat-icon>inbox</mat-icon><p>Sin posts esta semana.</p></div>
-        } @else {
-          <ol class="adm-top">
-            @for (post of resumen.topPostsSemana; track trackById($index, post)) {
-              <li>
-                <span class="adm-top__rank">{{$index + 1}}</span>
-                <a [routerLink]="[postUrl(post)]" target="_blank">{{post.titulo}}</a>
-                <span class="adm-top__pts">{{post.puntos}}</span>
-              </li>
-            }
-          </ol>
+    <section aria-labelledby="pc-llegadas">
+      <h2 id="pc-llegadas" class="pc-titulo">Quién llegó</h2>
+      <p class="pc-embudo">
+        <strong>{{resumen.registrados30 | number}}</strong> registros en 30 días,
+        <strong>{{ resumen.registrados30 ? ((resumen.confirmados30 / resumen.registrados30) | percent:'1.0-0') : '0%' }}</strong> confirmó el correo.
+        @if (resumen.usuariosBaneados) { Hay {{resumen.usuariosBaneados | number}} cuentas baneadas. }
+      </p>
+      <ul class="pc-lista">
+        @for (u of resumen.ultimosUsuarios; track u.id) {
+          <li>
+            <app-user-avatar [avatar]="u.avatar" [userName]="u.userName" [height]="28"></app-user-avatar>
+            <div class="pc-fila__cuerpo">
+              <a [routerLink]="['/perfil/' + u.userName]" target="_blank" [appUserPopover]="u.userName" class="pc-fila__titulo">{{u.userName}}</a>
+              <small>
+                @if (u.rango) { <span [ngStyle]="{'color': u.rangoColor}">{{u.rango}}</span>, }
+                {{u.fechaRegistro | timeAgo | lowercase}}
+              </small>
+            </div>
+          </li>
+        } @empty {
+          <li class="pc-vacio">Sin registros recientes.</li>
         }
-      </section>
+      </ul>
+      <a class="pc-enlace" routerLink="/administracion/usuarios">Ver todos los usuarios</a>
 
-      <!-- Últimos usuarios -->
-      <section class="adm-card mt-3">
-        <header class="adm-card__head">
-          <h2><mat-icon>person_add</mat-icon> Nuevos usuarios</h2>
-          <a class="adm-card__link" [routerLink]="['/administracion/usuarios']">Ver todos</a>
-        </header>
-
-        @if (resumen.ultimosUsuarios.length === 0) {
-          <div class="adm-empty"><mat-icon>inbox</mat-icon><p>Sin registros recientes.</p></div>
-        } @else {
-          <ul class="adm-list adm-list--compact">
-            @for (u of resumen.ultimosUsuarios; track trackById($index, u)) {
-              <li>
-                <app-user-avatar [class]="'adm-avatar'" [avatar]="u.avatar" [userName]="u.userName" [height]="28"></app-user-avatar>
-                <div class="adm-list__body">
-                  <a [routerLink]="['/perfil/' + u.userName]" target="_blank" [appUserPopover]="u.userName">{{u.userName}}</a>
-                  <small>
-                    @if (u.rango) { <span [ngStyle]="{'color': u.rangoColor}">{{u.rango}}</span> · }
-                    {{u.fechaRegistro | timeAgo | lowercase}}
-                  </small>
-                </div>
-                <span class="adm-pill">{{u.puntos}} pts</span>
-              </li>
-            }
-          </ul>
+      <h2 class="pc-titulo pc-titulo--separado">Qué hizo el staff</h2>
+      <ul class="pc-bitacora">
+        @for (a of resumen.actividad; track a.id) {
+          <li>
+            <span><strong>{{a.staff}}</strong>: {{a.accionNombre}}</span>
+            @if (a.detalle) { <small class="pc-bitacora__detalle">{{a.detalle}}</small> }
+            <small>{{a.fechaRegistro | timeAgo | lowercase}}</small>
+          </li>
+        } @empty {
+          <li class="pc-vacio">Sin acciones registradas.</li>
         }
-      </section>
+      </ul>
+      <a class="pc-enlace" routerLink="/administracion/moderacion">Abrir moderación</a>
 
-      <!-- Bitácora -->
-      <section class="adm-card mt-3">
-        <header class="adm-card__head">
-          <h2><mat-icon>history</mat-icon> Últimas acciones de staff</h2>
-          <a class="adm-card__link" [routerLink]="['/administracion/moderacion']">Ver bitácora</a>
-        </header>
-
-        @if (resumen.actividad.length === 0) {
-          <div class="adm-empty"><mat-icon>inbox</mat-icon><p>Sin acciones registradas.</p></div>
-        } @else {
-          <ul class="adm-feed">
-            @for (a of resumen.actividad; track trackById($index, a)) {
-              <li>
-                <span class="adm-feed__mark"></span>
-                <div>
-                  <strong>{{a.staff}}</strong> · {{a.accionNombre}}
-                  @if (a.detalle) { <small class="adm-feed__detail">{{a.detalle}}</small> }
-                  <small class="adm-feed__time">{{a.fechaRegistro | timeAgo | lowercase}}</small>
-                </div>
-              </li>
+      @if (resumen.errores24h !== null && resumen.errores24h !== undefined) {
+        <h2 class="pc-titulo pc-titulo--separado">Errores en 24 horas: {{resumen.errores24h | number}}</h2>
+        @if (resumen.erroresRecientes.length) {
+          <ul class="pc-errores">
+            @for (e of resumen.erroresRecientes; track e.huella) {
+              <li [matTooltip]="e.mensaje"><b>{{e.cantidad}}×</b> <span>{{e.origen}}: {{e.mensaje}}</span></li>
             }
           </ul>
+        } @else {
+          <p class="pc-vacio">Ningún error sin resolver.</p>
         }
-      </section>
-    </aside>
+        <a class="pc-enlace" routerLink="/administracion/logs">Ver logs</a>
+      }
+    </section>
   </div>
 
-  <!-- Accesos rápidos -->
-  <section class="adm-quick mt-3">
+  <nav class="pc-accesos" aria-label="Accesos rápidos">
     @for (acceso of accesos; track acceso.ruta) {
-      <a [routerLink]="[acceso.ruta]">
-        <mat-icon>{{acceso.icono}}</mat-icon>
-        {{acceso.titulo}}
-      </a>
+      <a [routerLink]="[acceso.ruta]"><mat-icon aria-hidden="true">{{acceso.icono}}</mat-icon>{{acceso.titulo}}</a>
     }
-  </section>
+  </nav>
 }
 
-<footer class="adm-foot">
+<footer class="pc-pie">
   Desarrollado con ❤️ por <a href="https://juliopoveda.com" target="_blank" rel="noopener">Gorgoroth</a>
 </footer>

@@ -123,10 +123,16 @@
                   <mat-icon>delete_outline</mat-icon>
                   <span>Descartar reporte</span>
                 </button>
-                @if (reporte.autorId) {
+                @if (reporte.autorId && reporte.autorBaneable) {
                   <button type="button" mat-menu-item (click)="banearAutor(reporte)">
                     <mat-icon>do_disturb_alt</mat-icon>
                     <span>Banear a {{reporte.autorUserName}}</span>
+                  </button>
+                }
+                @if (reporte.autorId && reporte.autorEditable) {
+                  <button type="button" mat-menu-item (click)="editarDatosAutor(reporte)">
+                    <mat-icon>manage_accounts</mat-icon>
+                    <span>Editar género, país y región</span>
                   </button>
                 }
               </mat-menu>

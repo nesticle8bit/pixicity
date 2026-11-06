@@ -228,6 +228,12 @@ export class DashboardModeracionComponent implements OnInit {
     this.dialog.open(DialogBanUserComponent, { width: '860px', maxWidth: '95vw', data: { usuarioId: reporte.autorId }, disableClose: true });
   }
 
+  async editarDatosAutor(reporte: Reporte): Promise<void> {
+    if (!reporte.autorId) return;
+    const { DialogDatosPerfilComponent } = await import('src/app/components/dialogs/dialog-datos-perfil/dialog-datos-perfil.component');
+    this.dialog.open(DialogDatosPerfilComponent, { width: '480px', maxWidth: '95vw', disableClose: true, data: { usuarioId: reporte.autorId, userName: reporte.autorUserName } });
+  }
+
   toggleBitacora(): void {
     this.verBitacora = !this.verBitacora;
     if (this.verBitacora && this.logs.length === 0) {

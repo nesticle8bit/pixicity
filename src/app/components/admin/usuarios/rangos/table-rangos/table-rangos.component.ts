@@ -105,8 +105,6 @@ export class TableRangosComponent implements OnInit {
     });
   }
 
-  deleteRango(id: number): void {}
-
   updateRangoUsuarios(): void {
     this.rangosService
       .changeUsuariosRangosByPuntos()

@@ -14,7 +14,9 @@
           <th></th>
           <th style="width: 80px"></th>
           <th>UserName</th>
-          <th>Email</th>
+          @if (modo() === 'admin') {
+            <th>Email</th>
+          }
           <th>Género</th>
           <th>País</th>
           <th>Posts</th>
@@ -22,7 +24,9 @@
           <th>
             <i class="ti ti-wifi" [matTooltip]="'Última Conexión'"></i>
           </th>
-          <th>Última IP</th>
+          @if (modo() === 'admin') {
+            <th>Última IP</th>
+          }
           <th>Baneado</th>
           <th>Eliminado</th>
           <th></th>
@@ -42,14 +46,16 @@
               {{usuario.userName}}
             </a>
           </td>
-          <td>
-            <span class="text-primary">{{usuario.email}}</span>
-            @if (!usuario.emailConfirmado) {
-              <span class="badge bg-warning text-dark ms-1" matTooltip="Todavía no confirmó su correo: puede leer pero no publicar">
-                Sin confirmar
-              </span>
-            }
-          </td>
+          @if (modo() === 'admin') {
+            <td>
+              <span class="text-primary">{{usuario.email}}</span>
+              @if (!usuario.emailConfirmado) {
+                <span class="badge bg-warning text-dark ms-1" matTooltip="Todavía no confirmó su correo: puede leer pero no publicar">
+                  Sin confirmar
+                </span>
+              }
+            </td>
+          }
           <td>
             {{usuario.genero}}
           </td>
@@ -68,9 +74,11 @@
               <i class="ti ti-calendar text-muted" matTooltip="{{usuario.ultimaConexion | date:'medium'}}" matTooltipPosition="right"></i>
             }
           </td>
-          <td>
-            {{usuario.ultimaIP}}
-          </td>
+          @if (modo() === 'admin') {
+            <td>
+              {{usuario.ultimaIP}}
+            </td>
+          }
           <td>
             <span class="badge" [ngClass]="{'bg-danger': usuario.baneado, 'bg-info': !usuario.baneado}">
               @if (usuario.baneado) {
@@ -113,10 +121,18 @@
                 Actualizar Imagen de Perfil
               </button>
             }
-            <button type="button" mat-menu-item (click)="removeAvatar(usuario)">
-              <mat-icon>image_not_supported</mat-icon>
-              Eliminar Imagen de Perfil
-            </button>
+            @if (modo() === 'moderacion' && puedeModificar(usuario)) {
+              <button type="button" mat-menu-item (click)="editarDatos(usuario)">
+                <mat-icon>manage_accounts</mat-icon>
+                Editar género, país y región
+              </button>
+            }
+            @if (puedeModificar(usuario)) {
+              <button type="button" mat-menu-item (click)="removeAvatar(usuario)">
+                <mat-icon>image_not_supported</mat-icon>
+                Eliminar Imagen de Perfil
+              </button>
+            }
             @if (modo() === 'admin' && !usuario.emailConfirmado && !usuario.eliminado) {
               <button type="button" mat-menu-item (click)="reenviarConfirmacion(usuario)">
                 <mat-icon>mark_email_unread</mat-icon>
@@ -134,11 +150,17 @@
                 Enviar Mensaje Privado
               </button>
             }
-            @if (!usuario.baneado && !usuario.eliminado) {
+            @if (!usuario.baneado && !usuario.eliminado && puedeModificar(usuario) && usuario.rangoNombre !== 'Administrador') {
               <button type="button" mat-menu-item (click)="banUser(usuario)"
                 >
                 <mat-icon>do_disturb_alt</mat-icon>
                 Banear
+              </button>
+            }
+            @if (usuario.baneado && !usuario.eliminado && puedeModificar(usuario)) {
+              <button type="button" mat-menu-item (click)="desbanear(usuario)">
+                <mat-icon>undo</mat-icon>
+                Quitar baneo
               </button>
             }
             @if (modo() === 'admin') {

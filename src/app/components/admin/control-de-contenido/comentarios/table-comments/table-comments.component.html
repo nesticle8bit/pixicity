@@ -15,7 +15,9 @@
           <th>Creado</th>
           <th>Comentario</th>
           <th>Post</th>
-          <th>IP</th>
+          @if (hayIps) {
+            <th>IP</th>
+          }
           <th>Usuario</th>
           <th></th>
         </tr>
@@ -46,9 +48,11 @@
                 </a>
               }
               </td>
-              <td>
-                <app-who-is-ip [IP]="comment.ip"></app-who-is-ip>
-              </td>
+              @if (hayIps) {
+                <td>
+                  <app-who-is-ip [IP]="comment.ip"></app-who-is-ip>
+                </td>
+              }
               <td>
                 <a [routerLink]="['/perfil/' + comment.usuario]" target="_blank" [appUserPopover]="comment.usuario">
                   {{comment.usuario}}

@@ -45,6 +45,11 @@ export class TablePostsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public posts: PostAdmin[] = [];
+
+  /** El API solo manda la IP a administradores: sin datos, la columna no se muestra. */
+  get hayIps(): boolean {
+    return this.posts.some((p) => !!p.ip);
+  }
   public totalCount: number = 0;
 
   public filtro: AdminFiltro = {};

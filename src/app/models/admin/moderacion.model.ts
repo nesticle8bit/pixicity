@@ -23,6 +23,9 @@ export interface Reporte {
   autorId?: number | null;
   autorUserName: string | null;
   autorAvatar: string | null;
+  /** Quien lee puede editar los datos del autor o banearlo (un moderador no actúa sobre otro staff). */
+  autorEditable: boolean;
+  autorBaneable: boolean;
   contenidoEliminado: boolean;
   contextoUrl: string | null;
 }

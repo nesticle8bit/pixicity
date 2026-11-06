@@ -13,7 +13,7 @@ import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from '../shared/notification.service';
 import { ApiResponse, PaginatedData } from 'src/app/models/api/api-response.model';
-import { AdminResumen, CuentaAdminModel, PerfilUsuarioViewModel, SesionActivaViewModel, UsuarioAdminViewModel, UsuarioListadoViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
+import { AdminResumen, CuentaAdminModel, DatosPerfilStaff, PerfilUsuarioViewModel, SesionActivaViewModel, UsuarioAdminViewModel, UsuarioListadoViewModel, UsuarioViewModel } from 'src/app/models/seguridad/seguridad-vm.model';
 import { enNavegador } from '../../shared/helpers/plataforma';
 @Injectable()
 export class HttpSecurityService implements IHttpSecurityService {
@@ -572,6 +572,45 @@ export class HttpSecurityService implements IHttpSecurityService {
             this.notificationService.error(response.errors.join(', '), 'Error');
             throw new Error(response.errors?.join(', ') ?? 'Error');
           }
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  unbanUser(usuarioId: number): Observable<boolean> {
+    return this.http
+      .delete<ApiResponse<number>>(`${environment.api}/api/usuarios/baneos`, { body: { id: usuarioId } })
+      .pipe(
+        map((response) => {
+          if (response.status === 200) return true;
+          this.notificationService.error(response.errors.join(', '), 'Error');
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  getDatosPerfil(usuarioId: number): Observable<DatosPerfilStaff> {
+    return this.http
+      .get<ApiResponse<DatosPerfilStaff>>(`${environment.api}/api/usuarios/${usuarioId}/datos-perfil`)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) return response.data!;
+          this.notificationService.error(response.errors.join(', '), 'Error');
+          throw new Error(response.errors?.join(', ') ?? 'Error');
+        })
+      )
+      .pipe(catchError(this.helper.errorHandler));
+  }
+
+  editarDatosPerfil(usuarioId: number, datos: DatosPerfilStaff): Observable<boolean> {
+    return this.http
+      .put<ApiResponse<boolean>>(`${environment.api}/api/usuarios/${usuarioId}/datos-perfil`, datos)
+      .pipe(
+        map((response) => {
+          if (response.status === 200) return response.data!;
+          this.notificationService.error(response.errors.join(', '), 'Error');
+          throw new Error(response.errors?.join(', ') ?? 'Error');
         })
       )
       .pipe(catchError(this.helper.errorHandler));

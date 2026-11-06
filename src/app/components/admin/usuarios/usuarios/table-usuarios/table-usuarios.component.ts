@@ -62,7 +62,7 @@ export class TableUsuariosComponent implements OnInit {
 
   public filtro: AdminFiltro = {};
   public cargando = false;
-  public readonly filtrosConfig: AdminFiltrosConfig = {
+  public filtrosConfig: AdminFiltrosConfig = {
     placeholder: 'Buscar por usuario, email o IP...',
     fechas: true,
     estado: true,
@@ -80,7 +80,32 @@ export class TableUsuariosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.modo() === 'moderacion') this.filtrosConfig = { ...this.filtrosConfig, placeholder: 'Buscar por usuario...' };
     this.getUsuarios();
+  }
+
+  /** Un moderador no actúa sobre administradores ni otros moderadores (el API también lo rechaza). */
+  puedeModificar(usuario: UsuarioAdminViewModel): boolean {
+    return this.modo() === 'admin' || (usuario.rangoNombre !== 'Administrador' && usuario.rangoNombre !== 'Moderador');
+  }
+
+  async editarDatos(usuario: UsuarioAdminViewModel): Promise<void> {
+    const { DialogDatosPerfilComponent } = await import('src/app/components/dialogs/dialog-datos-perfil/dialog-datos-perfil.component');
+    this.dialog
+      .open(DialogDatosPerfilComponent, { width: '480px', maxWidth: '95vw', disableClose: true, data: { usuarioId: usuario.id, userName: usuario.userName } })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((cambio) => {
+        if (cambio) this.getUsuarios();
+      });
+  }
+
+  async desbanear(usuario: UsuarioAdminViewModel): Promise<void> {
+    if (!await this.notificationService.confirm(`¿Quitar el baneo de ${usuario.userName}?`)) return;
+    this.securityService.unbanUser(usuario.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.notificationService.success(`${usuario.userName} ya puede volver a entrar`, 'Baneo quitado');
+      this.getUsuarios();
+    });
   }
 
   getUsuarios(): void {

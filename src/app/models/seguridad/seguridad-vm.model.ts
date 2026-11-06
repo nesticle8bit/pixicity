@@ -58,6 +58,16 @@ export interface UsuarioViewModel {
 
 /** Fila del listado de usuarios del panel admin (UsuarioAdminViewModel del API). */
 /** Datos editables de una cuenta desde /administracion/usuarios (GET/PUT api/usuarios/{id}/cuenta). */
+/** Lo que un moderador puede corregir de una cuenta. */
+export interface DatosPerfilStaff {
+  id?: number;
+  userName?: string;
+  genero: number;
+  paisId: number;
+  estadoId: number;
+  razon?: string | null;
+}
+
 export interface CuentaAdminModel {
   id: number;
   userName: string;
@@ -86,6 +96,7 @@ export interface UsuarioAdminViewModel {
   userName: string;
   email: string;
   emailConfirmado: boolean;
+  rangoNombre: string | null;
   genero: string | null;
   puntos: number;
   ultimaConexion: string | null;

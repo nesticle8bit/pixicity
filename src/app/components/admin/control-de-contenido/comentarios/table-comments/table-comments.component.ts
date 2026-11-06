@@ -47,6 +47,11 @@ export class TableCommentsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public comments: ComentarioViewModel[] = [];
+
+  /** El API solo manda la IP a administradores: sin datos, la columna no se muestra. */
+  get hayIps(): boolean {
+    return this.comments.some((c) => !!c.ip);
+  }
   public totalCount: number = 0;
 
   public filtro: AdminFiltro = {};

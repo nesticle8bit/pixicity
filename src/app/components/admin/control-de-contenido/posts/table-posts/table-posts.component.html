@@ -16,7 +16,9 @@
           <th>Título</th>
           <th>Puntos</th>
           <th>Etiquetas</th>
-          <th>IP</th>
+          @if (hayIps) {
+            <th>IP</th>
+          }
           <th>Usuario</th>
           <th></th>
         </tr>
@@ -47,9 +49,11 @@
               <td>
                 {{post.etiquetas}}
               </td>
-              <td>
-                <app-who-is-ip [IP]="post.ip"></app-who-is-ip>
-              </td>
+              @if (hayIps) {
+                <td>
+                  <app-who-is-ip [IP]="post.ip"></app-who-is-ip>
+                </td>
+              }
               <td>
                 <a [routerLink]="['/perfil/' + post.userName]" target="_blank" [appUserPopover]="post.userName">
                   {{post.userName}}

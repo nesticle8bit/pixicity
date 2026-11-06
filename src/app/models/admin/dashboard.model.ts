@@ -11,6 +11,7 @@ export interface DashboardSerieDia {
   posts: number;
   comentarios: number;
   usuarios: number;
+  shouts: number;
 }
 
 export interface DashboardPendiente {
