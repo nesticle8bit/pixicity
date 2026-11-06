@@ -7,7 +7,7 @@
 // $etiquetas: nombre del lenguaje en la etiqueta del bloque de código. El editor no las incluye (pesan en el
 // presupuesto de estilos del componente) porque ahí el lenguaje se ve en el selector de la barra contextual.
 
-$acento: light-dark(#1976d2, #559ee7);
+$acento: light-dark(#1976d2, var(--o-marca-texto));
 
 // Etiqueta de cada lenguaje (misma lista que LENGUAJES_CODIGO en shared/helpers/contenido-post.ts)
 $lenguajes: (
@@ -28,9 +28,9 @@ $lenguajes: (
     position: relative;
     max-width: 100%;
     overflow-x: auto;
-    background: light-dark(#f6f8fa, #202d3a);
-    color: light-dark(#24292f, #d4d4d4);
-    border: 1px solid light-dark(#d0d7de, #414f5d);
+    background: light-dark(#f6f8fa, var(--o-elevada));
+    color: light-dark(#24292f, var(--o-texto));
+    border: 1px solid light-dark(#d0d7de, var(--o-borde-fuerte));
     border-left: 4px solid $acento;
     border-radius: 6px;
     padding: 30px 14px 12px;
@@ -53,7 +53,7 @@ $lenguajes: (
       font-weight: 600;
       letter-spacing: .5px;
       text-transform: uppercase;
-      color: light-dark(#6e7781, #a5a5a5);
+      color: light-dark(#6e7781, var(--o-texto-2));
       pointer-events: none;
       user-select: none;
     }
@@ -89,7 +89,7 @@ $lenguajes: (
 
   th,
   td {
-    border: 1px solid light-dark(#d0d7de, #414f5d);
+    border: 1px solid light-dark(#d0d7de, var(--o-borde-fuerte));
     padding: 6px 10px;
     min-width: 60px;
     vertical-align: top;
@@ -98,7 +98,7 @@ $lenguajes: (
 
   th,
   thead td {
-    background: light-dark(#f6f8fa, #202d3a);
+    background: light-dark(#f6f8fa, var(--o-elevada));
     font-weight: 700;
   }
 
@@ -113,7 +113,7 @@ $lenguajes: (
       caption-side: bottom;
       padding: 6px 4px 0;
       font-size: .85em;
-      color: light-dark(#6e7781, #a5a5a5);
+      color: light-dark(#6e7781, var(--o-texto-2));
       font-style: italic;
       text-align: center;
     }
@@ -212,15 +212,15 @@ $lenguajes: (
     clear: both;
     margin: 12px 0;
     padding: 10px 14px;
-    border: 1px dashed light-dark(#c9a227, #a88a2c);
+    border: 1px dashed light-dark(#c9a227, var(--o-aviso));
     border-radius: 8px;
-    background: light-dark(#fffaeb, #2c2817);
+    background: light-dark(#fffaeb, var(--o-aviso-fondo));
 
     &::before {
       content: '🔓 Links para quien dio puntos o comentó';
       display: block;
       margin-bottom: 6px;
-      color: light-dark(#7a5d00, #e3c35f);
+      color: light-dark(#7a5d00, var(--o-aviso));
       font: 600 12px/1.4 system-ui, sans-serif;
     }
 
@@ -243,7 +243,7 @@ $lenguajes: (
     &::after {
       content: 'Dale puntos o deja un comentario para verlos.';
       display: block;
-      color: light-dark(#6b5a24, #c9b67a);
+      color: light-dark(#6b5a24, var(--o-aviso));
       font-size: 13px;
     }
   }
@@ -252,37 +252,37 @@ $lenguajes: (
 // Colores de highlight.js (tema claro tipo GitHub); solo en el post publicado
 @mixin resaltado {
   .hljs-comment,
-  .hljs-quote { color: light-dark(#6e7781, #a5a5a5); font-style: italic; }
+  .hljs-quote { color: light-dark(#6e7781, var(--o-texto-2)); font-style: italic; }
   .hljs-keyword,
   .hljs-selector-tag,
   .hljs-meta .hljs-keyword,
   .hljs-doctag,
-  .hljs-section { color: light-dark(#cf222e, #e6646d); }
+  .hljs-section { color: light-dark(#cf222e, var(--o-error)); }
   .hljs-string,
   .hljs-regexp,
-  .hljs-meta .hljs-string { color: light-dark(#0a3069, #a1c2f5); }
+  .hljs-meta .hljs-string { color: light-dark(#0a3069, var(--o-marca-texto)); }
   .hljs-number,
   .hljs-literal,
   .hljs-symbol,
   .hljs-bullet,
   .hljs-variable,
-  .hljs-template-variable { color: light-dark(#0550ae, #7eb1f1); }
+  .hljs-template-variable { color: light-dark(#0550ae, var(--o-marca-texto)); }
   .hljs-title,
   .hljs-title.function_,
-  .hljs-title.class_ { color: light-dark(#8250df, #8a5be1); }
+  .hljs-title.class_ { color: light-dark(#8250df, var(--o-marca-texto)); }
   .hljs-attr,
   .hljs-attribute,
   .hljs-property,
   .hljs-selector-class,
-  .hljs-selector-id { color: light-dark(#116329, #a5f0bb); }
+  .hljs-selector-id { color: light-dark(#116329, var(--o-ok)); }
   .hljs-built_in,
   .hljs-type,
-  .hljs-params { color: light-dark(#953800, #f2b48e); }
+  .hljs-params { color: light-dark(#953800, var(--o-aviso)); }
   .hljs-tag,
-  .hljs-name { color: light-dark(#116329, #a5f0bb); }
-  .hljs-meta { color: light-dark(#6639ba, #9674d4); }
-  .hljs-addition { color: light-dark(#116329, #a5f0bb); background: light-dark(#dafbe1, #1f512a); }
-  .hljs-deletion { color: light-dark(#82071e, #f395a7); background: light-dark(#ffebe9, #461f1b); }
+  .hljs-name { color: light-dark(#116329, var(--o-ok)); }
+  .hljs-meta { color: light-dark(#6639ba, var(--o-marca-texto)); }
+  .hljs-addition { color: light-dark(#116329, var(--o-ok)); background: light-dark(#dafbe1, var(--o-ok-fondo)); }
+  .hljs-deletion { color: light-dark(#82071e, var(--o-error)); background: light-dark(#ffebe9, var(--o-error-fondo)); }
   .hljs-emphasis { font-style: italic; }
   .hljs-strong { font-weight: 700; }
 }
@@ -316,10 +316,10 @@ $lenguajes: (
     align-items: center;
     gap: 4px;
     padding: 2px 8px;
-    border: 1px solid light-dark(#d0d7de, #414f5d);
+    border: 1px solid light-dark(#d0d7de, var(--o-borde-fuerte));
     border-radius: 5px;
-    background: light-dark(#fff, #1e2124);
-    color: light-dark(#57606a, #b3b3b3);
+    background: light-dark(#fff, var(--o-superficie));
+    color: light-dark(#57606a, var(--o-texto-2));
     font: 600 11px/1.6 system-ui, sans-serif;
     cursor: pointer;
     opacity: .85;
@@ -327,12 +327,12 @@ $lenguajes: (
     &:hover,
     &:focus-visible {
       opacity: 1;
-      color: light-dark(#1976d2, #61a7ec);
+      color: light-dark(#1976d2, var(--o-marca-texto));
       border-color: #1976d2;
     }
 
     &.is-ok {
-      color: light-dark(#1a7f37, #95e9ad);
+      color: light-dark(#1a7f37, var(--o-ok));
       border-color: #1a7f37;
     }
   }

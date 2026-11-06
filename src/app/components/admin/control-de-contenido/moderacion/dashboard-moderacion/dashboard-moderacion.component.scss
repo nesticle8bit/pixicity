@@ -8,13 +8,13 @@
 
 .mod-toggle {
   display: inline-flex;
-  border: 1px solid light-dark(#d0d0d0, #4c545c);
+  border: 1px solid light-dark(#d0d0d0, var(--o-borde-fuerte));
   border-radius: 6px;
   overflow: hidden;
 
   button {
     border: 0;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     padding: 0.35rem 0.9rem;
     font-size: 0.85rem;
     cursor: pointer;
@@ -62,7 +62,7 @@
   gap: 8px;
   padding: 8px 12px;
   margin-bottom: 8px;
-  background: light-dark(#e7f1f7, #1d3a4c);
-  border: 1px solid light-dark(#c9dfec, #2a556f);
+  background: light-dark(#e7f1f7, var(--o-info-fondo));
+  border: 1px solid light-dark(#c9dfec, var(--o-marca));
   border-radius: 6px;
 }

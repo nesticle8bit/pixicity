@@ -1,22 +1,22 @@
 .cat-url {
   margin: 0 0 12px;
   font-size: 12px;
-  color: light-dark(#6b7280, #a7a7a7);
+  color: light-dark(#6b7280, var(--o-texto-2));
 
   code {
     padding: 1px 5px;
     border-radius: 4px;
-    background: light-dark(#f3f4f6, #2b3035);
-    color: light-dark(#006595, #8ed2f2);
+    background: light-dark(#f3f4f6, var(--o-realce));
+    color: light-dark(#006595, var(--o-marca-texto));
   }
 
   &__warn {
-    color: light-dark(#b45309, #f0ac79);
+    color: light-dark(#b45309, var(--o-aviso));
   }
 }
 
 .cat-nota {
   margin: 0;
   font-size: 12px;
-  color: light-dark(#6b7280, #a7a7a7);
+  color: light-dark(#6b7280, var(--o-texto-2));
 }

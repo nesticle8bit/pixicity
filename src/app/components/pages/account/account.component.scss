@@ -1,9 +1,9 @@
-$marca: light-dark(#006595, #1e99d3);
-$marca-suave: light-dark(#e6f1f7, #1d3c4d);
-$texto: light-dark(#26323a, #c7d2da);
-$tenue: light-dark(#5d6b75, #aeaeae);
-$borde: light-dark(#dde3e8, #394855);
-$superficie: light-dark(#fff, #1e2124);
+$marca: light-dark(#006595, var(--o-marca));
+$marca-suave: light-dark(#e6f1f7, var(--o-info-fondo));
+$texto: light-dark(#26323a, var(--o-texto));
+$tenue: light-dark(#5d6b75, var(--o-texto-2));
+$borde: light-dark(#dde3e8, var(--o-borde));
+$superficie: light-dark(#fff, var(--o-superficie));
 $radio: 12px;
 
 .cuenta {
@@ -160,8 +160,8 @@ $radio: 12px;
 
   mat-icon { font-size: 14px; width: 14px; height: 14px; }
 
-  &--ok { background: light-dark(#e3f4ea, #1f5033); color: light-dark(#1e7f4f, #96e6be); }
-  &--pendiente { background: light-dark(#fff4e0, #4c3b1d); color: light-dark(#9a5b00, #f2c88c); }
+  &--ok { background: light-dark(#e3f4ea, var(--o-ok-fondo)); color: light-dark(#1e7f4f, #96e6be); }
+  &--pendiente { background: light-dark(#fff4e0, var(--o-aviso-fondo)); color: light-dark(#9a5b00, #f2c88c); }
 }
 
 .cuenta__link {
@@ -228,7 +228,7 @@ $radio: 12px;
 
   mat-icon { font-size: 20px; width: 20px; height: 20px; color: $tenue; }
 
-  &:hover { background: light-dark(#f3f6f8, #23323c); }
+  &:hover { background: light-dark(#f3f6f8, var(--o-realce)); }
 
   &.activo {
     background: $marca-suave;
@@ -307,12 +307,12 @@ $radio: 12px;
 }
 
 .campo__solo-lectura {
-  background: light-dark(#f6f8f9, #253137);
+  background: light-dark(#f6f8f9, var(--o-elevada));
   color: $tenue;
 }
 
 .campo__ayuda { color: $tenue; font-size: 0.78rem; }
-.campo__error { color: light-dark(#b3261e, #e87b75); font-size: 0.78rem; }
+.campo__error { color: light-dark(#b3261e, var(--o-error)); font-size: 0.78rem; }
 
 //  Personalización: banner y fondo de página
 
@@ -357,7 +357,7 @@ $radio: 12px;
   color: $tenue;
   cursor: pointer;
 
-  &:hover { background: light-dark(#f6f8fa, #202d3a); }
+  &:hover { background: light-dark(#f6f8fa, var(--o-elevada)); }
   &:has(input:focus-visible) { outline: 2px solid $marca; outline-offset: 2px; }
 
   &--activa {
@@ -376,7 +376,7 @@ $radio: 12px;
   margin: 0 0 14px;
   border: 1px dashed $borde;
   border-radius: 10px;
-  background-color: light-dark(#f6f8fa, #202d3a);
+  background-color: light-dark(#f6f8fa, var(--o-elevada));
   background-position: top center;
   font-size: 0.8rem;
   color: $tenue;
@@ -413,7 +413,7 @@ $radio: 12px;
   > span {
     margin-right: auto;
     font-size: 0.82rem;
-    color: light-dark(#9a5b00, #f2c88c);
+    color: light-dark(#9a5b00, var(--o-aviso));
   }
 
   // Con cambios pendientes la barra se queda visible al hacer scroll.

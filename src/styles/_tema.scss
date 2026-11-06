@@ -3,8 +3,36 @@
 // antes de pintar, sin parpadeo. Sin atributo (SSR para bots) queda claro. data-bs-theme acompaña para Bootstrap.
 @use '@angular/material' as mat;
 
+// Paleta del tema oscuro (azul grafito). Es la única fuente de colores oscuros: en un .scss nuevo se escribe
+// light-dark(#claro, var(--o-superficie)). Lo que está más arriba es más claro; los bordes marcan el límite, no las sombras.
 :root {
   color-scheme: light;
+
+  --o-pagina: #12161c;
+  --o-superficie: #1a1f26;
+  --o-elevada: #212730;
+  --o-realce: #2a313b;
+
+  --o-borde-suave: #262c35;
+  --o-borde: #333b46;
+  --o-borde-fuerte: #4a5563;
+
+  --o-texto: #e7ebf0;
+  --o-texto-2: #b8c1cc;
+  --o-texto-3: #8f9aa7;
+  --o-texto-4: #6f7a87;
+
+  --o-marca: #4aa8e0;
+  --o-marca-texto: #8cc8ee;
+  --o-marca-solida: #2279b0; // con texto blanco encima (AA)
+  --o-info-fondo: #16303f;
+
+  --o-ok: #62c991;
+  --o-ok-fondo: #15301f;
+  --o-aviso: #e5b45c;
+  --o-aviso-fondo: #2b2413;
+  --o-error: #ef8d83;
+  --o-error-fondo: #3a1b19;
 }
 
 :root[data-theme='dark'] {
@@ -12,7 +40,7 @@
 }
 
 body {
-  color: light-dark(#212529, #dde2e6);
+  color: light-dark(#212529, var(--o-texto));
 }
 
 // Material: el tema prebuilt (indigo-pink) solo trae colores claros; en oscuro se pisan con su variante M2 oscura.
@@ -28,27 +56,47 @@ $oscuro: mat.m2-define-dark-theme((
 @mixin material-oscuro {
   @include mat.all-component-colors($oscuro);
   // Superficies de Material con el mismo gris que las tarjetas del sitio.
-  --mat-dialog-container-color: #1e2124;
-  --mat-menu-container-color: #24282c;
-  --mat-select-panel-background-color: #24282c;
-  --mat-autocomplete-background-color: #24282c;
-  --mat-bottom-sheet-container-background-color: #1e2124;
-  --mat-datepicker-calendar-container-background-color: #24282c;
-  --mat-card-elevated-container-color: #1e2124;
-  --mat-card-outlined-container-color: #1e2124;
-  --mat-expansion-container-background-color: #1e2124;
-  --mat-table-background-color: #1e2124;
-  --mat-paginator-container-background-color: #1e2124;
-  --mat-sidenav-container-background-color: #1e2124;
+  --mat-dialog-container-color: var(--o-elevada);
+  --mat-menu-container-color: var(--o-elevada);
+  --mat-select-panel-background-color: var(--o-elevada);
+  --mat-autocomplete-background-color: var(--o-elevada);
+  --mat-bottom-sheet-container-background-color: var(--o-elevada);
+  --mat-datepicker-calendar-container-background-color: var(--o-elevada);
+  --mat-card-elevated-container-color: var(--o-superficie);
+  --mat-card-outlined-container-color: var(--o-superficie);
+  --mat-expansion-container-background-color: var(--o-superficie);
+  --mat-table-background-color: var(--o-superficie);
+  --mat-paginator-container-background-color: var(--o-superficie);
+  --mat-sidenav-container-background-color: var(--o-superficie);
   --mat-sidenav-content-background-color: transparent;
-  --mat-tab-header-pagination-icon-color: #dde2e6;
+  --mat-tab-header-pagination-icon-color: var(--o-texto);
 }
 
 :root[data-theme='dark'] {
   @include material-oscuro;
 
   // Utilidades de Bootstrap con color fijo que se usan en las plantillas.
-  .bg-white { background-color: #1e2124 !important; }
-  .bg-light { background-color: #262b30 !important; }
-  .text-dark { color: #dde2e6 !important; }
+  .bg-white { background-color: var(--o-superficie) !important; }
+  .bg-light { background-color: var(--o-elevada) !important; }
+  .text-dark { color: var(--o-texto) !important; }
+  .text-primary { color: var(--o-marca-texto) !important; }
+
+  // Avisos: fondo apenas teñido y borde discreto; el color fuerte queda para el texto.
+  @each $tipo, $estado in (warning: aviso, danger: error, success: ok, info: info) {
+    .alert-#{$tipo} {
+      --bs-alert-bg: var(--o-#{$estado}-fondo);
+      --bs-alert-color: var(--o-#{if($estado == info, marca-texto, $estado)});
+      --bs-alert-border-color: color-mix(in srgb, var(--o-#{if($estado == info, marca, $estado)}) 30%, transparent);
+    }
+  }
+
+  // El verde de .bverde es un neón pensado para fondo claro.
+  .bverde { background: #1f8a56; }
+
+  scrollbar-color: var(--o-borde-fuerte) var(--o-pagina);
+
+  ::selection {
+    background: color-mix(in srgb, var(--o-marca) 40%, transparent);
+    color: var(--o-texto);
+  }
 }

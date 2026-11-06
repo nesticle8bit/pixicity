@@ -48,41 +48,41 @@
     }
 
     &--active {
-      background: light-dark(#fff, #1e2124);
+      background: light-dark(#fff, var(--o-superficie));
 
       &>a {
-        color: light-dark(#00354e, #b5e2f7);
+        color: light-dark(#00354e, var(--o-marca-texto));
       }
     }
   }
 }
 
 .sub-menu {
-  background: linear-gradient(0deg, light-dark(#e9e9e9, #24292e) 0%, light-dark(#fff, #1e2124) 60%);
+  background: linear-gradient(0deg, light-dark(#e9e9e9, var(--o-elevada)) 0%, light-dark(#fff, var(--o-superficie)) 60%);
 
-  border: 1px solid light-dark(#ccc, #4e575f);
+  border: 1px solid light-dark(#ccc, var(--o-borde-fuerte));
   border-top: none;
 
   &--item {
-    color: light-dark(#105CB6, #74adf0);
+    color: light-dark(#105CB6, var(--o-marca-texto));
     padding: 6px 10px 6px 10px;
     font-size: .8rem;
     font-weight: bold;
 
     &--active {
-      background: light-dark(#eee, #30353b);
+      background: light-dark(#eee, var(--o-realce));
       border-radius: 18px;
 
       &>a {
-        color: light-dark(#00354e, #b5e2f7);
+        color: light-dark(#00354e, var(--o-marca-texto));
       }
     }
   }
 }
 
 .container--home {
-  background: light-dark(#fff, #1e2124);
-  border: 1px solid light-dark(#ccc, #4e575f);
+  background: light-dark(#fff, var(--o-superficie));
+  border: 1px solid light-dark(#ccc, var(--o-borde-fuerte));
   border-top: none;
   padding-top: 10px;
 }
@@ -95,11 +95,11 @@
     & span {
       display: block;
       text-align: center;
-      background-color: light-dark(#fff, #1e2124);
+      background-color: light-dark(#fff, var(--o-superficie));
       margin: 0 auto;
       font-size: 18px;
       padding: 0 20px;
-      color: light-dark(#6b6b6b, #adadad);
+      color: light-dark(#6b6b6b, var(--o-texto-2));
       font-family: Georgia, "Times New Roman", Times, serif;
       font-style: italic;
 
@@ -126,10 +126,10 @@
 .main-title span {
   font-weight: 700;
   font-size: 16px !important;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   padding-right: 10px;
   line-height: 1.2em;
-  color: light-dark(#666, #b0b0b0);
+  color: light-dark(#666, var(--o-texto-2));
   float: left;
 }
 

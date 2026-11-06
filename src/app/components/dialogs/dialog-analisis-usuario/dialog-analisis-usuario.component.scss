@@ -1,8 +1,8 @@
-$alta: light-dark(#c62828, #ef8a8a);
-$media: light-dark(#b26a00, #f3c26b);
-$baja: light-dark(#2b6cb0, #8ec2f2);
-$tenue: light-dark(#666, #aaa);
-$borde: light-dark(#e3e3e3, #3a3a3a);
+$alta: light-dark(#c62828, var(--o-error));
+$media: light-dark(#b26a00, var(--o-aviso));
+$baja: light-dark(#2b6cb0, var(--o-marca-texto));
+$tenue: light-dark(#666, var(--o-texto-2));
+$borde: light-dark(#e3e3e3, var(--o-borde));
 
 .au-cabecera {
   display: flex;
@@ -49,7 +49,7 @@ $borde: light-dark(#e3e3e3, #3a3a3a);
   color: #fff;
 
   &--sin-senales { background: light-dark(#2e7d32, #3f8f43); }
-  &--bajo { background: light-dark(#2b6cb0, #3b7cc0); }
+  &--bajo { background: light-dark(#2b6cb0, var(--o-marca-solida)); }
   &--medio { background: light-dark(#b26a00, #a86a10); }
   &--alto { background: light-dark(#c62828, #b33a3a); }
 }
@@ -82,14 +82,14 @@ $borde: light-dark(#e3e3e3, #3a3a3a);
   padding: 8px 10px;
   border-left: 3px solid currentColor;
   border-radius: 4px;
-  background: light-dark(#f7f7f7, #262626);
+  background: light-dark(#f7f7f7, var(--o-superficie));
 
   > i { font-size: 1.15rem; }
 
   div {
     display: flex;
     flex-direction: column;
-    color: light-dark(#222, #ddd);
+    color: light-dark(#222, var(--o-texto));
   }
 
   &--alta { color: $alta; }
@@ -107,7 +107,7 @@ $borde: light-dark(#e3e3e3, #3a3a3a);
   margin: 0 0 6px;
   color: $tenue;
 
-  strong { color: light-dark(#222, #eee); }
+  strong { color: light-dark(#222, var(--o-texto)); }
 }
 
 .au-lista {
@@ -155,13 +155,13 @@ $borde: light-dark(#e3e3e3, #3a3a3a);
 .au-chip {
   padding: 0 6px;
   border-radius: 4px;
-  background: light-dark(#eee, #333);
+  background: light-dark(#eee, var(--o-realce));
   color: $tenue;
   font-size: 0.72rem;
   line-height: 18px;
 
-  &--alta { background: light-dark(#fdecea, #4a2222); color: $alta; }
-  &--media { background: light-dark(#fff4e0, #44361a); color: $media; }
+  &--alta { background: light-dark(#fdecea, var(--o-error-fondo)); color: $alta; }
+  &--media { background: light-dark(#fff4e0, var(--o-aviso-fondo)); color: $media; }
 }
 
 .au-ips {

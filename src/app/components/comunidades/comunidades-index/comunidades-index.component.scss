@@ -10,7 +10,7 @@
 
     input {
       flex: 1;
-      border: 1px solid light-dark(#ccc, #4e575f);
+      border: 1px solid light-dark(#ccc, var(--o-borde-fuerte));
       border-radius: 6px 0 0 6px;
       padding: 8px 10px;
       font-size: 13px;
@@ -39,11 +39,11 @@
     font-weight: 600;
     padding: 5px 12px;
     border-radius: 14px;
-    background: light-dark(#eef1f3, #2b353c);
-    color: light-dark(#555, #bababa);
+    background: light-dark(#eef1f3, var(--o-realce));
+    color: light-dark(#555, var(--o-texto-2));
 
     &:hover {
-      background: light-dark(#dde6ea, #2f434c);
+      background: light-dark(#dde6ea, var(--o-realce));
     }
 
     &.active {
@@ -61,8 +61,8 @@
   .com-card {
     display: flex;
     flex-direction: column;
-    background: light-dark(#fff, #1e2124);
-    border: 1px solid light-dark(#e5e5e5, #3e454c);
+    background: light-dark(#fff, var(--o-superficie));
+    border: 1px solid light-dark(#e5e5e5, var(--o-borde));
     border-radius: 10px;
     overflow: hidden;
     text-decoration: none;
@@ -101,15 +101,15 @@
       font-size: 15px;
       font-weight: 700;
       margin: 0 0 4px;
-      color: light-dark(#222, #d9d9d9);
+      color: light-dark(#222, var(--o-texto));
     }
 
     &__cat {
       display: inline-block;
       font-size: 11px;
       font-weight: 600;
-      color: light-dark(#006595, #8ed2f2);
-      background: light-dark(#eaf6fc, #1b3948);
+      color: light-dark(#006595, var(--o-marca-texto));
+      background: light-dark(#eaf6fc, var(--o-info-fondo));
       padding: 1px 8px;
       border-radius: 10px;
       margin-bottom: 6px;
@@ -117,7 +117,7 @@
 
     &__desc {
       font-size: 12px;
-      color: light-dark(#666, #b0b0b0);
+      color: light-dark(#666, var(--o-texto-2));
       line-height: 1.4;
       margin: 0 0 8px;
       display: -webkit-box;
@@ -130,7 +130,7 @@
       display: flex;
       gap: 14px;
       font-size: 12px;
-      color: light-dark(#888, #9c9c9c);
+      color: light-dark(#888, var(--o-texto-3));
 
       i {
         margin-right: 2px;
@@ -150,10 +150,10 @@
       min-width: 30px;
       text-align: center;
       padding: 5px 8px;
-      border: 1px solid light-dark(#ddd, #434b52);
+      border: 1px solid light-dark(#ddd, var(--o-borde));
       border-radius: 5px;
       font-size: 13px;
-      color: light-dark(#555, #bababa);
+      color: light-dark(#555, var(--o-texto-2));
 
       &.active {
         background: #006595;

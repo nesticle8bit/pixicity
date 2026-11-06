@@ -1,5 +1,5 @@
-$marca: light-dark(#006595, #1e99d3);
-$tenue: light-dark(#5d6b75, #aeaeae);
+$marca: light-dark(#006595, var(--o-marca));
+$tenue: light-dark(#5d6b75, var(--o-texto-2));
 
 .df {
   max-width: 560px;
@@ -13,9 +13,9 @@ $tenue: light-dark(#5d6b75, #aeaeae);
   margin: 16px 0 6px;
   font-size: 1rem;
   font-weight: 700;
-  color: light-dark(#26323a, #c7d2da);
+  color: light-dark(#26323a, var(--o-texto));
 
-  i { color: light-dark(#1e7f4f, #96e6be); }
+  i { color: light-dark(#1e7f4f, var(--o-ok)); }
 }
 
 .df__texto {
@@ -29,13 +29,13 @@ $tenue: light-dark(#5d6b75, #aeaeae);
   display: inline-block;
   margin: 0 0 8px;
   padding: 10px 14px;
-  border: 1px dashed light-dark(#b9c6ce, #4c616d);
+  border: 1px dashed light-dark(#b9c6ce, var(--o-borde-fuerte));
   border-radius: 8px;
-  background: light-dark(#f4f8fa, #1d343f);
+  background: light-dark(#f4f8fa, var(--o-info-fondo));
   font-family: ui-monospace, Consolas, monospace;
   font-size: 1rem;
   letter-spacing: 0.04em;
-  color: light-dark(#26323a, #c7d2da);
+  color: light-dark(#26323a, var(--o-texto));
   user-select: all;
 }
 
@@ -61,7 +61,7 @@ $tenue: light-dark(#5d6b75, #aeaeae);
   margin: 0 0 14px;
   padding: 12px 16px;
   border-radius: 8px;
-  background: light-dark(#f4f8fa, #1d343f);
+  background: light-dark(#f4f8fa, var(--o-info-fondo));
   list-style: none;
   font-family: ui-monospace, Consolas, monospace;
 }
@@ -91,10 +91,10 @@ $tenue: light-dark(#5d6b75, #aeaeae);
   &:focus-visible { outline: 2px solid $marca; outline-offset: 2px; }
 
   &--suave {
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     color: $marca;
 
-    &:hover:not(:disabled) { background: light-dark(#f4f8fa, #1d343f); }
+    &:hover:not(:disabled) { background: light-dark(#f4f8fa, var(--o-info-fondo)); }
   }
 
   &--peligro {

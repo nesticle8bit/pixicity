@@ -9,8 +9,8 @@
   padding: 0 12px 0 10px;
   font-size: 11px;
   float: right;
-  color: light-dark(#666, #b0b0b0);
-  background: url('/assets/images/ui/droparrow.png') right 6px no-repeat light-dark(#fff, #1e2124);
+  color: light-dark(#666, var(--o-texto-2));
+  background: url('/assets/images/ui/droparrow.png') right 6px no-repeat light-dark(#fff, var(--o-superficie));
 }
 
 .actualtop,
@@ -19,8 +19,8 @@
 }
 
 .listop {
-  border: solid light-dark(#CCC, #4e575f);
-  background: light-dark(#fff, #1e2124);
+  border: solid light-dark(#CCC, var(--o-borde-fuerte));
+  background: light-dark(#fff, var(--o-superficie));
   border-width: 1px 1px 0;
   margin-top: 24px;
   display: none;
@@ -29,7 +29,7 @@
   left: 10px;
 
   & a {
-    border-bottom: 1px solid light-dark(#CCC, #4e575f);
+    border-bottom: 1px solid light-dark(#CCC, var(--o-borde-fuerte));
     display: block;
     padding: 5px 6px;
     font-size: 11px;
@@ -42,13 +42,13 @@
 }
 
 .lista-posts {
-  border-top: light-dark(#E0E0E0, #414950) 1px solid;
+  border-top: light-dark(#E0E0E0, var(--o-borde)) 1px solid;
   padding: 7px 0 7px 10px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
 }
 
 .lista-posts:nth-child(2n+1) {
-  background: light-dark(#f5f5f5, #2b3035);
+  background: light-dark(#f5f5f5, var(--o-realce));
 }
 
 .catbox {
@@ -63,12 +63,12 @@
 
 .liscat,
 .simcat {
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
 }
 
 .simcat {
-  border: 1px solid light-dark(#ebebeb, #3b4148);
-  color: light-dark(#494d50, #bfbfbf);
+  border: 1px solid light-dark(#ebebeb, var(--o-borde));
+  color: light-dark(#494d50, var(--o-texto-2));
   padding: 3px 10px;
   font-size: 0.8rem;
 }
@@ -83,12 +83,12 @@
   height: 0;
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
-  border-top: 4px solid light-dark(#696969, #aeaeae);
+  border-top: 4px solid light-dark(#696969, var(--o-borde-fuerte));
 }
 
 .liscat {
   display: none;
-  border: solid light-dark(#ebebeb, #3b4148);
+  border: solid light-dark(#ebebeb, var(--o-borde));
   border-width: 0 1px 1px;
   overflow: auto;
   max-height: 380px;
@@ -103,11 +103,11 @@
   text-align: left;
   padding: 0 10px;
   line-height: 1.8em;
-  color: light-dark(#4d4d4d, #bfbfbf);
+  color: light-dark(#4d4d4d, var(--o-texto-2));
 }
 
 .liscat a.listo,
 .liscat a:hover {
-  color: light-dark(#0a6fc2, #71b6ef);
+  color: light-dark(#0a6fc2, var(--o-marca-texto));
   text-decoration: none;
 }

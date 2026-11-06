@@ -1,12 +1,12 @@
 .last_news {
     padding: 7px 10px;
-    border-top: 1px solid light-dark(#FFF, #2e3338);
-    border-bottom: 1px solid light-dark(#f0d35b, #a5913f);
-    background: light-dark(#f9ecb7, #675a27);
-    border-right: 1px solid light-dark(#ccc, #4e575f);
-    border-left: 1px solid light-dark(#ccc, #4e575f);
+    border-top: 1px solid light-dark(#FFF, var(--o-borde-suave));
+    border-bottom: 1px solid light-dark(#f0d35b, var(--o-aviso));
+    background: light-dark(#f9ecb7, var(--o-aviso-fondo));
+    border-right: 1px solid light-dark(#ccc, var(--o-borde-fuerte));
+    border-left: 1px solid light-dark(#ccc, var(--o-borde-fuerte));
     text-align: center;
-    color: light-dark(#7a6516, #ecdb98); // 4,8:1 sobre el amarillo (antes #a38c2e: 2,8:1)
+    color: light-dark(#7a6516, var(--o-aviso)); // 4,8:1 sobre el amarillo (antes #a38c2e: 2,8:1)
 }
 
 .fade-in {

@@ -6,8 +6,8 @@
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  background: light-dark(#fff, #1e2124);
-  border: 1px solid light-dark(#eaeef1, #33414c);
+  background: light-dark(#fff, var(--o-superficie));
+  border: 1px solid light-dark(#eaeef1, var(--o-borde));
   border-radius: 16px;
   padding: 18px;
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 8px 24px rgba(16, 24, 40, 0.03);
@@ -18,7 +18,7 @@
     ::ng-deep img {
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid light-dark(#fff, #2e3338);
+      border: 2px solid light-dark(#fff, var(--o-borde-suave));
       box-shadow: 0 1px 4px rgba(16, 24, 40, 0.12);
     }
   }
@@ -31,25 +31,25 @@
   &__input {
     width: 100%;
     min-height: 52px;
-    border: 1px solid light-dark(#e3e8ec, #374550);
+    border: 1px solid light-dark(#e3e8ec, var(--o-borde));
     border-radius: 12px;
     padding: 12px 14px;
     font-size: 0.95rem;
     line-height: 1.5;
-    color: light-dark(#1f2a33, #cad6df);
+    color: light-dark(#1f2a33, var(--o-texto));
     resize: vertical;
     outline: none;
-    background: light-dark(#f7f9fb, #1e2d3b);
+    background: light-dark(#f7f9fb, var(--o-info-fondo));
     transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 
     &::placeholder {
-      color: light-dark(#7b8891, #9d9d9d);
+      color: light-dark(#7b8891, var(--o-texto-3));
     }
 
     &:focus {
       border-color: #0085c4;
       box-shadow: 0 0 0 3px rgba(0, 133, 196, 0.12);
-      background: light-dark(#fff, #1e2124);
+      background: light-dark(#fff, var(--o-superficie));
     }
   }
 
@@ -59,13 +59,13 @@
     gap: 8px;
     margin-top: 8px;
     padding: 8px 12px;
-    border: 1px solid light-dark(#e3e8ec, #374550);
+    border: 1px solid light-dark(#e3e8ec, var(--o-borde));
     border-radius: 10px;
-    background: light-dark(#f7f9fb, #1e2d3b);
+    background: light-dark(#f7f9fb, var(--o-info-fondo));
     transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 
     >i {
-      color: light-dark(#006a9e, #8ad0f2);
+      color: light-dark(#006a9e, var(--o-marca-texto));
       font-size: 1.05rem;
       flex-shrink: 0;
     }
@@ -73,7 +73,7 @@
     &:focus-within {
       border-color: #0085c4;
       box-shadow: 0 0 0 3px rgba(0, 133, 196, 0.12);
-      background: light-dark(#fff, #1e2124);
+      background: light-dark(#fff, var(--o-superficie));
     }
   }
 
@@ -84,10 +84,10 @@
     outline: none;
     background: transparent;
     font-size: 0.85rem;
-    color: light-dark(#1f2a33, #cad6df);
+    color: light-dark(#1f2a33, var(--o-texto));
 
     &::placeholder {
-      color: light-dark(#7b8891, #9d9d9d);
+      color: light-dark(#7b8891, var(--o-texto-3));
     }
   }
 
@@ -105,7 +105,7 @@
 
   &__hint {
     font-size: 0.78rem;
-    color: light-dark(#5d6b75, #aeaeae);
+    color: light-dark(#5d6b75, var(--o-texto-2));
     margin-right: auto;
   }
 
@@ -113,7 +113,7 @@
     border: none;
     background: none;
     cursor: pointer;
-    color: light-dark(#8a98a0, #949494);
+    color: light-dark(#8a98a0, var(--o-texto-3));
     padding: 4px;
     border-radius: 6px;
     display: inline-flex;
@@ -125,8 +125,8 @@
     &:hover,
     &[aria-expanded="true"],
     &.is-activo {
-      color: light-dark(#006595, #8ed2f2);
-      background: light-dark(#f1f4f6, #26333c);
+      color: light-dark(#006595, var(--o-marca-texto));
+      background: light-dark(#f1f4f6, var(--o-realce));
     }
 
     &:disabled {
@@ -155,7 +155,7 @@
     cursor: pointer;
 
     &:focus-visible {
-      outline: 2px solid light-dark(#fff, #2e3338);
+      outline: 2px solid light-dark(#fff, var(--o-borde-suave));
       outline-offset: 2px;
     }
   }
@@ -166,11 +166,11 @@
     gap: 8px;
     margin-top: 8px;
     padding: 14px;
-    border: 1px dashed light-dark(#c9d3db, #425463);
+    border: 1px dashed light-dark(#c9d3db, var(--o-borde-fuerte));
     border-radius: 12px;
-    background: light-dark(#f7f9fb, #1e2d3b);
+    background: light-dark(#f7f9fb, var(--o-info-fondo));
     font-size: 0.9rem;
-    color: light-dark(#1f2a33, #cad6df);
+    color: light-dark(#1f2a33, var(--o-texto));
 
     i {
       animation: sh-girar 1s linear infinite;
@@ -269,8 +269,8 @@
   margin: 0;
   padding: 4px;
   list-style: none;
-  background: light-dark(#fff, #1e2124);
-  border: 1px solid light-dark(#e3e8ec, #374550);
+  background: light-dark(#fff, var(--o-superficie));
+  border: 1px solid light-dark(#e3e8ec, var(--o-borde));
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(16, 24, 40, 0.12);
 
@@ -283,34 +283,34 @@
     cursor: pointer;
 
     &.is-activo {
-      background: light-dark(#eef6fb, #1a3546);
+      background: light-dark(#eef6fb, var(--o-info-fondo));
     }
   }
 
   &__tag {
     font-weight: 600;
-    color: light-dark(#006595, #8ed2f2);
+    color: light-dark(#006595, var(--o-marca-texto));
   }
 
   &__num {
     font-size: 0.8rem;
-    color: light-dark(#6b7782, #a6a6a6);
+    color: light-dark(#6b7782, var(--o-texto-2));
   }
 }
 
 // Marcar el shout como +18 (solo enlaces externos)
 .sh-composer__nsfw {
   padding: 3px 9px;
-  border: 1px solid light-dark(#d0d0d0, #4e575f);
+  border: 1px solid light-dark(#d0d0d0, var(--o-borde-fuerte));
   border-radius: 999px;
   background: transparent;
-  color: light-dark(#666, #adadad);
+  color: light-dark(#666, var(--o-texto-2));
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.04em;
   cursor: pointer;
 
-  &:hover:not(:disabled) { border-color: #c0392b; color: light-dark(#c0392b, #e87b75); }
+  &:hover:not(:disabled) { border-color: #c0392b; color: light-dark(#c0392b, var(--o-error)); }
   &.is-activo { background: #c0392b; border-color: #c0392b; color: #fff; }
   &:disabled { opacity: 0.5; cursor: default; }
 }
@@ -321,8 +321,8 @@
   align-items: center;
   gap: 3px;
 
-  &:hover:not(:disabled) { border-color: light-dark(#0B6EA5, #2a8cc4); color: light-dark(#0B6EA5, #6cbcec); }
-  &.is-activo { background: light-dark(#0B6EA5, #2a8cc4); border-color: light-dark(#0B6EA5, #2a8cc4); color: #fff; }
+  &:hover:not(:disabled) { border-color: light-dark(#0B6EA5, var(--o-marca)); color: light-dark(#0B6EA5, var(--o-marca)); }
+  &.is-activo { background: light-dark(#0B6EA5, var(--o-marca-solida)); border-color: light-dark(#0B6EA5, var(--o-marca-solida)); color: #fff; }
 }
 
 // Encuesta: de 2 a 4 opciones, duración y quitar.
@@ -332,9 +332,9 @@
   gap: 8px;
   margin: 8px 0 0;
   padding: 10px 12px;
-  border: 1px solid light-dark(#e3e8ec, #374550);
+  border: 1px solid light-dark(#e3e8ec, var(--o-borde));
   border-radius: 10px;
-  background: light-dark(#f7f9fb, #1e2d3b);
+  background: light-dark(#f7f9fb, var(--o-info-fondo));
   min-width: 0;
 
   legend {
@@ -357,10 +357,10 @@
     flex: 1;
     min-width: 0;
     padding: 8px 52px 8px 10px;
-    border: 1px solid light-dark(#d5dde3, #3c4b57);
+    border: 1px solid light-dark(#d5dde3, var(--o-borde));
     border-radius: 8px;
-    background: light-dark(#fff, #1e2124);
-    color: light-dark(#1f2a33, #cad6df);
+    background: light-dark(#fff, var(--o-superficie));
+    color: light-dark(#1f2a33, var(--o-texto));
     font-size: 16px; // 16px: iOS no hace zoom al enfocar
 
     &:focus {
@@ -374,7 +374,7 @@
     position: absolute;
     right: 10px;
     font-size: 0.72rem;
-    color: light-dark(#5d6b75, #aeaeae);
+    color: light-dark(#5d6b75, var(--o-texto-2));
     pointer-events: none;
   }
 
@@ -389,7 +389,7 @@
     background: none;
     cursor: pointer;
     border-radius: 6px;
-    color: light-dark(#5d6b75, #aeaeae);
+    color: light-dark(#5d6b75, var(--o-texto-2));
     min-height: 36px;
   }
 
@@ -416,23 +416,23 @@
     gap: 4px;
     padding: 0 8px;
     font-weight: 600;
-    color: light-dark(#006595, #8ed2f2);
+    color: light-dark(#006595, var(--o-marca-texto));
 
-    &:hover { background: light-dark(#eef3f6, #26333c); }
+    &:hover { background: light-dark(#eef3f6, var(--o-realce)); }
   }
 
   &__duracion {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: light-dark(#1f2a33, #cad6df);
+    color: light-dark(#1f2a33, var(--o-texto));
 
     select {
       min-height: 36px;
       padding: 0 8px;
-      border: 1px solid light-dark(#d5dde3, #3c4b57);
+      border: 1px solid light-dark(#d5dde3, var(--o-borde));
       border-radius: 6px;
-      background: light-dark(#fff, #1e2124);
+      background: light-dark(#fff, var(--o-superficie));
       color: inherit;
       font-size: 16px;
     }

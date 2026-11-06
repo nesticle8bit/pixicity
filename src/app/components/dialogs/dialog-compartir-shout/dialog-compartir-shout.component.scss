@@ -18,7 +18,7 @@
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: light-dark(#555, #bbb);
+  color: light-dark(#555, var(--o-texto-2));
   font-size: 1.1rem;
   cursor: pointer;
 

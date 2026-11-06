@@ -1,9 +1,9 @@
 .metricas {
   margin: 0 0 24px;
   padding: 16px;
-  border: 1px solid light-dark(#e3e6ea, #3d444b);
+  border: 1px solid light-dark(#e3e6ea, var(--o-borde));
   border-radius: 8px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
 
   &__cabecera {
     display: flex;
@@ -37,11 +37,11 @@
     flex-direction: column;
     padding: 10px 12px;
     border-radius: 6px;
-    background: light-dark(#f4f6f8, #252f39);
+    background: light-dark(#f4f6f8, var(--o-elevada));
 
     &--alerta {
-      background: light-dark(#fdecea, #47201b);
-      color: light-dark(#8a1c13, #ef948d);
+      background: light-dark(#fdecea, var(--o-error-fondo));
+      color: light-dark(#8a1c13, var(--o-error));
     }
   }
 
@@ -52,11 +52,11 @@
 
   &__label {
     font-size: 0.8rem;
-    color: light-dark(#555, #bababa);
+    color: light-dark(#555, var(--o-texto-2));
   }
 
   &__stat--alerta &__label {
-    color: light-dark(#8a1c13, #ef948d);
+    color: light-dark(#8a1c13, var(--o-error));
   }
 
   &__tablas {

@@ -22,18 +22,18 @@
   white-space: nowrap;
 
   &--quita {
-    background: light-dark(#fdecea, #47201b);
-    color: light-dark(#b02a37, #df7983);
+    background: light-dark(#fdecea, var(--o-error-fondo));
+    color: light-dark(#b02a37, var(--o-error));
   }
 
   &--devuelve {
-    background: light-dark(#e6f4ea, #214b2d);
-    color: light-dark(#1e7b34, #99e6ab);
+    background: light-dark(#e6f4ea, var(--o-ok-fondo));
+    color: light-dark(#1e7b34, var(--o-ok));
   }
 
   &--cambia {
-    background: light-dark(#e7f1f7, #1d3a4c);
-    color: light-dark(#006595, #8ed2f2);
+    background: light-dark(#e7f1f7, var(--o-info-fondo));
+    color: light-dark(#006595, var(--o-marca-texto));
   }
 }
 
@@ -53,7 +53,7 @@
 }
 
 .mh-razon {
-  color: light-dark(#6c757d, #a7a7a7);
+  color: light-dark(#6c757d, var(--o-texto-2));
   font-size: 0.85rem;
   margin-top: 2px;
 }

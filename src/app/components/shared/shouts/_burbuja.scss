@@ -1,8 +1,8 @@
 // Globo ("nube") de los items del muro: lo comparten app-shout-card y app-post-card.
-$marca: light-dark(#006595, #1e99d3);
-$tenue: light-dark(#5d6b75, #aeaeae);
-$favorito: light-dark(#b7791f, #e1a650);
-$reshout: light-dark(#1e7f4f, #30c97d);
+$marca: light-dark(#006595, var(--o-marca));
+$tenue: light-dark(#5d6b75, var(--o-texto-2));
+$favorito: light-dark(#b7791f, var(--o-aviso));
+$reshout: light-dark(#1e7f4f, var(--o-ok));
 
 // Fecha corta ("2 h"): la muestra /mi en el celular; en el resto queda la fecha completa.
 .sc-fecha-corta { display: none; }
@@ -38,7 +38,7 @@ $reshout: light-dark(#1e7f4f, #30c97d);
     ::ng-deep img {
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid light-dark(#fff, #2e3338);
+      border: 2px solid light-dark(#fff, var(--o-borde-suave));
       box-shadow: 0 1px 4px rgba(16, 24, 40, 0.12);
     }
   }
@@ -49,8 +49,8 @@ $reshout: light-dark(#1e7f4f, #30c97d);
   position: relative;
   flex: 1;
   min-width: 0;
-  background: light-dark(#fff, #1e2124);
-  border: 1px solid light-dark(#e9edf0, #34424c);
+  background: light-dark(#fff, var(--o-superficie));
+  border: 1px solid light-dark(#e9edf0, var(--o-borde));
   border-radius: 14px;
   padding: 12px 16px;
   box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
@@ -64,9 +64,9 @@ $reshout: light-dark(#1e7f4f, #30c97d);
     top: 16px;
     width: 14px;
     height: 14px;
-    background: light-dark(#fff, #1e2124);
-    border-left: 1px solid light-dark(#e9edf0, #34424c);
-    border-bottom: 1px solid light-dark(#e9edf0, #34424c);
+    background: light-dark(#fff, var(--o-superficie));
+    border-left: 1px solid light-dark(#e9edf0, var(--o-borde));
+    border-bottom: 1px solid light-dark(#e9edf0, var(--o-borde));
     transform: rotate(45deg);
     border-radius: 0 0 0 4px;
   }
@@ -124,7 +124,7 @@ $reshout: light-dark(#1e7f4f, #30c97d);
     margin: 0;
     font-size: 0.92rem;
     line-height: 1.55;
-    color: light-dark(#1f2a33, #cad6df);
+    color: light-dark(#1f2a33, var(--o-texto));
     overflow-wrap: anywhere;
     white-space: pre-wrap;
   }
@@ -137,7 +137,7 @@ $reshout: light-dark(#1e7f4f, #30c97d);
     flex-wrap: wrap;
     margin-top: 11px;
     padding-top: 9px;
-    border-top: 1px solid light-dark(#eef2f4, #30414a);
+    border-top: 1px solid light-dark(#eef2f4, var(--o-borde));
   }
 }
 
@@ -159,7 +159,7 @@ $reshout: light-dark(#1e7f4f, #30c97d);
 
   i { font-size: 0.95rem; }
 
-  &:hover:not(:disabled) { background: light-dark(#eef5f9, #1b3747); color: $marca; }
+  &:hover:not(:disabled) { background: light-dark(#eef5f9, var(--o-info-fondo)); color: $marca; }
 
   &:focus-visible {
     outline: 2px solid $marca;
@@ -171,25 +171,25 @@ $reshout: light-dark(#1e7f4f, #30c97d);
   &--reshout.is-activo {
     color: $reshout;
 
-    &:hover:not(:disabled) { background: light-dark(#e8f5ee, #204a33); color: $reshout; }
+    &:hover:not(:disabled) { background: light-dark(#e8f5ee, var(--o-ok-fondo)); color: $reshout; }
   }
 
   &--favorito.is-activo {
     color: $favorito;
 
-    &:hover:not(:disabled) { background: light-dark(#fdf6e7, #493a1c); color: light-dark(#975a16, #edbc85); }
+    &:hover:not(:disabled) { background: light-dark(#fdf6e7, var(--o-aviso-fondo)); color: light-dark(#975a16, #edbc85); }
   }
 
   &--megusta.is-activo {
     color: $marca;
 
-    &:hover:not(:disabled) { background: light-dark(#e6f1f7, #1d3c4d); }
+    &:hover:not(:disabled) { background: light-dark(#e6f1f7, var(--o-info-fondo)); }
   }
 
   &--nomegusta.is-activo {
-    color: light-dark(#b42318, #ec7c74);
+    color: light-dark(#b42318, var(--o-error));
 
-    &:hover:not(:disabled) { background: light-dark(#fdecea, #4a2522); }
+    &:hover:not(:disabled) { background: light-dark(#fdecea, var(--o-error-fondo)); }
   }
 
   /* Editar / denunciar: a la izquierda, separadas de las reacciones. */
@@ -209,7 +209,7 @@ $reshout: light-dark(#1e7f4f, #30c97d);
   textarea {
     width: 100%;
     padding: 8px 10px;
-    border: 1px solid light-dark(#c9d3da, #435662);
+    border: 1px solid light-dark(#c9d3da, var(--o-borde-fuerte));
     border-radius: 8px;
     font: inherit;
     font-size: 0.92rem;

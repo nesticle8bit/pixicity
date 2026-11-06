@@ -1,7 +1,7 @@
-$marca: light-dark(#006595, #1e99d3);
-$texto: light-dark(#1f2a33, #cad6df);
-$suave: light-dark(#6b7782, #a6a6a6);
-$borde: light-dark(#e6eaee, #35424e);
+$marca: light-dark(#006595, var(--o-marca));
+$texto: light-dark(#1f2a33, var(--o-texto));
+$suave: light-dark(#6b7782, var(--o-texto-2));
+$borde: light-dark(#e6eaee, var(--o-borde));
 
 .bv {
   max-width: 900px;
@@ -9,7 +9,7 @@ $borde: light-dark(#e6eaee, #35424e);
   padding: 28px;
   border: 1px solid $borde;
   border-radius: 16px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
 
   &__head {
     text-align: center;
@@ -67,7 +67,7 @@ $borde: light-dark(#e6eaee, #35424e);
     padding: 6px 12px 6px 6px;
     border: 1px solid $borde;
     border-radius: 999px;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     font-weight: 600;
     font-size: 0.9rem;
     color: $suave;
@@ -80,7 +80,7 @@ $borde: light-dark(#e6eaee, #35424e);
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    background: light-dark(#f1f4f6, #26333c);
+    background: light-dark(#f1f4f6, var(--o-realce));
     font-size: 0.85rem;
   }
 
@@ -95,8 +95,8 @@ $borde: light-dark(#e6eaee, #35424e);
   }
 
   &__item.is-hecho .bv-pasos__num {
-    background: light-dark(#e3f4ea, #1f5033);
-    color: light-dark(#1e8a4c, #8fe7b4);
+    background: light-dark(#e3f4ea, var(--o-ok-fondo));
+    color: light-dark(#1e8a4c, var(--o-ok));
   }
 }
 
@@ -107,9 +107,9 @@ $borde: light-dark(#e6eaee, #35424e);
   margin-bottom: 20px;
   padding: 10px 14px;
   border-radius: 10px;
-  background: light-dark(#fffaf0, #423519);
-  border: 1px solid light-dark(#f3d9a4, #7e6430);
-  color: light-dark(#7a5310, #f1d096);
+  background: light-dark(#fffaf0, var(--o-aviso-fondo));
+  border: 1px solid light-dark(#f3d9a4, var(--o-aviso));
+  color: light-dark(#7a5310, var(--o-aviso));
 }
 
 .bv-paso {
@@ -137,7 +137,7 @@ $borde: light-dark(#e6eaee, #35424e);
   margin: 0 2px;
   padding: 0 8px;
   border-radius: 999px;
-  background: light-dark(#eef6fb, #1a3546);
+  background: light-dark(#eef6fb, var(--o-info-fondo));
   font-weight: 600;
   font-size: 0.85rem;
   color: $marca;
@@ -163,7 +163,7 @@ $borde: light-dark(#e6eaee, #35424e);
 
   &.is-elegida {
     border-color: $marca;
-    background: light-dark(#f5fafd, #193241);
+    background: light-dark(#f5fafd, var(--o-info-fondo));
   }
 
   &__img {
@@ -174,7 +174,7 @@ $borde: light-dark(#e6eaee, #35424e);
     height: 48px;
     overflow: hidden;
     border-radius: 12px;
-    background: light-dark(#eef6fb, #1a3546);
+    background: light-dark(#eef6fb, var(--o-info-fondo));
     color: $marca;
     font-size: 1.4rem;
 
@@ -219,7 +219,7 @@ $borde: light-dark(#e6eaee, #35424e);
   padding: 6px 12px;
   border: 1px solid $marca;
   border-radius: 999px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   font-size: 0.85rem;
   font-weight: 700;
   color: $marca;
@@ -249,7 +249,7 @@ $borde: light-dark(#e6eaee, #35424e);
   cursor: pointer;
 
   &--suave {
-    background: light-dark(#f1f4f6, #26333c);
+    background: light-dark(#f1f4f6, var(--o-realce));
     color: $texto;
   }
 }
@@ -264,9 +264,9 @@ $borde: light-dark(#e6eaee, #35424e);
   gap: 8px;
   padding: 14px;
   border-radius: 12px;
-  background: light-dark(#e9f7ef, #1c4b30);
+  background: light-dark(#e9f7ef, var(--o-ok-fondo));
   font-weight: 600;
-  color: light-dark(#1e7a45, #99e6ba);
+  color: light-dark(#1e7a45, var(--o-ok));
 }
 
 // Paso "Tu perfil": mini cabecera como la de /perfil (portada + avatar encima)
@@ -302,10 +302,10 @@ $borde: light-dark(#e6eaee, #35424e);
     width: 104px;
     height: 104px;
     padding: 0;
-    border: 4px solid light-dark(#fff, #1e2124);
+    border: 4px solid light-dark(#fff, var(--o-borde-suave));
     border-radius: 50%;
     overflow: hidden;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     cursor: pointer;
 
@@ -376,8 +376,8 @@ $borde: light-dark(#e6eaee, #35424e);
     color: $suave;
     font-size: 0.85rem;
 
-    &.is-error { color: light-dark(#b3261e, #f08a84); }
-    .ti-circle-check { color: light-dark(#1e8a4c, #8fe7b4); }
+    &.is-error { color: light-dark(#b3261e, var(--o-error)); }
+    .ti-circle-check { color: light-dark(#1e8a4c, var(--o-ok)); }
   }
 }
 

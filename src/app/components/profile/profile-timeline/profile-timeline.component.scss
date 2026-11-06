@@ -35,17 +35,17 @@ $punto-movil: 26px;
   gap: 6px;
   min-height: 36px;
   padding: 0 14px;
-  border: 1px solid light-dark(#d4dde3, #354652);
+  border: 1px solid light-dark(#d4dde3, var(--o-borde));
   border-radius: 999px;
-  background: light-dark(#fff, #1f262c);
-  color: light-dark(#3d4a54, #c7d2da);
+  background: light-dark(#fff, var(--o-superficie));
+  color: light-dark(#3d4a54, var(--o-texto));
   font-size: 0.85rem;
   font-weight: 600;
   white-space: nowrap;
   scroll-snap-align: start;
 
   &:hover {
-    border-color: light-dark(#9fb3c2, #4f6372);
+    border-color: light-dark(#9fb3c2, var(--o-borde-fuerte));
   }
 
   &.activo {
@@ -71,7 +71,7 @@ $punto-movil: 26px;
   gap: 6px;
   margin: -6px 0 14px;
   font-size: 0.8rem;
-  color: light-dark(#5d6b75, #aeaeae);
+  color: light-dark(#5d6b75, var(--o-texto-2));
   text-decoration: none;
 
   &:hover .tl-privacidad__accion {
@@ -85,7 +85,7 @@ $punto-movil: 26px;
 }
 
 .tl-privacidad__accion {
-  color: light-dark(#005bb3, #63a9f0);
+  color: light-dark(#005bb3, var(--o-marca-texto));
   font-weight: 600;
 }
 
@@ -104,7 +104,7 @@ $punto-movil: 26px;
     left: calc($punto / 2 - 1px);
     width: 2px;
     border-radius: 2px;
-    background: light-dark(#e3e9ed, #2f3b44);
+    background: light-dark(#e3e9ed, var(--o-realce));
   }
 }
 
@@ -120,10 +120,10 @@ $punto-movil: 26px;
     display: inline-block;
     margin: 0 0 0 (-$riel);
     padding: 3px 12px;
-    border: 1px solid light-dark(#e3e9ed, #354652);
+    border: 1px solid light-dark(#e3e9ed, var(--o-borde));
     border-radius: 999px;
-    background: light-dark(#f4f8fa, #1b2228);
-    color: light-dark(#4b5a65, #aebac4);
+    background: light-dark(#f4f8fa, var(--o-superficie));
+    color: light-dark(#4b5a65, var(--o-texto-2));
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.02em;
@@ -143,21 +143,21 @@ $punto-movil: 26px;
   place-items: center;
   width: $punto;
   height: $punto;
-  border: 3px solid light-dark(#fff, #16191c);
+  border: 3px solid light-dark(#fff, var(--o-borde-suave));
   border-radius: 50%;
-  background: light-dark(#eef3f6, #26313a);
-  color: light-dark(#5d6b75, #aebac4);
+  background: light-dark(#eef3f6, var(--o-realce));
+  color: light-dark(#5d6b75, var(--o-texto-2));
   font-size: 0.95rem;
 
-  &--shout { background: light-dark(#e3f0fb, #1b3247); color: #1e7bc4; }
-  &--reshout { background: light-dark(#e6f6ec, #183526); color: #1f9d55; }
-  &--post { background: light-dark(#eef7dc, #2a3418); color: light-dark(#5a7d00, #a6d13a); }
-  &--comentario { background: light-dark(#e3f0fb, #1b3247); color: #1e7bc4; }
-  &--reaccion { background: light-dark(#fde8ef, #3a1e28); color: light-dark(#d6336c, #f06595); }
-  &--comunidad { background: light-dark(#efe8fb, #2c2340); color: light-dark(#7048e8, #9775fa); }
-  &--gente { background: light-dark(#e8f3f8, #1c2d36); color: light-dark(#0b7285, #3bc9db); }
-  &--rango { background: light-dark(#fff4db, #3a301a); color: light-dark(#b07500, #fcc419); }
-  &--mas { color: light-dark(#7a8893, #8d9aa5); }
+  &--shout { background: light-dark(#e3f0fb, var(--o-info-fondo)); color: #1e7bc4; }
+  &--reshout { background: light-dark(#e6f6ec, var(--o-ok-fondo)); color: #1f9d55; }
+  &--post { background: light-dark(#eef7dc, var(--o-ok-fondo)); color: light-dark(#5a7d00, #a6d13a); }
+  &--comentario { background: light-dark(#e3f0fb, var(--o-info-fondo)); color: #1e7bc4; }
+  &--reaccion { background: light-dark(#fde8ef, var(--o-error-fondo)); color: light-dark(#d6336c, #f06595); }
+  &--comunidad { background: light-dark(#efe8fb, var(--o-realce)); color: light-dark(#7048e8, #9775fa); }
+  &--gente { background: light-dark(#e8f3f8, var(--o-info-fondo)); color: light-dark(#0b7285, var(--o-marca-solida)); }
+  &--rango { background: light-dark(#fff4db, var(--o-aviso-fondo)); color: light-dark(#b07500, #fcc419); }
+  &--mas { color: light-dark(#7a8893, var(--o-texto-3)); }
 }
 
 // Las tarjetas (shout, post) arrancan un poco más arriba que el punto: el punto queda junto al avatar.
@@ -176,7 +176,7 @@ $punto-movil: 26px;
 
 .tl__texto {
   margin: 0;
-  color: light-dark(#26323a, #c7d2da);
+  color: light-dark(#26323a, var(--o-texto));
   font-size: 0.9rem;
   line-height: 1.45;
   overflow-wrap: anywhere;
@@ -185,8 +185,8 @@ $punto-movil: 26px;
 .tl__detalle {
   padding: 0 6px;
   border-radius: 6px;
-  background: light-dark(#eef7dc, #2a3418);
-  color: light-dark(#4a6a00, #a6d13a);
+  background: light-dark(#eef7dc, var(--o-ok-fondo));
+  color: light-dark(#4a6a00, var(--o-ok));
   font-size: 0.82rem;
 }
 
@@ -206,11 +206,11 @@ $punto-movil: 26px;
 }
 
 .tl__no-disponible {
-  color: light-dark(#7a8893, #8d9aa5);
+  color: light-dark(#7a8893, var(--o-texto-3));
 }
 
 .tl__fecha {
-  color: light-dark(#7a8893, #8d9aa5);
+  color: light-dark(#7a8893, var(--o-texto-3));
   font-size: 0.8rem;
   white-space: nowrap;
 }
@@ -220,17 +220,17 @@ $punto-movil: 26px;
   display: block;
   margin: 6px 0 0;
   padding: 8px 12px;
-  border-left: 3px solid light-dark(#b9d7ef, #2b4e6b);
+  border-left: 3px solid light-dark(#b9d7ef, var(--o-borde));
   border-radius: 0 10px 10px 0;
-  background: light-dark(#f4f8fa, #1b2228);
-  color: light-dark(#3d4a54, #c7d2da);
+  background: light-dark(#f4f8fa, var(--o-superficie));
+  color: light-dark(#3d4a54, var(--o-texto));
   font-size: 0.88rem;
   line-height: 1.45;
   text-decoration: none;
   overflow-wrap: anywhere;
 
   &:hover {
-    background: light-dark(#eaf2f7, #212a31);
+    background: light-dark(#eaf2f7, var(--o-elevada));
   }
 }
 
@@ -241,15 +241,15 @@ $punto-movil: 26px;
 .tl__mas {
   min-height: 36px;
   padding: 0 14px;
-  border: 1px dashed light-dark(#c3d0d9, #3f505d);
+  border: 1px dashed light-dark(#c3d0d9, var(--o-borde-fuerte));
   border-radius: 999px;
   background: transparent;
-  color: light-dark(#3d4a54, #c7d2da);
+  color: light-dark(#3d4a54, var(--o-texto));
   font-size: 0.85rem;
   font-weight: 600;
 
   &:hover {
-    background: light-dark(#f4f8fa, #1b2228);
+    background: light-dark(#f4f8fa, var(--o-superficie));
   }
 }
 
@@ -261,7 +261,7 @@ $punto-movil: 26px;
   gap: 8px;
   margin: 8px 0 0;
   padding: 12px 0;
-  color: light-dark(#5d6b75, #aeaeae);
+  color: light-dark(#5d6b75, var(--o-texto-2));
   font-size: 0.88rem;
 
   p {
@@ -285,9 +285,9 @@ $punto-movil: 26px;
 }
 
 .tl-boton--suave {
-  border: 1px solid light-dark(#d4dde3, #354652);
-  background: light-dark(#fff, #1f262c);
-  color: light-dark(#3d4a54, #c7d2da);
+  border: 1px solid light-dark(#d4dde3, var(--o-borde));
+  background: light-dark(#fff, var(--o-superficie));
+  color: light-dark(#3d4a54, var(--o-texto));
 }
 
 .tl-mas-cargando {

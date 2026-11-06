@@ -1,9 +1,9 @@
-$marca: light-dark(#006595, #1e99d3);
-$texto: light-dark(#1f2a33, #cad6df);
-$suave: light-dark(#5f6b75, #aeaeae);
-$borde: light-dark(#e6eaee, #35424e);
-$verde: light-dark(#1e7a45, #30c46f);
-$oro: light-dark(#b7791f, #e1a650);
+$marca: light-dark(#006595, var(--o-marca));
+$texto: light-dark(#1f2a33, var(--o-texto));
+$suave: light-dark(#5f6b75, var(--o-texto-2));
+$borde: light-dark(#e6eaee, var(--o-borde));
+$verde: light-dark(#1e7a45, var(--o-ok));
+$oro: light-dark(#b7791f, var(--o-aviso));
 
 :host {
   display: block;
@@ -14,7 +14,7 @@ $oro: light-dark(#b7791f, #e1a650);
   overflow: hidden;
   border: 1px solid $borde;
   border-radius: 14px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
 }
 
 /* --- Puntos --- */
@@ -23,7 +23,7 @@ $oro: light-dark(#b7791f, #e1a650);
   align-items: center;
   gap: 20px;
   padding: 18px 20px;
-  background: linear-gradient(180deg, light-dark(#f6fafc, #193341) 0%, light-dark(#fff, #1e2124) 100%);
+  background: linear-gradient(180deg, light-dark(#f6fafc, var(--o-info-fondo)) 0%, light-dark(#fff, var(--o-superficie)) 100%);
   border-bottom: 1px solid $borde;
 
   &__total {
@@ -34,8 +34,8 @@ $oro: light-dark(#b7791f, #e1a650);
     min-width: 92px;
     padding: 8px 12px;
     border-radius: 12px;
-    background: light-dark(#fff7e6, #483a1b);
-    border: 1px solid light-dark(#f3dfb3, #77602d);
+    background: light-dark(#fff7e6, var(--o-aviso-fondo));
+    border: 1px solid light-dark(#f3dfb3, var(--o-aviso));
   }
 
   &__numero {
@@ -50,7 +50,7 @@ $oro: light-dark(#b7791f, #e1a650);
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: light-dark(#8a5a00, #f3d294);
+    color: light-dark(#8a5a00, var(--o-aviso));
   }
 
   &__dar {
@@ -100,11 +100,11 @@ $oro: light-dark(#b7791f, #e1a650);
 .pm-punto {
   width: 38px;
   height: 38px;
-  border: 1px solid light-dark(#f0d9a6, #7f6630);
+  border: 1px solid light-dark(#f0d9a6, var(--o-aviso));
   border-radius: 10px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   font-weight: 800;
-  color: light-dark(#8a5a00, #f3d294);
+  color: light-dark(#8a5a00, var(--o-aviso));
   cursor: pointer;
   transition: transform 0.12s, background-color 0.12s, color 0.12s;
 
@@ -132,7 +132,7 @@ $oro: light-dark(#b7791f, #e1a650);
   background: none;
   font: inherit;
   font-weight: 700;
-  color: light-dark(#005a85, #97d6f3);
+  color: light-dark(#005a85, var(--o-marca-texto));
   text-decoration: underline;
   cursor: pointer;
 }
@@ -164,7 +164,7 @@ $oro: light-dark(#b7791f, #e1a650);
   padding: 8px 14px;
   border: 1px solid $borde;
   border-radius: 999px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   font-size: 0.9rem;
   font-weight: 600;
   color: $texto;
@@ -187,8 +187,8 @@ $oro: light-dark(#b7791f, #e1a650);
 
   &.is-activa {
     border-color: $marca;
-    background: light-dark(#eef6fb, #1a3546);
-    color: light-dark(#005a85, #97d6f3);
+    background: light-dark(#eef6fb, var(--o-info-fondo));
+    color: light-dark(#005a85, var(--o-marca-texto));
   }
 
   &:disabled {
@@ -204,8 +204,8 @@ $oro: light-dark(#b7791f, #e1a650);
     color: $suave;
 
     &:hover:not(:disabled) {
-      border-color: light-dark(#f1c4c0, #71312b);
-      color: light-dark(#b42318, #ec7c74);
+      border-color: light-dark(#f1c4c0, var(--o-error));
+      color: light-dark(#b42318, var(--o-error));
     }
   }
 }
@@ -217,12 +217,12 @@ $oro: light-dark(#b7791f, #e1a650);
   margin: 0 20px 12px;
   padding: 8px 12px;
   border-radius: 8px;
-  background: light-dark(#f1f4f6, #26333c);
+  background: light-dark(#f1f4f6, var(--o-realce));
   font-size: 0.9rem;
   color: $texto;
 
   &--ok {
-    background: light-dark(#e9f7ef, #1c4b30);
+    background: light-dark(#e9f7ef, var(--o-ok-fondo));
     color: $verde;
   }
 }
@@ -270,9 +270,9 @@ $oro: light-dark(#b7791f, #e1a650);
   &__icono {
     font-size: 1.05rem;
 
-    &--seguidores { color: light-dark(#5f6b75, #aeaeae); }
-    &--puntos { color: light-dark(#1d8fd0, #63b8e9); }
-    &--visitas { color: light-dark(#c2410c, #ef9570); }
+    &--seguidores { color: light-dark(#5f6b75, var(--o-texto-2)); }
+    &--puntos { color: light-dark(#1d8fd0, var(--o-marca-texto)); }
+    &--visitas { color: light-dark(#c2410c, var(--o-error)); }
     &--favoritos { color: $oro; }
   }
 }
@@ -290,7 +290,7 @@ $oro: light-dark(#b7791f, #e1a650);
 
   a {
     font-weight: 600;
-    color: light-dark(#005a85, #97d6f3);
+    color: light-dark(#005a85, var(--o-marca-texto));
   }
 }
 
@@ -377,7 +377,7 @@ $oro: light-dark(#b7791f, #e1a650);
     text-decoration: none;
 
     ::ng-deep img {
-      border: 2px solid light-dark(#fff, #2e3338);
+      border: 2px solid light-dark(#fff, var(--o-borde-suave));
       border-radius: 50%;
       box-shadow: 0 0 0 1px $borde;
     }
@@ -410,7 +410,7 @@ $oro: light-dark(#b7791f, #e1a650);
     height: 28px;
     padding: 0 6px;
     border-radius: 999px;
-    background: light-dark(#f1f4f6, #26333c);
+    background: light-dark(#f1f4f6, var(--o-realce));
     font-size: 0.72rem;
     font-weight: 700;
     color: $suave;
@@ -419,7 +419,7 @@ $oro: light-dark(#b7791f, #e1a650);
 
 .pm-gente__mas:hover,
 .pm-gente__mas:focus-visible {
-  background: light-dark(#e3ebf1, #263b4b);
+  background: light-dark(#e3ebf1, var(--o-info-fondo));
   color: $texto;
 }
 
@@ -437,7 +437,7 @@ $oro: light-dark(#b7791f, #e1a650);
   gap: 8px 16px;
 
   &__hoy {
-    color: light-dark(#8a5a00, #f3d294);
+    color: light-dark(#8a5a00, var(--o-aviso));
   }
 
   &__editar {
@@ -445,7 +445,7 @@ $oro: light-dark(#b7791f, #e1a650);
     align-items: center;
     gap: 4px;
     font-weight: 600;
-    color: light-dark(#005a85, #97d6f3);
+    color: light-dark(#005a85, var(--o-marca-texto));
   }
 }
 
@@ -459,7 +459,7 @@ $oro: light-dark(#b7791f, #e1a650);
   &__barra {
     display: block;
     border-radius: 8px;
-    background: linear-gradient(90deg, light-dark(#eef2f5, #253440) 25%, light-dark(#f7f9fa, #233037) 50%, light-dark(#eef2f5, #253440) 75%);
+    background: linear-gradient(90deg, light-dark(#eef2f5, var(--o-realce)) 25%, light-dark(#f7f9fa, var(--o-elevada)) 50%, light-dark(#eef2f5, var(--o-realce)) 75%);
     background-size: 200% 100%;
     animation: pm-brillo 1.2s linear infinite;
   }

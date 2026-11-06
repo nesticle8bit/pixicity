@@ -16,7 +16,7 @@
   clear: both;
   min-height: 400px;
   margin-bottom: 20px;
-  border-top: solid 1px light-dark(#ebebeb, #3b4148);
+  border-top: solid 1px light-dark(#ebebeb, var(--o-borde));
   padding: 20px 0 0;
   margin-top: 20px;
 }
@@ -126,7 +126,7 @@
   }
 
   & li::marker {
-    color: light-dark(#1976d2, #61a7ec);
+    color: light-dark(#1976d2, var(--o-marca-texto));
   }
 
   /* Código, tablas, imágenes, botón Copiar e índice */
@@ -160,7 +160,7 @@
 // Base: solo tipografía. El layout lo define cada variante .ph-sep--*
 .ph-sep {
   margin: 28px 0 16px;
-  color: light-dark(#1976d2, #61a7ec);
+  color: light-dark(#1976d2, var(--o-marca-texto));
   font-weight: 700;
   font-size: 17px;
   letter-spacing: 1px;
@@ -274,7 +274,7 @@
   &--dark {
     color: #fff;
     background: #1f2937;
-    border-bottom: 3px solid light-dark(#42a5f5, #427eaf);
+    border-bottom: 3px solid light-dark(#42a5f5, var(--o-marca));
     padding: 12px 16px;
     border-radius: 6px;
   }
@@ -285,13 +285,13 @@
     .ph-sep__txt::after {
       content: "✦";
       margin: 0 12px;
-      color: light-dark(#6a3ab2, #9d79d3);
+      color: light-dark(#6a3ab2, var(--o-marca-texto));
     }
   }
 
   // 12) Tarjeta elevada
   &--shadow {
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     padding: 12px 16px;
     border-radius: 10px;
     border-top: 3px solid #1976d2;
@@ -303,17 +303,17 @@
   margin-bottom: 20px;
   padding: 15px 20px;
   border-radius: 0 0 5px 5px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
 }
 
 .fortags {
   overflow: hidden;
-  border-top: 1px solid light-dark(#ebebeb, #3b4148);
+  border-top: 1px solid light-dark(#ebebeb, var(--o-borde));
   padding-top: 15px;
 }
 
 .letres {
-  color: light-dark(#666, #b0b0b0);
+  color: light-dark(#666, var(--o-texto-2));
   float: left;
   font-size: 13px;
   font-weight: 700;
@@ -324,7 +324,7 @@
   display: block;
   float: left;
   padding: 0 5px;
-  color: light-dark(#0a6fc2, #71b6ef);
+  color: light-dark(#0a6fc2, var(--o-marca-texto));
   font-weight: 400;
   text-transform: uppercase;
   font-size: 13px;

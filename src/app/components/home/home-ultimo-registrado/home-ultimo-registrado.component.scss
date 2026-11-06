@@ -1,10 +1,10 @@
 .ur {
-  border: 1px solid light-dark(#e5e5e5, #2b3035);
+  border: 1px solid light-dark(#e5e5e5, var(--o-borde-suave));
   border-radius: 8px;
   overflow: hidden;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   font-size: .85rem;
-  color: light-dark(#333, #cfcfcf);
+  color: light-dark(#333, var(--o-texto));
 }
 
 .ur-banner {
@@ -25,8 +25,8 @@
 
   ::ng-deep img {
     border-radius: 50%;
-    border: 3px solid light-dark(#fff, #1e2124);
-    background: light-dark(#fff, #1e2124);
+    border: 3px solid light-dark(#fff, var(--o-borde-suave));
+    background: light-dark(#fff, var(--o-superficie));
   }
 }
 
@@ -54,7 +54,7 @@
 .ur-completo,
 .ur-linea {
   font-size: .78rem;
-  color: light-dark(#777, #9a9a9a);
+  color: light-dark(#777, var(--o-texto-3));
 }
 
 .ur-linea {
@@ -73,7 +73,7 @@
   margin: 8px 10px 0;
   font-size: .8rem;
   font-style: italic;
-  color: light-dark(#555, #b5b5b5);
+  color: light-dark(#555, var(--o-texto-2));
   overflow-wrap: anywhere;
 }
 
@@ -82,16 +82,16 @@
   grid-template-columns: repeat(4, 1fr);
   margin: 10px 10px 0;
   padding: 6px 0;
-  border-top: 1px solid light-dark(#eee, #2b3035);
-  border-bottom: 1px solid light-dark(#eee, #2b3035);
+  border-top: 1px solid light-dark(#eee, var(--o-borde-suave));
+  border-bottom: 1px solid light-dark(#eee, var(--o-borde-suave));
   text-align: center;
   font-size: .72rem;
-  color: light-dark(#777, #9a9a9a);
+  color: light-dark(#777, var(--o-texto-3));
 
   strong {
     display: block;
     font-size: .9rem;
-    color: light-dark(#333, #e0e0e0);
+    color: light-dark(#333, var(--o-texto));
   }
 }
 
@@ -104,7 +104,7 @@
 .ur-skeleton {
   height: 190px;
   border-radius: 8px;
-  background: linear-gradient(90deg, light-dark(#eee, #30353b) 25%, light-dark(#f5f5f5, #2b3035) 50%, light-dark(#eee, #30353b) 75%);
+  background: linear-gradient(90deg, light-dark(#eee, var(--o-realce)) 25%, light-dark(#f5f5f5, var(--o-realce)) 50%, light-dark(#eee, var(--o-realce)) 75%);
   background-size: 200% 100%;
   animation: ur-brillo 1.2s infinite;
 }

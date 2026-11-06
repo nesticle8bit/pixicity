@@ -1,6 +1,6 @@
-$accent: light-dark(#006595, #1e99d3);
-$borde: light-dark(#e5e7eb, #3c434a);
-$texto-suave: light-dark(#6b7280, #a7a7a7);
+$accent: light-dark(#006595, var(--o-marca));
+$borde: light-dark(#e5e7eb, var(--o-borde));
+$texto-suave: light-dark(#6b7280, var(--o-texto-2));
 
 :host {
   display: block;
@@ -25,7 +25,7 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
   padding: 10px 12px;
   border: 1px solid $borde;
   border-radius: 10px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
 
   > mat-icon {
     flex: none;
@@ -42,7 +42,7 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
     display: block;
     font-size: 18px;
     line-height: 1.1;
-    color: light-dark(#111827, #cfd7ea);
+    color: light-dark(#111827, var(--o-marca-texto));
   }
 
   span {
@@ -51,8 +51,8 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
   }
 
   &--warn > mat-icon {
-    background: light-dark(#fff4e5, #49361c);
-    color: light-dark(#b45309, #f0ac79);
+    background: light-dark(#fff4e5, var(--o-aviso-fondo));
+    color: light-dark(#b45309, var(--o-aviso));
   }
 }
 
@@ -75,7 +75,7 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
   padding: 0 10px;
   border: 1px solid $borde;
   border-radius: 8px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   color: $texto-suave;
 
   &:focus-within {
@@ -90,7 +90,7 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
     outline: none;
     background: transparent;
     font-size: 13px;
-    color: light-dark(#111827, #cfd7ea);
+    color: light-dark(#111827, var(--o-marca-texto));
   }
 }
 
@@ -119,11 +119,11 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
 .tx-card {
   border: 1px solid $borde;
   border-radius: 10px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   transition: box-shadow .15s, border-color .15s;
 
   &:hover {
-    border-color: light-dark(#d1d5db, #485058);
+    border-color: light-dark(#d1d5db, var(--o-borde-fuerte));
   }
 
   &.is-open {
@@ -132,7 +132,7 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
 
   &--skeleton {
     height: 58px;
-    background: linear-gradient(90deg, light-dark(#f3f4f6, #2b3035) 25%, light-dark(#e5e7eb, #343a40) 50%, light-dark(#f3f4f6, #2b3035) 75%) 0 0 / 200% 100%;
+    background: linear-gradient(90deg, light-dark(#f3f4f6, var(--o-realce)) 25%, light-dark(#e5e7eb, var(--o-realce)) 50%, light-dark(#f3f4f6, var(--o-realce)) 75%) 0 0 / 200% 100%;
     animation: tx-shimmer 1.2s infinite;
   }
 
@@ -164,7 +164,7 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
     cursor: pointer;
 
     &:hover:not(:disabled) {
-      background: light-dark(#f9fafb, #232c35);
+      background: light-dark(#f9fafb, var(--o-elevada));
     }
 
     &:disabled {
@@ -197,21 +197,21 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
     white-space: nowrap;
     font-size: 15px;
     font-weight: 700;
-    color: light-dark(#111827, #cfd7ea);
+    color: light-dark(#111827, var(--o-marca-texto));
   }
 
   &__seo {
     flex: none;
     padding: 1px 6px;
     border-radius: 4px;
-    background: light-dark(#f3f4f6, #2b3035);
+    background: light-dark(#f3f4f6, var(--o-realce));
     color: $texto-suave;
     font-size: 11px;
   }
 
   &__chev {
     margin-left: auto;
-    color: light-dark(#9ca3af, #8a8a8a);
+    color: light-dark(#9ca3af, var(--o-texto-3));
     transition: transform .15s;
   }
 
@@ -231,7 +231,7 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
 
   &__body {
     padding: 4px 14px 12px 42px;
-    border-top: 1px solid light-dark(#f3f4f6, #353a40);
+    border-top: 1px solid light-dark(#f3f4f6, var(--o-borde));
 
     @media (max-width: 575px) {
       padding-left: 14px;
@@ -245,13 +245,13 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
   border: 0;
   border-radius: 4px;
   background: none;
-  color: light-dark(#9ca3af, #8a8a8a);
+  color: light-dark(#9ca3af, var(--o-texto-3));
   cursor: grab;
 
   &:hover,
   &:focus-visible {
     color: $accent;
-    background: light-dark(#f3f4f6, #2b3035);
+    background: light-dark(#f3f4f6, var(--o-realce));
   }
 }
 
@@ -274,18 +274,18 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
   }
 
   &--empty {
-    background: light-dark(#f3f4f6, #2b3035);
+    background: light-dark(#f3f4f6, var(--o-realce));
     color: $texto-suave;
   }
 
   &--soft {
-    background: light-dark(#f3f4f6, #2b3035);
-    color: light-dark(#4b5563, #b9b9b9);
+    background: light-dark(#f3f4f6, var(--o-realce));
+    color: light-dark(#4b5563, var(--o-texto-2));
   }
 }
 
 .is-match {
-  background: light-dark(#fef3c7, #5b4f22);
+  background: light-dark(#fef3c7, var(--o-aviso-fondo));
   border-radius: 3px;
 }
 
@@ -305,23 +305,23 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
   padding: 3px 4px 3px 4px;
   border: 1px solid $borde;
   border-radius: 16px;
-  background: light-dark(#f9fafb, #232c35);
+  background: light-dark(#f9fafb, var(--o-elevada));
   font-size: 12.5px;
-  color: light-dark(#374151, #b9c2d0);
+  color: light-dark(#374151, var(--o-texto-2));
 
   &:hover {
-    border-color: light-dark(#cbd5e1, #3a4e65);
-    background: light-dark(#fff, #1e2124);
+    border-color: light-dark(#cbd5e1, var(--o-borde-fuerte));
+    background: light-dark(#fff, var(--o-superficie));
   }
 
   &.is-match {
     border-color: #f59e0b;
-    background: light-dark(#fef3c7, #5b4f22);
+    background: light-dark(#fef3c7, var(--o-aviso-fondo));
   }
 
   &.is-editing {
     border-color: $accent;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
   }
 
   &__grip {
@@ -354,12 +354,12 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
     border: 0;
     border-radius: 50%;
     background: none;
-    color: light-dark(#9ca3af, #8a8a8a);
+    color: light-dark(#9ca3af, var(--o-texto-3));
     line-height: 1;
     cursor: pointer;
 
-    &:hover:not(:disabled) { color: $accent; background: light-dark(#eef2f7, #203044); }
-    &--del:hover:not(:disabled) { color: light-dark(#c0392b, #df796f); background: light-dark(#fdecea, #47201b); }
+    &:hover:not(:disabled) { color: $accent; background: light-dark(#eef2f7, var(--o-info-fondo)); }
+    &--del:hover:not(:disabled) { color: light-dark(#c0392b, var(--o-error)); background: light-dark(#fdecea, var(--o-error-fondo)); }
     &:disabled { opacity: .35; cursor: not-allowed; }
   }
 
@@ -395,9 +395,9 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
   margin: 10px 0 0;
   padding: 0 10px;
   height: 34px;
-  border: 1px dashed light-dark(#cbd5e1, #3a4e65);
+  border: 1px dashed light-dark(#cbd5e1, var(--o-borde-fuerte));
   border-radius: 8px;
-  color: light-dark(#9ca3af, #8a8a8a);
+  color: light-dark(#9ca3af, var(--o-texto-3));
 
   &:focus-within {
     border-style: solid;
@@ -424,9 +424,9 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
 // - Vacío -
 .tx-empty {
   padding: 40px 16px;
-  border: 1px dashed light-dark(#d1d5db, #485058);
+  border: 1px dashed light-dark(#d1d5db, var(--o-borde-fuerte));
   border-radius: 12px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   text-align: center;
   color: $texto-suave;
 
@@ -440,7 +440,7 @@ $texto-suave: light-dark(#6b7280, #a7a7a7);
   h3 {
     margin: 8px 0 4px;
     font-size: 16px;
-    color: light-dark(#111827, #cfd7ea);
+    color: light-dark(#111827, var(--o-marca-texto));
   }
 
   p {

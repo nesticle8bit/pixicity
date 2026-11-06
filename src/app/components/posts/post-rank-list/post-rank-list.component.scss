@@ -1,6 +1,6 @@
 .rank-widget {
-  background: light-dark(#fff, #1e2124);
-  border: 1px solid light-dark(#e5e5e5, #3e454c);
+  background: light-dark(#fff, var(--o-superficie));
+  border: 1px solid light-dark(#e5e5e5, var(--o-borde));
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 10px;
@@ -30,7 +30,7 @@
   &__empty {
     padding: 18px 12px;
     text-align: center;
-    color: light-dark(#6b6b6b, #adadad);
+    color: light-dark(#6b6b6b, var(--o-texto-2));
     font-size: 12px;
     line-height: 1.4;
 
@@ -55,11 +55,11 @@
   transition: background 0.12s ease;
 
   &+& {
-    border-top: 1px dotted light-dark(#eee, #393f45);
+    border-top: 1px dotted light-dark(#eee, var(--o-borde));
   }
 
   &:hover {
-    background: light-dark(#f4fafd, #193441);
+    background: light-dark(#f4fafd, var(--o-info-fondo));
   }
 
   &__rank {
@@ -72,22 +72,22 @@
     font-size: 11px;
     font-weight: 700;
     border-radius: 50%;
-    background: light-dark(#eef1f3, #2b353c);
-    color: light-dark(#666, #b0b0b0);
+    background: light-dark(#eef1f3, var(--o-realce));
+    color: light-dark(#666, var(--o-texto-2));
 
     &.gold {
       background: #f6c343;
-      color: light-dark(#5b4500, #f6e5ae);
+      color: light-dark(#5b4500, var(--o-aviso));
     }
 
     &.silver {
-      background: light-dark(#d3d8dd, #40474e);
-      color: light-dark(#3a3f44, #c7c7c7);
+      background: light-dark(#d3d8dd, var(--o-realce));
+      color: light-dark(#3a3f44, var(--o-texto-2));
     }
 
     &.bronze {
       background: #e7b486;
-      color: light-dark(#5e3a1c, #e6c6ab);
+      color: light-dark(#5e3a1c, var(--o-aviso));
     }
   }
 
@@ -99,11 +99,11 @@
     overflow: hidden;
 
     ::ng-deep a {
-      color: light-dark(#2a2a2a, #d4d4d4);
+      color: light-dark(#2a2a2a, var(--o-texto));
       text-decoration: none;
 
       &:hover {
-        color: light-dark(#006595, #8ed2f2);
+        color: light-dark(#006595, var(--o-marca-texto));
         text-decoration: underline;
       }
     }
@@ -116,8 +116,8 @@
     gap: 3px;
     font-size: 11px;
     font-weight: 700;
-    color: light-dark(#006595, #8ed2f2);
-    background: light-dark(#eaf6fc, #1b3948);
+    color: light-dark(#006595, var(--o-marca-texto));
+    background: light-dark(#eaf6fc, var(--o-info-fondo));
     padding: 2px 8px;
     border-radius: 10px;
 

@@ -1,16 +1,32 @@
 // Pie de página: buscador inferior, "Ir al cielo", enlaces y copyright.
 
+// Tres hojas apiladas bajo el buscador, cada una 2px más angosta por lado, y una línea de sombra.
+// Cada hoja son dos capas: el borde y, encima, el relleno 1px más angosto.
+$hoja-borde: light-dark(#ccc, var(--o-borde-fuerte));
+$hoja-relleno: light-dark(#f8f8f8, var(--o-superficie));
+
+@function capa($color, $sangria, $alto, $abajo) {
+  @return linear-gradient($color, $color) center bottom $abajo / calc(100% - #{$sangria}) $alto no-repeat;
+}
+
 .seccion {
-  background: url('/assets/images/final.png') left bottom no-repeat;
+  background:
+    capa($hoja-relleno, 2px, 2px, 8px),
+    capa($hoja-borde, 0px, 3px, 7px),
+    capa($hoja-relleno, 6px, 2px, 5px),
+    capa($hoja-borde, 4px, 3px, 4px),
+    capa($hoja-relleno, 10px, 2px, 2px),
+    capa($hoja-borde, 8px, 3px, 1px),
+    capa(rgb(0 0 0 / 9%), 8px, 1px, 0px);
   padding-bottom: 10px;
 }
 
 .inpie {
   padding: 10px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   height: 50px;
   border: solid;
-  border-color: rgb(255 255 255 / 0%) light-dark(#ccc, #4e575f) light-dark(#ccc, #4e575f);
+  border-color: rgb(255 255 255 / 0%) light-dark(#ccc, var(--o-borde-fuerte)) light-dark(#ccc, var(--o-borde-fuerte));
   border-width: 1px 1px 0;
 }
 
@@ -18,12 +34,12 @@
   margin: 0;
   padding: 0 8px;
   width: 240px;
-  border: 1px solid light-dark(#CCC, #4e575f);
+  border: 1px solid light-dark(#CCC, var(--o-borde-fuerte));
   border-radius: 30px;
 }
 
 input.bbcuerpo {
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   padding: 5px;
   border: 0;
   width: 195px;
@@ -32,20 +48,27 @@ input.bbcuerpo {
   line-height: 1;
 }
 
-input.bbboton {
+.bbboton {
   float: right;
-  padding: 0;
+  padding: 8px 0 6px; // el ícono de 14px, a 8px del borde superior
   margin: 0;
-  background: url('/assets/images/magn.gif') center 8px no-repeat light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
+  color: light-dark(#555, var(--o-texto-2));
   width: 24px; // mínimo táctil (WCAG 2.5.8)
   height: 28px;
   border: 0;
   border-radius: 22px;
+  font-size: 14px;
+  line-height: 14px;
+
+  .ti {
+    display: block;
+  }
 }
 
 .footer {
   padding: 12px 0;
-  background: light-dark(#FFF, #1e2124);
+  background: light-dark(#FFF, var(--o-superficie));
   margin: 10px auto;
 
   & a {
@@ -55,10 +78,10 @@ input.bbboton {
 }
 
 .copyright {
-  color: light-dark(#979797, #939393);
+  color: light-dark(#979797, var(--o-texto-3));
 
   & a {
-    color: light-dark(#979797, #939393);
+    color: light-dark(#979797, var(--o-texto-3));
   }
 }
 
@@ -77,14 +100,14 @@ input.bbboton {
 }
 
 input.buscador {
-  background: light-dark(#FFF, #1e2124) !important;
+  background: light-dark(#FFF, var(--o-superficie)) !important;
   display: block;
   padding: 8px;
   width: 360px;
-  border-right: solid 1px light-dark(#c6c6c6, #525b64);
-  border-left: solid 1px light-dark(#c6c6c6, #525b64);
-  border-top: solid 1px light-dark(#cecece, #4d555e);
-  border-bottom: solid 1px light-dark(#a4a4a4, #67737e);
+  border-right: solid 1px light-dark(#c6c6c6, var(--o-borde-fuerte));
+  border-left: solid 1px light-dark(#c6c6c6, var(--o-borde-fuerte));
+  border-top: solid 1px light-dark(#cecece, var(--o-borde-fuerte));
+  border-bottom: solid 1px light-dark(#a4a4a4, var(--o-borde-fuerte));
   box-shadow: 0 1px 1px #d3d3d3;
   font-size: 13px;
   font-family: Helvetica, Arial;
@@ -98,8 +121,8 @@ input.buscador:focus {
 }
 
 a.ircielo {
-  color: light-dark(#6b6b6b, #adadad) !important;
-  border-bottom: 1px dotted light-dark(#999, #6e7a87);
+  color: light-dark(#6b6b6b, var(--o-texto-2)) !important;
+  border-bottom: 1px dotted light-dark(#999, var(--o-borde-fuerte));
   float: right;
   text-decoration: none;
   margin: 7px 0;

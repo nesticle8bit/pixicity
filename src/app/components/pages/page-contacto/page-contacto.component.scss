@@ -11,19 +11,19 @@
 
 .contacto-card {
     padding: 18px;
-    border: 1px solid light-dark(#e6eaee, #35424e);
+    border: 1px solid light-dark(#e6eaee, var(--o-borde));
     border-radius: 12px;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     font-size: 0.95rem;
     line-height: 1.55;
-    color: light-dark(#3a4650, #bac5cd);
+    color: light-dark(#3a4650, var(--o-texto-2));
 
     p {
         margin: 0;
     }
 
     a {
-        color: light-dark(#006595, #8ed2f2);
+        color: light-dark(#006595, var(--o-marca-texto));
         font-weight: 600;
     }
 
@@ -34,15 +34,15 @@
         margin: 0 0 12px;
         font-size: 1.05rem;
         font-weight: 700;
-        color: light-dark(#1f2a33, #cad6df);
+        color: light-dark(#1f2a33, var(--o-texto));
     }
 
     &--aviso {
-        border-color: light-dark(#f3d9a4, #7e6430);
-        background: light-dark(#fffaf0, #423519);
+        border-color: light-dark(#f3d9a4, var(--o-aviso));
+        background: light-dark(#fffaf0, var(--o-aviso-fondo));
 
         .contacto-card__titulo i {
-            color: light-dark(#c27c0e, #efbd6f);
+            color: light-dark(#c27c0e, var(--o-aviso));
         }
     }
 }
@@ -68,14 +68,14 @@
         width: 36px;
         height: 36px;
         border-radius: 10px;
-        background: light-dark(#eef6fb, #1a3546);
-        color: light-dark(#006595, #8ed2f2);
+        background: light-dark(#eef6fb, var(--o-info-fondo));
+        color: light-dark(#006595, var(--o-marca-texto));
         font-size: 1.15rem;
     }
 
     strong {
         display: block;
-        color: light-dark(#1f2a33, #cad6df);
+        color: light-dark(#1f2a33, var(--o-texto));
     }
 }
 
@@ -97,7 +97,7 @@
 
         &:hover,
         &:focus-visible {
-            background: light-dark(#f3f6f8, #23323c);
+            background: light-dark(#f3f6f8, var(--o-realce));
         }
     }
 }
@@ -106,9 +106,9 @@
     display: flex;
     gap: 8px;
     padding-top: 12px;
-    border-top: 1px solid light-dark(#eef1f3, #333f48);
+    border-top: 1px solid light-dark(#eef1f3, var(--o-borde));
     font-size: 0.85rem;
-    color: light-dark(#6b7782, #a6a6a6);
+    color: light-dark(#6b7782, var(--o-texto-2));
 }
 
 @media (max-width: 575.98px) {

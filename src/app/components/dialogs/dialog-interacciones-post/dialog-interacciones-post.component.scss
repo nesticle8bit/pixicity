@@ -6,7 +6,7 @@
 
 .dip-total {
   font-weight: 500;
-  color: light-dark(#5f6b75, #aeaeae);
+  color: light-dark(#5f6b75, var(--o-texto-2));
 }
 
 .dip-lista {
@@ -37,7 +37,7 @@
 
   &:hover .dip-nombre,
   &:focus-visible .dip-nombre {
-    color: light-dark(#005a85, #97d6f3);
+    color: light-dark(#005a85, var(--o-marca-texto));
     text-decoration: underline;
   }
 
@@ -57,13 +57,13 @@
   flex-shrink: 0;
   align-items: center;
   gap: 10px;
-  color: light-dark(#5f6b75, #aeaeae);
+  color: light-dark(#5f6b75, var(--o-texto-2));
 }
 
 .dip-vacio {
   padding: 16px 0;
   text-align: center;
-  color: light-dark(#5f6b75, #aeaeae);
+  color: light-dark(#5f6b75, var(--o-texto-2));
 }
 
 .dip-mas {

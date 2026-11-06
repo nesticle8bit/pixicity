@@ -2,13 +2,13 @@
 
 .cp-bar__comunidad {
   font-size: 13px;
-  color: light-dark(#666, #b0b0b0);
+  color: light-dark(#666, var(--o-texto-2));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
   a {
-    color: light-dark(#006595, #8ed2f2);
+    color: light-dark(#006595, var(--o-marca-texto));
     font-weight: 700;
   }
 }
@@ -24,15 +24,15 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  color: light-dark(#333, #cfcfcf);
+  color: light-dark(#333, var(--o-texto));
   text-decoration: none;
 
   strong {
-    color: light-dark(#006595, #8ed2f2);
+    color: light-dark(#006595, var(--o-marca-texto));
   }
 
   small {
-    color: light-dark(#888, #9c9c9c);
+    color: light-dark(#888, var(--o-texto-3));
     font-size: 12px;
   }
 

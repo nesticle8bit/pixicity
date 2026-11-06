@@ -149,7 +149,7 @@
   font-size: 12.5px;
 }
 
-.pf-banner-form__ayuda--error { color: light-dark(#b3261e, #f08a84); }
+.pf-banner-form__ayuda--error { color: light-dark(#b3261e, var(--o-error)); }
 
 .pf-hero__cuerpo {
   display: flex;
@@ -227,7 +227,7 @@
   padding: 1px 10px 1px 6px;
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--rango) 35%, transparent);
-  background: color-mix(in srgb, var(--rango) 10%, light-dark(#fff, #1e2124));
+  background: color-mix(in srgb, var(--rango) 10%, light-dark(#fff, var(--o-superficie)));
   color: var(--rango);
   font-size: 0.78rem;
   font-weight: 700;
@@ -241,7 +241,7 @@
 // "Te sigue": la píldora del rango en verde. El texto un poco más oscuro/claro que el borde para que se lea (4.5:1).
 .pf-te-sigue {
   --rango: #16a34a;
-  color: light-dark(#15803d, #6ee7a0);
+  color: light-dark(#15803d, var(--o-ok));
 
   i { font-size: 0.9rem; }
 }
@@ -316,13 +316,13 @@
   font-size: 1.1rem;
   cursor: pointer;
 
-  &:hover { color: light-dark(#b3261e, #e87b75); border-color: light-dark(#e4b6b2, #7f3630); background: light-dark(#fdf2f1, #431d19); }
+  &:hover { color: light-dark(#b3261e, var(--o-error)); border-color: light-dark(#e4b6b2, var(--o-error)); background: light-dark(#fdf2f1, var(--o-error-fondo)); }
   &:focus-visible { outline: 2px solid p.$marca; outline-offset: 2px; }
 
   &--activo {
-    color: light-dark(#b3261e, #e87b75);
-    border-color: light-dark(#e4b6b2, #7f3630);
-    background: light-dark(#fdf2f1, #431d19);
+    color: light-dark(#b3261e, var(--o-error));
+    border-color: light-dark(#e4b6b2, var(--o-error));
+    background: light-dark(#fdf2f1, var(--o-error-fondo));
   }
 }
 
@@ -402,7 +402,7 @@
   gap: 8px 12px;
   padding: 10px 20px;
   border-top: 1px dashed p.$borde;
-  background: light-dark(#fffaf0, #423519);
+  background: light-dark(#fffaf0, var(--o-aviso-fondo));
   font-size: 0.85rem;
 }
 
@@ -411,7 +411,7 @@
   align-items: center;
   gap: 4px;
   font-weight: 700;
-  color: light-dark(#8a5a00, #f3d294);
+  color: light-dark(#8a5a00, var(--o-aviso));
 }
 
 //  Pestañas

@@ -25,8 +25,8 @@
   margin-left: 6px;
   padding: 0 7px;
   border-radius: 999px;
-  background: light-dark(#e8f3f9, #1c3a4b);
-  color: light-dark(#006595, #8ed2f2);
+  background: light-dark(#e8f3f9, var(--o-info-fondo));
+  color: light-dark(#006595, var(--o-marca-texto));
   font-size: 11px;
   font-weight: 700;
   line-height: 18px;
@@ -34,7 +34,7 @@
   i { font-size: 12px; }
 }
 
-.sc-action--eliminar:hover:not(:disabled) { color: light-dark(#c62828, #e16b6b); }
+.sc-action--eliminar:hover:not(:disabled) { color: light-dark(#c62828, var(--o-error)); }
 
 // Menú "Compartir": los botones de redes en fila
 .sc-compartir { padding: 6px 12px; }
@@ -46,9 +46,9 @@
   gap: 8px;
   margin: 0 0 12px;
   padding: 10px 14px;
-  border: 1px dashed light-dark(#c9d6de, #3a4650);
+  border: 1px dashed light-dark(#c9d6de, var(--o-borde));
   border-radius: 10px;
-  color: light-dark(#4a5a66, #a9b6bf);
+  color: light-dark(#4a5a66, var(--o-texto-2));
   font-size: 13.5px;
 
   span { flex: 1; }
@@ -59,12 +59,12 @@
   padding: 0 12px;
   border: 0;
   border-radius: 999px;
-  background: light-dark(#e8f3f9, #1c3a4b);
-  color: light-dark(#005a85, #8ed2f2);
+  background: light-dark(#e8f3f9, var(--o-info-fondo));
+  color: light-dark(#005a85, var(--o-marca-texto));
   font-weight: 700;
   cursor: pointer;
 
-  &:hover:not(:disabled) { background: light-dark(#d6eaf5, #24485c); }
+  &:hover:not(:disabled) { background: light-dark(#d6eaf5, var(--o-info-fondo)); }
 }
 
 // Doble toque = me gusta: el pulgar aparece grande en el centro de la burbuja y se desvanece.
@@ -77,7 +77,7 @@
   pointer-events: none;
 
   i {
-    color: light-dark(#0b6ea5, #8ed2f2);
+    color: light-dark(#0b6ea5, var(--o-marca-texto));
     font-size: 4.5rem;
     filter: drop-shadow(0 4px 12px rgb(0 0 0 / 30%));
     animation: sc-doble-toque .7s ease-out forwards;

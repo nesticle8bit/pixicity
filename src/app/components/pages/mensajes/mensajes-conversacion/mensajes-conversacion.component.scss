@@ -9,9 +9,9 @@ img {
     gap: .75rem;
     padding: .7rem .9rem;
     margin-bottom: .8rem;
-    border: 1px solid light-dark(#e3e9ed, #354652);
+    border: 1px solid light-dark(#e3e9ed, var(--o-borde));
     border-radius: 14px;
-    background: linear-gradient(135deg, light-dark(#f4f9fc, #1b2a33) 0%, light-dark(#fff, #1e2124) 70%);
+    background: linear-gradient(135deg, light-dark(#f4f9fc, var(--o-info-fondo)) 0%, light-dark(#fff, var(--o-superficie)) 70%);
 
     &__volver {
         display: grid;
@@ -21,13 +21,13 @@ img {
         height: 34px;
         border-radius: 50%;
         font-size: 1.1rem;
-        color: light-dark(#5f6b75, #aeaeae);
+        color: light-dark(#5f6b75, var(--o-texto-2));
         text-decoration: none;
 
         &:hover,
         &:focus-visible {
-            background: light-dark(#e6f1f7, #1d3c4d);
-            color: light-dark(#005a85, #97d6f3);
+            background: light-dark(#e6f1f7, var(--o-info-fondo));
+            color: light-dark(#005a85, var(--o-marca-texto));
         }
     }
 
@@ -55,7 +55,7 @@ img {
         bottom: 0;
         width: 13px;
         height: 13px;
-        border: 2px solid light-dark(#fff, #1e2124);
+        border: 2px solid light-dark(#fff, var(--o-borde-suave));
         border-radius: 50%;
         background: #2ecc71;
     }
@@ -80,11 +80,11 @@ img {
     &__nombre {
         font-size: 1rem;
         font-weight: 800;
-        color: light-dark(#1f2a33, #e2e8ec);
+        color: light-dark(#1f2a33, var(--o-texto));
         text-decoration: none;
 
         &:hover {
-            color: light-dark(#005a85, #97d6f3);
+            color: light-dark(#005a85, var(--o-marca-texto));
             text-decoration: underline;
         }
     }
@@ -95,7 +95,7 @@ img {
         gap: 4px;
         padding: 1px 8px;
         border-radius: 999px;
-        background: light-dark(#eef2f5, #253440);
+        background: light-dark(#eef2f5, var(--o-realce));
         font-size: .72rem;
         font-weight: 700;
     }
@@ -107,7 +107,7 @@ img {
         gap: 2px 10px;
         margin-top: 2px;
         font-size: .76rem;
-        color: light-dark(#5f6b75, #aeaeae);
+        color: light-dark(#5f6b75, var(--o-texto-2));
     }
 
     &__estado-texto {
@@ -125,7 +125,7 @@ img {
 
         &.is-en-linea {
             font-weight: 700;
-            color: light-dark(#18864a, #5fe39a);
+            color: light-dark(#18864a, var(--o-ok));
 
             &::before {
                 background: #2ecc71;
@@ -145,7 +145,7 @@ img {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        color: light-dark(#5f6b75, #aeaeae);
+        color: light-dark(#5f6b75, var(--o-texto-2));
         font-size: .76rem;
     }
 
@@ -178,12 +178,12 @@ img {
     align-self: center;
     border: 0;
     background: transparent;
-    color: light-dark(#0d6efd, #518fec);
+    color: light-dark(#0d6efd, var(--o-marca-texto));
     font-size: .75rem;
     cursor: pointer;
 
     &:disabled {
-        color: light-dark(#888, #9c9c9c);
+        color: light-dark(#888, var(--o-texto-3));
         cursor: default;
     }
 }
@@ -212,13 +212,13 @@ img {
     display: flex;
     flex-direction: column;
     gap: .6rem;
-    background: light-dark(#f7f8fa, #232a37);
+    background: light-dark(#f7f8fa, var(--o-elevada));
 }
 
 .chat-day {
     text-align: center;
     font-size: .72rem;
-    color: light-dark(#888, #9c9c9c);
+    color: light-dark(#888, var(--o-texto-3));
     margin: .4rem 0;
 }
 
@@ -250,8 +250,8 @@ img {
         height: 28px;
         margin-top: -14px;
         border-radius: 50%;
-        background: light-dark(#e6f1f7, #1d3c4d);
-        color: light-dark(#005a85, #97d6f3);
+        background: light-dark(#e6f1f7, var(--o-info-fondo));
+        color: light-dark(#005a85, var(--o-marca-texto));
         font-size: 1rem;
         opacity: var(--deslizar, 0);
         transform: scale(calc(.6 + var(--deslizar, 0) * .4));
@@ -281,9 +281,9 @@ img {
     padding: 0;
     border: 0;
     border-radius: 50%;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     box-shadow: 0 1px 3px rgba(0, 0, 0, .18);
-    color: light-dark(#5f6b75, #aeaeae);
+    color: light-dark(#5f6b75, var(--o-texto-2));
     font-size: .95rem;
     opacity: 0;
     cursor: pointer;
@@ -295,7 +295,7 @@ img {
     }
 
     &:hover {
-        color: light-dark(#005a85, #97d6f3);
+        color: light-dark(#005a85, var(--o-marca-texto));
     }
 }
 
@@ -320,7 +320,7 @@ img {
     margin: 0 0 6px;
     padding: 5px 8px;
     border: 0;
-    border-left: 3px solid light-dark(#7d5bd0, #b49af0);
+    border-left: 3px solid light-dark(#7d5bd0, var(--o-marca));
     border-radius: 6px;
     background: color-mix(in srgb, light-dark(#000, #fff) 6%, transparent);
     color: inherit;
@@ -330,7 +330,7 @@ img {
     cursor: pointer;
 
     &--mia {
-        border-left-color: light-dark(#006595, #1e99d3);
+        border-left-color: light-dark(#006595, var(--o-marca));
     }
 
     &:hover {
@@ -338,7 +338,7 @@ img {
     }
 
     &:focus-visible {
-        outline: 2px solid light-dark(#006595, #1e99d3);
+        outline: 2px solid light-dark(#006595, var(--o-marca));
         outline-offset: 1px;
     }
 
@@ -350,11 +350,11 @@ img {
     &__autor {
         display: block;
         font-size: 12px;
-        color: light-dark(#6a46c4, #c5b2f5);
+        color: light-dark(#6a46c4, var(--o-marca-texto));
     }
 
     &--mia &__autor {
-        color: light-dark(#005a85, #8ed2f2);
+        color: light-dark(#005a85, var(--o-marca-texto));
     }
 
     &__cuerpo {
@@ -362,7 +362,7 @@ img {
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        color: light-dark(#4f5b64, #b9c2c9);
+        color: light-dark(#4f5b64, var(--o-texto-2));
     }
 
     &__miniatura {
@@ -380,13 +380,13 @@ img {
     gap: 8px;
     margin: .8rem 0 -.4rem;
     padding: 6px 6px 6px 10px;
-    border: 1px solid light-dark(#dfe5ea, #3a4752);
+    border: 1px solid light-dark(#dfe5ea, var(--o-borde));
     border-radius: 14px;
-    background: light-dark(#f6f8fa, #262b30);
+    background: light-dark(#f6f8fa, var(--o-elevada));
 
     &__icono {
         flex: none;
-        color: light-dark(#005a85, #97d6f3);
+        color: light-dark(#005a85, var(--o-marca-texto));
         font-size: 1.1rem;
     }
 
@@ -404,15 +404,15 @@ img {
         border: 0;
         border-radius: 50%;
         background: transparent;
-        color: light-dark(#5f6b75, #aeaeae);
+        color: light-dark(#5f6b75, var(--o-texto-2));
         cursor: pointer;
 
         &:hover {
-            background: light-dark(#e9eef2, #333d45);
+            background: light-dark(#e9eef2, var(--o-realce));
         }
 
         &:focus-visible {
-            outline: 2px solid light-dark(#006595, #1e99d3);
+            outline: 2px solid light-dark(#006595, var(--o-marca));
         }
     }
 }
@@ -438,7 +438,7 @@ img {
 
     .chat-row.is-resaltado .chat-bubble {
         animation: none;
-        outline: 3px solid color-mix(in srgb, light-dark(#006595, #1e99d3) 45%, transparent);
+        outline: 3px solid color-mix(in srgb, light-dark(#006595, var(--o-marca)) 45%, transparent);
     }
 }
 
@@ -446,14 +446,14 @@ img {
     max-width: 70%;
     padding: .5rem .8rem;
     border-radius: 14px 14px 14px 4px;
-    background: light-dark(#fff, #1e2124);
-    border: 1px solid light-dark(#e3e3e3, #40474e);
+    background: light-dark(#fff, var(--o-superficie));
+    border: 1px solid light-dark(#e3e3e3, var(--o-borde));
     font-size: 14px;
     word-break: break-word;
 
     &--mine {
-        background: light-dark(#dcecff, #1e344e);
-        border-color: light-dark(#c4dcf8, #29486b);
+        background: light-dark(#dcecff, var(--o-info-fondo));
+        border-color: light-dark(#c4dcf8, var(--o-borde));
         border-radius: 14px 14px 4px 14px;
     }
 
@@ -486,7 +486,7 @@ img {
         right: 4px;
         border: 0;
         background: transparent;
-        color: light-dark(#6b6b6b, #adadad);
+        color: light-dark(#6b6b6b, var(--o-texto-2));
         font-size: .8rem;
         opacity: 0;
         cursor: pointer;
@@ -498,13 +498,13 @@ img {
         right: 22px;
         border: 0;
         background: transparent;
-        color: light-dark(#6b6b6b, #adadad);
+        color: light-dark(#6b6b6b, var(--o-texto-2));
         font-size: .8rem;
         opacity: 0;
         cursor: pointer;
 
         &:hover {
-            color: light-dark(#c0392b, #ff7b6b);
+            color: light-dark(#c0392b, var(--o-error));
         }
     }
 
@@ -519,7 +519,7 @@ img {
         display: block;
         text-align: right;
         font-size: .68rem;
-        color: light-dark(#888, #9c9c9c);
+        color: light-dark(#888, var(--o-texto-3));
         margin-top: 2px;
     }
 
@@ -529,7 +529,7 @@ img {
         vertical-align: middle;
 
         &--read {
-            color: light-dark(#0d6efd, #518fec);
+            color: light-dark(#0d6efd, var(--o-marca-texto));
         }
     }
 }
@@ -541,14 +541,14 @@ img {
     gap: 6px;
     margin: .8rem 0 0;
     padding: 6px 6px 6px 8px;
-    border: 1px solid light-dark(#dfe5ea, #3a4752);
+    border: 1px solid light-dark(#dfe5ea, var(--o-borde));
     border-radius: 24px;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     box-shadow: 0 1px 2px rgba(16, 24, 40, .05);
     transition: border-color .15s, box-shadow .15s;
 
     &:focus-within {
-        border-color: light-dark(#006595, #1e99d3);
+        border-color: light-dark(#006595, var(--o-marca));
         box-shadow: 0 0 0 3px color-mix(in srgb, light-dark(#006595, #1e99d3) 18%, transparent);
     }
 
@@ -569,18 +569,18 @@ img {
         border-radius: 50%;
         background: transparent;
         font-size: 1.3rem;
-        color: light-dark(#5d6b75, #aeb8c0);
+        color: light-dark(#5d6b75, var(--o-texto-2));
         cursor: pointer;
         transition: background .15s, color .15s;
 
         &:hover:not(:disabled),
         &.is-activo {
-            background: light-dark(#eef4f8, #26333c);
-            color: light-dark(#006595, #8ed2f2);
+            background: light-dark(#eef4f8, var(--o-realce));
+            color: light-dark(#006595, var(--o-marca-texto));
         }
 
         &:disabled { opacity: .4; cursor: default; }
-        &:focus-visible { outline: 2px solid light-dark(#006595, #1e99d3); outline-offset: 1px; }
+        &:focus-visible { outline: 2px solid light-dark(#006595, var(--o-marca)); outline-offset: 1px; }
     }
 
     &__campo {
@@ -597,7 +597,7 @@ img {
         line-height: 20px;
         resize: none;
 
-        &::placeholder { color: light-dark(#8a959d, #7f8a92); }
+        &::placeholder { color: light-dark(#8a959d, var(--o-texto-3)); }
     }
 
     &__enviar {
@@ -608,7 +608,7 @@ img {
         height: 38px;
         border: 0;
         border-radius: 50%;
-        background: light-dark(#006595, #1e99d3);
+        background: light-dark(#006595, var(--o-marca-solida));
         color: #fff;
         font-size: 1.15rem;
         cursor: pointer;
@@ -616,26 +616,26 @@ img {
 
         i { transform: translateX(-1px); }
 
-        &:hover:not(:disabled) { background: light-dark(#00527a, #3aa9de); }
+        &:hover:not(:disabled) { background: light-dark(#00527a, var(--o-marca-solida)); }
         &:active:not(:disabled) { transform: scale(.94); }
         &:disabled {
-            background: light-dark(#d5dde3, #34404a);
-            color: light-dark(#8a959d, #7f8a92);
+            background: light-dark(#d5dde3, var(--o-realce));
+            color: light-dark(#8a959d, var(--o-texto-3));
             cursor: default;
         }
-        &:focus-visible { outline: 2px solid light-dark(#006595, #1e99d3); outline-offset: 2px; }
+        &:focus-visible { outline: 2px solid light-dark(#006595, var(--o-marca)); outline-offset: 2px; }
     }
 
     &__ayuda {
         margin: 4px 0 1rem 16px;
         font-size: .72rem;
-        color: light-dark(#7a868e, #8f9aa2);
+        color: light-dark(#7a868e, var(--o-texto-3));
 
         kbd {
             padding: 0 4px;
-            border: 1px solid light-dark(#dfe5ea, #3a4752);
+            border: 1px solid light-dark(#dfe5ea, var(--o-borde));
             border-radius: 4px;
-            background: light-dark(#f6f8fa, #262b30);
+            background: light-dark(#f6f8fa, var(--o-elevada));
             color: inherit;
             font: inherit;
             font-size: .68rem;
@@ -665,23 +665,23 @@ img {
   place-items: center;
   width: 38px;
   height: 38px;
-  border: 1px solid light-dark(#e6eaee, #35424e);
+  border: 1px solid light-dark(#e6eaee, var(--o-borde));
   border-radius: 50%;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   font-size: 1.1rem;
-  color: light-dark(#5f6b75, #aeaeae);
+  color: light-dark(#5f6b75, var(--o-texto-2));
   text-decoration: none; // también es <a> ("Ver perfil")
   cursor: pointer;
 
   &:hover,
   &:focus-visible {
     border-color: #006595;
-    color: light-dark(#005a85, #97d6f3);
+    color: light-dark(#005a85, var(--o-marca-texto));
   }
 
   &.is-activa {
-    background: light-dark(#eef2f5, #253440);
-    color: light-dark(#1f2a33, #cad6df);
+    background: light-dark(#eef2f5, var(--o-realce));
+    color: light-dark(#1f2a33, var(--o-texto));
   }
 }
 
@@ -700,7 +700,7 @@ img {
     display: block;
     overflow: hidden;
     border-radius: 10px;
-    background: light-dark(#eef2f5, #253440);
+    background: light-dark(#eef2f5, var(--o-realce));
 
     img {
       display: block;
@@ -722,7 +722,7 @@ img {
   gap: 3px;
   margin: -2px 6px 6px;
   font-size: 0.75rem;
-  color: light-dark(#1e7a45, #99e6ba);
+  color: light-dark(#1e7a45, var(--o-ok));
 }
 
 /* --- Adjuntos antes de enviar --- */
@@ -739,7 +739,7 @@ img {
     width: 72px;
     height: 72px;
     overflow: hidden;
-    border: 1px solid light-dark(#e6eaee, #35424e);
+    border: 1px solid light-dark(#e6eaee, var(--o-borde));
     border-radius: 10px;
 
     img {
@@ -759,7 +759,7 @@ img {
     display: grid;
     place-items: center;
     font-size: 1.3rem;
-    color: light-dark(#1f2a33, #cad6df);
+    color: light-dark(#1f2a33, var(--o-texto));
 
     i {
       animation: chat-girar 1s linear infinite;
@@ -810,9 +810,9 @@ img {
     flex: none;
     margin: 0;
     border: 0;
-    border-bottom: 1px solid light-dark(#dde3e8, #394855);
+    border-bottom: 1px solid light-dark(#dde3e8, var(--o-borde));
     border-radius: 0;
-    background: light-dark(#f6f8fa, #202d3a);
+    background: light-dark(#f6f8fa, var(--o-elevada));
 
     // Volver a la lista: solo en celular (en escritorio la lista está al lado).
     &__volver {
@@ -833,7 +833,7 @@ img {
     height: auto;
     min-height: 0;
     padding: 1rem clamp(.5rem, 3vw, 2rem);
-    background-color: light-dark(#eef3f6, #1a222b);
+    background-color: light-dark(#eef3f6, var(--o-superficie));
     // Trama suave de puntos, como el fondo de los chats de WhatsApp.
     background-image: radial-gradient(light-dark(rgb(0 101 149 / 7%), rgb(255 255 255 / 4%)) 1px, transparent 1px);
     background-size: 18px 18px;

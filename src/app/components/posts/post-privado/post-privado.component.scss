@@ -1,7 +1,7 @@
 h1 {
     font-size: 1.4rem;
     font-weight: 400;
-    color: light-dark(#CE0101, #ef6f6f);
+    color: light-dark(#CE0101, var(--o-error));
     margin: 0 0 5px 0;
 }
 

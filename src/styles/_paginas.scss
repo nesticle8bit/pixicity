@@ -3,12 +3,12 @@
 .post {
   &-header {
     a {
-      color: light-dark(#666, #b0b0b0);
+      color: light-dark(#666, var(--o-texto-2));
     }
 
     &-list {
       font-weight: 400;
-      color: light-dark(#666, #b0b0b0);
+      color: light-dark(#666, var(--o-texto-2));
 
       & li {
         max-width: 180px;
@@ -25,15 +25,15 @@
       margin-left: 4px;
       padding: 2px 8px;
       border: none;
-      background: light-dark(#fff, #1e2124);
-      color: light-dark(#ababab, #878787);
+      background: light-dark(#fff, var(--o-superficie));
+      color: light-dark(#ababab, var(--o-texto-3));
       border-radius: 3px;
     }
   }
 }
 
 .mite {
-  border: solid light-dark(#ddd, #434b52);
+  border: solid light-dark(#ddd, var(--o-borde));
   border-width: 0 1px 1px;
   overflow: hidden;
   padding: 10px;
@@ -53,10 +53,10 @@
 }
 
 table.table-sm {
-  border: 1px solid light-dark(#ddd, #434b52);
+  border: 1px solid light-dark(#ddd, var(--o-borde));
 
   & thead tr th {
-    background: light-dark(#ebebeb, #32383d);
+    background: light-dark(#ebebeb, var(--o-realce));
     padding: 10px;
   }
 
@@ -65,18 +65,18 @@ table.table-sm {
   }
 
   &>tbody>tr:nth-of-type(odd) {
-    background: light-dark(#fff, #1e2124) !important;
+    background: light-dark(#fff, var(--o-superficie)) !important;
   }
 }
 
 .table>:not(:last-child)>:last-child>* {
-  border-bottom: 1px solid light-dark(#ddd, #434b52);
+  border-bottom: 1px solid light-dark(#ddd, var(--o-borde));
 }
 
 .lista-posts {
-  border-top: light-dark(#E0E0E0, #414950) 1px solid;
+  border-top: light-dark(#E0E0E0, var(--o-borde)) 1px solid;
   padding: 7px 0 7px 10px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
 }
 
 .post-privado {
@@ -89,10 +89,10 @@ table.table-sm {
   position: absolute;
   top: -2px;
   right: 0;
-  background: url('/assets/images/ui/searchboxy.gif') no-repeat 5px 5px light-dark(#FFF, #1e2124);
+  background: url('/assets/images/ui/searchboxy.gif') no-repeat 5px 5px light-dark(#FFF, var(--o-superficie));
   padding: 4px 4px 4px 23px;
   width: 165px;
-  border: solid 1px light-dark(#CCC, #4e575f);
+  border: solid 1px light-dark(#CCC, var(--o-borde-fuerte));
   font-size: 12px;
 }
 
@@ -108,12 +108,12 @@ table.table-sm {
 
 .row-deleted {
   opacity: .5;
-  color: light-dark(#525252, #bcbcbc);
+  color: light-dark(#525252, var(--o-texto-2));
 }
 
 .list-items {
   float: none !important;
-  border-bottom: 1px solid light-dark(#f1f1f1, #373d43);
+  border-bottom: 1px solid light-dark(#f1f1f1, var(--o-borde));
   padding: 2px 10px 6px 10px;
   background: none !important;
   font-size: .7rem;
@@ -122,12 +122,12 @@ table.table-sm {
 .form-container {
 
   &--footer {
-    background: light-dark(#e8e8e8, #343a40);
-    border-top: 1px solid light-dark(#d8d8d8, #464e56);
+    background: light-dark(#e8e8e8, var(--o-realce));
+    border-top: 1px solid light-dark(#d8d8d8, var(--o-borde-fuerte));
     padding: .5rem;
   }
 }
 
 .border-right {
-  border-right: 1px solid light-dark(#dadada, #454d55);
+  border-right: 1px solid light-dark(#dadada, var(--o-borde-fuerte));
 }

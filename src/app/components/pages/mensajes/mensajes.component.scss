@@ -84,8 +84,8 @@ $alto-panel: calc(100dvh - 190px);
   }
 
   &--peligro:hover:not(:disabled) {
-    background: light-dark(#fdecea, #4a2422);
-    color: light-dark(#b3261e, #f08a84);
+    background: light-dark(#fdecea, var(--o-error-fondo));
+    color: light-dark(#b3261e, var(--o-error));
   }
 }
 
@@ -191,7 +191,7 @@ $alto-panel: calc(100dvh - 190px);
     font-size: .9rem;
     color: p.$tenue;
 
-    i { font-size: 2rem; color: light-dark(#a9b6bf, #818181); }
+    i { font-size: 2rem; color: light-dark(#a9b6bf, var(--o-texto-3)); }
   }
 }
 
@@ -199,7 +199,7 @@ $alto-panel: calc(100dvh - 190px);
   position: relative;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid light-dark(#eef1f4, #2c3640);
+  border-bottom: 1px solid light-dark(#eef1f4, var(--o-borde-suave));
   transition: background .12s;
 
   &:hover { background: p.$fondo-suave; }
@@ -216,7 +216,7 @@ $alto-panel: calc(100dvh - 190px);
     }
   }
 
-  &.is-elegida { background: light-dark(#e8f0fe, #1b2b48); }
+  &.is-elegida { background: light-dark(#e8f0fe, var(--o-info-fondo)); }
 
   &__check { flex: none; margin-left: 4px; }
 
@@ -287,7 +287,7 @@ $alto-panel: calc(100dvh - 190px);
     i { font-size: .95rem; vertical-align: -2px; }
   }
 
-  &__estado.is-leido { color: light-dark(#0d6efd, #518fec); }
+  &__estado.is-leido { color: light-dark(#0d6efd, var(--o-marca-texto)); }
 
   &__silencio { flex: none; font-size: .9rem; color: p.$tenue; }
 

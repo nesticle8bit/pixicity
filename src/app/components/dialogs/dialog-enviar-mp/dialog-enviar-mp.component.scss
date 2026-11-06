@@ -1,7 +1,7 @@
-$marca: light-dark(#006595, #1e99d3);
-$texto: light-dark(#1f2a33, #cad6df);
-$suave: light-dark(#5f6b75, #aeaeae);
-$borde: light-dark(#e3e8ec, #374550);
+$marca: light-dark(#006595, var(--o-marca));
+$texto: light-dark(#1f2a33, var(--o-texto));
+$suave: light-dark(#5f6b75, var(--o-texto-2));
+$borde: light-dark(#e3e8ec, var(--o-borde));
 
 :host .NgxEditor__Wrapper {
   height: 230px;
@@ -31,7 +31,7 @@ $borde: light-dark(#e3e8ec, #374550);
   padding: 10px 12px;
   border: 1px solid $borde;
   border-radius: 12px;
-  background: light-dark(#f6fafc, #193341);
+  background: light-dark(#f6fafc, var(--o-info-fondo));
 
   &__etiqueta {
     font-size: 0.8rem;
@@ -84,7 +84,7 @@ $borde: light-dark(#e3e8ec, #374550);
   margin: 0;
   padding: 4px;
   list-style: none;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   border: 1px solid $borde;
   border-radius: 10px;
   box-shadow: 0 10px 24px rgba(16, 24, 40, 0.14);
@@ -100,7 +100,7 @@ $borde: light-dark(#e3e8ec, #374550);
     cursor: pointer;
 
     &.is-activa {
-      background: light-dark(#eef6fb, #1a3546);
+      background: light-dark(#eef6fb, var(--o-info-fondo));
     }
   }
 }
@@ -110,7 +110,7 @@ $borde: light-dark(#e3e8ec, #374550);
 }
 
 .mp-error {
-  color: light-dark(#b42318, #ec7c74);
+  color: light-dark(#b42318, var(--o-error));
 }
 
 .mp-captcha {
@@ -125,6 +125,6 @@ $borde: light-dark(#e3e8ec, #374550);
   margin: 0;
   padding: 10px 12px;
   border-radius: 8px;
-  background: light-dark(#fff1f0, #421c19);
-  color: light-dark(#b42318, #ec7c74);
+  background: light-dark(#fff1f0, var(--o-error-fondo));
+  color: light-dark(#b42318, var(--o-error));
 }

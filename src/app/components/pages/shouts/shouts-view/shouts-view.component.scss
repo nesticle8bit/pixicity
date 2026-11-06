@@ -11,7 +11,7 @@
     ::ng-deep img {
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid light-dark(#fff, #2e3338);
+      border: 2px solid light-dark(#fff, var(--o-borde-suave));
       box-shadow: 0 1px 4px rgba(16, 24, 40, 0.12);
     }
   }
@@ -22,8 +22,8 @@
   position: relative;
   flex: 1;
   min-width: 0;
-  background: light-dark(#fff, #1e2124);
-  border: 1px solid light-dark(#e9edf0, #34424c);
+  background: light-dark(#fff, var(--o-superficie));
+  border: 1px solid light-dark(#e9edf0, var(--o-borde));
   border-radius: 14px;
   padding: 14px 18px;
   box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
@@ -34,9 +34,9 @@
     top: 18px;
     width: 14px;
     height: 14px;
-    background: light-dark(#fff, #1e2124);
-    border-left: 1px solid light-dark(#e9edf0, #34424c);
-    border-bottom: 1px solid light-dark(#e9edf0, #34424c);
+    background: light-dark(#fff, var(--o-superficie));
+    border-left: 1px solid light-dark(#e9edf0, var(--o-borde));
+    border-bottom: 1px solid light-dark(#e9edf0, var(--o-borde));
     transform: rotate(45deg);
     border-radius: 0 0 0 4px;
   }
@@ -58,7 +58,7 @@
     gap: 8px;
     font-weight: 700;
     font-size: 0.95rem;
-    color: light-dark(#006595, #8ed2f2);
+    color: light-dark(#006595, var(--o-marca-texto));
     text-decoration: none;
 
     &:hover { text-decoration: underline; }
@@ -66,7 +66,7 @@
 
   &__time {
     font-size: 0.74rem;
-    color: light-dark(#9aa7b0, #8a8a8a);
+    color: light-dark(#9aa7b0, var(--o-texto-3));
     white-space: nowrap;
   }
 
@@ -74,7 +74,7 @@
     margin: 0;
     font-size: 1rem;
     line-height: 1.6;
-    color: light-dark(#1f2a33, #cad6df);
+    color: light-dark(#1f2a33, var(--o-texto));
     word-wrap: break-word;
     overflow-wrap: anywhere;
     white-space: pre-wrap;
@@ -87,7 +87,7 @@
     flex-wrap: wrap;
     margin-top: 12px;
     padding-top: 10px;
-    border-top: 1px solid light-dark(#eef2f4, #30414a);
+    border-top: 1px solid light-dark(#eef2f4, var(--o-borde));
   }
 }
 
@@ -97,7 +97,7 @@
   gap: 5px;
   font-size: 0.78rem;
   font-weight: 600;
-  color: light-dark(#8a97a0, #949494);
+  color: light-dark(#8a97a0, var(--o-texto-3));
   text-decoration: none;
   padding: 5px 9px;
   border: 0;
@@ -109,7 +109,7 @@
 
   i { font-size: 0.95rem; }
 
-  &:hover { background: light-dark(#eef5f9, #1b3747); color: light-dark(#006595, #8ed2f2); }
+  &:hover { background: light-dark(#eef5f9, var(--o-info-fondo)); color: light-dark(#006595, #8ed2f2); }
 
   &:focus-visible {
     outline: 2px solid #006595;
@@ -119,35 +119,35 @@
   &:disabled { cursor: progress; }
 
   &--favorito.is-activo {
-    color: light-dark(#b7791f, #e7b873);
+    color: light-dark(#b7791f, var(--o-aviso));
 
-    &:hover { background: light-dark(#fdf6e7, #493a1c); color: light-dark(#975a16, #edbc85); }
+    &:hover { background: light-dark(#fdf6e7, var(--o-aviso-fondo)); color: light-dark(#975a16, #edbc85); }
   }
 
   &--reshout.is-activo {
-    color: light-dark(#1e7f4f, #96e6be);
+    color: light-dark(#1e7f4f, var(--o-ok));
 
-    &:hover { background: light-dark(#e8f5ee, #204a33); color: light-dark(#1e7f4f, #96e6be); }
+    &:hover { background: light-dark(#e8f5ee, var(--o-ok-fondo)); color: light-dark(#1e7f4f, #96e6be); }
   }
 
   &--reshout:disabled { opacity: 0.55; cursor: default; }
 
   &--megusta.is-activo {
-    color: light-dark(#006595, #8ed2f2);
+    color: light-dark(#006595, var(--o-marca-texto));
 
-    &:hover { background: light-dark(#e6f1f7, #1d3c4d); }
+    &:hover { background: light-dark(#e6f1f7, var(--o-info-fondo)); }
   }
 
   &--nomegusta.is-activo {
-    color: light-dark(#b42318, #ec7c74);
+    color: light-dark(#b42318, var(--o-error));
 
-    &:hover { background: light-dark(#fdecea, #4a2522); }
+    &:hover { background: light-dark(#fdecea, var(--o-error-fondo)); }
   }
 
   &.is-activo i { animation: sv-pop 0.25s ease-out; }
 
   &--open {
-    color: light-dark(#006a9e, #8ad0f2);
+    color: light-dark(#006a9e, var(--o-marca-texto));
     margin-right: auto;
 
     &:hover { background: rgba(0, 133, 196, 0.1); }
@@ -172,7 +172,7 @@
   &__vacio {
     margin: 8px 0 0;
     font-size: 0.82rem;
-    color: light-dark(#5d6b75, #aeaeae);
+    color: light-dark(#5d6b75, var(--o-texto-2));
   }
 }
 
@@ -240,7 +240,7 @@
 
     // Sin hover en táctil: el fondo quedaba pegado después de tocar.
     &:hover { background: none; }
-    &:active { background: light-dark(#eef5f9, #1b3747); }
+    &:active { background: light-dark(#eef5f9, var(--o-info-fondo)); }
   }
 
 }
@@ -262,11 +262,11 @@
   flex-direction: column;
   gap: 6px;
   padding: 8px 16px 10px;
-  border-top: 1px solid light-dark(#e6eaee, #35424e);
+  border-top: 1px solid light-dark(#e6eaee, var(--o-borde));
 }
 
 .sv-compartir__label {
-  color: light-dark(#666, #aaa);
+  color: light-dark(#666, var(--o-texto-2));
   font-size: 12px;
   font-weight: 600;
 }

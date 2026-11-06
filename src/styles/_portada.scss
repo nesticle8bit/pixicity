@@ -2,8 +2,8 @@
 @use 'variables' as *;
 
 .boxposts {
-  background: light-dark(#fff, #1e2124);
-  border: 1px solid light-dark(#e5e5e5, #3e454c);
+  background: light-dark(#fff, var(--o-superficie));
+  border: 1px solid light-dark(#e5e5e5, var(--o-borde));
   border-radius: 3px;
   overflow: hidden;
 
@@ -12,13 +12,13 @@
   }
 
   & .titular {
-    background: light-dark(#f5f5f5, #2b3035);
-    border-bottom: 1px solid light-dark(#e5e5e5, #3e454c);
+    background: light-dark(#f5f5f5, var(--o-realce));
+    border-bottom: 1px solid light-dark(#e5e5e5, var(--o-borde));
     padding: 8px 10px;
     overflow: hidden;
 
     & h2 {
-      color: light-dark(#555, #bababa);
+      color: light-dark(#555, var(--o-texto-2));
       font-size: 13px;
       font-weight: 700;
       margin: 0;
@@ -28,11 +28,11 @@
   }
 
   & .paginar {
-    background: light-dark(#f5f5f5, #2b3035);
-    border-top: 1px solid light-dark(#e5e5e5, #3e454c);
+    background: light-dark(#f5f5f5, var(--o-realce));
+    border-top: 1px solid light-dark(#e5e5e5, var(--o-borde));
     padding: 6px 10px;
     font-size: 11px;
-    color: light-dark(#666, #b0b0b0);
+    color: light-dark(#666, var(--o-texto-2));
     text-align: center;
 
     & a {
@@ -63,9 +63,9 @@
 .lin {
   overflow: hidden;
   padding: 4px 0;
-  border-bottom: 1px dotted light-dark(#e5e5e5, #3e454c);
+  border-bottom: 1px dotted light-dark(#e5e5e5, var(--o-borde));
   font-size: 12px;
-  color: light-dark(#555, #bababa);
+  color: light-dark(#555, var(--o-texto-2));
 
   &:last-child {
     border-bottom: none;
@@ -81,8 +81,8 @@
    ============================================ */
 
 .boxposts .main-title {
-  background: light-dark(#f5f5f5, #2b3035) !important;
-  border-bottom: 1px solid light-dark(#e5e5e5, #3e454c);
+  background: light-dark(#f5f5f5, var(--o-realce)) !important;
+  border-bottom: 1px solid light-dark(#e5e5e5, var(--o-borde));
   padding: 8px 10px !important;
   height: auto !important;
   margin-bottom: 0 !important;
@@ -93,7 +93,7 @@
     padding: 0 !important;
     font-size: 13px !important;
     font-weight: 700 !important;
-    color: light-dark(#555, #bababa) !important;
+    color: light-dark(#555, var(--o-texto-2)) !important;
     display: inline;
   }
 }
@@ -107,8 +107,8 @@
     display: inline-block;
     margin: 2px 3px;
     padding: 2px 8px;
-    background: light-dark(#f0f0f0, #2f3439);
-    border: 1px solid light-dark(#ddd, #434b52);
+    background: light-dark(#f0f0f0, var(--o-realce));
+    border: 1px solid light-dark(#ddd, var(--o-borde));
     border-radius: 3px;
     color: $link-color;
     font-size: 11px;
@@ -116,7 +116,7 @@
     text-decoration: none;
 
     &:hover {
-      background: light-dark(#e0f0fa, #1e3c4f);
+      background: light-dark(#e0f0fa, var(--o-info-fondo));
       border-color: $link-color;
     }
   }
@@ -125,11 +125,11 @@
 /* home last-posts list: V5 lipost style */
 .lista-posts {
   padding: 5px 0 5px 6px !important;
-  background: light-dark(#f5f5f5, #2b3035);
-  border-top: light-dark(#e0e0e0, #414950) 1px solid !important;
+  background: light-dark(#f5f5f5, var(--o-realce));
+  border-top: light-dark(#e0e0e0, var(--o-borde)) 1px solid !important;
 
   &:nth-child(2n+1) {
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
   }
 
   & a {

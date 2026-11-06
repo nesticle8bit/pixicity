@@ -1,9 +1,9 @@
-$marca: light-dark(#006595, #1e99d3);
-$texto: light-dark(#26323a, #c7d2da);
-$tenue: light-dark(#5d6b75, #aeaeae);
-$borde: light-dark(#e3e9ed, #354652);
-$fondo-suave: light-dark(#f4f8fa, #1d343f);
-$favorito: light-dark(#b7791f, #e1a650);
+$marca: light-dark(#006595, var(--o-marca));
+$texto: light-dark(#26323a, var(--o-texto));
+$tenue: light-dark(#5d6b75, var(--o-texto-2));
+$borde: light-dark(#e3e9ed, var(--o-borde));
+$fondo-suave: light-dark(#f4f8fa, var(--o-info-fondo));
+$favorito: light-dark(#b7791f, var(--o-aviso));
 
 .fav {
   padding-top: 12px;
@@ -72,7 +72,7 @@ $favorito: light-dark(#b7791f, #e1a650);
   min-width: 20px;
   padding: 1px 6px;
   border-radius: 10px;
-  background: light-dark(#e8eef2, #273945);
+  background: light-dark(#e8eef2, var(--o-realce));
   font-size: 0.72rem;
   text-align: center;
   color: $tenue;
@@ -110,7 +110,7 @@ $favorito: light-dark(#b7791f, #e1a650);
     border: 1px solid $borde;
     border-radius: 8px;
     font-size: 0.88rem;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     transition: border-color 0.12s ease, box-shadow 0.12s ease;
 
     &:focus {
@@ -155,7 +155,7 @@ $favorito: light-dark(#b7791f, #e1a650);
   padding: 4px 10px;
   border: 1px solid $borde;
   border-radius: 999px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   font: inherit;
   font-size: 0.8rem;
   color: $texto;
@@ -195,7 +195,7 @@ $favorito: light-dark(#b7791f, #e1a650);
   border: 1px solid $borde;
   border-radius: 10px;
   overflow: hidden;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   transition: opacity 0.15s ease;
 
   &.is-cargando {
@@ -275,7 +275,7 @@ $favorito: light-dark(#b7791f, #e1a650);
 .fav-item__tipo {
   padding: 0 6px;
   border-radius: 4px;
-  background: light-dark(#e8eef2, #273945);
+  background: light-dark(#e8eef2, var(--o-realce));
   font-size: 0.7rem;
   font-weight: 600;
 }
@@ -321,9 +321,9 @@ $favorito: light-dark(#b7791f, #e1a650);
 
 .fav-item__quitar {
   width: 32px;
-  color: light-dark(#9aa7b0, #8a8a8a);
+  color: light-dark(#9aa7b0, var(--o-texto-3));
 
-  &:hover { background: light-dark(#fdecec, #461a1a); color: light-dark(#c62828, #e16b6b); }
+  &:hover { background: light-dark(#fdecec, var(--o-error-fondo)); color: light-dark(#c62828, #e16b6b); }
 }
 
 .fav-item__deshacer {

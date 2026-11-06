@@ -30,14 +30,14 @@
   height: 56px;
   margin-bottom: 10px;
   border-radius: 50%;
-  background: light-dark(#e8f3f9, #1c3a4b);
-  color: light-dark(#006595, #8ed2f2);
+  background: light-dark(#e8f3f9, var(--o-info-fondo));
+  color: light-dark(#006595, var(--o-marca-texto));
   font-size: 28px;
 }
 
 .login-2fa__titulo {
   margin: 0 0 6px;
-  color: light-dark(#333, #cfcfcf);
+  color: light-dark(#333, var(--o-texto));
   font-size: 20px;
   font-weight: 700;
 }
@@ -45,7 +45,7 @@
 .login-2fa__texto {
   margin: 0 0 16px;
   padding: 0;
-  color: light-dark(#555, #b5b5b5);
+  color: light-dark(#555, var(--o-texto-2));
   font-size: 15px;
   line-height: 1.45;
 }
@@ -62,14 +62,14 @@
   font-variant-numeric: tabular-nums;
 
   &::placeholder {
-    color: light-dark(#cfcfcf, #4a4f55);
+    color: light-dark(#cfcfcf, var(--o-texto-4));
   }
 }
 
 .login-2fa__ayuda {
   margin: 10px 0 16px;
   padding: 0;
-  color: light-dark(#777, #9a9a9a);
+  color: light-dark(#777, var(--o-texto-3));
   font-size: 13px;
   line-height: 1.4;
 }
@@ -83,7 +83,7 @@
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: light-dark(#006595, #8ed2f2);
+  color: light-dark(#006595, var(--o-marca-texto));
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;

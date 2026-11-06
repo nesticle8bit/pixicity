@@ -18,13 +18,13 @@
   }
 
   & .avatar-top h3 {
-    color: light-dark(#4ea1f0, #51a0ec);
+    color: light-dark(#4ea1f0, var(--o-marca-texto));
     font-size: 14px;
     margin: 0;
   }
 
   & .avatar-top p {
-    color: light-dark(#545454, #bbbbbb);
+    color: light-dark(#545454, var(--o-texto-2));
     margin: 0;
     font-size: 12px;
     line-height: 15px;
@@ -51,10 +51,10 @@
 
   & a.gris,
   #ised a.gris {
-    background: light-dark(#c8c8c8, #4b545c);
+    background: light-dark(#c8c8c8, var(--o-realce));
 
     &:hover {
-      background: light-dark(#bebebe, #535c65);
+      background: light-dark(#bebebe, var(--o-realce));
     }
   }
 
@@ -70,13 +70,13 @@
 
 .bg {
   &-white {
-    background-color: light-dark(#fff, #1e2124);
+    background-color: light-dark(#fff, var(--o-superficie));
   }
 }
 
 .pixicity-popover.info {
   background: url('../assets/images/y.png') repeat-x silver;
-  border: 1px solid light-dark(#ccc, #4e575f);
+  border: 1px solid light-dark(#ccc, var(--o-borde-fuerte));
 }
 
 .pixicity-popover em {
@@ -86,7 +86,7 @@
 }
 
 .pixicity-popover.info em {
-  color: light-dark(#000, #ededed);
+  color: light-dark(#000, var(--o-texto));
   text-shadow: 0 1px 0 #eee;
 }
 
@@ -213,7 +213,7 @@ li.usernameMenu:hover a.nick {
 
 .userInfoLogin ul li.logout {
   border-right: none;
-  border-left: 1px solid light-dark(#dcdcdc, #444b53);
+  border-left: 1px solid light-dark(#dcdcdc, var(--o-borde));
   padding: 7px 10px;
 }
 
@@ -261,7 +261,7 @@ li.usernameMenu:hover a.nick {
 }
 
 .userInfoLogin ul li div.notificaciones-list ul li:first-child {
-  border-top: 0px solid light-dark(#EEE, #393f45) !important;
+  border-top: 0px solid light-dark(#EEE, var(--o-borde)) !important;
 }
 
 img.punti {
@@ -282,7 +282,7 @@ a.nick span {
   width: 183px;
   height: 34px;
   font-size: 14px;
-  color: light-dark(#6b6b6b, #adadad);
+  color: light-dark(#6b6b6b, var(--o-texto-2));
   border-radius: 0;
 }
 
@@ -306,7 +306,7 @@ a.nick span {
 }
 
 .onblur_effect {
-  color: light-dark(#B1B1B1, #838383);
+  color: light-dark(#B1B1B1, var(--o-texto-3));
   font-family: Helvetica;
 }
 
@@ -329,11 +329,11 @@ a.nick span {
 #modalBody textarea {
   width: 100%;
   padding: 8px 10px;
-  background: light-dark(#fff, #1e2124);
-  border-right: solid 1px light-dark(#c6c6c6, #525b64);
-  border-left: solid 1px light-dark(#c6c6c6, #525b64);
-  border-top: solid 1px light-dark(#cecece, #4d555e);
-  border-bottom: solid 1px light-dark(#a4a4a4, #67737e);
+  background: light-dark(#fff, var(--o-superficie));
+  border-right: solid 1px light-dark(#c6c6c6, var(--o-borde-fuerte));
+  border-left: solid 1px light-dark(#c6c6c6, var(--o-borde-fuerte));
+  border-top: solid 1px light-dark(#cecece, var(--o-borde-fuerte));
+  border-bottom: solid 1px light-dark(#a4a4a4, var(--o-borde-fuerte));
   box-shadow: 0 1px 1px #d3d3d3;
   font-size: 13px;
   font-family: Helvetica, Arial;

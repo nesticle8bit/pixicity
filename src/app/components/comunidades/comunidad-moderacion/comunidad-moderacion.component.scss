@@ -1,7 +1,7 @@
-$marca: light-dark(#006595, #1e99d3);
-$texto: light-dark(#1f2a33, #cad6df);
-$suave: light-dark(#6b7782, #a6a6a6);
-$borde: light-dark(#e6eaee, #35424e);
+$marca: light-dark(#006595, var(--o-marca));
+$texto: light-dark(#1f2a33, var(--o-texto));
+$suave: light-dark(#6b7782, var(--o-texto-2));
+$borde: light-dark(#e6eaee, var(--o-borde));
 
 .cm {
   max-width: 900px;
@@ -9,7 +9,7 @@ $borde: light-dark(#e6eaee, #35424e);
   padding: 24px;
   border: 1px solid $borde;
   border-radius: 16px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
 
   &__volver {
     display: inline-flex;
@@ -125,10 +125,10 @@ $borde: light-dark(#e6eaee, #35424e);
   &__motivo {
     padding: 2px 8px;
     border-radius: 999px;
-    background: light-dark(#fff1f0, #421c19);
+    background: light-dark(#fff1f0, var(--o-error-fondo));
     font-size: 0.8rem;
     font-weight: 600;
-    color: light-dark(#b42318, #ec7c74);
+    color: light-dark(#b42318, var(--o-error));
   }
 
   &__fecha,
@@ -167,7 +167,7 @@ $borde: light-dark(#e6eaee, #35424e);
 
   &__estado {
     font-weight: 600;
-    color: light-dark(#1e7a45, #99e6ba);
+    color: light-dark(#1e7a45, var(--o-ok));
   }
 }
 
@@ -178,7 +178,7 @@ $borde: light-dark(#e6eaee, #35424e);
   padding: 5px 12px;
   border: 1px solid $marca;
   border-radius: 8px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   font-size: 0.85rem;
   font-weight: 700;
   color: $marca;
@@ -218,14 +218,14 @@ $borde: light-dark(#e6eaee, #35424e);
   &__rol {
     padding: 2px 8px;
     border-radius: 999px;
-    background: light-dark(#eef6fb, #1a3546);
+    background: light-dark(#eef6fb, var(--o-info-fondo));
     font-size: 0.75rem;
     font-weight: 700;
     color: $marca;
 
     &--creador {
-      background: light-dark(#fff6e0, #4c3e1d);
-      color: light-dark(#8a5a00, #f3d294);
+      background: light-dark(#fff6e0, var(--o-aviso-fondo));
+      color: light-dark(#8a5a00, var(--o-aviso));
     }
   }
 }
@@ -243,8 +243,8 @@ $borde: light-dark(#e6eaee, #35424e);
   margin-left: 4px;
   padding: 0 6px;
   border-radius: 999px;
-  background: light-dark(#e9f7ef, #1c4b30);
-  color: light-dark(#1e7a45, #99e6ba);
+  background: light-dark(#e9f7ef, var(--o-ok-fondo));
+  color: light-dark(#1e7a45, var(--o-ok));
   font-size: 0.75rem;
   font-weight: 700;
 }

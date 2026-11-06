@@ -4,8 +4,8 @@
   margin-bottom: 1rem;
 }
 
-$blurple: light-dark(#5865f2, #616de9);
-$blurple-oscuro: light-dark(#3c45c5, #6a71d3);
+$blurple: light-dark(#5865f2, var(--o-marca-texto));
+$blurple-oscuro: light-dark(#3c45c5, var(--o-marca-texto));
 
 .discord {
   position: relative;
@@ -31,7 +31,7 @@ $blurple-oscuro: light-dark(#3c45c5, #6a71d3);
     box-shadow: 0 10px 24px rgba(60, 69, 197, 0.35);
 
     .discord__boton {
-      background: light-dark(#fff, #1e2124);
+      background: light-dark(#fff, var(--o-superficie));
       color: $blurple-oscuro;
     }
 

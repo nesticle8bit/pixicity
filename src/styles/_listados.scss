@@ -38,18 +38,18 @@
 
 .list-posts--zebra {
   padding: 7px 10px;
-  background: light-dark(#f5f5f5, #2b3035);
-  border-top: light-dark(#e0e0e0, #414950) 1px solid;
+  background: light-dark(#f5f5f5, var(--o-realce));
+  border-top: light-dark(#e0e0e0, var(--o-borde)) 1px solid;
   font-size: .76rem;
 
   &:nth-child(2n+1) {
-    border-top: light-dark(#FFF, #2e3338) 1px solid;
-    background: light-dark(#FFF, #1e2124);
+    border-top: light-dark(#FFF, var(--o-borde-suave)) 1px solid;
+    background: light-dark(#FFF, var(--o-superficie));
   }
 
   & strong {
     width: 21px;
-    color: light-dark(#666, #b0b0b0);
+    color: light-dark(#666, var(--o-texto-2));
     font-weight: 700;
     margin-right: 2px;
   }
@@ -58,20 +58,20 @@
     font-weight: bold;
     text-shadow: 0 1px 0 #fff;
     // #69900f no llegaba a 4,5:1 sobre las filas cebra (Lighthouse/axe).
-    color: light-dark(#4f720b, #d6f49b);
+    color: light-dark(#4f720b, var(--o-ok));
   }
 }
 
 .view-more-list {
-  background: light-dark(#eff9fd, #1a3844);
+  background: light-dark(#eff9fd, var(--o-info-fondo));
   text-align: center;
   border-radius: 0 0 5px 5px;
-  border-top: 1px solid light-dark(#cfe9f4, #275568);
+  border-top: 1px solid light-dark(#cfe9f4, var(--o-borde));
   padding: 3px;
 }
 
 .tops-container {
-  border: light-dark(#f0d35b, #a5913f) solid 1px;
+  border: light-dark(#f0d35b, var(--o-aviso)) solid 1px;
 
   & .card-body {
     padding: 0;
@@ -79,15 +79,15 @@
 
   & .card-header {
     padding: 7px 10px;
-    border-top: 1px solid light-dark(#FFF, #2e3338);
-    border-bottom: 1px solid light-dark(#f0d35b, #a5913f);
-    background: light-dark(#f9ecb7, #675a27);
+    border-top: 1px solid light-dark(#FFF, var(--o-borde-suave));
+    border-bottom: 1px solid light-dark(#f0d35b, var(--o-aviso));
+    background: light-dark(#f9ecb7, var(--o-aviso-fondo));
     overflow: hidden;
     border-radius: 3px 3px 0 0;
 
     & h2 {
       text-shadow: 0 1px 0 rgb(255 255 255 / 70%);
-      color: light-dark(#b59130, #dbc076);
+      color: light-dark(#b59130, var(--o-aviso));
       float: left;
       padding-right: 10px;
       margin: 0;
@@ -108,7 +108,7 @@
 .text {
 
   &-rose {
-    color: light-dark(#E1306C, #e65687);
+    color: light-dark(#E1306C, var(--o-error));
   }
 }
 
@@ -121,7 +121,7 @@
 }
 
 .bg-white {
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
 }
 
 .align {
@@ -141,14 +141,14 @@
 // Puesto 1/2/3 en los TOP de la portada (categorías, posts, usuarios).
 .rank {
   &.gold {
-    color: light-dark(#d4a017, #edc660);
+    color: light-dark(#d4a017, var(--o-aviso));
   }
 
   &.silver {
-    color: light-dark(#9aa3ab, #8c8c8c);
+    color: light-dark(#9aa3ab, var(--o-texto-3));
   }
 
   &.bronze {
-    color: light-dark(#c0794a, #cd956f);
+    color: light-dark(#c0794a, var(--o-aviso));
   }
 }

@@ -5,27 +5,27 @@
   min-width: 0;
   max-width: 100%;
 
-  --re-border: light-dark(#e0e0e0, #414950);
+  --re-border: light-dark(#e0e0e0, var(--o-borde));
   --re-radius: 4px;
-  --re-bg: light-dark(#fff, #1e2124);
-  --re-text: light-dark(#333, #cfcfcf);
-  --re-muted: light-dark(#aaa, #878787);
-  --re-accent: light-dark(#1976d2, #559ee7);
-  --re-toolbar-bg: light-dark(#f8f8f8, #292d32);
-  --re-toolbar-text: light-dark(#444, #c4c4c4);
-  --re-toolbar-hover: light-dark(#e3e3e3, #383e44);
-  --re-toolbar-active: light-dark(#e3ecf9, #1d314d);
-  --re-separator: light-dark(#ddd, #434b52);
-  --re-menu-bg: light-dark(#fff, #1e2124);
-  --re-menu-hover: light-dark(#f0f4ff, #192442);
+  --re-bg: light-dark(#fff, var(--o-superficie));
+  --re-text: light-dark(#333, var(--o-texto));
+  --re-muted: light-dark(#aaa, var(--o-texto-3));
+  --re-accent: light-dark(#1976d2, var(--o-marca-texto));
+  --re-toolbar-bg: light-dark(#f8f8f8, var(--o-elevada));
+  --re-toolbar-text: light-dark(#444, var(--o-texto-2));
+  --re-toolbar-hover: light-dark(#e3e3e3, var(--o-borde));
+  --re-toolbar-active: light-dark(#e3ecf9, var(--o-info-fondo));
+  --re-separator: light-dark(#ddd, var(--o-borde));
+  --re-menu-bg: light-dark(#fff, var(--o-superficie));
+  --re-menu-hover: light-dark(#f0f4ff, var(--o-info-fondo));
   --re-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  --re-code-bg: light-dark(#f0f0f0, #2f3439);
-  --re-quote-border: light-dark(#ccc, #4e575f);
-  --re-quote-text: light-dark(#555, #bababa);
+  --re-code-bg: light-dark(#f0f0f0, var(--o-realce));
+  --re-quote-border: light-dark(#ccc, var(--o-borde-fuerte));
+  --re-quote-text: light-dark(#555, var(--o-texto-2));
   --re-bubble-bg: #2b2b2b;
   --re-bubble-text: #e8e8e8;
   --re-bubble-hover: rgba(255, 255, 255, 0.14);
-  --re-bubble-accent: light-dark(#6cb6ff, #7eb6ed);
+  --re-bubble-accent: light-dark(#6cb6ff, var(--o-marca-texto));
   --re-bubble-separator: rgba(255, 255, 255, 0.18);
   --re-bubble-input-bg: #1f1f1f;
 }
@@ -156,7 +156,7 @@
     gap: 4px;
     padding: 6px 12px;
     border-bottom: 1px solid var(--re-border);
-    background: var(--re-bg, light-dark(#fff, #1e2124));
+    background: var(--re-bg, light-dark(#fff, var(--o-superficie)));
     font-size: 12px;
     color: var(--re-accent);
   }
@@ -445,7 +445,7 @@
   // app-rich-editor-bubble, por eso estos estilos viven aquí (ngTemplateOutletContext → .is-dark).
   &__palette-section.is-dark {
     .rich-editor__palette-label {
-      color: light-dark(#9a9a9a, #919191);
+      color: light-dark(#9a9a9a, var(--o-texto-3));
     }
 
     .rich-editor__swatches button.swatch {
@@ -525,7 +525,7 @@
     width: 12px;
     height: 12px;
     box-sizing: border-box;
-    border: 2px solid light-dark(#fff, #2e3338);
+    border: 2px solid light-dark(#fff, var(--o-borde-suave));
     border-radius: 50%;
     background: var(--re-accent);
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);

@@ -88,14 +88,12 @@
 
         <li class="list-inline-item sub-menu--item">
           <a [routerLink]="['/buscar']">
-            <i class="ti ti-search"></i>
             <span style="margin-left: 2px;">Buscador</span>
           </a>
         </li>
 
         <li class="list-inline-item sub-menu--item">
           <a [routerLink]="['/comunidades']">
-            <i class="ti ti-users-group"></i>
             <span style="margin-left: 2px;">Comunidades</span>
           </a>
         </li>
@@ -112,7 +110,6 @@
         @if (currentUser?.usuario?.rango === 'Moderador' || currentUser?.usuario?.rango === 'Administrador') {
         <li class="list-inline-item sub-menu--item">
           <a [routerLink]="['/mod-history']">
-            <i class="ti ti-history"></i>
             <span style="margin-left: 2px;">Historial</span>
           </a>
         </li>
@@ -121,7 +118,6 @@
         @if (currentUser?.usuario?.rango === 'Moderador') {
         <li class="list-inline-item sub-menu--item">
           <a [routerLink]="['/moderacion']">
-            <i class="ti ti-tool"></i>
             <span style="margin-left: 2px;">Moderación</span>
           </a>
         </li>

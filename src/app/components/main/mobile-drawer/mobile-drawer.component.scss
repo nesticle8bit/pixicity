@@ -5,10 +5,10 @@
   }
 }
 
-$main: light-dark(#0B6EA5, #2ba0e1);
-$accent: light-dark(#004160, #1777a4);
+$main: light-dark(#0B6EA5, var(--o-marca));
+$accent: light-dark(#004160, var(--o-marca));
 // Texto activo: el $accent oscuro no llega a 4.5:1 sobre el fondo del tema oscuro.
-$activo: light-dark(#004160, #6cbcec);
+$activo: light-dark(#004160, var(--o-marca-texto));
 
 .drawer-backdrop {
   position: fixed;
@@ -26,7 +26,7 @@ $activo: light-dark(#004160, #6cbcec);
   display: flex;
   flex-direction: column;
   width: min(86vw, 320px);
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   box-shadow: -4px 0 16px rgb(0 0 0 / 25%);
   transform: translateX(100%);
   visibility: hidden;
@@ -55,7 +55,7 @@ $activo: light-dark(#004160, #6cbcec);
   &__head {
     position: relative;
     margin-bottom: .25rem;
-    border-bottom: 1px solid light-dark(#e6eaee, #35424e);
+    border-bottom: 1px solid light-dark(#e6eaee, var(--o-borde));
   }
 
   &__banner {
@@ -110,7 +110,7 @@ $activo: light-dark(#004160, #6cbcec);
 
     ::ng-deep img {
       display: block;
-      border: 4px solid light-dark(#fff, #1e2124);
+      border: 4px solid light-dark(#fff, var(--o-borde-suave));
       border-radius: 50% !important;
       object-fit: cover;
       box-shadow: 0 2px 10px rgb(0 0 0 / 18%);
@@ -129,7 +129,7 @@ $activo: light-dark(#004160, #6cbcec);
     width: 30px;
     height: 30px;
     padding: 0;
-    border: 2px solid light-dark(#fff, #1e2124);
+    border: 2px solid light-dark(#fff, var(--o-borde-suave));
     border-radius: 50%;
     background: $main;
     color: #fff;
@@ -166,7 +166,7 @@ $activo: light-dark(#004160, #6cbcec);
 
   &__username {
     overflow: hidden;
-    color: light-dark(#14202a, #f1f3f5);
+    color: light-dark(#14202a, var(--o-texto));
     font-size: 1.1rem;
     font-weight: 800;
     text-overflow: ellipsis;
@@ -175,7 +175,7 @@ $activo: light-dark(#004160, #6cbcec);
 
   &__handle {
     overflow: hidden;
-    color: light-dark(#5f6b75, #aeb8c1);
+    color: light-dark(#5f6b75, var(--o-texto-2));
     font-size: .8rem;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -220,12 +220,12 @@ $activo: light-dark(#004160, #6cbcec);
     }
 
     a {
-      color: light-dark(#5f6b75, #aeb8c1);
+      color: light-dark(#5f6b75, var(--o-texto-2));
       font-size: .82rem;
       text-decoration: none;
 
       b {
-        color: light-dark(#14202a, #f1f3f5);
+        color: light-dark(#14202a, var(--o-texto));
         font-weight: 800;
       }
 
@@ -236,7 +236,7 @@ $activo: light-dark(#004160, #6cbcec);
   }
 
   &__title {
-    color: light-dark(#14202a, #f1f3f5);
+    color: light-dark(#14202a, var(--o-texto));
     font-size: 1.15rem;
     font-weight: 800;
   }
@@ -281,15 +281,15 @@ $activo: light-dark(#004160, #6cbcec);
       min-width: 0;
       height: 44px;
       padding: 0 .75rem 0 2.2rem;
-      border: 1px solid light-dark(#c9d3db, #425463);
+      border: 1px solid light-dark(#c9d3db, var(--o-borde-fuerte));
       border-right: 0;
       border-radius: 10px 0 0 10px;
-      background: light-dark(#f6f9fb, #1c303e);
+      background: light-dark(#f6f9fb, var(--o-info-fondo));
       font-size: 16px; // menos de 16px hace que iOS agrande la página al enfocar
 
       &:focus {
         border-color: $main;
-        background: light-dark(#fff, #1e2124);
+        background: light-dark(#fff, var(--o-superficie));
         outline: none;
         box-shadow: 0 0 0 3px rgb(11 110 165 / 20%);
       }
@@ -311,7 +311,7 @@ $activo: light-dark(#004160, #6cbcec);
     top: 50%;
     left: .75rem;
     transform: translateY(-50%);
-    color: light-dark(#5f6b75, #aeaeae);
+    color: light-dark(#5f6b75, var(--o-texto-2));
     pointer-events: none;
   }
 
@@ -330,7 +330,7 @@ $activo: light-dark(#004160, #6cbcec);
       gap: .3rem;
       padding: .35rem 0;
       border-radius: 12px;
-      color: light-dark(#33414c, #c9d3db);
+      color: light-dark(#33414c, var(--o-texto));
       font-size: .72rem;
       font-weight: 700;
       text-decoration: none;
@@ -341,7 +341,7 @@ $activo: light-dark(#004160, #6cbcec);
         width: 46px;
         height: 46px;
         border-radius: 50%;
-        background: light-dark(#eef5fa, #1b3446);
+        background: light-dark(#eef5fa, var(--o-info-fondo));
         color: $main;
         font-size: 1.35rem;
         transition: background-color .15s, transform .1s;
@@ -349,7 +349,7 @@ $activo: light-dark(#004160, #6cbcec);
 
       &:active i {
         transform: scale(.94);
-        background: light-dark(#dcebf5, #203f54);
+        background: light-dark(#dcebf5, var(--o-info-fondo));
       }
 
       &.active {
@@ -367,7 +367,7 @@ $activo: light-dark(#004160, #6cbcec);
     position: absolute;
     top: 0;
     left: calc(50% + 8px);
-    border: 2px solid light-dark(#fff, #2e3338);
+    border: 2px solid light-dark(#fff, var(--o-borde-suave));
     min-width: 18px;
     padding: 0 5px;
     border-radius: 9px;
@@ -391,7 +391,7 @@ $activo: light-dark(#004160, #6cbcec);
 
     h2 {
       margin: .5rem 1rem .25rem;
-      color: light-dark(#5f6b75, #9ea9b2); // #888 sobre blanco no llegaba a 4.5:1
+      color: light-dark(#5f6b75, var(--o-texto-2)); // #888 sobre blanco no llegaba a 4.5:1
       font-size: .7rem;
       font-weight: 700;
       letter-spacing: .05em;
@@ -407,7 +407,7 @@ $activo: light-dark(#004160, #6cbcec);
       padding: 0 1rem;
       border: 0;
       background: transparent;
-      color: light-dark(#222, #d9d9d9);
+      color: light-dark(#222, var(--o-texto));
       font-size: .95rem;
       text-align: left;
 
@@ -419,7 +419,7 @@ $activo: light-dark(#004160, #6cbcec);
       }
 
       &.active {
-        background: light-dark(#eef5fa, #1b3446);
+        background: light-dark(#eef5fa, var(--o-info-fondo));
         color: $activo;
         font-weight: 700;
         box-shadow: inset 3px 0 0 $main;
@@ -456,7 +456,7 @@ $activo: light-dark(#004160, #6cbcec);
     margin: 0 1rem;
     padding: .25rem;
     border-radius: 10px;
-    background: light-dark(#f1f4f6, #2a3036);
+    background: light-dark(#f1f4f6, var(--o-realce));
 
     // Misma especificidad que ".drawer__section button" pero va después: gana.
     button {
@@ -467,11 +467,11 @@ $activo: light-dark(#004160, #6cbcec);
       padding: 0 .5rem;
       border-radius: 8px;
       font-size: .8rem;
-      color: light-dark(#5f6b75, #aeb8c1);
+      color: light-dark(#5f6b75, var(--o-texto-2));
 
       &.active {
-        background: light-dark(#fff, #1e2124);
-        color: light-dark(#006595, #6cbcec);
+        background: light-dark(#fff, var(--o-superficie));
+        color: light-dark(#006595, var(--o-marca-texto));
         font-weight: 700;
         box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
       }
@@ -482,8 +482,8 @@ $activo: light-dark(#004160, #6cbcec);
     margin: .25rem 1rem .5rem;
     padding: .65rem .75rem;
     border-radius: 10px;
-    background: light-dark(#eef5fa, #1b3446);
-    color: light-dark(#1f2a33, #cad6df);
+    background: light-dark(#eef5fa, var(--o-info-fondo));
+    color: light-dark(#1f2a33, var(--o-texto));
     font-size: .85rem;
     line-height: 1.45;
 
@@ -498,10 +498,10 @@ $activo: light-dark(#004160, #6cbcec);
     gap: .25rem 1rem;
     margin: 1rem 1rem 0;
     padding-top: .75rem;
-    border-top: 1px solid light-dark(#e6eaee, #35424e);
+    border-top: 1px solid light-dark(#e6eaee, var(--o-borde));
 
     a {
-      color: light-dark(#5f6b75, #aeaeae);
+      color: light-dark(#5f6b75, var(--o-texto-2));
       font-size: .8rem;
     }
   }
@@ -509,8 +509,8 @@ $activo: light-dark(#004160, #6cbcec);
   &__foot {
     flex: 0 0 auto;
     padding: .5rem 1rem calc(.5rem + env(safe-area-inset-bottom, 0px));
-    border-top: 1px solid light-dark(#e6eaee, #35424e);
-    background: light-dark(#fff, #1e2124);
+    border-top: 1px solid light-dark(#e6eaee, var(--o-borde));
+    background: light-dark(#fff, var(--o-superficie));
   }
 
   &__logout {
@@ -520,10 +520,10 @@ $activo: light-dark(#004160, #6cbcec);
     gap: .5rem;
     width: 100%;
     min-height: 44px;
-    border: 1px solid light-dark(#f1c4c0, #71312b);
+    border: 1px solid light-dark(#f1c4c0, var(--o-error));
     border-radius: 10px;
-    background: light-dark(#fff, #1e2124);
-    color: light-dark(#b42318, #ec7c74);
+    background: light-dark(#fff, var(--o-superficie));
+    color: light-dark(#b42318, var(--o-error));
     font-family: inherit;
     font-weight: 700;
   }
@@ -535,11 +535,11 @@ $activo: light-dark(#004160, #6cbcec);
     margin: 1rem;
     padding: 1rem;
     border-radius: 12px;
-    background: light-dark(#eef5fa, #1b3446);
+    background: light-dark(#eef5fa, var(--o-info-fondo));
 
     p {
       margin: 0 0 .25rem;
-      color: light-dark(#1f2a33, #cad6df);
+      color: light-dark(#1f2a33, var(--o-texto));
       font-size: .9rem;
       text-align: center;
     }
@@ -555,7 +555,7 @@ $activo: light-dark(#004160, #6cbcec);
 
   &__login {
     border: 1px solid $accent;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     color: $accent;
   }
 

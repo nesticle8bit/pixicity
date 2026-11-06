@@ -5,11 +5,11 @@
 }
 
 .ap-item {
-  border: 1px solid light-dark(#e5e8ec, #38414d);
+  border: 1px solid light-dark(#e5e8ec, var(--o-borde));
   border-radius: 8px;
   padding: 12px 14px;
   margin-bottom: 10px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
 
   &__cabecera {
     display: flex;
@@ -27,17 +27,17 @@
   margin-top: 8px;
   padding: 8px 10px;
   border-radius: 6px;
-  background: light-dark(#f1f3f5, #29313a);
+  background: light-dark(#f1f3f5, var(--o-realce));
   font-size: 0.9rem;
 
   &--ok {
-    background: light-dark(#e6f4ea, #214b2d);
-    color: light-dark(#1e7b34, #99e6ab);
+    background: light-dark(#e6f4ea, var(--o-ok-fondo));
+    color: light-dark(#1e7b34, var(--o-ok));
   }
 
   &--no {
-    background: light-dark(#fdecea, #47201b);
-    color: light-dark(#8a1f2b, #e68f99);
+    background: light-dark(#fdecea, var(--o-error-fondo));
+    color: light-dark(#8a1f2b, var(--o-error));
   }
 }
 

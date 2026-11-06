@@ -2,8 +2,8 @@
 // el color-scheme de <html> (ver _tema.scss). No pasarlas por funciones de color de Sass (rgba, darken...): usar
 // color-mix() de CSS.
 
-$background-color: light-dark(#F0EEEE, #121518);
-$main-color: light-dark(#0B6EA5, #2a8cc4);
-$accent-color: light-dark(#004160, #1d5f85);
+$background-color: light-dark(#F0EEEE, var(--o-pagina));
+$main-color: light-dark(#0B6EA5, var(--o-marca));
+$accent-color: light-dark(#004160, var(--o-marca));
 // Enlaces y acentos de texto (contraste AA sobre blanco / sobre la superficie oscura).
-$link-color: light-dark(#006595, #6cbcec);
+$link-color: light-dark(#006595, var(--o-marca-texto));

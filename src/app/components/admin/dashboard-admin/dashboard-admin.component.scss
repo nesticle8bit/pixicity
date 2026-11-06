@@ -1,11 +1,11 @@
-$main: light-dark(#0B6EA5, #2ba0e1);
-$tinta: light-dark(#2b3440, #c3ccd7);
-$titulo: light-dark(#004160, #8fcdf0);
-$suave: light-dark(#5d6b75, #aeaeae);
-$linea: light-dark(#e5e8ec, #38414d);
-$superficie: light-dark(#fff, #1e2124);
-$sube: light-dark(#1e7d50, #8ce7bc);
-$baja: light-dark(#c0392b, #e8877d);
+$main: light-dark(#0B6EA5, var(--o-marca));
+$tinta: light-dark(#2b3440, var(--o-texto));
+$titulo: light-dark(#004160, var(--o-marca-texto));
+$suave: light-dark(#5d6b75, var(--o-texto-2));
+$linea: light-dark(#e5e8ec, var(--o-borde));
+$superficie: light-dark(#fff, var(--o-superficie));
+$sube: light-dark(#1e7d50, var(--o-ok));
+$baja: light-dark(#c0392b, var(--o-error));
 
 :host {
   display: block;
@@ -168,7 +168,7 @@ $baja: light-dark(#c0392b, #e8877d);
   text-align: left;
   cursor: pointer;
 
-  &:hover { background: light-dark(#f4f6f8, #262b30); }
+  &:hover { background: light-dark(#f4f6f8, var(--o-elevada)); }
   &:focus-visible { outline: 2px solid $main; outline-offset: -2px; }
   &--activa { border-bottom-color: $main; }
 
@@ -392,7 +392,7 @@ $baja: light-dark(#c0392b, #e8877d);
   height: 240px;
   margin-top: 1.5rem;
   border-radius: 14px;
-  background: light-dark(#eef0f3, #2b323c);
+  background: light-dark(#eef0f3, var(--o-realce));
 
   &--franja { height: 220px; margin-top: 0; }
 }

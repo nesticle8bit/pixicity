@@ -10,7 +10,7 @@
   }
 
   &__desc {
-    color: light-dark(#6c757d, #a7a7a7);
+    color: light-dark(#6c757d, var(--o-texto-2));
     margin: 0;
     font-size: 0.9rem;
   }
@@ -18,7 +18,7 @@
   &__tabs {
     display: flex;
     gap: 4px;
-    border-bottom: 1px solid light-dark(#e5e8ec, #38414d);
+    border-bottom: 1px solid light-dark(#e5e8ec, var(--o-borde));
     margin-bottom: 16px;
     overflow-x: auto;
     scrollbar-width: none;
@@ -29,17 +29,17 @@
       gap: 6px;
       padding: 8px 12px;
       white-space: nowrap;
-      color: light-dark(#495057, #bdbdbd);
+      color: light-dark(#495057, var(--o-texto-2));
       text-decoration: none;
       border-bottom: 2px solid transparent;
       margin-bottom: -1px;
 
       &:hover {
-        color: light-dark(#006595, #8ed2f2);
+        color: light-dark(#006595, var(--o-marca-texto));
       }
 
       &.active {
-        color: light-dark(#006595, #8ed2f2);
+        color: light-dark(#006595, var(--o-marca-texto));
         font-weight: 600;
         border-bottom-color: #006595;
       }

@@ -13,7 +13,7 @@
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: 6px;
-  background: light-dark(#eee, #30353b);
+  background: light-dark(#eee, var(--o-realce));
 
   img {
     width: 100%;
@@ -72,7 +72,7 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   max-height: 75vh;
-  background: light-dark(#f4f4f4, #2c3135);
+  background: light-dark(#f4f4f4, var(--o-realce));
   border-radius: 6px;
   overflow: hidden;
 }
@@ -86,7 +86,7 @@
 }
 
 .foto-main-desc {
-  color: light-dark(#444, #c4c4c4);
+  color: light-dark(#444, var(--o-texto-2));
   line-height: 1.6;
   margin-bottom: 16px;
 }
@@ -96,7 +96,7 @@
   flex-direction: column;
   gap: 10px;
   padding: 14px;
-  background: light-dark(#f8f8f8, #292d32);
+  background: light-dark(#f8f8f8, var(--o-elevada));
   border-radius: 6px;
   margin-bottom: 16px;
 }
@@ -124,7 +124,7 @@
   transition: all .15s;
 
   &.positivo {
-    color: light-dark(#4caf50, #7dc780);
+    color: light-dark(#4caf50, var(--o-ok));
     border-color: #4caf50;
 
     &:hover,
@@ -135,7 +135,7 @@
   }
 
   &.negativo {
-    color: light-dark(#f44336, #ec5b51);
+    color: light-dark(#f44336, var(--o-error));
     border-color: #f44336;
 
     &:hover,
@@ -155,6 +155,6 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    color: light-dark(#666, #b0b0b0);
+    color: light-dark(#666, var(--o-texto-2));
   }
 }

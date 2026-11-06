@@ -1,10 +1,10 @@
-$accent: light-dark(#006595, #1e99d3);
-$accent-dark: light-dark(#004160, #1777a4);
+$accent: light-dark(#006595, var(--o-marca));
+$accent-dark: light-dark(#004160, var(--o-marca));
 $accent-soft: rgba(0, 101, 149, 0.08);
-$borde: light-dark(#e4e4e4, #3f464d);
-$texto: light-dark(#333, #cfcfcf);
-$suave: light-dark(#666, #b0b0b0);
-$mark: light-dark(#fff1a8, #f4eab3);
+$borde: light-dark(#e4e4e4, var(--o-borde));
+$texto: light-dark(#333, var(--o-texto));
+$suave: light-dark(#666, var(--o-texto-2));
+$mark: light-dark(#fff1a8, var(--o-aviso));
 
 :host {
   display: block;
@@ -19,8 +19,8 @@ $mark: light-dark(#fff1a8, #f4eab3);
   position: relative;
   display: flex;
   align-items: center;
-  background: light-dark(#fff, #1e2124);
-  border: 1px solid light-dark(#d6d6d6, #485058);
+  background: light-dark(#fff, var(--o-superficie));
+  border: 1px solid light-dark(#d6d6d6, var(--o-borde-fuerte));
   border-radius: 12px;
   transition: border-color 0.15s, box-shadow 0.15s;
 
@@ -32,7 +32,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
   &__icono {
     position: absolute;
     left: 14px;
-    color: light-dark(#6b6b6b, #adadad);
+    color: light-dark(#6b6b6b, var(--o-texto-2));
     font-size: 18px;
     pointer-events: none;
   }
@@ -107,8 +107,8 @@ $mark: light-dark(#fff1a8, #f4eab3);
     padding: 6px 12px;
     border: 1px solid $borde;
     border-radius: 999px;
-    background: light-dark(#fff, #1e2124);
-    color: light-dark(#555, #bababa);
+    background: light-dark(#fff, var(--o-superficie));
+    color: light-dark(#555, var(--o-texto-2));
     font-size: 13px;
     cursor: pointer;
     transition: all 0.15s;
@@ -192,7 +192,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
   align-items: center;
   border: 1px solid $borde;
   border-radius: 999px;
-  background: light-dark(#fafafa, #272c30);
+  background: light-dark(#fafafa, var(--o-elevada));
   font-size: 13px;
   overflow: hidden;
 
@@ -214,11 +214,11 @@ $mark: light-dark(#fff1a8, #f4eab3);
     padding: 4px 9px 4px 4px;
     border: none;
     background: none;
-    color: light-dark(#6b6b6b, #adadad);
+    color: light-dark(#6b6b6b, var(--o-texto-2));
     cursor: pointer;
 
     &:hover {
-      color: light-dark(#c0392b, #df796f);
+      color: light-dark(#c0392b, var(--o-error));
     }
   }
 }
@@ -248,7 +248,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
   padding: 10px 12px;
   border: 1px solid $borde;
   border-radius: 10px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   color: $texto;
   text-decoration: none;
   transition: border-color 0.15s, transform 0.15s;
@@ -270,14 +270,14 @@ $mark: light-dark(#fff1a8, #f4eab3);
 
   &__total {
     font-size: 12px;
-    color: light-dark(#6b6b6b, #adadad);
+    color: light-dark(#6b6b6b, var(--o-texto-2));
   }
 }
 
 // - Resultados -
 .bq-barra {
   padding: 16px 0 14px;
-  border-bottom: 1px solid light-dark(#eee, #393f45);
+  border-bottom: 1px solid light-dark(#eee, var(--o-borde));
   margin-bottom: 16px;
 }
 
@@ -312,11 +312,11 @@ $mark: light-dark(#fff1a8, #f4eab3);
   &__texto {
     margin: 0;
     font-size: 14px;
-    color: light-dark(#555, #bababa);
+    color: light-dark(#555, var(--o-texto-2));
   }
 
   &__rango {
-    color: light-dark(#6b6b6b, #adadad);
+    color: light-dark(#6b6b6b, var(--o-texto-2));
   }
 }
 
@@ -332,7 +332,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
     padding: 5px 8px;
     border: 1px solid $borde;
     border-radius: 8px;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     font-size: 13px;
     color: $texto;
     cursor: pointer;
@@ -394,13 +394,13 @@ $mark: light-dark(#fff1a8, #f4eab3);
 
 .bq-res {
   padding: 14px 16px;
-  border: 1px solid light-dark(#ececec, #3a4047);
+  border: 1px solid light-dark(#ececec, var(--o-borde));
   border-radius: 12px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   transition: border-color 0.15s, box-shadow 0.15s;
 
   &:hover {
-    border-color: light-dark(#d5e6ef, #275167);
+    border-color: light-dark(#d5e6ef, var(--o-borde));
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
   }
 
@@ -410,14 +410,14 @@ $mark: light-dark(#fff1a8, #f4eab3);
     align-items: center;
     gap: 6px;
     font-size: 12px;
-    color: light-dark(#6b6b6b, #adadad);
+    color: light-dark(#6b6b6b, var(--o-texto-2));
   }
 
   &__cat {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    color: light-dark(#666, #b0b0b0);
+    color: light-dark(#666, var(--o-texto-2));
     font-weight: 600;
     text-decoration: none;
 
@@ -432,8 +432,8 @@ $mark: light-dark(#fff1a8, #f4eab3);
     gap: 3px;
     padding: 1px 7px;
     border-radius: 999px;
-    background: light-dark(#fff4e0, #4c3b1d);
-    color: light-dark(#b26a00, #f1c37f);
+    background: light-dark(#fff4e0, var(--o-aviso-fondo));
+    color: light-dark(#b26a00, var(--o-aviso));
     font-weight: 600;
   }
 
@@ -457,7 +457,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
     margin: 0;
     font-size: 13.5px;
     line-height: 1.55;
-    color: light-dark(#555, #bababa);
+    color: light-dark(#555, var(--o-texto-2));
     overflow-wrap: anywhere;
   }
 
@@ -469,7 +469,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
 
     a {
       font-size: 12px;
-      color: light-dark(#888, #9c9c9c);
+      color: light-dark(#888, var(--o-texto-3));
       text-decoration: none;
 
       &:hover {
@@ -491,7 +491,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
     gap: 8px;
     margin-top: 10px;
     padding-top: 10px;
-    border-top: 1px dashed light-dark(#eee, #393f45);
+    border-top: 1px dashed light-dark(#eee, var(--o-borde));
   }
 
   &__autor {
@@ -500,7 +500,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
     gap: 6px;
     font-size: 12.5px;
     font-weight: 600;
-    color: light-dark(#555, #bababa);
+    color: light-dark(#555, var(--o-texto-2));
     text-decoration: none;
 
     &:hover {
@@ -513,7 +513,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
     flex-wrap: wrap;
     gap: 12px;
     font-size: 12px;
-    color: light-dark(#888, #9c9c9c);
+    color: light-dark(#888, var(--o-texto-3));
 
     span {
       display: inline-flex;
@@ -541,7 +541,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
   display: block;
   height: 12px;
   border-radius: 6px;
-  background: linear-gradient(90deg, light-dark(#f0f0f0, #2f3439) 25%, light-dark(#e6e6e6, #363c42) 50%, light-dark(#f0f0f0, #2f3439) 75%);
+  background: linear-gradient(90deg, light-dark(#f0f0f0, var(--o-realce)) 25%, light-dark(#e6e6e6, var(--o-realce)) 50%, light-dark(#f0f0f0, var(--o-realce)) 75%);
   background-size: 200% 100%;
   animation: sk-brillo 1.2s infinite;
 
@@ -574,10 +574,10 @@ $mark: light-dark(#fff1a8, #f4eab3);
 
 .bq-vacio {
   padding: 36px 20px;
-  border: 1px dashed light-dark(#ddd, #434b52);
+  border: 1px dashed light-dark(#ddd, var(--o-borde));
   border-radius: 12px;
   text-align: center;
-  color: light-dark(#666, #b0b0b0);
+  color: light-dark(#666, var(--o-texto-2));
 
   > i {
     font-size: 40px;
@@ -622,9 +622,9 @@ $mark: light-dark(#fff1a8, #f4eab3);
     align-items: center;
     gap: 6px;
     padding: 9px 14px;
-    border: 1px solid light-dark(#e6e6e6, #3e454b);
+    border: 1px solid light-dark(#e6e6e6, var(--o-borde));
     border-radius: 10px;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     font-size: 13.5px;
     font-weight: 700;
     color: $texto;
@@ -643,7 +643,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
     &::after {
       content: '▾';
       margin-left: auto;
-      color: light-dark(#6b6b6b, #adadad);
+      color: light-dark(#6b6b6b, var(--o-texto-2));
     }
   }
 
@@ -668,9 +668,9 @@ $mark: light-dark(#fff1a8, #f4eab3);
 
 .bq-card {
   padding: 12px 14px;
-  border: 1px solid light-dark(#e6e6e6, #3e454b);
+  border: 1px solid light-dark(#e6e6e6, var(--o-borde));
   border-radius: 12px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
 
   &__titulo {
     display: flex;
@@ -690,7 +690,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
   &__vacio {
     margin: 0;
     font-size: 12.5px;
-    color: light-dark(#6b6b6b, #adadad);
+    color: light-dark(#6b6b6b, var(--o-texto-2));
   }
 }
 
@@ -711,12 +711,12 @@ $mark: light-dark(#fff1a8, #f4eab3);
     border-radius: 8px;
     background: none;
     font-size: 13px;
-    color: light-dark(#444, #c4c4c4);
+    color: light-dark(#444, var(--o-texto-2));
     text-align: left;
     cursor: pointer;
 
     &:hover {
-      background: light-dark(#f4f4f4, #2c3135);
+      background: light-dark(#f4f4f4, var(--o-realce));
     }
 
     &.active {
@@ -737,9 +737,9 @@ $mark: light-dark(#fff1a8, #f4eab3);
   &__total {
     padding: 0 7px;
     border-radius: 999px;
-    background: light-dark(#f0f0f0, #2f3439);
+    background: light-dark(#f0f0f0, var(--o-realce));
     font-size: 11.5px;
-    color: light-dark(#666, #b0b0b0);
+    color: light-dark(#666, var(--o-texto-2));
   }
 }
 
@@ -752,9 +752,9 @@ $mark: light-dark(#fff1a8, #f4eab3);
     padding: 4px 10px;
     border: 1px solid $borde;
     border-radius: 999px;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     font-size: 12.5px;
-    color: light-dark(#555, #bababa);
+    color: light-dark(#555, var(--o-texto-2));
     cursor: pointer;
 
     &:hover {
@@ -793,7 +793,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
     transform: translateY(-50%);
     border: none;
     background: none;
-    color: light-dark(#6b6b6b, #adadad);
+    color: light-dark(#6b6b6b, var(--o-texto-2));
     cursor: pointer;
   }
 }
@@ -802,9 +802,9 @@ $mark: light-dark(#fff1a8, #f4eab3);
 .bq-shouts {
   margin-bottom: 20px;
   padding: 14px;
-  border: 1px solid light-dark(#e3e9ed, #354652);
+  border: 1px solid light-dark(#e3e9ed, var(--o-borde));
   border-radius: 12px;
-  background: light-dark(#f7f9fb, #1e2d3b);
+  background: light-dark(#f7f9fb, var(--o-info-fondo));
 
   &__titulo {
     display: flex;
@@ -813,15 +813,15 @@ $mark: light-dark(#fff1a8, #f4eab3);
     margin: 0 0 12px;
     font-size: 1rem;
     font-weight: 700;
-    color: light-dark(#26323a, #c7d2da);
+    color: light-dark(#26323a, var(--o-texto));
   }
 
   &__total {
     padding: 1px 7px;
     border-radius: 10px;
-    background: light-dark(#e3ecf1, #263e4b);
+    background: light-dark(#e3ecf1, var(--o-info-fondo));
     font-size: 0.75rem;
-    color: light-dark(#5d6b75, #aeaeae);
+    color: light-dark(#5d6b75, var(--o-texto-2));
   }
 
   &__lista {
@@ -835,7 +835,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
     margin-top: 10px;
     font-size: 0.85rem;
     font-weight: 700;
-    color: light-dark(#006595, #8ed2f2);
+    color: light-dark(#006595, var(--o-marca-texto));
   }
 }
 .bq-box {
@@ -845,7 +845,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
 .bq-hero__ayuda {
   margin: 10px 0 0;
   font-size: 0.85rem;
-  color: light-dark(#6b7782, #a6a6a6);
+  color: light-dark(#6b7782, var(--o-texto-2));
 }
 
 .bq-sugerencias {
@@ -858,8 +858,8 @@ $mark: light-dark(#fff1a8, #f4eab3);
   padding: 4px;
   list-style: none;
   text-align: left;
-  background: light-dark(#fff, #1e2124);
-  border: 1px solid light-dark(#e3e8ec, #374550);
+  background: light-dark(#fff, var(--o-superficie));
+  border: 1px solid light-dark(#e3e8ec, var(--o-borde));
   border-radius: 12px;
   box-shadow: 0 10px 28px rgba(16, 24, 40, 0.14);
 
@@ -872,7 +872,7 @@ $mark: light-dark(#fff1a8, #f4eab3);
     cursor: pointer;
 
     &.is-activa {
-      background: light-dark(#eef6fb, #1a3546);
+      background: light-dark(#eef6fb, var(--o-info-fondo));
     }
   }
 
@@ -882,19 +882,19 @@ $mark: light-dark(#fff1a8, #f4eab3);
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: light-dark(#eef6fb, #1a3546);
+    background: light-dark(#eef6fb, var(--o-info-fondo));
     font-weight: 700;
-    color: light-dark(#006595, #8ed2f2);
+    color: light-dark(#006595, var(--o-marca-texto));
   }
 
   &__valor {
     font-weight: 600;
-    color: light-dark(#1f2a33, #cad6df);
+    color: light-dark(#1f2a33, var(--o-texto));
   }
 
   &__detalle {
     margin-left: auto;
     font-size: 0.8rem;
-    color: light-dark(#6b7782, #a6a6a6);
+    color: light-dark(#6b7782, var(--o-texto-2));
   }
 }

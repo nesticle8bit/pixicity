@@ -1,4 +1,4 @@
-$accent: light-dark(#006595, #1e99d3);
+$accent: light-dark(#006595, var(--o-marca));
 
 // - Barra de búsqueda y filtros rápidos -
 .mon-toolbar {
@@ -19,13 +19,13 @@ $accent: light-dark(#006595, #1e99d3);
     left: 10px;
     top: 50%;
     transform: translateY(-50%);
-    color: light-dark(#6b6b6b, #adadad);
+    color: light-dark(#6b6b6b, var(--o-texto-2));
   }
 
   input {
     width: 100%;
     padding: 7px 30px 7px 32px;
-    border: 1px solid light-dark(#ddd, #434b52);
+    border: 1px solid light-dark(#ddd, var(--o-borde));
     border-radius: 8px;
     font-size: 13px;
     outline: none;
@@ -47,36 +47,36 @@ $accent: light-dark(#006595, #1e99d3);
     transform: translateY(-50%);
     border: none;
     background: none;
-    color: light-dark(#6b6b6b, #adadad);
+    color: light-dark(#6b6b6b, var(--o-texto-2));
     cursor: pointer;
     padding: 2px;
 
     &:hover {
-      color: light-dark(#333, #cfcfcf);
+      color: light-dark(#333, var(--o-texto));
     }
   }
 }
 
 .mon-chips {
   display: inline-flex;
-  border: 1px solid light-dark(#ddd, #434b52);
+  border: 1px solid light-dark(#ddd, var(--o-borde));
   border-radius: 8px;
   overflow: hidden;
 
   button {
     border: none;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     padding: 6px 10px;
     font-size: 12.5px;
-    color: light-dark(#555, #bababa);
+    color: light-dark(#555, var(--o-texto-2));
     cursor: pointer;
 
     & + button {
-      border-left: 1px solid light-dark(#ddd, #434b52);
+      border-left: 1px solid light-dark(#ddd, var(--o-borde));
     }
 
     &:hover {
-      background: light-dark(#f4f4f4, #2c3135);
+      background: light-dark(#f4f4f4, var(--o-realce));
     }
 
     &.active {
@@ -92,7 +92,7 @@ $accent: light-dark(#006595, #1e99d3);
   align-items: center;
   justify-content: space-between;
   font-size: 12px;
-  color: light-dark(#666, #b0b0b0);
+  color: light-dark(#666, var(--o-texto-2));
   margin-bottom: 6px;
 }
 
@@ -110,7 +110,7 @@ $accent: light-dark(#006595, #1e99d3);
   }
 
   &:disabled {
-    color: light-dark(#bbb, #7d7d7d);
+    color: light-dark(#bbb, var(--o-texto-3));
     cursor: default;
   }
 }
@@ -132,14 +132,14 @@ $accent: light-dark(#006595, #1e99d3);
   align-items: flex-start;
   gap: 10px;
   padding: 10px 8px;
-  border-bottom: 1px solid light-dark(#eee, #393f45);
+  border-bottom: 1px solid light-dark(#eee, var(--o-borde));
 
   &:hover {
-    background: light-dark(#fafafa, #272c30);
+    background: light-dark(#fafafa, var(--o-elevada));
   }
 
   &--nueva {
-    background: light-dark(#f2f8fc, #193243);
+    background: light-dark(#f2f8fc, var(--o-info-fondo));
     box-shadow: inset 3px 0 0 $accent;
   }
 
@@ -171,7 +171,7 @@ $accent: light-dark(#006595, #1e99d3);
 // - Panel derecho -
 .mon-masivo {
   font-size: 12px;
-  color: light-dark(#6b6b6b, #adadad);
+  color: light-dark(#6b6b6b, var(--o-texto-2));
   margin: 6px 0 4px;
 }
 
@@ -185,7 +185,7 @@ $accent: light-dark(#006595, #1e99d3);
     margin: 0 0 4px;
     font-size: 13px;
     font-weight: 700;
-    color: light-dark(#333, #cfcfcf);
+    color: light-dark(#333, var(--o-texto));
     cursor: pointer;
   }
 

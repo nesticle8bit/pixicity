@@ -1,4 +1,4 @@
-$accent: light-dark(#1976d2, #559ee7);
+$accent: light-dark(#1976d2, var(--o-marca-texto));
 $accent-soft: rgba(25, 118, 210, 0.1);
 
 // - Cuerpo -
@@ -13,7 +13,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: light-dark(#9aa0a6, #8d8d8d);
+  color: light-dark(#9aa0a6, var(--o-texto-3));
 
   &:first-child {
     margin-top: 8px;
@@ -66,20 +66,20 @@ $accent-soft: rgba(25, 118, 210, 0.1);
     display: block;
     font-size: 14px;
     font-weight: 700;
-    color: light-dark(#2b2b2b, #d3d3d3);
+    color: light-dark(#2b2b2b, var(--o-texto));
   }
 
   &__hint {
     margin: 2px 0 10px;
     font-size: 12px;
-    color: light-dark(#8a9098, #969696);
+    color: light-dark(#8a9098, var(--o-texto-3));
     line-height: 1.4;
   }
 
   &__opt {
     font-weight: 400;
     font-size: 12px;
-    color: light-dark(#8a9098, #969696);
+    color: light-dark(#8a9098, var(--o-texto-3));
   }
 
   &__error {
@@ -88,7 +88,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
     gap: 4px;
     margin: 6px 0 0;
     font-size: 12px;
-    color: light-dark(#d32f2f, #de6262);
+    color: light-dark(#d32f2f, var(--o-error));
   }
 }
 
@@ -99,21 +99,21 @@ $accent-soft: rgba(25, 118, 210, 0.1);
 // - Inputs modernos -
 .pg-input {
   width: 100%;
-  border: 1px solid light-dark(#e2e6ea, #3a454f);
+  border: 1px solid light-dark(#e2e6ea, var(--o-borde));
   border-radius: 10px;
   padding: 10px 14px;
   font-size: 14px;
-  color: light-dark(#333, #cfcfcf);
-  background: light-dark(#fff, #1e2124);
+  color: light-dark(#333, var(--o-texto));
+  background: light-dark(#fff, var(--o-superficie));
   transition: border-color 0.15s, box-shadow 0.15s;
   resize: vertical;
 
   &::placeholder {
-    color: light-dark(#b5bbc2, #7d7d7d);
+    color: light-dark(#b5bbc2, var(--o-texto-3));
   }
 
   &:hover {
-    border-color: light-dark(#cfd6dd, #42505d);
+    border-color: light-dark(#cfd6dd, var(--o-borde-fuerte));
   }
 
   &:focus {
@@ -152,12 +152,12 @@ $accent-soft: rgba(25, 118, 210, 0.1);
     border: 0;
     border-radius: 50%;
     background: transparent;
-    color: light-dark(#999, #919191);
+    color: light-dark(#999, var(--o-texto-3));
     cursor: pointer;
 
     &:hover {
-      background: light-dark(#fdecea, #47201b);
-      color: light-dark(#d32f2f, #de6262);
+      background: light-dark(#fdecea, var(--o-error-fondo));
+      color: light-dark(#d32f2f, var(--o-error));
     }
   }
 }
@@ -165,7 +165,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
 .pg-add {
   margin-top: 10px;
   padding: 6px 14px;
-  border: 1px dashed light-dark(#90caf9, #336085);
+  border: 1px dashed light-dark(#90caf9, var(--o-marca));
   border-radius: 8px;
   background: rgba(25, 118, 210, 0.04);
   color: $accent;
@@ -185,8 +185,8 @@ $accent-soft: rgba(25, 118, 210, 0.1);
   gap: 6px;
 
   &__card {
-    background: light-dark(#fff, #1e2124);
-    border: 1px solid light-dark(#e2e6ea, #3a454f);
+    background: light-dark(#fff, var(--o-superficie));
+    border: 1px solid light-dark(#e2e6ea, var(--o-borde));
     border-radius: 8px;
     padding: 8px 6px 6px;
     cursor: pointer;
@@ -194,7 +194,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
     transition: border-color 0.15s, box-shadow 0.15s, background 0.15s, transform 0.1s;
 
     &:hover {
-      border-color: light-dark(#90caf9, #336085);
+      border-color: light-dark(#90caf9, var(--o-marca));
       box-shadow: 0 4px 12px rgba(25, 118, 210, 0.12);
       transform: translateY(-1px);
     }
@@ -211,7 +211,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
     margin-top: 5px;
     font-size: 11px;
     font-weight: 700;
-    color: light-dark(#555, #bababa);
+    color: light-dark(#555, var(--o-texto-2));
   }
 
   // Miniatura compacta de cada separador dentro de la card
@@ -252,7 +252,7 @@ $accent-soft: rgba(25, 118, 210, 0.1);
 // - Footer -
 .pg-actions {
   padding: 14px 28px !important;
-  border-top: 1px solid light-dark(#eef0f2, #373e44);
+  border-top: 1px solid light-dark(#eef0f2, var(--o-borde));
   gap: 10px;
   justify-content: flex-end;
 

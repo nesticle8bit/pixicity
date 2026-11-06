@@ -1,9 +1,9 @@
-$main: light-dark(#0B6EA5, #2ba0e1);
-$accent: light-dark(#004160, #1777a4);
-$ink: light-dark(#4a5560, #bababa);
-$muted: light-dark(#5d6b75, #aeaeae); // contraste AA sobre blanco (el anterior, #949ca5, daba 2.8:1)
-$line: light-dark(#e5e8ec, #38414d);
-$alert: light-dark(#c0392b, #dc6c61);
+$main: light-dark(#0B6EA5, var(--o-marca));
+$accent: light-dark(#004160, var(--o-marca));
+$ink: light-dark(#4a5560, var(--o-texto-2));
+$muted: light-dark(#5d6b75, var(--o-texto-2)); // contraste AA sobre blanco (el anterior, #949ca5, daba 2.8:1)
+$line: light-dark(#e5e8ec, var(--o-borde));
+$alert: light-dark(#c0392b, var(--o-error));
 
 :host {
   display: block;
@@ -19,7 +19,7 @@ $alert: light-dark(#c0392b, #dc6c61);
   scrollbar-width: thin;
 
   &::-webkit-scrollbar { width: 6px; }
-  &::-webkit-scrollbar-thumb { background: light-dark(#dfe3e8, #343d48); border-radius: 3px; }
+  &::-webkit-scrollbar-thumb { background: light-dark(#dfe3e8, var(--o-realce)); border-radius: 3px; }
 
   /* - buscador - */
   &__search {
@@ -30,7 +30,7 @@ $alert: light-dark(#c0392b, #dc6c61);
     margin-bottom: .9rem;
     border: 1px solid $line;
     border-radius: 8px;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
 
     &:focus-within {
       border-color: $main;
@@ -91,7 +91,7 @@ $alert: light-dark(#c0392b, #dc6c61);
     transition: .15s ease;
 
     &:hover {
-      background: light-dark(#f4f6f8, #252f39);
+      background: light-dark(#f4f6f8, var(--o-elevada));
       color: $accent;
     }
 
@@ -130,7 +130,7 @@ $alert: light-dark(#c0392b, #dc6c61);
       line-height: 1.3;
       transition: background .15s ease, color .15s ease;
 
-      span {
+      span:not(.adm-nav__badge) {
         flex: 1;
         min-width: 0;
         overflow: hidden;
@@ -142,12 +142,12 @@ $alert: light-dark(#c0392b, #dc6c61);
         font-size: 1.15rem;
         width: 1.15rem;
         height: 1.15rem;
-        color: light-dark(#a8b1ba, #838383);
+        color: light-dark(#a8b1ba, var(--o-texto-3));
         flex-shrink: 0;
       }
 
       &:hover {
-        background: light-dark(#f2f5f8, #21303e);
+        background: light-dark(#f2f5f8, var(--o-info-fondo));
         color: $accent;
 
         mat-icon { color: $main; }
@@ -171,7 +171,7 @@ $alert: light-dark(#c0392b, #dc6c61);
     height: 18px;
     padding: 0 5px;
     border-radius: 9px;
-    background: $alert;
+    background: light-dark(#c0392b, #b93a30); // con texto blanco (AA)
     color: #fff;
     font-size: 11px;
     font-weight: 700;
@@ -202,7 +202,7 @@ $alert: light-dark(#c0392b, #dc6c61);
     padding: .5rem .8rem;
     border: 1px solid $line;
     border-radius: 8px;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     color: $accent;
     font-size: .85rem;
     font-weight: 700;

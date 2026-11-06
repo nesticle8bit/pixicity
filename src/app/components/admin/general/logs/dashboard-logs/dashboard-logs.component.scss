@@ -9,9 +9,9 @@
   display: flex;
   flex-direction: column;
   padding: 0.75rem 1rem;
-  border: 1px solid light-dark(#e2e2e2, #40474e);
+  border: 1px solid light-dark(#e2e2e2, var(--o-borde));
   border-radius: 8px;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
 
   &__valor {
     font-size: 1.5rem;
@@ -21,15 +21,15 @@
 
   &__label {
     font-size: 0.8rem;
-    color: light-dark(#6c757d, #a7a7a7);
+    color: light-dark(#6c757d, var(--o-texto-2));
   }
 
   &--alerta {
-    border-color: light-dark(#f5c2c7, #6e2a30);
-    background: light-dark(#fff5f5, #3f1818);
+    border-color: light-dark(#f5c2c7, var(--o-borde));
+    background: light-dark(#fff5f5, var(--o-error-fondo));
 
     .logs-stat__valor {
-      color: light-dark(#c53030, #db6c6c);
+      color: light-dark(#c53030, var(--o-error));
     }
   }
 }
@@ -43,12 +43,12 @@
   list-style: none;
   padding: 0;
   margin: 0 0 1.25rem;
-  border: 1px solid light-dark(#e2e2e2, #40474e);
+  border: 1px solid light-dark(#e2e2e2, var(--o-borde));
   border-radius: 8px;
   overflow: hidden;
 
   li + li {
-    border-top: 1px solid light-dark(#eee, #393f45);
+    border-top: 1px solid light-dark(#eee, var(--o-borde));
   }
 }
 
@@ -59,12 +59,12 @@
   width: 100%;
   padding: 0.5rem 0.75rem;
   border: 0;
-  background: light-dark(#fff, #1e2124);
+  background: light-dark(#fff, var(--o-superficie));
   text-align: left;
   cursor: pointer;
 
   &:hover {
-    background: light-dark(#f7fafc, #183040);
+    background: light-dark(#f7fafc, var(--o-info-fondo));
   }
 
   &__mensaje {
@@ -80,7 +80,7 @@
   }
 
   &__fecha {
-    color: light-dark(#6c757d, #a7a7a7);
+    color: light-dark(#6c757d, var(--o-texto-2));
     font-size: 0.8rem;
     white-space: nowrap;
   }
@@ -96,13 +96,13 @@
 
 .logs-toggle {
   display: inline-flex;
-  border: 1px solid light-dark(#d0d0d0, #4c545c);
+  border: 1px solid light-dark(#d0d0d0, var(--o-borde-fuerte));
   border-radius: 6px;
   overflow: hidden;
 
   button {
     border: 0;
-    background: light-dark(#fff, #1e2124);
+    background: light-dark(#fff, var(--o-superficie));
     padding: 0.35rem 0.9rem;
     font-size: 0.85rem;
     cursor: pointer;
@@ -126,7 +126,7 @@
   cursor: pointer;
 
   &--activa {
-    background: light-dark(#ebf4ff, #1a2e45);
+    background: light-dark(#ebf4ff, var(--o-info-fondo));
   }
 }
 
@@ -146,7 +146,7 @@
 }
 
 .logs-detalle-fila > td {
-  background: light-dark(#f8fafc, #1a2c3d);
+  background: light-dark(#f8fafc, var(--o-info-fondo));
 }
 
 .logs-detalle {
@@ -160,7 +160,7 @@
     font-size: 0.85rem;
 
     dt {
-      color: light-dark(#6c757d, #a7a7a7);
+      color: light-dark(#6c757d, var(--o-texto-2));
       font-weight: 600;
     }
 
@@ -182,7 +182,7 @@
   &__excepcion {
     font-family: monospace;
     font-size: 0.8rem;
-    color: light-dark(#c53030, #db6c6c);
+    color: light-dark(#c53030, var(--o-error));
   }
 
   &__stack {

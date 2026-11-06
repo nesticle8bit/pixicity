@@ -1,10 +1,10 @@
 .sil__intro {
   margin: 0 0 20px;
-  color: light-dark(#6b7782, #a6a6a6);
+  color: light-dark(#6b7782, var(--o-texto-2));
 
   a {
     font-weight: 600;
-    color: light-dark(#006595, #8ed2f2);
+    color: light-dark(#006595, var(--o-marca-texto));
   }
 }
 
@@ -16,7 +16,7 @@
   margin: 0 0 10px;
   font-size: 1rem;
   font-weight: 700;
-  color: light-dark(#1f2a33, #cad6df);
+  color: light-dark(#1f2a33, var(--o-texto));
 }
 
 .sil__form {
@@ -43,8 +43,8 @@
 
   &--suave {
     margin-left: auto;
-    background: light-dark(#f1f4f6, #26333c);
-    color: light-dark(#1f2a33, #cad6df);
+    background: light-dark(#f1f4f6, var(--o-realce));
+    color: light-dark(#1f2a33, var(--o-texto));
   }
 }
 
@@ -63,9 +63,9 @@
   gap: 4px;
   padding: 4px 6px 4px 12px;
   border-radius: 999px;
-  background: light-dark(#eef6fb, #1a3546);
+  background: light-dark(#eef6fb, var(--o-info-fondo));
   font-weight: 600;
-  color: light-dark(#006595, #8ed2f2);
+  color: light-dark(#006595, var(--o-marca-texto));
 
   button {
     display: grid;
@@ -79,7 +79,7 @@
     cursor: pointer;
 
     &:hover {
-      background: light-dark(#d7eaf5, #214357);
+      background: light-dark(#d7eaf5, var(--o-info-fondo));
     }
   }
 }
@@ -100,13 +100,13 @@
 
   a {
     font-weight: 600;
-    color: light-dark(#1f2a33, #cad6df);
+    color: light-dark(#1f2a33, var(--o-texto));
   }
 }
 
 .sil__vacio {
   margin: 0;
-  color: light-dark(#6b7782, #a6a6a6);
+  color: light-dark(#6b7782, var(--o-texto-2));
 }
 
 // Shout oculto: el extracto ocupa el espacio y se corta en una línea

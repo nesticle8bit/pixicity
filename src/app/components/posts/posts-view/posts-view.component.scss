@@ -30,12 +30,12 @@
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  color: light-dark(#e67e22, #eb9951);
+  color: light-dark(#e67e22, var(--o-aviso));
 }
 
 .post-body {
-  background: light-dark(#fff, #1e2124);
-  border: 1px solid light-dark(#e8e8e8, #3c434a);
+  background: light-dark(#fff, var(--o-superficie));
+  border: 1px solid light-dark(#e8e8e8, var(--o-borde));
   border-radius: 10px;
   padding: 16px;
   margin-bottom: 16px;
@@ -67,8 +67,8 @@
 
 // Índice automático con los H2/H3 del post
 .post-toc {
-  background: light-dark(#f7f9fc, #182840);
-  border: 1px solid light-dark(#e3e9f2, #293d59);
+  background: light-dark(#f7f9fc, var(--o-info-fondo));
+  border: 1px solid light-dark(#e3e9f2, var(--o-borde));
   border-radius: 8px;
   padding: 10px 14px;
   margin-bottom: 4px;
@@ -77,7 +77,7 @@
   summary {
     cursor: pointer;
     font-weight: 700;
-    color: light-dark(#1976d2, #61a7ec);
+    color: light-dark(#1976d2, var(--o-marca-texto));
     display: flex;
     align-items: center;
     gap: 6px;
@@ -101,7 +101,7 @@
 
   a {
     font-weight: 500;
-    color: light-dark(#2b4a6f, #a3bcdb);
+    color: light-dark(#2b4a6f, var(--o-marca-texto));
 
     &:hover {
       text-decoration: underline;

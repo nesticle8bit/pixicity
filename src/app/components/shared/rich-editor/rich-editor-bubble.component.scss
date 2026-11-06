@@ -165,7 +165,7 @@
     width: min(320px, calc(100vw - 32px));
 
     > mat-icon {
-      color: light-dark(#9a9a9a, #919191);
+      color: light-dark(#9a9a9a, var(--o-texto-3));
       font-size: 18px;
       width: 18px;
       height: 18px;
@@ -184,7 +184,7 @@
       outline: none;
 
       &::placeholder {
-        color: light-dark(#888, #9c9c9c);
+        color: light-dark(#888, var(--o-texto-3));
       }
 
       &:focus {
@@ -196,11 +196,11 @@
       padding: 5px;
 
       &.apply:hover {
-        color: light-dark(#5ed07a, #69d383);
+        color: light-dark(#5ed07a, var(--o-ok));
       }
 
       &.remove:hover {
-        color: light-dark(#ff7b7b, #ec5151);
+        color: light-dark(#ff7b7b, var(--o-error));
       }
     }
   }

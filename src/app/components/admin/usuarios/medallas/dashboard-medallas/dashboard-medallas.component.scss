@@ -23,7 +23,7 @@
   }
 
   small {
-    color: light-dark(#6b7782, #a6a6a6);
+    color: light-dark(#6b7782, var(--o-texto-2));
     overflow-wrap: anywhere;
   }
 }
@@ -40,11 +40,11 @@
   font-size: 0.78rem;
   font-weight: 600;
 
-  &--bronce { background: light-dark(#f3e3d3, #4a3524); color: light-dark(#7a4a1e, #e8b88a); }
-  &--plata { background: light-dark(#e6e9ec, #39414a); color: light-dark(#4a5560, #cfd6dd); }
-  &--oro { background: light-dark(#fbefc4, #4a3f17); color: light-dark(#7a5d00, #f1d26b); }
-  &--platino { background: light-dark(#dcefee, #1e4240); color: light-dark(#1d6461, #8fdcd7); }
-  &--especial { background: light-dark(#ece3fa, #3a2d55); color: light-dark(#5b33a3, #c9b2f2); }
+  &--bronce { background: light-dark(#f3e3d3, var(--o-aviso-fondo)); color: light-dark(#7a4a1e, #e8b88a); }
+  &--plata { background: light-dark(#e6e9ec, var(--o-realce)); color: light-dark(#4a5560, #cfd6dd); }
+  &--oro { background: light-dark(#fbefc4, var(--o-aviso-fondo)); color: light-dark(#7a5d00, #f1d26b); }
+  &--platino { background: light-dark(#dcefee, var(--o-info-fondo)); color: light-dark(#1d6461, #8fdcd7); }
+  &--especial { background: light-dark(#ece3fa, var(--o-info-fondo)); color: light-dark(#5b33a3, #c9b2f2); }
 }
 
 .dmed-usuarios,
@@ -57,19 +57,19 @@
   cursor: pointer;
 
   &:hover {
-    background: light-dark(#eef2f5, #2a3036);
+    background: light-dark(#eef2f5, var(--o-realce));
   }
 }
 
 .dmed-usuarios {
-  color: light-dark(#006595, #8ed2f2);
+  color: light-dark(#006595, var(--o-marca-texto));
 }
 
 .dmed-estado {
-  color: light-dark(#6b7782, #a6a6a6);
+  color: light-dark(#6b7782, var(--o-texto-2));
 
   &.is-activa {
-    color: light-dark(#1e7d32, #7ed58b);
+    color: light-dark(#1e7d32, var(--o-ok));
   }
 }
 
@@ -78,10 +78,10 @@
   align-items: center;
   gap: 4px;
   font-size: 0.82rem;
-  color: light-dark(#1e5f8a, #8ed2f2);
+  color: light-dark(#1e5f8a, var(--o-marca-texto));
 }
 
 .dmed-manual {
   font-size: 0.82rem;
-  color: light-dark(#6b7782, #a6a6a6);
+  color: light-dark(#6b7782, var(--o-texto-2));
 }

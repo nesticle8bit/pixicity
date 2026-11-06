@@ -8,12 +8,12 @@ p {
 }
 
 b {
-    color: light-dark(#f60, #ec9255);
+    color: light-dark(#f60, var(--o-aviso));
 }
 
 small {
     font-family: Georgia;
     font-style: italic;
-    color: light-dark(#888, #9c9c9c);
+    color: light-dark(#888, var(--o-texto-3));
     font-size: .8rem;
 }

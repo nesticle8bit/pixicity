@@ -152,8 +152,8 @@
 // (mensaje MEASURE) y el iframe se ajusta. Ancho como el de Instagram: más angosto el video se ve chico.
 .sm-embed--instagram {
   max-width: 480px;
-  background: light-dark(#fff, #000);
-  border: 1px solid light-dark(#dbdbdb, #262626);
+  background: light-dark(#fff, var(--o-pagina));
+  border: 1px solid light-dark(#dbdbdb, var(--o-borde-suave));
 
   iframe {
     display: block;
@@ -208,15 +208,15 @@
   display: flex;
   text-decoration: none;
   color: inherit;
-  border: 1px solid light-dark(#e6e6e6, #3e454b);
+  border: 1px solid light-dark(#e6e6e6, var(--o-borde));
   border-radius: 10px;
   overflow: hidden;
-  background: light-dark(#fafafa, #272c30);
+  background: light-dark(#fafafa, var(--o-elevada));
   transition: background .15s, border-color .15s;
 
   &:hover {
-    background: light-dark(#f2f2f2, #2d3237);
-    border-color: light-dark(#d5d5d5, #485058);
+    background: light-dark(#f2f2f2, var(--o-realce));
+    border-color: light-dark(#d5d5d5, var(--o-borde-fuerte));
   }
 }
 
@@ -225,7 +225,7 @@
   min-height: 90px;
   background-size: cover;
   background-position: center;
-  background-color: light-dark(#e9e9e9, #34393f);
+  background-color: light-dark(#e9e9e9, var(--o-realce));
 }
 
 .sm-card__body {
@@ -240,13 +240,13 @@
   font-size: .7rem;
   text-transform: uppercase;
   letter-spacing: .03em;
-  color: light-dark(#6b6b6b, #adadad);
+  color: light-dark(#6b6b6b, var(--o-texto-2));
 }
 
 .sm-card__title {
   font-size: .88rem;
   font-weight: 700;
-  color: light-dark(#222, #d9d9d9);
+  color: light-dark(#222, var(--o-texto));
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -255,7 +255,7 @@
 
 .sm-card__desc {
   font-size: .78rem;
-  color: light-dark(#666, #b0b0b0);
+  color: light-dark(#666, var(--o-texto-2));
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -274,7 +274,7 @@
     aspect-ratio: 1200 / 630;
     min-height: 0;
     object-fit: cover;
-    background-color: light-dark(#e9e9e9, #34393f);
+    background-color: light-dark(#e9e9e9, var(--o-realce));
   }
 }
 

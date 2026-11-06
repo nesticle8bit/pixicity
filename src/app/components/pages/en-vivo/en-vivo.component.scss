@@ -1,57 +1,57 @@
 th {
     margin: 0;
-    color: light-dark(#576b86, #99a8bd);
+    color: light-dark(#576b86, var(--o-texto-2));
     padding: 8px !important;
     text-align: left;
     text-transform: uppercase;
-    background: light-dark(#d6dee8, #2f3f54) !important;
+    background: light-dark(#d6dee8, var(--o-realce)) !important;
     border-bottom: 1px solid #576b86 !important;
 }
 
 tr {
-    background: light-dark(#EEE, #30353b);
+    background: light-dark(#EEE, var(--o-realce));
 }
 
 td {
     margin: 0;
     padding: 5px;
     color: #FFF!important;
-    border-bottom: 1px solid light-dark(#CCC, #4e575f);
-    border-top: 1px solid light-dark(#FFF, #2e3338);
+    border-bottom: 1px solid light-dark(#CCC, var(--o-borde-fuerte));
+    border-top: 1px solid light-dark(#FFF, var(--o-borde-suave));
 }
 
 td a {
     margin: 0;
     font-weight: bold;
-    color: light-dark(#666, #b0b0b0)!important;
+    color: light-dark(#666, var(--o-texto-2))!important;
     width: 90px;
     overflow: hidden;
 }
 
 tr.post td.accion {
-	color: light-dark(#004a95, #8ec0f2)!important;
+	color: light-dark(#004a95, var(--o-marca-texto))!important;
 }
 
 tr.comentario td.accion  {
-	color: light-dark(#f7941d, #eca551)!important;
+	color: light-dark(#f7941d, var(--o-aviso))!important;
 }
 
 tr.comunidad td.accion  {
-	color: light-dark(#007236, #a1f5c9)!important;
+	color: light-dark(#007236, var(--o-ok))!important;
 }
 
 
 tr.tema  td.accion {
-	color: light-dark(#7cc576, #7dc577)!important;
+	color: light-dark(#7cc576, var(--o-ok))!important;
 	
 }
 
 tr.usuario td.accion {
-	color: light-dark(#ed145b, #ec5486)!important;
+	color: light-dark(#ed145b, var(--o-error))!important;
 }
 
 tr.shout td.accion  {
-	color: light-dark(#77AABC, #7daebf)!important;
+	color: light-dark(#77AABC, var(--o-marca-texto))!important;
 }
 
 tr.foto td.accion  {
@@ -59,36 +59,36 @@ tr.foto td.accion  {
 }
 
 tr.rango td.accion  {
-	color: light-dark(#e8a200, #eec362)!important;
+	color: light-dark(#e8a200, var(--o-aviso))!important;
 }
 
 tr.album td.accion  {
-	color: light-dark(#AABC77, #aebf7d)!important;
+	color: light-dark(#AABC77, var(--o-ok))!important;
 }
 
 tr.track td.accion  {
-	color: light-dark(#AABC77, #aebf7d)!important;
+	color: light-dark(#AABC77, var(--o-ok))!important;
 }
 
 strong.text-muted {
-    color: light-dark(#8D8D8D, #999999) !important;
+    color: light-dark(#8D8D8D, var(--o-texto-3)) !important;
 }
 
 .list-unstyled {
     & li {
         padding: 3px 6px;
-        border-bottom: 1px light-dark(#EEE, #393f45) dotted;
+        border-bottom: 1px light-dark(#EEE, var(--o-borde)) dotted;
     }
 
     & li span.number {
-        color: light-dark(#141414, #e1e1e1);
+        color: light-dark(#141414, var(--o-texto));
         font-weight: bold;
         margin-right: 10px;
     }
 }
 
 .vivo-filter strong {
-    color: light-dark(#FF6600, #ec9255)!important;
+    color: light-dark(#FF6600, var(--o-aviso))!important;
 }
 // Pausar/reanudar es un <button> real (antes un <img> con clic): accesible por teclado y sin estilos de botón.
 .en-vivo-toggle {
