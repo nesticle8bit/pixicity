@@ -134,7 +134,6 @@ export interface PerfilUsuarioViewModel {
   siguiendoCount: number;
   genero: string;
   rango: RangoUsuarioViewModel | null;
-  fechaNacimiento: string;
   edad: number;
   pais: PaisViewModel | null;
 }
@@ -168,7 +167,7 @@ export const PERFIL_VACIO: PerfilUsuarioViewModel = {
   id: 0, avatar: '', profileBackground: '', profileBackgroundPosX: 50, profileBackgroundPosY: 50,
   profilePageBackground: null, profilePageBackgroundRepeat: null, userName: '', completeName: '', mensajePersonal: '', website: '',
   fechaRegistro: '', puntos: 0, comentariosCount: 0, postsCount: 0, seguidoresCount: 0, siguiendoCount: 0,
-  genero: '', rango: null, fechaNacimiento: '', edad: 0, pais: null,
+  genero: '', rango: null, edad: 0, pais: null,
 };
 
 export interface UsuarioOnlineViewModel {
