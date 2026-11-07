@@ -55,7 +55,7 @@
       @if (notificaciones.length > 0) {
       <ul class="mon-list" [class.mon-list--cargando]="cargando">
         @for (notificacion of notificaciones; track notificacion.id) {
-        <li class="mon-item" [class.mon-item--nueva]="!notificacion.leido">
+        <li class="mon-item" [class.mon-item--nueva]="!notificacion.leido" (click)="marcarLeida(notificacion)">
           @if (notificacion.imagen) {
           <!-- Aviso con imagen propia (la medalla ganada) en lugar del avatar. -->
           <img class="mon-item__avatar mon-item__imagen" [src]="srcImagen(notificacion.imagen)" alt="" width="40" height="40"

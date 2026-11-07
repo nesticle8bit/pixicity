@@ -125,6 +125,8 @@ export class SectionUserInfoLoginComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((payload) => {
         this.currentStats.notifications = (this.currentStats.notifications ?? 0) + 1;
+        // Con la campana abierta, la nueva entra a la lista.
+        if (this.display.monitor) this.cargarNotificaciones();
         if (payload?.mensaje) {
           // Tocar el aviso lleva adonde apunta (el API arma el mismo enlace que la campana y el push de escritorio).
           const id = payload.id;
@@ -133,6 +135,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
               void this.router.navigateByUrl('/monitor');
               return;
             }
+            this.httpLogs.setNotificacionLeida(id).subscribe({ error: () => {} });
             this.httpLogs.getEnlaceNotificacion(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
               next: (enlace) => void this.irA.ir(enlace || '/monitor'),
               error: () => void this.router.navigateByUrl('/monitor'),
@@ -168,13 +171,21 @@ export class SectionUserInfoLoginComponent implements OnInit {
   }
 
   verNotificaciones(): void {
-    const habiaSinLeer = this.currentStats.notifications > 0;
+    this.cargarNotificaciones();
 
-    // Trae todas las no leídas (más las últimas leídas hasta 60). Se marcan como leídas recién cuando llegan:
-    // si la marca ganaba la carrera, las nuevas venían ya leídas (sin resaltar) y solo entraban hasta el tope.
+    this.display.monitor = true;
+    this.display.mensajes = false;
+    this.display.favoritos = false;
+  }
+
+  private cargarNotificaciones(): void {
+    const habiaSinVer = this.currentStats.notifications > 0;
+
+    // Trae todas las no vistas (más las últimas hasta 60) y marca vistas solo hasta la más nueva recibida:
+    // lo que llegue entre el GET y el PUT sigue sin ver.
     this.httpLogs.getLastNotificaciones().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
-      if (habiaSinLeer || response?.some((n) => !n.leido)) {
-        this.setNotificacionesAsReaded();
+      if (response?.length && (habiaSinVer || response.some((n) => !n.leido))) {
+        this.mobileNav.marcarNotificacionesVistas(Math.max(...response.map((n) => n.id)));
       }
 
       if (response) {
@@ -213,10 +224,28 @@ export class SectionUserInfoLoginComponent implements OnInit {
 
       this.notificaciones = response;
     });
+  }
 
-    this.display.monitor = true;
-    this.display.mensajes = false;
-    this.display.favoritos = false;
+  get haySinLeer(): boolean {
+    return this.notificaciones.some((n) => !n.leido);
+  }
+
+  /** Clic en la fila: solo esa pierde el fondo. */
+  marcarLeida(notificacion: MonitorViewModel): void {
+    if (notificacion.leido) return;
+    notificacion.leido = true;
+    this.httpLogs.setNotificacionLeida(notificacion.id).subscribe({ error: () => (notificacion.leido = false) });
+  }
+
+  /** stopPropagation: el clic no llega a clickOutside y la lista queda abierta. */
+  marcarTodasLeidas(event: Event): void {
+    event.stopPropagation();
+    const pendientes = this.notificaciones.filter((n) => !n.leido);
+    if (!pendientes.length) return;
+    pendientes.forEach((n) => (n.leido = true));
+    this.httpLogs.setNotificacionesAsReaded(Math.max(...this.notificaciones.map((n) => n.id))).subscribe({
+      error: () => pendientes.forEach((n) => (n.leido = false)),
+    });
   }
 
   verMensajes(): void {
@@ -225,12 +254,8 @@ export class SectionUserInfoLoginComponent implements OnInit {
     this.display.monitor = false;
 
     this.mensajesService.getLastMensajes().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((response) => {
+      // Abrir el menú no los marca: fondo y globo siguen hasta entrar a la conversación.
       this.mensajes = response;
-
-      if (this.currentStats.messages > 0) {
-        this.currentStats.messages = 0;
-        this.setMensajesAsReaded();
-      }
     });
   }
 
@@ -276,15 +301,4 @@ export class SectionUserInfoLoginComponent implements OnInit {
     this.router.navigate(['/buscar', 'posts', obj.search]);
   }
 
-  setNotificacionesAsReaded(): void {
-    this.currentStats.notifications = 0;
-    this.mobileNav.marcarNotificacionesLeidas();
-  }
-
-  setMensajesAsReaded(): void {
-    this.mensajesService
-      .setMensajesAsReaded()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({ next: () => this.badgeService.refresh(), error: () => {} });
-  }
 }

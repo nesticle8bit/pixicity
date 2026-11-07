@@ -15,14 +15,19 @@
           <i class="ti ti-eye"></i>
         </a>
         <div class="notificaciones-list" id="mon_list" [style.display]="display.monitor ? 'block' : 'none'">
-          <div class="timoni">Notificaciones</div>
+          <div class="timoni timoni--acciones">
+            Notificaciones
+            @if (haySinLeer) {
+            <button type="button" class="marcar-todas" (click)="marcarTodasLeidas($event)">Marcar todas como leídas</button>
+            }
+          </div>
           <app-sugerencia-push class="mon-push" />
           <ul>
             @if (notificaciones.length < 1) { <div class="errr">No hay notificaciones
         </div>
         }
         @for (notificacion of notificaciones; track notificacion) {
-      <li class="list-items" [ngClass]="{'sin-leer': !notificacion.leido}">
+      <li class="list-items" [ngClass]="{'sin-leer': !notificacion.leido}" (click)="marcarLeida(notificacion)">
         <div class="d-flex">
           <div class="flex-shrink-0">
             @if (notificacion.imagen) {

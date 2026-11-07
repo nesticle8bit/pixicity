@@ -7,6 +7,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { DisplayComponentService } from 'src/app/services/shared/displayComponents.service';
 import { MobileNavService } from 'src/app/services/shared/mobile-nav.service';
+import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { FiltroNotificaciones, MonitorViewModel } from 'src/app/models/logs/logs-vm.model';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
 import { RouterLink } from '@angular/router';
@@ -124,8 +125,9 @@ export class MonitorComponent implements OnInit {
 
   private readonly busqueda$ = new Subject<string>();
   private readonly mobileNav = inject(MobileNavService);
-  /** Las de esta visita se marcan leídas una vez, después de mostrarlas (así se ve cuáles eran nuevas). */
-  private marcadas = false;
+  private readonly signalr = inject(SignalrService);
+  /** Hasta qué id ya se marcó visto: lo llegado después del GET sigue sin ver. */
+  private vistasHasta = 0;
 
   constructor() {
     this.paginationService.change({ pageIndex: 0, pageSize: 10, length: 0 });
@@ -143,6 +145,11 @@ export class MonitorComponent implements OnInit {
     this.busqueda$
       .pipe(debounceTime(350), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.aplicarFiltros());
+
+    // En la primera página la nueva entra a la lista; en otra no se le mueve lo que está leyendo.
+    this.signalr.notification$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      if (this.paginationService.page === 1) this.getNotificaciones();
+    });
 
     this.getNotificaciones();
   }
@@ -186,13 +193,21 @@ export class MonitorComponent implements OnInit {
         this.notificaciones = response?.data ?? [];
         this.totalCount = response?.pagination?.totalCount ?? 0;
         this.cargando = false;
-        if (!this.marcadas) {
-          this.marcadas = true;
-          this.mobileNav.marcarNotificacionesLeidas();
+        const hastaId = Math.max(0, ...this.notificaciones.map((n) => n.id));
+        if (hastaId > this.vistasHasta) {
+          this.vistasHasta = hastaId;
+          this.mobileNav.marcarNotificacionesVistas(hastaId);
         }
       },
       error: () => (this.cargando = false),
     });
+  }
+
+  /** Clic en la fila: solo esa pierde el fondo. */
+  marcarLeida(notificacion: MonitorViewModel): void {
+    if (notificacion.leido) return;
+    notificacion.leido = true;
+    this.logsService.setNotificacionLeida(notificacion.id).subscribe({ error: () => (notificacion.leido = false) });
   }
 
   /** Cualquier cambio de filtro vuelve a la primera página. */

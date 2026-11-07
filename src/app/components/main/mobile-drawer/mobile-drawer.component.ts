@@ -216,9 +216,9 @@ export class MobileDrawerComponent implements OnInit {
     return n > 99 ? '99+' : String(n);
   }
 
-  /** Entrar al monitor: el contador se va al instante (y el API las marca como leídas). */
+  /** Entrar al monitor: el contador se va al instante; /monitor las marca vistas cuando las muestra. */
   abrirMonitor(): void {
-    this.nav.marcarNotificacionesLeidas();
+    this.nav.marcarNotificacionesVistas();
     this.nav.close();
   }
 

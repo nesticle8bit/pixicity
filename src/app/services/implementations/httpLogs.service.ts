@@ -66,9 +66,22 @@ export class HttpLogsService implements IHttpLogsService {
       .pipe(catchError(this.helper.errorHandler));
   }
 
-  setNotificacionesAsReaded(): Observable<boolean> {
+  setNotificacionesVistas(hastaId: number): Observable<boolean> {
     return this.http
-      .put<ApiResponse<boolean>>(`${environment.api}/api/notificaciones/leidas`, {})
+      .put<ApiResponse<boolean>>(`${environment.api}/api/notificaciones/vistas?hastaId=${hastaId}`, {})
+      .pipe(map((r) => r.data ?? false));
+  }
+
+  /** keepalive: el clic suele navegar con recarga completa y la petición debe sobrevivir. */
+  setNotificacionLeida(id: number): Observable<boolean> {
+    return this.http
+      .put<ApiResponse<boolean>>(`${environment.api}/api/notificaciones/${id}/leida`, {}, { keepalive: true })
+      .pipe(map((r) => r.data ?? false));
+  }
+
+  setNotificacionesAsReaded(hastaId: number): Observable<boolean> {
+    return this.http
+      .put<ApiResponse<boolean>>(`${environment.api}/api/notificaciones/leidas?hastaId=${hastaId}`, {})
       .pipe(
         map((response) => {
           if (response.status === 200) {

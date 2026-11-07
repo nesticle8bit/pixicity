@@ -17,6 +17,8 @@ export const SIN_LOADER: RegExp[] = [
   'shouts/favoritos',
   'notificaciones/recientes',
   'notificaciones/leidas',
+  'notificaciones/vistas',
+  `notificaciones/${ID}/leida`,
   'notificaciones/estadisticas',
   // Al tocar el aviso en vivo: navega enseguida, no hace falta tapar la pantalla.
   `notificaciones/${ID}/enlace`,

@@ -4,7 +4,7 @@ import { slugUrl } from 'src/app/shared/helpers/slug';
 import { DecimalPipe } from '@angular/common';
 
 /** Igual que PostValidator.MaxContenido en el API (cuenta el HTML, no solo el texto). */
-export const LARGO_MAX_CONTENIDO_POST = 100_000;
+export const LARGO_MAX_CONTENIDO_POST = 150_000;
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, map, of, switchMap } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';

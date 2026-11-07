@@ -23,15 +23,18 @@ export class MobileNavService {
 
   private watching = false;
   private readonly leidasSubject = new Subject<void>();
-  /** Se marcaron las notificaciones como leídas (desde el header, el cajón o /monitor): todos los contadores a 0. */
+  /** Se abrieron las notificaciones (desde el header, el cajón o /monitor): todos los contadores a 0. */
   public readonly notificacionesLeidas$ = this.leidasSubject.asObservable();
 
-  /** Abrir el monitor: el contador se va al instante y el API las marca como leídas. */
-  marcarNotificacionesLeidas(): void {
+  /**
+   * Abrir el monitor: el contador se va al instante. Con hastaId (la más nueva recibida) el API las marca vistas
+   * y se recalcula: lo llegado mientras tanto vuelve al globo. El fondo amarillo no cambia.
+   */
+  marcarNotificacionesVistas(hastaId?: number): void {
     this.stats.update((s) => ({ ...s, notifications: 0 }));
     this.leidasSubject.next();
-    if (!this.securityService.getCurrentUser()?.usuario) return;
-    this.logsService.setNotificacionesAsReaded().subscribe({ error: () => {} });
+    if (!hastaId || !this.securityService.getCurrentUser()?.usuario) return;
+    this.logsService.setNotificacionesVistas(hastaId).subscribe({ next: () => this.badgeService.refresh(), error: () => {} });
   }
 
   open(): void {

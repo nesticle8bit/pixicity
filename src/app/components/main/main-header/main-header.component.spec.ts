@@ -34,7 +34,7 @@ describe('MainHeader + MobileDrawer (hamburguesa)', () => {
     close: jasmine.Spy;
     toggle: jasmine.Spy;
     watchStats: jasmine.Spy;
-    marcarNotificacionesLeidas: jasmine.Spy;
+    marcarNotificacionesVistas: jasmine.Spy;
   };
 
   const el = (selector: string): HTMLElement | null => fixture.nativeElement.querySelector(selector);
@@ -53,9 +53,9 @@ describe('MainHeader + MobileDrawer (hamburguesa)', () => {
       close: jasmine.createSpy('close').and.callFake(() => isOpen.set(false)),
       toggle: jasmine.createSpy('toggle').and.callFake(() => isOpen.set(!isOpen())),
       watchStats: jasmine.createSpy('watchStats'),
-      marcarNotificacionesLeidas: jasmine.createSpy('marcarNotificacionesLeidas'),
+      marcarNotificacionesVistas: jasmine.createSpy('marcarNotificacionesVistas'),
     };
-    nav.marcarNotificacionesLeidas.and.callFake(() => nav.stats.update((st: any) => ({ ...st, notifications: 0 })));
+    nav.marcarNotificacionesVistas.and.callFake(() => nav.stats.update((st: any) => ({ ...st, notifications: 0 })));
 
     await TestBed.configureTestingModule({
     imports: [ReactiveFormsModule, RouterModule, HostComponent, MainHeaderComponent, MobileDrawerComponent],

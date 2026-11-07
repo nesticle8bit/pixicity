@@ -2,6 +2,27 @@
     background: rgb(251 255 0 / 17%) !important;
 }
 
+.timoni--acciones {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.marcar-todas {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: light-dark(#0a6fc2, var(--o-marca-texto));
+    font-size: 11px;
+    font-weight: 400;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 .list-items {
     padding-top: 8px;
 

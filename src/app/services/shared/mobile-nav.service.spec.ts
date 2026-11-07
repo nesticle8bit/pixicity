@@ -84,6 +84,26 @@ describe('MobileNavService', () => {
     expect(service.stats().notifications).toBe(4);
   });
 
+  it('marcar vistas envía hasta dónde se recibió y recalcula el globo', () => {
+    logs.setNotificacionesVistas = jasmine.createSpy().and.returnValue(of(true));
+    const badge = TestBed.inject(MensajesBadgeService);
+    spyOn(badge, 'refresh');
+
+    service.marcarNotificacionesVistas(42);
+
+    expect(service.stats().notifications).toBe(0);
+    expect(logs.setNotificacionesVistas).toHaveBeenCalledOnceWith(42);
+    expect(badge.refresh).toHaveBeenCalled();
+  });
+
+  it('sin hastaId solo baja el globo (el cajón, antes de que /monitor cargue)', () => {
+    logs.setNotificacionesVistas = jasmine.createSpy();
+
+    service.marcarNotificacionesVistas();
+
+    expect(logs.setNotificacionesVistas).not.toHaveBeenCalled();
+  });
+
   it('watchStats es idempotente', () => {
     setViewport(true);
 

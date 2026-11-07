@@ -11,7 +11,9 @@ export abstract class IHttpLogsService {
   abstract getLastNotificaciones(): Observable<MonitorViewModel[]>;
   /** Adónde lleva la notificación (lo usa el aviso en vivo al tocarlo). */
   abstract getEnlaceNotificacion(id: number): Observable<string>;
-  abstract setNotificacionesAsReaded(): Observable<boolean>;
+  abstract setNotificacionesVistas(hastaId: number): Observable<boolean>;
+  abstract setNotificacionLeida(id: number): Observable<boolean>;
+  abstract setNotificacionesAsReaded(hastaId: number): Observable<boolean>;
   abstract getStats(): Observable<StatsViewModel>;
   abstract getMonitorsAdmin(filtro?: AdminFiltro): Observable<PaginatedData<MonitorAdmin>>;
   abstract deleteNotificacion(id: number): Observable<boolean>;
