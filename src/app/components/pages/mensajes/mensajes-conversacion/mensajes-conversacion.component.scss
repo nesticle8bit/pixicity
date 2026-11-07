@@ -860,3 +860,10 @@ img {
 @media (max-width: 575.98px) {
     .chat-reply { margin-bottom: 8px; }
 }
+
+.chat-escribiendo {
+  padding: 2px 4px 6px;
+  color: light-dark(#6b6b6b, var(--o-texto-2));
+  font-size: 12px;
+  font-style: italic;
+}

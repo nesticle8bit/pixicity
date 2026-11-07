@@ -29,6 +29,7 @@ export class SignalrService {
   private mensajesLeidosSubject = new Subject<EventoDeUsuario>();
   private shoutNuevoSubject = new Subject<{ shoutId: number; autor: string }>();
   private postVotadoSubject = new Subject<PostVotadoEnVivo>();
+  private escribiendoSubject = new Subject<EventoDeUsuario>();
   private handlersBound = false;
 
   /** Qué grupos volver a pedir al reconectar. */
@@ -53,6 +54,9 @@ export class SignalrService {
   public shoutNuevo$: Observable<{ shoutId: number; autor: string }> = this.shoutNuevoSubject.asObservable();
   // Alguien dio puntos a un post que tengo abierto.
   public postVotado$: Observable<PostVotadoEnVivo> = this.postVotadoSubject.asObservable();
+
+  // El otro usuario está escribiendo en el chat privado.
+  public escribiendo$: Observable<EventoDeUsuario> = this.escribiendoSubject.asObservable();
 
   // Inicia la conexión y se suscribe a los grupos del usuario. Idempotente.
   async start(token: string): Promise<void> {
@@ -121,6 +125,7 @@ export class SignalrService {
       this.connection.on('mensajesLeidos', (payload: EventoDeUsuario) => this.mensajesLeidosSubject.next(payload));
       this.connection.on('postVotado', (payload: PostVotadoEnVivo) => this.postVotadoSubject.next(payload));
       this.connection.on('shoutNuevo', (payload: { shoutId: number; autor: string }) => this.shoutNuevoSubject.next(payload));
+      this.connection.on('escribiendo', (payload: EventoDeUsuario) => this.escribiendoSubject.next(payload));
       // Un solo manejador de reconexión: antes cada start()/startEnVivo() agregaba uno más.
       this.connection.onreconnected(() => this.alReconectar());
       this.handlersBound = true;
@@ -145,6 +150,11 @@ export class SignalrService {
   async stopPost(postId: number): Promise<void> {
     if (!this.postsSuscritos.delete(postId)) return;
     await this.invocar('UnsubscribePost', postId);
+  }
+
+  /** Avisa que estoy escribiendo. Sin conexión no pasa nada: el chat funciona igual. */
+  avisarEscribiendo(otroId: number): void {
+    void this.invocar('Escribiendo', otroId);
   }
 
   private async invocar(metodo: string, ...args: unknown[]): Promise<void> {

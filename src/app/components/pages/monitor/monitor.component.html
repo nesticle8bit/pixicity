@@ -33,6 +33,12 @@
         </div>
       </div>
 
+      @if (puedeMarcarTodas) {
+      <div class="mon-marcar">
+        <button type="button" class="mon-link" (click)="marcarTodasLeidas()">Marcar todas como leídas</button>
+      </div>
+      }
+
       @if (hayFiltros) {
       <div class="mon-activos">
         <span><i class="ti ti-filter"></i> Filtros activos</span>

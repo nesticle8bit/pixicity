@@ -46,6 +46,10 @@ const MOTIVOS_DENUNCIA_MP = ['Spam o publicidad', 'Acoso o amenazas', 'Contenido
 
 const MINUTOS_EN_LINEA = 15;
 
+/** Cada cuánto se avisa "escribiendo" mientras se teclea, y cuánto dura el aviso sin recibir otro. */
+const AVISO_ESCRIBIENDO_MS = 3_000;
+const DURA_ESCRIBIENDO_MS = 5_000;
+
 /** Igual que MensajeService.LargoCita en el API. */
 const LARGO_CITA = 140;
 /** Páginas hacia atrás que se cargan como mucho para llegar a un mensaje citado. */
@@ -138,6 +142,11 @@ export class MensajesConversacionComponent implements OnInit {
   public adjuntos: Adjunto[] = [];
   private siguienteAdjunto = 1;
 
+  /** El otro está escribiendo ahora. */
+  readonly otroEscribiendo = signal(false);
+  private finEscribiendo?: ReturnType<typeof setTimeout>;
+  private ultimoAvisoEscribiendo = 0;
+
   private id?: number;
   private userName?: string;
 
@@ -146,11 +155,14 @@ export class MensajesConversacionComponent implements OnInit {
     this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.id = value.get('id') ? Number(value.get('id')) : undefined;
       this.userName = value.get('userName') ?? undefined;
+      this.dejarDeMostrarEscribiendo();
+      this.ultimoAvisoEscribiendo = 0;
       this.cargarInicial();
     });
 
     this.signalrService.mensaje$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((p) => {
       if (this.otro && p?.otroId === this.otro.id) {
+        if (!p.esMio) this.dejarDeMostrarEscribiendo();
         this.mergeLatest(!!p.esMio);
       }
     });
@@ -167,7 +179,17 @@ export class MensajesConversacionComponent implements OnInit {
       }
     });
 
+    this.signalrService.escribiendo$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((p) => {
+      if (!this.otro || p?.porId !== this.otro.id) return;
+      const seguia = this.estaAbajo();
+      this.otroEscribiendo.set(true);
+      clearTimeout(this.finEscribiendo);
+      this.finEscribiendo = setTimeout(() => this.otroEscribiendo.set(false), DURA_ESCRIBIENDO_MS);
+      if (seguia) setTimeout(() => this.scrollToBottom());
+    });
+
     this.destroyRef.onDestroy(() => {
+      clearTimeout(this.finEscribiendo);
       this.adjuntos.forEach((a) => URL.revokeObjectURL(a.vista));
     });
   }
@@ -343,6 +365,20 @@ export class MensajesConversacionComponent implements OnInit {
       this.quitarAdjuntos();
       setTimeout(() => this.ajustarAlto());
     });
+  }
+
+  /** Al teclear: avisa al otro, como mucho una vez cada 3 s. */
+  alEscribir(): void {
+    if (!this.otro || this.bloqueado || !this.respuesta.trim()) return;
+    const ahora = Date.now();
+    if (ahora - this.ultimoAvisoEscribiendo < AVISO_ESCRIBIENDO_MS) return;
+    this.ultimoAvisoEscribiendo = ahora;
+    this.signalrService.avisarEscribiendo(this.otro.id);
+  }
+
+  private dejarDeMostrarEscribiendo(): void {
+    clearTimeout(this.finEscribiendo);
+    this.otroEscribiendo.set(false);
   }
 
   /** Responder a un mensaje: queda arriba del campo hasta enviar o cancelar. */

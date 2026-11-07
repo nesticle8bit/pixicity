@@ -17,56 +17,52 @@
 
 @for (post of stickyPosts; track post.id) {
 <article class="lista-posts sticky-post--list">
-  <div class="row">
-    <div class="col-12 col-sm-12 col-md-7">
-      @if (post.sticky) {
-      <img width="16" height="16" src="/assets/images/categorias/sticky.png" class="sticky-post--home"
-        matTooltip="Post fijado por el Staff" aria-label="Post fijado por el Staff" matTooltipPosition="left"
-        alt="Sticky" loading="lazy" />
-      }
-      <a class="lp-link" [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
-        <img width="16" height="16" src="/assets/images/categorias/{{post.categoria.icono}}"
-          matTooltip="{{post.categoria.nombre}}" matTooltipPosition="left" alt="{{post.categoria.nombre}}"
-          loading="lazy" />
-        <span class="lp-titulo" (mouseenter)="tituloSiCortado($event, post.titulo)">{{post.titulo}}</span>
-      </a>
-    </div>
-    <div class="col-12 col-sm-12 col-md-2 text-end d-none d-md-block">
-      <small class="text-muted">{{post.fechaRegistro | timeAgo}}</small>
-    </div>
-    <div class="col-12 col-sm-12 col-md-3 text-end d-none d-md-block">
-      <a class="lp-autor" [routerLink]="['/perfil', post.userName]" [attr.aria-label]="'Ver perfil de ' + post.userName">
-        <app-user-avatar [class]="'img-avatar'" [avatar]="post.avatar" [userName]="post.userName"></app-user-avatar>
-        <small class="ms-1 pe-1 text-muted" [appUserPopover]="post.userName">{{post.userName}}</small>
-      </a>
-    </div>
-  </div>
+  <ng-container *ngTemplateOutlet="fila; context: { $implicit: post }"></ng-container>
 </article>
 }
 
 @for (post of lastPosts; track post.id) {
 <article class="lista-posts">
-  <div class="row">
-    <div class="col-12 col-sm-12 col-md-7">
-      <a class="lp-link" [ngClass]="{'post-privado': post.esPrivado}"
-        [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
-        <img width="16" height="16" src="/assets/images/categorias/{{post.categoria.icono}}" matTooltip="{{post.categoria.nombre}}"
-          matTooltipPosition="left" alt="{{post.categoria.nombre}}" loading="lazy" />
-        <span class="lp-titulo" (mouseenter)="tituloSiCortado($event, post.titulo)">{{post.titulo}}</span>
-      </a>
-    </div>
-    <div class="col-12 col-sm-12 col-md-2 text-end d-none d-md-block">
-      <small class="text-muted">{{post.fechaRegistro | timeAgo}}</small>
-    </div>
-    <div class="col-12 col-sm-12 col-md-3 text-end d-none d-md-block">
-      <a class="lp-autor" [routerLink]="['/perfil', post.userName]" [attr.aria-label]="'Ver perfil de ' + post.userName">
-        <app-user-avatar [class]="'img-avatar'" [avatar]="post.avatar" [userName]="post.userName"></app-user-avatar>
-        <small class="ms-1 pe-1 text-muted" [appUserPopover]="post.userName">{{post.userName}}</small>
-      </a>
-    </div>
-  </div>
+  <ng-container *ngTemplateOutlet="fila; context: { $implicit: post }"></ng-container>
 </article>
 }
+
+<ng-template #fila let-post>
+  <div class="lp-fila">
+  <div class="lp-iconos">
+    @if (post.sticky) {
+    <img width="16" height="16" src="/assets/images/categorias/sticky.png" class="sticky-post--home"
+      matTooltip="Post fijado por el Staff" aria-label="Post fijado por el Staff" matTooltipPosition="left"
+      alt="Sticky" loading="lazy" />
+    }
+    <!-- El título ya enlaza al post: este enlace es solo para el mouse. -->
+    <a [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]" tabindex="-1" aria-hidden="true">
+      <img width="16" height="16" src="/assets/images/categorias/{{post.categoria.icono}}"
+        matTooltip="{{post.categoria.nombre}}" matTooltipPosition="left" alt="" loading="lazy" />
+    </a>
+  </div>
+  <div class="lp-cuerpo">
+  <div class="lp-linea">
+    <a class="lp-link" [ngClass]="{'post-privado': post.esPrivado}"
+      [routerLink]="['/posts/' + post.categoria.seo + '/' + post.id + '/' + post.url]">
+      <span class="lp-titulo" (mouseenter)="tituloSiCortado($event, post.titulo)">{{post.titulo}}</span>
+    </a>
+    <small class="lp-fecha text-muted">{{post.fechaRegistro | timeAgo}}</small>
+  </div>
+  <div class="lp-linea lp-linea--datos">
+    <a class="lp-autor" [routerLink]="['/perfil', post.userName]" [attr.aria-label]="'Ver perfil de ' + post.userName">
+      <!-- <app-user-avatar [class]="'img-avatar'" [avatar]="post.avatar" [userName]="post.userName"></app-user-avatar> -->
+      <small class="ms-1 text-muted" [appUserPopover]="post.userName">
+        @{{post.userName}}
+      </small>
+    </a>
+    <small class="lp-dato text-muted" matTooltip="Visitas"><i class="ti ti-eye" aria-hidden="true"></i> {{post.visitantes | number}}<span class="visually-hidden"> visitas</span></small>
+    <small class="lp-dato text-muted" matTooltip="Puntos"><i class="ti ti-award" aria-hidden="true"></i> {{post.puntos | number}}<span class="visually-hidden"> puntos</span></small>
+    <small class="lp-dato text-muted" matTooltip="Comentarios"><i class="ti ti-message" aria-hidden="true"></i> {{post.comentarios | number}}<span class="visually-hidden"> comentarios</span></small>
+  </div>
+  </div>
+  </div>
+</ng-template>
 
 <div class="row">
   <div class="col-12">

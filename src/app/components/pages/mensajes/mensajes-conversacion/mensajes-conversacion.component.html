@@ -147,6 +147,9 @@
               Aún no hay mensajes{{otro ? ' con @' + otro.userName : ''}}. ¡Escribe el primero!
             </p>
           }
+          @if (otroEscribiendo()) {
+            <div class="chat-escribiendo">{{'@'}}{{otro?.userName}} está escribiendo…</div>
+          }
         </div>
 
         @if (nuevosSinLeer > 0) {
@@ -243,7 +246,7 @@
         </div>
         <textarea #campoMensaje class="chat-reply__campo" rows="1" aria-label="Escribir un mensaje" [(ngModel)]="respuesta"
           placeholder="Escribe un mensaje…" [disabled]="!otro || bloqueado"
-          (ngModelChange)="ajustarAlto()" (keydown.enter)="onEnter($event)" (keydown.escape)="onEscape()"
+          (ngModelChange)="ajustarAlto(); alEscribir()" (keydown.enter)="onEnter($event)" (keydown.escape)="onEscape()"
           (paste)="alPegar($event)"></textarea>
         <button type="button" class="chat-reply__enviar" (click)="responderMensaje()" [disabled]="!puedeEnviar"
           matTooltip="Enviar (Enter)" aria-label="Enviar mensaje">

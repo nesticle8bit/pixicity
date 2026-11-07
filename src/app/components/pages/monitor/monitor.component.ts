@@ -210,6 +210,26 @@ export class MonitorComponent implements OnInit {
     this.logsService.setNotificacionLeida(notificacion.id).subscribe({ error: () => (notificacion.leido = false) });
   }
 
+  /**
+   * El API marca hasta un id sin mirar filtros: solo se ofrece viendo la primera página sin filtrar por tipo, texto
+   * o período, para que "todas" no deje sin marcar las más nuevas ni marque otras que no están a la vista.
+   */
+  get puedeMarcarTodas(): boolean {
+    return this.paginationService.page === 1 && this.todosMarcados && !this.busqueda.trim() && !this.periodo
+      && this.notificaciones.some((n) => !n.leido);
+  }
+
+  marcarTodasLeidas(): void {
+    const pendientes = this.notificaciones.filter((n) => !n.leido);
+    if (!pendientes.length) return;
+    pendientes.forEach((n) => (n.leido = true));
+    this.logsService.setNotificacionesAsReaded(Math.max(...this.notificaciones.map((n) => n.id))).subscribe({
+      // En "No leídas" la lista queda vacía o trae las siguientes.
+      next: () => { if (this.soloNoLeidas) this.getNotificaciones(); },
+      error: () => pendientes.forEach((n) => (n.leido = false)),
+    });
+  }
+
   /** Cualquier cambio de filtro vuelve a la primera página. */
   aplicarFiltros(): void {
     this.paginationService.change({ pageIndex: 0, pageSize: this.paginationService.pageCount, length: 0 });

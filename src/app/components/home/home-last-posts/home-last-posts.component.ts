@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs';
-import { ViewportScroller, NgClass } from '@angular/common';
+import { DecimalPipe, NgTemplateOutlet, ViewportScroller, NgClass } from '@angular/common';
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { PortadaService, POSTS_POR_PAGINA_PORTADA } from 'src/app/services/shared/portada.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -25,6 +25,8 @@ import { TimeAgoPipe } from '../../../shared/pipes/timeAgo.pipe';
         UserAvatarComponent,
         UserPopoverDirective,
         NgClass,
+        NgTemplateOutlet,
+        DecimalPipe,
         MatPaginator,
         TimeAgoPipe,
     ],

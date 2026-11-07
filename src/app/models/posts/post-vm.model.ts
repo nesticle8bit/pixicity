@@ -222,5 +222,8 @@ export interface PostListaViewModel {
   url: string;
   userName: string;
   avatar: string;
+  visitantes: number;
+  puntos: number;
+  comentarios: number;
 }
 

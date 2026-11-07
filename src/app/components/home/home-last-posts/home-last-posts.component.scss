@@ -19,13 +19,9 @@
   }
 }
 
-// Fila de relleno con el alto de una fila real (en md+ la columna del avatar la hace 1 px más alta)
+// Fila de relleno con el alto de una fila real de dos líneas
 .lp-esqueleto {
-  height: 30px;
-
-  @media (min-width: 768px) {
-    height: 31px;
-  }
+  height: 56px;
 
   span {
     display: block;
@@ -61,12 +57,7 @@
   align-items: center;
   gap: 6px;
   max-width: 100%;
-  vertical-align: middle;
-
-  // En los fijados va después del ícono de "sticky"
-  .sticky-post--list & {
-    max-width: calc(100% - 22px);
-  }
+  min-width: 0;
 
   img {
     flex: none;
@@ -89,4 +80,55 @@
   &:hover small {
     text-decoration: underline;
   }
+}
+
+// Dos líneas por post: título y fecha; autor y números.
+.lp-fila {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+// Íconos centrados respecto a las dos líneas
+.lp-iconos {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+
+  a,
+  img {
+    display: block;
+  }
+}
+
+.lp-cuerpo {
+  flex: 1;
+  min-width: 0;
+}
+
+.lp-linea {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 8px;
+}
+
+.lp-linea--datos {
+  gap: 12px;
+  margin-top: 3px;
+  flex-wrap: wrap;
+}
+
+.lp-fecha {
+  flex: none;
+  margin-left: auto;
+  padding-left: 8px;
+}
+
+.lp-dato {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
 }

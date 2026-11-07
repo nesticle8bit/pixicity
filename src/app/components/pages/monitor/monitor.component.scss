@@ -200,3 +200,13 @@ $accent: light-dark(#006595, var(--o-marca));
     display: none;
   }
 }
+
+// Área táctil cómoda en el celular
+.mon-marcar {
+  margin: 0 0 8px;
+  text-align: right;
+
+  .mon-link {
+    min-height: 32px;
+  }
+}
