@@ -12,7 +12,7 @@ import { UsuarioInfoViewModel } from 'src/app/models/seguridad/seguridad-vm.mode
 import { urlCss } from 'src/app/shared/helpers/url-css';
 import { MOBILE_MAX_WIDTH, MobileNavService } from 'src/app/services/shared/mobile-nav.service';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
-import { PreferenciaTema, TemaService } from 'src/app/services/shared/tema.service';
+import { COLORES_TEMA, PreferenciaTema, TemaService } from 'src/app/services/shared/tema.service';
 import { AppInstalableService } from 'src/app/services/shared/app-instalable.service';
 import { isLinkActive, linksFor, NavLink } from '../main-nav.config';
 import { UserAvatarComponent } from '../../addons/user-avatar/user-avatar.component';
@@ -43,6 +43,7 @@ const SWIPE_CLOSE_PX = 70;
 export class MobileDrawerComponent implements OnInit {
   nav = inject(MobileNavService);
   tema = inject(TemaService);
+  readonly colores = COLORES_TEMA;
   readonly app = inject(AppInstalableService);
   /** iPhone: los pasos de "Agregar a inicio" (no hay diálogo de instalación). */
   readonly ayudaIos = signal(false);

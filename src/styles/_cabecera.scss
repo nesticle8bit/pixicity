@@ -165,3 +165,119 @@ a.identificarse {
   text-shadow: 0 1px 0 #000;
   cursor: pointer;
 }
+
+// Color de la cabecera (TemaService.establecerColor): la imagen conserva su trama y toma el tono elegido.
+// Sin data-color queda el azul original. Los valores coinciden con COLORES_TEMA.
+html[data-color='naranja'] {
+  --cabecera-color: #b4480f;
+}
+
+html[data-color='rojo'] {
+  --cabecera-color: #a81e2c;
+}
+
+html[data-color='rosa'] {
+  --cabecera-color: #b0246f;
+}
+
+html[data-color='morado'] {
+  --cabecera-color: #6232a8;
+}
+
+html[data-color='turquesa'] {
+  --cabecera-color: #0b7a75;
+}
+
+html[data-color='verde'] {
+  --cabecera-color: #2c7a2e;
+}
+
+html[data-color='gris'] {
+  --cabecera-color: #4a5058;
+}
+
+html[data-color] {
+  header.main-header {
+    background-color: var(--cabecera-color);
+    background-blend-mode: luminosity;
+  }
+
+  .main-menu {
+    background: color-mix(in srgb, var(--cabecera-color) 62%, #000);
+  }
+
+  .main-menu--item:not(.main-menu--item--active) {
+    background: color-mix(in srgb, var(--cabecera-color) 32%, #000);
+  }
+
+  // Menú del nombre de usuario: en _menus.scss su fondo es azul con una imagen de línea.
+  .menuver a {
+    border-color: color-mix(in srgb, var(--cabecera-color) 40%, #000);
+    background: color-mix(in srgb, var(--cabecera-color) 45%, #000);
+
+    &:hover {
+      background: color-mix(in srgb, var(--cabecera-color) 80%, #000);
+    }
+  }
+
+  // Barra de usuario: sus fondos son GIF azules, así que se reemplazan por degradados del color elegido.
+  .userInfoLogin {
+    border-color: color-mix(in srgb, var(--cabecera-color) 55%, #000);
+    border-top-color: color-mix(in srgb, var(--cabecera-color) 80%, #fff);
+    background: linear-gradient(color-mix(in srgb, var(--cabecera-color) 85%, #000), color-mix(in srgb, var(--cabecera-color) 60%, #000));
+
+    >ul {
+      display: flex;
+      height: 100%;
+    }
+
+    // Mismo alto que la barra: el enlace es más alto y el fondo del hover se salía unos píxeles.
+    >ul>li {
+      height: 100%;
+      background: none;
+      border-right: 1px solid color-mix(in srgb, var(--cabecera-color) 45%, #000);
+
+      &:first-child,
+      &:first-child>a.nick {
+        border-radius: 3px 0 0 3px;
+      }
+
+      &:last-child,
+      &:last-child>a.nick {
+        border-right: 0;
+        border-radius: 0 3px 3px 0;
+      }
+
+      // El enlace del nombre no se estira: .menuver va después de él y bajaría.
+      &:hover {
+        background: color-mix(in srgb, var(--cabecera-color) 45%, #000);
+      }
+
+      &:hover>a.nick {
+        background: none;
+      }
+    }
+  }
+}
+
+// Selector de color
+.tema-colores {
+  display: grid;
+  grid-template-columns: repeat(8, 28px);
+  gap: 8px;
+  padding: 10px 12px;
+}
+
+.tema-color {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px light-dark(#fff, var(--o-superficie));
+  cursor: pointer;
+
+  &[aria-checked='true'] {
+    border-color: light-dark(#222, #fff);
+  }
+}

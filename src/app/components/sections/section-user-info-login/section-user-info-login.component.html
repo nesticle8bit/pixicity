@@ -164,6 +164,27 @@
         aria-hidden="true"></i>
     </a>
   </li>
+  @if (tema.puedeElegirColor) {
+  <li class="tema" style="position:relative">
+    <a class="menu" role="button" tabindex="0" aria-label="Elegir el color de la cabecera" aria-haspopup="true"
+      [attr.aria-expanded]="display.colores" (click)="display.colores = !display.colores"
+      (clickOutside)="display.colores = false" (keydown.enter)="display.colores = !display.colores"
+      (keydown.space)="display.colores = !display.colores; $event.preventDefault()">
+      <i class="ti ti-palette" aria-hidden="true"></i>
+    </a>
+    <!-- stopPropagation: la lista queda abierta para probar varios colores. -->
+    <div class="notificaciones-list" [style.display]="display.colores ? 'block' : 'none'" (click)="$event.stopPropagation()">
+      <div class="timoni">Color de la cabecera</div>
+      <div class="tema-colores" role="radiogroup" aria-label="Color de la cabecera">
+        @for (c of colores; track c.valor) {
+        <button type="button" class="tema-color" role="radio" [style.background]="c.muestra" [matTooltip]="c.nombre"
+          [attr.aria-label]="c.nombre" [attr.aria-checked]="tema.color() === c.valor"
+          (click)="tema.establecerColor(c.valor)"></button>
+        }
+      </div>
+    </div>
+  </li>
+  }
   <li class="usernameMenu" (mouseenter)="displayMenu = true" (mouseleave)="displayMenu = false">
     <a class="nick menu" [routerLink]="['/perfil/' + currentUser.usuario.userName]">
       <app-user-avatar [class]="'avamu'" [avatar]="currentUser.usuario.avatar" [userName]="currentUser.usuario.userName"

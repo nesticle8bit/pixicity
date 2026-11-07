@@ -163,6 +163,15 @@
           </button>
         }
       </div>
+      @if (tema.puedeElegirColor) {
+      <div class="tema-colores" role="radiogroup" aria-label="Color de la cabecera">
+        @for (c of colores; track c.valor) {
+          <button type="button" class="tema-color" role="radio" [style.background]="c.muestra"
+            [attr.aria-label]="c.nombre" [attr.aria-checked]="tema.color() === c.valor"
+            (click)="tema.establecerColor(c.valor)"></button>
+        }
+      </div>
+      }
     </div>
 
     <nav class="drawer__legal" aria-label="Información">

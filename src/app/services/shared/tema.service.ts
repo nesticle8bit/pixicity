@@ -8,6 +8,20 @@ import { IHttpSecurityService } from '../interfaces/httpSecurity.interface';
 export type PreferenciaTema = 'light' | 'dark' | 'sistema';
 
 const CLAVE = 'tema';
+const CLAVE_COLOR = 'tema-color';
+
+/** Colores de la cabecera. El azul es el original (sin data-color). Sus tonos están en styles/_cabecera.scss. */
+export const COLORES_TEMA = [
+  { valor: 'azul', nombre: 'Azul', muestra: '#004160' },
+  { valor: 'naranja', nombre: 'Naranja', muestra: '#b4480f' },
+  { valor: 'rojo', nombre: 'Rojo', muestra: '#a81e2c' },
+  { valor: 'rosa', nombre: 'Rosa', muestra: '#b0246f' },
+  { valor: 'morado', nombre: 'Morado', muestra: '#6232a8' },
+  { valor: 'turquesa', nombre: 'Turquesa', muestra: '#0b7a75' },
+  { valor: 'verde', nombre: 'Verde', muestra: '#2c7a2e' },
+  { valor: 'gris', nombre: 'Gris', muestra: '#4a5058' },
+] as const;
+export type ColorTema = (typeof COLORES_TEMA)[number]['valor'];
 const CONSULTA_OSCURO = '(prefers-color-scheme: dark)';
 
 /**
@@ -22,6 +36,7 @@ export class TemaService {
   private securityService = inject(IHttpSecurityService);
 
   readonly preferencia = signal<PreferenciaTema>('sistema');
+  readonly color = signal<ColorTema>('azul');
   private readonly sistemaOscuro = signal(false);
   /** Tema que se ve ahora mismo. */
   readonly efectivo = computed<'light' | 'dark'>(() => {
@@ -35,6 +50,7 @@ export class TemaService {
     if (!enNavegador()) return;
 
     this.preferencia.set(leerPreferencia());
+    this.color.set(leerColor());
     const consulta = matchMedia(CONSULTA_OSCURO);
     this.sistemaOscuro.set(consulta.matches);
     consulta.addEventListener('change', (e) => {
@@ -45,6 +61,10 @@ export class TemaService {
     window.addEventListener('storage', (e) => {
       if (e.key === CLAVE) {
         this.preferencia.set(leerPreferencia());
+        this.aplicar();
+      }
+      if (e.key === CLAVE_COLOR) {
+        this.color.set(leerColor());
         this.aplicar();
       }
     });
@@ -78,6 +98,21 @@ export class TemaService {
     if (guardarEnCuenta && this.securityService.getCurrentUser()?.usuario) this.guardarEnCuenta(preferencia);
   }
 
+  /** En prueba: solo este usuario ve el selector. Solo oculta la interfaz, no es un permiso. */
+  get puedeElegirColor(): boolean {
+    return this.securityService.getCurrentUser()?.usuario?.userName?.toLowerCase() === 'gorgoroth';
+  }
+
+  /** Por ahora solo en este navegador. */
+  establecerColor(color: ColorTema): void {
+    this.color.set(color);
+    try {
+      if (color === 'azul') localStorage.removeItem(CLAVE_COLOR);
+      else localStorage.setItem(CLAVE_COLOR, color);
+    } catch { /* almacenamiento bloqueado: el color dura lo que la pestaña */ }
+    this.aplicar();
+  }
+
   /** Alterna claro/oscuro partiendo de lo que se ve (el botón de la cabecera). */
   alternar(): void {
     this.establecer(this.efectivo() === 'dark' ? 'light' : 'dark');
@@ -91,6 +126,17 @@ export class TemaService {
     const raiz = document.documentElement;
     raiz.setAttribute('data-theme', this.efectivo());
     raiz.setAttribute('data-bs-theme', this.efectivo());
+    if (this.color() === 'azul') raiz.removeAttribute('data-color');
+    else raiz.setAttribute('data-color', this.color());
+  }
+}
+
+function leerColor(): ColorTema {
+  try {
+    const c = localStorage.getItem(CLAVE_COLOR);
+    return COLORES_TEMA.find((x) => x.valor === c)?.valor ?? 'azul';
+  } catch {
+    return 'azul';
   }
 }
 

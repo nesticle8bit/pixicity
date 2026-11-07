@@ -14,7 +14,7 @@ import { Router, RouterLink } from '@angular/router';
 import { SignalrService } from 'src/app/services/shared/signalr.service';
 import { MensajesBadgeService } from 'src/app/services/shared/mensajes-badge.service';
 import { MobileNavService } from 'src/app/services/shared/mobile-nav.service';
-import { TemaService } from 'src/app/services/shared/tema.service';
+import { COLORES_TEMA, TemaService } from 'src/app/services/shared/tema.service';
 import { debounceTime, merge } from 'rxjs';
 import { NotificationService } from 'src/app/services/shared/notification.service';
 import { IrANotificacionService } from 'src/app/services/shared/ir-a-notificacion.service';
@@ -65,6 +65,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly mobileNav = inject(MobileNavService);
   public readonly tema = inject(TemaService);
+  public readonly colores = COLORES_TEMA;
 
   public formGroup: FormGroup;
   public displayMenu: boolean = false;
@@ -73,6 +74,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
     monitor: false,
     mensajes: false,
     favoritos: false,
+    colores: false,
   };
   public favoritos: FavoritosViewModel[] = [];
   public notificaciones: MonitorViewModel[] = [];
@@ -106,6 +108,7 @@ export class SectionUserInfoLoginComponent implements OnInit {
     this.display.monitor = false;
     this.display.mensajes = false;
     this.display.favoritos = false;
+    this.display.colores = false;
   }
 
   ngOnInit(): void {

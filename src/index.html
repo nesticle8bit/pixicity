@@ -195,6 +195,8 @@
       if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       document.documentElement.setAttribute('data-theme', t);
       document.documentElement.setAttribute('data-bs-theme', t);
+      var c = localStorage.getItem('tema-color');
+      if (c && /^[a-z]+$/.test(c)) document.documentElement.setAttribute('data-color', c);
     } catch (e) { }
   </script>
 </head>

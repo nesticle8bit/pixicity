@@ -1,11 +1,11 @@
 // GENERADO por scripts/build-icon-subset.js — no editar a mano.
-// Subconjunto de Tabler Icons con solo los íconos que usa la app (205).
+// Subconjunto de Tabler Icons con solo los íconos que usa la app (207).
 @font-face {
   font-family: "tabler-icons";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/tabler-icons-subset.woff2?v=882cc49c1a") format("woff2");
+  src: url("/assets/fonts/tabler-icons-subset.woff2?v=4fe9530f98") format("woff2");
 }
 
 @font-face {
@@ -84,6 +84,7 @@
 .ti-chart-bar:before { content: "\ea59"; }
 .ti-chart-line:before { content: "\ea5c"; }
 .ti-check:before { content: "\ea5e"; }
+.ti-checkbox:before { content: "\eba6"; }
 .ti-checks:before { content: "\ebaa"; }
 .ti-chevron-down:before { content: "\ea5f"; }
 .ti-chevron-right:before { content: "\ea61"; }
@@ -171,6 +172,7 @@
 .ti-movie:before { content: "\eafa"; }
 .ti-news:before { content: "\eafd"; }
 .ti-notes:before { content: "\eb6e"; }
+.ti-palette:before { content: "\eb01"; }
 .ti-pencil:before { content: "\eb04"; }
 .ti-pencil-plus:before { content: "\f1ec"; }
 .ti-photo:before { content: "\eb0a"; }
